@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" window-icon="this://app/ico.png">
+<head>
+<meta charset="utf-8" />
+<title>Tiny Game UI</title>
+<style type="text/css">
+    *{margin:0;padding:0;}
+    a{text-decoration:none;}
+    body{width:100%;font-size:14px;}
+    #left{background:#fff;overflow:auto;height:*;box-shadow:0 0 5px #666;}
+    #right{background:#d8dce3;height:*;overflow:auto;}
+
+    .search{height: 32px;background: #D8DCE3;margin: 10px;position: relative;}
+    .search .input{height: 32px;line-height: 32px;background:none;border: 0;display:block;width: 125px;position: absolute;left:5px;color: #666;}
+    .search .submit{height: 32px;width: 32px;background:url("ico_search.png") no-repeat center 8px;border: 0;display:block;position: absolute;right: 0;}
+    .search .submit:hover{background-position: center -24px;cursor: pointer;}
+    
+    #menulist{padding:0 10px;}
+    #menulist dt{text-align:left;color:#fff;padding:10px 0;color:#999;}
+    #menulist dd{color:#666;line-height:3em;text-indent:1em;border-top:1px solid #e9ecef;background:url("this://app/i.gif") no-repeat 160px center;}
+    #menulist dd:hover{cursor:pointer;}
+    #menulist .active{background:url("this://app/ih.gif") #5b93d3 no-repeat 160px center;color:#fff;}
+    
+    #romlist{display:block;}
+    #romlist li{display:inline-block;width:175px;text-align:center;margin:10px 0 10px 20px;background:#fff;}
+    #romlist li:hover{box-shadow:0 0 15px #999;}
+    #romlist li img{height: 164px;width:175px;}
+    #romlist li img:hover{cursor:pointer;}
+    #romlist li:active{transform:scale(0.95);transition:transform(bounce-in,0.3s,bounce-out);}
+    #romlist li p{color:#333;margin:5px 0 10px 0;overflow:hidden;height:36px;vertical-align:middle;padding:0 5px}
+
+    .titlebar{background: #2B333E;height:50px;width: 100%;position: relative;}
+    .titlebar .tb_logo{background: #384250;width:200px;height:50px;line-height: 50px; display:block;left: 0;position: absolute;color: #FFF;text-align: center;font-size: 18px;}
+    .titlebar .tb_left{text-align: left;width: *;height:50px;display: block;position: absolute;left: 200px;z-index:1}
+    .titlebar .tb_right{text-align: right;width: 50px;height:50px;display:block;right: 0;position:absolute;z-index:2}
+    
+    .titlebar button{width:50px;height:50px;display:inline-block;background:#313A47;color:#FFF;font-weight:bold}
+    button.btn_list{background:url("btn_list.gif") no-repeat center center #313A47;}
+    button.btn_table{background:url("btn_table.gif") no-repeat center center #313A47;}
+    button.btn_about{background:url("btn_about.png") no-repeat center center #313A47;}
+    button.platform{width:80px;margin-right:1px}
+    .titlebar button:hover{background-color: #252C35;cursor:pointer}
+    .titlebar button.active{background-color: #14191f}
+    
+    .nav{background:#e9ecef;position:relative;height:52px;}
+    .nav .title{padding-left:20px;position:absolute;left:0;color:#999;line-height:52px;}
+    .nav .counnum{position:absolute;right:20px;line-height:52px;color: #999;}
+    #romcount{font-style: normal;}
+    .romnav{}
+    .clear{clear:both;width:100%;}
+    .funbtn button{width:32px;height:32px;background:#fff;display:inline-block;cursor:pointer;font-family:arial;font-weight:bold;text-align:center;}
+    .funbtn button:hover{background:#5b93d3;color:#fff;transition:blend;}
+    #loading{width: 300px;position: absolute;left: 50%;top: 50%;background: #FFF;z-index: 5;padding:10px;box-shadow:0 0 15px #999;margin:-35px 0 0 -150px;display: none;}
+    #loading p{color: #666;text-align: center;}
+    #proc{height:40px; width:300px;margin-bottom: 10px;}
+</style>
+</head>
+<body>
+<div id="loading">
+    <progress id="proc" max="100" value="0"></progress>
+    <p>正在加载游戏列表，请稍候...</p>
+</div>
+
+<div class="titlebar">
+    <div class="tb_logo"></div>
+    <div class="tb_left"></div>
+    <div class="tb_right"><button class="btn_about" id="about"></button></div>
+</div>
+
+<frameset cols="200px,*">
+    <section id="left">
+        <div class="search">
+            <input type="text" class="input" id="search_input" />
+            <button type="submit" class="submit" id="search_submit"></button>
+        </div>
+        <dl id="menulist"></dl>
+    </section>
+
+    <section id="right">
+        <div class="nav">
+            <div class="title">GAME LIST</div>
+            <div class="counnum">游戏数：<i id="romcount">0</i></div>
+        </div>
+        <div class="romnav" id="romnav">
+            <ul id="romlist"></ul>
+        </div>
+    </section>
+</frameset>
+
+</body>
+
+<script type="text/tiscript">
+include "this://app/decorators.tis";
+@click @on "#about": 
+{
+    view.dialog({
+        url: self.url("this://app/about.html"),
+        //url: self.url("about.html"),
+        width: 480,
+    })
+}
+
+self.ready = function(){
+
+    //搜索功能按下回车
+    $(#search_input).on("keyup", function(evt) {
+        if(evt.type == Event.KEY_UP && evt.keyCode == Event.VK_RETURN) {
+            search();
+        }
+    });
+    
+    //搜索功能
+    self.on("click", "#search_submit", function(evt) {
+        search();
+    });
+
+    //平台单击
+    self.on("click", "button[class=platform]", function(evt) {
+        //生成菜单列表
+        var menujson = view.GetMenuList(this.attributes["platform"])
+        createMenuList(menujson)
+        //生成游戏列表
+        var romjson = view.GetGameList(this.attributes["platform"],"全部游戏","")
+        createRomList(romjson)
+        //改变样式
+        var dds = self.$$(.tb_left > button);
+        for(var el in dds) el.attributes.removeClass("active");
+        this.attributes.addClass("active");
+        //更新配置文件
+        view.UpdateConfig("General","Platform",this.attributes["platform"])
+    });
+
+    //目录单击
+    self.on("click", "dd[class=menuitem]", function(evt) {
+        var platform = self.select(".platform.active").attributes["platform"];
+        //生成游戏列表
+        var romjson = view.GetGameList(platform,this.html,"")
+        createRomList(romjson)
+        //改变样式
+        var dds = self.$$(#menulist > dd);
+        for(var el in dds) el.attributes.removeClass("active");
+        this.attributes.addClass("active");
+    });
+    
+    //游戏启动
+    self.on("click", "li[class=romitem]", function(evt) {
+        var platform = self.select(".platform.active").attributes["platform"];
+        var path = this.attributes["path"]
+        view.RunGame(platform,path) //运行游戏
+    });
+};
+
+    /**
+    * UI数据初始化
+    **/
+    function initView(title,platform,platformjson,menujson,romjson){
+        self.$(.tb_logo).html = title; //定义标题
+        
+        //生成平台列表
+        createPlatformList(platformjson);
+        //生成菜单列表
+        createMenuList(menujson);
+        //生成rom列表
+        createRomList(romjson);
+        //platform改变样式
+        var dds = self.$$(.tb_left > button);
+        for(var el in dds){
+            if (platform == el.attributes["platform"]){
+                el.attributes.addClass("active");
+            }else{
+                el.attributes.removeClass("active");
+            }
+        }
+    }
+
+    //生成平台列表
+    function createPlatformList(pfjson){
+        var pfobj = JSON.parse(pfjson);
+        var pflist = self.$(.tb_left);
+        var dd = "";
+
+        //遍历数据，生成dom
+        for(var obj in pfobj) {
+            dd += "<button class='platform' platform='"+obj.Value+"'>"+ obj.Name +"</button>";
+        }
+        pflist.html = dd; //生成dom
+    }
+
+    //生成菜单列表
+    function createMenuList(menujson){
+        var menuobj = JSON.parse(menujson);
+        var menulist = self.$(#menulist);
+        var dd = "";
+
+        menulist.clear();
+        dd += "<dt>NAVICATION</dt>";
+        dd += "<dd class='menuitem active'>全部游戏</dd>";
+        dd += "<dd class='menuitem'>未分类</dd>";
+
+        //遍历数据，生成dom
+        for(var obj in menuobj) {
+            dd += "<dd class='menuitem'>"+ obj.Name +"</dd>";
+        }
+        menulist.html = dd; //生成dom
+    }
+    
+    //创建游戏rom dom
+    function createRomList(romjson){
+
+        var romobj = JSON.parse(romjson);
+        var romlist = self.$(#romlist);
+        var numobj = self.$(#romcount);
+        var d = "";
+        
+        //先清理所有li
+        romlist.clear();
+        
+        //生成dom
+        for(var obj in romobj) {
+            d += "<li class='romitem' path='" + obj.Path + "'><img src='"+ obj.Thumb +"' /><br><p>" + obj.Title + "</p></li>";
+        }
+        romlist.html = d; //生成dom
+        numobj.html = romobj.length.toString(); //统计游戏数
+    }
+    
+    //rom搜索功能
+    function search(){
+        var platform = self.select(".platform.active").attributes["platform"];
+        var menu = self.select("#menulist > .active").text;
+        var val = self.$(#search_input).value;
+
+        //生成游戏列表
+        var romjson = view.GetGameList(platform,menu,val)
+        if(romjson == "[]"){
+            var info = "";
+            if(menu == "全部游戏"){
+                info = "没有找到游戏";
+            }else{
+                info = "该分类下没有找到游戏";
+            }
+            view.msgbox(#alert,info);
+        }else{
+            createRomList(romjson)    
+        }
+    }
+    
+    //弹出错误窗口
+    function errorBox(str){
+        view.msgbox(#error,str);
+    }    
+</script>
+</html>

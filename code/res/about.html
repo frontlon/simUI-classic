@@ -1,0 +1,38 @@
+﻿<html>
+<head>
+  <title>关于 Tiny Game UI</title>
+  <style>
+    html,body{width:max-intrinsic; height:max-intrinsic; overflow:hidden;margin:0;padding:0}
+    .thumb{height:123px;width:480px;background:url("this://app/about.png") no-repeat;border-bottom:3px solid #54a9b5}
+    .content{padding:10px}
+    .btn{text-align:right;background:#eee;padding:10px}
+    p{font-size:12px}
+  </style>
+  <script type="text/tiscript">
+    include "this://app/decorators.tis";
+    $(#close).setState(Element.STATE_FOCUS);
+    @click @on "#close":
+    {
+      view.close();
+    }
+
+     //打开网址
+    self.on("click", "#link", function(evt) {
+        var href = this.attributes["href"];
+        Sciter.launch(href);
+        return true;
+    });
+    </script>
+</head>
+<body>
+<div class="thumb"></div>
+<div class="content">
+    <p>版本：v2.0</p>
+    <p>网址：<a href="http://www.runester.cn/gui" target="_blank" title="点击访问网站" id="link">http://www.runester.cn/gui</a></p>
+    <p>作者：frontLon</p>
+    <p>ＱＱ：48664567</p>
+    <p>邮件：front_diablo@163.com</p>
+</div>
+<div class="btn"><button id="close">确定</button></div>
+</body>
+</html>
