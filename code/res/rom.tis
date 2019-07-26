@@ -1,0 +1,255 @@
+﻿//初始化游戏列表样式
+function initRomListStyle(){
+    //初始化游戏列表样式
+    if(CONF.Default.Romlist == "1"){
+        self.$(#switch_romlist).html = "<i>&#xe659;</i>";
+        self.$(#romlist).attributes.addClass("romblock");
+        self.$(#zoom).style["display"]="inline-block";
+    }else{
+        self.$(#switch_romlist).html = "<i>&#xe690;</i>";
+        self.$(#romlist).attributes.addClass("romlist");
+        self.$(#zoom).style["display"]="none";
+    }
+    $(#switch_romlist).attributes["value"] = CONF.Default.Romlist;
+
+    //初始化缩放功能样式
+    self.$(#zoom).attributes["value"] = CONF.Default.ZoomValue;
+    self.$(#zoom).attributes["direction"] = CONF.Default.ZoomDirection;
+    //更新列表样式
+    self.$(#romlist).attributes.addClass("zoom"+CONF.Default.ZoomValue);
+    if(CONF.Default.ZoomValue >= MAXZOOM){
+        self.$(#zoom).html = "<i>&#xe642;</i>";
+    }else if(CONF.Default.ZoomValue <=1){
+        self.$(#zoom).html = "<i>&#xe625;</i>";
+    }else{
+        if(CONF.Default.ZoomDirection == "1"){
+            self.$(#zoom).html = "<i>&#xe625;</i>";
+        }else{
+            self.$(#zoom).html = "<i>&#xe642;</i>";
+        }
+    }
+}
+
+//列表图标缩放
+function romBlockZoom(obj){
+
+    var val = obj.attributes["value"];
+    //先修改缩放值
+    if(val >= MAXZOOM){
+        obj.attributes["value"] = val.toInteger() - 1;
+        obj.attributes["direction"] = "0";
+    }else if(val <=1){
+        obj.attributes["value"] = val.toInteger() + 1;
+        obj.attributes["direction"] = "1";
+    }else{
+        if(obj.attributes["direction"] == "1"){
+            obj.attributes["value"] = val.toInteger() + 1;
+        }else{
+            obj.attributes["value"] = val.toInteger() - 1;
+        }
+    }
+    //再修改缩放图标
+    if(obj.attributes["value"] >= MAXZOOM){
+        obj.html = "<i>&#xe642;</i>";
+    }else if(obj.attributes["value"] <=1){
+        obj.html = "<i>&#xe625;</i>";
+    }else{
+        if(obj.attributes["direction"] == "1"){
+            obj.html = "<i>&#xe625;</i>";
+        }else{
+            obj.html = "<i>&#xe642;</i>";
+        }
+    }
+
+    var romlist = self.$(#romlist);
+    //先清除所有缩放样式
+    for(var i=1;i<=MAXZOOM;i++){
+        romlist.attributes.removeClass("zoom"+i);
+    }
+    //更新列表样式
+    romlist.attributes.addClass("zoom"+obj.attributes["value"]);
+    //更新配置文件
+    view.UpdateConfig("Default","ZoomValue",obj.attributes["value"])
+    view.UpdateConfig("Default","ZoomDirection",obj.attributes["direction"])
+}
+
+ //切换rom列表样式
+function switchRomListStyle(obj){
+    if(obj.attributes["value"] == "1"){
+        obj.attributes["value"] = "2";
+        obj.html = "<i>&#xe690;</i>";
+        self.$(#romlist).attributes.removeClass("romblock");
+        self.$(#romlist).attributes.addClass("romlist");
+        self.$(#zoom).style["display"]="none";
+    }else{
+        obj.attributes["value"] = "1";
+        obj.html = "<i>&#xe659;</i>";
+        self.$(#romlist).attributes.removeClass("romlist");
+        self.$(#romlist).attributes.addClass("romblock");
+        self.$(#zoom).style["display"]="inline-block";
+    }
+    //更新配置文件
+    view.UpdateConfig("Default","Romlist",obj.attributes["value"])
+}
+
+//创建游戏rom dom
+function createRomList(cls=0){
+    var romobj = JSON.parse(ROMJSON);
+    var romlist = self.$(#romlist);
+    var data = "";
+    var switch_romlist = $(#switch_romlist).attributes["value"];
+    var title = "";
+
+    //如果清理参数=1，则清理掉所有数据
+    if(cls == 1){
+        romlist.clear();
+    }
+    for(var obj in romobj) {
+        if(obj.Menu == "_7b9"){
+            obj.Menu = "";
+        }
+        data += "<li class='romitem'><img src='"+  obj.Thumb +"' /><p>" +obj.Title +"</p><span>&nbsp;" + obj.Menu + "</span></li>";
+    }
+    
+    romlist.append(data);
+    SCROLL_PAGE++;
+}
+    
+//rom搜索功能
+function search(){
+    var platform = self.select(".platform.active").attributes["platform"];
+    var menu = self.select("#menulist > .active").text;
+    var val = self.$(#search_input).value;
+    
+    //重置滚动翻页数据
+    resetScroll();
+
+    //生成游戏列表
+    ROMJSON = view.GetGameList(platform,menu,val,SCROLL_PAGE)
+    if(ROMJSON == "[]"){
+        var info = "";
+
+        if(menu == CONF.Lang["AllGames"]){
+            info = CONF.Lang["GameNotFound"];
+        }else{
+            info = CONF.Lang["GameNotFoundInCate"];
+        }
+        view.msgbox(#alert,info);
+    }else{
+        createRomList(1)
+    }
+}
+
+//分页
+function scrollLoadRom(evt){
+    var scrollPos = evt.scrollPos + $(#center).box(#height);
+    var boxHeight = $(#romwrapper).box(#height);
+
+    if(SCROLL_POS == 0){
+        SCROLL_POS = scrollPos;
+    }
+
+    if ((boxHeight - scrollPos <=50) && (scrollPos > SCROLL_POS)){
+
+        //如果加锁中，则不执行后续逻辑，防止重复触发
+        if (SCROLL_LOCK == true){
+            return;
+        }
+        SCROLL_LOCK = true; //加锁
+        var platform = self.select(".platform.active").attributes["platform"];
+        var menu = self.select("#menulist > .active").text;
+        var val = self.$(#search_input).value;
+        //生成游戏列表
+        ROMJSON = view.GetGameList(platform,menu,val,SCROLL_PAGE)
+        if(ROMJSON != "[]"){
+            createRomList()
+            SCROLL_POS = scrollPos;
+            SCROLL_LOCK = false;
+        }
+    }
+}
+
+//初始化滚动分页功能
+function resetScroll(){
+    SCROLL_PAGE = 0;
+    SCROLL_LOCK = false;
+    SCROLL_POS = 0
+}
+
+//列表游戏双击启动
+function runGameInList(obj){
+    if(ACTIVETIME){
+        self.timer(0,ACTIVETIME);
+    }
+    var platform = self.select(".platform.active").attributes["platform"];
+    var file  = obj.select("p").html;
+    view.RunGame(platform,file); //运行游戏
+}
+
+//侧边栏游戏启动
+function runGameInSide(obj){
+    var platform = obj.attributes["platform"];
+    var master = obj.attributes["master"];
+    var file  = obj.html;
+    if(master != ""){
+        file = master + "__"+ file
+    }
+    view.RunGame(platform,file) //运行游戏
+}
+
+//单击游戏侧边栏详情
+function openSidebar(obj){
+    if(ACTIVETIME){
+        self.timer(0,ACTIVETIME);
+    }
+    var thisObj = obj;
+    ACTIVETIME = function(){
+        if($(#right).style["display"] == "none"){
+            $(#right).style["display"] = "block";
+            $(#right).attributes.addClass("ready");
+        }else{
+            $(#right).attributes.removeClass("ready");
+        }
+        var platform = self.select(".platform.active").attributes["platform"];
+        var getjson = view.GetRomDetail(platform,thisObj.select("p").html)
+        var detailObj = JSON.parse(getjson);
+        
+        //游戏缩略图
+        $(#thumb).html = "<img class='video' src='"+ thisObj.select("img").attributes["src"] +"' />";
+
+        //展示视频
+        if(detailObj.Video != ""){
+            $(#video_title).style["display"] = "block";
+            $(#video).style["display"] = "block";
+            $(#video).html = "<img class='video' src='"+ detailObj.Video +"' />";
+        }else{
+            $(#video).html = "<img class='video' src='' />";
+            $(#video).style["display"] = "none";
+            $(#video_title).style["display"] = "none";
+        }
+        
+        //生成文本介绍
+        if(detailObj.Doc != ""){
+            $(#doc_title).style["display"] = "block";
+            $(#doc).style["display"] = "block";
+            $(#doc).html = detailObj.Doc;
+        }else{
+            $(#doc_title).style["display"] = "none";
+            $(#doc).style["display"] = "none";
+        }
+
+        //生成按钮
+        var btndata = "<button class='run' platform='"+ platform +"' master=''>"+thisObj.select("p").html+"</button>";
+        for(var sub in detailObj.Sublist) {
+            btndata += "<button class='run' platform='"+ platform +"' master='"+ thisObj.select("p").html +"'>"+sub.Title+"</button>";
+        }
+        self.$(#buttons).html = btndata;
+    };
+    self.timer(300,ACTIVETIME);
+}
+
+//关闭侧边栏
+function closeSidebar(){
+    $(#right).style["display"] = "none";
+    $(#right).attributes.removeClass("ready");
+}

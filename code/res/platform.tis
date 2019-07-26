@@ -1,0 +1,53 @@
+﻿  
+//点击平台下拉菜单
+function openPlatformMenu(obj){
+    view.OpenFolder(obj.attributes["opt"],obj.parent.parent.attributes["platform"]);
+}
+
+//切换平台
+function changePlatform(obj){
+    //生成菜单列表
+    var menujson = view.GetMenuList(obj.attributes["platform"])
+    createMenuList(menujson)
+    
+    //重置滚动翻页数据
+    resetScroll();
+    //生成游戏列表
+    ROMJSON = view.GetGameList(obj.attributes["platform"],CONF.Lang.AllGames,"",SCROLL_PAGE);
+    createRomList(1);
+
+    var romCount = view.InitData("romCount"); //必须在获取rom的方法下面
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //改变样式
+    var dds = self.$$(#tb_left > button);
+    for(var el in dds) el.attributes.removeClass("active");
+    obj.attributes.addClass("active");
+    //更新配置文件
+    view.UpdateConfig("Default","Platform",obj.attributes["platform"])
+}
+
+//platform改变样式
+function changePlatformStyle(){
+    var dds = self.$$(#tb_left > button[class='platform']);
+    for(var el in dds){
+        if (CONF.Default.Platform == el.attributes["platform"]){
+            el.attributes.addClass("active");
+        }else{
+            el.attributes.removeClass("active");
+        }
+    }
+}
+
+//生成平台列表
+function createPlatformList(pfjson){
+    var pfobj = JSON.parse(pfjson);
+    var pflist = self.$(#tb_left);
+    var dd = "";
+    //遍历数据，生成dom
+    for(var obj in pfobj) {
+        dd += "<button class='platform' platform='"+obj.Value+"'>"+ obj.Name +"</button>";
+        dd += "<button class='platform_down' type='menu' platform='"+obj.Value+"'><i>&#xe628;</i><menu><li opt='rom'>打开Rom目录</li><li opt='sim'>打开模拟器目录</li><li opt='thumb'>打开Thumb目录</li><li opt='video'>打开Video目录</li></menu></button>";
+    }
+    pflist.html = dd; //生成dom
+}

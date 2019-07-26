@@ -1,0 +1,67 @@
+html:theme(purple) {
+
+    var(html-border-color) : #25192b;
+    var(body-border-color) : #5b4269;
+    var(splitter-background-color) : #3d274b;
+    var(left-background-color) : #3d274b;
+    var(center-background-color) : #3a2743;
+    var(center-box-shadow-color) : #312239;
+    var(right-background-color) : #3d274b;
+    var(logo-text-color) : #FFF;
+
+    var(titlebar-background-color) : #2e1e39;
+    var(titlebar-close-hover-background-color) : #fb5c56;
+    var(titlebar-button-background-color) : #4e355d;
+    var(titlebar-button-text-color) : #fff;
+    var(titlebar-button-hover-background-color) : #5b3e6c;
+    var(titlebar-button-active-background-color) : #84238f;
+    var(titlebar-button-arrow-border-light) : #624377;
+    var(titlebar-button-arrow-border-dark) : #2e1e39;
+    var(titlebar-menu-border-color) : #2b333e;
+    var(titlebar-menu-text-color) : #ccc;
+    var(titlebar-menu-odd-background-color) : #3a2743;
+    var(titlebar-menu-even-background-color) : #432e4f;
+    var(titlebar-menu-hover-text-color) : #fff;
+    var(titlebar-menu-hover-background-color) : #573c67;
+
+    var(statebar-background-color) : #432e4f;
+    var(statebar-title-text-color) : #b49ec2;
+    var(statebar-num-text-color) : #b49ec2;
+
+    var(search-background-color) : #2e1e39;
+    var(search-input-text-color) : #d1bedc;
+    var(search-button-text-color) : #d1bedc;
+    var(search-button-hover-text-color) : #fff;
+
+    var(left-menu-title-text-color) : #d4bfe0;
+    var(left-menu-list-text-color) : #fff;
+    var(left-menu-separator-color) : #342140;
+    var(left-menu-list-active-text-color) : #fff;
+    var(left-menu-list-active-background-color) : #84238f;
+
+    var(rom-block-hover-box-shadow-color) : #160e1c;
+    var(rom-block-text-color) : #fff;
+    var(rom-block-background-color) : #432e4f;
+
+    var(rom-list-odd-background-color) : #432e4f;
+    var(rom-list-even-background-color) : #3a2743;
+    var(rom-list-active-text-color) : #ccc;
+    var(rom-list-active-background-color) : #4b305b;
+    var(rom-list-title-text-color) : #fff;
+    var(rom-list-cate-text-color) : #d1bedc;
+
+    var(right-title-text-color) : #d4bfe0;
+    var(right-run-text-color) : #FFF;
+    var(right-run-background-color) : #84238f;
+    var(right-run-hover-text-color) : #FFF;
+    var(right-run-hover-background-color) : #9822a6;
+    var(right-run-active-text-color) : #FFF;
+    var(right-run-active-background-color) : #b937c8;
+    var(right-doc-border-color) : #432e4f;
+    var(right-doc-text-color) : #b49ec2;
+    var(right-doc-background-color) : #3a2743;
+    var(right-close-text-color) : #d1bedc;
+    var(right-close-background-color) : #2e1e39;
+    var(right-close-hover-text-color) : #fff;
+    var(right-close-hover-background-color) : #352242;
+}

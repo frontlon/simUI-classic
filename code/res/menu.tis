@@ -1,0 +1,37 @@
+﻿//生成菜单列表
+function createMenuList(menujson){
+    var menuobj = JSON.parse(menujson);
+    var menulist = self.$(#menulist);
+    var dd = "";
+
+    menulist.clear();
+    dd += "<dt>"+ CONF.Lang.Cate +"</dt>";
+    dd += "<dd class='menuitem active'>"+ CONF.Lang.AllGames +"</dd>";
+    dd += "<dd class='menuitem'>"+ CONF.Lang.Uncate +"</dd>";
+
+    //遍历数据，生成dom
+    for(var obj in menuobj) {
+        dd += "<dd class='menuitem'>"+ obj.Name +"</dd>";
+    }
+    menulist.html = dd; //生成dom
+}
+
+//目录单击
+function changeMenu(obj){
+    var platform = self.select(".platform.active").attributes["platform"];
+    
+    //重置滚动翻页数据
+    resetScroll();
+    
+    //生成游戏列表
+    ROMJSON = view.GetGameList(platform,obj.html,"",SCROLL_PAGE);
+    createRomList(1);
+
+    var romCount = view.InitData("romCount"); //必须在获取rom的方法下面
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //改变样式
+    var dds = self.$$(#menulist > dd);
+    for(var el in dds) el.attributes.removeClass("active");
+    obj.attributes.addClass("active");
+}

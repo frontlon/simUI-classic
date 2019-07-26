@@ -2,23 +2,18 @@ package main
 
 import (
 	"io/ioutil"
-	"strings"
 )
 
 var constMenuList = &Menu{}
+var constMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 
-type Menu struct{
-	Fc []*MenuInfo
-	Sfc []*MenuInfo
-	Md []*MenuInfo
-	Pce []*MenuInfo
-	Gb []*MenuInfo
-	Arcade []*MenuInfo
+type Menu struct {
+	Platform map[string][]*MenuInfo
 }
 
 //菜单信息
 type MenuInfo struct {
-	Name  string //菜单名称
+	Name string //菜单名称
 }
 
 /**
@@ -27,52 +22,21 @@ type MenuInfo struct {
 
 func GetMenuData(platform string) error {
 
-	platform = strings.ToLower(platform)
-	romPath := ""
-	switch platform {
-	case "fc":
-		romPath = Config.Fc.RomPath
-	case "sfc":
-		romPath = Config.Sfc.RomPath
-	case "md":
-		romPath = Config.Md.RomPath
-	case "pce":
-		romPath = Config.Pce.RomPath
-	case "gb":
-		romPath = Config.Gb.RomPath
-	case "arcade":
-		romPath = Config.Arcade.RomPath
-	}
-
-	dir_list, e := ioutil.ReadDir(romPath)
+	dir_list, e := ioutil.ReadDir(Config.Platform[platform].RomPath)
 	if e != nil {
 		return e
 	}
 
+	item := &MenuInfo{}
 	menulist := []*MenuInfo{}
-
 	for _, v := range dir_list {
 		if v.IsDir() == true {
-			des := &MenuInfo{
-				Name:   v.Name(),
+			item = &MenuInfo{
+				Name: v.Name(),
 			}
-			menulist = append(menulist, des)
+			menulist = append(menulist, item)
 		}
 	}
-	switch platform {
-	case "fc":
-		constMenuList.Fc = menulist
-	case "sfc":
-		constMenuList.Sfc = menulist
-	case "md":
-		constMenuList.Md = menulist
-	case "pce":
-		constMenuList.Pce = menulist
-	case "gb":
-		constMenuList.Gb = menulist
-	case "arcade":
-		constMenuList.Arcade = menulist
-	}
-
+	constMenuList.Platform[platform] = menulist
 	return e
 }

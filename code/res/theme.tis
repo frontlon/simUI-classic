@@ -1,0 +1,23 @@
+﻿//生成语言
+function createLang(){
+    $(#logo).html = CONF.Lang.Title;
+    $(#center .statebar .title).html = CONF.Lang.GameList;
+    $(#rom_count_text).html = CONF.Lang.GameCount;
+    $(#lang_thumb).html = CONF.Lang.Thumb;
+    $(#video_title).html = CONF.Lang.Video;
+    $(#doc_title).html = CONF.Lang.Doc;
+    $(#lang_rungame).html = CONF.Lang.RunGame;
+    $(#dark).html = CONF.Lang.ThemeDark;
+    $(#light).html = CONF.Lang.ThemeLight;
+    $(#purple).html = CONF.Lang.ThemePurple;
+    $(#blue).html = CONF.Lang.ThemeBlue;
+    $(#red).html = CONF.Lang.ThemeRed;
+}
+
+//切换主题
+function changeTheme(obj){
+    var id = obj.attributes["id"]; //主题列表
+    self.attributes["theme"] = id;
+    //更新配置文件
+    view.UpdateConfig("Default","Theme",id)
+}
