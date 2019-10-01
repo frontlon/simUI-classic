@@ -1,0 +1,93 @@
+﻿//生成语言
+function createLang(){
+    $(#loading p).html = CONF.Lang.Loading;
+    $(#logo).html = CONF.Lang.Title;
+    $(#rom_count_text).html = CONF.Lang.GameCount;
+    $(#thumb_title).html = CONF.Lang.Thumb;
+    $(#video_title).html = CONF.Lang.Video;
+    $(#doc_title).html = CONF.Lang.Doc;
+    $(#lang_rungame).html = CONF.Lang.RunGame;
+}
+
+
+//创建主题
+function createTheme(){
+
+    //默认主题
+    self.attributes["theme"] = CONF.Default.Theme;
+
+    //生成主题列表
+    var cssfile = "";
+    var menu = "";
+
+    for(var themeId in CONF.Theme) {
+        cssfile += "<style src='"+  CONF.Theme[themeId].Path +"' />"; //引入文件
+        menu += "<li id="+ themeId +">"+  CONF.Theme[themeId].Name +"</li>"; //填充菜单
+    }
+    $(#theme menu).html = menu;
+    $(#themefile).html = cssfile;
+
+    //设置主题样式
+    setTheme(CONF.Default.Theme);
+}
+
+
+//切换主题
+function changeTheme(obj){
+    var id = obj.attributes["id"]; //主题列表
+    self.attributes["theme"] = id;
+    //更新配置文件
+  //  view.UpdateConfig("Default","Theme",id)
+}
+
+//设置主题样式
+function setTheme(themeId){
+
+    if(CONF.Theme[themeId].Params["titlebar-opacity"] != undefined){
+        $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["titlebar-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["left-opacity"] != undefined){
+        $(#left).style["opacity"] = CONF.Theme[themeId].Params["left-opacity"];
+        $(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["left-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["center-opacity"] != undefined){
+        $(#center).style["opacity"] = CONF.Theme[themeId].Params["center-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["right-opacity"] != undefined){
+        $(#right).style["opacity"] = CONF.Theme[themeId].Params["right-opacity"];
+        $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["right-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["body-opacity"] != undefined){
+        $(body).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["background-color"] != undefined){$(body).style["background-color"] = CONF.Theme[themeId].Params["background-color"];}
+    if(CONF.Theme[themeId].Params["background-image"] != undefined){$(body).style["background-image"] = "url("+CONF.Theme[themeId].Params["background-image"]+")";}
+    if(CONF.Theme[themeId].Params["background-repeat"] != undefined){$(body).style["background-repeat"] = CONF.Theme[themeId].Params["background-repeat"];}
+    if(CONF.Theme[themeId].Params["background-position"] != undefined){$(body).style["background-position"] = CONF.Theme[themeId].Params["background-position"];}
+}
+/*
+function changeTheme(obj) {
+
+
+
+
+
+    const themeRelPath = ROOTPATH + "theme/light.css";
+  const themeAbsPath = System.home(themeRelPath); // abs path from path relative to the executable folder
+  const themeUrl = URL.fromPath(themeAbsPath); // make file:// url from it
+
+  const styleBag = $(style#theme);
+  styleBag.deactivate(); // remove all rules defined in it
+  styleBag.attributes["src"] = themeUrl;
+  styleBag.activate(); // inject rules
+
+view.msgbox(#alert,"11");
+
+}
+*/
+

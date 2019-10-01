@@ -1,0 +1,194 @@
+﻿
+var CONF; //读取的config配置
+var ROMJSON;//rom列表
+var SCROLL_PAGE = 0; //当前滚动条翻页页数
+var SCROLL_LOCK = false; //滚动条锁
+var SCROLL_POS = 0; //默认滚动条位置
+var MAXZOOM = 5; //最大缩放等级
+var ACTIVETIME = null; //正在启动的定时器
+
+view.root.on("ready", function(){
+
+try{
+
+    /********** 数据初始化 **********/
+    //初始化全局配置
+    initConfig("0");
+
+    //初始化rom
+    var pf = CONF.Default.Platform;
+    ROMJSON = view.GetGameList(pf,"","","",SCROLL_PAGE)
+
+    createRomList(0); //生成rom列表
+    //生成rom数量
+    var romCount = view.GetGameCount(pf,"","");
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+}catch(e){
+    view.msgbox(#alert,e);
+}
+    // ================= 事件 =================
+
+    //搜索功能按下回车
+    $(#search_input).on("keyup", function(evt) {
+        if(evt.type == Event.KEY_UP && evt.keyCode == Event.VK_RETURN) {
+            search();
+        }
+    });
+    
+    //搜索功能
+    self.on("click", "#search_submit", function(evt) {
+        search();
+    });
+
+    //平台单击
+    self.on("click", "button[class=platform]", function(evt) {
+        changePlatform(this);
+    });
+
+    //平台下拉菜单 - 打开目录
+    self.on("click", ".opendir", function(evt) {
+        openPlatformDir(this);
+    });
+
+    //平台下拉菜单 - 切换模拟器
+    self.on("click", ".switch_sim", function(evt) {
+        openPlatformSim(this);
+    });
+
+
+    //目录单击
+    self.on("click", "dd[class=menuitem]", function(evt) {
+        changeMenu(this);
+    });
+    
+ 
+    //游戏启动（侧边栏）
+    self.on("click", "div[class=run]", function(evt) {
+        view.RunGame(this.attributes["rid"],"");
+    });    
+    
+    //单击游戏侧边栏详情
+    self.on("click", "li[class=romitem]", function(evt) {
+        openSidebar(this);
+    });
+    
+    //关闭侧边栏
+    self.on("click", "#right_close", function(evt) {
+        closeSidebar();
+    });
+    
+    //设置喜爱
+    self.on("click", "#right_favorite", function(evt) {
+        setFavorite(this);
+    });
+
+    //分页
+    $(#center).onScroll = function(evt) {
+        scrollLoadRom(evt);
+    };
+
+    //切换rom列表样式
+    self.on("click", "#switch_romlist", function(evt) {
+        switchRomListStyle(this);
+    });
+    
+    //列表图标缩放
+    self.on("change", "#zoom", function(evt) {
+        romBlockZoom(this);
+    });
+
+    //生成缓存
+    self.on("click", "#create", function(evt) {
+        createAllCache("1");
+    });
+
+    //切换主题
+    self.on("click", "#theme menu li", function(evt) {
+        changeTheme(this);
+    });
+
+    //rom展开右键菜单
+    self.on("contextmenusetup", "#romlist > li", function(evt) {
+        romContextMenu(this);
+    });
+
+    //右键菜单按钮启动游戏
+    self.on("click", "#romcontext .menu_run_game", function(evt) {
+        view.RunGame(this.attributes["rid"],this.attributes['sim']);
+    });
+
+    //右键菜单启动图片下载
+    self.on("click", "#romcontext .open_down_thumb", function(evt) {
+        view.dialog({
+            url:self.url(ROOTPATH + "down_thumbs.html"),
+            caption:"图片下载",
+            width:1024,
+            height:750,
+            parameters: {
+                id:this.attributes["rid"],
+                keyword:this.attributes["rname"],
+                updateRomThumbs:updateRomThumbs,
+            };
+        });
+    });
+
+    //按字母搜索rom
+    self.on("click", "#num_search li", function(evt) {
+        numSearch(this);
+    });
+
+    //弹出关于窗口
+    self.on("click", "#about", function(evt) {
+        view.dialog({
+            url:self.url(ROOTPATH + "about.html"),
+            width:480,
+        })
+    });
+
+    //弹出设置窗口
+    self.on("click", "#config", function(evt) {
+        view.dialog({
+            url:self.url(ROOTPATH + "config.html"),
+            width:650,
+            height:635,
+            parameters: {
+                getPlatform:getPlatform,
+                getPlatformById:getPlatformById,
+                getSimulatorByPlatform:getSimulatorByPlatform,
+                updateConfig:updateConfig,
+                updatePlatform:updatePlatform,
+                addPlatform:addPlatform,
+                delPlatform:delPlatform,
+            };
+        });
+        $(#loading).style["display"]="block";
+        initConfig("1");
+        $(#loading).style["display"]="none";
+    });
+    
+});
+
+
+//初始化配置
+function initConfig(isfresh){
+
+    //var themejson = view.InitData("themeList","0"); //主题列表
+    var confstr = view.InitData("config",isfresh);
+    CONF = JSON.parse(confstr);
+
+    createLang(); //创建语言
+    createTheme(); //创建主题
+    createPlatformList(); //生成平台列表
+    changePlatformStyle(); //platform改变样式
+    initRomListStyle(); //初始化游戏列表样式
+    //生成菜单
+    var menujson = view.GetMenuList(CONF.Default.Platform);
+    createMenuList(menujson);
+}
+
+//弹出错误窗口
+function errorBox(str){
+    view.msgbox(#error,str);
+}
+

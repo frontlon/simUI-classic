@@ -1,0 +1,47 @@
+﻿<html resizeable>
+<head>
+    <title></title>
+    <style>
+        html,body{width:*; height:*;margin:0;padding:0;color:#000;background:#fff;}
+
+        @font-face{font-family:iconfont;src:url(iconfont.ttf)}
+        i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align: middle}
+    
+        #loading{text-align: center;padding-bottom:20px;}
+
+        #down_thumb_list{padding:0;margin:20px 0 0 0;display:block;width:100%;flow:horizontal-flow;overflow: hidden;}
+        #down_thumb_list li{display: inline-block;min-width:170px;max-width:200px;margin:15px;}
+        #down_thumb_list li:hover{box-shadow:0 0 15px #666}
+        #down_thumb_list li:active{transform:scale(0.95);transition:transform(bounce-in,0s,bounce-out);}
+        #down_thumb_list li img{width:100%;height:width(80%);}
+
+        .thumb_bg{width:100%;height:250px;background:url(images/down_thumbs.jpg) no-repeat center center;clear:both;}
+        .thumb_search{width:480px;height:48px;margin:100px auto 0 auto;padding:0;}
+        .thumb_search .input{opacity: 0.8;background:#fff;height:48px;line-height:48px;border:0;display:block;float:left;width:300px;color:#333;font-size:18px;text-align:center;padding:0;border-radius: 8px 0 0 8px}
+        .thumb_search .submit{opacity: 0.8;height:48px;width:70px;line-height:48px;border:0;display:block;float:left;font-size:14px;background:#ddd;color:#666;text-align:center;margin:0;border-radius: 0 8px 8px 0;cursor:pointer}
+        .thumb_search .submit.active{background: #09f;color: #FFF}
+        #search_submit_1{border-radius: 0}
+            
+        .description{text-align:center;display:block;position:relative;width:100%;color:#FFF;padding-top: 20px}
+
+    </style>
+</head>
+<body>
+
+    <div class="thumb_bg">
+        <div class="thumb_search">
+            <input type="text" class="input" id="search_input" novalue="输入关键字" />
+            <button class="submit active" id="search_submit_1" value="1">展示图</button>
+            <button class="submit" id="search_submit_2" value="2">场景图</button>
+        </div>
+        <div class="description">图片搜索技术由百度图片提供</div>      
+    </div>
+
+    <ul id="down_thumb_list"></ul>
+    <div id="loading"><p>加载中，请稍候...</p></div>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/dialog_down_thumbs.tis";
+</script>
+</body>
+</html>

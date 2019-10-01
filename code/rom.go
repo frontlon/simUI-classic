@@ -1,6 +1,9 @@
 package main
 
 import (
+	"VirtualNesGUI/code/db"
+	"github.com/axgle/mahonia"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -8,182 +11,257 @@ import (
 	"strings"
 )
 
-var constRomList = &Rom{}
+var constSeparator = "__" //rom子分隔符
 
-type Rom struct{
-	Fc []*Rominfo
-	Sfc []*Rominfo
-	Md []*Rominfo
-	Pce []*Rominfo
-	Gb []*Rominfo
-	Arcade []*Rominfo
+type RomDetail struct {
+	Info       *db.Rom
+	DocContent string
+	Sublist    []*db.Rom
 }
 
-//游戏信息
-type Rominfo struct {
-	Title string //标题
-	Menu  string //目录
-	Path  string //完整路径
-	Thumb string //缩略图
+/**
+ * 读取游戏介绍文本
+ **/
+func getDocContent(f string) string {
+	if f == "" {
+		return ""
+	}
+	text, err := ioutil.ReadFile(f)
+	content := ""
+	if err != nil {
+		return content
+	}
+	enc := mahonia.NewDecoder("gbk")
+	content = enc.ConvertString(string(text))
+	return content
 }
 
-
-
-//读取fc rom列表
-func getRomList(platform string)  {
-	platform = strings.ToLower(platform)
-
-	//读取平台配置
-	conf := &PfStruct{}
-	switch platform {
-	case "fc":
-		conf = Config.Fc
-	case "sfc":
-		conf = Config.Sfc
-	case "md":
-		conf = Config.Md
-	case "pce":
-		conf = Config.Pce
-	case "gb":
-		conf = Config.Gb
-	case "arcade":
-		conf = Config.Arcade
+/**
+ * 运行游戏
+ **/
+func runGame(platform int64, romfile string, sim int64) string {
+	exeFile := Config.Platform[platform].UseSim.Path
+	if sim != 0 {
+		exeFile = Config.Platform[platform].SimList[sim].Path;
+	}
+	//检测执行文件是否存在
+	_, err := os.Stat(exeFile)
+	if err != nil {
+		return err.Error()
 	}
 
-	//路径最后加入反斜杠
-	conf.RomPath = conf.RomPath + "\\"
+	//检测rom文件是否存在
+	if Exists(romfile) == false {
+		return Config.Lang["RomNotFound"] + romfile
+	}
 
-	romlist := []*Rominfo{}
+	//验证桥接程序是否存在
+	bridge := filepath.Dir(exeFile) + separator + "tplugin.exe"
+	cmd := &exec.Cmd{}
+	_, ok := os.Stat(bridge)
+	if ok == nil {
+		cmd = exec.Command(bridge, exeFile, romfile)
+	} else {
+		cmd = exec.Command(exeFile, romfile)
+	}
+
+	if err := cmd.Start(); err != nil {
+		return err.Error()
+	}
+
+	return ""
+}
+
+
+
+/**
+ * 创建缓存
+ **/
+func CreateRomCache(platform int64) error {
+	romlist := []*db.Rom{}
+	menuList := map[string]*db.Menu{}              //分类目录
+	RomPath := Config.Platform[platform].RomPath   //rom文件路径
+	RomExt := Config.Platform[platform].RomExts    //rom扩展名
+	ThumbList := GetMaterialUrl("thumb", platform) //缩略图
+	VideoList := GetMaterialUrl("video", platform) //视频
+	SnapList := GetMaterialUrl("snap", platform)   //截图
+	DocList := GetMaterialUrl("doc", platform)     //文档
+	RomAlias := getRomAlias(platform)              //别名配置
 
 	//进入循环，遍历文件
-	if err:= filepath.Walk(conf.RomPath,
+	if err := filepath.Walk(RomPath,
 		func(p string, f os.FileInfo, err error) error {
 			if f == nil {
 				return err
 			}
 
 			//整理目录格式，并转换为数组
-			newpath := strings.Replace(conf.RomPath, "/", "\\", -1)
-			if newpath[0 : 2] == ".\\"{
-				p = ".\\" + p
-			}
+			newpath := strings.Replace(RomPath, "/", "\\", -1)
 			newpath = strings.Replace(p, newpath, "", -1)
+			if len(newpath) > 0 && newpath[0:1] == "\\" {
+				newpath = strings.Replace(newpath, "\\", "", 1)
+			}
 			subpath := strings.Split(newpath, "\\")
-			fileExt := strings.ToLower(path.Ext(p)) //获取文件后缀
+			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
 
 			//如果该文件是游戏rom
-			if f.IsDir() == false && CheckPlatformExt(conf.FileExt,fileExt){
+			if f.IsDir() == false && CheckPlatformExt(RomExt, romExt) {
+				romName := GetFileName(f.Name())
+				title := romName
+				//如果有别名配置，则读取别名
+				if _, ok := RomAlias[title]; ok {
+					title = RomAlias[title]
+				}
+
+				py := TextToPinyin(title)
+
+				//如果游戏名称存在分隔符，说明是子游戏
 				menu := constMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
 				if len(subpath) > 1 {
 					menu = subpath[0]
 				}
 
-				//去掉扩展名，生成标题
-				rinfo := &Rominfo{
-					Title: GetRomName(f.Name()),
-					Path:  p,
-					Menu:  menu,
-					Thumb: getThumb(conf.ThumbPath,GetRomName(f.Name())),
+				thumb := ""
+				snap := ""
+				video := ""
+				doc := ""
+
+				if _, ok := ThumbList[romName]; ok {
+					thumb = ThumbList[romName]
 				}
-				romlist = append(romlist, rinfo)
+
+				if _, ok := SnapList[romName]; ok {
+					snap = SnapList[romName]
+				}
+
+				if _, ok := VideoList[romName]; ok {
+					video = VideoList[romName]
+				}
+
+				if _, ok := DocList[romName]; ok {
+					doc = DocList[romName]
+				}
+
+				//如果游戏名称存在分隔符，说明是子游戏
+				if strings.Contains(title, constSeparator) {
+
+					//拆分文件名
+					sub := strings.Split(title, constSeparator)
+
+					//去掉扩展名，生成标题
+					sinfo := &db.Rom{
+						Name:      sub[1],
+						Pname:     sub[0],
+						RomPath:   p,
+						Menu:      menu,
+						Platform:  platform,
+						ThumbPath: thumb,
+						SnapPath:  snap,
+						VideoPath: video,
+						DocPath:   doc,
+						Star:      0,
+						Pinyin:    py,
+					}
+					romlist = append(romlist, sinfo)
+				} else {
+
+					//去掉扩展名，生成标题
+					rinfo := &db.Rom{
+						Menu:      menu,
+						Name:      title,
+						Platform:  platform,
+						RomPath:   p,
+						ThumbPath: thumb,
+						SnapPath:  snap,
+						VideoPath: video,
+						DocPath:   doc,
+						Star:      0,
+						Pinyin:    py,
+					}
+
+					//rom列表
+					romlist = append(romlist, rinfo)
+					//分类列表
+					if menu != constMenuRootKey {
+						menuList[menu] = &db.Menu{
+							Platform: platform,
+							Name:     menu,
+							Pinyin:   TextToPinyin(menu),
+						}
+					}
+
+				}
 			}
 			return nil
-		});err != nil{}
-
-	//赋值给全局变量
-	switch platform {
-	case "fc":
-		constRomList.Fc = romlist
-	case "sfc":
-		constRomList.Sfc = romlist
-	case "md":
-		constRomList.Md = romlist
-	case "pce":
-		constRomList.Pce = romlist
-	case "gb":
-		constRomList.Gb = romlist
-	case "arcade":
-		constRomList.Arcade = romlist
+		}); err != nil {
 	}
 
+	//保存数据到数据库rom表
+	if len(romlist) > 0 {
+		if err := (&db.Rom{}).Add(&romlist); err != nil {
+		}
+	}
+	//保存数据到数据库cate表
+	if len(menuList) > 0 {
+
+		if err := (&db.Menu{}).Add(&menuList); err != nil {
+		}
+	}
+
+	//写入完成后清理变量
+	romlist = []*db.Rom{}
+	menuList = make(map[string]*db.Menu)
+
+	return nil
 }
 
-/**
- * 读取游戏缩略图
- **/
-func  getThumb(thumbPath string,title string) string {
-	img := thumbPath + "\\" +title+".png"
-	if !exists(img){
-		img = thumbPath + "\\..\\_DEF_.png"
-	}
-	return img
-}
-
-/**
- * 运行游戏
- **/
-func runGame(platform string,path string) string {
-
-	exeFile := ""
-	switch(platform){
-	case "fc":
-		exeFile = Config.Fc.FileExe
-	case "sfc":
-		exeFile = Config.Sfc.FileExe
-	case "md":
-		exeFile = Config.Md.FileExe
-	case "pce":
-		exeFile = Config.Pce.FileExe
-	case "gb":
-		exeFile = Config.Gb.FileExe
-	case "arcade":
-		exeFile = Config.Arcade.FileExe
+//读取资源文件url
+func GetMaterialUrl(stype string, platform int64) map[string]string {
+	getpath := ""
+	exts := []string{}
+	list := make(map[string]string)
+	switch stype {
+	case "video":
+		getpath = Config.Platform[platform].VideoPath;
+		exts = []string{".gif"}
+	case "thumb":
+		getpath = Config.Platform[platform].ThumbPath;
+		exts = []string{".jpg", ".bmp", ".png", ".jpeg"}
+	case "snap":
+		getpath = Config.Platform[platform].SnapPath;
+		exts = []string{".jpg", ".bmp", ".png", ".jpeg"}
+	case "doc":
+		getpath = Config.Platform[platform].DocPath;
+		exts = []string{".txt"}
 	}
 
-	//检测执行文件是否存在
-	_, err := os.Stat(exeFile)
-	if err != nil {
-		return "执行程序" + exeFile + "不存在"
+	//如果参数为空，不向下执行
+	if getpath == "" || len(exts) == 0 {
+		return list
 	}
 
-	//检测rom文件是否存在
-	if exists(path) == false {
-		return "rom文件:" + path + "不存在"
+	//进入循环，遍历文件
+	if err := filepath.Walk(getpath,
+		func(p string, f os.FileInfo, err error) error {
+			if f == nil {
+				return err
+			}
+			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
+			//如果是规定的扩展名，则记录数据
+			if f.IsDir() == false && CheckPlatformExt(exts, romExt) {
+				list[GetFileName(f.Name())] = p
+			}
+			return nil
+		}); err != nil {
 	}
-
-	cmd := exec.Command(exeFile,path)
-	if err := cmd.Start(); err != nil {
-		return "程序启动失败:" + err.Error()
-	}
-	return ""
-}
-
-/**
- * 检测文件是否存在（文件夹也返回false）
- **/
-func exists(path string) bool {
-	finfo, err := os.Stat(path)
-	isset := false
-	if err != nil || finfo.IsDir() == true{
-		isset =  false
-	}else{
-		isset = true
-	}
-	return isset
-}
-
-/**
- * 去掉rom扩展名，从文件名中读取Rom名称
- **/
-func GetRomName(filename string) string{
-	return strings.TrimSuffix(filename, path.Ext(filename))
+	return list
 }
 
 //检查文件扩展名是否存在于该平台中
-func CheckPlatformExt(exts []string,file string) bool{
-	for _,v := range exts{
-		if v == file{
+func CheckPlatformExt(exts []string, file string) bool {
+	for _, v := range exts {
+		if v == file {
 			return true
 		}
 	}

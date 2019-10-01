@@ -1,0 +1,38 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
+        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:10px;}
+        input[type="text"]{border:1px solid #999;border-radius:2px;display:inline-block;font-size:14px;}
+        label{font-size:14px;}
+        table{width:100%;}
+        th{text-align:left;border-bottom:1px solid #ccc;padding:20px 0 5px 0;}
+        td:first-child{font-size:14px;text-align:left;padding:10px 0;}
+        tr:last-child td{text-align: center;padding-bottom:0}
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <table>
+            <tr><td>名称：</td><td><input type="text" id="sim_name" value="">
+            <label><input type='checkbox' value='1' id="sim_default" />设为默认模拟器</label></td></tr>
+            <tr><td>路径：</td><td><input type="text" id="sim_path" value=""> <button  class="openfolder" for="sim_path" caption="请选择文件夹">&#x2026;</button></td></tr>
+            <tr><td>参数：</td><td><input type="text" id="sim_cmd" value="">
+            <select>
+                <option value="">默认</option>
+                <option value="1">MAME</option>
+                <option value="2">FBAS</option>
+                <option value="3">Winkawaks</option>
+            </select>
+            </td></tr>
+            <tr><th colspan="2"></th></tr>
+            <tr><td colspan="2"><button id="sim_submit"></button></td></tr>
+        </table>
+    </div>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/dialog_sim.tis";
+</script>
+</body>
+</html>

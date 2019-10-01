@@ -1,0 +1,154 @@
+﻿var ID;
+var PAGE=0;
+var PAGENUM = 30;
+var SCROLL_POS = 0;
+var SCROLL_LOCK = false;
+view.root.on("ready", function(){
+    var keyword = view.parameters.keyword;
+    ID = view.parameters.id;
+    $(#search_input).value = keyword;
+    searchPic(keyword,1);
+
+    //分页
+    self.onScroll = function(evt) {
+
+        var scrollPos = evt.scrollPos + self.box(#height);
+        var boxHeight = $(#down_thumb_list).box(#height);
+
+        if(SCROLL_POS == 0){
+            SCROLL_POS = scrollPos;
+        }
+
+        if ((boxHeight - scrollPos <=50) && (scrollPos > SCROLL_POS)){
+
+            //如果加锁中，则不执行后续逻辑，防止重复触发
+            if (SCROLL_LOCK == true){
+                return;
+            }
+            SCROLL_LOCK = true; //加锁
+
+            var keyword = $(#search_input).value;
+            var ctype = $(.submit.active).attributes['value'];
+            PAGE++;
+
+            var result = searchPic(keyword,ctype);
+
+            if(result == true){
+                SCROLL_POS = scrollPos;
+            }
+            SCROLL_LOCK = false;
+        }
+
+    };
+
+
+});
+
+//点击图片
+event click $(#down_thumb_list li){
+
+    var keyword = $(#search_input).value;
+    var ctype = $(.submit.active).attributes['value'];
+    var caption = "";
+    var content = "";
+     if(ctype == 1){ //展示图
+        caption = "设置展示图";
+        content = "确定要设置这张图片为展示图吗？";
+    }else{ //场景图、动画
+        keyword += " 动图";
+        caption = " 设置场景图";
+        content = "确定要设置这张图片为场景图吗？";
+    }
+
+    var result = view.msgbox {
+        type:#question, 
+        caption:caption, 
+        content:content,
+        buttons:[
+            {id:#yes,text:"确定"},
+            {id:#cancel,text:"取消"},
+        ]
+    };
+
+    if(result == "yes"){
+        var result = view.parameters.updateRomThumbs(ctype,ID,this.select("img").attributes["src"]);
+        if(result != ""){
+            view.msgbox(#alert,"设置成功");
+        }
+    }
+}
+
+//点击搜索按钮
+event click $(.submit){
+
+    var keyword  = $(#search_input).value;
+
+    if(keyword == ""){
+        view.msgbox(#alert,'请输入关键字');
+        return true;
+    }
+
+    //按钮样式
+    this.attributes.addClass('active');
+
+    if(this.attributes['value'] == 1){ //展示图
+            $(#search_submit_2).attributes.removeClass('active');
+
+    }else{ //场景图、动画
+        keyword += "动图";
+        $(#search_submit_1).attributes.removeClass('active');
+    }
+
+    //清空数据
+    $(#down_thumb_list).clear();
+
+    //搜索内容
+    searchPic(keyword,this.attributes['value']);
+    
+}
+
+
+
+
+//图片搜索
+function searchPic(keyword,ctype){
+    //过滤特殊字符
+    keyword = keyword.replace(/[\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\;\'\:\"\'\,\.\/\<\>\?\-\=\_\+]/g,"");
+    var newkeyword = keyword.urlEscape(); //unicode转码
+    var num = PAGE*PAGENUM;
+
+    //载入url
+    var url = "https://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&ct=201326592&is=&fp=result&queryWord={$keyword}&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=0&hd=&latest=&copyright=&word={$keyword}&s=&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&expermode=&force=&pn={$NumIndex}&rn={$pageNum}&gsm=&1569904957071=";
+    //替换关键字
+    url = url.replace("{$keyword}",keyword);
+    url = url.replace("{$NumIndex}",num.toString());
+    url = url.replace("{$pageNum}",PAGENUM.toString());
+
+    //生成平台列表    
+	view.request({
+        type:#get,
+        url:url,
+        protocol:#json,
+        success:function(data,status){
+            var content = "";
+            for(var item in data.data) {
+                if(item.thumbURL != undefined){
+                    //如果是展示图，不允许设置动画
+                    if (ctype == 1){
+                        if(item.is_gif == 1){
+                            continue;
+                        }
+                    }
+                    content +="<li><img src='"+item.thumbURL+"'/></li>";
+                }
+            }
+            $(#down_thumb_list).append(content);
+            return true;
+        },
+        error:function(err,status){
+            view.msgbox(#alert,err);
+            return false;
+        }
+	});
+    return false;
+}

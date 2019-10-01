@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" window-icon="this://app/ico.png" window-resizable window-frame="transparent">
+<head>
+<meta charset="utf-8" />
+<title></title>
+<div id="themefile"></div>
+<style type="text/css">
+    /*
+        @import url(theme/dark.css);
+        var(hover-option-cover): rgba(0,0,0,0.1);
+        html:not(:theme(dark))
+
+        var(accent): window-accent-color;  
+        var(accent-text): #fff;  
+        var(border-width): 0.14em;
+        var(border-double-width): 0.28em;
+        var(border-radius):0dip;
+        var(icon-size): window-icon-size;
+        <li>window-border-width: <icon style="width:window-border-width"/> </li>
+    */
+
+    html{min-width:800px;width:*;background:transparent;border:1px solid color(html-border-color);}
+    @font-face{font-family:iconfont;src:url(iconfont.ttf)}
+    i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align: middle}
+    *{margin:0;padding:0}
+    a{text-decoration:none}
+    body{font-size:14px;border:1px solid color(body-border-color);}
+    splitter{background:color(splitter-background-color);}
+    splitter:hover{background:color(splitter-background-color)}
+    #left{background-color:color(left-background-color);height:*;overflow:scroll-indicator;position: relative;}
+    #center{background-color:color(center-background-color);box-shadow:inset 0 0 5px color(center-box-shadow-color);height:*;overflow:scroll-indicator;position: relative;}
+    #right{background-color: color(right-background-color); height:*;overflow:scroll-indicator;padding:0 10px;display:none;width:261px;position: relative;}
+    #logo{ color:color(logo-text-color); width:200px;line-height:45px; display:inline-block;text-align:center;font-size:18px}
+    #tb_left{text-align:left;width:*;display:inline-block;height:*;overflow:hidden}
+    
+    #tb_right{text-align:right;width:415px;display:inline-block}
+    #tb_right button{margin-left:1px;font-size:14px;;line-height:45px}
+    #tb_right i{font-size:18dip;line-height:45px;display:block}
+    #titlebar{background-color: color(titlebar-background-color);height:45px;line-height:45px;width:100%;position:relative;flow:horizontal-flow;overflow: hidden}
+    #titlebar button{color: color(titlebar-button-text-color);background:color(titlebar-button-background-color);width:45px;height:45px;display:inline-block;overflow: hidden}
+    #titlebar button:hover{background-color:color(titlebar-button-hover-background-color);cursor:pointer}
+    #titlebar button.active{background-color:color(titlebar-button-active-background-color)}
+    #titlebar button.platform{min-width:30px;width:auto;padding:0 15px ;border-right:1px solid color(titlebar-button-arrow-border-light);border-left:1px solid color(titlebar-button-arrow-border-dark)}
+    #titlebar button.platform_down{width:15px;line-height:45px;text-align:center;border-left:1px solid color(titlebar-button-arrow-border-dark);border-right:1px solid color(titlebar-button-arrow-border-light)}
+
+    button[role=window-close]:hover{background-color:color(titlebar-close-hover-background-color)}
+    menu{display:none;border:1px solid color(titlebar-menu-border-color)}
+    menu li{padding:10px 20px 10px 10px ;text-align:center;color:color(titlebar-menu-text-color);line-height: 20px;height: 20px}
+    menu li:nth-child(odd){ background:color(titlebar-menu-odd-background-color)}
+    menu li:nth-child(even){ background:color(titlebar-menu-even-background-color)}
+    menu li:hover{background:color(titlebar-menu-hover-background-color);color:color(titlebar-menu-hover-text-color);cursor: pointer}
+    menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
+    menu li i{line-height:20px;height:20px;width:22px;text-align: left; padding-top:0;vertical-align: middle;font-size:18px!important;}
+    .statebar{background:color(statebar-background-color);position:relative;height:52px;margin-top:0}
+    .statebar .zoom_wrapper{color:color(statebar-title-text-color);position:absolute;left:7px;top:10px;padding:10px;}
+    .statebar .counnum{color:color(statebar-num-text-color);position:absolute;right:20px;line-height:52px}
+    .zoom_slider{width:100px;display:inline-block;height:5px;background: #373737;background-clip: content-box;overflow:visible;padding:5px;border-radius:5px}
+    .zoom_slider > button{width:15px; height:1.2em; foreground: none; background: #2d2d2d; border:none;border-radius:2px;}
+    .zoom_slider > button:hover{background:#252525}
+    
+    .search{height:32px;background:color(search-background-color);margin:10px;position:relative}
+    .search .input{color:color(search-input-text-color);height:32px;line-height:32px;background:none;border:0;display:block;width:125px;position:absolute;left:5px}
+    .search .submit{color:color(search-button-text-color);height:32px;width:26px;line-height:34px;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none}
+    .search .submit:hover{cursor:pointer;color:color(search-button-hover-text-color)}
+    
+    #menulist{padding:0 10px;height:*;overflow:scroll-indicator;}
+    #menulist dt{text-align:left;padding:10px 0;color:color(left-menu-title-text-color)}
+    #menulist dd{color:color(left-menu-list-text-color);line-height:38px;height:38px;overflow:hidden;text-indent:1em;border-top:1px solid color(left-menu-separator-color);position:relative;}
+    #menulist dd:hover{cursor:pointer}
+    #menulist .active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color);}
+
+    #romlist{display:block;}
+    .romblock{flow:horizontal-flow;clear:both;margin-left:15px;}
+    .romblock li{display:inline-block;position: relative;context-menu:selector(menu#romcontext);width:*;}
+    .romblock li:hover{box-shadow:0 0 15px color(rom-block-hover-box-shadow-color)}
+    .romblock li:active{transform:scale(0.95);transition:transform(bounce-in,0s,bounce-out);}
+    .romblock li:current{background:#fff;border:5px solid #f00;border-radius:50px;}
+    .romblock li img{width:100%;height:width(80%);display:block;}
+    .romblock li .img:hover{cursor:pointer}
+    .romblock li div{background:color(rom-block-background-color);color:color(rom-block-text-color);text-align:center;padding:5px;height:36px;vertical-align: middle;display:block}
+    .romblock li p{overflow:hidden;max-height:2.5em;}
+    .romblock li span{display: none}
+
+    .romblock.zoom1 li{min-width:100px;max-width:150px;margin:10px 15px;font-size:12px}
+    .romblock.zoom2 li{min-width:150px;max-width:200px;margin:15px 20px}
+    .romblock.zoom3 li{min-width:200px;max-width:250px;margin:10px 15px;}
+    .romblock.zoom4 li{min-width:250px;max-width:350px;margin:15px 20px}
+    .romblock.zoom5 li{min-width:300px;max-width:400px;margin:15px 20px}
+    
+    .romlist{width:*;margin-top:30px;margin-left:35px;list-style-type:none;}
+    .romlist li{height:45px;line-height:45px;padding:0 15px;margin:0;position: relative;}
+    .romlist li:nth-child(odd){ background:color(rom-list-odd-background-color)}
+    .romlist li:nth-child(even){ background:color(rom-list-even-background-color)}
+    .romlist li:hover{cursor:pointer}
+    .romlist li:active{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color)}
+    .romlist li:current{background:#fff;border:5px solid #f00;border-radius:50px;}
+    .romlist li img{border-radius:50%;width:24px;height:24px;vertical-align:middle;margin:0;display:block;position: absolute;top:10px}
+    .romlist li div{text-align:left;padding:0;height:auto;width:*;vertical-align:middle;display:block;position: absolute;top:0;left:50px}
+    .romlist li p{line-height:45px;height:45px;font-weight:bolder;color:color(rom-list-title-text-color);display:inline}
+    .romlist li span{line-height:45px;height:45px;color:color(rom-list-cate-text-color);font-weight:normal;padding-left:10px;display:inline-block}
+
+    #right h2{text-align:left;padding:10px 0;color:color(right-title-text-color);font-weight:normal;font-size:14px;line-height:24px}
+    #right .video{width:100%;max-width:240px;margin:0 auto;display:block;height:auto;size:auto}
+    #right .run{padding:5px;line-height:1.5em;height:auto;width:*;display:block;background:color(right-run-background-color);color:color(right-run-text-color);text-align:center;margin-bottom:10px;overflow:hidden;white-space:pre-wrap;word-wrap: break-word;word-break:break-all}
+    #right .run:hover{color:color(right-run-hover-text-color);background:color(right-run-hover-background-color);cursor:pointer}
+    #right .run:active{color:color(right-run-active-text-color);background:color(right-run-active-background-color)}
+    #right .doc{height:*;min-height:80px;overflow:scroll-indicator;border:1px solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:5px;white-space:pre-wrap;word-wrap: break-word;word-break:break-all}
+  
+  
+    #right .funbtn{height:24px;line-height:24px;width:24px;color:color(right-close-text-color);background:color(right-close-background-color);position:absolute;top:10px;display:block}
+    #right .funbtn:hover{background:color(right-close-hover-background-color);cursor:pointer}
+    #right .funbtn i{display:block}
+    #right .funbtn_0{color:color(right-close-text-color)}
+    #right .funbtn_1{color: #1366cc}
+
+    #right_close{right:20px;}
+    #right_favorite{right:48px;}
+
+    #romcontext > li{padding-right:20px}
+    #romcontext li li{behavior: shell-icon;padding-left:28px;}
+
+    #loading{box-shadow:0 0 10px #fff;position: absolute;top: 50%;left: 50%;width:300px;margin:-65px 0 0 -150px;height:auto;background: #FFF;text-align: center;padding:30px 0;display:none}
+    #loading img{display: block;margin:0 auto 10px auto;}
+
+    #num_search{height:*;position:fixed;display: block;top:120px}
+    #num_search li{display: block;font-size:12px;padding:4px;text-align: center;color:#666}
+    #num_search li:hover{color:#FFF}
+    #num_search li.active{color:#FFF}
+
+</style>
+</head>
+<body>
+<div id="loading"><img src="images/loading.gif" /><p></p></div>
+<menu class="context" id="romcontext"></menu>
+<div class="titlebar" id="titlebar" role=window-caption>
+    <div id="logo"></div>
+    <div id="tb_left"></div>
+    <div id="tb_right">
+
+            <button id="switch_romlist" value="1"><i></i></button>
+            <button id="create"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
+                <menu>
+                    <li  id="config"><i>&#xe602;</i>设置</li>
+                    <li id="theme"><i>&#xe72b;</i>主题
+                        <menu>
+                        </menu>
+                    </li>
+                    <li id="about"><i>&#xe7b9;</i>关于</li>
+                    </menu>
+            </button>     
+        <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
+    </div>
+</div>
+
+<frameset cols="195px,*,261px">
+    <section id="left">
+        <div class="search">
+            <input type="text" class="input" id="search_input" />
+            <button type="submit" class="submit" id="search_submit"><i>&#xe873;</i></button>
+        </div>
+        <dl id="menulist"></dl>
+    </section>
+<splitter id="left_splitter" />
+    <section id="center" class="scrollbar">
+
+        <ul id="num_search"><li class="active">ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
+
+        <div class="statebar">
+            <div class="zoom_wrapper">
+                缩放：<input type='hslider'class='zoom_slider' id="zoom" min=1 max=5 value=1 step=1 />
+            </div>
+            <div class="counnum">
+                <span id="rom_count_text"></span><span id="rom_count_num">0</span></div>
+        </div>
+        <div id="romwrapper">
+            <ul id="romlist"></ul>
+        </div>
+    </section>
+    <splitter id="right_splitter" />
+    <section id="right">
+    <button id="right_close" class="funbtn">X</button>
+    <button id="right_favorite" class="funbtn" platform="" name="" value=""><i>&#xe61a;</i></button>
+        <h2 id="thumb_title"></h2>
+        <div id="thumb"></div>
+        <h2 id="video_title">&Video;</h2>
+        <div id="video"></div>
+        <h2 id="snap_title">记得改语言</h2>
+        <div id="snap"></div>
+        <h2 id="doc_title"></h2>
+        <pre id="doc" class="doc"></pre>
+        <h2 id="lang_rungame"></h2>
+        <div id="buttons"></div>
+    </section>
+    
+</frameset>
+
+</body>
+
+<script type="text/tiscript">
+    //var ROOTPATH = "this://app/";
+    var ROOTPATH = "";
+    include ROOTPATH + "tis/decorators.tis";
+    include ROOTPATH + "tis/platform.tis";
+    include ROOTPATH + "tis/theme.tis";
+    include ROOTPATH + "tis/rom.tis";
+    include ROOTPATH + "tis/menu.tis";
+    include ROOTPATH + "tis/dialog.tis";
+    include ROOTPATH + "tis/script.tis";
+</script>
+</html>

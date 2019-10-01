@@ -1,0 +1,119 @@
+﻿<html>
+  <head>
+  <title></title>
+  <style>
+    tabs{font:system;prototype:Tabs url(this://app/tis/tabs.tis);size:*;display:block;flow:vertical}
+    tabs>strip{display:block;flow:horizontal;margin-bottom:-1dip;padding:2dip 2dip 0 2dip}
+    tabs>strip>label{display:block;padding:3dip 8dip;margin-bottom:1dip;height:*;max-width:auto}
+    tabs>strip>label:current{margin:-2dip -2dip -1dip -2dip;padding:4dip 10dip 5dip 10dip;position:relative}
+    tabs>strip>label:current{background-image:url(theme:tab-item-selected)}
+    tabs>strip>label:current:hover{background-image:url(theme:tab-item-selected)}
+    tabs>strip>label:current:first-child,tabs>strip>label:current:hover:first-child{background-image:url(theme:tab-item-leftmost-selected)}
+    tabs:tab-focus>strip>label:current{outline:1dip dotted -4dip}
+    tabs:tab-focus>strip>label:current>*{outline:1dip dotted #fff}
+    tabs>panels{display:block;size:*}
+    tabs>panels>*{visibility:none}
+    tabs>panels>:expanded{padding:4dip;visibility:visible;height:*}
+    tabs>strip>label{background-image:url(theme:tab-item-normal);background-repeat:stretch}
+    tabs>strip>label:hover{background-image:url(theme:tab-item-hover);transition:blend}
+    tabs>panels>:expanded{background-image:url(theme:tab-panel);background-repeat:stretch}
+
+    html,body{width:*; height:*; overflow:hidden;margin:0;padding:5px;}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow: hidden;padding:10px;}
+    .frame_left{width:150;height:*;display:inline-block;overflow:hidden;}
+    .frame_right{width:400;height:*;display:inline-block;padding-left:10px;}
+    .frame_right input[type="text"]{border:1px solid #999;border-radius:2px}
+    
+    table{width:*}
+    th{text-align: left;border-bottom:1px solid #ccc;padding:20px 0 5px 0;}
+    td:first-child{font-size:14px;text-align:right;padding:10px 0;}
+    tr:last-child td{text-align: center;padding-bottom:0}
+    .platform_list{width:*;height:*;display:block;border:1px solid #ccc}
+    .platform_list option{height:30px;line-height: 30px}
+    #table_default td:first-child{width:70px;}
+
+    .platform_control a{width:20px;height:20px;line-height:20px;display:inline-block;border: 1px solid #ccc;border-top:0;border-right:0;text-align:center;}
+    .platform_control a:hover{background:#ccc;}
+    .platform_control a:active{background:#666;}
+    .platform_control input{display:inline-block;width:96px;height:21px;font-size:12px;border:1px solid #ccc;border-top:0;padding:0 5px;margin:0;top:-2px;position: relative;}
+
+  </style>
+  </head>
+<body>
+
+  <tabs id="mytabs">
+    <strip>
+      <label for="first" selected>通用配置</label>
+      <label for="second" >平台配置</label>
+    </strip>
+    <panels>
+      <section id="first">
+
+        <div class="wrapper">
+          <table id="table_default">
+
+              <tr><td>语言：</td><td><select id="config_lang"></select></td></tr>
+              
+              <tr><td>列表中显示我的最爱：</td><td>
+                  <select>
+                      <option value="1">显示</option>
+                      <option value="1">隐藏</option>
+                  </select>
+                </td></tr>
+
+                <tr><td>列表中显示玩的最多：</td><td>
+                    <select>
+                        <option value="1">显示</option>
+                        <option value="1">隐藏</option>
+                    </select>
+                  </td></tr>
+              <tr><th colspan="2"></th></tr>
+              <tr><td colspan="2"><button id="config_submit">更新配置</button></td></tr>
+             </table>
+        </div>
+
+      </section>
+      <section id="second">
+        <div class="wrapper">
+          <div class="frame_left">
+              <select class="platform_list" id="platform_list" size="5"></select>
+              <div class="platform_control">
+                <a class="sub" id="platform_del" title="删除选定平台">-</a><a class="add" id="platform_add" title="添加新平台">+</a><input type="text" value="" id="platform_add_name" novalue="输入平台名称"/>
+              </div>
+          </div>
+          <div class="frame_right">
+            <table>
+                <tr><th colspan="2" style="padding-top:0">基础信息：</th></tr>
+                <tr><td>标题：</td><td><input type="text" value="" id="platform_name" disabled>
+                  <select id="platform_status" disabled>
+                      <option value="1">启用</option>
+                      <option value="0">禁用</option>
+                  </select>
+                </td></tr>
+                <tr><td>ROM类型：</td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
+                <tr><td>模拟器：</td><td>
+                  <select id="platform_sim" disabled></select>
+                  <button id="add_sim" disabled>添加模拟器</button>
+                </td></tr>
+                <tr><th colspan="2">目录配置：</th></tr>
+                <tr><td>ROM目录：</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="请选择文件夹" disabled>&#x2026;</button></td></tr>
+                <tr><td>缩略图目录：</td><td><input type="text"  id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" caption="请选择文件夹" disabled>&#x2026;</button></td></tr>
+                <tr><td>截图目录：</td><td><input type="text"  id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" caption="请选择文件夹" disabled>&#x2026;</button></td></tr>
+                <tr><td>视频目录：</td><td><input type="text" id="platform_video"  value="" disabled> <button class="openfolder" for="platform_video" caption="请选择文件夹" disabled>&#x2026;</button></td></tr>
+                <tr><td>简介目录：</td><td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" caption="请选择文件夹" disabled>&#x2026;</button></td></tr>
+                <tr><td>romlist：</td><td><input type="text"  id="platform_romlist" value="" disabled> <button class="openfile" for="platform_romlist" caption="请选择配置文件" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
+                <tr><th colspan="2"></th></tr>
+                <tr><td colspan="2""><button id="platform_submit" disabled>更新配置</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </panels>
+  </tabs>
+
+  <script type="text/tiscript">
+    include ROOTPATH + "tis/dialog_config.tis";
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+﻿var id;
+var action;
+var pfId;
+view.root.on("ready", function(){
+
+    id = view.parameters.id.toString();
+    pfId = view.parameters.platform.toString();
+
+    if(id == 0){
+        action = "add";
+        $(#sim_submit).value = "添加模拟器";
+    }else{
+        var sim = view.parameters.getSimulatorById(id);
+        action = "update";
+        $(#sim_submit).value = "编辑模拟器";
+        $(#sim_name).value = sim.Name;
+        $(#sim_default).value = sim.Default;
+        $(#sim_path).value = sim.Path;
+        $(#sim_cmd).value = sim.Cmd;
+        if(sim.Default == 1){$(#sim_default).checked = true;}
+    }
+});
+
+//更新模拟器信息
+event click $(#sim_submit) {
+    var def = $(#sim_default).value == undefined ? 0 : 1;
+    var result = "";
+    var data = {
+        id : id.toString();
+        name : $(#sim_name).value,
+        default : def.toString(),
+        platform : pfId.toString(),
+        path:$(#sim_path).value,
+        cmd:$(#sim_cmd).value,
+    };
+
+    if(data.name == ""){view.msgbox(#alert,"模拟器名称不能为空");return true;}
+    if(data.sim_path == ""){view.msgbox(#alert,"模拟器路径不能为空");return true;}
+    if(data.platform == ""){view.msgbox(#alert,"请选择平台");return true;}
+
+    if(id == 0){
+        //添加模拟器
+        result = view.parameters.addSimulator(data);
+        if(result != ""){
+            view.msgbox(#alert,"添加成功");
+            view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
+        }
+    }else{
+        //修改模拟器信息
+        result = view.parameters.updateSimulator(data);
+        if(result != ""){
+            view.msgbox(#alert,"编辑成功");
+            view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
+        }
+    }
+}
+
+//选择文件夹
+event click $(.openfolder){
+    var url = view.selectFolder(this.attributes["caption"]);
+    var out = self.select("#"+this.attributes["for"]);
+    if(url){
+        url = URL.toPath(url);
+        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split(CONF.RootPath.toString()).join("");
+        out.value = url;
+    }
+}
+
