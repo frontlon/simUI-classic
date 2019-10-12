@@ -104,10 +104,10 @@ func CreateRomCache(platform int64) error {
 					menu = subpath[0]
 				}
 
-				thumb := ""
-				snap := ""
-				strategy := ""
-				doc := ""
+				thumb := ""    //缩略图地址
+				snap := ""     //场景图地址
+				strategy := "" //攻略地址
+				doc := ""      //文档地址
 				if _, ok := ThumbList[romName]; ok {
 					thumb = ThumbList[romName]
 				}
@@ -123,8 +123,6 @@ func CreateRomCache(platform int64) error {
 				if _, ok := DocList[romName]; ok {
 					doc = DocList[romName]
 				}
-
-
 
 				//如果游戏名称存在分隔符，说明是子游戏
 				if strings.Contains(title, constSeparator) {
@@ -147,9 +145,8 @@ func CreateRomCache(platform int64) error {
 						Pinyin:       py,
 					}
 					romlist = append(romlist, sinfo)
-					names = append(names,sub[1]) //游戏名称列表，用于删除不存在的rom
-				} else {
-
+					names = append(names, sub[1]) //游戏名称列表，用于删除不存在的rom
+				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
 						Menu:         menu,
@@ -174,7 +171,7 @@ func CreateRomCache(platform int64) error {
 							Pinyin:   TextToPinyin(menu),
 						}
 					}
-					names = append(names,title) //游戏名称列表，用于删除不存在的rom
+					names = append(names, title) //游戏名称列表，用于删除不存在的rom
 				}
 			}
 			return nil
@@ -182,16 +179,18 @@ func CreateRomCache(platform int64) error {
 	}
 
 	//删除不存在的rom
-	if err :=(&db.Rom{}).DeleteByNotExists(platform,names);err != nil{
+	if err := (&db.Rom{}).DeleteByNotExists(platform, names); err != nil {
 	}
 	//保存数据到数据库rom表
 	if len(romlist) > 0 {
-		if err := (&db.Rom{}).Add(&romlist); err != nil {
+		for _, v := range romlist {
+			if err := v.UpdateSert(); err != nil {
+			}
 		}
+
 	}
 	//保存数据到数据库cate表
 	if len(menuList) > 0 {
-
 		if err := (&db.Menu{}).Add(&menuList); err != nil {
 		}
 	}
@@ -209,9 +208,6 @@ func GetMaterialUrl(stype string, platform int64) map[string]string {
 	exts := []string{}
 	list := make(map[string]string)
 	switch stype {
-	case "strategy":
-		getpath = Config.Platform[platform].StrategyPath;
-		exts = []string{".md"}
 	case "thumb":
 		getpath = Config.Platform[platform].ThumbPath;
 		exts = []string{".jpg", ".bmp", ".png", ".jpeg"}
@@ -221,6 +217,9 @@ func GetMaterialUrl(stype string, platform int64) map[string]string {
 	case "doc":
 		getpath = Config.Platform[platform].DocPath;
 		exts = []string{".md", ".txt"}
+	case "strategy":
+		getpath = Config.Platform[platform].StrategyPath;
+		exts = []string{".md"}
 	}
 
 	//如果参数为空，不向下执行

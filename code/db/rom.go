@@ -25,7 +25,67 @@ type Rom struct {
 	Pinyin       string // 拼音索引
 }
 
-//写入rom数据
+//更新插入，(这里不能使用replace)
+func (r *Rom) UpdateSert() error {
+
+	//先查询记录是否存在
+	vo := &Rom{}
+	sql := "SELECT id FROM rom "
+	sql += ` WHERE platform = ` + strconv.Itoa(int(r.Platform)) + ` AND pname = '`+ sql +`' AND name = '` + r.Name + `'`
+
+	rows := sqlite.QueryRow(sql)
+	err := rows.Scan(&vo.Id)
+	if err != nil{
+		return err
+	}
+
+	//记录不存在，则新建记录
+	if vo == nil{
+		r.Add()
+		return nil
+	}
+
+	//如果记录存在，则更新记录
+	sql = `UPDATE rom SET `
+	sql += `rom_path = '` + r.RomPath + `'`
+	sql += ` ,thumb_path = '` + r.ThumbPath + `'`
+	sql += ` ,snap_path = '` + r.SnapPath + `'`
+	sql += ` ,doc_path = '` + r.DocPath + `'`
+	sql += ` ,strategy_path = '` + r.StrategyPath + `' `
+	sql += ` WHERE id = ` + strconv.Itoa(int(vo.Id))
+	_, err = sqlite.Exec(sql)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+//插入rom数据
+func (r *Rom) Add() error {
+
+	//关闭同步
+	sqlite.Exec("PRAGMA synchronous = OFF;")
+
+	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,thumb_path,snap_path,doc_path,strategy_path,pinyin) values(?,?,?,?,?,?,?,?,?,?)")
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+
+	//开始写入父rom
+	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.ThumbPath, r.SnapPath, r.DocPath, r.StrategyPath, r.Pinyin);
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+
+/*
+
 func (*Rom) Add(romlist *[]*Rom) error {
 
 	lastIds := make(map[string]int64)
@@ -42,7 +102,6 @@ func (*Rom) Add(romlist *[]*Rom) error {
 
 	//开始写入父rom
 	for _, r := range *romlist {
-
 		res, err := stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.ThumbPath, r.SnapPath, r.DocPath, r.StrategyPath, r.Pinyin);
 		if err != nil {
 		}
@@ -52,6 +111,8 @@ func (*Rom) Add(romlist *[]*Rom) error {
 
 	return nil
 }
+
+*/
 
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform string, menu string, keyword string) ([]*Rom, error) {
