@@ -124,11 +124,14 @@ function platformMouseMove(evt){
     }
 
     var left_value = PLATFORM_LEFT + (evt.x - PLATFORM_OFFSET - 200);
+    left_value = -1 * left_value; //取反
+    /*
     if(left_value > 0){
         left_value = left_value - (left_value*2);
     }else{
         left_value = Math.abs(left_value);
     }
+    */
     $(#platform_ul).style["left"] = left_value.toString() + "px";
 }
 

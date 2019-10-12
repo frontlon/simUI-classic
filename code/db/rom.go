@@ -31,17 +31,19 @@ func (r *Rom) UpdateSert() error {
 	//先查询记录是否存在
 	vo := &Rom{}
 	sql := "SELECT id FROM rom "
-	sql += ` WHERE platform = ` + strconv.Itoa(int(r.Platform)) + ` AND pname = '`+ sql +`' AND name = '` + r.Name + `'`
+	sql += ` WHERE platform = ` + strconv.Itoa(int(r.Platform)) + ` AND pname = '` + sql + `' AND name = '` + r.Name + `'`
 
 	rows := sqlite.QueryRow(sql)
 	err := rows.Scan(&vo.Id)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
 	//记录不存在，则新建记录
-	if vo == nil{
-		r.Add()
+	if vo == nil {
+		if err = r.Add(); err != nil {
+			return err
+		}
 		return nil
 	}
 
@@ -59,7 +61,6 @@ func (r *Rom) UpdateSert() error {
 	}
 	return nil
 }
-
 
 //插入rom数据
 func (r *Rom) Add() error {
@@ -82,7 +83,6 @@ func (r *Rom) Add() error {
 	}
 	return nil
 }
-
 
 /*
 
@@ -191,7 +191,7 @@ func (*Rom) GetById(id string) (*Rom, error) {
 	vo := &Rom{}
 	sql := "SELECT * FROM rom where id= '" + id + "'"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.ThumbPath, &vo.SnapPath, &vo.DocPath, &vo.StrategyPath,&vo.Star,&vo.SimId, &vo.Pinyin)
+	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.ThumbPath, &vo.SnapPath, &vo.DocPath, &vo.StrategyPath, &vo.Star, &vo.SimId, &vo.Pinyin)
 	return vo, err
 }
 
@@ -250,7 +250,7 @@ func (*Rom) GetByStar(platform string, star int64) (*Rom, error) {
 
 	sql := "SELECT * FROM rom WHERE " + where + " star = " + strconv.Itoa(int(star))
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.ThumbPath, &vo.SnapPath, &vo.DocPath,&vo.StrategyPath, &vo.Star, &vo.Pinyin)
+	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.ThumbPath, &vo.SnapPath, &vo.DocPath, &vo.StrategyPath, &vo.Star, &vo.Pinyin)
 	return vo, err
 }
 
@@ -319,10 +319,10 @@ func (sim *Rom) DeleteByPlatform() (error) {
 }
 
 //删除不存在的rom
-func (sim *Rom) DeleteByNotExists(platform int64,names []string) (error) {
-	namesStr:=strings.Join(names,"\",\"")
-	namesStr = "\""+namesStr+"\""
-	sql := "DELETE FROM rom WHERE platform = " + strconv.Itoa(int(sim.Platform)) + "AND name not in ("+namesStr+")"
+func (sim *Rom) DeleteByNotExists(platform int64, names []string) (error) {
+	namesStr := strings.Join(names, "\",\"")
+	namesStr = "\"" + namesStr + "\""
+	sql := "DELETE FROM rom WHERE platform = " + strconv.Itoa(int(sim.Platform)) + "AND name not in (" + namesStr + ")"
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())
