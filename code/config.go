@@ -59,12 +59,13 @@ func getPlatform() map[int64]*db.Platform {
 		platform[v.Id].SimList, _ = DBSim.GetByPlatform(v.Id) //填充模拟器
 		platform[v.Id].DocPath, _ = filepath.Abs(platform[v.Id].DocPath)
 		platform[v.Id].Romlist, _ = filepath.Abs(platform[v.Id].Romlist)
-		platform[v.Id].VideoPath, _ = filepath.Abs(platform[v.Id].VideoPath)
+		platform[v.Id].StrategyPath, _ = filepath.Abs(platform[v.Id].StrategyPath)
 		platform[v.Id].RomPath, _ = filepath.Abs(platform[v.Id].RomPath)
 		platform[v.Id].ThumbPath, _ = filepath.Abs(platform[v.Id].ThumbPath)
 		platform[v.Id].SnapPath, _ = filepath.Abs(platform[v.Id].SnapPath)
 
 		for sk, sim := range platform[v.Id].SimList {
+			platform[v.Id].UseSim = &db.Simulator{}
 			//当前正在使用的模拟器
 			if sim.Default == 1 {
 				platform[v.Id].UseSim = sim
@@ -188,7 +189,8 @@ func getLangList() map[string]string {
 	lists, _ := ioutil.ReadDir(dirPth)
 	for _, fi := range lists {
 		if !fi.IsDir() { // 忽略目录
-			lang[GetFileName(fi.Name())] = fi.Name()
+			name := strings.TrimSuffix(fi.Name(), path.Ext(fi.Name()))
+			lang[name] = fi.Name()
 		}
 	}
 	return lang

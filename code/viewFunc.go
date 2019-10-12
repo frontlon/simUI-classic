@@ -3,7 +3,6 @@ package main
 import (
 	"VirtualNesGUI/code/db"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -45,16 +44,49 @@ func defineViewFunction(w *window.Window) {
 		id := args[0].String()
 		simId, _ := strconv.ParseInt(args[1].String(), 10, 64)
 
-		vo, err := (&db.Rom{}).GetById(id)
+		//数据库中读取rom详情
+		rom, err := (&db.Rom{}).GetById(id)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 
-		errstr := runGame(vo.Platform, vo.RomPath, simId);
-		if errstr != "" {
-			if _, err := w.Call("errorBox", sciter.NewValue(errstr)); err != nil {
+		sim := &db.Simulator{}
+		if simId == 0 {
+			sim = Config.Platform[rom.Platform].UseSim
+			if sim == nil {
+				return errorMsg(w, Config.Lang["SimulatorNotFound"])
 			}
+		} else {
+			if Config.Platform[rom.Platform].SimList == nil {
+				return errorMsg(w, Config.Lang["SimulatorNotFound"])
+			}
+			sim = Config.Platform[rom.Platform].SimList[simId];
+		}
+
+		//检测执行文件是否存在
+		_, err = os.Stat(sim.Path)
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		//检测rom文件是否存在
+		if Exists(rom.RomPath) == false {
+			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
+		}
+
+		cmd := ""
+		if sim.Cmd == "" {
+			cmd = rom.RomPath
+		} else {
+			filename := filepath.Base(rom.RomPath) //exe运行文件路径
+			cmd = strings.ReplaceAll(sim.Cmd, `{RomName}`, GetFileName(filename))
+			cmd = strings.ReplaceAll(cmd, `{RomExt}`, path.Ext(filename))
+			cmd = strings.ReplaceAll(cmd, `{RomFullPath}`, rom.RomPath)
+		}
+
+		err = runGame(sim.Path, cmd)
+		if err != nil {
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
 	})
@@ -69,15 +101,18 @@ func defineViewFunction(w *window.Window) {
 			p = Config.Platform[platform].RomPath
 		case "thumb":
 			p = Config.Platform[platform].ThumbPath
-		case "video":
-			p = Config.Platform[platform].VideoPath
+		case "snap":
+			p = Config.Platform[platform].SnapPath
+		case "doc":
+			p = Config.Platform[platform].DocPath
+		case "strategy":
+			p = Config.Platform[platform].StrategyPath
 		case "sim":
 			exe := Config.Platform[platform].UseSim.Path
 			p = filepath.Dir(exe)
 		}
 		if err := exec.Command(`explorer`, p).Start(); err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
 	})
@@ -91,8 +126,7 @@ func defineViewFunction(w *window.Window) {
 		err := (&db.Simulator{}).UpdateDefault(platform, simId)
 
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
 	})
@@ -105,8 +139,7 @@ func defineViewFunction(w *window.Window) {
 		err := (&db.Config{}).UpdateField(field, value)
 
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
 	})
@@ -114,13 +147,12 @@ func defineViewFunction(w *window.Window) {
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 		//清理数据库
-		db.DbClear()
+		//db.DbClear()
 
 		for k, _ := range Config.Platform {
 			err := CreateRomCache(k)
 			if err != nil {
-				if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-				}
+				return errorMsg(w, err.Error())
 			}
 		}
 		return sciter.NullValue()
@@ -134,8 +166,7 @@ func defineViewFunction(w *window.Window) {
 		menu, err := (&db.Menu{}).GetByPlatform(platform) //从数据库中读取当前平台的分类目录
 
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		getjson, _ := json.Marshal(menu)
 		return sciter.NewValue(string(getjson))
@@ -177,8 +208,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		info, err := (&db.Rom{}).GetById(id)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		//子游戏列表
 		sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
@@ -198,9 +228,7 @@ func defineViewFunction(w *window.Window) {
 		}
 		id, err := platform.Add()
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-			}
-			return sciter.NewValue("0")
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue(strconv.Itoa(int(id)))
 	})
@@ -212,13 +240,22 @@ func defineViewFunction(w *window.Window) {
 		platform := &db.Platform{
 			Id: int64(id),
 		}
+		sim := &db.Simulator{
+			Platform: int64(id),
+		}
+		rom := &db.Rom{
+			Platform: int64(id),
+		}
 
+		//删除rom数据
+		err = rom.DeleteByPlatform()
+		//删除模拟器
+		err = sim.DeleteByPlatform()
 		//删除平台
-		err = platform.Delete()
+		err = platform.DeleteById()
+
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-			}
-			return sciter.NewValue("0")
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue("1")
 	})
@@ -230,7 +267,6 @@ func defineViewFunction(w *window.Window) {
 		json.Unmarshal([]byte(data), &d)
 
 		id, _ := strconv.ParseInt(d["id"], 10, 64)
-		status, _ := strconv.ParseInt(d["status"], 10, 64)
 		exts := strings.Split(d["exts"], ",")
 
 		platform := &db.Platform{
@@ -240,18 +276,15 @@ func defineViewFunction(w *window.Window) {
 			RomPath:   d["rom"],
 			ThumbPath: d["thumb"],
 			SnapPath:  d["snap"],
-			VideoPath: d["video"],
+			StrategyPath: d["strategy"],
 			DocPath:   d["doc"],
 			Romlist:   d["romlist"],
-			Status:    status,
 			Pinyin:    TextToPinyin(d["name"]),
 		}
 
 		err := platform.UpdateById()
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-			}
-			return sciter.NewValue("0")
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue("1")
 	})
@@ -278,9 +311,7 @@ func defineViewFunction(w *window.Window) {
 		if def == 1 {
 			err = sim.UpdateDefault(pfId, id)
 			if err != nil {
-				if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-				}
-				return sciter.NewValue("")
+				return errorMsg(w, err.Error())
 			}
 		}
 		sim.Id = id
@@ -288,7 +319,7 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NewValue(string(jsonData))
 	})
 
-	//添加模拟器
+	//更新模拟器
 	w.DefineFunction("UpdateSimulator", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]string)
@@ -306,13 +337,27 @@ func defineViewFunction(w *window.Window) {
 		//更新模拟器
 		err := sim.UpdateById()
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-			}
-			return sciter.NewValue("")
+			return errorMsg(w, err.Error())
 		}
 
 		jsonData, _ := json.Marshal(&sim)
 		return sciter.NewValue(string(jsonData))
+	})
+
+	//删除一个模拟器
+	w.DefineFunction("DelSimulator", func(args ...*sciter.Value) *sciter.Value {
+		idstr := args[0].String()
+		id, err := strconv.Atoi(idstr)
+		sim := &db.Simulator{
+			Id: int64(id),
+		}
+
+		//删除平台
+		err = sim.DeleteById()
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NewValue(idstr)
 	})
 
 	//读取平台详情
@@ -322,8 +367,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetById(id)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
@@ -334,8 +378,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetAll()
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
@@ -348,8 +391,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		info, err := (&db.Simulator{}).GetById(id)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
@@ -361,8 +403,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		info, err := (&db.Simulator{}).GetByPlatform(id)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
+			return errorMsg(w, err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
@@ -374,19 +415,6 @@ func defineViewFunction(w *window.Window) {
 		name := args[1].String()
 		star, _ := strconv.ParseInt(args[2].String(), 10, 64)
 
-		fav := &db.Favorite{
-			Platform: platform,
-			Name:     name,
-			Star:     star,
-		}
-
-		err := errors.New("")
-		if star == 0 {
-			err = fav.Delete()
-		} else {
-			err = fav.UpSert()
-		}
-
 		//更新rom表
 		rom := &db.Rom{
 			Platform: platform,
@@ -394,19 +422,15 @@ func defineViewFunction(w *window.Window) {
 			Star:     star,
 		}
 
-		err = rom.UpdateStar()
+		err := rom.UpdateStar()
 		//更新数据
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
-			return sciter.NewValue("0")
+			return errorMsg(w, err.Error())
 		}
 
 		//更新数据
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
-			return sciter.NewValue("0")
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue("1")
 	})
@@ -427,9 +451,7 @@ func defineViewFunction(w *window.Window) {
 		//下载文件
 		res, err := http.Get(newpath)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
-			return sciter.NewValue("")
+			return errorMsg(w, err.Error())
 		}
 
 		//下载成功后，备份原文件
@@ -448,9 +470,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		if platformPath == "" {
-			if _, err := w.Call("errorBox", sciter.NewValue("当前平台没有设置图片目录，请先设置图片目录")); err != nil {
-			}
-			return sciter.NewValue("")
+			return errorMsg(w, Config.Lang["NoSetThumbDir"])
 		}
 
 		if isset == true {
@@ -464,7 +484,7 @@ func defineViewFunction(w *window.Window) {
 
 			oldFileName := filepath.Base(oldFilePath)
 			bakFileName := GetFileName(oldFileName) + "_" + strconv.Itoa(int(time.Now().Unix())) + path.Ext(oldFileName)
-			err := os.Rename(oldFilePath, bakFolder + bakFileName)
+			err := os.Rename(oldFilePath, bakFolder+bakFileName)
 
 			if err != nil {
 				fmt.Println(err.Error())
@@ -476,9 +496,7 @@ func defineViewFunction(w *window.Window) {
 		newFileName := platformPathAbs + separator + vo.Name + path.Ext(newpath) //生成新文件的完整绝路路径地址
 		f, err := os.Create(newFileName)
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
-			return sciter.NewValue("")
+			return errorMsg(w, err.Error())
 		}
 		io.Copy(f, res.Body)
 
@@ -491,9 +509,7 @@ func defineViewFunction(w *window.Window) {
 		//游戏游戏详细数据
 		err = rom.UpdatePic()
 		if err != nil {
-			if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-			}
-			return sciter.NewValue("")
+			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue(newFileName)
 	})

@@ -4,7 +4,6 @@ function createLang(){
     $(#logo).html = CONF.Lang.Title;
     $(#rom_count_text).html = CONF.Lang.GameCount;
     $(#thumb_title).html = CONF.Lang.Thumb;
-    $(#video_title).html = CONF.Lang.Video;
     $(#doc_title).html = CONF.Lang.Doc;
     $(#lang_rungame).html = CONF.Lang.RunGame;
 }

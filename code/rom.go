@@ -2,7 +2,7 @@ package main
 
 import (
 	"VirtualNesGUI/code/db"
-	"github.com/axgle/mahonia"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -31,62 +31,44 @@ func getDocContent(f string) string {
 	if err != nil {
 		return content
 	}
-	enc := mahonia.NewDecoder("gbk")
-	content = enc.ConvertString(string(text))
+	//enc := mahonia.NewDecoder("gbk")
+	//content = enc.ConvertString(string(text))
+	content = string(text)
 	return content
 }
 
 /**
  * 运行游戏
  **/
-func runGame(platform int64, romfile string, sim int64) string {
-	exeFile := Config.Platform[platform].UseSim.Path
-	if sim != 0 {
-		exeFile = Config.Platform[platform].SimList[sim].Path;
+func runGame(exeFile string, cmd string) error {
+
+	//更改程序运行目录
+	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
+		fmt.Println("目录错误:" + err.Error())
 	}
-	//检测执行文件是否存在
-	_, err := os.Stat(exeFile)
-	if err != nil {
-		return err.Error()
+	result := exec.Command(exeFile, cmd)
+
+	if err := result.Start(); err != nil {
+		return err
 	}
 
-	//检测rom文件是否存在
-	if Exists(romfile) == false {
-		return Config.Lang["RomNotFound"] + romfile
-	}
-
-	//验证桥接程序是否存在
-	bridge := filepath.Dir(exeFile) + separator + "tplugin.exe"
-	cmd := &exec.Cmd{}
-	_, ok := os.Stat(bridge)
-	if ok == nil {
-		cmd = exec.Command(bridge, exeFile, romfile)
-	} else {
-		cmd = exec.Command(exeFile, romfile)
-	}
-
-	if err := cmd.Start(); err != nil {
-		return err.Error()
-	}
-
-	return ""
+	return nil
 }
-
-
 
 /**
  * 创建缓存
  **/
 func CreateRomCache(platform int64) error {
 	romlist := []*db.Rom{}
-	menuList := map[string]*db.Menu{}              //分类目录
-	RomPath := Config.Platform[platform].RomPath   //rom文件路径
-	RomExt := Config.Platform[platform].RomExts    //rom扩展名
-	ThumbList := GetMaterialUrl("thumb", platform) //缩略图
-	VideoList := GetMaterialUrl("video", platform) //视频
-	SnapList := GetMaterialUrl("snap", platform)   //截图
-	DocList := GetMaterialUrl("doc", platform)     //文档
-	RomAlias := getRomAlias(platform)              //别名配置
+	names := []string{}
+	menuList := map[string]*db.Menu{}                    //分类目录
+	RomPath := Config.Platform[platform].RomPath         //rom文件路径
+	RomExt := Config.Platform[platform].RomExts          //rom扩展名
+	ThumbList := GetMaterialUrl("thumb", platform)       //缩略图
+	SnapList := GetMaterialUrl("snap", platform)         //截图
+	DocList := GetMaterialUrl("doc", platform)           //文档
+	StrategyList := GetMaterialUrl("strategy", platform) //视频
+	RomAlias := getRomAlias(platform)                    //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
@@ -124,9 +106,8 @@ func CreateRomCache(platform int64) error {
 
 				thumb := ""
 				snap := ""
-				video := ""
+				strategy := ""
 				doc := ""
-
 				if _, ok := ThumbList[romName]; ok {
 					thumb = ThumbList[romName]
 				}
@@ -135,13 +116,15 @@ func CreateRomCache(platform int64) error {
 					snap = SnapList[romName]
 				}
 
-				if _, ok := VideoList[romName]; ok {
-					video = VideoList[romName]
+				if _, ok := StrategyList[romName]; ok {
+					strategy = StrategyList[romName]
 				}
 
 				if _, ok := DocList[romName]; ok {
 					doc = DocList[romName]
 				}
+
+
 
 				//如果游戏名称存在分隔符，说明是子游戏
 				if strings.Contains(title, constSeparator) {
@@ -151,33 +134,34 @@ func CreateRomCache(platform int64) error {
 
 					//去掉扩展名，生成标题
 					sinfo := &db.Rom{
-						Name:      sub[1],
-						Pname:     sub[0],
-						RomPath:   p,
-						Menu:      menu,
-						Platform:  platform,
-						ThumbPath: thumb,
-						SnapPath:  snap,
-						VideoPath: video,
-						DocPath:   doc,
-						Star:      0,
-						Pinyin:    py,
+						Name:         sub[1],
+						Pname:        sub[0],
+						RomPath:      p,
+						Menu:         menu,
+						Platform:     platform,
+						ThumbPath:    thumb,
+						SnapPath:     snap,
+						StrategyPath: strategy,
+						DocPath:      doc,
+						Star:         0,
+						Pinyin:       py,
 					}
 					romlist = append(romlist, sinfo)
+					names = append(names,sub[1]) //游戏名称列表，用于删除不存在的rom
 				} else {
 
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
-						Menu:      menu,
-						Name:      title,
-						Platform:  platform,
-						RomPath:   p,
-						ThumbPath: thumb,
-						SnapPath:  snap,
-						VideoPath: video,
-						DocPath:   doc,
-						Star:      0,
-						Pinyin:    py,
+						Menu:         menu,
+						Name:         title,
+						Platform:     platform,
+						RomPath:      p,
+						ThumbPath:    thumb,
+						SnapPath:     snap,
+						StrategyPath: strategy,
+						DocPath:      doc,
+						Star:         0,
+						Pinyin:       py,
 					}
 
 					//rom列表
@@ -190,13 +174,16 @@ func CreateRomCache(platform int64) error {
 							Pinyin:   TextToPinyin(menu),
 						}
 					}
-
+					names = append(names,title) //游戏名称列表，用于删除不存在的rom
 				}
 			}
 			return nil
 		}); err != nil {
 	}
 
+	//删除不存在的rom
+	if err :=(&db.Rom{}).DeleteByNotExists(platform,names);err != nil{
+	}
 	//保存数据到数据库rom表
 	if len(romlist) > 0 {
 		if err := (&db.Rom{}).Add(&romlist); err != nil {
@@ -222,18 +209,18 @@ func GetMaterialUrl(stype string, platform int64) map[string]string {
 	exts := []string{}
 	list := make(map[string]string)
 	switch stype {
-	case "video":
-		getpath = Config.Platform[platform].VideoPath;
-		exts = []string{".gif"}
+	case "strategy":
+		getpath = Config.Platform[platform].StrategyPath;
+		exts = []string{".md"}
 	case "thumb":
 		getpath = Config.Platform[platform].ThumbPath;
 		exts = []string{".jpg", ".bmp", ".png", ".jpeg"}
 	case "snap":
 		getpath = Config.Platform[platform].SnapPath;
-		exts = []string{".jpg", ".bmp", ".png", ".jpeg"}
+		exts = []string{".jpg", ".bmp", ".png", ".jpeg", ".gif"}
 	case "doc":
 		getpath = Config.Platform[platform].DocPath;
-		exts = []string{".txt"}
+		exts = []string{".md", ".txt"}
 	}
 
 	//如果参数为空，不向下执行

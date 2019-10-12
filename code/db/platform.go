@@ -8,41 +8,40 @@ import (
 )
 
 type Platform struct {
-	Id        int64
-	Name      string
-	RomExts   []string
-	RomPath   string
-	ThumbPath string
-	VideoPath string
-	SnapPath  string
-	DocPath   string
-	Romlist   string
-	Status    int64
-	Pinyin    string
-	SimList   map[int64]*Simulator
-	UseSim    *Simulator //当前使用的模拟器
+	Id           int64
+	Name         string
+	RomExts      []string
+	RomPath      string
+	ThumbPath    string
+	SnapPath     string
+	DocPath      string
+	StrategyPath string
+	Romlist      string
+	Pinyin       string
+	SimList      map[int64]*Simulator
+	UseSim       *Simulator //当前使用的模拟器
 }
 
 //添加平台
-func (v *Platform) Add() (int64,error) {
+func (v *Platform) Add() (int64, error) {
 
 	//关闭同步
 	sqlite.Exec("PRAGMA synchronous = OFF;")
 
-	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, video_path, doc_path, romlist, status, pinyin) values(?,?,?,?,?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, video_path, doc_path, romlist, status, pinyin) values(?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		fmt.Println(err.Error())
-		return 0,err
+		return 0, err
 	}
 
 	//开始写入父rom
 	exts := ""
-	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath,v.VideoPath, v.DocPath, v.Romlist, v.Status,v.Pinyin);
+	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath, v.DocPath,  v.StrategyPath,v.Romlist, v.Pinyin);
 	if err != nil {
 	}
 	id, _ := res.LastInsertId()
-	return id,err
+	return id, err
 }
 
 //根据条件，查询多条数据
@@ -50,7 +49,7 @@ func (*Platform) GetAll() (map[int64]*Platform, error) {
 
 	volist := map[int64]*Platform{}
 	exts := ""
-	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path,video_path, doc_path, romlist, status FROM platform  ORDER BY pinyin ASC"
+	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist FROM platform  ORDER BY pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
 	if err != nil {
@@ -58,7 +57,7 @@ func (*Platform) GetAll() (map[int64]*Platform, error) {
 	}
 	for rows.Next() {
 		v := &Platform{}
-		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath,&v.VideoPath, &v.DocPath, &v.Romlist, &v.Status)
+		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath,  &v.DocPath,&v.StrategyPath ,&v.Romlist)
 		if err != nil {
 			return volist, err
 		}
@@ -72,10 +71,10 @@ func (*Platform) GetAll() (map[int64]*Platform, error) {
 func (*Platform) GetById(id int64) (*Platform, error) {
 	v := &Platform{}
 	exts := ""
-	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path,video_path, doc_path, romlist, status"
+	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path,video_path, doc_path, strategy_path,romlist"
 	sql := "SELECT " + field + " FROM platform WHERE id = " + strconv.Itoa(int(id))
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath,&v.SnapPath, &v.VideoPath, &v.DocPath, &v.Romlist, &v.Status)
+	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath,&v.StrategyPath, &v.Romlist)
 	v.RomExts = strings.Split(exts, ",") //拆分rom扩展名
 	return v, err
 }
@@ -88,10 +87,9 @@ func (pf *Platform) UpdateById() error {
 	sql += `,rom_path = '` + pf.RomPath + `'`
 	sql += `,thumb_path = '` + pf.ThumbPath + `'`
 	sql += `,snap_path = '` + pf.SnapPath + `'`
-	sql += `,video_path = '` + pf.VideoPath + `'`
+	sql += `,strategy_path = '` + pf.StrategyPath + `'`
 	sql += `,doc_path = '` + pf.DocPath + `'`
 	sql += `,romlist = '` + pf.Romlist + `'`
-	sql += `,status = '` + strconv.Itoa(int(pf.Status)) + `'`
 	sql += `,pinyin = '` + pf.Pinyin + `'`
 	sql += ` WHERE id = ` + strconv.Itoa(int(pf.Id))
 
@@ -107,9 +105,9 @@ func (pf *Platform) UpdateById() error {
 	}
 }
 
-//删除一个喜好
-func (pf *Platform) Delete() (error) {
-	sql := "DELETE FROM platform WHERE id = "+ strconv.Itoa(int(pf.Id))
+//删除一个平台
+func (pf *Platform) DeleteById() (error) {
+	sql := "DELETE FROM platform WHERE id = " + strconv.Itoa(int(pf.Id))
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())

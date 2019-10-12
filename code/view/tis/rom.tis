@@ -81,18 +81,17 @@ function createRomList(cls=0){
     
 //rom搜索功能
 function search(){
-    var platform = self.select(".platform.active").attributes["platform"];
-    var menu = self.select("#menulist > .active").attributes["opt"];
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
     var val = self.$(#search_input).value;
     
     //重置滚动翻页数据
     resetScroll();
 
-    var romCount = view.GetGameCount(platform,menu,val); //必须在获取rom的方法下面
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
     $(#rom_count_num).html = romCount; //初始化在线人数
 
     //生成游戏列表
-    ROMJSON = view.GetGameList(platform,menu,val,"",SCROLL_PAGE)
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE)
     if(ROMJSON == "[]"){
         var info = "";
 
@@ -108,6 +107,7 @@ function search(){
 
 //分页
 function scrollLoadRom(evt){
+
     var scrollPos = evt.scrollPos + $(#center).box(#height);
     var boxHeight = $(#romwrapper).box(#height);
 
@@ -122,17 +122,16 @@ function scrollLoadRom(evt){
             return;
         }
         SCROLL_LOCK = true; //加锁
-        var platform = self.select(".platform.active").attributes["platform"];
-        var menu = self.select("#menulist > .active").attributes["opt"];
+        var menu = $(#menulist).select("dd:current").attributes["opt"];
         var val = self.$(#search_input).value;
-        var num = self.select("#num_search > .active").html;
+        var num = $(#num_search).select("li:current").html;
 
         if(num == "ALL"){
             num = "";
         }
 
         //生成游戏列表
-        ROMJSON = view.GetGameList(platform,menu,val,"",SCROLL_PAGE)
+        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE)
 
         if(ROMJSON != "[]"){
             createRomList()
@@ -163,13 +162,11 @@ function openSidebar(obj){
     var getjson = view.GetGameDetail(obj.attributes["rid"]);
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
-    
     //生成喜好按钮
     var favorite = $(#right_favorite);
     favorite.attributes["platform"] = info.Platform.toHtmlString();
     favorite.attributes["name"] = info.Name.toHtmlString();
     favorite.attributes["value"] = info.Star.toHtmlString();
-
     if(info.Star == "1"){
         favorite.attributes.removeClass("funbtn_0");
         favorite.attributes.addClass("funbtn_1");
@@ -178,39 +175,31 @@ function openSidebar(obj){
         favorite.attributes.addClass("funbtn_0");        
     }
     
-    //游戏缩略图
-    $(#thumb).html = "<img class='video' src='"+ info.ThumbPath.toHtmlString() +"' />";
 
+    var thumb = "";
     //展示视频
-    if(info.VideoPath != ""){
-        $(#video_title).style["display"] = "block";
-        $(#video).style["display"] = "block";
-        $(#video).html = "<img class='video' src='"+ info.VideoPath.toHtmlString() +"' />";
+    if(info.VideoPath != ""){thumb += "<img src=\""+ info.VideoPath.toHtmlString() +"\" />";}
+    //截图
+    if(info.SnapPath != ""){thumb += "<img src=\""+ info.SnapPath.toHtmlString() +"\" />";}
+    //游戏缩略图
+    thumb += "<img src='"+ info.ThumbPath.toHtmlString() +"' />";
+
+   $(#stack).html = thumb;
+    rotateAttached();
+
+    if($$(#stack > img).length == 1){
+        $(#rotate).style["display"] = "none";
     }else{
-        //没有视频，展示缩略图
-        $(#video).html = "<img class='video' src='' />";
-        $(#video).style["display"] = "none";
-        $(#video_title).style["display"] = "none";
+        $(#rotate).style["display"] = undefined;
     }
     
-   //截图
-    if(info.SnapPath != ""){
-        $(#snap_title).style["display"] = "block";
-        $(#snap).style["display"] = "block";
-        $(#snap).html = "<img class='video' src='"+ info.SnapPath.toHtmlString() +"' />";
-    }else{
-        //没有视频，展示缩略图
-        $(#snap).html = "<img class='video' src='' />";
-        $(#snap).style["display"] = "none";
-        $(#snap_title).style["display"] = "none";
-    }
-
 
     //生成文本介绍
     if(detailObj.DocContent != ""){
         $(#doc_title).style["display"] = "block";
         $(#doc).style["display"] = "block";
-        $(#doc).html = detailObj.DocContent.toHtmlString();
+        view.msgbox(#alert,markdown.parse(detailObj.DocContent));
+        $(#doc).html = markdown.parse(detailObj.DocContent);
     }else{
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";
@@ -260,7 +249,7 @@ function romContextMenu(obj){
         "</li>";
     }
 
-    btndata = "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name +"'  rid='"+ detailObj.Info.Id +"'>更换图片</li>";
+    btndata += "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name +"'  rid='"+ detailObj.Info.Id +"'>更换图片</li>";
 
     romcontext.append(btndata);
 }
@@ -324,12 +313,13 @@ function setFavorite(evt){
 function numSearch(evt){
 
     //重复点击拦截
-    if(self.select("#num_search > .active").html == evt.html){
+    var current = $(#num_search).select("li:current");
+    if(current != undefined && current.html == evt.html){
+        view.msgbox(#alert,"repeat");
         return;
     }
 
-    var platform = self.select(".platform.active").attributes["platform"];
-    var menu = self.select("#menulist > .active").attributes["opt"];
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
     var num = evt.html;
 
     if(num == "ALL"){
@@ -337,11 +327,9 @@ function numSearch(evt){
     }
 
     SCROLL_PAGE = 0;
-    ROMJSON = view.GetGameList(platform,menu,"",num,SCROLL_PAGE);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE);
     createRomList(1);
 
-    //改变样式
-    var dds = self.$$(#num_search > li);
-    for(var el in dds) el.attributes.removeClass("active");
-    evt.attributes.addClass("active");
+    //激活当前，改变样式
+    evt.state.current = true;
 }

@@ -1,7 +1,7 @@
 ﻿  
 //点击平台下拉菜单 - 打开目录
 function openPlatformDir(obj){
-    view.OpenFolder(obj.attributes["opt"],obj.parent.parent.attributes["platform"]);
+    view.OpenFolder(obj.attributes["opt"],obj.parent.parent.parent.attributes["platform"]);
 }
 
 //点击平台下拉菜单 - 切换模拟器
@@ -22,6 +22,9 @@ function changePlatform(obj){
 
     var menujson = view.GetMenuList(obj.attributes["platform"]); //读取分配列表
 
+    //设置全局变量
+    ACTIVE_PLATFORM = obj.attributes["platform"];
+    //创建菜单
     createMenuList(menujson);
     //重置滚动翻页数据
     resetScroll();
@@ -30,46 +33,32 @@ function changePlatform(obj){
     createRomList(1);
     var romCount = view.GetGameCount(obj.attributes["platform"],"",""); //必须在获取rom的方法下面
     $(#rom_count_num).html = romCount; //初始化在线人数
-    //改变样式
-    var dds = self.$$(#tb_left > button);
-    for(var el in dds) el.attributes.removeClass("active");
-     obj.attributes.addClass("active");
+    
+    //激活按钮改变样式
+    obj.state.current = true;
 
-    //字母索引改变样式
-    var nums = self.$$(#num_search > li);
-    for(var el in nums) el.attributes.removeClass("active");
-    $(#num_search > li).attributes.addClass("active");
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
     //更新配置文件
     view.UpdateConfig("platform",obj.attributes["platform"])
 }
 
-//platform改变样式
-function changePlatformStyle(){
-    var dds = self.$$(#tb_left > button[class='platform']);
-    for(var el in dds){
-        if (CONF.Default.Platform == el.attributes["platform"]){
-            el.attributes.addClass("active");
-        }else{
-            el.attributes.removeClass("active");
-        }
-    }
-}
-
 //生成平台列表
-function createPlatformList(){
-
-    var pflist = self.$(#tb_left);
-    var dd = "<button class='platform' platform=''>全部平台</button>";
+function createPlatform(){
     var simclass = "";
-
+    var dd = "<li><button class='platform' platform=''>全部平台</button></li>";
     //遍历数据，生成dom
     for(var pfId in CONF.Platform) {
-        dd += "<button class='platform' platform='"+ CONF.Platform[pfId].Id +"'>" + CONF.Platform[pfId].Name + "</button>";
-        dd += "<button class='platform_down' type='menu' platform='"+ CONF.Platform[pfId].Id +"'><i>&#xe628;</i><menu>";
+        dd += "<li platform='"+ CONF.Platform[pfId].Id +"'>";
+        dd += "<button class='platform'>" + CONF.Platform[pfId].Name + "</button>";
+        dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";
         dd += "<li class='opendir' opt='rom'>打开Rom目录</li>";
         dd += "<li class='opendir' opt='sim'>打开模拟器目录</li>";
-        dd += "<li class='opendir' opt='thumb'>打开Thumb目录</li>";
-        dd += "<li class='opendir' opt='video'>打开Video目录</li>";
+        dd += "<li class='opendir' opt='thumb'>打开缩略图目录</li>";
+        dd += "<li class='opendir' opt='snap'>打开场景图目录</li>";
+        dd += "<li class='opendir' opt='doc'>打开文档目录</li>";
+        dd += "<li class='opendir' opt='strategy'>打开攻略目录</li>";
         if(CONF.Platform[pfId].SimList.length > 0 ){
             dd += "<li>切换模拟器<menu>";
             for(var simId in CONF.Platform[pfId].SimList) {
@@ -82,8 +71,73 @@ function createPlatformList(){
             }
             dd += "</menu></li>";
         }
-        dd += "</menu></button>";
+        dd += "</menu></button></li>";
+    }
+    self.$(#platform_ul).html = dd; //生成dom
+
+    //设置默认激活
+    ACTIVE_PLATFORM = CONF.Default.Platform;
+    var pfDom =  $(#platform_ul).select("li[platform="+CONF.Default.Platform+"]");
+    if (pfDom != undefined){
+        pfDom.state.current = true;
+    }
+}
+
+//滑动平台列表参数
+var PLATFORM_OFFSET=0; //x坐标
+var PLATFORM_LEFT=0; //left值
+var PLATFORM_MUTEX=false; //互斥锁
+var PLATFORM_OUTER_WIDTH=0; //外框宽度
+var PLATFORM_INNER_WIDTH=0; //内部宽度
+
+//平台列表鼠标移入，初始化一些常量参数
+function platformMouseEnter(evt){
+    if(PLATFORM_MUTEX == true){
+        return;
+    }
+    PLATFORM_OFFSET = evt.x;
+    PLATFORM_LEFT = $(#platform_ul).style["left"].toString().replace("px","").toInteger();
+    if(PLATFORM_LEFT < 0){
+        PLATFORM_LEFT = Math.abs(PLATFORM_LEFT);
     }
 
-    pflist.html = dd; //生成dom
+    PLATFORM_OUTER_WIDTH = $(#tb_left).box(#width).toInteger();
+    PLATFORM_INNER_WIDTH = $(#platform_ul).box(#width).toInteger();
+    PLATFORM_MUTEX = true; //互斥锁
+}
+//平台列表鼠标移出，销毁一些参数
+function platformMouseLeave(evt){
+     PLATFORM_MUTEX = false;
+}
+
+//平台列表鼠标移动，滑动功能
+function platformMouseMove(evt){
+
+    //初始化未完成，不执行逻辑
+    if(PLATFORM_MUTEX == false){
+        return;
+    }
+
+    //如果能全部显示，则不需要拖动
+    if(PLATFORM_OUTER_WIDTH >= PLATFORM_INNER_WIDTH){
+        return;
+    }
+
+    var left_value = PLATFORM_LEFT + (evt.x - PLATFORM_OFFSET - 200);
+    if(left_value > 0){
+        left_value = left_value - (left_value*2);
+    }else{
+        left_value = Math.abs(left_value);
+    }
+    $(#platform_ul).style["left"] = left_value.toString() + "px";
+}
+
+
+function platformResize(evt){
+     //还原平台拉条位置
+    var out = $(#tb_left).box(#width).toInteger();
+    var inner = $(#platform_ul).box(#width).toInteger();
+    if(out >= inner){
+        $(#platform_ul).style["left"] = "0";
+    }
 }

@@ -9,10 +9,13 @@ view.root.on("ready", function(){
     if(id == 0){
         action = "add";
         $(#sim_submit).value = "添加模拟器";
+        $(#sim_delete).style['display'] = "none";
+
+        
     }else{
         var sim = view.parameters.getSimulatorById(id);
         action = "update";
-        $(#sim_submit).value = "编辑模拟器";
+        $(#sim_submit).value = "保存设置";
         $(#sim_name).value = sim.Name;
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
@@ -49,16 +52,50 @@ event click $(#sim_submit) {
         //修改模拟器信息
         result = view.parameters.updateSimulator(data);
         if(result != ""){
-            view.msgbox(#alert,"编辑成功");
+            view.msgbox(#alert,"修改成功");
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }
 }
 
-//选择文件夹
-event click $(.openfolder){
-    var url = view.selectFolder(this.attributes["caption"]);
-    var out = self.select("#"+this.attributes["for"]);
+//删除模拟器
+event click $(#sim_delete) {
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:"你确定要删除该模拟器吗?", 
+        caption:"删除模拟器",
+        buttons:[
+            {id:#yes,text:"删除"},
+            {id:#cancel,text:"取消",role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+    //开始删除
+    result = view.parameters.delSimulator(id);
+    if(result != "0"){
+        var data = {
+            Opt:"delete",
+            Id:result,
+        };
+        var datastr = JSON.stringify(data);
+        view.msgbox(#alert,"删除成功");
+        view.close(datastr); //如果更新成功，则关闭窗口，并把修改后的数据返回
+    }
+}
+
+//选择文件
+event click $(.openfile){
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = this.attributes["filter"];
+    const caption = this.attributes["caption"];
+    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
+    var out = self.select("#"+this.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
         url = url.split("\/").join(CONF.Separator.toString());
@@ -66,4 +103,3 @@ event click $(.openfolder){
         out.value = url;
     }
 }
-

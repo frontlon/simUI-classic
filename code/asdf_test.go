@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -15,6 +15,9 @@ import (
 
 func TestAAA(T *testing.T) {
 
+	names := []string{"张三","离散"}
+	namesStr:=strings.Join(names,",")
+	fmt.Println(namesStr)
 
 
 }

@@ -72,9 +72,16 @@ function updateSimulator(data){
     return result;
 }
 
+//删除模拟器
+function delSimulator(id){
+    var result = view.DelSimulator(id);
+    return result;
+}
+
 //更新rom的展示图片
 function updateRomThumbs(type,id,newpath){
     var result = view.UpdateRomThumbs(type,id,newpath);
+
     //刷新rom列表图片
     if(result != ""){
         $(#romlist).select("li[rid="+id+"] img").attributes['src'] = newpath;

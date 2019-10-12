@@ -1,6 +1,19 @@
 ﻿var pfId;
 view.root.on("ready", function(){
     
+    //生成语言列表
+    var langdata = "";
+    var config_lang = $(#config_lang);
+    for(var lang in CONF.LangList) {
+        config_lang.options.$append(<option value={lang}>{lang}</option>);
+    }
+
+
+    $(#config_lang).value = CONF.Default.Lang;
+
+    //图片搜索引擎
+    $(#config_search_engines).value = CONF.Default.SearchEngines;
+
     //生成平台列表
     var pfdata = "";
     var lists = view.parameters.getPlatform();
@@ -9,14 +22,6 @@ view.root.on("ready", function(){
         pfdata += '<option value="'+ lists[pf].Id +'">'+  lists[pf].Name + '</option>';
     }
     platform_list.html = pfdata;
-
-    //生成语言列表
-    var langdata = "";
-    var config_lang = $(#config_lang);
-    for(var lang in CONF.LangList) {
-        config_lang.options.$append(<option value={lang}>{lang}</option>);
-    }
-    $(#config_lang).value = CONF.Default.Lang;
 });
 
 //平台列表点击
@@ -29,10 +34,9 @@ event change $(#platform_list) {
     var info = view.parameters.getPlatformById(pfId);
     var exts = info.RomExts.join(",");
     $(#platform_name).value = info.Name;
-    $(#platform_status).value = info.Status;
     $(#platform_exts).value = exts;
     $(#platform_doc).value = info.DocPath;
-    $(#platform_video).value = info.VideoPath;
+    $(#platform_strategy).value = info.StrategyPath;
     $(#platform_rom).value = info.RomPath;
     $(#platform_thumb).value = info.ThumbPath;
     $(#platform_snap).value = info.SnapPath;
@@ -54,10 +58,9 @@ event change $(#platform_list) {
     $(#add_sim).state.disabled = false;
     $(#platform_sim).state.disabled = false;
     $(#platform_name).state.disabled = false;
-    $(#platform_status).state.disabled = false;
     $(#platform_exts).state.disabled = false;
     $(#platform_doc).state.disabled = false;
-    $(#platform_video).state.disabled = false;
+    $(#platform_strategy).state.disabled = false;
     $(#platform_rom).state.disabled = false;
     $(#platform_thumb).state.disabled = false;
     $(#platform_snap).state.disabled = false;
@@ -75,6 +78,7 @@ event change $(#platform_list) {
 event click $(#config_submit) {
     var data = {
         lang : $(#config_lang).value.toString();
+        search_engines : $(#config_search_engines).value.toString();
     };
     //更新平台信息
     view.parameters.updateConfig(data);
@@ -85,12 +89,11 @@ event click $(#platform_submit) {
     var data = {
         id       : $(#platform_list).value.toString();
         name     : $(#platform_name).value,
-        status   : $(#platform_status).value.toString(),
         exts     : $(#platform_exts).value,
         rom      : $(#platform_rom).value,
         thumb    : $(#platform_thumb).value,
-        snap    : $(#platform_snap).value,
-        video    : $(#platform_video).value,
+        snap     : $(#platform_snap).value,
+        strategy : $(#platform_strategy).value,
         doc      : $(#platform_doc).value,
         romlist  : $(#platform_romlist).value,
     };
@@ -135,6 +138,7 @@ event change $(#platform_sim) {
             id:this.value,
             platform:pfId,
             updateSimulator:updateSimulator,
+            delSimulator:delSimulator,
             getSimulatorById:getSimulatorById,
         };
     });
@@ -145,7 +149,13 @@ event change $(#platform_sim) {
     //更新option选项
     if(res != ""){
         var sim = JSON.parse(res);
-        $(#platform_sim).select("option[value="+sim.Id+"]").html = sim.Name;
+        if(sim.Opt == undefined){
+            //修改
+            $(#platform_sim).select("option[value="+sim.Id+"]").html = sim.Name;
+        }else{
+            //删除
+            $(#platform_sim).select("option[value="+sim.Id+"]").remove();
+        }
     }
 }
 

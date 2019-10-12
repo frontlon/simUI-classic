@@ -6,10 +6,8 @@ var SCROLL_LOCK = false; //滚动条锁
 var SCROLL_POS = 0; //默认滚动条位置
 var MAXZOOM = 5; //最大缩放等级
 var ACTIVETIME = null; //正在启动的定时器
-
+var ACTIVE_PLATFORM = ""; //当前选定的平台
 view.root.on("ready", function(){
-
-try{
 
     /********** 数据初始化 **********/
     //初始化全局配置
@@ -24,9 +22,7 @@ try{
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
-}catch(e){
-    view.msgbox(#alert,e);
-}
+
     // ================= 事件 =================
 
     //搜索功能按下回车
@@ -42,7 +38,7 @@ try{
     });
 
     //平台单击
-    self.on("click", "button[class=platform]", function(evt) {
+    self.on("click", "#platform_ul > li", function(evt) {
         changePlatform(this);
     });
 
@@ -58,7 +54,7 @@ try{
 
 
     //目录单击
-    self.on("click", "dd[class=menuitem]", function(evt) {
+    self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
     });
     
@@ -166,9 +162,59 @@ try{
         initConfig("1");
         $(#loading).style["display"]="none";
     });
-    
+
+    //平台列表鼠标移入，初始化一些常量参数
+    $(#tb_left).on("mouseenter", function(evt) {
+        platformMouseEnter(evt);
+    });
+
+    //平台列表鼠标移出，销毁一些参数
+    $(#tb_left).on("mouseleave", function(evt) {
+       platformMouseLeave(evt);
+    });
+
+    //平台列表鼠标移动，滑动功能
+    self.on("mousemove", "#tb_left", function(evt) {
+        platformMouseMove(evt);
+    });
+ 
+    //调整窗口大小
+    view.on("size", function(evt) {
+        //还原平台拉条位置
+        platformResize(evt);
+    });
+
+
+   // $(#right_desc).on("click", function(evt) {
+
+        other = view.window{
+          type:View.FRAME_WINDOW,
+          url: self.url("desc.html"),
+          alignment: 5,
+          screen:1,
+          width : 1280,
+          height : 800
+        };
+
+
+
+
+
+  //  });
+
+      
+
+
 });
 
+    //侧边懒缩略图滑动特效
+    $(#rotate) << event click()
+    {     
+      var container = $(div#stack);
+      var next = container.shown.next || container.first;
+      this.state.disabled = true;
+      rotateTo(next, :: (this super).state.disabled = false);
+    }
 
 //初始化配置
 function initConfig(isfresh){
@@ -179,12 +225,16 @@ function initConfig(isfresh){
 
     createLang(); //创建语言
     createTheme(); //创建主题
-    createPlatformList(); //生成平台列表
-    changePlatformStyle(); //platform改变样式
+    createPlatform(); //生成平台列表
     initRomListStyle(); //初始化游戏列表样式
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform);
     createMenuList(menujson);
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
+
+
 }
 
 //弹出错误窗口

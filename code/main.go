@@ -22,7 +22,6 @@ func main() {
 
 	//初始化配置
 	InitConf()
-
 	left :=Config.Default.WindowLeft
 	top := Config.Default.WindowTop
 	width := Config.Default.WindowWidth
@@ -31,6 +30,8 @@ func main() {
 	//创建window窗口
 	w, err := window.New(
 		sciter.SW_MAIN|
+			//sciter.SW_RESIZEABLE|
+			//sciter.SW_CONTROLS|
 			sciter.SW_ENABLE_DEBUG,
 		&sciter.Rect{Left: int32(left), Top: int32(top), Right: int32(width), Bottom: int32(height)});
 	if err != nil {
@@ -85,4 +86,11 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
+}
+
+//调用alert框
+func errorMsg(w *window.Window,err string) *sciter.Value {
+	if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
+	}
+	return sciter.NullValue();
 }

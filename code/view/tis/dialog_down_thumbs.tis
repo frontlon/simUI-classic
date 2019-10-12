@@ -8,7 +8,6 @@ view.root.on("ready", function(){
     ID = view.parameters.id;
     $(#search_input).value = keyword;
     searchPic(keyword,1);
-
     //分页
     self.onScroll = function(evt) {
 
@@ -40,7 +39,6 @@ view.root.on("ready", function(){
         }
 
     };
-
 
 });
 
@@ -112,17 +110,20 @@ event click $(.submit){
 
 //图片搜索
 function searchPic(keyword,ctype){
+
     //过滤特殊字符
     keyword = keyword.replace(/[\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\;\'\:\"\'\,\.\/\<\>\?\-\=\_\+]/g,"");
     var newkeyword = keyword.urlEscape(); //unicode转码
     var num = PAGE*PAGENUM;
 
     //载入url
-    var url = "https://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&ct=201326592&is=&fp=result&queryWord={$keyword}&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=0&hd=&latest=&copyright=&word={$keyword}&s=&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&expermode=&force=&pn={$NumIndex}&rn={$pageNum}&gsm=&1569904957071=";
+    var url = CONF.Default.SearchEngines;
     //替换关键字
     url = url.replace("{$keyword}",keyword);
     url = url.replace("{$NumIndex}",num.toString());
     url = url.replace("{$pageNum}",PAGENUM.toString());
+
+    $(#loading).style['display'] = 'block';
 
     //生成平台列表    
 	view.request({
@@ -143,10 +144,13 @@ function searchPic(keyword,ctype){
                 }
             }
             $(#down_thumb_list).append(content);
+            $(#loading).style['display'] = 'none';
+
             return true;
         },
         error:function(err,status){
-            view.msgbox(#alert,err);
+            view.msgbox(#alert,"网络请求失败");
+            $(#loading).style['display'] = 'none';
             return false;
         }
 	});

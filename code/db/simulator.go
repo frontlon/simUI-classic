@@ -122,3 +122,25 @@ func (*Simulator) UpdateDefault(platform int64,id int64) error {
 	}
 	return nil
 }
+
+//删除一个模拟器
+func (sim *Simulator) DeleteById() (error) {
+	sql := "DELETE FROM simulator WHERE id = "+ strconv.Itoa(int(sim.Id))
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+//删除一个平台下的所有模拟器
+func (sim *Simulator) DeleteByPlatform() (error) {
+	sql := "DELETE FROM simulator WHERE platform = "+ strconv.Itoa(int(sim.Platform))
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
