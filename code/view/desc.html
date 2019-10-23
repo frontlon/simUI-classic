@@ -1,212 +1,74 @@
 ﻿<html window-frame="solid" window-resizable >
   <head>
-    <title>Hello world!</title>
-    <style>
+    <title></title>
+    <div id="themefile"></div>
+    <style type="text/css">
+      @font-face{font-family:iconfont;src:url(iconfont.ttf)}
+      i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle;display:block}
       *{margin:0;padding:0}
       html{}
       body{flow:vertical;size:*;}
-      body>header{width:*;line-height:1.6em;background:#383838;flow:horizontal}
-      body>header>caption{width:*}
+      body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.8);}
+      body>header>caption{width:*;height:32dip;}
       body>main{size:*;overflow:hidden}
-      button.window{display:block;size:24dip;margin:0;padding:0;background:50% 50% no-repeat;background-size:24dip}
-      button.window:hover{background-color:gold}
-      button.window#minimize{background-image:url(icons/icon-minimize.png)}
-      button.window#maximize{background-image:url(icons/icon-maximize.png)}
-      button.window#maximize.restore{background-image:url(icons/icon-restore.png)}
-      button.window#close{background-image:url(icons/icon-close.png)}
+      button.window{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center}
+      button.window:hover{background:color(desc-titlebar-hover-background-color)}
+   
+      .left{background-color:morph(color(desc-background-color),opacity:0.8);}
+      .left ul{list-style:none;}
+      .left ul li{height:40dip;line-height:40dip;color:color(desc-menu-text-color);padding-left:24dip;display:none}
+      .left ul li:current{background:color(desc-menu-active-background-color);}
+      .right{display:block;padding:0 16dip 16dip 24dip;background-color:morph(color(desc-background-color),opacity:0.8);}
+      splitter{background:morph(color(desc-background-color),opacity:0.8);}
+      splitter:hover{background:morph(color(desc-background-color),opacity:0.8);}
 
-      .left{background:#383838}
-      .left ul{list-style: none;background:#666}
-      .left ul li{height:55px;line-height:55px;color:#FFF;padding-left:30px}
-      .left ul li.active{border-left:5px solid #000;background:#999}
-      .right{background:#383838}
-      splitter{background:#383838}
+      .desc{display:none;color:color(desc-content-text-color);height:*;}
+      .desc p{line-height:1.5em;}
+      .title_h1{display:block;font-size:14dip;font-style:italic;font-weight:normal;margin:80dip 8dip 40dip 0;text-align:right;color:color(desc-title-text-color);line-height:2em;padding-left:40dip}
 
-      .desc{display: block;padding:10px;color:#999}
-      .desc p{line-height: 1.5em;}
-      .title_h1{display: block;font-size: 18px;font-style:italic;padding:50px 10px 50px 0;text-align: right}
+      .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;}
+      .markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{line-height:3em}
+      .markdown hr{border:0;border-bottom:1dip solid #ccc;margin:12dip 0}
+      .markdown pre{margin:0;border:1dip solid #ccc;background:@PLAIN;padding:4dip}
+      .markdown code{background:#333}
+      .markdown table[border]{border-spacing:-1dip;border:none;margin:1em 0}
+      .markdown table[border] td{border:1dip solid #bbb;padding:2dip 4dip}
+      .markdown table[border] th{border:1dip solid #bbb;padding:2dip 4dip;background:#eee}
+      .markdown dl{flow:row(dt,dd);border-spacing:1em 4dip}
+      .markdown dl dt{text-align:right;font-weight:700}
+      .markdown dl dt::after{content:":"}
+      .markdown dl dd{margin:0;padding:0;width:*}
 
     </style>
-    <script type="text/tiscript">
-
-  
-  
-
-    
-    }
-
     </script>
   </head>
 <body>
   <header>
-    <caption role="window-caption">Caption</caption>
-
-
-   
-    <button.window #refresh>刷新</button>
-    <button.window role="window-minimize" #minimize>最小化</button>
-    <button.window role="window-maximize" #maximize>最大化</button>
-    <button.window role="window-close" #close>关闭</button>
+    <caption role="window-caption">&nbsp;</caption>
+    <button class="window" id="minimize" role="window-minimize"><i>&#xe661;</i></button>
+    <button class="window" id="maximize" role="window-maximize"><i>&#xe66b;</i></button>
+    <button class="window" id="close" role="window-close"><i>&#xe605;</i></button>
   </header>
   <main>
-
-    <frameset cols="200px,*">
+    <frameset cols="200dip,*">
         <section class="left">
-          <h1 class="title_h1">游戏名称</h1>
+          <h1 class="title_h1" id="title"></h1>
             <ul>
-                <li id="btn_desc1">简介</li>
-                <li id="btn_desc2" class="active">攻略</li>
-                <li id="btn_desc3">出招表</li>
+                <li id="btn_desc_doc"></li>
+                <li id="btn_desc_strategy" class="active"></li>
               </ul>
         </section>
         <splitter />
-
         <section class="right">
-    
-          <div class="desc" id="desc1">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1 id="h1--markdown-mdeditor"><a name="欢迎使用 Markdown在线编辑器 MdEditor" class="reference-link"></a><span class="header-link octicon octicon-link"></span>2442欢迎使用 Markdown在线编辑器 MdEditor</h1><p><strong>Markdown是一种轻量级的「标记语言」</strong></p> <p>Markdown是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面，Markdown文件的后缀名便是“.md”</p> <h2 id="h2-mdeditor-markdown-"><a name="MdEditor是一个在线编辑Markdown文档的编辑器" class="reference-link"></a><span class="header-link octicon octicon-link"></span>MdEditor是一个在线编辑Markdown文档的编辑器</h2><p><em>MdEditor扩展了Markdown的功能（如表格、脚注、内嵌HTML等等），以使让Markdown转换成更多的格式，和更丰富的展示效果，这些功能原初的Markdown尚不具备。</em></p> <blockquote> <p>Markdown增强版中比较有名的有Markdown Extra、MultiMarkdown、 Maruku等。这些衍生版本要么基于工具，如<del>Pandoc</del>，Pandao；要么基于网站，如GitHub和Wikipedia，在语法上基本兼容，但在一些语法和渲染效果上有改动。</p> </blockquote> <p>MdEditor源于Pandao的JavaScript开源项目，开源地址<a href="https://github.com/pandao/editor.md" title="Editor.md">Editor.md</a>，并在MIT开源协议的许可范围内进行了优化，以适应广大用户群体的需求。向优秀的markdown开源编辑器原作者Pandao致敬。</p> <h2 id="h2-mdeditor-"><a name="MdEditor的功能列表演示" class="reference-link"></a><span class="header-link octicon octicon-link"></span>MdEditor的功能列表演示</h2><h1 id="h1--h1"><a name="标题H1" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H1</h1><h2 id="h2--h2"><a name="标题H2" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H2</h2><h3 id="h3--h3"><a name="标题H3" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H3</h3><h4 id="h4--h4"><a name="标题H4" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H4</h4><h5 id="h5--h5"><a name="标题H5" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H5</h5><h6 id="h6--h5"><a name="标题H5" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题H5</h6><h3 id="h3-u5B57u7B26u6548u679Cu548Cu6A2Au7EBFu7B49"><a name="字符效果和横线等" class="reference-link"></a><span class="header-link octicon octicon-link"></span>字符效果和横线等</h3><hr> <p><del>删除线</del> <s>删除线（开启识别HTML标签时）</s></p> <p><em>斜体字</em> <em>斜体字</em></p> <p><strong>粗体</strong> <strong>粗体</strong></p> <p><strong><em>粗斜体</em></strong> <strong><em>粗斜体</em></strong></p> <p>上标：X<sub>2</sub>，下标：O<sup>2</sup></p> <p><strong>缩写(同HTML的abbr标签)</strong></p> <blockquote> <p>即更长的单词或短语的缩写形式，前提是开启识别HTML标签时，已默认开启</p> </blockquote> <p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p> <h3 id="h3--blockquotes"><a name="引用 Blockquotes" class="reference-link"></a><span class="header-link octicon octicon-link"></span>引用 Blockquotes</h3><blockquote> <p>引用文本 Blockquotes</p> </blockquote> <p>引用的行内混合 Blockquotes</p> <blockquote> <p>引用：如果想要插入空白换行<code>即&lt;br /&gt;标签</code>，在插入处先键入两个以上的空格然后回车即可，<a href="https://www.mdeditor.com/">普通链接</a>。</p> </blockquote> <h3 id="h3--links"><a name="锚点与链接 Links" class="reference-link"></a><span class="header-link octicon octicon-link"></span>锚点与链接 Links</h3><p><a href="https://www.mdeditor.com/">普通链接</a><br><a href="https://www.mdeditor.com/" title="普通链接带标题">普通链接带标题</a><br>直接链接：<a href="https://www.mdeditor.com">https://www.mdeditor.com</a><br><a href="https://www.mdeditor.com/">锚点链接</a></p> <p><a href="mailto:test.test@gmail.com">mailto:test.test@gmail.com</a><br>GFM a-tail link <a href="https://github.com/pandao" title="@pandao" class="at-link">@pandao</a><br>邮箱地址自动链接 <a href="mailto:test.test@gmail.com">test.test@gmail.com</a> <a href="mailto:www@vip.qq.com">www@vip.qq.com</a></p> <blockquote> <p><a href="https://github.com/pandao" title="@pandao" class="at-link">@pandao</a></p> </blockquote> <h3 id="h3--codes"><a name="多语言代码高亮 Codes" class="reference-link"></a><span class="header-link octicon octicon-link"></span>多语言代码高亮 Codes</h3><h4 id="h4--inline-code"><a name="行内代码 Inline code" class="reference-link"></a><span class="header-link octicon octicon-link"></span>行内代码 Inline code</h4><p>执行命令：<code>npm install marked</code></p> <h4 id="h4-u7F29u8FDBu98CEu683C"><a name="缩进风格" class="reference-link"></a><span class="header-link octicon octicon-link"></span>缩进风格</h4><p>即缩进四个空格，也做为实现类似 <code>&lt;pre&gt;</code> 预格式化文本 ( Preformatted Text ) 的功能。</p> <pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="pun">&lt;?</span><span class="pln">php</span></code></li><li class="L1"><code><span class="pln"> echo </span><span class="str">"Hello world!"</span><span class="pun">;</span></code></li><li class="L2"><code><span class="pun">?&gt;</span></code></li></ol></pre><p>预格式化文本：</p> <pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="pun">|</span><span class="pln"> </span><span class="typ">First</span><span class="pln"> </span><span class="typ">Header</span><span class="pln"> </span><span class="pun">|</span><span class="pln"> </span><span class="typ">Second</span><span class="pln"> </span><span class="typ">Header</span><span class="pln"> </span><span class="pun">|</span></code></li><li class="L1"><code><span class="pun">|</span><span class="pln"> </span><span class="pun">-------------</span><span class="pln"> </span><span class="pun">|</span><span class="pln"> </span><span class="pun">-------------</span><span class="pln"> </span><span class="pun">|</span></code></li><li class="L2"><code><span class="pun">|</span><span class="pln"> </span><span class="typ">Content</span><span class="pln"> </span><span class="typ">Cell</span><span class="pln"> </span><span class="pun">|</span><span class="pln"> </span><span class="typ">Content</span><span class="pln"> </span><span class="typ">Cell</span><span class="pln"> </span><span class="pun">|</span></code></li><li class="L3"><code><span class="pun">|</span><span class="pln"> </span><span class="typ">Content</span><span class="pln"> </span><span class="typ">Cell</span><span class="pln"> </span><span class="pun">|</span><span class="pln"> </span><span class="typ">Content</span><span class="pln"> </span><span class="typ">Cell</span><span class="pln"> </span><span class="pun">|</span></code></li></ol></pre><h4 id="h4-js-"><a name="JS代码" class="reference-link"></a><span class="header-link octicon octicon-link"></span>JS代码</h4><pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><code class="lang-javascript"><span class="kwd">function</span><span class="pln"> test</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code class="lang-javascript"><span class="pln"> console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Hello world!"</span><span class="pun">);</span></code></li><li class="L2"><code class="lang-javascript"><span class="pun">}</span></code></li></ol></pre> <h4 id="h4-html-html-codes"><a name="HTML 代码 HTML codes" class="reference-link"></a><span class="header-link octicon octicon-link"></span>HTML 代码 HTML codes</h4><pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><code class="lang-html"><span class="dec">&lt;!DOCTYPE html&gt;</span></code></li><li class="L1"><code class="lang-html"><span class="tag">&lt;html&gt;</span></code></li><li class="L2"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;head&gt;</span></code></li><li class="L3"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;mate</span><span class="pln"> </span><span class="atn">charest</span><span class="pun">=</span><span class="atv">"utf-8"</span><span class="pln"> </span><span class="tag">/&gt;</span></code></li><li class="L4"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;meta</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"keywords"</span><span class="pln"> </span><span class="atn">content</span><span class="pun">=</span><span class="atv">"Editor.md, Markdown, Editor"</span><span class="pln"> </span><span class="tag">/&gt;</span></code></li><li class="L5"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;title&gt;</span><span class="pln">Hello world!</span><span class="tag">&lt;/title&gt;</span></code></li><li class="L6"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;style</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/css"</span><span class="tag">&gt;</span></code></li><li class="L7"><code class="lang-html"><span class="pln"> body</span><span class="pun">{</span><span class="pln">font</span><span class="pun">-</span><span class="pln">size</span><span class="pun">:</span><span class="lit">14px</span><span class="pun">;</span><span class="pln">color</span><span class="pun">:#</span><span class="lit">444</span><span class="pun">;</span><span class="pln">font</span><span class="pun">-</span><span class="pln">family</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Microsoft Yahei"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Tahoma</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Hiragino Sans GB"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Arial</span><span class="pun">;</span><span class="pln">background</span><span class="pun">:#</span><span class="pln">fff</span><span class="pun">;}</span></code></li><li class="L8"><code class="lang-html"><span class="pln"> ul</span><span class="pun">{</span><span class="pln">list</span><span class="pun">-</span><span class="pln">style</span><span class="pun">:</span><span class="pln"> none</span><span class="pun">;}</span></code></li><li class="L9"><code class="lang-html"><span class="pln"> img</span><span class="pun">{</span><span class="pln">border</span><span class="pun">:</span><span class="pln">none</span><span class="pun">;</span><span class="pln">vertical</span><span class="pun">-</span><span class="pln">align</span><span class="pun">:</span><span class="pln"> middle</span><span class="pun">;}</span></code></li><li class="L0"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;/style&gt;</span></code></li><li class="L1"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;/head&gt;</span></code></li><li class="L2"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;body&gt;</span></code></li><li class="L3"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;h1</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"text-xxl"</span><span class="tag">&gt;</span><span class="pln">Hello world!</span><span class="tag">&lt;/h1&gt;</span></code></li><li class="L4"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;p</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"text-green"</span><span class="tag">&gt;</span><span class="pln">Plain text</span><span class="tag">&lt;/p&gt;</span></code></li><li class="L5"><code class="lang-html"><span class="pln"> </span><span class="tag">&lt;/body&gt;</span></code></li><li class="L6"><code class="lang-html"><span class="tag">&lt;/html&gt;</span></code></li></ol></pre> <h3 id="h3--images"><a name="图片 Images" class="reference-link"></a><span class="header-link octicon octicon-link"></span>图片 Images</h3><p>图片加链接 (Image + Link)：</p> <p><a href="https://www.mdeditor.com/images/logos/markdown.png" title="markdown"><img src="https://www.mdeditor.com/images/logos/markdown.png" alt=""></a></p><a href="https://www.mdeditor.com/images/logos/markdown.png" title="markdown"> <blockquote> <p>Follow your heart.</p> </blockquote> <hr> </a><h3 id="h3--lists"><a href="https://www.mdeditor.com/images/logos/markdown.png" title="markdown"></a><a name="列表 Lists" class="reference-link"></a><span class="header-link octicon octicon-link"></span>列表 Lists</h3><h4 id="h4--unordered-lists-"><a name="无序列表（减号）Unordered Lists (-)" class="reference-link"></a><span class="header-link octicon octicon-link"></span>无序列表（减号）Unordered Lists (-)</h4><ul> <li>列表一</li><li>列表二</li><li>列表三</li></ul> <h4 id="h4--unordered-lists-"><a name="无序列表（星号）Unordered Lists (*)" class="reference-link"></a><span class="header-link octicon octicon-link"></span>无序列表（星号）Unordered Lists (*)</h4><ul> <li>列表一</li><li>列表二</li><li>列表三</li></ul> <h4 id="h4--unordered-lists-"><a name="无序列表（加号和嵌套）Unordered Lists (+)" class="reference-link"></a><span class="header-link octicon octicon-link"></span>无序列表（加号和嵌套）Unordered Lists (+)</h4><ul> <li>列表一</li><li>列表二<ul> <li>列表二-1</li><li>列表二-2</li><li>列表二-3</li></ul> </li><li>列表三<ul> <li>列表一</li><li>列表二</li><li>列表三</li></ul> </li></ul> <h4 id="h4--ordered-lists-"><a name="有序列表 Ordered Lists (-)" class="reference-link"></a><span class="header-link octicon octicon-link"></span>有序列表 Ordered Lists (-)</h4><ol> <li>第一行</li><li>第二行</li><li>第三行</li></ol> <h4 id="h4-gfm-task-list"><a name="GFM task list" class="reference-link"></a><span class="header-link octicon octicon-link"></span>GFM task list</h4><ul> <li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox" checked="checked" disabled="disabled"> GFM task list 1</li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox" checked="checked" disabled="disabled"> GFM task list 2</li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 3<ul> <li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 3-1</li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 3-2</li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 3-3</li></ul> </li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 4<ul> <li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 4-1</li><li style="list-style: none;"><input type="checkbox" class="task-list-item-checkbox"> GFM task list 4-2</li></ul> </li></ul> <hr> <h3 id="h3--tables"><a name="绘制表格 Tables" class="reference-link"></a><span class="header-link octicon octicon-link"></span>绘制表格 Tables</h3><table> <thead> <tr> <th>项目</th> <th style="text-align:right">价格</th> <th style="text-align:center">数量</th> </tr> </thead> <tbody> <tr> <td>计算机</td> <td style="text-align:right">$1600</td> <td style="text-align:center">5</td> </tr> <tr> <td>手机</td> <td style="text-align:right">$12</td> <td style="text-align:center">12</td> </tr> <tr> <td>管线</td> <td style="text-align:right">$1</td> <td style="text-align:center">234</td> </tr> </tbody> </table> <table> <thead> <tr> <th>First Header</th> <th>Second Header</th> </tr> </thead> <tbody> <tr> <td>Content Cell</td> <td>Content Cell</td> </tr> <tr> <td>Content Cell</td> <td>Content Cell</td> </tr> </tbody> </table> <table> <thead> <tr> <th>First Header</th> <th>Second Header</th> </tr> </thead> <tbody> <tr> <td>Content Cell</td> <td>Content Cell</td> </tr> <tr> <td>Content Cell</td> <td>Content Cell</td> </tr> </tbody> </table> <table> <thead> <tr> <th>Function name</th> <th>Description</th> </tr> </thead> <tbody> <tr> <td><code>help()</code></td> <td>Display the help window.</td> </tr> <tr> <td><code>destroy()</code></td> <td><strong>Destroy your computer!</strong></td> </tr> </tbody> </table> <table> <thead> <tr> <th style="text-align:left">Left-Aligned</th> <th style="text-align:center">Center Aligned</th> <th style="text-align:right">Right Aligned</th> </tr> </thead> <tbody> <tr> <td style="text-align:left">col 3 is</td> <td style="text-align:center">some wordy text</td> <td style="text-align:right">$1600</td> </tr> <tr> <td style="text-align:left">col 2 is</td> <td style="text-align:center">centered</td> <td style="text-align:right">$12</td> </tr> <tr> <td style="text-align:left">zebra stripes</td> <td style="text-align:center">are neat</td> <td style="text-align:right">$1</td> </tr> </tbody> </table> <table> <thead> <tr> <th>Item</th> <th style="text-align:right">Value</th> </tr> </thead> <tbody> <tr> <td>Computer</td> <td style="text-align:right">$1600</td> </tr> <tr> <td>Phone</td> <td style="text-align:right">$12</td> </tr> <tr> <td>Pipe</td> <td style="text-align:right">$1</td> </tr> </tbody> </table> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          </div>
-          <div class="desc" id="desc2"></div>
-          <div class="desc" id="desc3"></div>
-
-
-
+          <div class="desc markdown" id="desc_doc"></div>
+          <div class="desc markdown" id="desc_strategy"></div>
         </section>
-      
-        
     </frameset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </main>
 
-  <script type="text/tiscript">
-      //var ROOTPATH = "this://app/";
-      var ROOTPATH = "";
-      include ROOTPATH + "tis/plugins/markdown.tis";
-
-      view.root.on("ready", function(){
-        view.state = View.WINDOW_SHOWN;
-        view << event statechange {
-          $(button#maximize).attributes.toggleClass("restore", view.windowState == View.WINDOW_MAXIMIZED); 
-        }
-
-
-
-        $(#refresh).on("click", function(evt) {
-          try{
-          view.msgbox(#alert,"123");
-          self.refresh();
-        }catch(e){
-          view.msgbox(#alert,e);
-        }
-      });
-
-
-      });
-
-
-
-
-
-  
-  
-  
-        
-
-
-
-
-
-
-
-
+<script type="text/tiscript">
+    include ROOTPATH + "tis/plugins/markdown.tis";
+    include ROOTPATH + "tis/dialog_desc.tis";
 </script>
-
 </body>
 </html>

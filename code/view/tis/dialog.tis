@@ -3,7 +3,7 @@ function updateConfig(data){
     for(var k in data) {
         var result = view.UpdateConfig(k,data[k]);
     }
-    view.msgbox(#alert,"更新成功");
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
 
 //添加一个新平台
@@ -26,7 +26,7 @@ function updatePlatform(data){
     var datastr = JSON.stringify(data);
     var result = view.UpdatePlatform(datastr);
     if( result.toString() == "1"){
-        view.msgbox(#alert,"更新成功");
+        view.msgbox(#alert,CONF.Lang.UpdateSuccess);
     }
 }
 
@@ -89,4 +89,9 @@ function updateRomThumbs(type,id,newpath){
     return result;
 }
 
-
+//读取rom的详细信息
+function getRomDetail(id){
+    var result = view.GetGameDetail(id);
+    var obj = JSON.parse(result);
+    return obj;
+}

@@ -7,6 +7,8 @@ var SCROLL_POS = 0; //默认滚动条位置
 var MAXZOOM = 5; //最大缩放等级
 var ACTIVETIME = null; //正在启动的定时器
 var ACTIVE_PLATFORM = ""; //当前选定的平台
+var ACTIVE_ROM = ""; //当前选定的rom
+
 view.root.on("ready", function(){
 
     /********** 数据初始化 **********/
@@ -22,18 +24,70 @@ view.root.on("ready", function(){
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
-
     // ================= 事件 =================
+    //方向键选择rom
+    self.on("keyup", function(evt) {
 
-    //搜索功能按下回车
-    $(#search_input).on("keyup", function(evt) {
-        if(evt.type == Event.KEY_UP && evt.keyCode == Event.VK_RETURN) {
-            search();
+        if(evt.keyCode == Event.VK_TAB){
+        //}else if(evt.keyCode == Event.VK_UP){
+        //}else if(evt.keyCode == Event.VK_DOWN){                    
+        }else if(evt.keyCode == Event.VK_LEFT){
+
+            //如果没有rom，则直接返回
+            if($$(#romlist li).length == 0){
+                return;
+            }
+            //如果当前没有选定，则选定第一个
+            var current = $(#romlist li:current);
+            if (current == undefined){
+                current = $(#romlist li);
+                current.state.current = true; //第一个
+                openSidebar(current);
+                $(#test).html = "first";
+            }else{
+                //读取上一个节点
+                var pri = $(#romlist li:current).priorNode;
+                //如果没有上一个节点，直接返回
+                if(pri == undefined){
+                    return;
+                }else{
+                    pri.state.current = true;
+                    openSidebar(pri);
+                }
+            }
+            //nodeIndex
+        }else if(evt.keyCode == Event.VK_RIGHT){
+
+            //如果没有rom，则直接返回
+            if($$(#romlist li).length == 0){
+                return;
+            }
+
+            //如果当前没有选定，则选定第一个
+            var current = $(#romlist li:current);
+            if (current == undefined){
+                current = $(#romlist li);
+                current.state.current = true; //第一个
+                openSidebar(current);
+            }else{
+                //读取上一个节点
+                var next = $(#romlist li:current).nextNode;
+                //如果没有上一个节点，直接返回
+                if(next == undefined){
+                    return;
+                }else{
+                    next.state.current = true;
+                    openSidebar(next);
+                }
+            }
         }
+        //else{
+        //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}
+        //}
     });
     
     //搜索功能
-    self.on("click", "#search_submit", function(evt) {
+    self.on("change", "#search_input", function(evt) {
         search();
     });
 
@@ -48,32 +102,31 @@ view.root.on("ready", function(){
     });
 
     //平台下拉菜单 - 切换模拟器
+    /*
     self.on("click", ".switch_sim", function(evt) {
         openPlatformSim(this);
     });
-
-
+*/
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
     });
     
- 
-    //游戏启动（侧边栏）
-    self.on("click", "div[class=run]", function(evt) {
-        view.RunGame(this.attributes["rid"],"");
-    });    
-    
-    //单击游戏侧边栏详情
-    self.on("click", "li[class=romitem]", function(evt) {
+    //单击游戏，启动侧边栏
+    self.on("click", "#romlist li[class=romitem]", function(evt) {
         openSidebar(this);
     });
-    
-    //关闭侧边栏
-    self.on("click", "#right_close", function(evt) {
-        closeSidebar();
-    });
-    
+
+    //游戏启动（侧边栏）
+    self.on("click", "#right div[class=run]", function(evt) {
+        var simdom = $(#sim_select).select("li:current");
+        var sim = "";
+        if(simdom != undefined){
+            sim = simdom.attributes["sim"];
+        }
+        view.RunGame(this.attributes["rid"],sim);
+    });    
+           
     //设置喜爱
     self.on("click", "#right_favorite", function(evt) {
         setFavorite(this);
@@ -90,7 +143,7 @@ view.root.on("ready", function(){
     });
     
     //列表图标缩放
-    self.on("change", "#zoom", function(evt) {
+    self.on("click", "#zoom", function(evt) {
         romBlockZoom(this);
     });
 
@@ -99,26 +152,21 @@ view.root.on("ready", function(){
         createAllCache("1");
     });
 
+    //启动电子书
+    self.on("click", "#book", function(evt) {
+        view.RunBook();
+    });
+
     //切换主题
     self.on("click", "#theme menu li", function(evt) {
         changeTheme(this);
     });
 
-    //rom展开右键菜单
-    self.on("contextmenusetup", "#romlist > li", function(evt) {
-        romContextMenu(this);
-    });
-
-    //右键菜单按钮启动游戏
-    self.on("click", "#romcontext .menu_run_game", function(evt) {
-        view.RunGame(this.attributes["rid"],this.attributes['sim']);
-    });
-
-    //右键菜单启动图片下载
-    self.on("click", "#romcontext .open_down_thumb", function(evt) {
+    //启动图片下载
+    self.on("click", "#right_thumb_down", function(evt) {
         view.dialog({
             url:self.url(ROOTPATH + "down_thumbs.html"),
-            caption:"图片下载",
+            caption:CONF.Lang.ThumbsDown,
             width:1024,
             height:750,
             parameters: {
@@ -184,8 +232,13 @@ view.root.on("ready", function(){
         platformResize(evt);
     });
 
+    //攻略弹窗按钮
+    $(#right_desc).on("click", function(evt) {
 
-   // $(#right_desc).on("click", function(evt) {
+        //如果是禁用状态
+        if(this.attributes.hasClass("right_desc_disable") == true){
+            return;
+        }
 
         other = view.window{
           type:View.FRAME_WINDOW,
@@ -193,35 +246,45 @@ view.root.on("ready", function(){
           alignment: 5,
           screen:1,
           width : 1280,
-          height : 800
+          height : 800,
+          parameters: {
+                getRomDetail:getRomDetail,
+                id:this.attributes["rid"],
+                conf:CONF,
+            };
         };
+    });
 
-
-
-
-
-  //  });
-
-      
-
+    //侧边栏切换模拟器
+    self.on("click", "#sim_select > li", function(evt) {
+        this.state.current = true;
+        var romid = this.attributes["rom"];
+        var simid = this.attributes["sim"];
+        view.SetRomSimulator(romid,simid);
+    });
 
 });
 
-    //侧边懒缩略图滑动特效
-    $(#rotate) << event click()
-    {     
-      var container = $(div#stack);
-      var next = container.shown.next || container.first;
-      this.state.disabled = true;
-      rotateTo(next, :: (this super).state.disabled = false);
-    }
+//侧边栏缩略图滑动特效
+$(#rotate) << event click() {     
+    var container = $(div#stack);
+    var next = container.shown.next || container.first;
+    this.state.disabled = true;
+    rotateTo(next, :: (this super).state.disabled = false);
+}
 
 //初始化配置
 function initConfig(isfresh){
 
-    //var themejson = view.InitData("themeList","0"); //主题列表
     var confstr = view.InitData("config",isfresh);
     CONF = JSON.parse(confstr);
+
+    if(CONF.RootPath != CONF.Default.RootPath){
+        //刷新数据库rom
+        view.CreateRomCache();
+        view.UpdateConfig("root_path",CONF.RootPath);
+        view.msgbox(#alert,"初次启动，初始化完成");
+    }
 
     createLang(); //创建语言
     createTheme(); //创建主题
@@ -234,7 +297,8 @@ function initConfig(isfresh){
     //激活第一个字母索引
     $(#num_search li).state.current = true;
 
-
+    //动态设置平台栏宽度，滑动平台栏使用
+    setPlatformWidth();
 }
 
 //弹出错误窗口

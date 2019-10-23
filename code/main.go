@@ -5,6 +5,7 @@ var res = []byte{
 package main
 
 import (
+	"VirtualNesGUI/code/db"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"log"
@@ -20,8 +21,11 @@ var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //
 
 func main() {
 
+	//连接数据库
+	db.Conn()
 	//初始化配置
 	InitConf()
+
 	left :=Config.Default.WindowLeft
 	top := Config.Default.WindowTop
 	width := Config.Default.WindowWidth
@@ -51,13 +55,18 @@ func main() {
 	//加载文件
 	err = w.LoadFile(constMainFile);
 	if err != nil {
-		if _, err := w.Call("errorBox", sciter.NewValue(err.Error())); err != nil {
-		}
+		errorMsg(w, err.Error())
+		return
+	}
+
+	if len(Config.Lang) == 0{
+		errorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		os.Exit(1)
 		return
 	}
 
 	//设置标题
-	w.SetTitle(Config.Lang["Title"]);
+	w.SetTitle(Config.Lang["SoftName"]);
 	//定义view函数
 	defineViewFunction(w)
 	//显示窗口

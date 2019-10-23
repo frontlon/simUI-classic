@@ -5,6 +5,7 @@ function openPlatformDir(obj){
 }
 
 //点击平台下拉菜单 - 切换模拟器
+/*
 function openPlatformSim(obj){
     var pfId = obj.attributes["platform"];
     var simId = obj.attributes["sid"];
@@ -12,11 +13,11 @@ function openPlatformSim(obj){
     //更新参数和配置文件
     view.SwitchSim(simId,pfId);
     //改变列表样式
-    var dds = self.selectAll(".switch_sim[platform="+pfId+"]");    
+    var dds = self.selectAll(".switch_sim[platform="+pfId+"]");
     for(var el in dds) el.attributes.removeClass("active");
     obj.attributes.addClass("active");
 }
-
+*/
 //切换平台
 function changePlatform(obj){
 
@@ -47,20 +48,25 @@ function changePlatform(obj){
 //生成平台列表
 function createPlatform(){
     var simclass = "";
-    var dd = "<li><button class='platform' platform=''>全部平台</button></li>";
+    var dd = "";
+    //如果有多个平台，才显示“全部平台”按钮
+    if(CONF.Platform.length > 1){
+        dd += "<li platform='0'><button class='platform'>"+CONF.Lang.AllPlatform +"</button></li>";
+    }
     //遍历数据，生成dom
     for(var pfId in CONF.Platform) {
         dd += "<li platform='"+ CONF.Platform[pfId].Id +"'>";
         dd += "<button class='platform'>" + CONF.Platform[pfId].Name + "</button>";
         dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";
-        dd += "<li class='opendir' opt='rom'>打开Rom目录</li>";
-        dd += "<li class='opendir' opt='sim'>打开模拟器目录</li>";
-        dd += "<li class='opendir' opt='thumb'>打开缩略图目录</li>";
-        dd += "<li class='opendir' opt='snap'>打开场景图目录</li>";
-        dd += "<li class='opendir' opt='doc'>打开文档目录</li>";
-        dd += "<li class='opendir' opt='strategy'>打开攻略目录</li>";
+        dd += "<li class='opendir' opt='rom'>"+CONF.Lang.OpenRomFolder +"</li>";
+        dd += "<li class='opendir' opt='sim'>"+ CONF.Lang.OpenSimFolder +"</li>";
+        dd += "<li class='opendir' opt='thumb'>"+ CONF.Lang.OpenThumbsFolder +"</li>";
+        dd += "<li class='opendir' opt='snap'>"+ CONF.Lang.OpenSnapFolder +"</li>";
+        dd += "<li class='opendir' opt='doc'>"+ CONF.Lang.OpenDocFolder +"</li>";
+        dd += "<li class='opendir' opt='strategy'>"+ CONF.Lang.OpenStrategyFolder +"</li>";
+        /*
         if(CONF.Platform[pfId].SimList.length > 0 ){
-            dd += "<li>切换模拟器<menu>";
+            dd += "<li>"+ CONF.Lang.SwitchSimulator +"<menu>";
             for(var simId in CONF.Platform[pfId].SimList) {
                 if(CONF.Platform[pfId].UseSim.Id  == CONF.Platform[pfId].SimList[simId].Id){
                     simclass = "active";
@@ -71,12 +77,14 @@ function createPlatform(){
             }
             dd += "</menu></li>";
         }
+        */
         dd += "</menu></button></li>";
     }
     self.$(#platform_ul).html = dd; //生成dom
 
     //设置默认激活
     ACTIVE_PLATFORM = CONF.Default.Platform;
+
     var pfDom =  $(#platform_ul).select("li[platform="+CONF.Default.Platform+"]");
     if (pfDom != undefined){
         pfDom.state.current = true;
@@ -96,7 +104,7 @@ function platformMouseEnter(evt){
         return;
     }
     PLATFORM_OFFSET = evt.x;
-    PLATFORM_LEFT = $(#platform_ul).style["left"].toString().replace("px","").toInteger();
+    PLATFORM_LEFT = $(#platform_ul).style["left"].toString().replace("dip","").toInteger();
     if(PLATFORM_LEFT < 0){
         PLATFORM_LEFT = Math.abs(PLATFORM_LEFT);
     }
@@ -123,16 +131,15 @@ function platformMouseMove(evt){
         return;
     }
 
-    var left_value = PLATFORM_LEFT + (evt.x - PLATFORM_OFFSET - 200);
-    left_value = -1 * left_value; //取反
-    /*
-    if(left_value > 0){
-        left_value = left_value - (left_value*2);
-    }else{
-        left_value = Math.abs(left_value);
+    var left_value = -1 * (PLATFORM_LEFT + (evt.x - PLATFORM_OFFSET - 200));
+    if(evt.x - PLATFORM_OFFSET - 200 < 0){
+        //控制左侧
+        if (left_value > 0){
+            return;
+        }
     }
-    */
-    $(#platform_ul).style["left"] = left_value.toString() + "px";
+  
+    $(#platform_ul).style["left"] = left_value.toString() + "dip";
 }
 
 
@@ -143,4 +150,14 @@ function platformResize(evt){
     if(out >= inner){
         $(#platform_ul).style["left"] = "0";
     }
+}
+
+//动态设置平台宽度，滑动使用
+function setPlatformWidth(){
+    var pfli = $$(#platform_ul li);
+    var w = 0;
+    for(var li in pfli) {
+        w += li.box(#width);
+    }
+    $(#platform_ul).style["width"] = w;
 }

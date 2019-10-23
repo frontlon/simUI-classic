@@ -1,13 +1,25 @@
 ﻿//生成语言
 function createLang(){
     $(#loading p).html = CONF.Lang.Loading;
-    $(#logo).html = CONF.Lang.Title;
+    $(#logo).html = CONF.Lang.SoftName;
     $(#rom_count_text).html = CONF.Lang.GameCount;
     $(#thumb_title).html = CONF.Lang.Thumb;
     $(#doc_title).html = CONF.Lang.Doc;
     $(#lang_rungame).html = CONF.Lang.RunGame;
-}
 
+    $(#lang_config).html = CONF.Lang.Config;
+    $(#lang_theme).html = CONF.Lang.Theme;
+    $(#lang_about).html = CONF.Lang.About;
+    $(#book).attributes["title"] = CONF.Lang.OpenBook;
+    $(#create).attributes["title"] = CONF.Lang.createCache;
+    $(#switch_romlist).attributes["title"] = CONF.Lang.SwitchRomlist;
+    $(#zoom).attributes["title"] = CONF.Lang.ZoomIcon;
+
+    $(#lang_funcbutton).html = CONF.Lang.FunButton;
+    $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
+    $(#right_favorite).attributes["title"] = CONF.Lang.SetFavorite;
+    $(#right_thumb_down).attributes["title"] = CONF.Lang.DownPicture;
+}
 
 //创建主题
 function createTheme(){
@@ -42,32 +54,20 @@ function changeTheme(obj){
 //设置主题样式
 function setTheme(themeId){
 
-    if(CONF.Theme[themeId].Params["titlebar-opacity"] != undefined){
-        $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["titlebar-opacity"];
-    }
-
-    if(CONF.Theme[themeId].Params["left-opacity"] != undefined){
-        $(#left).style["opacity"] = CONF.Theme[themeId].Params["left-opacity"];
-        $(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["left-opacity"];
-    }
-
-    if(CONF.Theme[themeId].Params["center-opacity"] != undefined){
-        $(#center).style["opacity"] = CONF.Theme[themeId].Params["center-opacity"];
-    }
-
-    if(CONF.Theme[themeId].Params["right-opacity"] != undefined){
-        $(#right).style["opacity"] = CONF.Theme[themeId].Params["right-opacity"];
-        $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["right-opacity"];
-    }
-
     if(CONF.Theme[themeId].Params["body-opacity"] != undefined){
-        $(body).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#center).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
     }
 
-    if(CONF.Theme[themeId].Params["background-color"] != undefined){$(body).style["background-color"] = CONF.Theme[themeId].Params["background-color"];}
-    if(CONF.Theme[themeId].Params["background-image"] != undefined){$(body).style["background-image"] = "url("+CONF.Theme[themeId].Params["background-image"]+")";}
-    if(CONF.Theme[themeId].Params["background-repeat"] != undefined){$(body).style["background-repeat"] = CONF.Theme[themeId].Params["background-repeat"];}
-    if(CONF.Theme[themeId].Params["background-position"] != undefined){$(body).style["background-position"] = CONF.Theme[themeId].Params["background-position"];}
+    if(CONF.Theme[themeId].Params["window-opacity"] != undefined){
+        $(body).style["opacity"] = CONF.Theme[themeId].Params["window-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["window-background-image"] != undefined){$(body).style["background-image"] = "url("+CONF.Theme[themeId].Params["window-background-image"]+")";}
 }
 /*
 function changeTheme(obj) {

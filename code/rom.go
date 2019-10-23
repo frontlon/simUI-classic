@@ -16,6 +16,7 @@ var constSeparator = "__" //rom子分隔符
 type RomDetail struct {
 	Info       *db.Rom
 	DocContent string
+	StrategyContent string
 	Sublist    []*db.Rom
 }
 
@@ -58,7 +59,7 @@ func runGame(exeFile string, cmd string) error {
 /**
  * 创建缓存
  **/
-func CreateRomCache(platform int64) error {
+func CreateRomCache(platform uint32) error {
 	romlist := []*db.Rom{}
 	names := []string{}
 	menuList := map[string]*db.Menu{}                    //分类目录
@@ -185,14 +186,21 @@ func CreateRomCache(platform int64) error {
 	if len(romlist) > 0 {
 		for _, v := range romlist {
 			if err := v.UpdateSert(); err != nil {
+				fmt.Println(err)
 			}
 		}
-
 	}
 	//保存数据到数据库cate表
 	if len(menuList) > 0 {
-		if err := (&db.Menu{}).Add(&menuList); err != nil {
+		//先清空menu表
+		if err := (&db.Menu{}).ClearMenu(platform); err != nil {
+			return err
 		}
+		for _, v := range menuList {
+			if err := v.Add(); err != nil {
+			}
+		}
+
 	}
 
 	//写入完成后清理变量
@@ -203,7 +211,7 @@ func CreateRomCache(platform int64) error {
 }
 
 //读取资源文件url
-func GetMaterialUrl(stype string, platform int64) map[string]string {
+func GetMaterialUrl(stype string, platform uint32) map[string]string {
 	getpath := ""
 	exts := []string{}
 	list := make(map[string]string)
@@ -216,7 +224,7 @@ func GetMaterialUrl(stype string, platform int64) map[string]string {
 		exts = []string{".jpg", ".bmp", ".png", ".jpeg", ".gif"}
 	case "doc":
 		getpath = Config.Platform[platform].DocPath;
-		exts = []string{".md", ".txt"}
+		exts = []string{".md"}
 	case "strategy":
 		getpath = Config.Platform[platform].StrategyPath;
 		exts = []string{".md"}

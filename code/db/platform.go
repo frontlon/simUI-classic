@@ -1,14 +1,14 @@
 package db
 
 import (
+	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"strconv"
 	"strings"
 )
 
 type Platform struct {
-	Id           int64
+	Id           uint32
 	Name         string
 	RomExts      []string
 	RomPath      string
@@ -18,17 +18,14 @@ type Platform struct {
 	StrategyPath string
 	Romlist      string
 	Pinyin       string
-	SimList      map[int64]*Simulator
+	SimList      map[uint32]*Simulator
 	UseSim       *Simulator //当前使用的模拟器
 }
 
 //添加平台
-func (v *Platform) Add() (int64, error) {
+func (v *Platform) Add() (uint32, error) {
 
-	//关闭同步
-	sqlite.Exec("PRAGMA synchronous = OFF;")
-
-	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, video_path, doc_path, romlist, status, pinyin) values(?,?,?,?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, romlist, status, pinyin) values(?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -37,17 +34,17 @@ func (v *Platform) Add() (int64, error) {
 
 	//开始写入父rom
 	exts := ""
-	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath, v.DocPath,  v.StrategyPath,v.Romlist, v.Pinyin);
+	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath, v.DocPath, v.StrategyPath, v.Romlist, v.Pinyin);
 	if err != nil {
 	}
 	id, _ := res.LastInsertId()
-	return id, err
+	return uint32(id), err
 }
 
 //根据条件，查询多条数据
-func (*Platform) GetAll() (map[int64]*Platform, error) {
+func (*Platform) GetAll() (map[uint32]*Platform, error) {
 
-	volist := map[int64]*Platform{}
+	volist := map[uint32]*Platform{}
 	exts := ""
 	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist FROM platform  ORDER BY pinyin ASC"
 
@@ -57,7 +54,7 @@ func (*Platform) GetAll() (map[int64]*Platform, error) {
 	}
 	for rows.Next() {
 		v := &Platform{}
-		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath,  &v.DocPath,&v.StrategyPath ,&v.Romlist)
+		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist)
 		if err != nil {
 			return volist, err
 		}
@@ -68,13 +65,13 @@ func (*Platform) GetAll() (map[int64]*Platform, error) {
 }
 
 //根据ID查询一个平台参数
-func (*Platform) GetById(id int64) (*Platform, error) {
+func (*Platform) GetById(id uint32) (*Platform, error) {
 	v := &Platform{}
 	exts := ""
-	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path,video_path, doc_path, strategy_path,romlist"
-	sql := "SELECT " + field + " FROM platform WHERE id = " + strconv.Itoa(int(id))
+	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, strategy_path,romlist"
+	sql := "SELECT " + field + " FROM platform WHERE id = " + utils.ToString(id)
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath,&v.StrategyPath, &v.Romlist)
+	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist)
 	v.RomExts = strings.Split(exts, ",") //拆分rom扩展名
 	return v, err
 }
@@ -91,7 +88,7 @@ func (pf *Platform) UpdateById() error {
 	sql += `,doc_path = '` + pf.DocPath + `'`
 	sql += `,romlist = '` + pf.Romlist + `'`
 	sql += `,pinyin = '` + pf.Pinyin + `'`
-	sql += ` WHERE id = ` + strconv.Itoa(int(pf.Id))
+	sql += ` WHERE id = ` + utils.ToString(pf.Id)
 
 	stmt, err := sqlite.Prepare(sql)
 	if err != nil {
@@ -106,8 +103,8 @@ func (pf *Platform) UpdateById() error {
 }
 
 //删除一个平台
-func (pf *Platform) DeleteById() (error) {
-	sql := "DELETE FROM platform WHERE id = " + strconv.Itoa(int(pf.Id))
+func (pf *Platform) DeleteById() error {
+	sql := "DELETE FROM platform WHERE id = " + utils.ToString(pf.Id)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())

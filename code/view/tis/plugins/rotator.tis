@@ -27,7 +27,7 @@ function rotateTo( el, whenEnds = null )
     var hideZIndex = 100;
     function step()
     {
-      progress += 0.08;
+      progress += 0.1;
       if( progress > 1.0 ) { 
           elementToHide.style#visibility = "hidden"; 
           if(whenEnds) whenEnds();

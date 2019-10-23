@@ -1,50 +1,42 @@
 package db
 
 import (
+	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"strconv"
 )
 
 
 type Menu struct {
 	Name     string
-	Platform int64
+	Platform uint32
 	Pinyin string
 }
 
 //写入cate数据
-func (*Menu) Add(menulist *map[string]*Menu) error {
-
-	//关闭同步
-	sqlite.Exec("PRAGMA synchronous = OFF;")
-
+func (v *Menu) Add() error {
 	stmt, err := sqlite.Prepare("INSERT INTO menu (`name`,platform,pinyin) values(?,?,?)")
-
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
 	}
-
-	//开始写入父rom
-	for _, v := range *menulist {
-		_, err := stmt.Exec(v.Name,v.Platform,v.Pinyin);
-		if err != nil {
-		}
+	_, err = stmt.Exec(v.Name,v.Platform,v.Pinyin);
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
-
 	return nil
 }
 
 //根据条件，查询多条数据
-func (*Menu) GetByPlatform(platform int64) ([]*Menu, error) {
+func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 
 	volist := []*Menu{}
 
 	where := ""
 
 	if platform != 0 {
-		where += " WHERE platform = " + strconv.FormatInt(platform,10)
+		where += " WHERE platform = " + utils.ToString(platform)
 	}
 	sql := "SELECT name,platform FROM menu " + where + " ORDER BY pinyin ASC"
 
@@ -61,4 +53,16 @@ func (*Menu) GetByPlatform(platform int64) ([]*Menu, error) {
 		volist = append(volist, v)
 	}
 	return volist, nil
+}
+
+//清理菜单数据
+func (*Menu) ClearMenu(platform uint32) error {
+	where := ""
+	if platform > 0{
+		where = " WHERE platform = "+ utils.ToString(platform)
+	}
+	if _,err :=sqlite.Exec(`DELETE FROM menu` + where);err != nil{
+		return err
+	}
+	return nil
 }

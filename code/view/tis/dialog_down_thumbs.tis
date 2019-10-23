@@ -4,6 +4,9 @@ var PAGENUM = 30;
 var SCROLL_POS = 0;
 var SCROLL_LOCK = false;
 view.root.on("ready", function(){
+
+    createLang();
+
     var keyword = view.parameters.keyword;
     ID = view.parameters.id;
     $(#search_input).value = keyword;
@@ -50,12 +53,12 @@ event click $(#down_thumb_list li){
     var caption = "";
     var content = "";
      if(ctype == 1){ //展示图
-        caption = "设置展示图";
-        content = "确定要设置这张图片为展示图吗？";
+        caption = CONF.Lang.Thumb;
+        content = CONF.Lang.SetThumbConfirm;
     }else{ //场景图、动画
-        keyword += " 动图";
-        caption = " 设置场景图";
-        content = "确定要设置这张图片为场景图吗？";
+        keyword += " "+ CONF.Lang.Snap;
+        caption = " "+CONF.Lang.SetSnap;;
+        content = CONF.Lang.SetSnapConfirm;
     }
 
     var result = view.msgbox {
@@ -63,15 +66,15 @@ event click $(#down_thumb_list li){
         caption:caption, 
         content:content,
         buttons:[
-            {id:#yes,text:"确定"},
-            {id:#cancel,text:"取消"},
+            {id:#yes,text:CONF.Lang.Yes},
+            {id:#cancel,text:CONF.Lang.Cancel},
         ]
     };
 
     if(result == "yes"){
         var result = view.parameters.updateRomThumbs(ctype,ID,this.select("img").attributes["src"]);
         if(result != ""){
-            view.msgbox(#alert,"设置成功");
+            view.msgbox(#alert,CONF.Lang.UpdateSuccess);
         }
     }
 }
@@ -82,7 +85,7 @@ event click $(.submit){
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){
-        view.msgbox(#alert,'请输入关键字');
+        view.msgbox(#alert,CONF.Lang.InputKeyword);
         return true;
     }
 
@@ -93,7 +96,7 @@ event click $(.submit){
             $(#search_submit_2).attributes.removeClass('active');
 
     }else{ //场景图、动画
-        keyword += "动图";
+        keyword += " "+CONF.Lang.Animation;
         $(#search_submit_1).attributes.removeClass('active');
     }
 
@@ -102,11 +105,7 @@ event click $(.submit){
 
     //搜索内容
     searchPic(keyword,this.attributes['value']);
-    
 }
-
-
-
 
 //图片搜索
 function searchPic(keyword,ctype){
@@ -149,10 +148,19 @@ function searchPic(keyword,ctype){
             return true;
         },
         error:function(err,status){
-            view.msgbox(#alert,"网络请求失败");
+            view.msgbox(#alert,CONF.Lang.NetworkRequestFailed);
             $(#loading).style['display'] = 'none';
             return false;
         }
 	});
     return false;
+}
+
+
+function createLang(){
+    $(#search_input).attributes["novalue"] = CONF.Lang.InputKeyword;
+    $(#search_submit_1).html = CONF.Lang.Thumb;
+    $(#search_submit_2).html = CONF.Lang.Snap;
+    $(#lang_description).html = CONF.Lang.Description;
+    $(#loading p).html = CONF.Lang.Loading;
 }

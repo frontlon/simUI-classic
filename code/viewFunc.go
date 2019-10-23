@@ -2,6 +2,7 @@ package main
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
@@ -12,7 +13,6 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -42,7 +42,7 @@ func defineViewFunction(w *window.Window) {
 	//运行游戏
 	w.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
 		id := args[0].String()
-		simId, _ := strconv.ParseInt(args[1].String(), 10, 64)
+		simId := uint32(utils.ToInt(args[1].String()))
 
 		//数据库中读取rom详情
 		rom, err := (&db.Rom{}).GetById(id)
@@ -91,10 +91,26 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NullValue()
 	})
 
+	//运行电子书
+	w.DefineFunction("RunBook", func(args ...*sciter.Value) *sciter.Value {
+
+		//检测执行文件是否存在
+		_, err := os.Stat(Config.Default.Book)
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		err = runGame(Config.Default.Book, "")
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NullValue()
+	})
+
 	//打开rom目录
 	w.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
 		gtype := args[0].String() //目录类型
-		platform, _ := strconv.ParseInt(args[1].String(), 10, 64)
+		platform := uint32(utils.ToInt(args[1].String()))
 		p := ""
 		switch gtype {
 		case "rom":
@@ -118,9 +134,9 @@ func defineViewFunction(w *window.Window) {
 	})
 
 	//切换模拟器
-	w.DefineFunction("SwitchSim", func(args ...*sciter.Value) *sciter.Value {
-		simId, _ := strconv.ParseInt(args[0].String(), 10, 64)
-		platform, _ := strconv.ParseInt(args[1].String(), 10, 64)
+	/*w.DefineFunction("SwitchSim", func(args ...*sciter.Value) *sciter.Value {
+		simId := uint32(utils.ToInt(args[0].String()))
+		platform := uint32(utils.ToInt(args[1].String()))
 
 		Config.Platform[platform].UseSim = Config.Platform[platform].SimList[simId]
 		err := (&db.Simulator{}).UpdateDefault(platform, simId)
@@ -129,7 +145,7 @@ func defineViewFunction(w *window.Window) {
 			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
-	})
+	})*/
 
 	//更新配置文件
 	w.DefineFunction("UpdateConfig", func(args ...*sciter.Value) *sciter.Value {
@@ -146,8 +162,15 @@ func defineViewFunction(w *window.Window) {
 
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
-		//清理数据库
-		//db.DbClear()
+
+		//先检查平台，将不存在的平台数据先干掉
+		pfs := []string{}
+		for k, _ := range Config.Platform {
+			pfs = append(pfs, utils.ToString(k))
+		}
+		if err := (&db.Rom{}).DeleteByPlatformNotExists(pfs); err != nil {
+			return errorMsg(w, err.Error())
+		}
 
 		for k, _ := range Config.Platform {
 			err := CreateRomCache(k)
@@ -160,7 +183,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取目录列表
 	w.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
-		platform, _ := strconv.ParseInt(args[0].String(), 10, 64)
+		platform := uint32(utils.ToInt(args[0].String()))
 
 		//读取数据库
 		menu, err := (&db.Menu{}).GetByPlatform(platform) //从数据库中读取当前平台的分类目录
@@ -174,11 +197,11 @@ func defineViewFunction(w *window.Window) {
 
 	//读取游戏列表
 	w.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
-		platform := strings.Trim(args[0].String(), " ")              //平台
-		catname := strings.Trim(args[1].String(), " ")               //分类
-		keyword := strings.Trim(args[2].String(), " ")               //关键字
-		num := strings.Trim(args[3].String(), " ")                   //字母索引
-		page, _ := strconv.Atoi(strings.Trim(args[4].String(), " ")) //分页数
+		platform := strings.Trim(args[0].String(), " ")          //平台
+		catname := strings.Trim(args[1].String(), " ")           //分类
+		keyword := strings.Trim(args[2].String(), " ")           //关键字
+		num := strings.Trim(args[3].String(), " ")               //字母索引
+		page := utils.ToInt(strings.Trim(args[4].String(), " ")) //分页数
 
 		newlist := []*db.Rom{}
 		if num == "" {
@@ -198,7 +221,7 @@ func defineViewFunction(w *window.Window) {
 		catname := strings.Trim(args[1].String(), " ")
 		keyword := strings.Trim(args[2].String(), " ")
 		count, _ := (&db.Rom{}).Count(platform, catname, keyword)
-		return sciter.NewValue(strconv.Itoa(count))
+		return sciter.NewValue(utils.ToString(count))
 	})
 
 	//读取rom详情
@@ -215,6 +238,7 @@ func defineViewFunction(w *window.Window) {
 		res.Info = info
 		res.Sublist = sub
 		res.DocContent = getDocContent(info.DocPath)
+		res.StrategyContent = getDocContent(info.StrategyPath)
 		jsonMenu, _ := json.Marshal(&res)
 		return sciter.NewValue(string(jsonMenu))
 	})
@@ -230,25 +254,24 @@ func defineViewFunction(w *window.Window) {
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
-		return sciter.NewValue(strconv.Itoa(int(id)))
+		return sciter.NewValue(utils.ToString(id))
 	})
 
 	//删除一个平台
 	w.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
-		idstr := args[0].String()
-		id, err := strconv.Atoi(idstr)
+		id := uint32(utils.ToInt(args[0].String()))
 		platform := &db.Platform{
-			Id: int64(id),
+			Id: id,
 		}
 		sim := &db.Simulator{
-			Platform: int64(id),
+			Platform: id,
 		}
 		rom := &db.Rom{
-			Platform: int64(id),
+			Platform: id,
 		}
 
 		//删除rom数据
-		err = rom.DeleteByPlatform()
+		err := rom.DeleteByPlatform()
 		//删除模拟器
 		err = sim.DeleteByPlatform()
 		//删除平台
@@ -266,20 +289,21 @@ func defineViewFunction(w *window.Window) {
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
 
-		id, _ := strconv.ParseInt(d["id"], 10, 64)
+		id := uint32(utils.ToInt(d["id"]))
+
 		exts := strings.Split(d["exts"], ",")
 
 		platform := &db.Platform{
-			Id:        id,
-			Name:      d["name"],
-			RomExts:   exts,
-			RomPath:   d["rom"],
-			ThumbPath: d["thumb"],
-			SnapPath:  d["snap"],
+			Id:           id,
+			Name:         d["name"],
+			RomExts:      exts,
+			RomPath:      d["rom"],
+			ThumbPath:    d["thumb"],
+			SnapPath:     d["snap"],
 			StrategyPath: d["strategy"],
-			DocPath:   d["doc"],
-			Romlist:   d["romlist"],
-			Pinyin:    TextToPinyin(d["name"]),
+			DocPath:      d["doc"],
+			Romlist:      d["romlist"],
+			Pinyin:       TextToPinyin(d["name"]),
 		}
 
 		err := platform.UpdateById()
@@ -294,7 +318,7 @@ func defineViewFunction(w *window.Window) {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
-		pfId, _ := strconv.ParseInt(d["platform"], 10, 64)
+		pfId := uint32(utils.ToInt(d["platform"]))
 
 		sim := &db.Simulator{
 			Name:     d["name"],
@@ -306,9 +330,8 @@ func defineViewFunction(w *window.Window) {
 		id, err := sim.Add()
 
 		//更新默认模拟器
-		def, _ := strconv.ParseInt(d["default"], 10, 64)
 
-		if def == 1 {
+		if utils.ToInt(d["platform"]) == 1 {
 			err = sim.UpdateDefault(pfId, id)
 			if err != nil {
 				return errorMsg(w, err.Error())
@@ -324,8 +347,9 @@ func defineViewFunction(w *window.Window) {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
-		id, _ := strconv.ParseInt(d["id"], 10, 64)
-		pfId, _ := strconv.ParseInt(d["platform"], 10, 64)
+		id := uint32(utils.ToInt(d["id"]))
+		pfId := uint32(utils.ToInt(d["platform"]))
+		def :=uint8(utils.ToInt(d["default"]))
 		sim := &db.Simulator{
 			Id:       id,
 			Name:     d["name"],
@@ -334,10 +358,17 @@ func defineViewFunction(w *window.Window) {
 			Cmd:      d["cmd"],
 			Pinyin:   TextToPinyin(d["name"]),
 		}
+
 		//更新模拟器
-		err := sim.UpdateById()
-		if err != nil {
+		if err := sim.UpdateById();err != nil {
 			return errorMsg(w, err.Error())
+		}
+
+		//如果设置了默认模拟器，则更新默认模拟器
+		if def == 1 {
+			if err := sim.UpdateDefault(pfId, id);err != nil {
+				return errorMsg(w, err.Error())
+			}
 		}
 
 		jsonData, _ := json.Marshal(&sim)
@@ -346,23 +377,23 @@ func defineViewFunction(w *window.Window) {
 
 	//删除一个模拟器
 	w.DefineFunction("DelSimulator", func(args ...*sciter.Value) *sciter.Value {
-		idstr := args[0].String()
-		id, err := strconv.Atoi(idstr)
+		id := uint32(utils.ToInt(args[0].String()))
+
 		sim := &db.Simulator{
-			Id: int64(id),
+			Id: id,
 		}
 
 		//删除平台
-		err = sim.DeleteById()
+		err := sim.DeleteById()
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
-		return sciter.NewValue(idstr)
+		return sciter.NewValue(args[0].String())
 	})
 
 	//读取平台详情
 	w.DefineFunction("GetPlatformById", func(args ...*sciter.Value) *sciter.Value {
-		id, _ := strconv.ParseInt(args[0].String(), 10, 64)
+		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetById(id)
@@ -386,7 +417,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取模拟器详情
 	w.DefineFunction("GetSimulatorById", func(args ...*sciter.Value) *sciter.Value {
-		id, _ := strconv.ParseInt(args[0].String(), 10, 64)
+		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
 		info, err := (&db.Simulator{}).GetById(id)
@@ -399,7 +430,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取一个平台下的所有模拟器
 	w.DefineFunction("GetSimulatorByPlatform", func(args ...*sciter.Value) *sciter.Value {
-		id, _ := strconv.ParseInt(args[0].String(), 10, 64)
+		id := uint32(utils.ToInt(args[0].String()))
 		//游戏游戏详细数据
 		info, err := (&db.Simulator{}).GetByPlatform(id)
 		if err != nil {
@@ -411,9 +442,9 @@ func defineViewFunction(w *window.Window) {
 
 	//设为我的最爱
 	w.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
-		platform, _ := strconv.ParseInt(args[0].String(), 10, 64)
+		platform := uint32(utils.ToInt(args[2].String()))
 		name := args[1].String()
-		star, _ := strconv.ParseInt(args[2].String(), 10, 64)
+		star := uint8(utils.ToInt(args[2].String()))
 
 		//更新rom表
 		rom := &db.Rom{
@@ -421,13 +452,24 @@ func defineViewFunction(w *window.Window) {
 			Name:     name,
 			Star:     star,
 		}
-
 		err := rom.UpdateStar()
 		//更新数据
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
+		return sciter.NewValue("1")
+	})
 
+	//设置rom的模拟器
+	w.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {
+		romId := uint64(utils.ToInt(args[0].String()))
+		simId := uint32(utils.ToInt(args[1].String()))
+		//更新rom表
+		rom := &db.Rom{
+			Id:    romId,
+			SimId: simId,
+		}
+		err := rom.UpdateSimulator()
 		//更新数据
 		if err != nil {
 			return errorMsg(w, err.Error())
@@ -437,8 +479,8 @@ func defineViewFunction(w *window.Window) {
 
 	//更新rom图片
 	w.DefineFunction("UpdateRomThumbs", func(args ...*sciter.Value) *sciter.Value {
-		typeid, _ := strconv.ParseInt(args[0].String(), 10, 64)
-		id, _ := strconv.ParseInt(args[1].String(), 10, 64)
+		typeid := utils.ToInt(args[0].String())
+		id := uint64(utils.ToInt(args[1].String()))
 		newpath := args[2].String()
 
 		rom := &db.Rom{
@@ -483,7 +525,7 @@ func defineViewFunction(w *window.Window) {
 			}
 
 			oldFileName := filepath.Base(oldFilePath)
-			bakFileName := GetFileName(oldFileName) + "_" + strconv.Itoa(int(time.Now().Unix())) + path.Ext(oldFileName)
+			bakFileName := GetFileName(oldFileName) + "_" + utils.ToString(time.Now().Unix()) + path.Ext(oldFileName)
 			err := os.Rename(oldFilePath, bakFolder+bakFileName)
 
 			if err != nil {

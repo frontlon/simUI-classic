@@ -3,19 +3,21 @@ var action;
 var pfId;
 view.root.on("ready", function(){
 
+    createLang();
+
     id = view.parameters.id.toString();
     pfId = view.parameters.platform.toString();
 
     if(id == 0){
         action = "add";
-        $(#sim_submit).value = "添加模拟器";
+        $(#sim_submit).value = CONF.Lang.AddSimulator;
         $(#sim_delete).style['display'] = "none";
 
         
     }else{
         var sim = view.parameters.getSimulatorById(id);
         action = "update";
-        $(#sim_submit).value = "保存设置";
+        $(#sim_submit).value = CONF.Lang.SaveConfig;
         $(#sim_name).value = sim.Name;
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
@@ -37,22 +39,22 @@ event click $(#sim_submit) {
         cmd:$(#sim_cmd).value,
     };
 
-    if(data.name == ""){view.msgbox(#alert,"模拟器名称不能为空");return true;}
-    if(data.sim_path == ""){view.msgbox(#alert,"模拟器路径不能为空");return true;}
-    if(data.platform == ""){view.msgbox(#alert,"请选择平台");return true;}
+    if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
+    if(data.sim_path == ""){view.msgbox(#alert,CONF.Lang.SimulatorPathCanNotBeEmpty);return true;}
+    if(data.platform == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
 
     if(id == 0){
         //添加模拟器
         result = view.parameters.addSimulator(data);
         if(result != ""){
-            view.msgbox(#alert,"添加成功");
+            view.msgbox(#alert,CONF.Lang.AddSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }else{
         //修改模拟器信息
         result = view.parameters.updateSimulator(data);
         if(result != ""){
-            view.msgbox(#alert,"修改成功");
+            view.msgbox(#alert,CONF.Lang.UpdateSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }
@@ -63,11 +65,11 @@ event click $(#sim_delete) {
 
     var result = view.msgbox {
         type:#warning, 
-        content:"你确定要删除该模拟器吗?", 
-        caption:"删除模拟器",
+        content:CONF.Lang.DeleteSimulatorConfirm, 
+        caption:CONF.Lang.DeleteSimulator,
         buttons:[
-            {id:#yes,text:"删除"},
-            {id:#cancel,text:"取消",role:"default-button"}
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
         ]
     };
 
@@ -83,7 +85,7 @@ event click $(#sim_delete) {
             Id:result,
         };
         var datastr = JSON.stringify(data);
-        view.msgbox(#alert,"删除成功");
+        view.msgbox(#alert,CONF.Lang.DeleteSuccess);
         view.close(datastr); //如果更新成功，则关闭窗口，并把修改后的数据返回
     }
 }
@@ -102,4 +104,19 @@ event click $(.openfile){
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
     }
+}
+
+//设置命令代码
+event change $(#set_cmd) {
+    $(#sim_cmd).value = this.value;
+}
+
+function createLang(){
+    $(#lang_Name).html = CONF.Lang.Name;
+    $(#SetDefaultSimulator).html = CONF.Lang.SetDefaultSimulator;
+    $(#lang_Path).html = CONF.Lang.Path;
+    $(#lang_SelectBootFile).attributes['caption'] = CONF.Lang.SelectBootFile;
+    $(#lang_Params).html = CONF.Lang.Params;
+    $(#lang_Default).html = CONF.Lang.Default;
+    $(#sim_delete).html = CONF.Lang.DeleteSimulator;
 }

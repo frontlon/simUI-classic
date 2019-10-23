@@ -7,22 +7,24 @@ import (
 type Config struct {
 	Lang          string
 	Theme         string
-	Platform      int64
-	RomlistStyle  int64
-	RomlistZoom   int64
+	Platform      uint32
+	RomlistStyle  uint8
+	RomlistZoom   uint8
 	SearchEngines string
-	WindowWidth   int64
-	WindowHeight  int64
-	WindowLeft    int64
-	WindowTop     int64
+	Book          string
+	RootPath      string
+	WindowWidth   uint16
+	WindowHeight  uint16
+	WindowLeft    uint16
+	WindowTop     uint16
 }
 
 //根据id查询一条数据
 func (*Config) Get() (*Config, error) {
 	vo := &Config{}
-	sql := "SELECT lang, theme, platform, romlist_style, romlist_zoom, search_engines,window_width, window_height, window_left, window_top FROM config where id= 1"
+	sql := "SELECT lang, theme, platform, romlist_style, romlist_zoom, search_engines,book,root_path,window_width, window_height, window_left, window_top FROM config where id= 1"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines,&vo.WindowWidth, &vo.WindowHeight, &vo.WindowLeft, &vo.WindowTop)
+	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines, &vo.Book, &vo.RootPath,&vo.WindowWidth, &vo.WindowHeight, &vo.WindowLeft, &vo.WindowTop)
 	return vo, err
 }
 

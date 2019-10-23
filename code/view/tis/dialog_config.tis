@@ -1,6 +1,9 @@
 ﻿var pfId;
 view.root.on("ready", function(){
     
+    //渲染语言
+    createLang();
+
     //生成语言列表
     var langdata = "";
     var config_lang = $(#config_lang);
@@ -10,6 +13,7 @@ view.root.on("ready", function(){
 
 
     $(#config_lang).value = CONF.Default.Lang;
+    $(#config_book).value = CONF.Default.Book;
 
     //图片搜索引擎
     $(#config_search_engines).value = CONF.Default.SearchEngines;
@@ -47,7 +51,7 @@ event change $(#platform_list) {
     platform_sim.options.clear();
     //读取模拟器列表
     var sims = view.parameters.getSimulatorByPlatform(pfId);
-    platform_sim.options.$append(<option value=0>编辑模拟器</option>);
+    platform_sim.options.$append(<option value=0>{CONF.Lang.EditSimulator}</option>);
     for(var simId in sims) {
         platform_sim.options.$append(<option value={sims[simId].Id}>{sims[simId].Name}</option>);
     }
@@ -65,13 +69,16 @@ event change $(#platform_list) {
     $(#platform_thumb).state.disabled = false;
     $(#platform_snap).state.disabled = false;
     $(#platform_romlist).state.disabled = false;
-    $(.openfile).state.disabled = false;
+
+    var openfile = $$(.openfile);
+    for(var of in openfile) {
+        of.state.disabled = false;
+    }
 
     var openfolders = $$(.openfolder);
     for(var of in openfolders) {
         of.state.disabled = false;
     }
-    
 }
 
 //更新通用配置信息
@@ -79,6 +86,7 @@ event click $(#config_submit) {
     var data = {
         lang : $(#config_lang).value.toString();
         search_engines : $(#config_search_engines).value.toString();
+        book : $(#config_book).value.toString();
     };
     //更新平台信息
     view.parameters.updateConfig(data);
@@ -97,10 +105,10 @@ event click $(#platform_submit) {
         doc      : $(#platform_doc).value,
         romlist  : $(#platform_romlist).value,
     };
-    if(data.id == ""){view.msgbox(#alert,"请选择平台");return true;}
-    if(data.name == ""){view.msgbox(#alert,"平台名称不能为空");return true;}
-    if(data.exts == ""){view.msgbox(#alert,"rom类型不能为空");return true;}
-    if(data.rom == ""){view.msgbox(#alert,"rom目录不能为空");return true;}
+    if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
+    if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
+    if(data.exts == ""){view.msgbox(#alert,CONF.Lang.RomTypeCanNotBeEmpty);return true;}
+    if(data.rom == ""){view.msgbox(#alert,CONF.Lang.RomMenuCanNotBeEmpty);return true;}
     //更新平台信息
     view.parameters.updatePlatform(data);
 }
@@ -191,12 +199,12 @@ event click $(.openfile){
 //添加平台
 event click $(#platform_add){
     var name = $(#platform_add_name).value.toString();
-    if(name == ""){view.msgbox(#alert,"平台名称不能为空");return true;}
+    if(name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
     var insertId = view.parameters.addPlatform(name);
     if(insertId != "0"){
         var newopt = "<option value='"+ insertId +"'>"+ name +"</option>";
         $(#platform_list).append(newopt);
-        view.msgbox(#alert,"添加成功");
+        view.msgbox(#alert,CONF.Lang.AddSuccess);
     }
 }
 
@@ -205,7 +213,7 @@ event click $(#platform_del){
     var pfId = $(#platform_list).value;
     
     if (pfId == undefined){
-        view.msgbox(#alert,"没有选择平台");
+        view.msgbox(#alert,CONF.Lang.NotSelectPlatform);
         return true;
     }
 
@@ -213,11 +221,11 @@ event click $(#platform_del){
     var name = $(#platform_list).select("option[value="+pfId+"]").html;
     var result = view.msgbox {
         type:#question, 
-        content:"你确定要删除平台【<span style='color:red;font-weight:bold'>"+name+"</span>】吗？\n如果删除平台，平台相关的数据都将被删除，你确定继续吗？", 
-        caption:"删除平台",
+        content:CONF.Lang.DeletePlatformConfirm, 
+        caption:CONF.Lang.DeletePlatform,
         buttons:[
-            {id:#yes,text:"删除"},
-            {id:#cancel,text:"取消",role:"default-button"}
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
         ]
     };
 
@@ -229,6 +237,40 @@ event click $(#platform_del){
     result = view.parameters.delPlatform(pfId);
     if(result == "1"){
         $(#platform_list).select("option[value="+pfId+"]").remove();
-        view.msgbox(#alert,"删除完成");
+        view.msgbox(#alert,CONF.Lang.DeleteSuccess);
     }
+}
+
+function createLang(){
+    $(#lang_generalcofig).html = CONF.Lang.GeneralConfig;
+    $(#lang_platformconfig).html = CONF.Lang.PlatformConfig;
+    $(#lang_Lang).html = CONF.Lang.Lang;
+    $(#lang_Book).html = CONF.Lang.Book;
+    $(#lang_PicSearchEngines).html = CONF.Lang.PicSearchEngines;
+    $(#config_search_engines).html = CONF.Lang.PicSearchEnginesTitle;
+    $(#config_book).html = CONF.Lang.SelectBookFile;
+    $(#config_submit).html = CONF.Lang.UpdateConfig;
+    $(#config_book).attributes["title"] = CONF.Lang.BookTitle;
+    $(#config_search_engines).attributes["title"] = CONF.Lang.PicSearchEnginesTitle;
+    $(#platform_del).attributes["title"] = CONF.Lang.DeleteSelectPlatform;
+    $(#platform_add).attributes["title"] = CONF.Lang.AddNewPlatform;
+    $(#platform_add_name).attributes["novalue"] = CONF.Lang.InputPlatformName;
+    $(#lang_BaseInfo).html = CONF.Lang.BaseInfo;
+    $(#lang_Title).html = CONF.Lang.Title;
+    $(#lang_RomType).html = CONF.Lang.RomType;
+    $(#lang_Simulator).html = CONF.Lang.Simulator;
+    $(#add_sim).html = CONF.Lang.AddSimulator;
+    $(#lang_MenuConfig).html = CONF.Lang.MenuConfig;
+    $(#lang_RomMenu).html = CONF.Lang.RomMenu;
+    $(#lang_ThumbMenu).html = CONF.Lang.ThumbMenu;
+    $(#lang_SanpMenu).html = CONF.Lang.SanpMenu;
+    $(#lang_DescMenu).html = CONF.Lang.DescMenu;
+    $(#lang_StrategyMenu).html = CONF.Lang.StrategyMenu;
+    $(#platform_submit).html = CONF.Lang.UpdateConfig;
+    $(#lang_SelectFolder1).attributes["caption"] = CONF.Lang.SelectFolder;
+    $(#lang_SelectFolder2).attributes["caption"] = CONF.Lang.SelectFolder;
+    $(#lang_SelectFolder3).attributes["caption"] = CONF.Lang.SelectFolder;
+    $(#lang_SelectFolder4).attributes["caption"] = CONF.Lang.SelectFolder;
+    $(#lang_SelectFolder5).attributes["caption"] = CONF.Lang.SelectFolder;
+    $(#lang_SelectConfigFile).attributes["caption"] = CONF.Lang.SelectConfigFile;
 }

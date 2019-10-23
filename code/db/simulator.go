@@ -1,26 +1,23 @@
 package db
 
 import (
+	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"strconv"
 )
 
 type Simulator struct {
-	Id       int64
+	Id       uint32
 	Name     string
-	Platform int64
+	Platform uint32
 	Path     string
 	Cmd      string
-	Default  int64
+	Default  uint8
 	Pinyin   string
 }
 
 //写入数据
-func (sim *Simulator) Add() (int64,error) {
-
-	//关闭同步
-	sqlite.Exec("PRAGMA synchronous = OFF;")
+func (sim *Simulator) Add() (uint32,error) {
 	stmt, err := sqlite.Prepare("INSERT INTO simulator (`name`, platform, path, cmd, `default`,pinyin) values(?,?,?,?,?,?)")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -33,15 +30,15 @@ func (sim *Simulator) Add() (int64,error) {
 	}
 	//返回插入的id
 	id, err := res.LastInsertId()
-	return id,nil
+	return uint32(id),nil
 }
 
 
 //根据ID查询一个模拟器参数
-func (*Simulator) GetById(id int64) (*Simulator, error) {
+func (*Simulator) GetById(id uint32) (*Simulator, error) {
 	v := &Simulator{}
 	field := "id, platform, name, path, cmd, `default`"
-	sql := "SELECT "+ field +" FROM simulator WHERE id = " + strconv.Itoa(int(id))
+	sql := "SELECT "+ field +" FROM simulator WHERE id = " + utils.ToString(id)
 
 	rows := sqlite.QueryRow(sql)
 	err := rows.Scan(&v.Id, &v.Platform, &v.Name, &v.Path, &v.Cmd, &v.Default)
@@ -49,15 +46,15 @@ func (*Simulator) GetById(id int64) (*Simulator, error) {
 }
 
 //根据条件，查询多条数据
-func (*Simulator) GetByPlatform(platform int64) (map[int64]*Simulator, error) {
+func (*Simulator) GetByPlatform(platform uint32) (map[uint32]*Simulator, error) {
 
-	volist:= map[int64]*Simulator{}
+	volist:= map[uint32]*Simulator{}
 	where := ""
 
 	if platform != 0 {
-		where += " where platform = '" + strconv.FormatInt(platform,10) + "'"
+		where += " where platform = '" + utils.ToString(platform) + "'"
 	}
-	sql := "SELECT id, platform, name, path, cmd, `default` FROM simulator " + where + " ORDER BY `default`,pinyin ASC"
+	sql := "SELECT id, platform, name, path, cmd, `default` FROM simulator " + where + " ORDER BY `default` DESC,pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
 	if err != nil {
@@ -83,8 +80,9 @@ func (sim *Simulator) UpdateById() error {
 	sql += `,path = '` + sim.Path + `'`
 	sql += `,cmd = '` + sim.Cmd + `'`
 	sql += `,pinyin = '` + sim.Pinyin + `'`
-	sql += ` WHERE id = ` + strconv.Itoa(int(sim.Id))
+	sql += ` WHERE id = ` + utils.ToString(sim.Id)
 	stmt, err := sqlite.Prepare(sql)
+
 	if err != nil {
 		return err
 	}
@@ -97,10 +95,10 @@ func (sim *Simulator) UpdateById() error {
 }
 
 //更新模拟器为默认模拟器
-func (*Simulator) UpdateDefault(platform int64,id int64) error {
+func (*Simulator) UpdateDefault(platform uint32,id uint32) error {
 
 	//先将平台下的所有参数都设为0
-	sql := "UPDATE simulator SET `default` = 0 WHERE `platform` = '" + strconv.Itoa(int(platform)) + "' AND `default` = 1"
+	sql := "UPDATE simulator SET `default` = 0 WHERE `platform` = '" + utils.ToString(platform) + "' AND `default` = 1"
 	stmt, err := sqlite.Prepare(sql)
 	if err != nil {
 		return err
@@ -111,7 +109,7 @@ func (*Simulator) UpdateDefault(platform int64,id int64) error {
 	}
 
 	//将指定的模拟器更换为默认模拟器
-	sql = "UPDATE simulator SET `default` = 1 WHERE id = " + strconv.Itoa(int(id))
+	sql = "UPDATE simulator SET `default` = 1 WHERE id = " + utils.ToString(id)
 	stmt, err = sqlite.Prepare(sql)
 	if err != nil {
 		return err
@@ -125,7 +123,7 @@ func (*Simulator) UpdateDefault(platform int64,id int64) error {
 
 //删除一个模拟器
 func (sim *Simulator) DeleteById() (error) {
-	sql := "DELETE FROM simulator WHERE id = "+ strconv.Itoa(int(sim.Id))
+	sql := "DELETE FROM simulator WHERE id = "+ utils.ToString(sim.Id)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -136,7 +134,7 @@ func (sim *Simulator) DeleteById() (error) {
 
 //删除一个平台下的所有模拟器
 func (sim *Simulator) DeleteByPlatform() (error) {
-	sql := "DELETE FROM simulator WHERE platform = "+ strconv.Itoa(int(sim.Platform))
+	sql := "DELETE FROM simulator WHERE platform = "+ utils.ToString(sim.Platform)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())

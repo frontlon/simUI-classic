@@ -1,0 +1,69 @@
+﻿var conf;
+view.root.on("ready", function(){
+
+    conf = view.parameters.conf;
+
+    //配置语言
+    $(#btn_desc_doc).html=conf.Lang.Desc;
+    $(#btn_desc_strategy).html=conf.Lang.Strategy;
+    
+    //self.attributes['title']= "sss";
+    //conf.Lang.DocWindowTitle;
+
+    view.windowCaption="asdfasdf";
+
+
+    //默认主题
+    var cssfile = "";
+    for(var themeId in conf.Theme) {
+        cssfile += "<style src='"+  conf.Theme[themeId].Path +"' />"; //引入文件
+    }
+    $(#themefile).html = cssfile;
+    self.attributes["theme"] = conf.Default.Theme;
+    setTheme(conf.Default.Theme);
+
+    //读取rom详情
+    var detailObj = view.parameters.getRomDetail(view.parameters.id);
+    $(#title).html = detailObj.Info.Name;
+
+    //初始化读取内容
+    if(detailObj.DocContent != ""){$(#btn_desc_doc).style["display"] = "block";}
+    if(detailObj.StrategyContent != ""){$(#btn_desc_strategy).style["display"] = "block";}
+    if(detailObj.DocContent != ""){
+        $(#btn_desc_doc).state.current = true;
+        $(#desc_doc).html = markdown.parse(detailObj.DocContent);        
+        $(#desc_doc).style["display"] = "block";
+        $(#desc_strategy).style["display"] = "none";
+    }else if(detailObj.StrategyContent != ""){
+        $(#btn_desc_strategy).state.current = true;
+        $(#desc_strategy).html = markdown.parse(detailObj.StrategyContent);        
+        $(#desc_strategy).style["display"] = "block";
+        $(#desc_doc).style["display"] = "none";
+    }
+
+    //简介按钮
+    self.on("click", "#btn_desc_doc", function(evt) {
+        this.state.current = true;
+        $(#desc_doc).style["display"] = "block";
+        $(#desc_strategy).style["display"] = "none";
+        $(#desc_doc).html = markdown.parse(detailObj.DocContent);
+    });
+
+    //攻略按钮
+    self.on("click", "#btn_desc_strategy", function(evt) {
+        this.state.current = true;
+        $(#desc_doc).style["display"] = "none";
+        $(#desc_strategy).style["display"] = "block";
+        $(#desc_strategy).html = markdown.parse(detailObj.StrategyContent);
+    });
+
+});
+
+
+//设置主题样式
+function setTheme(themeId){
+    if(conf.Theme[themeId].Params["desc-background-image"] != undefined){
+        $(body).style["background-image"] = "url("+conf.Theme[themeId].Params["desc-background-image"]+")";
+    }
+    
+}
