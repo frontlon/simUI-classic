@@ -6,9 +6,7 @@ view.root.on("ready", function(){
     //配置语言
     $(#btn_desc_doc).html=conf.Lang.Desc;
     $(#btn_desc_strategy).html=conf.Lang.Strategy;
-    //定义标题
-    view.windowCaption = detailObj.Info.Name;
-
+    
     //默认主题
     var cssfile = "";
     for(var themeId in conf.Theme) {
@@ -21,6 +19,9 @@ view.root.on("ready", function(){
     //读取rom详情
     var detailObj = view.parameters.getRomDetail(view.parameters.id);
     $(#title).html = detailObj.Info.Name;
+
+    //定义标题
+    view.windowCaption = detailObj.Info.Name;
 
     //初始化读取内容
     if(detailObj.DocContent != ""){$(#btn_desc_doc).style["display"] = "block";}

@@ -74,7 +74,7 @@ event click $(#down_thumb_list li){
     if(result == "yes"){
         var result = view.parameters.updateRomThumbs(ctype,ID,this.select("img").attributes["src"]);
         if(result != ""){
-            view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+            view.msgbox(#alert,CONF.Lang.ThumbsDownUpdateSuccess);
         }
     }
 }

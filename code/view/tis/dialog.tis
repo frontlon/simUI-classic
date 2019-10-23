@@ -82,9 +82,11 @@ function delSimulator(id){
 function updateRomThumbs(type,id,newpath){
     var result = view.UpdateRomThumbs(type,id,newpath);
 
-    //刷新rom列表图片
+    //如果是展示图，则刷新rom列表图片
     if(result != ""){
-        $(#romlist).select("li[rid="+id+"] img").attributes['src'] = newpath;
+        if(type == "1"){
+            $(#romlist).select("li[rid="+id+"] img").attributes['src'] = newpath;
+        }
     }
     return result;
 }

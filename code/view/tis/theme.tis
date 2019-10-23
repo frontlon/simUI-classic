@@ -42,13 +42,12 @@ function createTheme(){
     setTheme(CONF.Default.Theme);
 }
 
-
 //切换主题
 function changeTheme(obj){
     var id = obj.attributes["id"]; //主题列表
     self.attributes["theme"] = id;
     //更新配置文件
-  //  view.UpdateConfig("Default","Theme",id)
+    view.UpdateConfig("theme",id)
 }
 
 //设置主题样式

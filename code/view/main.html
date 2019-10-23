@@ -102,14 +102,14 @@
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
   
- 
     #right .funbtn{height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block}
     #right .funbtn:hover{background:color(func-button-hover-background-color);cursor:pointer}
     #right .funbtn i{display:block}
     #right .funbtn_0{color:color(func-button-text-color)}
     #right .funbtn_1{color:color(func-button-active-text-color)}
-    #right .right_desc_disable{background:none;opacity:0.5;}
-    #right .right_desc_disable:hover{background:none;cursor: default}
+    #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
+    #right .right_desc_disable:hover{cursor: default;background: none}
+    
     #rotate{top:62dip;right:28dip;position:absolute;}
 
     #sim_select{margin-bottom:9dip;display:none}
@@ -184,7 +184,7 @@
     <section id="right">
         <h2 id="lang_funcbutton"></h2>
         <button id="right_desc" class="funbtn" platform="" name="" value="" title=""><i>&#xea07;</i></button>
-        <button id="right_favorite" class="funbtn" platform="" name="" value="" title=""><i>&#xe61a;</i></button>
+        <button id="right_favorite" class="funbtn" rid="" value="" title=""><i>&#xe61a;</i></button>
         <button id="right_thumb_down" class="funbtn" rid="" rname="" title=""><i>&#xe655;</i></button>
         <h2 id="thumb_title"></h2>
         <button id="rotate" class="funbtn">&gt;</button>

@@ -165,7 +165,6 @@ func getTheme() map[string]*ThemeStruct {
 							key == "default-thumb-image") {
 							value = dirPth + separator + value
 						}
-
 						params[key] = value
 					}
 				}

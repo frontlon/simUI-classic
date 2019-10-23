@@ -349,7 +349,7 @@ func defineViewFunction(w *window.Window) {
 		json.Unmarshal([]byte(data), &d)
 		id := uint32(utils.ToInt(d["id"]))
 		pfId := uint32(utils.ToInt(d["platform"]))
-		def :=uint8(utils.ToInt(d["default"]))
+		def := uint8(utils.ToInt(d["default"]))
 		sim := &db.Simulator{
 			Id:       id,
 			Name:     d["name"],
@@ -360,13 +360,13 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//更新模拟器
-		if err := sim.UpdateById();err != nil {
+		if err := sim.UpdateById(); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
 		//如果设置了默认模拟器，则更新默认模拟器
 		if def == 1 {
-			if err := sim.UpdateDefault(pfId, id);err != nil {
+			if err := sim.UpdateDefault(pfId, id); err != nil {
 				return errorMsg(w, err.Error())
 			}
 		}
@@ -442,16 +442,15 @@ func defineViewFunction(w *window.Window) {
 
 	//设为我的最爱
 	w.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
-		platform := uint32(utils.ToInt(args[2].String()))
-		name := args[1].String()
-		star := uint8(utils.ToInt(args[2].String()))
+		id := uint64(utils.ToInt(args[0].String()))
+		star := uint8(utils.ToInt(args[1].String()))
 
 		//更新rom表
 		rom := &db.Rom{
-			Platform: platform,
-			Name:     name,
-			Star:     star,
+			Id:   id,
+			Star: star,
 		}
+
 		err := rom.UpdateStar()
 		//更新数据
 		if err != nil {

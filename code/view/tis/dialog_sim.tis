@@ -12,8 +12,6 @@ view.root.on("ready", function(){
         action = "add";
         $(#sim_submit).value = CONF.Lang.AddSimulator;
         $(#sim_delete).style['display'] = "none";
-
-        
     }else{
         var sim = view.parameters.getSimulatorById(id);
         action = "update";
@@ -117,7 +115,6 @@ function createLang(){
     $(#lang_Path).html = CONF.Lang.Path;
     $(#lang_SelectBootFile).attributes['caption'] = CONF.Lang.SelectBootFile;
     $(#lang_Params).html = CONF.Lang.Params;
-    $(#lang_Default).html = CONF.Lang.Default;
     $(#sim_delete).html = CONF.Lang.DeleteSimulator;
     $(#sim_cmd).attributes['novalue'] = CONF.Lang.SimulatorCmdNoValue;
 }

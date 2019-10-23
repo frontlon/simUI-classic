@@ -105,15 +105,14 @@ function createRomList(cls=0){
 
         if(obj.ThumbPath != ""){
             thumb = obj.ThumbPath.toHtmlString();
-        }else if(CONF.Theme[themeId].Params["default-thumb-image"] != undefined){
-            thumb = CONF.Theme[themeId].Params["default-thumb-image"].toHtmlString();
+        }else if(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+            thumb = CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"].toHtmlString();
         }else{
             thumb = "";
         }
 
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()  +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
     }
-
     romlist.append(data);
     SCROLL_PAGE++;
 }
@@ -202,10 +201,10 @@ function openSidebar(obj){
     $(#right_thumb_down).attributes["rid"] = info.Id;
     $(#right_thumb_down).attributes["rname"] = info.Name;
 
+
     //生成喜好按钮
     var favorite = $(#right_favorite);
-    favorite.attributes["platform"] = info.Platform.toHtmlString();
-    favorite.attributes["name"] = info.Name.toHtmlString();
+    favorite.attributes["rid"] = info.Id.toHtmlString();
     favorite.attributes["value"] = info.Star.toHtmlString();
     if(info.Star == "1"){
         favorite.attributes.removeClass("funbtn_0");
@@ -217,18 +216,18 @@ function openSidebar(obj){
 
     var thumb = "";
 
-    //截图
+    //场景图
     if(info.SnapPath != ""){thumb += "<img src=\""+ info.SnapPath.toHtmlString() +"\" />";}
 
     //游戏缩略图
-    if(obj.ThumbPath != ""){
+    if(info.ThumbPath != ""){
         thumb += "<img src='"+ info.ThumbPath.toHtmlString() +"' />";
-    }else if(info.SnapPath == "" && CONF.Theme[themeId].Params["default-thumb-image"] != undefined){
-        thumb += "<img src='"+ CONF.Theme[themeId].Params["default-thumb-image"].toHtmlString() +"' />";
+    }else if(info.SnapPath == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+        thumb += "<img src='"+ CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"].toHtmlString() +"' />";
     }
-    
     //滚动图
     $(#stack).html = thumb;
+    $(#stack).refresh();
     rotateAttached();
     if($$(#stack > img).length == 1){
         $(#rotate).style["display"] = "none";
@@ -335,22 +334,32 @@ function createAllCache(showMsgbox){
 
 //设置我的喜爱
 function setFavorite(evt){
-    var pfID = evt.attributes["platform"];
-    var val = evt.attributes["value"];
-    var name = evt.attributes["name"];
-    if(val == "1"){
-        val = "0";
+    var id = evt.attributes["rid"];
+    var star = evt.attributes["value"];
+
+    if(star == "1"){
+        star = "0";
         evt.attributes.removeClass("funbtn_1");
         evt.attributes.addClass("funbtn_0");
     }else{
-        val = "1";
+        star = "1";
         evt.attributes.removeClass("funbtn_0");
         evt.attributes.addClass("funbtn_1");        
     }
-    evt.attributes["value"] = val;
-    result = view.SetFavorite(pfID,name,val);
+
+    evt.attributes["value"] = star;
+
+    var result = view.SetFavorite(id,star);
+   
     if(result != "1"){
         view.msgbox(#alert,result);
+    }
+
+    //如果当前是喜好目录，则从rom列表中删除
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    var rdom = $(#romlist).select("li[rid="+id+"]");
+    if(menu == "favorite" && rdom != undefined){
+        rdom.remove();
     }
 }
 

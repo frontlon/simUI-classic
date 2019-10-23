@@ -202,11 +202,6 @@ func (*Rom) GetByPinyin(pages int, platform string, menu string, keyword string)
 		volist = append(volist, vo)
 	}
 
-	for k,v :=range volist{
-		fmt.Println(k,v)
-	}
-
-
 	return volist, err
 }
 
@@ -247,7 +242,7 @@ func (*Rom) Count(platform string, menu string, keyword string) (int, error) {
 func (r *Rom) UpdateStar() error {
 	sql := `UPDATE rom SET `
 	sql += `star = ` + utils.ToString(r.Star)
-	sql += ` WHERE platform = ` + utils.ToString(r.Platform) + ` AND name = '` + r.Name + `'`
+	sql += ` WHERE id = ` + utils.ToString(r.Id)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		return err
@@ -261,7 +256,6 @@ func (r *Rom) UpdateSimulator() error {
 	sql += `sim_id = ` + utils.ToString(r.SimId)
 	sql += ` WHERE id = ` + utils.ToString(r.Id)
 	_, err := sqlite.Exec(sql)
-	fmt.Println(sql)
 	if err != nil {
 		return err
 	}
