@@ -119,4 +119,5 @@ function createLang(){
     $(#lang_Params).html = CONF.Lang.Params;
     $(#lang_Default).html = CONF.Lang.Default;
     $(#sim_delete).html = CONF.Lang.DeleteSimulator;
+    $(#sim_cmd).attributes['novalue'] = CONF.Lang.SimulatorCmdNoValue;
 }

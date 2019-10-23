@@ -28,16 +28,16 @@ type ConfStruct struct {
 	Platform  map[uint32]*db.Platform //平台及对应的模拟器列表
 }
 
+//主题配置
 type ThemeStruct struct {
-	Name   string
-	Path   string
-	Params map[string]string
+	Name   string            //主题名称
+	Path   string            //文件路径
+	Params map[string]string //主题各项参数
 }
 
 /*
  初始化读取配置
  @author frontLon
- @return strucctfilepath.Abs
 */
 func InitConf() {
 	var rootpath, _ = filepath.Abs(filepath.Dir(os.Args[0])) //exe运行文件路径
@@ -160,7 +160,9 @@ func getTheme() map[string]*ThemeStruct {
 					key := strings.Trim(strarr[0][first+1:last], " ")
 					value := strings.Trim(strings.Replace(strarr[1], ";", "", 1), " ")
 					if key != "" && value != "" {
-						if (key == "window-background-image" || key == "desc-background-image") {
+						if (key == "window-background-image" ||
+							key == "desc-background-image" ||
+							key == "default-thumb-image") {
 							value = dirPth + separator + value
 						}
 
