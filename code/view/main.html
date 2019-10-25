@@ -56,7 +56,7 @@
     /* 搜索栏 */
     .search{height:26dip;background:color(search-background-color);margin:9dip;position:relative}
     .search .input{context-menu:none;color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:100dip;position:absolute;left:4dip}
-    .search .submit{color:color(search-button-text-color);height:26dip;width:21dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none}
+    .search .submit{color:color(search-ico-text-color);height:26dip;width:21dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none}
     
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;}
@@ -101,7 +101,8 @@
     #right .run:hover{color:color(run-button-hover-text-color);background:color(run-button-hover-background-color);cursor:pointer}
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-  
+    
+
     #right .funbtn{height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block}
     #right .funbtn:hover{background:color(func-button-hover-background-color);cursor:pointer}
     #right .funbtn i{display:block}
@@ -120,6 +121,7 @@
     #doc h1,#doc h2,#doc h3,#doc h4,#doc h5,#doc h6,#doc pre,
     #doc ul,#doc li,#doc ol,#doc li,#doc dl,#doc dd,#doc tr,
     #doc th,#doc td,#doc p,#doc strong,#doc em,#doc code,#doc del{font-size:11dip;font-weight:normal;list-style:none;padding:0;margin:0;font-style:normal}
+    #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
@@ -127,7 +129,7 @@
     #num_search{position:fixed;display:block;top:100dip;height:*;}
     #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
     #num_search li:hover{color:color(num-index-hover-text-color)}
-    #num_search li:current{color:color(num-index-active-text-color)}
+    #num_search li:current{color:color(num-index-active-text-color);}
 
     #stack{overflow:hidden;flow:stack;width:205dip;height:154dip;}
     #stack>img{width:205dip;height:154dip}
@@ -201,8 +203,8 @@
 </body>
 
 <script type="text/tiscript">
-    //var ROOTPATH = "this://app/";
-    var ROOTPATH = "";
+    var ROOTPATH = "this://app/";
+    //var ROOTPATH = "";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

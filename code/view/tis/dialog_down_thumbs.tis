@@ -7,6 +7,8 @@ view.root.on("ready", function(){
 
     createLang();
 
+    view.windowCaption = CONF.Lang.ThumbsDown;
+
     var keyword = view.parameters.keyword;
     ID = view.parameters.id;
     $(#search_input).value = keyword;
@@ -40,9 +42,7 @@ view.root.on("ready", function(){
             }
             SCROLL_LOCK = false;
         }
-
     };
-
 });
 
 //点击图片

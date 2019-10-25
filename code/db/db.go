@@ -10,7 +10,7 @@ var sqlite = &sql.DB{}
 //连接数据库
 func Conn() {
 	//连接数据库
-	sqlite, _ = sql.Open("sqlite3", `./db.db`)
+	sqlite, _ = sql.Open("sqlite3", `./data.dll`)
 	//关闭同步
 	sqlite.Exec("PRAGMA synchronous = OFF;")
 }

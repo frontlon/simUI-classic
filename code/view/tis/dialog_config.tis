@@ -1,6 +1,9 @@
 ﻿var pfId;
 view.root.on("ready", function(){
     
+    //定义标题
+    view.windowCaption = CONF.Lang.Config;
+
     //渲染语言
     createLang();
 

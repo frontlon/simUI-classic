@@ -1,7 +1,3 @@
-/*
-package main
-var res = []byte{
-*/
 package main
 
 import (
@@ -16,8 +12,8 @@ import (
 var separator = string(os.PathSeparator) //系统路径分隔符
 //路径分隔符
 var constMenuRootKey = "_7b9"                                                //根子目录游戏的Menu参数
-var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-//var constMainFile = "this://app/main.html" //主文件路径（正式）
+//var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+var constMainFile = "this://app/main.html" //主文件路径（正式）
 
 func main() {
 

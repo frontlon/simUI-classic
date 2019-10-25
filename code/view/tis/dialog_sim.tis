@@ -12,10 +12,12 @@ view.root.on("ready", function(){
         action = "add";
         $(#sim_submit).value = CONF.Lang.AddSimulator;
         $(#sim_delete).style['display'] = "none";
+        view.windowCaption = CONF.Lang.AddSimulator;
     }else{
         var sim = view.parameters.getSimulatorById(id);
         action = "update";
         $(#sim_submit).value = CONF.Lang.SaveConfig;
+        view.windowCaption = CONF.Lang.EditSimulator;
         $(#sim_name).value = sim.Name;
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;

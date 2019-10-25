@@ -3,13 +3,15 @@
   <title>关于 Tiny Game UI</title>
   <style>
     html,body{width:max-intrinsic; height:max-intrinsic; overflow:hidden;margin:0;padding:0}
-    .thumb{height:98dip;width:384dip;background:url("this://app/about.png") no-repeat;border-bottom:3dip solid #54a9b5}
+    #thumb{height:98dip;width:384dip;background-repeat:no-repeat;border-bottom:3dip solid #54a9b5}
     .content{padding:8dip}
     .btn{text-align:right;background:#eee;padding:8dip}
     p{font-size:10dip}
   </style>
   <script type="text/tiscript">
-    include "this://app/tis/decorators.tis";
+    include ROOTPATH + "tis/plugins/decorators.tis";
+    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.png" +")"
+
     $(#close).setState(Element.STATE_FOCUS);
     @click @on "#close":
     {
@@ -25,9 +27,9 @@
     </script>
 </head>
 <body>
-<div class="thumb"></div>
+<div id="thumb"></div>
 <div class="content">
-    <p>版本：v2.1.1</p>
+    <p>版本：v2.2</p>
     <p>文档：<a href="http://gui.runester.cn/" target="_blank" title="点击访问网站" id="link">http://gui.runester.cn/</a></p>
     <p>作者：frontLon</p>
     <p>ＱＱ：48664567</p>
