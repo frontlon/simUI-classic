@@ -86,10 +86,16 @@ view.root.on("ready", function(){
         //}
     });
     
-    //搜索功能
+    //搜索功能 - 实时改变文本
     self.on("change", "#search_input", function(evt) {
         search();
     });
+
+    //搜索功能 - 点击搜索按钮
+    self.on("click", "#search_submit", function(evt) {
+        search();
+    });
+
 
     //平台单击
     self.on("click", "#platform_ul > li", function(evt) {
@@ -101,12 +107,6 @@ view.root.on("ready", function(){
         openPlatformDir(this);
     });
 
-    //平台下拉菜单 - 切换模拟器
-    /*
-    self.on("click", ".switch_sim", function(evt) {
-        openPlatformSim(this);
-    });
-*/
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
@@ -283,13 +283,14 @@ function initConfig(isfresh){
         //刷新数据库rom
         view.CreateRomCache();
         view.UpdateConfig("root_path",CONF.RootPath);
-        view.msgbox(#alert,"初次启动，初始化完成");
+        view.msgbox(#alert,CONF.Lang.FirstBootCreateCache);
     }
 
     createLang(); //创建语言
     createTheme(); //创建主题
     createPlatform(); //生成平台列表
     initRomListStyle(); //初始化游戏列表样式
+   
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform);
     createMenuList(menujson);
@@ -299,6 +300,7 @@ function initConfig(isfresh){
 
     //动态设置平台栏宽度，滑动平台栏使用
     setPlatformWidth();
+  
 }
 
 //弹出错误窗口

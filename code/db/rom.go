@@ -73,9 +73,6 @@ func (r *Rom) Add() error {
 		fmt.Println(err.Error())
 		return err
 	}
-
-	fmt.Println(r.Name)
-
 	return nil
 }
 
@@ -135,7 +132,7 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 
 	field := "id,name,pname,rom_path";
 	sql := "SELECT " + field + " FROM rom WHERE 1=1"
-	sql += " AND platform = '" + string(platform) + "' AND pname = '" + pname + "'"
+	sql += " AND platform = '" + utils.ToString(platform) + "' AND pname = '" + pname + "'"
 	sql += " ORDER BY pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
@@ -225,7 +222,7 @@ func (*Rom) Count(platform string, menu string, keyword string) (int, error) {
 	count := 0
 	sql := "SELECT count(*) as count FROM rom WHERE 1=1"
 	if platform != "0" {
-		sql += " AND platform = '" + platform + "'"
+		sql += " AND platform = '" + platform + "' AND pname=''"
 	}
 	if menu != "" {
 		sql += " AND menu = '" + menu + "'"

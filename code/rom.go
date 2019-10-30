@@ -45,7 +45,7 @@ func runGame(exeFile string, cmd string) error {
 
 	//更改程序运行目录
 	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
-		fmt.Println("目录错误:" + err.Error())
+		return err
 	}
 	result := exec.Command(exeFile, cmd)
 
@@ -69,7 +69,7 @@ func CreateRomCache(platform uint32) error {
 	SnapList := GetMaterialUrl("snap", platform)         //截图
 	DocList := GetMaterialUrl("doc", platform)           //文档
 	StrategyList := GetMaterialUrl("strategy", platform) //视频
-	RomAlias := getRomAlias(platform)                    //别名配置
+	RomAlias,_ := getRomAlias(platform)                    //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
@@ -186,16 +186,12 @@ func CreateRomCache(platform uint32) error {
 	if len(romlist) > 0 {
 		for _, v := range romlist {
 			if err := v.UpdateSert(); err != nil {
-				fmt.Println(err)
+				fmt.Println(err.Error())
 			}
 		}
 	}
 	//保存数据到数据库cate表
 	if len(menuList) > 0 {
-		//先清空menu表
-		if err := (&db.Menu{}).ClearMenu(platform); err != nil {
-			return err
-		}
 		for _, v := range menuList {
 			if err := v.Add(); err != nil {
 			}

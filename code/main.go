@@ -6,21 +6,27 @@ import (
 	"github.com/sciter-sdk/go-sciter/window"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 var separator = string(os.PathSeparator) //系统路径分隔符
 //路径分隔符
 var constMenuRootKey = "_7b9"                                                //根子目录游戏的Menu参数
-//var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-var constMainFile = "this://app/main.html" //主文件路径（正式）
+var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+//var constMainFile = "this://app/main.html" //主文件路径（正式）
 
 func main() {
 
 	//连接数据库
 	db.Conn()
+
 	//初始化配置
-	InitConf()
+	Config = &ConfStruct{}
+	var rootpath, _ = filepath.Abs(filepath.Dir(os.Args[0]))
+	Config.RootPath = rootpath + separator //当前软件的绝对路径
+	Config.Separator = separator //系统的目录分隔符
+	errConf := InitConf()
 
 	left :=Config.Default.WindowLeft
 	top := Config.Default.WindowTop
@@ -54,6 +60,14 @@ func main() {
 		errorMsg(w, err.Error())
 		return
 	}
+
+	//配置出先错误
+	if errConf != nil{
+		errorMsg(w, errConf.Error())
+		os.Exit(1)
+		return
+	}
+
 
 	if len(Config.Lang) == 0{
 		errorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")

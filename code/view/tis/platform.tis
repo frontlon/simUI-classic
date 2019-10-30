@@ -1,23 +1,9 @@
 ﻿  
 //点击平台下拉菜单 - 打开目录
 function openPlatformDir(obj){
-    view.OpenFolder(obj.attributes["opt"],obj.parent.parent.parent.attributes["platform"]);
+    view.OpenFolder(obj.parent.parent.parent.attributes["platform"],obj.attributes["opt"],obj.attributes["sid"]);
 }
 
-//点击平台下拉菜单 - 切换模拟器
-/*
-function openPlatformSim(obj){
-    var pfId = obj.attributes["platform"];
-    var simId = obj.attributes["sid"];
-
-    //更新参数和配置文件
-    view.SwitchSim(simId,pfId);
-    //改变列表样式
-    var dds = self.selectAll(".switch_sim[platform="+pfId+"]");
-    for(var el in dds) el.attributes.removeClass("active");
-    obj.attributes.addClass("active");
-}
-*/
 //切换平台
 function changePlatform(obj){
 
@@ -38,9 +24,9 @@ function changePlatform(obj){
     //激活按钮改变样式
     obj.state.current = true;
 
-
     //激活第一个字母索引
     $(#num_search li).state.current = true;
+
     //更新配置文件
     view.UpdateConfig("platform",obj.attributes["platform"])
 }
@@ -58,26 +44,19 @@ function createPlatform(){
         dd += "<li platform='"+ CONF.Platform[pfId].Id +"'>";
         dd += "<button class='platform'>" + CONF.Platform[pfId].Name + "</button>";
         dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";
-        dd += "<li class='opendir' opt='rom'>"+CONF.Lang.OpenRomFolder +"</li>";
-        dd += "<li class='opendir' opt='sim'>"+ CONF.Lang.OpenSimFolder +"</li>";
-        dd += "<li class='opendir' opt='thumb'>"+ CONF.Lang.OpenThumbsFolder +"</li>";
-        dd += "<li class='opendir' opt='snap'>"+ CONF.Lang.OpenSnapFolder +"</li>";
-        dd += "<li class='opendir' opt='doc'>"+ CONF.Lang.OpenDocFolder +"</li>";
-        dd += "<li class='opendir' opt='strategy'>"+ CONF.Lang.OpenStrategyFolder +"</li>";
-        /*
+
+        if (CONF.Platform[pfId].RomPath !=""){dd += "<li class='opendir' opt='rom' sid=''>"+CONF.Lang.OpenRomFolder +"</li>";}
+        if (CONF.Platform[pfId].ThumbPath !=""){dd += "<li class='opendir' opt='thumb' sid=''>"+ CONF.Lang.OpenThumbsFolder +"</li>";}
+        if (CONF.Platform[pfId].SnapPath !=""){dd += "<li class='opendir' opt='snap' sid=''>"+ CONF.Lang.OpenSnapFolder +"</li>";}
+        if (CONF.Platform[pfId].DocPath !=""){dd += "<li class='opendir' opt='doc' sid=''>"+ CONF.Lang.OpenDocFolder +"</li>";}
+        if (CONF.Platform[pfId].StrategyPath !=""){dd += "<li class='opendir' opt='strategy' sid=''>"+ CONF.Lang.OpenStrategyFolder +"</li>";}
+      
         if(CONF.Platform[pfId].SimList.length > 0 ){
-            dd += "<li>"+ CONF.Lang.SwitchSimulator +"<menu>";
             for(var simId in CONF.Platform[pfId].SimList) {
-                if(CONF.Platform[pfId].UseSim.Id  == CONF.Platform[pfId].SimList[simId].Id){
-                    simclass = "active";
-                }else{
-                    simclass = "";
-                }
-                dd += "<li class='switch_sim "+ simclass +"' platform='"+ CONF.Platform[pfId].Id +"' sid='"+  CONF.Platform[pfId].SimList[simId].Id +"'>"+ CONF.Platform[pfId].SimList[simId].Name + "</li>";
+                dd += "<li class='opendir' opt='sim' sid='"+  CONF.Platform[pfId].SimList[simId].Id +"'>"+ CONF.Lang.OpenSimFolder  +":"+ CONF.Platform[pfId].SimList[simId].Name +"</li>";
             }
-            dd += "</menu></li>";
         }
-        */
+
         dd += "</menu></button></li>";
     }
     self.$(#platform_ul).html = dd; //生成dom

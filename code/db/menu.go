@@ -22,7 +22,7 @@ func (v *Menu) Add() error {
 	}
 	_, err = stmt.Exec(v.Name,v.Platform,v.Pinyin);
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return err
 	}
 	return nil

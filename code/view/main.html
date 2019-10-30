@@ -5,26 +5,25 @@
 <title></title>
 <div id="themefile"></div>
 <style type="text/css">
-    html{min-width:800dip;width:*;background:transparent;border:1dip solid color(html-border-color);}
+    html{min-width:800dip;width:*;background:transparent;border:1dip solid color(window-outside-border-color);}
     @font-face{font-family:iconfont;src:url(iconfont.ttf)}
     i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle}
     *{margin:0;padding:0;}
     a{text-decoration:none}
-    body{font-size:11dip;border:1dip solid color(body-border-color);background-position:center center;background-repeat:no-repeat;}
+    body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;}
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
     #left{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative;}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
     #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;display:none}
    
-
     /* 标题栏 */
     #titlebar{background-color:color(titlebar-background-color);height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;}
     #logo{ color:color(logo-text-color);width:160dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
-    #tb_right{text-align:right;width:226dip;display:inline-block;}
+    #tb_right{text-align:right;width:226dip;display:inline-block}
     #tb_right i{font-size:18dip;line-height:36dip;display:block}
-    #tb_right > button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);width:36dip;height:36dip;display:inline-block;overflow:hidden;margin-left:1dip;font-size:11dip;line-height:36dip}
+    #tb_right > button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;}
     #tb_right > button:hover{opacity:0.7;cursor:pointer}
 
     /* 平台按钮 */
@@ -34,8 +33,10 @@
     #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;}
     #platform_ul button{color:color(platform-text-color);background:none;width:36dip;height:36dip;display:inline-block;overflow:hidden}    
     #platform_ul button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark)}
-    #platform_ul button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-dark);border-right:1dip solid color(platform-arrow-border-light)}
-    
+    #platform_ul button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-dark);border-right:1dip solid color(platform-arrow-border-light)}    
+    #platform_ul > li:current button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
+    #platform_ul > li:current button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-light);border-right:color(platform-active-background-color)}
+
     /* 下拉菜单 */
     menu{display:none;border:1dip solid color(context-border-color)}
     menu li{padding:9dip 16dip 9dip 9dip ;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
@@ -56,7 +57,8 @@
     /* 搜索栏 */
     .search{height:26dip;background:color(search-background-color);margin:9dip;position:relative}
     .search .input{context-menu:none;color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:100dip;position:absolute;left:4dip}
-    .search .submit{color:color(search-ico-text-color);height:26dip;width:21dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none}
+    .search .submit{color:color(search-ico-text-color);height:26dip;width:21dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none;cursor: pointer}
+    .search .submit:hover{opacity: 0.7;}
     
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;}
@@ -102,7 +104,6 @@
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     
-
     #right .funbtn{height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block}
     #right .funbtn:hover{background:color(func-button-hover-background-color);cursor:pointer}
     #right .funbtn i{display:block}
@@ -203,8 +204,8 @@
 </body>
 
 <script type="text/tiscript">
-    var ROOTPATH = "this://app/";
-    //var ROOTPATH = "";
+    //var ROOTPATH = "this://app/";
+    var ROOTPATH = "";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

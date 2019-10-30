@@ -11,7 +11,6 @@ function initRomListStyle(){
         $(#zoom).style["display"]="none";
     }
 
-
     var zoom = $(#zoom);
     zoom.attributes["value"] = CONF.Default.RomlistZoom;
 
@@ -104,9 +103,9 @@ function createRomList(cls=0){
         }
 
         if(obj.ThumbPath != ""){
-            thumb = obj.ThumbPath.toHtmlString();
+            thumb = URL.fromPath(obj.ThumbPath);
         }else if(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-            thumb = CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"].toHtmlString();
+            thumb = URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }else{
             thumb = "";
         }
@@ -217,14 +216,15 @@ function openSidebar(obj){
     var thumb = "";
 
     //场景图
-    if(info.SnapPath != ""){thumb += "<img src=\""+ info.SnapPath.toHtmlString() +"\" />";}
+    if(info.SnapPath != ""){thumb += "<img src=\""+ URL.fromPath(info.SnapPath) +"\" />";}
 
     //游戏缩略图
     if(info.ThumbPath != ""){
-        thumb += "<img src='"+ info.ThumbPath.toHtmlString() +"' />";
+        thumb += "<img src='"+ URL.fromPath(info.ThumbPath) +"' />";
     }else if(info.SnapPath == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        thumb += "<img src='"+ CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"].toHtmlString() +"' />";
+        thumb += "<img src='"+ URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
+
     //滚动图
     $(#stack).html = thumb;
     $(#stack).refresh();
@@ -270,7 +270,6 @@ function openSidebar(obj){
             $(#sim_select).style["display"] = "block";
         }
     }
-
 
     //如果该平台有模拟器
     if($(#sim_select li) != undefined){

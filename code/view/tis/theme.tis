@@ -46,6 +46,10 @@ function createTheme(){
 function changeTheme(obj){
     var id = obj.attributes["id"]; //主题列表
     self.attributes["theme"] = id;
+    
+    //更新主题样式
+    setTheme(id);
+    
     //更新配置文件
     view.UpdateConfig("theme",id)
 }
@@ -66,26 +70,7 @@ function setTheme(themeId){
         $(body).style["opacity"] = CONF.Theme[themeId].Params["window-opacity"];
     }
 
-    if(CONF.Theme[themeId].Params["window-background-image"] != undefined){$(body).style["background-image"] = "url("+CONF.Theme[themeId].Params["window-background-image"]+")";}
+    if(CONF.Theme[themeId].Params["window-background-image"] != undefined){
+        $(body).style["background-image"] = [url:URL.fromPath(CONF.Theme[themeId].Params["window-background-image"])];
+    }
 }
-/*
-function changeTheme(obj) {
-
-
-
-
-
-    const themeRelPath = ROOTPATH + "theme/light.css";
-  const themeAbsPath = System.home(themeRelPath); // abs path from path relative to the executable folder
-  const themeUrl = URL.fromPath(themeAbsPath); // make file:// url from it
-
-  const styleBag = $(style#theme);
-  styleBag.deactivate(); // remove all rules defined in it
-  styleBag.attributes["src"] = themeUrl;
-  styleBag.activate(); // inject rules
-
-view.msgbox(#alert,"11");
-
-}
-*/
-

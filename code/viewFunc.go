@@ -25,6 +25,7 @@ func defineViewFunction(w *window.Window) {
 	w.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 		ctype := args[0].String()
 		isfresh := args[1].String()
+
 		data := ""
 		switch (ctype) {
 		case "config": //读取配置
@@ -97,7 +98,7 @@ func defineViewFunction(w *window.Window) {
 		//检测执行文件是否存在
 		_, err := os.Stat(Config.Default.Book)
 		if err != nil {
-			return errorMsg(w, err.Error())
+			return errorMsg(w, Config.Lang["BookNotFound"])
 		}
 
 		err = runGame(Config.Default.Book, "")
@@ -109,8 +110,8 @@ func defineViewFunction(w *window.Window) {
 
 	//打开rom目录
 	w.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
-		gtype := args[0].String() //目录类型
-		platform := uint32(utils.ToInt(args[1].String()))
+		platform := uint32(utils.ToInt(args[0].String()))
+		gtype := args[1].String() //目录类型
 		p := ""
 		switch gtype {
 		case "rom":
@@ -124,7 +125,8 @@ func defineViewFunction(w *window.Window) {
 		case "strategy":
 			p = Config.Platform[platform].StrategyPath
 		case "sim":
-			exe := Config.Platform[platform].UseSim.Path
+			simid := uint32(utils.ToInt(args[2].String())) //模拟器ID
+			exe := Config.Platform[platform].SimList[simid].Path
 			p = filepath.Dir(exe)
 		}
 		if err := exec.Command(`explorer`, p).Start(); err != nil {
@@ -132,20 +134,6 @@ func defineViewFunction(w *window.Window) {
 		}
 		return sciter.NullValue()
 	})
-
-	//切换模拟器
-	/*w.DefineFunction("SwitchSim", func(args ...*sciter.Value) *sciter.Value {
-		simId := uint32(utils.ToInt(args[0].String()))
-		platform := uint32(utils.ToInt(args[1].String()))
-
-		Config.Platform[platform].UseSim = Config.Platform[platform].SimList[simId]
-		err := (&db.Simulator{}).UpdateDefault(platform, simId)
-
-		if err != nil {
-			return errorMsg(w, err.Error())
-		}
-		return sciter.NullValue()
-	})*/
 
 	//更新配置文件
 	w.DefineFunction("UpdateConfig", func(args ...*sciter.Value) *sciter.Value {
@@ -162,13 +150,18 @@ func defineViewFunction(w *window.Window) {
 
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
-
 		//先检查平台，将不存在的平台数据先干掉
 		pfs := []string{}
 		for k, _ := range Config.Platform {
 			pfs = append(pfs, utils.ToString(k))
 		}
+
 		if err := (&db.Rom{}).DeleteByPlatformNotExists(pfs); err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		//先清空menu表
+		if err := (&db.Menu{}).ClearMenu(0); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
@@ -556,3 +549,4 @@ func defineViewFunction(w *window.Window) {
 	})
 
 }
+

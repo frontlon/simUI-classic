@@ -1,16 +1,16 @@
 ﻿<html>
 <head>
-  <title>关于 Tiny Game UI</title>
+  <title>关于SimUI</title>
   <style>
-    html,body{width:max-intrinsic; height:max-intrinsic; overflow:hidden;margin:0;padding:0}
-    #thumb{height:98dip;width:384dip;background-repeat:no-repeat;border-bottom:3dip solid #54a9b5}
+    html,body{width:max-intrinsic; height:max-intrinsic; overflow:hidden;margin:0;padding:0;background:#FFF}
+    #thumb{height:98dip;width:384dip;background-repeat:no-repeat;border-bottom:3dip solid #6699ff}
     .content{padding:8dip}
     .btn{text-align:right;background:#eee;padding:8dip}
     p{font-size:10dip}
   </style>
   <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/decorators.tis";
-    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.png" +")"
+    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.jpg" +")"
 
     $(#close).setState(Element.STATE_FOCUS);
     @click @on "#close":
@@ -30,7 +30,7 @@
 <div id="thumb"></div>
 <div class="content">
     <p>版本：v2.2</p>
-    <p>文档：<a href="http://gui.runester.cn/" target="_blank" title="点击访问网站" id="link">http://gui.runester.cn/</a></p>
+    <p>文档：<a href="http://www.simui.net/" target="_blank" title="点击访问网站" id="link">http://www.simui.net/</a></p>
     <p>作者：frontLon</p>
     <p>ＱＱ：48664567</p>
     <p>邮件：front_diablo@163.com</p>

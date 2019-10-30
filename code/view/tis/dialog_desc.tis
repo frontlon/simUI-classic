@@ -56,11 +56,10 @@ view.root.on("ready", function(){
 
 });
 
-
 //设置主题样式
 function setTheme(themeId){
     if(conf.Theme[themeId].Params["desc-background-image"] != undefined){
-        $(body).style["background-image"] = "url("+conf.Theme[themeId].Params["desc-background-image"]+")";
+        $(body).style["background-image"] = [url:URL.fromPath(conf.Theme[themeId].Params["desc-background-image"])];
     }
     
 }

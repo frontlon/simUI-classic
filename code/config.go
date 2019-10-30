@@ -4,7 +4,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"bufio"
-	"fmt"
+	"errors"
 	"github.com/go-ini/ini"
 	"io/ioutil"
 	"os"
@@ -15,7 +15,6 @@ import (
 
 //配置文件
 var Config *ConfStruct
-//读取配置文件
 
 //配置文件
 type ConfStruct struct {
@@ -39,31 +38,63 @@ type ThemeStruct struct {
  初始化读取配置
  @author frontLon
 */
-func InitConf() {
-	var rootpath, _ = filepath.Abs(filepath.Dir(os.Args[0])) //exe运行文件路径
-	Config = &ConfStruct{}
-	//配置全局参数
-	Config.Platform = getPlatform()
-	Config.Default = getDefault()
-	Config.LangList = getLangList()
-	Config.Lang = getLang(Config.Default.Lang)
-	Config.Theme = getTheme()
-	Config.RootPath = rootpath + separator //exe文件的绝对路径
-	Config.Separator = separator           //系统的目录分隔符
+func InitConf() error {
+
+	err := errors.New("")
+
+	//更新缓存前，需要将工作目录换成默认目录
+	if err := os.Chdir(Config.RootPath); err != nil {
+		return err
+	}
+	Config.Default, err = getDefault()
+	if err != nil {
+		return err
+	}
+	Config.LangList, err = getLangList()
+	if err != nil {
+		return err
+	}
+	Config.Lang, err = getLang(Config.Default.Lang)
+	if err != nil {
+		return err
+	}
+	Config.Platform, err = getPlatform()
+	if err != nil {
+		return err
+	}
+	Config.Theme, err = getTheme()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //读取平台列表
-func getPlatform() map[uint32]*db.Platform {
+func getPlatform() (map[uint32]*db.Platform, error) {
 	DBSim := &db.Simulator{}
 	platform, _ := (&db.Platform{}).GetAll()
 	for _, v := range platform {
 		platform[v.Id].SimList, _ = DBSim.GetByPlatform(v.Id) //填充模拟器
-		platform[v.Id].DocPath, _ = filepath.Abs(platform[v.Id].DocPath)
-		platform[v.Id].Romlist, _ = filepath.Abs(platform[v.Id].Romlist)
-		platform[v.Id].StrategyPath, _ = filepath.Abs(platform[v.Id].StrategyPath)
-		platform[v.Id].RomPath, _ = filepath.Abs(platform[v.Id].RomPath)
-		platform[v.Id].ThumbPath, _ = filepath.Abs(platform[v.Id].ThumbPath)
-		platform[v.Id].SnapPath, _ = filepath.Abs(platform[v.Id].SnapPath)
+
+		if platform[v.Id].DocPath != "" {
+			platform[v.Id].DocPath, _ = filepath.Abs(platform[v.Id].DocPath)
+		}
+		if platform[v.Id].StrategyPath != "" {
+			platform[v.Id].StrategyPath, _ = filepath.Abs(platform[v.Id].StrategyPath)
+		}
+		if platform[v.Id].RomPath != "" {
+			platform[v.Id].RomPath, _ = filepath.Abs(platform[v.Id].RomPath)
+		}
+		if platform[v.Id].ThumbPath != "" {
+			platform[v.Id].ThumbPath, _ = filepath.Abs(platform[v.Id].ThumbPath)
+		}
+		if platform[v.Id].SnapPath != "" {
+			platform[v.Id].SnapPath, _ = filepath.Abs(platform[v.Id].SnapPath)
+		}
+		if platform[v.Id].Romlist != "" {
+			platform[v.Id].Romlist, _ = filepath.Abs(platform[v.Id].Romlist)
+		}
+
 		platform[v.Id].UseSim = &db.Simulator{}
 		for sk, sim := range platform[v.Id].SimList {
 			//当前正在使用的模拟器
@@ -71,14 +102,16 @@ func getPlatform() map[uint32]*db.Platform {
 				platform[v.Id].UseSim = sim
 			}
 			//模拟器路径转换为绝对路径
-			platform[v.Id].SimList[sk].Path, _ = filepath.Abs(platform[v.Id].SimList[sk].Path)
+			if platform[v.Id].SimList[sk].Path != "" {
+				platform[v.Id].SimList[sk].Path, _ = filepath.Abs(platform[v.Id].SimList[sk].Path)
+			}
 		}
 	}
-	return platform
+	return platform, nil
 }
 
 //读取缓存配置
-func getDefault() *db.Config {
+func getDefault() (*db.Config, error) {
 	vo, _ := (&db.Config{}).Get()
 	//查看当前选定平台值是否是正常的
 	isset := false
@@ -102,25 +135,27 @@ func getDefault() *db.Config {
 		}
 	}
 	//相对路径转换为绝对路径
-	vo.Book, _ = filepath.Abs(vo.Book)
-
-	return vo
+	if vo.Book != "" {
+		vo.Book, _ = filepath.Abs(vo.Book)
+	}
+	return vo, nil
 }
 
 //读取主题列表
-func getTheme() map[string]*ThemeStruct {
-	dirPth, _ := filepath.Abs("theme")
+func getTheme() (map[string]*ThemeStruct, error) {
+	dirPth := Config.RootPath + "theme" + separator
 	lists, _ := ioutil.ReadDir(dirPth)
+
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
 		if !fi.IsDir() && ext == ".css" { // 忽略目录
 
-			filename := dirPth + separator + fi.Name()
+			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件
 
 			if err != nil {
-				fmt.Println(err.Error())
+				return themelist, err
 			}
 			scanner := bufio.NewScanner(file) //扫描文件
 			lineText := ""
@@ -163,7 +198,7 @@ func getTheme() map[string]*ThemeStruct {
 						if (key == "window-background-image" ||
 							key == "desc-background-image" ||
 							key == "default-thumb-image") {
-							value = dirPth + separator + value
+							value = dirPth + value
 						}
 						params[key] = value
 					}
@@ -177,21 +212,41 @@ func getTheme() map[string]*ThemeStruct {
 			file.Close()
 		}
 	}
-	return themelist
+
+	if len(themelist) == 0 {
+		err := errors.New(Config.Lang["ThemeFileNotFound"])
+		return themelist, err
+	}
+
+	//如果当前的主题不存在，则将第一个主题更新到数据库
+	if _, ok := themelist[Config.Default.Theme]; !ok {
+		themeId := ""
+		for k,_ := range themelist{
+			themeId = k
+			break
+		}
+		if err := (&db.Config{}).UpdateField("theme", themeId); err != nil {
+			return themelist, err
+		}
+		Config.Default.Theme = themeId
+	}
+
+	return themelist, nil
 }
 
 //读取ROM别名配置参数
-func getRomAlias(platform uint32) map[string]string {
+func getRomAlias(platform uint32) (map[string]string, error) {
 	section := make(map[string]string)
 	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, Config.Platform[platform].Romlist)
-	if err == nil {
-		section = file.Section("Alias").KeysHash()
+	if err != nil {
+		return section, err
 	}
-	return section
+	section = file.Section("Alias").KeysHash()
+	return section, nil
 }
 
 //读取语言参数配置
-func getLang(lang string) map[string]string {
+func getLang(lang string) (map[string]string, error) {
 	langpath := Config.RootPath + "lang" + separator
 	fpath := langpath + lang + ".ini"
 	section := make(map[string]string)
@@ -203,6 +258,7 @@ func getLang(lang string) map[string]string {
 				fpath = langpath + langFile
 				//如果找到其他语言，则将第一项更新到数据库配置中
 				if err := (&db.Config{}).UpdateField("lang", langName); err != nil {
+					return section, err
 				}
 				break
 			}
@@ -210,16 +266,19 @@ func getLang(lang string) map[string]string {
 	}
 
 	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, fpath)
-	if err == nil {
-		section = file.Section("").KeysHash()
+
+	if err != nil {
+		return section, err
 	}
-	return section
+
+	section = file.Section("").KeysHash()
+	return section, nil
 }
 
 //读取语言文件列表
-func getLangList() map[string]string {
+func getLangList() (map[string]string, error) {
 	lang := make(map[string]string)
-	dirPth, _ := filepath.Abs("lang")
+	dirPth := Config.RootPath + "lang" + separator
 	lists, _ := ioutil.ReadDir(dirPth)
 	for _, fi := range lists {
 		if !fi.IsDir() { // 忽略目录
@@ -227,5 +286,5 @@ func getLangList() map[string]string {
 			lang[name] = fi.Name()
 		}
 	}
-	return lang
+	return lang, nil
 }
