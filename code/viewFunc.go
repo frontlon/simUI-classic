@@ -181,10 +181,28 @@ func defineViewFunction(w *window.Window) {
 		//读取数据库
 		menu, err := (&db.Menu{}).GetByPlatform(platform) //从数据库中读取当前平台的分类目录
 
+		//读取根目录下是否有rom
+		count, err := (&db.Rom{}).Count(platform, constMenuRootKey, "")
+		newMenu := []*db.Menu{}
+
+		//读取根目录下有rom，则显示未分类文件夹
+		if count > 0 {
+			root := &db.Menu{
+				Name:     Config.Lang["未分类"],
+				Platform: platform,
+			}
+			newMenu = append(newMenu, root)
+			for _, v := range menu {
+				newMenu = append(newMenu, v)
+			}
+		} else {
+			newMenu = menu
+		}
+
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
-		getjson, _ := json.Marshal(menu)
+		getjson, _ := json.Marshal(newMenu)
 		return sciter.NewValue(string(getjson))
 	})
 
@@ -210,7 +228,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取游戏数量
 	w.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
-		platform := strings.Trim(args[0].String(), " ")
+		platform := uint32(utils.ToInt(args[0].String()))
 		catname := strings.Trim(args[1].String(), " ")
 		keyword := strings.Trim(args[2].String(), " ")
 		count, _ := (&db.Rom{}).Count(platform, catname, keyword)
@@ -549,4 +567,3 @@ func defineViewFunction(w *window.Window) {
 	})
 
 }
-

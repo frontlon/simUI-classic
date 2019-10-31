@@ -31,7 +31,7 @@ func (r *Rom) UpdateSert() error {
 	//先查询记录是否存在
 	id := 0
 	sql := "SELECT id FROM rom "
-	sql += ` WHERE platform = ` + utils.ToString(r.Platform) + ` AND menu = '` + r.Menu + `' AND name = '` + r.Name + `'`
+	sql += ` WHERE platform = ` + utils.ToString(r.Platform) + ` AND name = '` + r.Name + `'`
 
 	err := sqlite.QueryRow(sql).Scan(&id)
 
@@ -45,7 +45,8 @@ func (r *Rom) UpdateSert() error {
 
 	//如果记录存在，则更新记录
 	sql = `UPDATE rom SET `
-	sql += `rom_path = '` + r.RomPath + `'`
+	sql += `menu = '` + r.Menu + `'`
+	sql += ` ,rom_path = '` + r.RomPath + `'`
 	sql += ` ,thumb_path = '` + r.ThumbPath + `'`
 	sql += ` ,snap_path = '` + r.SnapPath + `'`
 	sql += ` ,doc_path = '` + r.DocPath + `'`
@@ -218,11 +219,11 @@ func (*Rom) GetByStar(platform string, star uint8) (*Rom, error) {
 }
 
 //根据满足条件的rom数量
-func (*Rom) Count(platform string, menu string, keyword string) (int, error) {
+func (*Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	count := 0
 	sql := "SELECT count(*) as count FROM rom WHERE 1=1"
-	if platform != "0" {
-		sql += " AND platform = '" + platform + "' AND pname=''"
+	if platform != 0 {
+		sql += " AND platform = '" + utils.ToString(platform) + "' AND pname=''"
 	}
 	if menu != "" {
 		sql += " AND menu = '" + menu + "'"
