@@ -3,15 +3,21 @@ function createMenuList(menujson){
     var menuobj = JSON.parse(menujson);
     var menulist = self.$(#menulist);
     var dd = "";
+    var name ="";
     menulist.clear();
     dd += "<dt>"+ CONF.Lang.Cate +"</dt>";
     dd += "<dd opt='' class='menuitem'>"+ CONF.Lang.AllGames +"</dd>";
     dd += "<dd opt='favorite' class='menuitem'>"+ CONF.Lang.Favorite +"</dd>";
-    dd += "<dd opt='_7b9' class='menuitem'>"+ CONF.Lang.Uncate +"</dd>";
+    //dd += "<dd opt='_7b9' class='menuitem'>"+ CONF.Lang.Uncate +"</dd>";
     
     //遍历数据，生成dom
     for(var obj in menuobj) {
-        dd += "<dd opt='"+  obj.Name +"' class='menuitem'>"+ obj.Name"</dd>";
+        if(obj.Name == "_7b9"){
+            name = CONF.Lang.Uncate
+        }else{
+            name = obj.Name
+        }
+        dd += "<dd opt='"+  obj.Name +"' class='menuitem'>"+ name + "</dd>";
     }
     menulist.html = dd; //生成dom
 

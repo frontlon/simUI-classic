@@ -33,6 +33,12 @@ view.root.on("ready", function(){
 
             var keyword = $(#search_input).value;
             var ctype = $(.submit.active).attributes['value'];
+
+            //场景图加动图
+            if(ctype == 2){
+                keyword += " "+CONF.Lang.Animation;
+            }
+
             PAGE++;
 
             var result = searchPic(keyword,ctype);
@@ -102,6 +108,8 @@ event click $(.submit){
 
     //清空数据
     $(#down_thumb_list).clear();
+
+    PAGE = 0;
 
     //搜索内容
     searchPic(keyword,this.attributes['value']);

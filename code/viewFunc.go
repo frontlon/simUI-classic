@@ -188,7 +188,7 @@ func defineViewFunction(w *window.Window) {
 		//读取根目录下有rom，则显示未分类文件夹
 		if count > 0 {
 			root := &db.Menu{
-				Name:     Config.Lang["未分类"],
+				Name:     constMenuRootKey,
 				Platform: platform,
 			}
 			newMenu = append(newMenu, root)
@@ -544,8 +544,10 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//生成新文件
-		platformPathAbs, err := filepath.Abs(platformPath)                       //读取平台图片路径
-		newFileName := platformPathAbs + separator + vo.Name + path.Ext(newpath) //生成新文件的完整绝路路径地址
+		platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
+	
+
+		newFileName := platformPathAbs + separator + GetFileName(filepath.Base(vo.RomPath)) + path.Ext(newpath) //生成新文件的完整绝路路径地址
 		f, err := os.Create(newFileName)
 		if err != nil {
 			return errorMsg(w, err.Error())
