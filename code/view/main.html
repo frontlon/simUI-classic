@@ -10,7 +10,7 @@
     i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle}
     *{margin:0;padding:0;}
     a{text-decoration:none}
-    body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;}
+    body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover}
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
     #left{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative;}
@@ -122,6 +122,7 @@
     #doc h1,#doc h2,#doc h3,#doc h4,#doc h5,#doc h6,#doc pre,
     #doc ul,#doc li,#doc ol,#doc li,#doc dl,#doc dd,#doc tr,
     #doc th,#doc td,#doc p,#doc strong,#doc em,#doc code,#doc del{font-size:11dip;font-weight:normal;list-style:none;padding:0;margin:0;font-style:normal}
+    #doc p{display:block;margin-bottom:12dip}
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
@@ -146,10 +147,9 @@
         <button id="book" value="1" title=""><i>&#xe748;</i></button><button id="create" title=""><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
             <menu>
                 <li id="config"><i>&#xe602;</i><span id="lang_config"></span></li>
-                <li id="theme"><i>&#xe72b;</i><span id="lang_theme"></span>
-                    <menu></menu>
-                </li>
+                <li id="theme"><i>&#xe72b;</i><span id="lang_theme"></span><menu></menu></li>
                 <li id="about"><i>&#xe7b9;</i><span id="lang_about"></span></li>
+                <li id="help"><i>&#xf3c1;</i><span id="lang_help"></span></li>
             </menu>
         </button>     
         <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
@@ -204,8 +204,8 @@
 </body>
 
 <script type="text/tiscript">
-    //var ROOTPATH = "this://app/";
-    var ROOTPATH = "";
+    var ROOTPATH = "this://app/";
+    //var ROOTPATH = "";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

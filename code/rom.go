@@ -220,10 +220,10 @@ func GetMaterialUrl(stype string, platform uint32) map[string]string {
 		exts = []string{".jpg", ".bmp", ".png", ".jpeg", ".gif"}
 	case "doc":
 		getpath = Config.Platform[platform].DocPath;
-		exts = []string{".md"}
+		exts = []string{".md", ".html", ".htm", ".txt"}
 	case "strategy":
 		getpath = Config.Platform[platform].StrategyPath;
-		exts = []string{".md"}
+		exts = []string{".md", ".html", ".htm", ".txt"}
 	}
 
 	//如果参数为空，不向下执行

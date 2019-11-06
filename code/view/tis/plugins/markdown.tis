@@ -10,7 +10,7 @@ namespace markdown {
     var newline = r.indexOf("\r\n") != -1 ? "\r\n" : r.indexOf("\n") != -1 ? "\n" : ""
     
     // store {{{ unformatted blocks }}} and <pre> pre-formatted blocks </pre>
-    r = r.replace(/\{\{\{((?:.|\r|\n)*?)\}\}\}/gm, function (x) { pre1.push(x.substring(3, x.length - 3)); return "<!1!>"; });
+    r = r.replace(/\```((?:.|\r|\n)*?)```/gm, function (x) { pre1.push(x.substring(3, x.length - 3)); return "<!1!>"; });
     r = r.replace(new RegExp("<pre>([\\s\\S]*?)</pre>", "gi"), function (x) { pre2.push(x.substring(5, x.length - 6)); return "<!2!>"; });
     
     // h1 - h4 and hr
@@ -20,43 +20,35 @@ namespace markdown {
     r = r.replace(/^### (.*)#*/gm, "<h3>$1</h3>");
     r = r.replace(/^## (.*)#*/gm, "<h2>$1</h2>");
     r = r.replace(/^# (.*)#*/gm, "<h1>$1</h1>");
-    r = r.replace(/^[-*][-*][-*]+/gm, "<hr>");
+    r = r.replace(/^---/gm, "<hr />");
     
     // bold, italics, and code formatting
     r = r.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    r = r.replace(new RegExp("//(((?!https?://).)*?)//", "g"), "<em>$1</em>");
-    r = r.replace(/``(.*?)``/g, "<code>$1</code>");
-    
-    // unordered lists
-    r = r.replace(/^\*\*\*\* (.*)/gm, "<ul><ul><ul><ul><li>$1</li></ul></ul></ul></ul>");
-    r = r.replace(/^\*\*\* (.*)/gm, "<ul><ul><ul><li>$1</li></ul></ul></ul>");
-    r = r.replace(/^\*\* (.*)/gm, "<ul><ul><li>$1</li></ul></ul>");
-    r = r.replace(/^\* (.*)/gm, "<ul><li>$1</li></ul>");
-    for (ii = 0; ii < 3; ii++) r = r.replace(new RegExp("</ul>" + newline + "<ul>", "g"), newline);
-    
+    r = r.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    //r = r.replace(new RegExp("//(((?!https?://).)*?)//", "g"), "<em>$1</em>");
+    r = r.replace(/`(.*?)`/g, "<code>$1</code>");
 
-    r = r.replace(/^\+\+\+\+ (.*)/gm, "<ul><ul><ul><ul><li>$1</li></ul></ul></ul></ul>");
-    r = r.replace(/^\+\+\+ (.*)/gm, "<ul><ul><ul><li>$1</li></ul></ul></ul>");
-    r = r.replace(/^\+\+ (.*)/gm, "<ul><ul><li>$1</li></ul></ul>");
+    r = r.replace(/^            \+ (.*)/gm, "<ul><ul><ul><ul><li>$1</li></ul></ul></ul></ul>");
+    r = r.replace(/^        \+ (.*)/gm, "<ul><ul><ul><li>$1</li></ul></ul></ul>");
+    r = r.replace(/^    \+ (.*)/gm, "<ul><ul><li>$1</li></ul></ul>");
     r = r.replace(/^\+ (.*)/gm, "<ul><li>$1</li></ul>");
     for (ii = 0; ii < 3; ii++) r = r.replace(new RegExp("</ul>" + newline + "<ul>", "g"), newline);
 
-    r = r.replace(/^---- (.*)/gm, "<ul><ul><ul><ul><li>$1</li></ul></ul></ul></ul>");
-    r = r.replace(/^--- (.*)/gm, "<ul><ul><ul><li>$1</li></ul></ul></ul>");
-    r = r.replace(/^-- (.*)/gm, "<ul><ul><li>$1</li></ul></ul>");
+    r = r.replace(/^            - (.*)/gm, "<ul><ul><ul><ul><li>$1</li></ul></ul></ul></ul>");
+    r = r.replace(/^        - (.*)/gm, "<ul><ul><ul><li>$1</li></ul></ul></ul>");
+    r = r.replace(/^    - (.*)/gm, "<ul><ul><li>$1</li></ul></ul>");
     r = r.replace(/^- (.*)/gm, "<ul><li>$1</li></ul>");
     for (ii = 0; ii < 3; ii++) r = r.replace(new RegExp("</ul>" + newline + "<ul>", "g"), newline);
 
+
+// images
+    r = r.replace(/\!\[(.*?)\]\((.*?)\)/g, "<img src=\"" + "$2" + "\" />");
+
     // links
-    r = r.replace(/\[\[(http:[^\]|]*?)\]\]/g, "<a target='_blank' href='$1'>$1</a>");
-    r = r.replace(/\[\[(http:[^|]*?)\|(.*?)\]\]/g, "<a target='_blank' href='$1'>$2</a>");
-    r = r.replace(/\[\[([^\]|]*?)\]\]/g, "<a href='$1'>$1</a>");
-    r = r.replace(/\[\[([^|]*?)\|(.*?)\]\]/g, "<a href='$1'>$2</a>");
+    r = r.replace(/\[(.*?)\]\((http[^|]*?)\)/g, "<a target='_blank' href='$2'>$1</a>");
+
     
-    // images
-    r = r.replace(/\{\{([^\]|]*?)\}\}/g, "<img src='$1'>");
-    r = r.replace(/\{\{([^|]*?)\|(.*?)\}\}/g, "<img src='$1' alt='$2'>");
-    
+
     // video
     //r = r.replace(/<<(.*?)>>/g, "<embed class='video' src='$1' allowfullscreen='true' allowscriptaccess='never' type='application/x-shockwave/flash'></embed>");
     
@@ -82,7 +74,7 @@ namespace markdown {
             p[i] = p[i].replace(/ \|= /g, "</th><th>").replace(/\|= /g, "<tr><th>").replace(/ \|=/g, "</th></tr>");
             p[i] = p[i].replace(/ \| /g, "</td><td>").replace(/\| /g, "<tr><td>").replace(/ \|/g, "</td></tr>");
             p[i] = "<table border>" + p[i] + "</table>";
-        } else if (p[i].length >= 2 && p[i].charAt(0) == ">" && p[i].charAt(1) == " ") {
+        } else if (p[i].length >= 2 && p[i].charAt(0) == ">" ) {
             // format the paragraph as a blockquote
             blockLevel = true;
             p[i] = "<blockquote>" + p[i].replace(/^> /gm, "") + "</blockquote>";

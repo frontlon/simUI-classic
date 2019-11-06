@@ -255,6 +255,11 @@ view.root.on("ready", function(){
         };
     });
 
+    //设置菜单 帮助按钮
+    $(#help).on("click", function(evt) {
+        Sciter.launch("http://www.simui.net/");
+    });
+
     //侧边栏切换模拟器
     self.on("click", "#sim_select > li", function(evt) {
         this.state.current = true;

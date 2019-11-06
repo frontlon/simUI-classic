@@ -26,11 +26,17 @@
       .desc p{line-height:1.5em;}
       .title_h1{display:block;font-size:14dip;font-style:italic;font-weight:normal;margin:80dip 8dip 40dip 0;text-align:right;color:color(desc-title-text-color);line-height:2em;padding-left:40dip}
 
-      .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;}
-      .markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{line-height:3em}
+      .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+      .markdown p{margin-bottom:13dip}
+      .markdown a{color:color(desc-content-text-color)}
+      .markdown a:hover{opacity: 0.5;}
+      .markdown img{margin:0 auto;display:block;}
+      .markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{line-height:2em;display:block;margin-bottom:13dip}
+      .markdown h1,.markdown h2{border-bottom:1px solid;}
       .markdown hr{border:0;border-bottom:1dip solid color(desc-content-text-color);margin:12dip 0}
-      .markdown pre{margin:0;border:1dip solid #ccc;padding:4dip}
-      .markdown code{background:#333}
+      .markdown pre,.markdown code{margin:10dip;border:1dip solid color(desc-content-text-color);opacity: 0.5; padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+      .markdown table{width:*}
+      .markdown blockquote{border-left:3dip solid color(desc-content-text-color);padding-left:10dip;margin:15dip 0 15dip 20dip;opacity: 0.5;}
       .markdown table[border]{border-spacing:-1dip;border:none;margin:1em 0}
       .markdown table[border] td{border:1dip solid #bbb;padding:2dip 4dip}
       .markdown table[border] th{border:1dip solid #bbb;padding:2dip 4dip;background:#eee}

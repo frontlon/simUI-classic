@@ -10,6 +10,7 @@ function createLang(){
     $(#lang_config).html = CONF.Lang.Config;
     $(#lang_theme).html = CONF.Lang.Theme;
     $(#lang_about).html = CONF.Lang.About;
+    $(#lang_help).html = CONF.Lang.Help;
     $(#book).attributes["title"] = CONF.Lang.OpenBook;
     $(#create).attributes["title"] = CONF.Lang.createCache;
     $(#switch_romlist).attributes["title"] = CONF.Lang.SwitchRomlist;

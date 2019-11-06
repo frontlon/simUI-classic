@@ -46,6 +46,13 @@ view.root.on("ready", function(){
         $(#desc_doc).html = markdown.parse(detailObj.DocContent);
     });
 
+    //打开网址
+    self.on("click", "a", function(evt) {
+        var href = this.attributes["href"];
+        Sciter.launch(href);
+        return true;
+    });
+
     //攻略按钮
     self.on("click", "#btn_desc_strategy", function(evt) {
         this.state.current = true;

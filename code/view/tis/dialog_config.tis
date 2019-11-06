@@ -269,6 +269,7 @@ function createLang(){
     $(#lang_SanpMenu).html = CONF.Lang.SanpMenu;
     $(#lang_DescMenu).html = CONF.Lang.DescMenu;
     $(#lang_StrategyMenu).html = CONF.Lang.StrategyMenu;
+    $(#lang_Romlist).html = CONF.Lang.Romlist;
     $(#platform_submit).html = CONF.Lang.UpdateConfig;
     $(#lang_SelectFolder1).attributes["caption"] = CONF.Lang.SelectFolder;
     $(#lang_SelectFolder2).attributes["caption"] = CONF.Lang.SelectFolder;

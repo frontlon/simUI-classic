@@ -545,7 +545,7 @@ func defineViewFunction(w *window.Window) {
 
 		//生成新文件
 		platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
-	
+
 
 		newFileName := platformPathAbs + separator + GetFileName(filepath.Base(vo.RomPath)) + path.Ext(newpath) //生成新文件的完整绝路路径地址
 		f, err := os.Create(newFileName)
