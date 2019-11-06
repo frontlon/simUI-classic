@@ -25,7 +25,7 @@ type Platform struct {
 //添加平台
 func (v *Platform) Add() (uint32, error) {
 
-	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, romlist, status, pinyin) values(?,?,?,?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, strategy_path, romlist, pinyin) values(?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		fmt.Println(err.Error())
