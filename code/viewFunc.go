@@ -76,16 +76,20 @@ func defineViewFunction(w *window.Window) {
 			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
 		}
 
-		cmd := ""
+		//加载运行参数
+		cmd := []string{}
 		if sim.Cmd == "" {
-			cmd = rom.RomPath
+			cmd = append(cmd,rom.RomPath)
 		} else {
+			cmd = strings.Split(sim.Cmd," ")
 			filename := filepath.Base(rom.RomPath) //exe运行文件路径
-			cmd = strings.ReplaceAll(sim.Cmd, `{RomName}`, GetFileName(filename))
-			cmd = strings.ReplaceAll(cmd, `{RomExt}`, path.Ext(filename))
-			cmd = strings.ReplaceAll(cmd, `{RomFullPath}`, rom.RomPath)
+			//替换变量
+			for k,_ :=range cmd{
+				cmd[k] = strings.ReplaceAll(cmd[k], `{RomName}`, GetFileName(filename))
+				cmd[k] = strings.ReplaceAll(cmd[k], `{RomExt}`, path.Ext(filename))
+				cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
+			}
 		}
-
 		err = runGame(sim.Path, cmd)
 		if err != nil {
 			return errorMsg(w, err.Error())
@@ -102,7 +106,7 @@ func defineViewFunction(w *window.Window) {
 			return errorMsg(w, Config.Lang["BookNotFound"])
 		}
 
-		err = runGame(Config.Default.Book, "")
+		err = runGame(Config.Default.Book, []string{})
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
