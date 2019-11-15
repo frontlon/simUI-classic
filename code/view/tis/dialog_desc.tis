@@ -26,16 +26,16 @@ view.root.on("ready", function(){
     //初始化读取内容
     if(detailObj.DocContent != ""){$(#btn_desc_doc).style["display"] = "block";}
     if(detailObj.StrategyContent != ""){$(#btn_desc_strategy).style["display"] = "block";}
-    if(detailObj.DocContent != ""){
-        $(#btn_desc_doc).state.current = true;
-        $(#desc_doc).html = markdown.parse(detailObj.DocContent);        
-        $(#desc_doc).style["display"] = "block";
-        $(#desc_strategy).style["display"] = "none";
-    }else if(detailObj.StrategyContent != ""){
+    if(detailObj.StrategyContent != ""){
         $(#btn_desc_strategy).state.current = true;
         $(#desc_strategy).html = markdown.parse(detailObj.StrategyContent);        
         $(#desc_strategy).style["display"] = "block";
         $(#desc_doc).style["display"] = "none";
+    }else if(detailObj.DocContent != ""){
+        $(#btn_desc_doc).state.current = true;
+        $(#desc_doc).html = markdown.parse(detailObj.DocContent);        
+        $(#desc_doc).style["display"] = "block";
+        $(#desc_strategy).style["display"] = "none";
     }
 
     //简介按钮

@@ -114,6 +114,7 @@ function createRomList(cls=0){
     }
     romlist.append(data);
     SCROLL_PAGE++;
+
 }
 
 //rom搜索功能
@@ -316,6 +317,9 @@ function createAllCache(showMsgbox){
             //更新配置
             initConfig("1");
 
+            //重置滚动翻页数据
+            resetScroll();
+
             //初始化rom
             var pf = CONF.Default.Platform;
             ROMJSON = view.GetGameList(pf,"","","",0)
@@ -380,7 +384,10 @@ function numSearch(evt){
         num = "";
     }
 
-    SCROLL_PAGE = 0;
+    
+    //重置滚动翻页数据
+    resetScroll();
+
     ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE);
     createRomList(1);
 

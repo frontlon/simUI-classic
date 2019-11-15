@@ -31,7 +31,7 @@ func (r *Rom) UpdateSert() error {
 	//先查询记录是否存在
 	id := 0
 	sql := "SELECT id FROM rom "
-	sql += ` WHERE platform = ` + utils.ToString(r.Platform) + ` AND name = '` + r.Name + `'`
+	sql += ` WHERE platform = ` + utils.ToString(r.Platform) + ` AND name = '` + r.Name + `'`+ ` AND pname = '` + r.Pname + `'`
 
 	err := sqlite.QueryRow(sql).Scan(&id)
 
@@ -189,6 +189,7 @@ func (*Rom) GetByPinyin(pages int, platform string, menu string, keyword string)
 		offset := pages * num
 		sql += " OFFSET " + utils.ToString(offset)
 	}
+
 	rows, err := sqlite.Query(sql)
 	if err != nil {
 		return volist, err
@@ -231,6 +232,7 @@ func (*Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	if keyword != "" {
 		sql += " AND name LIKE '%" + keyword + "%'"
 	}
+
 	rows := sqlite.QueryRow(sql)
 	err := rows.Scan(&count)
 	return count, err

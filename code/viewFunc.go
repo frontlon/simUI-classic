@@ -4,7 +4,6 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
-	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -23,6 +22,7 @@ import (
 func defineViewFunction(w *window.Window) {
 
 	w.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
+
 		ctype := args[0].String()
 		isfresh := args[1].String()
 
@@ -42,6 +42,7 @@ func defineViewFunction(w *window.Window) {
 
 	//运行游戏
 	w.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
+
 		id := args[0].String()
 		simId := uint32(utils.ToInt(args[1].String()))
 
@@ -246,6 +247,7 @@ func defineViewFunction(w *window.Window) {
 		}
 		//子游戏列表
 		sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
+
 		res.Info = info
 		res.Sublist = sub
 		res.DocContent = getDocContent(info.DocPath)
@@ -539,7 +541,7 @@ func defineViewFunction(w *window.Window) {
 			err := os.Rename(oldFilePath, bakFolder+bakFileName)
 
 			if err != nil {
-				fmt.Println(err.Error())
+				return errorMsg(w, err.Error())
 			}
 		}
 
