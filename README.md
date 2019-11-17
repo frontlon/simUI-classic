@@ -1,6 +1,6 @@
 
 
-![](readme\logo.jpg)
+![](readme/logo.jpg)
 
 
 
