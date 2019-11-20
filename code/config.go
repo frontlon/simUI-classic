@@ -205,7 +205,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 				}
 			}
 			themelist[id] = &ThemeStruct{
-				Name:   GetFileName(fi.Name()),
+				Name:   utils.GetFileName(fi.Name()),
 				Path:   filename,
 				Params: params,
 			}
@@ -252,7 +252,7 @@ func getLang(lang string) (map[string]string, error) {
 	section := make(map[string]string)
 
 	//如果默认语言不存在，则读取列表中的其他语言
-	if !Exists(fpath) {
+	if !utils.FileExists(fpath) {
 		if len(Config.LangList) > 0 {
 			for langName, langFile := range Config.LangList {
 				fpath = langpath + langFile

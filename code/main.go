@@ -13,8 +13,8 @@ import (
 var separator = string(os.PathSeparator) //系统路径分隔符
 //路径分隔符
 var constMenuRootKey = "_7b9"                                                //根子目录游戏的Menu参数
-//var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-var constMainFile = "this://app/main.html" //主文件路径（正式）
+var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+//var constMainFile = "this://app/main.html" //主文件路径（正式）
 
 func main() {
 
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	//设置view权限
-	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO | sciter.ALLOW_SOCKET_IO);
+	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO | sciter.ALLOW_FILE_IO |sciter.ALLOW_SOCKET_IO);
 
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))

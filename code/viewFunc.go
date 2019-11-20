@@ -4,13 +4,13 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -19,6 +19,7 @@ import (
 /**
  * 定义view用function
  **/
+
 func defineViewFunction(w *window.Window) {
 
 	w.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
@@ -72,21 +73,21 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//检测rom文件是否存在
-		if Exists(rom.RomPath) == false {
+		if utils.FileExists(rom.RomPath) == false {
 			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
 		}
 
 		//加载运行参数
 		cmd := []string{}
 		if sim.Cmd == "" {
-			cmd = append(cmd,rom.RomPath)
+			cmd = append(cmd, rom.RomPath)
 		} else {
-			cmd = strings.Split(sim.Cmd," ")
+			cmd = strings.Split(sim.Cmd, " ")
 			filename := filepath.Base(rom.RomPath) //exe运行文件路径
 			//替换变量
-			for k,_ :=range cmd{
-				cmd[k] = strings.ReplaceAll(cmd[k], `{RomName}`, GetFileName(filename))
-				cmd[k] = strings.ReplaceAll(cmd[k], `{RomExt}`, path.Ext(filename))
+			for k, _ := range cmd {
+				cmd[k] = strings.ReplaceAll(cmd[k], `{RomName}`, utils.GetFileName(filename))
+				cmd[k] = strings.ReplaceAll(cmd[k], `{RomExt}`, utils.GetFileExt(filename))
 				cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
 			}
 		}
@@ -161,20 +162,89 @@ func defineViewFunction(w *window.Window) {
 			pfs = append(pfs, utils.ToString(k))
 		}
 
-		if err := (&db.Rom{}).DeleteByPlatformNotExists(pfs); err != nil {
+		//清空不存在的平台（rom表）
+		if err := (&db.Rom{}).ClearByPlatform(pfs); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
-		//先清空menu表
-		if err := (&db.Menu{}).ClearMenu(0); err != nil {
+		//清空不存在的平台（menu表）
+		if err := (&db.Menu{}).ClearByPlatform(pfs); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
-		for k, _ := range Config.Platform {
-			err := CreateRomCache(k)
+		//开始重建缓存
+		for platform, _ := range Config.Platform {
+			//创建rom数据
+			romlist,uniqs,err := CreateRomCache(platform)
 			if err != nil {
 				return errorMsg(w, err.Error())
 			}
+
+			menus := []string{}
+
+			//删除当前平台下，不存在的rom
+			if err := (&db.Rom{}).DeleteNotExists(platform, uniqs); err != nil {
+			}
+
+			//删除当前平台下不存在的菜单
+			if err := (&db.Menu{}).DeleteNotExists(platform, menus); err != nil {
+			}
+
+
+			issetMd5, err :=  (&db.Rom{}).GetMd5ByMd5(platform,uniqs)
+			if err != nil{
+				return errorMsg(w, err.Error())
+			}
+
+			//取出需要写入数据库的rom数据。
+			saveRomlist := []*db.Rom{}
+			for _,v := range romlist{
+				if utils.InSliceString(v.Md5,issetMd5) == false{
+					saveRomlist = append(saveRomlist,v)
+				}
+			}
+
+			//保存新数据到数据库rom表
+			if len(saveRomlist) > 0 {
+				for _, v := range saveRomlist {
+					if err := v.Add(); err != nil {
+						fmt.Println(err.Error())
+					}
+				}
+			}
+
+			//保存数据到数据库cate表
+			if len(menuList) > 0 {
+				for _, v := range menuList {
+					if err := v.Add(); err != nil {
+					}
+				}
+
+			}
+
+			//这些变量较大，写入完成后清理变量
+			romlist = []*db.Rom{}
+			saveRomlist = []*db.Rom{}
+			menuList = make(map[string]*db.Menu)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 		return sciter.NullValue()
 	})
@@ -254,8 +324,33 @@ func defineViewFunction(w *window.Window) {
 
 		res.Info = info
 		res.Sublist = sub
-		res.DocContent = getDocContent(info.DocPath)
-		res.StrategyContent = getDocContent(info.StrategyPath)
+
+		//读取文档内容
+		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+		if Config.Platform[info.Platform].DocPath != "" {
+
+			docFileName := "";
+			for _, v := range DOC_EXTS {
+				docFileName = Config.Platform[info.Platform].DocPath + separator + romName + v
+				res.DocContent = getDocContent(docFileName)
+				if res.DocContent != "" {
+					break
+				}
+			}
+
+		}
+		if Config.Platform[info.Platform].StrategyPath != "" {
+
+			strategyFileName := "";
+			for _, v := range DOC_EXTS {
+				strategyFileName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
+				res.StrategyContent = getDocContent(strategyFileName)
+				if res.StrategyContent != "" {
+					break
+				}
+			}
+
+		}
 		jsonMenu, _ := json.Marshal(&res)
 		return sciter.NewValue(string(jsonMenu))
 	})
@@ -513,17 +608,11 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//下载成功后，备份原文件
-		oldFilePath := ""
 		platformPath := ""
 		//原图存在，则备份
-		isset := false
 		if typeid == 1 {
-			isset = Exists(vo.ThumbPath)
-			oldFilePath = vo.ThumbPath
 			platformPath = Config.Platform[vo.Platform].ThumbPath
 		} else {
-			isset = Exists(vo.SnapPath)
-			oldFilePath = vo.SnapPath
 			platformPath = Config.Platform[vo.Platform].SnapPath
 		}
 
@@ -531,46 +620,36 @@ func defineViewFunction(w *window.Window) {
 			return errorMsg(w, Config.Lang["NoSetThumbDir"])
 		}
 
-		if isset == true {
+		//开始备份原图
+		bakFolder := Config.RootPath + "bak" + separator
+		RomFileName := utils.GetFileName(vo.RomPath)
 
-			bakFolder := Config.RootPath + "bak " + separator
-			//检测bak文件夹是否存在，不存在这创建bak目录
-			folder := ExistsFolder(bakFolder)
-			if folder == false {
-				_ = os.Mkdir(bakFolder, os.ModePerm);
-			}
-
-			oldFileName := filepath.Base(oldFilePath)
-			bakFileName := GetFileName(oldFileName) + "_" + utils.ToString(time.Now().Unix()) + path.Ext(oldFileName)
-			err := os.Rename(oldFilePath, bakFolder+bakFileName)
-
-			if err != nil {
-				return errorMsg(w, err.Error())
+		//检测bak文件夹是否存在，不存在这创建bak目录
+		folder := utils.PathExists(bakFolder)
+		if folder == false {
+			_ = os.Mkdir(bakFolder, os.ModePerm);
+		}
+		for _, ext := range PIC_EXTS {
+			oldFileName := RomFileName + ext //老图片文件名
+			if utils.FileExists(oldFileName) {
+				bakFileName := RomFileName + "_" + utils.ToString(time.Now().Unix()) + ext //生成备份文件名
+				err := os.Rename(oldFileName, bakFolder+bakFileName)                       //移动文件
+				if err != nil {
+					return errorMsg(w, err.Error())
+				}
 			}
 		}
 
 		//生成新文件
 		platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
 
-
-		newFileName := platformPathAbs + separator + GetFileName(filepath.Base(vo.RomPath)) + path.Ext(newpath) //生成新文件的完整绝路路径地址
+		newFileName := platformPathAbs + separator + RomFileName + utils.GetFileExt(newpath) //生成新文件的完整绝路路径地址
 		f, err := os.Create(newFileName)
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
 		io.Copy(f, res.Body)
 
-		if typeid == 1 {
-			rom.ThumbPath = newFileName
-		} else {
-			rom.SnapPath = newFileName
-		}
-
-		//游戏游戏详细数据
-		err = rom.UpdatePic()
-		if err != nil {
-			return errorMsg(w, err.Error())
-		}
 		return sciter.NewValue(newFileName)
 	})
 
