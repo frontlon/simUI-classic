@@ -107,3 +107,25 @@ func (sim *Menu) ClearByPlatform(platforms []string) (error) {
 	}
 	return nil
 }
+
+
+//根据一组名称，查询存在的名称，用于取交集
+func (sim *Menu) GetMenuByNames(platform uint32, names []string) ([]string,error) {
+
+	nameStr := strings.Join(names, "\",\"")
+	nameStr = "\"" + nameStr + "\""
+
+	nameList := []string{}
+	sql := "SELECT id FROM menu WHERE platform = " + utils.ToString(platform) + " AND name in (" + nameStr + ")"
+	rows, err := sqlite.Query(sql)
+	if err != nil {
+		return nameList, err
+	}
+
+	for rows.Next() {
+		n := ""
+		err = rows.Scan(&n)
+		nameList = append(nameList, n)
+	}
+	return nameList, err
+}

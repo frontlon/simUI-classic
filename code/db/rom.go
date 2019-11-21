@@ -26,7 +26,7 @@ type Rom struct {
 //插入rom数据
 func (r *Rom) Add() error {
 
-	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin) values(?,?,?,?,?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin) values(?,?,?,?,?,?)")
 	if err != nil {
 		fmt.Println(err.Error())
 		return err

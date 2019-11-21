@@ -4,7 +4,6 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
-	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -157,93 +156,28 @@ func defineViewFunction(w *window.Window) {
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 		//先检查平台，将不存在的平台数据先干掉
-		pfs := []string{}
-		for k, _ := range Config.Platform {
-			pfs = append(pfs, utils.ToString(k))
-		}
-
-		//清空不存在的平台（rom表）
-		if err := (&db.Rom{}).ClearByPlatform(pfs); err != nil {
-			return errorMsg(w, err.Error())
-		}
-
-		//清空不存在的平台（menu表）
-		if err := (&db.Menu{}).ClearByPlatform(pfs); err != nil {
+		if err := ClearPlatform();err != nil{
 			return errorMsg(w, err.Error())
 		}
 
 		//开始重建缓存
 		for platform, _ := range Config.Platform {
+
 			//创建rom数据
-			romlist,uniqs,err := CreateRomCache(platform)
+			romlist, menu,err := CreateRomCache(platform)
 			if err != nil {
 				return errorMsg(w, err.Error())
 			}
 
-			menus := []string{}
-
-			//删除当前平台下，不存在的rom
-			if err := (&db.Rom{}).DeleteNotExists(platform, uniqs); err != nil {
-			}
-
-			//删除当前平台下不存在的菜单
-			if err := (&db.Menu{}).DeleteNotExists(platform, menus); err != nil {
-			}
-
-
-			issetMd5, err :=  (&db.Rom{}).GetMd5ByMd5(platform,uniqs)
-			if err != nil{
+			//更新rom数据
+			if err := UpdateRomDB(platform,romlist);err != nil{
 				return errorMsg(w, err.Error())
 			}
 
-			//取出需要写入数据库的rom数据。
-			saveRomlist := []*db.Rom{}
-			for _,v := range romlist{
-				if utils.InSliceString(v.Md5,issetMd5) == false{
-					saveRomlist = append(saveRomlist,v)
-				}
+			//更新menu数据
+			if err := UpdateMenuDB(platform,menu);err != nil{
+				return errorMsg(w, err.Error())
 			}
-
-			//保存新数据到数据库rom表
-			if len(saveRomlist) > 0 {
-				for _, v := range saveRomlist {
-					if err := v.Add(); err != nil {
-						fmt.Println(err.Error())
-					}
-				}
-			}
-
-			//保存数据到数据库cate表
-			if len(menuList) > 0 {
-				for _, v := range menuList {
-					if err := v.Add(); err != nil {
-					}
-				}
-
-			}
-
-			//这些变量较大，写入完成后清理变量
-			romlist = []*db.Rom{}
-			saveRomlist = []*db.Rom{}
-			menuList = make(map[string]*db.Menu)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		}
 		return sciter.NullValue()
