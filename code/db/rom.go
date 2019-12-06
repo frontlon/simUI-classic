@@ -26,14 +26,14 @@ type Rom struct {
 //插入rom数据
 func (r *Rom) Add() error {
 
-	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin) values(?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin,md5) values(?,?,?,?,?,?,?)")
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
 	}
 
 	//开始写入父rom
-	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.Pinyin);
+	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.Pinyin,r.Md5);
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -118,7 +118,7 @@ func (*Rom) GetById(id string) (*Rom, error) {
 	vo := &Rom{}
 	sql := "SELECT * FROM rom where id= '" + id + "'"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin)
+	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin,&vo.Md5)
 	return vo, err
 }
 
@@ -179,7 +179,7 @@ func (*Rom) GetByStar(platform string, star uint8) (*Rom, error) {
 
 	sql := "SELECT * FROM rom WHERE " + where + " star = " + utils.ToString(star)
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.Pinyin)
+	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.Pinyin,&vo.Md5)
 	return vo, err
 }
 
@@ -262,7 +262,7 @@ func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string,error) {
 	uniqStr = "\"" + uniqStr + "\""
 
 	md5List := []string{}
-	sql := "SELECT id FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 in (" + uniqStr + ")"
+	sql := "SELECT md5 FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 in (" + uniqStr + ")"
 	rows, err := sqlite.Query(sql)
 	if err != nil {
 		return md5List, err
@@ -279,15 +279,15 @@ func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string,error) {
 //删除指定平台下，不存在的rom
 func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
 
+	sql := ""
+	//如果为空，说明目录下没有rom，全部删除
 	if len(uniq) == 0 {
-		return nil
+		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform)
+	}else{
+		uniqStr := strings.Join(uniq, "\",\"")
+		uniqStr = "\"" + uniqStr + "\""
+		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
 	}
-
-	uniqStr := strings.Join(uniq, "\",\"")
-	uniqStr = "\"" + uniqStr + "\""
-
-	sql := "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
-
 	//删除主记录
 	_, err := sqlite.Exec(sql)
 	if err != nil {
@@ -295,8 +295,6 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
 	}
 	return nil
 }
-
-
 
 //删除不存在的平台下的所有rom
 func (sim *Rom) ClearByPlatform(platforms []string) (error) {
@@ -311,6 +309,15 @@ func (sim *Rom) ClearByPlatform(platforms []string) (error) {
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+//清空表数据
+func (sim *Rom) Truncate() (error) {
+	_, err := sqlite.Exec("DELETE FROM rom")
+	if err != nil {
 		return err
 	}
 	return nil

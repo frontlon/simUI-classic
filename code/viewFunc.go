@@ -72,6 +72,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//检测rom文件是否存在
+		rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
 		if utils.FileExists(rom.RomPath) == false {
 			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
 		}
@@ -153,7 +154,24 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NullValue()
 	})
 
-	//生成所有缓存
+	//删除所有缓存
+	w.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
+
+		//清空rom表
+		if err := (&db.Rom{}).Truncate();err != nil{
+			return errorMsg(w, err.Error())
+		}
+
+		//清空menu表
+		if err := (&db.Menu{}).Truncate();err != nil{
+			return errorMsg(w, err.Error())
+		}
+
+		return sciter.NullValue()
+	})
+
+
+		//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 		//先检查平台，将不存在的平台数据先干掉
 		if err := ClearPlatform();err != nil{
@@ -168,6 +186,7 @@ func defineViewFunction(w *window.Window) {
 			if err != nil {
 				return errorMsg(w, err.Error())
 			}
+
 
 			//更新rom数据
 			if err := UpdateRomDB(platform,romlist);err != nil{
@@ -337,6 +356,18 @@ func defineViewFunction(w *window.Window) {
 
 		id := uint32(utils.ToInt(d["id"]))
 
+		//取掉路径结尾路径分隔符
+		d["rom"] = strings.TrimRight(d["rom"],`\`)
+		d["rom"] = strings.TrimRight(d["rom"],`/`)
+		d["thumb"] = strings.TrimRight(d["thumb"],`\`)
+		d["thumb"] = strings.TrimRight(d["thumb"],`/`)
+		d["snap"] = strings.TrimRight(d["snap"],`\`)
+		d["snap"] = strings.TrimRight(d["snap"],`/`)
+		d["strategy"] = strings.TrimRight(d["strategy"],`\`)
+		d["strategy"] = strings.TrimRight(d["strategy"],`/`)
+		d["doc"] = strings.TrimRight(d["doc"],`\`)
+		d["doc"] = strings.TrimRight(d["doc"],`/`)
+		
 		exts := strings.Split(d["exts"], ",")
 
 		platform := &db.Platform{

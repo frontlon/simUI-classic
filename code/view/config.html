@@ -20,7 +20,7 @@
 
     html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
     .wrapper{width:*;height:*;flow:horizontal-flow;overflow:hidden;padding:8dip;}
-    .frame_left{width:120dip;height:*;display:inline-block;overflow:hidden;}
+    .frame_left{width:120dip;height:*;display:inline-block;}
     .frame_right{width:320dip;height:*;display:inline-block;padding-left:8dip;}
     .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip}
     
@@ -32,9 +32,10 @@
     .platform_list option{height:24dip;line-height:24dip}
     #table_default td:first-child{width:120dip;}
 
-    .platform_control a{width:16dip;height:16dip;line-height:16dip;display:inline-block;border:1dip solid #ccc;border-top:0;border-right:0;text-align:center;}
-    .platform_control a:hover{background:#ccc;}
-    .platform_control a:active{background:#666;}
+    .platform_control{height:16dip;flow:horizontal-flow;}
+    .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
+    .platform_control button:hover{background:#eee;cursor: pointer}
+    .platform_control button:active{background:#ddd}
     .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #ccc;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
 
   </style>
@@ -63,7 +64,10 @@
         <div class="wrapper">
           <div class="frame_left">
               <select class="platform_list" id="platform_list" size="5"></select>
-              <div class="platform_control"><a class="sub" id="platform_del" title="">-</a><a class="add" id="platform_add" title="">+</a><input type="text" value="" id="platform_add_name" novalue=""/></div>
+              <div class="platform_control">
+                <button class="sub" id="platform_del" title="">删除平台</button>
+                <button class="add" id="platform_add" title="">添加平台</button>
+              </div>
           </div>
           <div class="frame_right">
             <table>
@@ -90,6 +94,11 @@
 
     </panels>
   </tabs>
+
+
+  <div id="msg-box-contnent" style="display:none">
+      <label>Name:</label><input name="namess" type="text" />
+  </div>
 
   <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/tabs.tis";

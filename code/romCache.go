@@ -27,6 +27,9 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 				return err
 			}
 
+			//转换为相对路径
+			p = strings.Replace(p,RomPath + separator,"",-1)
+
 			//整理目录格式，并转换为数组
 			newpath := strings.Replace(RomPath, "/", "\\", -1)
 			newpath = strings.Replace(p, newpath, "", -1)
@@ -100,55 +103,6 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 		}); err != nil {
 	}
 
-	/*
-		menus := []string{}
-
-		//删除当前平台下，不存在的rom
-		if err := (&db.Rom{}).DeleteNotExists(platform, uniqs); err != nil {
-		}
-
-		//删除当前平台下不存在的菜单
-		if err := (&db.Menu{}).DeleteNotExists(platform, menus); err != nil {
-		}
-
-
-		issetMd5, err :=  (&db.Rom{}).GetMd5ByMd5(platform,uniqs)
-		if err != nil{
-			return err
-		}
-
-		//取出需要写入数据库的rom数据。
-		saveRomlist := []*db.Rom{}
-		for _,v := range romlist{
-			if utils.InSliceString(v.Md5,issetMd5) == false{
-				saveRomlist = append(saveRomlist,v)
-			}
-		}
-
-		//保存新数据到数据库rom表
-		if len(saveRomlist) > 0 {
-			for _, v := range saveRomlist {
-				if err := v.Add(); err != nil {
-					fmt.Println(err.Error())
-				}
-			}
-		}
-
-		//保存数据到数据库cate表
-		if len(menuList) > 0 {
-			for _, v := range menuList {
-				if err := v.Add(); err != nil {
-				}
-			}
-
-		}
-
-		//这些变量较大，写入完成后清理变量
-		romlist = []*db.Rom{}
-		saveRomlist = []*db.Rom{}
-		menuList = make(map[string]*db.Menu)
-	*/
-
 	return romlist, menuList,nil
 }
 
@@ -198,6 +152,7 @@ func UpdateRomDB(platform uint32,romlist []*db.Rom) error{
 
 	//取出需要写入数据库的rom数据。
 	saveRomlist := []*db.Rom{}
+
 	for _, v := range romlist {
 		if utils.InSliceString(v.Md5, issetMd5) == false {
 			saveRomlist = append(saveRomlist, v)
@@ -258,7 +213,7 @@ func UpdateMenuDB(platform uint32,menumap map[string]*db.Menu) error{
 
 	//保存数据到数据库cate表
 	if len(saveMenulist) > 0 {
-		for _, v := range menumap {
+		for _, v := range saveMenulist {
 			if err := v.Add(); err != nil {
 			}
 		}

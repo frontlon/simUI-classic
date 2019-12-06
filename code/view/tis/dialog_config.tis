@@ -201,8 +201,18 @@ event click $(.openfile){
 
 //添加平台
 event click $(#platform_add){
-    var name = $(#platform_add_name).value.toString();
-    if(name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
+    var name =  view.dialog({
+        url:self.url(ROOTPATH + "dialog_add_platform.html"),
+        width:300,
+        height:158,
+        parameters: {};
+    });
+
+    if(name == "" || name == undefined){
+        return;
+    }
+
+    //开始添加平台
     var insertId = view.parameters.addPlatform(name);
     if(insertId != "0"){
         var newopt = "<option value='"+ insertId +"'>"+ name +"</option>";
@@ -257,7 +267,6 @@ function createLang(){
     $(#config_search_engines).attributes["title"] = CONF.Lang.PicSearchEnginesTitle;
     $(#platform_del).attributes["title"] = CONF.Lang.DeleteSelectPlatform;
     $(#platform_add).attributes["title"] = CONF.Lang.AddNewPlatform;
-    $(#platform_add_name).attributes["novalue"] = CONF.Lang.InputPlatformName;
     $(#lang_BaseInfo).html = CONF.Lang.BaseInfo;
     $(#lang_Title).html = CONF.Lang.Title;
     $(#lang_RomType).html = CONF.Lang.RomType;

@@ -195,7 +195,7 @@ view.root.on("ready", function(){
         view.dialog({
             url:self.url(ROOTPATH + "config.html"),
             width:650,
-            height:635,
+            height:650,
             parameters: {
                 getPlatform:getPlatform,
                 getPlatformById:getPlatformById,
@@ -284,8 +284,10 @@ function initConfig(isfresh){
     var confstr = view.InitData("config",isfresh);
     CONF = JSON.parse(confstr);
 
+    //如果初始路径不同，则刷新数据
     if(CONF.RootPath != CONF.Default.RootPath){
-        //刷新数据库rom
+        //删除所有缓存后，重建数据库rom
+        view.TruncateRomCache();
         view.CreateRomCache();
         view.UpdateConfig("root_path",CONF.RootPath);
         view.msgbox(#alert,CONF.Lang.FirstBootCreateCache);

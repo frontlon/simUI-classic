@@ -239,24 +239,25 @@ function openSidebar(obj){
         $(#rotate).style["display"] = undefined;
     }
 
- 
+    //显示简介
     if(detailObj.DocContent != ""){
         $(#doc_title).style["display"] = "block";
         $(#doc).style["display"] = "block";
         $(#doc).html = markdown.parse(detailObj.DocContent);
-        $(#right_desc).attributes.removeClass("right_desc_disable");
-        $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
     }else{
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";
-        $(#right_desc).attributes.addClass("right_desc_disable");
-        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
+        
     }
 
-    //如果简介存在，也显示攻略按钮
+    //打开攻略窗口按钮
     if(detailObj.StrategyContent != ""){
         $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
         $(#right_desc).attributes.removeClass("right_desc_disable");
+    }else{
+        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
+        $(#right_desc).attributes.addClass("right_desc_disable");
+
     }
     $(#right_desc).attributes["rid"] = info.Id;
 
