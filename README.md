@@ -16,16 +16,19 @@
 &nbsp;
 ## 下载地址
 
-| 发布时间 | 软件版本 | 软件大小 | 平台 | 下载地址 | 说明 |
-| --- | --- | --- | --- | --- | --- |
-| 2019.11.10 | v2.2.1 | 6.9MB | windows | [32+64位](https://simui-1256145569.cos.ap-beijing.myqcloud.com/simUI_2.2.1%E5%8D%87%E7%BA%A7%E8%A1%A5%E4%B8%81.rar) | 仅升级补丁 |
-| 2019.11.10 | v2.2.1 | 230MB | windows | [32+64位](https://simui-1256145569.cos.ap-beijing.myqcloud.com/simUI.rar) | 带平台实例 |
-| 2019.11.10 | v2.2.1 | 12MB | windows | [32+64位](https://simui-1256145569.cos.ap-beijing.myqcloud.com/simUI%E7%BA%AF%E5%87%80%E7%89%88.rar) | 纯净版 |
-| 2019.07.25 | v2.1 | 9MB | windows | [32位](https://www.ppxclub.com/plugin.php?id=phpdisk_mini:view&file_id=15594)  - [64位](https://www.ppxclub.com/plugin.php?id=phpdisk_mini:view&file_id=15593) | 纯净版 |
-| 2019.06.25 | v2.0 | 9MB | windows | [32位](https://www.ppxclub.com/plugin.php?id=phpdisk_mini:view&file_id=15590)  - [64位](https://www.ppxclub.com/plugin.php?id=phpdisk_mini:view&file_id=15589) | 纯净版 |
-| 2019.06.22 | v1.1 | 23MB | windows | [32位](https://share.weiyun.com/5oBAlmg)  - [64位](https://share.weiyun.com/5oBAlmg) | 带fc游戏 |
+二进制下载地址请见：[http://www.simui.net/](https://www.simui.net/)
 
 ## 更新说明
+
+**v2.2.3**
+
+1. 解决了更新缓存时，无法删除旧rom的问题
+2. 解决了添加平台按钮错位的问题
+
+**v2.2.2**
+
+1. 解决了在大量rom下，更新缓存非常慢的问题。如果你的rom非常多，请升级到该版本
+2. 在没有rom攻略的情况下，不再允许打开攻略窗口
 
 **v2.2.1**
 
