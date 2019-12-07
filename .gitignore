@@ -2,4 +2,4 @@ bak/
 app/
 .idea/
 test/
-code/res.syso
+code/res.go
