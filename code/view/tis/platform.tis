@@ -1,4 +1,6 @@
-﻿  
+﻿
+
+
 //点击平台下拉菜单 - 打开目录
 function openPlatformDir(obj){
     view.OpenFolder(obj.parent.parent.parent.attributes["platform"],obj.attributes["opt"],obj.attributes["sid"]);

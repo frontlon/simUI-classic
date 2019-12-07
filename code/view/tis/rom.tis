@@ -87,6 +87,7 @@ function createRomList(cls=0){
     var switch_romlist = $(#switch_romlist).attributes["value"];
     var title = "";
     var thumb = "";
+     var romPath = "";
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
         romlist.clear();
@@ -102,15 +103,15 @@ function createRomList(cls=0){
             title = "";
         }
 
-        if(obj.ThumbPath != ""){
-            thumb = URL.fromPath(obj.ThumbPath);
-        }else if(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+        //读取缩略图地址
+        romPath = URL.parse(obj.RomPath);
+        thumb = getRomPicPath("thumb",obj.Platform,romPath.name);
+        //没有找到图片，读取默认缩略图
+        if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
             thumb = URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
-        }else{
-            thumb = "";
         }
-
-        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()  +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
+      
+        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()   +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
     }
     romlist.append(data);
     SCROLL_PAGE++;
@@ -214,20 +215,22 @@ function openSidebar(obj){
         favorite.attributes.addClass("funbtn_0");
     }
 
-    var thumb = "";
 
-    //场景图
-    if(info.SnapPath != ""){thumb += "<img src=\""+ URL.fromPath(info.SnapPath) +"\" />";}
-
+    var pics = "";
+    var romPath = URL.parse(info.RomPath);
+    var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
+    var snap = getRomPicPath("snap",info.Platform,romPath.name); //场景图
+    
+    if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     //游戏缩略图
-    if(info.ThumbPath != ""){
-        thumb += "<img src='"+ URL.fromPath(info.ThumbPath) +"' />";
-    }else if(info.SnapPath == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        thumb += "<img src='"+ URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
+    if(thumb != ""){
+        pics += "<img src='"+ thumb +"' />";
+    }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+        pics += "<img src='"+ URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
-
+    
     //滚动图
-    $(#stack).html = thumb;
+    $(#stack).html = pics;
     $(#stack).refresh();
     rotateAttached();
     if($$(#stack > img).length == 1){
@@ -236,24 +239,25 @@ function openSidebar(obj){
         $(#rotate).style["display"] = undefined;
     }
 
-    //生成文本介绍
+    //显示简介
     if(detailObj.DocContent != ""){
         $(#doc_title).style["display"] = "block";
         $(#doc).style["display"] = "block";
         $(#doc).html = markdown.parse(detailObj.DocContent);
-        $(#right_desc).attributes.removeClass("right_desc_disable");
-        $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
     }else{
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";
-        $(#right_desc).attributes.addClass("right_desc_disable");
-        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
+        
     }
 
-    //如果简介存在，也显示攻略按钮
+    //打开攻略窗口按钮
     if(detailObj.StrategyContent != ""){
         $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
         $(#right_desc).attributes.removeClass("right_desc_disable");
+    }else{
+        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
+        $(#right_desc).attributes.addClass("right_desc_disable");
+
     }
     $(#right_desc).attributes["rid"] = info.Id;
 
@@ -384,7 +388,6 @@ function numSearch(evt){
         num = "";
     }
 
-    
     //重置滚动翻页数据
     resetScroll();
 
@@ -393,4 +396,35 @@ function numSearch(evt){
 
     //激活当前，改变样式
     evt.state.current = true;
+}
+
+
+
+//读取一个rom的展示图地址
+function getRomPicPath(type,platform,name){
+        var path = "";
+        //检查图片类型，拼接图片地址和文件名
+        if(type == "thumb"){
+                path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
+        }else if(type == "snap"){
+                path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
+        }else{
+            return "";
+        }
+        var exts = ["png","jpg","gif","jpeg","bmp"]; //支持的图片类型
+        var isset = false; //图片是否存在
+        var pic = ""; //图片地址
+        for(var ext in exts) {
+            pic = path +"."+ext;
+            if(System.scanFiles(pic)){ //检查图片是否存在
+                isset = true;
+                break;
+            }
+        }
+
+        if (isset == true){
+            return URL.fromPath(pic);
+        }else{
+            return "";
+        }
 }

@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"strings"
 )
 
 
@@ -55,13 +56,70 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 	return volist, nil
 }
 
-//清理菜单数据
-func (*Menu) ClearMenu(platform uint32) error {
-	where := ""
-	if platform > 0{
-		where = " WHERE platform = "+ utils.ToString(platform)
+//删除一个平台下不存在的目录
+func (sim *Menu) DeleteNotExists(platform uint32,menus []string) (error) {
+
+	sql := ""
+	//如果没有菜单，则全部删除
+	if len(menus) == 0 {
+		sql = "DELETE FROM menu WHERE platform = " + utils.ToString(platform)
+	}else{
+		menuStr := strings.Join(menus, "\",\"")
+		menuStr = "\"" + menuStr + "\""
+		sql = "DELETE FROM menu WHERE platform = " + utils.ToString(platform) + " AND name not in (" + menuStr + ")"
 	}
-	if _,err :=sqlite.Exec(`DELETE FROM menu` + where);err != nil{
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+//删除不存在的平台下的所有menu
+func (sim *Menu) ClearByPlatform(platforms []string) (error) {
+
+	sql := "DELETE FROM menu "
+
+	if len(platforms) > 0 {
+		namesStr := strings.Join(platforms, ",")
+		sql += " WHERE platform not in (" + namesStr + ")"
+	}
+
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+
+//根据一组名称，查询存在的名称，用于取交集
+func (sim *Menu) GetMenuByNames(platform uint32, names []string) ([]string,error) {
+
+	nameStr := strings.Join(names, "\",\"")
+	nameStr = "\"" + nameStr + "\""
+
+	nameList := []string{}
+	sql := "SELECT name FROM menu WHERE platform = " + utils.ToString(platform) + " AND name in (" + nameStr + ")"
+	rows, err := sqlite.Query(sql)
+	if err != nil {
+		return nameList, err
+	}
+
+	for rows.Next() {
+		n := ""
+		err = rows.Scan(&n)
+		nameList = append(nameList, n)
+	}
+	return nameList, err
+}
+
+//清空表数据
+func (sim *Menu) Truncate() (error) {
+	_, err := sqlite.Exec("DELETE FROM menu")
+	if err != nil {
 		return err
 	}
 	return nil
