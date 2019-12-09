@@ -26,16 +26,39 @@ view.root.on("ready", function(){
     var lists = view.parameters.getPlatform();
     var platform_list = $(#platform_list);
     for(var pf in lists) {
-        pfdata += '<option value="'+ lists[pf].Id +'">'+  lists[pf].Name + '</option>';
+        pfdata += '<li value="'+ lists[pf].Id +'">'+  lists[pf].Name + lists[pf].Sort + '</li>';
     }
     platform_list.html = pfdata;
+
+    //平台拖拽排序
+    DragDrop{
+        what      : "ul#platform_list>li",
+        where     : "ul#platform_list",
+        container : "ul#platform_list",        
+        dropped : function(){
+            var lis = $$(#platform_list > li);
+            var bbb = "";
+            var id = "";
+            var idx = 0;
+            var newObj = {};
+            for(var li in lis) {
+                id = li.attributes["value"];
+                newObj[id] = li.index;
+            }
+            //更新到数据库
+            view.parameters.updatePlatformSort(newObj);
+        }  
+    }
+    
 });
 
 //平台列表点击
-
-event change $(#platform_list) {
+event click $(#platform_list li) {
     
-    pfId = this.value.toString();
+    pfId = this.attributes["value"].toString();
+
+    //激活按钮改变样式
+    this.state.current = true;
 
     //读取平台信息
     var info = view.parameters.getPlatformById(pfId);
@@ -252,38 +275,4 @@ event click $(#platform_del){
         $(#platform_list).select("option[value="+pfId+"]").remove();
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);
     }
-}
-
-function createLang(){
-    $(#lang_generalcofig).html = CONF.Lang.GeneralConfig;
-    $(#lang_platformconfig).html = CONF.Lang.PlatformConfig;
-    $(#lang_Lang).html = CONF.Lang.Lang;
-    $(#lang_Book).html = CONF.Lang.Book;
-    $(#lang_PicSearchEngines).html = CONF.Lang.PicSearchEngines;
-    $(#config_search_engines).html = CONF.Lang.PicSearchEnginesTitle;
-    $(#config_book).html = CONF.Lang.SelectBookFile;
-    $(#config_submit).html = CONF.Lang.UpdateConfig;
-    $(#config_book).attributes["title"] = CONF.Lang.BookTitle;
-    $(#config_search_engines).attributes["title"] = CONF.Lang.PicSearchEnginesTitle;
-    $(#platform_del).attributes["title"] = CONF.Lang.DeleteSelectPlatform;
-    $(#platform_add).attributes["title"] = CONF.Lang.AddNewPlatform;
-    $(#lang_BaseInfo).html = CONF.Lang.BaseInfo;
-    $(#lang_Title).html = CONF.Lang.Title;
-    $(#lang_RomType).html = CONF.Lang.RomType;
-    $(#lang_Simulator).html = CONF.Lang.Simulator;
-    $(#add_sim).html = CONF.Lang.AddSimulator;
-    $(#lang_MenuConfig).html = CONF.Lang.MenuConfig;
-    $(#lang_RomMenu).html = CONF.Lang.RomMenu;
-    $(#lang_ThumbMenu).html = CONF.Lang.ThumbMenu;
-    $(#lang_SanpMenu).html = CONF.Lang.SanpMenu;
-    $(#lang_DescMenu).html = CONF.Lang.DescMenu;
-    $(#lang_StrategyMenu).html = CONF.Lang.StrategyMenu;
-    $(#lang_Romlist).html = CONF.Lang.Romlist;
-    $(#platform_submit).html = CONF.Lang.UpdateConfig;
-    $(#lang_SelectFolder1).attributes["caption"] = CONF.Lang.SelectFolder;
-    $(#lang_SelectFolder2).attributes["caption"] = CONF.Lang.SelectFolder;
-    $(#lang_SelectFolder3).attributes["caption"] = CONF.Lang.SelectFolder;
-    $(#lang_SelectFolder4).attributes["caption"] = CONF.Lang.SelectFolder;
-    $(#lang_SelectFolder5).attributes["caption"] = CONF.Lang.SelectFolder;
-    $(#lang_SelectConfigFile).attributes["caption"] = CONF.Lang.SelectConfigFile;
 }

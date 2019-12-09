@@ -24,6 +24,8 @@ view.root.on("ready", function(){
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
+    createLang(); //创建语言
+
     // ================= 事件 =================
     //方向键选择rom
     self.on("keyup", function(evt) {
@@ -202,6 +204,7 @@ view.root.on("ready", function(){
                 getSimulatorByPlatform:getSimulatorByPlatform,
                 updateConfig:updateConfig,
                 updatePlatform:updatePlatform,
+                updatePlatformSort:updatePlatformSort,
                 addPlatform:addPlatform,
                 delPlatform:delPlatform,
             };
@@ -293,7 +296,6 @@ function initConfig(isfresh){
         view.msgbox(#alert,CONF.Lang.FirstBootCreateCache);
     }
 
-    createLang(); //创建语言
     createTheme(); //创建主题
     createPlatform(); //生成平台列表
     initRomListStyle(); //初始化游戏列表样式
@@ -307,8 +309,7 @@ function initConfig(isfresh){
 
     //动态设置平台栏宽度，滑动平台栏使用
     setPlatformWidth();
-  
-}
+  }
 
 //弹出错误窗口
 function errorBox(str){

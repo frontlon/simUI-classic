@@ -3,8 +3,6 @@ var action;
 var pfId;
 view.root.on("ready", function(){
 
-    createLang();
-
     id = view.parameters.id.toString();
     pfId = view.parameters.platform.toString();
 
@@ -24,6 +22,10 @@ view.root.on("ready", function(){
         $(#sim_cmd).value = sim.Cmd;
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
+    
+    //创建语言
+    createLang();
+
 });
 
 //更新模拟器信息
@@ -109,14 +111,4 @@ event click $(.openfile){
 //设置命令代码
 event change $(#set_cmd) {
     $(#sim_cmd).value = this.value;
-}
-
-function createLang(){
-    $(#lang_Name).html = CONF.Lang.Name;
-    $(#SetDefaultSimulator).html = CONF.Lang.SetDefaultSimulator;
-    $(#lang_Path).html = CONF.Lang.Path;
-    $(#lang_SelectBootFile).attributes['caption'] = CONF.Lang.SelectBootFile;
-    $(#lang_Params).html = CONF.Lang.Params;
-    $(#sim_delete).html = CONF.Lang.DeleteSimulator;
-    $(#sim_cmd).attributes['novalue'] = CONF.Lang.SimulatorCmdNoValue;
 }

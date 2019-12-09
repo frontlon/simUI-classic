@@ -47,7 +47,7 @@
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
 
     /* 状态栏 */
-    .statebar{background:color(statebar-background-color);position:relative;height:42dip;margin-top:0}
+    .statebar{background:color(statebar-background-color);position:fixed;height:42dip;width:*;margin-top:0;top:36dip;opacity: 0.8;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
     .statebar_btn{position:absolute;left:8dip;top:9dip;padding:0;}
     .statebar_btn button{background:color(statebar-button-background-color);color:color(statebar-button-text-color);cursor: pointer;border-radius:2dip;margin-right:2px;display: inline-block;size:26dip;line-height:26dip;text-align:center;font-size:14.4dip}
@@ -86,6 +86,7 @@
     .romblock.zoom4 li{min-width:200dip;max-width:280dip;margin:12dip 16dip}
     .romblock.zoom5 li{min-width:240dip;max-width:320dip;margin:12dip 16dip}
 
+    #romwrapper{padding-top:40dip;}
     .romlist{width:*;margin-top:24dip;margin-left:28dip;list-style-type:none;}
     .romlist li{height:36dip;line-height:36dip;padding:0 12dip;margin:0;position:relative;}
     .romlist li:nth-child(odd){ background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
@@ -138,18 +139,18 @@
 </style>
 </head>
 <body>
-    
-<div id="loading"><img src="images/loading.gif" /><p></p></div>
+
+<div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
 <div class="titlebar" id="titlebar" role=window-caption>
-    <div id="logo"></div>
+    <div id="logo">{{SoftName}}</div>
     <div id="tb_left"><ul id="platform_ul"></ul></div>
     <div id="tb_right">
-        <button id="book" value="1" title=""><i>&#xe748;</i></button><button id="create" title=""><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
+        <button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button><button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
             <menu>
-                <li id="config"><i>&#xe602;</i><span id="lang_config"></span></li>
-                <li id="theme"><i>&#xe72b;</i><span id="lang_theme"></span><menu></menu></li>
-                <li id="about"><i>&#xe7b9;</i><span id="lang_about"></span></li>
-                <li id="help"><i>&#xf3c1;</i><span id="lang_help"></span></li>
+                <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
+                <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
+                <li id="about"><i>&#xe7b9;</i><span>{{About}}</span></li>
+                <li id="help"><i>&#xf3c1;</i><span>{{Help}}</span></li>
             </menu>
         </button>     
         <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
@@ -172,12 +173,13 @@
         <div class="statebar">
             
             <div class="statebar_btn">
-                <button id="switch_romlist" value="1" title=""><i>&#xe659;</i></button>
-                <button id="zoom" value=""><i>&#xe60f;</i></button>
+                <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button>
+                <button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button>
+                <button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
             </div>
 
             <div class="counnum">
-                <span id="rom_count_text"></span><span id="rom_count_num">0</span></div>
+                <span id="rom_count_text">{{GameCount}}</span><span id="rom_count_num">0</span></div>
         </div>
         <div id="romwrapper">
             <ul id="romlist"></ul>
@@ -185,16 +187,16 @@
     </section>
     <splitter id="right_splitter" />
     <section id="right">
-        <h2 id="lang_funcbutton"></h2>
-        <button id="right_desc" class="funbtn" platform="" name="" value="" title=""><i>&#xea07;</i></button>
-        <button id="right_favorite" class="funbtn" rid="" value="" title=""><i>&#xe61a;</i></button>
-        <button id="right_thumb_down" class="funbtn" rid="" rname="" title=""><i>&#xe655;</i></button>
-        <h2 id="thumb_title"></h2>
+        <h2>{{FunButton}}</h2>
+        <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
+        <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
+        <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{DownPicture}}"><i>&#xe655;</i></button>
+        <h2>{{Thumb}}</h2>
         <button id="rotate" class="funbtn">&gt;</button>
         <div id="stack"></div>
-        <h2 id="doc_title"></h2>
+        <h2 id="doc_title">{{Doc}}</h2>
         <div id="doc" class="doc"></div>
-        <h2 id="lang_rungame"></h2>
+        <h2>{{RunGame}}</h2>
         <ul id="sim_select"></ul>
         <div id="buttons"></div>
     </section>
@@ -209,6 +211,7 @@
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";
+    include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/platform.tis";
     include ROOTPATH + "tis/theme.tis";
     include ROOTPATH + "tis/rom.tis";

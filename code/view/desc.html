@@ -60,8 +60,8 @@
         <section class="left">
           <h1 class="title_h1" id="title"></h1>
             <ul>
-                <li id="btn_desc_strategy"></li>
-                <li id="btn_desc_doc"></li>
+                <li id="btn_desc_strategy">{{Strategy}}</li>
+                <li id="btn_desc_doc">{{Desc}}</li>
               </ul>
         </section>
         <splitter />
@@ -74,6 +74,7 @@
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/markdown.tis";
+    include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_desc.tis";
 </script>
 </body>

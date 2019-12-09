@@ -18,6 +18,7 @@ type Platform struct {
 	StrategyPath string
 	Romlist      string
 	Pinyin       string
+	Sort         uint32
 	SimList      map[uint32]*Simulator
 	UseSim       *Simulator //当前使用的模拟器
 }
@@ -46,7 +47,7 @@ func (*Platform) GetAll() (map[uint32]*Platform, error) {
 
 	volist := map[uint32]*Platform{}
 	exts := ""
-	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist FROM platform  ORDER BY pinyin ASC"
+	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist,sort FROM platform  ORDER BY sort ASC,pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
 	if err != nil {
@@ -54,7 +55,7 @@ func (*Platform) GetAll() (map[uint32]*Platform, error) {
 	}
 	for rows.Next() {
 		v := &Platform{}
-		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist)
+		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist,&v.Sort)
 		if err != nil {
 			return volist, err
 		}
@@ -76,7 +77,7 @@ func (*Platform) GetById(id uint32) (*Platform, error) {
 	return v, err
 }
 
-//更新一个字段
+//更新平台信息
 func (pf *Platform) UpdateById() error {
 	sql := `UPDATE platform SET `
 	sql += `name = '` + pf.Name + `'`
@@ -111,4 +112,22 @@ func (pf *Platform) DeleteById() error {
 		return err
 	}
 	return nil
+}
+
+//更新排序
+func (pf *Platform) UpdateSortById() error {
+	sql := `UPDATE platform SET `
+	sql += `sort = '` + utils.ToString(pf.Sort) + `'`
+	sql += ` WHERE id = ` + utils.ToString(pf.Id)
+
+	stmt, err := sqlite.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	_, err2 := stmt.Exec()
+	if err2 != nil {
+		return err2
+	} else {
+		return nil
+	}
 }

@@ -28,8 +28,11 @@
     th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
     td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
     tr:last-child td{text-align:center;padding-bottom:0}
-    .platform_list{width:*;height:*;display:block;border:1dip solid #ccc}
-    .platform_list option{height:24dip;line-height:24dip}
+    .platform_list{width:*;height:*;display:block;border:1dip solid #ccc;padding:0}
+    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip}
+    .platform_list li:current{background:#3399ff;color:#FFF}
+    .platform_list li:drag-source { background-color:#eee;}
+
     #table_default td:first-child{width:120dip;}
 
     .platform_control{height:16dip;flow:horizontal-flow;}
@@ -44,18 +47,18 @@
 
   <tabs id="mytabs">
     <strip>
-      <label for="first" selected id="lang_generalcofig"></label>
-      <label for="second" id="lang_platformconfig"></label>
+      <label for="first" selected>{{GeneralConfig}}</label>
+      <label for="second">{{PlatformConfig}}</label>
     </strip>
     <panels>
       <section id="first">
 
         <div class="wrapper">
           <table id="table_default">
-              <tr><td id="lang_Lang"></td><td><select id="config_lang"></select></td></tr>
-              <tr><td id="lang_Book"></td><td><input type="text"  id="config_book" value="" title=""><button class="openfile" for="config_book" caption="" filter="exe chm Files (*.exe,*.chm)|*.exe;*.chm|All Files (*.*)|*.*">&#x2026;</button></td></tr>
-              <tr><td id="lang_PicSearchEngines"></td><td><input type="text" title="" id="config_search_engines" style="width:280dip"></td></tr>
-              <tr><td colspan="2"><button id="config_submit"></button></td></tr>
+              <tr><td>{{Lang}}</td><td><select id="config_lang"></select></td></tr>
+              <tr><td>{{Book}}</td><td><input type="text"  id="config_book" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="exe chm Files (*.exe,*.chm)|*.exe;*.chm|All Files (*.*)|*.*">&#x2026;</button></td></tr>
+              <tr><td>{{PicSearchEngines}}</td><td><input type="text" title="{{PicSearchEnginesTitle}}" id="config_search_engines" style="width:280dip"></td></tr>
+              <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
              </table>
         </div>
 
@@ -63,30 +66,30 @@
       <section id="second">
         <div class="wrapper">
           <div class="frame_left">
-              <select class="platform_list" id="platform_list" size="5"></select>
+              <ul class="platform_list" id="platform_list" size="5"></ul>
               <div class="platform_control">
-                <button class="sub" id="platform_del" title="">删除平台</button>
-                <button class="add" id="platform_add" title="">添加平台</button>
+                <button class="sub" id="platform_del" title="{{DeleteSelectPlatform}}">删除平台</button>
+                <button class="add" id="platform_add" title="{{AddNewPlatform}}">添加平台</button>
               </div>
           </div>
           <div class="frame_right">
             <table>
-                <tr><th colspan="2" style="padding-top:0" id="lang_BaseInfo"></th></tr>
-                <tr><td id="lang_Title"></td><td><input type="text" value="" id="platform_name" disabled></td></tr>
-                <tr><td id="lang_RomType"></td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
-                <tr><td id="lang_Simulator"></td><td>
+                <tr><th colspan="2" style="padding-top:0">{{BaseInfo}}</th></tr>
+                <tr><td>{{Title}}</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
+                <tr><td>{{RomType}}</td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
+                <tr><td>{{Simulator}}</td><td>
                   <select id="platform_sim" disabled></select>
-                  <button id="add_sim" disabled></button>
+                  <button id="add_sim" disabled>{{AddSimulator}}</button>
                 </td></tr>
-                <tr><th colspan="2" id="lang_MenuConfig"></th></tr>
-                <tr><td id="lang_RomMenu"></td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" id="lang_SelectFolder1" caption="" disabled>&#x2026;</button></td></tr>
-                <tr><td id="lang_ThumbMenu"></td><td><input type="text" id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" id="lang_SelectFolder2" caption="" disabled>&#x2026;</button></td></tr>
-                <tr><td id="lang_SanpMenu"></td><td><input type="text" id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" id="lang_SelectFolder3" caption="" disabled>&#x2026;</button></td></tr>
-                <tr><td id="lang_DescMenu"></td><td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" id="lang_SelectFolder4" caption="" disabled>&#x2026;</button></td></tr>
-                <tr><td id="lang_StrategyMenu"></td><td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" id="lang_SelectFolder5" for="platform_strategy" caption="" disabled>&#x2026;</button></td></tr>
-                <tr><td id="lang_Romlist"></td><td><input type="text"  id="platform_romlist" value="" disabled> <button class="openfile" for="platform_romlist" id="lang_SelectConfigFile" caption="" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
+                <tr><th colspan="2">{{MenuConfig}}</th></tr>
+                <tr><td>{{RomMenu}}</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+                <tr><td>{{ThumbMenu}}</td><td><input type="text" id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+                <tr><td>{{SanpMenu}}</td><td><input type="text" id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+                <tr><td>{{DescMenu}}</td><td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+                <tr><td>{{StrategyMenu}}</td><td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+                <tr><td>{{Romlist}}</td><td><input type="text"  id="platform_romlist" value="" disabled> <button class="openfile" for="platform_romlist" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
                 <tr><th colspan="2"></th></tr>
-                <tr><td colspan="2""><button id="platform_submit" disabled></button></td></tr>
+                <tr><td colspan="2""><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
             </table>
           </div>
         </div>
@@ -96,13 +99,19 @@
   </tabs>
 
 
+  <!-- 添加平台框 -->
   <div id="msg-box-contnent" style="display:none">
       <label>Name:</label><input name="namess" type="text" />
   </div>
 
   <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/tabs.tis";
+    include ROOTPATH + "tis/plugins/dragdrop.tis";
+    include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_config.tis";
+
+
+
   </script>
 </body>
 </html>

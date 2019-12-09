@@ -2,10 +2,6 @@
 view.root.on("ready", function(){
 
     conf = view.parameters.conf;
-
-    //配置语言
-    $(#btn_desc_doc).html=conf.Lang.Desc;
-    $(#btn_desc_strategy).html=conf.Lang.Strategy;
     
     //默认主题
     var cssfile = "";
@@ -22,6 +18,9 @@ view.root.on("ready", function(){
 
     //定义标题
     view.windowCaption = detailObj.Info.Name;
+
+    //创建语言
+    createLang();
 
     //初始化读取内容
     if(detailObj.DocContent != ""){$(#btn_desc_doc).style["display"] = "block";}

@@ -1,0 +1,9 @@
+﻿//生成语言
+function createLang(){
+    //view.msgbox(#alert,"createlang");
+    var content = $(body).html;
+    for(var key in CONF.Lang) {
+        content = content.replace("{{"+ key +"}}",CONF.Lang[key]);
+    }
+    $(body).html = content;
+}

@@ -158,23 +158,22 @@ func defineViewFunction(w *window.Window) {
 	w.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
 		//清空rom表
-		if err := (&db.Rom{}).Truncate();err != nil{
+		if err := (&db.Rom{}).Truncate(); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
 		//清空menu表
-		if err := (&db.Menu{}).Truncate();err != nil{
+		if err := (&db.Menu{}).Truncate(); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
 		return sciter.NullValue()
 	})
 
-
-		//生成所有缓存
+	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 		//先检查平台，将不存在的平台数据先干掉
-		if err := ClearPlatform();err != nil{
+		if err := ClearPlatform(); err != nil {
 			return errorMsg(w, err.Error())
 		}
 
@@ -182,19 +181,18 @@ func defineViewFunction(w *window.Window) {
 		for platform, _ := range Config.Platform {
 
 			//创建rom数据
-			romlist, menu,err := CreateRomCache(platform)
+			romlist, menu, err := CreateRomCache(platform)
 			if err != nil {
 				return errorMsg(w, err.Error())
 			}
 
-
 			//更新rom数据
-			if err := UpdateRomDB(platform,romlist);err != nil{
+			if err := UpdateRomDB(platform, romlist); err != nil {
 				return errorMsg(w, err.Error())
 			}
 
 			//更新menu数据
-			if err := UpdateMenuDB(platform,menu);err != nil{
+			if err := UpdateMenuDB(platform, menu); err != nil {
 				return errorMsg(w, err.Error())
 			}
 
@@ -357,17 +355,17 @@ func defineViewFunction(w *window.Window) {
 		id := uint32(utils.ToInt(d["id"]))
 
 		//取掉路径结尾路径分隔符
-		d["rom"] = strings.TrimRight(d["rom"],`\`)
-		d["rom"] = strings.TrimRight(d["rom"],`/`)
-		d["thumb"] = strings.TrimRight(d["thumb"],`\`)
-		d["thumb"] = strings.TrimRight(d["thumb"],`/`)
-		d["snap"] = strings.TrimRight(d["snap"],`\`)
-		d["snap"] = strings.TrimRight(d["snap"],`/`)
-		d["strategy"] = strings.TrimRight(d["strategy"],`\`)
-		d["strategy"] = strings.TrimRight(d["strategy"],`/`)
-		d["doc"] = strings.TrimRight(d["doc"],`\`)
-		d["doc"] = strings.TrimRight(d["doc"],`/`)
-		
+		d["rom"] = strings.TrimRight(d["rom"], `\`)
+		d["rom"] = strings.TrimRight(d["rom"], `/`)
+		d["thumb"] = strings.TrimRight(d["thumb"], `\`)
+		d["thumb"] = strings.TrimRight(d["thumb"], `/`)
+		d["snap"] = strings.TrimRight(d["snap"], `\`)
+		d["snap"] = strings.TrimRight(d["snap"], `/`)
+		d["strategy"] = strings.TrimRight(d["strategy"], `\`)
+		d["strategy"] = strings.TrimRight(d["strategy"], `/`)
+		d["doc"] = strings.TrimRight(d["doc"], `\`)
+		d["doc"] = strings.TrimRight(d["doc"], `/`)
+
 		exts := strings.Split(d["exts"], ",")
 
 		platform := &db.Platform{
@@ -386,6 +384,29 @@ func defineViewFunction(w *window.Window) {
 		err := platform.UpdateById()
 		if err != nil {
 			return errorMsg(w, err.Error())
+		}
+		return sciter.NewValue("1")
+	})
+
+	//更新平台排序
+	w.DefineFunction("UpdatePlatformSort", func(args ...*sciter.Value) *sciter.Value {
+		data := args[0].String()
+		d := make(map[uint32]uint32)
+		json.Unmarshal([]byte(data), &d)
+
+		if len(d) == 0{
+			return sciter.NullValue()
+		}
+
+		for id,val := range d{
+			platform := &db.Platform{
+				Id:   id,
+				Sort: val,
+			}
+			err := platform.UpdateSortById()
+			if err != nil {
+				return errorMsg(w, err.Error())
+			}
 		}
 		return sciter.NewValue("1")
 	})

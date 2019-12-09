@@ -1,27 +1,4 @@
-﻿//生成语言
-function createLang(){
-    $(#loading p).html = CONF.Lang.Loading;
-    $(#logo).html = CONF.Lang.SoftName;
-    $(#rom_count_text).html = CONF.Lang.GameCount;
-    $(#thumb_title).html = CONF.Lang.Thumb;
-    $(#doc_title).html = CONF.Lang.Doc;
-    $(#lang_rungame).html = CONF.Lang.RunGame;
-
-    $(#lang_config).html = CONF.Lang.Config;
-    $(#lang_theme).html = CONF.Lang.Theme;
-    $(#lang_about).html = CONF.Lang.About;
-    $(#lang_help).html = CONF.Lang.Help;
-    $(#book).attributes["title"] = CONF.Lang.OpenBook;
-    $(#create).attributes["title"] = CONF.Lang.createCache;
-    $(#switch_romlist).attributes["title"] = CONF.Lang.SwitchRomlist;
-    $(#zoom).attributes["title"] = CONF.Lang.ZoomIcon;
-
-    $(#lang_funcbutton).html = CONF.Lang.FunButton;
-    $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
-    $(#right_favorite).attributes["title"] = CONF.Lang.SetFavorite;
-    $(#right_thumb_down).attributes["title"] = CONF.Lang.DownPicture;
-}
-
+﻿
 //创建主题
 function createTheme(){
 

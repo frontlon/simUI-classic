@@ -16,10 +16,10 @@
 <body>
     <div id="wrapper">
         <table>
-            <tr><td id="lang_Name">名称：</td><td><input type="text" id="sim_name" value="">
-            <label><input type='checkbox' value='1' id="sim_default" /><span id="SetDefaultSimulator">设为默认模拟器</span></label></td></tr>
-            <tr><td id="lang_Path">路径：</td><td><input type="text" id="sim_path" value=""><button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="请选择启动文件" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button></td></tr>
-            <tr><td id="lang_Params">参数：</td><td><input type="text" id="sim_cmd" value="" novalue="默认留空即可">
+            <tr><td>{{Name}}</td><td><input type="text" id="sim_name" value="">
+            <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
+            <tr><td>{{Path}}</td><td><input type="text" id="sim_path" value=""><button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button></td></tr>
+            <tr><td>{{Params}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
             <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
@@ -28,11 +28,12 @@
             </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">删除该模拟器</button></td></tr>
+            <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>
         </table>
     </div>
 
 <script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_sim.tis";
 </script>
 </body>

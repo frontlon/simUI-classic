@@ -23,16 +23,17 @@
 <body>
     <div class="thumb_bg">
         <div class="thumb_search">
-            <input type="text" class="input" id="search_input" novalue="" />
-            <button class="submit active" id="search_submit_1" value="1"></button>
-            <button class="submit" id="search_submit_2" value="2"></button>
+            <input type="text" class="input" id="search_input" novalue="{{InputKeyword}}" />
+            <button class="submit active" id="search_submit_1" value="1">{{Thumb}}</button>
+            <button class="submit" id="search_submit_2" value="2">{{Snap}}</button>
         </div>
-        <div class="description" id="lang_description"></div>      
+        <div class="description">{{Description}}</div>      
     </div>
     <ul id="down_thumb_list"></ul>
-    <div id="loading"><p></p></div>
+    <div id="loading"><p>{{Loading}}</p></div>
 
 <script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_down_thumbs.tis";
 </script>
 </body>

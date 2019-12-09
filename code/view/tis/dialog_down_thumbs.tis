@@ -5,14 +5,16 @@ var SCROLL_POS = 0;
 var SCROLL_LOCK = false;
 view.root.on("ready", function(){
 
-    createLang();
-
     view.windowCaption = CONF.Lang.ThumbsDown;
 
     var keyword = view.parameters.keyword;
     ID = view.parameters.id;
     $(#search_input).value = keyword;
     searchPic(keyword,1);
+
+    //创建语言
+    createLang();
+
     //分页
     self.onScroll = function(evt) {
 
@@ -162,13 +164,4 @@ function searchPic(keyword,ctype){
         }
 	});
     return false;
-}
-
-
-function createLang(){
-    $(#search_input).attributes["novalue"] = CONF.Lang.InputKeyword;
-    $(#search_submit_1).html = CONF.Lang.Thumb;
-    $(#search_submit_2).html = CONF.Lang.Snap;
-    $(#lang_description).html = CONF.Lang.Description;
-    $(#loading p).html = CONF.Lang.Loading;
 }
