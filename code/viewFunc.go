@@ -502,7 +502,7 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NewValue(string(jsonInfo))
 	})
 
-	//读取一个平台下的所有模拟器
+	//读取平台列表
 	w.DefineFunction("GetPlatform", func(args ...*sciter.Value) *sciter.Value {
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetAll()

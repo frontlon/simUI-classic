@@ -37,25 +37,27 @@ function changePlatform(obj){
 function createPlatform(){
     var simclass = "";
     var dd = "";
+    var pf = {};
     //如果有多个平台，才显示“全部平台”按钮
     if(CONF.Platform.length > 1){
         dd += "<li platform='0'><button class='platform'>"+CONF.Lang.AllPlatform +"</button></li>";
     }
     //遍历数据，生成dom
-    for(var pfId in CONF.Platform) {
-        dd += "<li platform='"+ CONF.Platform[pfId].Id +"'>";
-        dd += "<button class='platform'>" + CONF.Platform[pfId].Name + "</button>";
+    for(var pfId in CONF.PlatformList) {
+        pf = CONF.PlatformList[pfId];
+        dd += "<li platform='"+ pf.Id +"'>";
+        dd += "<button class='platform'>" + pf.Name + "</button>";
         dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";
 
-        if (CONF.Platform[pfId].RomPath !=""){dd += "<li class='opendir' opt='rom' sid=''>"+CONF.Lang.OpenRomFolder +"</li>";}
-        if (CONF.Platform[pfId].ThumbPath !=""){dd += "<li class='opendir' opt='thumb' sid=''>"+ CONF.Lang.OpenThumbsFolder +"</li>";}
-        if (CONF.Platform[pfId].SnapPath !=""){dd += "<li class='opendir' opt='snap' sid=''>"+ CONF.Lang.OpenSnapFolder +"</li>";}
-        if (CONF.Platform[pfId].DocPath !=""){dd += "<li class='opendir' opt='doc' sid=''>"+ CONF.Lang.OpenDocFolder +"</li>";}
-        if (CONF.Platform[pfId].StrategyPath !=""){dd += "<li class='opendir' opt='strategy' sid=''>"+ CONF.Lang.OpenStrategyFolder +"</li>";}
+        if (pf.RomPath !=""){dd += "<li class='opendir' opt='rom' sid=''>"+CONF.Lang.OpenRomFolder +"</li>";}
+        if (pf.ThumbPath !=""){dd += "<li class='opendir' opt='thumb' sid=''>"+ CONF.Lang.OpenThumbsFolder +"</li>";}
+        if (pf.SnapPath !=""){dd += "<li class='opendir' opt='snap' sid=''>"+ CONF.Lang.OpenSnapFolder +"</li>";}
+        if (pf.DocPath !=""){dd += "<li class='opendir' opt='doc' sid=''>"+ CONF.Lang.OpenDocFolder +"</li>";}
+        if (pf.StrategyPath !=""){dd += "<li class='opendir' opt='strategy' sid=''>"+ CONF.Lang.OpenStrategyFolder +"</li>";}
       
-        if(CONF.Platform[pfId].SimList.length > 0 ){
-            for(var simId in CONF.Platform[pfId].SimList) {
-                dd += "<li class='opendir' opt='sim' sid='"+  CONF.Platform[pfId].SimList[simId].Id +"'>"+ CONF.Lang.OpenSimFolder  +":"+ CONF.Platform[pfId].SimList[simId].Name +"</li>";
+        if(pf.SimList.length > 0 ){
+            for(var simId in pf.SimList) {
+                dd += "<li class='opendir' opt='sim' sid='"+  pf.SimList[simId].Id +"'>"+ CONF.Lang.OpenSimFolder  +":"+ pf.SimList[simId].Name +"</li>";
             }
         }
 

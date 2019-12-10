@@ -43,9 +43,9 @@ func (v *Platform) Add() (uint32, error) {
 }
 
 //根据条件，查询多条数据
-func (*Platform) GetAll() (map[uint32]*Platform, error) {
+func (*Platform) GetAll() ([]*Platform, error) {
 
-	volist := map[uint32]*Platform{}
+	volist := []*Platform{}
 	exts := ""
 	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist,sort FROM platform  ORDER BY sort ASC,pinyin ASC"
 

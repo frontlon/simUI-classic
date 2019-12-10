@@ -24,7 +24,8 @@ type ConfStruct struct {
 	LangList  map[string]string       //语言列表
 	Theme     map[string]*ThemeStruct //主题列表
 	Lang      map[string]string       //语言项
-	Platform  map[uint32]*db.Platform //平台及对应的模拟器列表
+	Platform  map[uint32]*db.Platform //平台及对应的模拟器列表（无序）
+	PlatformList  []*db.Platform //平台及对应的模拟器列表（有序）
 }
 
 //主题配置
@@ -58,7 +59,7 @@ func InitConf() error {
 	if err != nil {
 		return err
 	}
-	Config.Platform, err = getPlatform()
+	Config.PlatformList,Config.Platform, err = getPlatform()
 	if err != nil {
 		return err
 	}
@@ -70,44 +71,65 @@ func InitConf() error {
 }
 
 //读取平台列表
-func getPlatform() (map[uint32]*db.Platform, error) {
+func getPlatform() ([]*db.Platform,map[uint32]*db.Platform, error) {
 	DBSim := &db.Simulator{}
-	platform, _ := (&db.Platform{}).GetAll()
-	for _, v := range platform {
-		platform[v.Id].SimList, _ = DBSim.GetByPlatform(v.Id) //填充模拟器
+	platformList, _ := (&db.Platform{}).GetAll()
+	platform := map[uint32]*db.Platform{}
+	for k, v := range platformList {
+		platform[v.Id] = v
 
-		if platform[v.Id].DocPath != "" {
-			platform[v.Id].DocPath, _ = filepath.Abs(platform[v.Id].DocPath)
+		if v.DocPath != "" {
+			platformList[k].DocPath,_ = filepath.Abs(v.DocPath)
+			platform[v.Id].DocPath = platformList[k].DocPath
 		}
-		if platform[v.Id].StrategyPath != "" {
-			platform[v.Id].StrategyPath, _ = filepath.Abs(platform[v.Id].StrategyPath)
+
+		if v.StrategyPath != "" {
+			platformList[k].StrategyPath,_ = filepath.Abs(v.StrategyPath)
+			platform[v.Id].StrategyPath = platformList[k].StrategyPath
 		}
-		if platform[v.Id].RomPath != "" {
-			platform[v.Id].RomPath, _ = filepath.Abs(platform[v.Id].RomPath)
+
+		if v.RomPath != "" {
+			platformList[k].RomPath,_ = filepath.Abs(v.RomPath)
+			platform[v.Id].RomPath = platformList[k].RomPath
 		}
-		if platform[v.Id].ThumbPath != "" {
-			platform[v.Id].ThumbPath, _ = filepath.Abs(platform[v.Id].ThumbPath)
+
+		if v.ThumbPath != "" {
+			platformList[k].ThumbPath,_ = filepath.Abs(v.ThumbPath)
+			platform[v.Id].ThumbPath = platformList[k].ThumbPath
 		}
-		if platform[v.Id].SnapPath != "" {
-			platform[v.Id].SnapPath, _ = filepath.Abs(platform[v.Id].SnapPath)
+
+		if v.SnapPath != "" {
+			platformList[k].SnapPath,_ = filepath.Abs(v.SnapPath)
+			platform[v.Id].SnapPath = platformList[k].SnapPath
 		}
-		if platform[v.Id].Romlist != "" {
-			platform[v.Id].Romlist, _ = filepath.Abs(platform[v.Id].Romlist)
+
+		if v.Romlist != "" {
+			platformList[k].Romlist,_ = filepath.Abs(v.Romlist)
+			platform[v.Id].Romlist = platformList[k].Romlist
 		}
+
+		//填充模拟器列表
+		simList,_ := DBSim.GetByPlatform(v.Id)
+		platform[v.Id].SimList = simList
+		platformList[k].SimList = simList
 
 		platform[v.Id].UseSim = &db.Simulator{}
-		for sk, sim := range platform[v.Id].SimList {
+		//找到默认模拟器
+		for sk, sim := range simList {
 			//当前正在使用的模拟器
 			if sim.Default == 1 {
+				platformList[k].UseSim = sim
 				platform[v.Id].UseSim = sim
 			}
 			//模拟器路径转换为绝对路径
-			if platform[v.Id].SimList[sk].Path != "" {
-				platform[v.Id].SimList[sk].Path, _ = filepath.Abs(platform[v.Id].SimList[sk].Path)
+			if sim.Path != "" {
+				sim.Path,_ = filepath.Abs(sim.Path)
+				platformList[k].SimList[sk].Path = sim.Path
+				platform[v.Id].SimList[sk].Path = sim.Path
 			}
 		}
 	}
-	return platform, nil
+	return platformList,platform, nil
 }
 
 //读取缓存配置
