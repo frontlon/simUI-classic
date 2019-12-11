@@ -43,8 +43,7 @@ function createPlatform(){
         dd += "<li platform='0'><button class='platform'>"+CONF.Lang.AllPlatform +"</button></li>";
     }
     //遍历数据，生成dom
-    for(var pfId in CONF.PlatformList) {
-        pf = CONF.PlatformList[pfId];
+    for(var pf in CONF.PlatformList) {
         dd += "<li platform='"+ pf.Id +"'>";
         dd += "<button class='platform'>" + pf.Name + "</button>";
         dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";

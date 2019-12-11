@@ -60,7 +60,7 @@ func (*Platform) GetAll() ([]*Platform, error) {
 			return volist, err
 		}
 		v.RomExts = strings.Split(exts, ",") //拆分rom扩展名
-		volist[v.Id] = v
+		volist = append(volist,v)
 	}
 	return volist, nil
 }
