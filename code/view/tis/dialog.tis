@@ -22,7 +22,7 @@ function delPlatform(id){
 }
 
 //更新平台配置
-function updatePlatform(data){
+function updatePlatform(data){    
     var datastr = JSON.stringify(data);
     var result = view.UpdatePlatform(datastr);
     if( result.toString() == "1"){

@@ -21,13 +21,15 @@ view.root.on("ready", function(){
     //图片搜索引擎
     $(#config_search_engines).value = CONF.Default.SearchEngines;
 
+    //可执行扩展名
+    $(#config_exe_ext).value = CONF.Default.ExeExt.toString();
 
     //生成平台列表
     var pfdata = "";
     var lists = view.parameters.getPlatform();
     var platform_list = $(#platform_list);
     for(var pf in lists) {
-        pfdata += '<li value="'+ pf.Id +'">'+ pf.Name + pf.Sort + '</li>';
+        pfdata += '<li value="'+ pf.Id +'">'+ pf.Name +'</li>';
     }
     platform_list.html = pfdata;
 
@@ -114,6 +116,7 @@ event click $(#config_submit) {
     var data = {
         lang : $(#config_lang).value.toString();
         search_engines : $(#config_search_engines).value.toString();
+        exe_ext : $(#config_exe_ext).value.toString();
         book : $(#config_book).value.toString();
     };
     //更新平台信息
@@ -121,9 +124,10 @@ event click $(#config_submit) {
 }
 
 //更新平台信息
+
 event click $(#platform_submit) {
     var data = {
-        id       : $(#platform_list).value.toString();
+        id       : $(#platform_list).select("li:current").attributes["value"].toString();
         name     : $(#platform_name).value,
         exts     : $(#platform_exts).value,
         rom      : $(#platform_rom).value,

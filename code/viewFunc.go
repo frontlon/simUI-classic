@@ -79,19 +79,30 @@ func defineViewFunction(w *window.Window) {
 
 		//加载运行参数
 		cmd := []string{}
-		if sim.Cmd == "" {
+
+		ext :=utils.GetFileExt(rom.RomPath)
+
+		//如果是可执行程序，则不依赖模拟器直接运行
+		if utils.InSliceString(ext,Config.Default.ExeExt){
 			cmd = append(cmd, rom.RomPath)
-		} else {
-			cmd = strings.Split(sim.Cmd, " ")
-			filename := filepath.Base(rom.RomPath) //exe运行文件路径
-			//替换变量
-			for k, _ := range cmd {
-				cmd[k] = strings.ReplaceAll(cmd[k], `{RomName}`, utils.GetFileName(filename))
-				cmd[k] = strings.ReplaceAll(cmd[k], `{RomExt}`, utils.GetFileExt(filename))
-				cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
+			err = runGame("explorer", cmd)
+		}else{
+			//如果依赖模拟器
+			if sim.Cmd == "" {
+				cmd = append(cmd, rom.RomPath)
+			} else {
+				cmd = strings.Split(sim.Cmd, " ")
+				filename := filepath.Base(rom.RomPath) //exe运行文件路径
+				//替换变量
+				for k, _ := range cmd {
+					cmd[k] = strings.ReplaceAll(cmd[k], `{RomName}`, utils.GetFileName(filename))
+					cmd[k] = strings.ReplaceAll(cmd[k], `{RomExt}`, utils.GetFileExt(filename))
+					cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
+				}
 			}
+			err = runGame(sim.Path, cmd)
 		}
-		err = runGame(sim.Path, cmd)
+
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
@@ -218,9 +229,7 @@ func defineViewFunction(w *window.Window) {
 				Platform: platform,
 			}
 			newMenu = append(newMenu, root)
-			for _, v := range menu {
-				newMenu = append(newMenu, v)
-			}
+			newMenu = append(newMenu, menu...)
 		} else {
 			newMenu = menu
 		}
