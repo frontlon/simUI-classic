@@ -296,9 +296,9 @@ function openSidebar(obj){
     }
 
     //生成按钮
-    var btndata = "<div class='run' rid='"+ info.Id +"'>"+info.Name+"</div>";
+    var btndata = "<div class='run' rid='"+ info.Id +"'>"+info.Name.toHtmlString()+"</div>";
     for(var sub in detailObj.Sublist) {
-        btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name+"</div>";
+        btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name.toHtmlString()+"</div>";
     }
     self.$(#buttons).html = btndata;
 }
@@ -430,6 +430,7 @@ function getRomPicPath(type,platform,name){
 }
 
 //rom模块右键菜单
+
 function romContextMenu(obj){
     var romcontext = $(#romcontext);
     romcontext.clear();
@@ -438,12 +439,20 @@ function romContextMenu(obj){
     var pfId = detailObj.Info.Platform.toString();
 
     //生成按钮
-
-    //读取模拟器图标
+    var simId = 0;
     var simIco = "";
-    //var simIco = CONF.Platform[pfId].SimList[simId].Path;
+    if (detailObj.Info.SimId != 0){
+        simId = detailObj.Info.SimId;
+    }else if (CONF.Platform[pfId].UseSim != undefined){
+        simId = CONF.Platform[pfId].UseSim["Id"];
+    }
+    //读取模拟器图标
+    if (simId != 0){
+        simId = simId.toString();
+        simIco = CONF.Platform[pfId].SimList[simId].Path;
+    }
 
-    var btndata = "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ detailObj.Info.Id +"'>启动 "+ detailObj.Info.Name + "</li>";
+    var btndata = "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ detailObj.Info.Id +"'>启动 "+ detailObj.Info.Name.toHtmlString() + "</li>";
 
     //主游戏
     // if(CONF.Platform[pfId].SimList.length > 1){
@@ -457,7 +466,7 @@ function romContextMenu(obj){
 
     //子游戏
     for(var sub in detailObj.Sublist) {
-        btndata += "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ sub.Id +"'>启动 "+ sub.Name + "</li>";;
+        btndata += "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ sub.Id +"'>启动 "+ sub.Name.toHtmlString() + "</li>";;
         // if(CONF.Platform[pfId].SimList.length > 1){
         //     btndata += "<menu>";
         //     for(var simId in CONF.Platform[pfId].SimList) {
@@ -468,14 +477,14 @@ function romContextMenu(obj){
     }
 
     btndata += "<caption>功能</caption>";
-    btndata += "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>下载封面插画</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>设为喜爱</li>";
+    btndata += "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>下载封面插画</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>设为喜爱</li>";
     btndata += "<caption>文件定位</caption>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位rom文件文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位封面图片文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位插画图片文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位文档文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位攻略文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位rom文件文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位封面图片文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位插画图片文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位文档文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位攻略文件</li>";
 
     romcontext.append(btndata);
 }

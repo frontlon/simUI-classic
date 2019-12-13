@@ -134,7 +134,10 @@ func getPlatform() ([]*db.Platform,map[uint32]*db.Platform, error) {
 
 //读取缓存配置
 func getDefault() (*db.Config, error) {
-	vo, _ := (&db.Config{}).Get()
+	vo, err := (&db.Config{}).Get()
+	if err != nil{
+		return vo,err
+	}
 	//查看当前选定平台值是否是正常的
 	isset := false
 	for _, v := range (Config.Platform) {

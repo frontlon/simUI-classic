@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -284,6 +285,8 @@ func defineViewFunction(w *window.Window) {
 
 		res.Info = info
 		res.Sublist = sub
+
+		fmt.Println(Config.Platform[info.Platform].UseSim)
 
 		//读取文档内容
 		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址

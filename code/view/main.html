@@ -39,7 +39,7 @@
 
     /* 下拉菜单 */
     menu{display:none;border:1dip solid color(context-border-color)}
-    menu li{padding:9dip 16dip 9dip 9dip ;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
+    menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
     menu li:nth-child(odd){ background:color(context-odd-background-color)}
     menu li:nth-child(even){ background:color(context-even-background-color)}
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);cursor:pointer}
@@ -70,7 +70,7 @@
     #romlist{display:block;}
     .romblock{flow:horizontal-flow;clear:both;margin-left:12dip;}
     .romblock{clear:both;margin-left:12dip;}
-    .romblock li{display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;}
+    .romblock li{display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext)}
     .romblock li:hover{box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color)}
     .romblock li:current{border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);transform: scale(1.2);z-index:2;}
     
@@ -126,8 +126,9 @@
     #doc p{display:block;margin-bottom:12dip}
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
-    #romcontext > li{padding-right:20px}
-    #romcontext li li{behavior: shell-icon;padding-left:28px;}
+    #romcontext{font-size: 10dip;width:auto;}
+    #romcontext > caption{background: #1b2128;color:#FFF;padding:5dip 16dip 5dip 9dip;font-weight: bold}
+    #romcontext > li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;behavior: shell-icon;foreground-repeat:no-repeat;foreground-position:4dip 50%;}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
@@ -144,7 +145,7 @@
 <body>
 
 <div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
-<menu class="context" id="romcontext"></menu>
+<menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo">{{SoftName}}</div>
     <div id="tb_left"><ul id="platform_ul"></ul></div>
@@ -211,6 +212,7 @@
 
 <script type="text/tiscript">
     //var ROOTPATH = "this://app/";
+    try{
     var ROOTPATH = "";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
@@ -222,5 +224,8 @@
     include ROOTPATH + "tis/menu.tis";
     include ROOTPATH + "tis/dialog.tis";
     include ROOTPATH + "tis/script.tis";
+}catch(e){
+    view.msgbox(#alert,e);
+}
 </script>
 </html>
