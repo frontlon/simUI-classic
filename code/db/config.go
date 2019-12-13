@@ -2,6 +2,7 @@ package db
 
 import (
 	_ "github.com/mattn/go-sqlite3"
+	"strings"
 )
 
 type Config struct {
@@ -24,9 +25,11 @@ type Config struct {
 //根据id查询一条数据
 func (*Config) Get() (*Config, error) {
 	vo := &Config{}
+	exts := ""
 	sql := "SELECT lang, theme, platform, menu,romlist_style, romlist_zoom, search_engines,book,exe_ext,root_path,window_width, window_height, window_left, window_top FROM config where id= 1"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.Menu, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines, &vo.Book,&vo.ExeExt, &vo.RootPath, &vo.WindowWidth, &vo.WindowHeight, &vo.WindowLeft, &vo.WindowTop)
+	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.Menu, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines, &vo.Book, &exts, &vo.RootPath, &vo.WindowWidth, &vo.WindowHeight, &vo.WindowLeft, &vo.WindowTop)
+	vo.ExeExt = strings.Split(exts, ",") //拆分rom扩展名
 	return vo, err
 }
 
