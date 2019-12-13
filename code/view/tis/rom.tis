@@ -428,3 +428,54 @@ function getRomPicPath(type,platform,name){
             return "";
         }
 }
+
+//rom模块右键菜单
+function romContextMenu(obj){
+    var romcontext = $(#romcontext);
+    romcontext.clear();
+    var getjson = view.GetGameDetail(obj.attributes["rid"]);
+    var detailObj = JSON.parse(getjson);
+    var pfId = detailObj.Info.Platform.toString();
+
+    //生成按钮
+
+    //读取模拟器图标
+    var simIco = "";
+    //var simIco = CONF.Platform[pfId].SimList[simId].Path;
+
+    var btndata = "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ detailObj.Info.Id +"'>启动 "+ detailObj.Info.Name + "</li>";
+
+    //主游戏
+    // if(CONF.Platform[pfId].SimList.length > 1){
+    //     btndata += "<menu>";
+
+    //     for(var simId in CONF.Platform[pfId].SimList) {
+    //         btndata += "<li class='menu_run_game' filename='"+ CONF.Platform[pfId].SimList[simId].Path +"' sim='"+ CONF.Platform[pfId].SimList[simId].Id +"' rid='"+ detailObj.Info.Id +"'>" + CONF.Platform[pfId].SimList[simId].Name + "</li>";
+    //     }
+    //     btndata += "</menu>";
+    // }
+
+    //子游戏
+    for(var sub in detailObj.Sublist) {
+        btndata += "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ sub.Id +"'>启动 "+ sub.Name + "</li>";;
+        // if(CONF.Platform[pfId].SimList.length > 1){
+        //     btndata += "<menu>";
+        //     for(var simId in CONF.Platform[pfId].SimList) {
+        //         btndata += "<li class='menu_run_game'  sim='"+ CONF.Platform[pfId].SimList[simId].Id +"' rid='"+sub.Id+"'>" + CONF.Platform[pfId].SimList[simId].Name + "</li>";
+        //     }
+        //     btndata += "</menu>";
+        // }        
+    }
+
+    btndata += "<caption>功能</caption>";
+    btndata += "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>下载封面插画</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>设为喜爱</li>";
+    btndata += "<caption>文件定位</caption>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位rom文件文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位封面图片文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位插画图片文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位文档文件</li>";
+    btndata += "<li class='' rname = '"+ detailObj.Info.Name +"' rid='"+ detailObj.Info.Id +"'>定位攻略文件</li>";
+
+    romcontext.append(btndata);
+}

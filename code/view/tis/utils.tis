@@ -7,3 +7,8 @@ function createLang(){
     }
     $(body).html = content;
 }
+
+//弹出错误窗口
+function errorBox(str){
+    view.msgbox(#error,str);
+}

@@ -126,6 +126,9 @@
     #doc p{display:block;margin-bottom:12dip}
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
+    #romcontext > li{padding-right:20px}
+    #romcontext li li{behavior: shell-icon;padding-left:28px;}
+
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
 
@@ -141,6 +144,7 @@
 <body>
 
 <div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
+<menu class="context" id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo">{{SoftName}}</div>
     <div id="tb_left"><ul id="platform_ul"></ul></div>

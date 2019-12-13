@@ -8,8 +8,7 @@ function createMenuList(menujson){
     dd += "<dt>"+ CONF.Lang.Cate +"</dt>";
     dd += "<dd opt='' class='menuitem'>"+ CONF.Lang.AllGames +"</dd>";
     dd += "<dd opt='favorite' class='menuitem'>"+ CONF.Lang.Favorite +"</dd>";
-    //dd += "<dd opt='_7b9' class='menuitem'>"+ CONF.Lang.Uncate +"</dd>";
-    
+
     //遍历数据，生成dom
     for(var obj in menuobj) {
         if(obj.Name == "_7b9"){
@@ -21,10 +20,16 @@ function createMenuList(menujson){
     }
     menulist.html = dd; //生成dom
 
-    //激活默认按钮
-    var first =  menulist.select("dd[opt='']");
-    if (first != undefined){
-        first.state.current = true;
+   //设置默认激活按钮
+    var active =  $(#menulist).select("dd[opt="+ CONF.Default.Menu +"]");
+    if (active != undefined){
+        active.state.current = true;
+    }else{
+        //没有找到默认激活的按钮，则读取全部菜单
+        active =  $(#menulist).select("dd[opt='']");
+        if (active != undefined){
+            active.state.current = true;
+        }
     }
 
 }
@@ -48,4 +53,7 @@ function changeMenu(obj){
 
     //激活第一个字母索引
     $(#num_search li).state.current = true;
+
+    //更新配置文件
+    view.UpdateConfig("menu",obj.attributes["opt"]);
 }

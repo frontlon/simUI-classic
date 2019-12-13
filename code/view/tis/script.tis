@@ -17,7 +17,8 @@ view.root.on("ready", function(){
 
     //初始化rom
     var pf = CONF.Default.Platform;
-    ROMJSON = view.GetGameList(pf,"","","",SCROLL_PAGE)
+    var menu =  $(#menulist).select("dd:current").attributes["opt"];
+    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE)
 
     createRomList(0); //生成rom列表
     //生成rom数量
@@ -271,6 +272,32 @@ view.root.on("ready", function(){
         view.SetRomSimulator(romid,simid);
     });
 
+    //rom展开右键菜单
+    self.on("contextmenusetup", "#romlist > li", function(evt) {
+        romContextMenu(this);
+    });
+    
+    //右键菜单按钮启动游戏
+    /*
+    self.on("click", "#romcontext .menu_run_game", function(evt) {
+        view.RunGame(this.attributes["rid"],this.attributes['sim']);
+    });
+
+    //右键菜单启动图片下载
+    self.on("click", "#romcontext .open_down_thumb", function(evt) {
+        view.dialog({
+            url:self.url(ROOTPATH + "down_thumbs.html"),
+            caption:"图片下载",
+            width:1024,
+            height:750,
+            parameters: {
+                id:this.attributes["rid"],
+                keyword:this.attributes["rname"],
+                updateRomThumbs:updateRomThumbs,
+            };
+        });
+    });
+    */
 });
 
 //侧边栏缩略图滑动特效
@@ -280,6 +307,10 @@ $(#rotate) << event click() {
     this.state.disabled = true;
     rotateTo(next, :: (this super).state.disabled = false);
 }
+
+
+
+
 
 //初始化配置
 function initConfig(isfresh){
@@ -310,9 +341,3 @@ function initConfig(isfresh){
     //动态设置平台栏宽度，滑动平台栏使用
     setPlatformWidth();
   }
-
-//弹出错误窗口
-function errorBox(str){
-    view.msgbox(#error,str);
-}
-
