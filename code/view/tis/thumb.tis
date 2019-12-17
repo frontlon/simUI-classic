@@ -1,0 +1,14 @@
+﻿//启动图片下载
+function thumbDown(id,keyword){
+    view.dialog({
+        url:self.url(ROOTPATH + "down_thumbs.html"),
+        caption:CONF.Lang.ThumbsDown,
+        width:1024,
+        height:750,
+        parameters: {
+            id:id,
+            keyword:keyword,
+            updateRomThumbs:updateRomThumbs,
+        };
+    });
+}

@@ -3,6 +3,7 @@ package db
 import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
+	"github.com/astaxie/beego/config"
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
 )
@@ -42,14 +43,14 @@ func (r *Rom) Add() error {
 }
 
 //根据条件，查询多条数据
-func (*Rom) Get(pages int, platform string, menu string, keyword string) ([]*Rom, error) {
+func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
 	num := 50 //每页显示100个
 
 	volist := []*Rom{}
 	field := "id,name,menu,platform,rom_path";
 	sql := "SELECT " + field + " FROM rom WHERE 1=1"
-	if platform != "0" {
-		sql += " AND platform = '" + platform + "'"
+	if platform != 0 {
+		sql += " AND platform = '" + config.ToString(platform) + "'"
 	}
 
 	if menu != "" {
@@ -114,23 +115,23 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 }
 
 //根据id查询一条数据
-func (*Rom) GetById(id string) (*Rom, error) {
+func (*Rom) GetById(id uint64) (*Rom, error) {
 	vo := &Rom{}
-	sql := "SELECT * FROM rom where id= '" + id + "'"
+	sql := "SELECT * FROM rom where id= '" + utils.ToString(id) + "'"
 	rows := sqlite.QueryRow(sql)
 	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin,&vo.Md5)
 	return vo, err
 }
 
 //根据拼音筛选
-func (*Rom) GetByPinyin(pages int, platform string, menu string, keyword string) ([]*Rom, error) {
+func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
 	num := 50 //每页显示100个
 	volist := []*Rom{}
 	field := "id,name,menu,platform,rom_path";
 	sql := ""
 	pf := ""
-	if platform != "0" {
-		pf = " platform=" + platform + " AND "
+	if platform != 0 {
+		pf = " platform=" + utils.ToString(platform) + " AND "
 	}
 
 	if menu != "" {
@@ -169,12 +170,12 @@ func (*Rom) GetByPinyin(pages int, platform string, menu string, keyword string)
 }
 
 //查询star
-func (*Rom) GetByStar(platform string, star uint8) (*Rom, error) {
+/*func (*Rom) GetByStar(platform uint32, star uint8) (*Rom, error) {
 	vo := &Rom{}
 
 	where := ""
-	if platform != "0" {
-		where = " platform=" + platform + " AND "
+	if platform != 0 {
+		where = " platform=" + utils.ToString(platform) + " AND "
 	}
 
 	sql := "SELECT * FROM rom WHERE " + where + " star = " + utils.ToString(star)
@@ -182,7 +183,7 @@ func (*Rom) GetByStar(platform string, star uint8) (*Rom, error) {
 	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.Pinyin,&vo.Md5)
 	return vo, err
 }
-
+*/
 //根据满足条件的rom数量
 func (*Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	count := 0

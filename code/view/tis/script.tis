@@ -5,13 +5,12 @@ var SCROLL_PAGE = 0; //当前滚动条翻页页数
 var SCROLL_LOCK = false; //滚动条锁
 var SCROLL_POS = 0; //默认滚动条位置
 var MAXZOOM = 5; //最大缩放等级
-var ACTIVETIME = null; //正在启动的定时器
-var ACTIVE_PLATFORM = ""; //当前选定的平台
-var ACTIVE_ROM = ""; //当前选定的rom
+
 
 view.root.on("ready", function(){
 
     /********** 数据初始化 **********/
+
     //初始化全局配置
     initConfig("0");
 
@@ -25,7 +24,48 @@ view.root.on("ready", function(){
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
-    createLang(); //创建语言
+    
+
+
+
+
+
+
+    //平台拖拽排序
+    DragDrop{
+        what      : "dl#menulist>dd:not(.fixed)",
+        where     : "dl#menulist",
+        container : "dl#menulist",        
+        notBefore : "dl#menulist>dd.fixed",
+        dropped : function(){
+            var lis = $$(#menulist > dd);
+            var bbb = "";
+            var id = "";
+            var idx = 0;
+            var newObj = {};
+           // for(var li in lis) {
+           //     id = li.attributes["value"];
+           //     newObj[id] = li.index;
+            //}
+            //更新到数据库
+          //  view.parameters.updatePlatformSort(newObj);
+        }  
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // ================= 事件 =================
     //方向键选择rom
@@ -34,7 +74,7 @@ view.root.on("ready", function(){
         if(evt.keyCode == Event.VK_TAB){
         //}else if(evt.keyCode == Event.VK_UP){
         //}else if(evt.keyCode == Event.VK_DOWN){                    
-        }else if(evt.keyCode == Event.VK_LEFT){
+        }else if(evt.keyCode == Event.VK_LEFT){ //左键移动rom
 
             //如果没有rom，则直接返回
             if($$(#romlist li).length == 0){
@@ -58,8 +98,7 @@ view.root.on("ready", function(){
                     openSidebar(pri);
                 }
             }
-            //nodeIndex
-        }else if(evt.keyCode == Event.VK_RIGHT){
+        }else if(evt.keyCode == Event.VK_RIGHT){ //右键移动rom
 
             //如果没有rom，则直接返回
             if($$(#romlist li).length == 0){
@@ -83,6 +122,11 @@ view.root.on("ready", function(){
                     openSidebar(next);
                 }
             }
+        }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
+            var rom = $(#romlist).select("li:current");
+            if (rom != undefined){
+                view.RunGame(rom.attributes["rid"],"");
+            }
         }
         //else{
         //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}
@@ -100,22 +144,19 @@ view.root.on("ready", function(){
     });
 
 
-    //平台单击
-    self.on("click", "#platform_ul > li", function(evt) {
-        changePlatform(this);
-    });
-
-    //平台下拉菜单 - 打开目录
-    self.on("click", ".opendir", function(evt) {
-        openPlatformDir(this);
-    });
+  
 
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
     });
     
-    //单击游戏，启动侧边栏
+    //双击游戏模块，启动游戏
+    self.on("dblclick", "#romlist li[class=romitem]", function(evt) {
+        view.RunGame(this.attributes["rid"],"");
+    });
+
+    //点击模块，打开侧边栏
     self.on("click", "#romlist li[class=romitem]", function(evt) {
         openSidebar(this);
     });
@@ -167,17 +208,7 @@ view.root.on("ready", function(){
 
     //启动图片下载
     self.on("click", "#right_thumb_down", function(evt) {
-        view.dialog({
-            url:self.url(ROOTPATH + "down_thumbs.html"),
-            caption:CONF.Lang.ThumbsDown,
-            width:1024,
-            height:750,
-            parameters: {
-                id:this.attributes["rid"],
-                keyword:this.attributes["rname"],
-                updateRomThumbs:updateRomThumbs,
-            };
-        });
+        thumbDown(this.attributes["rid"],this.attributes["rname"]);
     });
 
     //按字母搜索rom
@@ -210,26 +241,12 @@ view.root.on("ready", function(){
                 delPlatform:delPlatform,
             };
         });
+       
         $(#loading).style["display"]="block";
         initConfig("1");
         $(#loading).style["display"]="none";
     });
 
-    //平台列表鼠标移入，初始化一些常量参数
-    $(#tb_left).on("mouseenter", function(evt) {
-        platformMouseEnter(evt);
-    });
-
-    //平台列表鼠标移出，销毁一些参数
-    $(#tb_left).on("mouseleave", function(evt) {
-       platformMouseLeave(evt);
-    });
-
-    //平台列表鼠标移动，滑动功能
-    self.on("mousemove", "#tb_left", function(evt) {
-        platformMouseMove(evt);
-    });
- 
     //调整窗口大小
     view.on("size", function(evt) {
         //还原平台拉条位置
@@ -272,32 +289,6 @@ view.root.on("ready", function(){
         view.SetRomSimulator(romid,simid);
     });
 
-    //rom展开右键菜单
-    self.on("contextmenusetup", "#romlist > li", function(evt) {
-        romContextMenu(this);
-    });
-    
-    //右键菜单按钮启动游戏
-    /*
-    self.on("click", "#romcontext .menu_run_game", function(evt) {
-        view.RunGame(this.attributes["rid"],this.attributes['sim']);
-    });
-
-    //右键菜单启动图片下载
-    self.on("click", "#romcontext .open_down_thumb", function(evt) {
-        view.dialog({
-            url:self.url(ROOTPATH + "down_thumbs.html"),
-            caption:"图片下载",
-            width:1024,
-            height:750,
-            parameters: {
-                id:this.attributes["rid"],
-                keyword:this.attributes["rname"],
-                updateRomThumbs:updateRomThumbs,
-            };
-        });
-    });
-    */
 });
 
 //侧边栏缩略图滑动特效
@@ -307,10 +298,6 @@ $(#rotate) << event click() {
     this.state.disabled = true;
     rotateTo(next, :: (this super).state.disabled = false);
 }
-
-
-
-
 
 //初始化配置
 function initConfig(isfresh){
@@ -325,6 +312,11 @@ function initConfig(isfresh){
         view.CreateRomCache();
         view.UpdateConfig("root_path",CONF.RootPath);
         view.msgbox(#alert,CONF.Lang.FirstBootCreateCache);
+    }
+
+    //创建语言
+    if (isfresh == "0"){
+        createLang();
     }
 
     createTheme(); //创建主题

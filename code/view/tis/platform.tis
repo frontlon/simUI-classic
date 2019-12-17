@@ -1,4 +1,29 @@
-﻿//点击平台下拉菜单 - 打开目录
+﻿var ACTIVE_PLATFORM = ""; //当前选定的平台
+
+view.root.on("ready", function(){
+
+      //平台单击
+    self.on("click", "#platform_ul > li", function(evt) {
+        changePlatform(this);
+    });
+
+    //平台列表鼠标移入，初始化一些常量参数
+    $(#tb_left).on("mouseenter", function(evt) {
+        platformMouseEnter(evt);
+    });
+
+    //平台列表鼠标移出，销毁一些参数
+    $(#tb_left).on("mouseleave", function(evt) {
+       platformMouseLeave(evt);
+    });
+
+    //平台列表鼠标移动，滑动功能
+    self.on("mousemove", "#tb_left", function(evt) {
+        platformMouseMove(evt);
+    });
+});
+
+//点击平台下拉菜单 - 打开目录
 function openPlatformDir(obj){
     view.OpenFolder(obj.parent.parent.parent.attributes["platform"],obj.attributes["opt"],obj.attributes["sid"]);
 }
@@ -6,32 +31,39 @@ function openPlatformDir(obj){
 //切换平台
 function changePlatform(obj){
 
-    var menujson = view.GetMenuList(obj.attributes["platform"]); //读取分配列表
-
     //设置全局变量
     ACTIVE_PLATFORM = obj.attributes["platform"];
+
     //创建菜单
+    var menujson = view.GetMenuList(ACTIVE_PLATFORM); //读取分配列表
     createMenuList(menujson);
     //重置滚动翻页数据
     resetScroll();
     //生成游戏列表
-    ROMJSON = view.GetGameList(obj.attributes["platform"],"","","",SCROLL_PAGE);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,"","","",SCROLL_PAGE);
     createRomList(1);
-    var romCount = view.GetGameCount(obj.attributes["platform"],"",""); //必须在获取rom的方法下面
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"",""); //必须在获取rom的方法下面
     $(#rom_count_num).html = romCount; //初始化在线人数
     
     //激活按钮改变样式
     obj.state.current = true;
+    $(#menulist).select("dd[opt='']").state.current = true;
+
 
     //激活第一个字母索引
     $(#num_search li).state.current = true;
 
     //更新配置文件
-    view.UpdateConfig("platform",obj.attributes["platform"])
+    view.UpdateConfig("platform",ACTIVE_PLATFORM)
+    view.UpdateConfig("menu","");
 }
 
 //生成平台列表
 function createPlatform(){
+
+    //设置默认激活
+    ACTIVE_PLATFORM = CONF.Default.Platform;
+
     var simclass = "";
     var dd = "";
     var pf = {};
@@ -41,33 +73,15 @@ function createPlatform(){
     }
     //遍历数据，生成dom
     for(var pf in CONF.PlatformList) {
-        dd += "<li platform='"+ pf.Id +"'>";
-        dd += "<button class='platform'>" + pf.Name + "</button>";
-        dd += "<button class='platform_down' type='menu'><i>&#xe628;</i><menu>";
-
-        if (pf.RomPath !=""){dd += "<li class='opendir' opt='rom' sid=''>"+CONF.Lang.OpenRomFolder +"</li>";}
-        if (pf.ThumbPath !=""){dd += "<li class='opendir' opt='thumb' sid=''>"+ CONF.Lang.OpenThumbsFolder +"</li>";}
-        if (pf.SnapPath !=""){dd += "<li class='opendir' opt='snap' sid=''>"+ CONF.Lang.OpenSnapFolder +"</li>";}
-        if (pf.DocPath !=""){dd += "<li class='opendir' opt='doc' sid=''>"+ CONF.Lang.OpenDocFolder +"</li>";}
-        if (pf.StrategyPath !=""){dd += "<li class='opendir' opt='strategy' sid=''>"+ CONF.Lang.OpenStrategyFolder +"</li>";}
-      
-        if(pf.SimList.length > 0 ){
-            for(var simId in pf.SimList) {
-                dd += "<li class='opendir' opt='sim' sid='"+  pf.SimList[simId].Id +"'>"+ CONF.Lang.OpenSimFolder  +":"+ pf.SimList[simId].Name +"</li>";
-            }
-        }
-
-        dd += "</menu></button></li>";
+        dd += "<li platform='"+ pf.Id +"'><button class='platform'>" + pf.Name + "</button></li>";
     }
     self.$(#platform_ul).html = dd; //生成dom
 
-    //设置默认激活
-    ACTIVE_PLATFORM = CONF.Default.Platform;
-
     var pfDom =  $(#platform_ul).select("li[platform="+CONF.Default.Platform+"]");
-    if (pfDom != undefined){
+    if(pfDom != undefined){
         pfDom.state.current = true;
     }
+    
 }
 
 //滑动平台列表参数

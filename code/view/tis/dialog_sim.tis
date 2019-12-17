@@ -3,6 +3,9 @@ var action;
 var pfId;
 view.root.on("ready", function(){
 
+    //创建语言
+    createLang();
+
     id = view.parameters.id.toString();
     pfId = view.parameters.platform.toString();
 
@@ -12,7 +15,9 @@ view.root.on("ready", function(){
         $(#sim_delete).style['display'] = "none";
         view.windowCaption = CONF.Lang.AddSimulator;
     }else{
+        
         var sim = view.parameters.getSimulatorById(id);
+        
         action = "update";
         $(#sim_submit).value = CONF.Lang.SaveConfig;
         view.windowCaption = CONF.Lang.EditSimulator;
@@ -23,8 +28,7 @@ view.root.on("ready", function(){
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
     
-    //创建语言
-    createLang();
+    
 
 });
 

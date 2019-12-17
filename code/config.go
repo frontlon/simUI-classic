@@ -18,14 +18,14 @@ var Config *ConfStruct
 
 //配置文件
 type ConfStruct struct {
-	RootPath  string                  //exe文件的当前路径
-	Separator string                  //exe文件的当前路径
-	Default   *db.Config              //默认配置
-	LangList  map[string]string       //语言列表
-	Theme     map[string]*ThemeStruct //主题列表
-	Lang      map[string]string       //语言项
-	Platform  map[uint32]*db.Platform //平台及对应的模拟器列表（无序）
-	PlatformList  []*db.Platform //平台及对应的模拟器列表（有序）
+	RootPath     string                  //exe文件的当前路径
+	Separator    string                  //exe文件的当前路径
+	Default      *db.Config              //默认配置
+	LangList     map[string]string       //语言列表
+	Theme        map[string]*ThemeStruct //主题列表
+	Lang         map[string]string       //语言项
+	Platform     map[uint32]*db.Platform //平台及对应的模拟器列表（无序）
+	PlatformList []*db.Platform          //平台及对应的模拟器列表（有序）
 }
 
 //主题配置
@@ -59,7 +59,7 @@ func InitConf() error {
 	if err != nil {
 		return err
 	}
-	Config.PlatformList,Config.Platform, err = getPlatform()
+	Config.PlatformList, Config.Platform, err = getPlatform()
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func InitConf() error {
 }
 
 //读取平台列表
-func getPlatform() ([]*db.Platform,map[uint32]*db.Platform, error) {
+func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 	DBSim := &db.Simulator{}
 	platformList, _ := (&db.Platform{}).GetAll()
 	platform := map[uint32]*db.Platform{}
@@ -79,64 +79,69 @@ func getPlatform() ([]*db.Platform,map[uint32]*db.Platform, error) {
 		platform[v.Id] = v
 
 		if v.DocPath != "" {
-			platformList[k].DocPath,_ = filepath.Abs(v.DocPath)
+			platformList[k].DocPath, _ = filepath.Abs(v.DocPath)
 			platform[v.Id].DocPath = platformList[k].DocPath
 		}
 
 		if v.StrategyPath != "" {
-			platformList[k].StrategyPath,_ = filepath.Abs(v.StrategyPath)
+			platformList[k].StrategyPath, _ = filepath.Abs(v.StrategyPath)
 			platform[v.Id].StrategyPath = platformList[k].StrategyPath
 		}
 
 		if v.RomPath != "" {
-			platformList[k].RomPath,_ = filepath.Abs(v.RomPath)
+			platformList[k].RomPath, _ = filepath.Abs(v.RomPath)
 			platform[v.Id].RomPath = platformList[k].RomPath
 		}
 
 		if v.ThumbPath != "" {
-			platformList[k].ThumbPath,_ = filepath.Abs(v.ThumbPath)
+			platformList[k].ThumbPath, _ = filepath.Abs(v.ThumbPath)
 			platform[v.Id].ThumbPath = platformList[k].ThumbPath
 		}
 
 		if v.SnapPath != "" {
-			platformList[k].SnapPath,_ = filepath.Abs(v.SnapPath)
+			platformList[k].SnapPath, _ = filepath.Abs(v.SnapPath)
 			platform[v.Id].SnapPath = platformList[k].SnapPath
 		}
 
 		if v.Romlist != "" {
-			platformList[k].Romlist,_ = filepath.Abs(v.Romlist)
+			platformList[k].Romlist, _ = filepath.Abs(v.Romlist)
 			platform[v.Id].Romlist = platformList[k].Romlist
 		}
 
 		//填充模拟器列表
-		simList,_ := DBSim.GetByPlatform(v.Id)
+		simList, _ := DBSim.GetByPlatform(v.Id)
 		platform[v.Id].SimList = simList
 		platformList[k].SimList = simList
 
 		platform[v.Id].UseSim = &db.Simulator{}
 		//找到默认模拟器
 		for sk, sim := range simList {
+
 			//当前正在使用的模拟器
-			if sim.Default == 1 {
+			if sim.Default == 1 { //如果有默认模拟器
+				platformList[k].UseSim = sim
+				platform[v.Id].UseSim = sim
+			} else if platformList[k].UseSim.Id == 0 { //如果没有默认模拟器，读取第一个
 				platformList[k].UseSim = sim
 				platform[v.Id].UseSim = sim
 			}
+
 			//模拟器路径转换为绝对路径
 			if sim.Path != "" {
-				sim.Path,_ = filepath.Abs(sim.Path)
+				sim.Path, _ = filepath.Abs(sim.Path)
 				platformList[k].SimList[sk].Path = sim.Path
 				platform[v.Id].SimList[sk].Path = sim.Path
 			}
 		}
 	}
-	return platformList,platform, nil
+	return platformList, platform, nil
 }
 
 //读取缓存配置
 func getDefault() (*db.Config, error) {
 	vo, err := (&db.Config{}).Get()
-	if err != nil{
-		return vo,err
+	if err != nil {
+		return vo, err
 	}
 	//查看当前选定平台值是否是正常的
 	isset := false
@@ -220,11 +225,6 @@ func getTheme() (map[string]*ThemeStruct, error) {
 					key := strings.Trim(strarr[0][first+1:last], " ")
 					value := strings.Trim(strings.Replace(strarr[1], ";", "", 1), " ")
 					if key != "" && value != "" {
-						if (key == "window-background-image" ||
-							key == "desc-background-image" ||
-							key == "default-thumb-image") {
-							value = dirPth + value
-						}
 						params[key] = value
 					}
 				}
@@ -246,7 +246,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	//如果当前的主题不存在，则将第一个主题更新到数据库
 	if _, ok := themelist[Config.Default.Theme]; !ok {
 		themeId := ""
-		for k,_ := range themelist{
+		for k, _ := range themelist {
 			themeId = k
 			break
 		}

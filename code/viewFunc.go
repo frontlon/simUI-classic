@@ -4,7 +4,6 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
-	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -44,7 +43,7 @@ func defineViewFunction(w *window.Window) {
 	//运行游戏
 	w.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
 
-		id := args[0].String()
+		id := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
 		//数据库中读取rom详情
@@ -81,13 +80,13 @@ func defineViewFunction(w *window.Window) {
 		//加载运行参数
 		cmd := []string{}
 
-		ext :=utils.GetFileExt(rom.RomPath)
+		ext := utils.GetFileExt(rom.RomPath)
 
 		//如果是可执行程序，则不依赖模拟器直接运行
-		if utils.InSliceString(ext,Config.Default.ExeExt){
+		if utils.InSliceString(ext, Config.Default.ExeExt) {
 			cmd = append(cmd, rom.RomPath)
 			err = runGame("explorer", cmd)
-		}else{
+		} else {
 			//如果依赖模拟器
 			if sim.Cmd == "" {
 				cmd = append(cmd, rom.RomPath)
@@ -128,28 +127,104 @@ func defineViewFunction(w *window.Window) {
 
 	//打开rom目录
 	w.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
-		platform := uint32(utils.ToInt(args[0].String()))
-		gtype := args[1].String() //目录类型
-		p := ""
-		switch gtype {
-		case "rom":
-			p = Config.Platform[platform].RomPath
-		case "thumb":
-			p = Config.Platform[platform].ThumbPath
-		case "snap":
-			p = Config.Platform[platform].SnapPath
-		case "doc":
-			p = Config.Platform[platform].DocPath
-		case "strategy":
-			p = Config.Platform[platform].StrategyPath
-		case "sim":
-			simid := uint32(utils.ToInt(args[2].String())) //模拟器ID
-			exe := Config.Platform[platform].SimList[simid].Path
-			p = filepath.Dir(exe)
-		}
-		if err := exec.Command(`explorer`, p).Start(); err != nil {
+
+		id := uint64(utils.ToInt(args[0].String()))
+		opt := args[1].String()
+		simId := uint32(utils.ToInt(args[2].String()))
+		info, err := (&db.Rom{}).GetById(id)
+		platform := Config.Platform[info.Platform] //读取当前平台信息
+		if err != nil {
 			return errorMsg(w, err.Error())
 		}
+		romName := utils.GetFileName(filepath.Base(info.RomPath)) //读取文件名 }
+		fileName := ""
+		isDir := false
+		switch opt {
+		case "rom":
+			fileName = platform.RomPath + separator + info.RomPath
+		case "thumb":
+			if platform.ThumbPath != "" {
+				for _, v := range PIC_EXTS {
+					fileName = platform.ThumbPath + separator + romName + v
+
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+
+				if fileName == "" {
+					isDir = true
+					fileName = platform.ThumbPath
+				}
+
+			}
+		case "snap":
+			if platform.SnapPath != "" {
+				for _, v := range PIC_EXTS {
+					fileName = platform.SnapPath + separator + romName + v
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+				if fileName == "" {
+					isDir = true
+					fileName = platform.SnapPath + separator
+				}
+			}
+		case "doc":
+			if platform.DocPath != "" {
+				for _, v := range DOC_EXTS {
+					fileName = platform.DocPath + separator + romName + v
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+				if fileName == "" {
+					isDir = true
+					fileName = platform.DocPath
+				}
+			}
+		case "strategy":
+			if platform.StrategyPath != "" {
+				for _, v := range DOC_EXTS {
+					fileName = platform.StrategyPath + separator + romName + v
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+				if fileName == "" {
+					isDir = true
+					fileName = platform.StrategyPath
+				}
+			}
+		case "sim":
+			if _, ok := platform.SimList[simId]; ok {
+				fileName = platform.SimList[simId].Path
+			}
+		}
+
+		if fileName != "" {
+			if isDir == true {
+				if err := exec.Command(`explorer`, fileName).Start(); err != nil {
+					return errorMsg(w, err.Error())
+				}
+			} else {
+				if err := exec.Command(`explorer`, `/select,`, `/n,`, fileName).Start(); err != nil {
+					return errorMsg(w, err.Error())
+				}
+			}
+		} else {
+			return errorMsg(w, Config.Lang["PathNotFound"])
+		}
+
 		return sciter.NullValue()
 	})
 
@@ -244,7 +319,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取游戏列表
 	w.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
-		platform := strings.Trim(args[0].String(), " ")          //平台
+		platform := uint32(utils.ToInt(args[0].String()))        //平台
 		catname := strings.Trim(args[1].String(), " ")           //分类
 		keyword := strings.Trim(args[2].String(), " ")           //关键字
 		num := strings.Trim(args[3].String(), " ")               //字母索引
@@ -273,7 +348,7 @@ func defineViewFunction(w *window.Window) {
 
 	//读取rom详情
 	w.DefineFunction("GetGameDetail", func(args ...*sciter.Value) *sciter.Value {
-		id := strings.Trim(args[0].String(), " ") //游戏id
+		id := uint64(utils.ToInt(args[0].String()))
 		res := &RomDetail{}
 		//游戏游戏详细数据
 		info, err := (&db.Rom{}).GetById(id)
@@ -285,8 +360,6 @@ func defineViewFunction(w *window.Window) {
 
 		res.Info = info
 		res.Sublist = sub
-
-		fmt.Println(Config.Platform[info.Platform].UseSim)
 
 		//读取文档内容
 		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
@@ -406,11 +479,11 @@ func defineViewFunction(w *window.Window) {
 		d := make(map[uint32]uint32)
 		json.Unmarshal([]byte(data), &d)
 
-		if len(d) == 0{
+		if len(d) == 0 {
 			return sciter.NullValue()
 		}
 
-		for id,val := range d{
+		for id, val := range d {
 			platform := &db.Platform{
 				Id:   id,
 				Sort: val,
@@ -440,8 +513,7 @@ func defineViewFunction(w *window.Window) {
 		id, err := sim.Add()
 
 		//更新默认模拟器
-
-		if utils.ToInt(d["platform"]) == 1 {
+		if utils.ToInt(d["default"]) == 1 {
 			err = sim.UpdateDefault(pfId, id)
 			if err != nil {
 				return errorMsg(w, err.Error())
@@ -597,7 +669,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//设定新的文件名
-		vo, _ := rom.GetById(args[1].String())
+		vo, _ := rom.GetById(id)
 
 		//下载文件
 		res, err := http.Get(newpath)

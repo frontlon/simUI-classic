@@ -1,4 +1,6 @@
-﻿//初始化游戏列表样式
+﻿var MASK = true;
+
+//初始化游戏列表样式
 function initRomListStyle(){
     //初始化游戏列表样式
     if(CONF.Default.RomlistStyle == "1"){
@@ -87,7 +89,7 @@ function createRomList(cls=0){
     var switch_romlist = $(#switch_romlist).attributes["value"];
     var title = "";
     var thumb = "";
-     var romPath = "";
+    var romPath = "";
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
         romlist.clear();
@@ -108,7 +110,7 @@ function createRomList(cls=0){
         thumb = getRomPicPath("thumb",obj.Platform,romPath.name);
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-            thumb = URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+            thumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
       
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()   +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
@@ -180,20 +182,13 @@ function resetScroll(){
 //单击游戏侧边栏详情
 function openSidebar(obj){
 
-    //判断重复点击
-    if (ACTIVE_ROM == obj.attributes["rid"]){
-        return;
-    }
-    ACTIVE_ROM = obj.attributes["rid"];
-
     obj.state.current = true;
 
-    if($(#right).style["display"] == "none"){
-        $(#right).style["display"] = "block";
-        $(#right).attributes.addClass("ready");
-    }else{
-        $(#right).attributes.removeClass("ready");
+    if(MASK == true){
+        MASK = false;
+        $(#mask).style["display"] = "none";
     }
+
     var getjson = view.GetGameDetail(obj.attributes["rid"]);
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
@@ -226,7 +221,7 @@ function openSidebar(obj){
     if(thumb != ""){
         pics += "<img src='"+ thumb +"' />";
     }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        pics += "<img src='"+ URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
+        pics += "<img src='"+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
     
     //滚动图
@@ -325,12 +320,11 @@ function createAllCache(showMsgbox){
             resetScroll();
 
             //初始化rom
-            var pf = CONF.Default.Platform;
-            ROMJSON = view.GetGameList(pf,"","","",0)
+            ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0)
 
             createRomList(1); //生成rom列表
             //生成rom数量
-            var romCount = view.GetGameCount(pf,"","");
+            var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","");
             $(#rom_count_num).html = romCount; //初始化在线人数
             $(#loading).style["display"]="none";
             if(showMsgbox == "1"){
@@ -427,64 +421,4 @@ function getRomPicPath(type,platform,name){
         }else{
             return "";
         }
-}
-
-//rom模块右键菜单
-
-function romContextMenu(obj){
-    var romcontext = $(#romcontext);
-    romcontext.clear();
-    var getjson = view.GetGameDetail(obj.attributes["rid"]);
-    var detailObj = JSON.parse(getjson);
-    var pfId = detailObj.Info.Platform.toString();
-
-    //生成按钮
-    var simId = 0;
-    var simIco = "";
-    if (detailObj.Info.SimId != 0){
-        simId = detailObj.Info.SimId;
-    }else if (CONF.Platform[pfId].UseSim != undefined){
-        simId = CONF.Platform[pfId].UseSim["Id"];
-    }
-    //读取模拟器图标
-    if (simId != 0){
-        simId = simId.toString();
-        simIco = CONF.Platform[pfId].SimList[simId].Path;
-    }
-
-    var btndata = "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ detailObj.Info.Id +"'>启动 "+ detailObj.Info.Name.toHtmlString() + "</li>";
-
-    //主游戏
-    // if(CONF.Platform[pfId].SimList.length > 1){
-    //     btndata += "<menu>";
-
-    //     for(var simId in CONF.Platform[pfId].SimList) {
-    //         btndata += "<li class='menu_run_game' filename='"+ CONF.Platform[pfId].SimList[simId].Path +"' sim='"+ CONF.Platform[pfId].SimList[simId].Id +"' rid='"+ detailObj.Info.Id +"'>" + CONF.Platform[pfId].SimList[simId].Name + "</li>";
-    //     }
-    //     btndata += "</menu>";
-    // }
-
-    //子游戏
-    for(var sub in detailObj.Sublist) {
-        btndata += "<li class='menu_run_game' sim='' filename='"+ simIco +"' rid='"+ sub.Id +"'>启动 "+ sub.Name.toHtmlString() + "</li>";;
-        // if(CONF.Platform[pfId].SimList.length > 1){
-        //     btndata += "<menu>";
-        //     for(var simId in CONF.Platform[pfId].SimList) {
-        //         btndata += "<li class='menu_run_game'  sim='"+ CONF.Platform[pfId].SimList[simId].Id +"' rid='"+sub.Id+"'>" + CONF.Platform[pfId].SimList[simId].Name + "</li>";
-        //     }
-        //     btndata += "</menu>";
-        // }        
-    }
-
-    btndata += "<caption>功能</caption>";
-    btndata += "<li class='open_down_thumb' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>下载封面插画</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>设为喜爱</li>";
-    btndata += "<caption>文件定位</caption>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位rom文件文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位封面图片文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位插画图片文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位文档文件</li>";
-    btndata += "<li class='' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>定位攻略文件</li>";
-
-    romcontext.append(btndata);
 }
