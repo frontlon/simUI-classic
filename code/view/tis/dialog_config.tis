@@ -39,9 +39,7 @@ view.root.on("ready", function(){
         container : "ul#platform_list",        
         dropped : function(){
             var lis = $$(#platform_list > li);
-            var bbb = "";
             var id = "";
-            var idx = 0;
             var newObj = {};
             for(var li in lis) {
                 id = li.attributes["value"];
