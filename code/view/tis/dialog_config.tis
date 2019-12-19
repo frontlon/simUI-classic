@@ -228,7 +228,7 @@ event click $(.openfile){
 //添加平台
 event click $(#platform_add){
     var name =  view.dialog({
-        url:self.url(ROOTPATH + "dialog_add_platform.html"),
+        url:self.url(ROOTPATH + "dialog/add_platform.html"),
         width:300,
         height:158,
         parameters: {};

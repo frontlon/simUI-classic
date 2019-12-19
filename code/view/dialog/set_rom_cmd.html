@@ -1,0 +1,46 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0}
+        input{width:*;}
+        .input_wrapper{padding:0 10dip 10dip 10dip;}
+        .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;}
+        h4{margin:7dip 0}
+    </style>
+
+</head>
+<body>
+    <div class="input_wrapper">
+        <h4 id="desc">VirtualNes</h4>
+        <input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" />
+    </div>
+    <div class="submit_wrapper">
+        <button id="close-dialog" role="default-button">{{Yes}}</button>
+    </div>
+    <script type="text/tiscript">
+        include ROOTPATH + "tis/utils.tis";
+        
+        view.root.on("ready", function(){
+            $(#cmd).setState(Element.STATE_FOCUS);
+            view.windowCaption = CONF.Lang.AddNewPlatform;
+        });
+        
+        var sim = view.parameters.getSimulatorById(id);
+        var simId = view.parameters.simId;
+        var simobj = JSON.parse(sim);
+        var simlist = JSON.parse(simobj.SimCmd);
+        if (simlist[simId] != undefined){
+            
+            $(#cmd).value = simlist[simId];
+        }
+
+        //创建语言
+      //  createLang();
+
+        event click $(#close-dialog){
+            view.close($(#cmd).value);
+        }
+    </script>
+</body>
+</html>

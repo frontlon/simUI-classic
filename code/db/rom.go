@@ -3,7 +3,6 @@ package db
 import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
-	"github.com/astaxie/beego/config"
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
 )
@@ -23,7 +22,6 @@ type Rom struct {
 	Md5      string // 文件Md5
 }
 
-
 //插入rom数据
 func (r *Rom) Add() error {
 
@@ -34,7 +32,7 @@ func (r *Rom) Add() error {
 	}
 
 	//开始写入父rom
-	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.Pinyin,r.Md5);
+	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.Pinyin, r.Md5);
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -50,7 +48,7 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 	field := "id,name,menu,platform,rom_path";
 	sql := "SELECT " + field + " FROM rom WHERE 1=1"
 	if platform != 0 {
-		sql += " AND platform = '" + config.ToString(platform) + "'"
+		sql += " AND platform = '" + utils.ToString(platform) + "'"
 	}
 
 	if menu != "" {
@@ -119,7 +117,7 @@ func (*Rom) GetById(id uint64) (*Rom, error) {
 	vo := &Rom{}
 	sql := "SELECT * FROM rom where id= '" + utils.ToString(id) + "'"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin,&vo.Md5)
+	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin, &vo.Md5)
 	return vo, err
 }
 
@@ -257,7 +255,7 @@ func (sim *Rom) GetIdsByPlatform(platform uint32, menu string) ([]uint64, error)
 }
 
 //根据一组dm5，查询存在的md5，用于取交集
-func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string,error) {
+func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
 
 	uniqStr := strings.Join(uniq, "\",\"")
 	uniqStr = "\"" + uniqStr + "\""
@@ -284,7 +282,7 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
 	//如果为空，说明目录下没有rom，全部删除
 	if len(uniq) == 0 {
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform)
-	}else{
+	} else {
 		uniqStr := strings.Join(uniq, "\",\"")
 		uniqStr = "\"" + uniqStr + "\""
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"

@@ -350,7 +350,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		for name, val := range d {
-			if name == ""{
+			if name == "" {
 				continue
 			}
 			menu := &db.Menu{
@@ -358,7 +358,8 @@ func defineViewFunction(w *window.Window) {
 				Platform: platform,
 				Sort:     val,
 			}
-			if err := menu.UpdateSortByName();err != nil{}
+			if err := menu.UpdateSortByName(); err != nil {
+			}
 		}
 		return sciter.NewValue("1")
 	})
@@ -591,9 +592,14 @@ func defineViewFunction(w *window.Window) {
 			Id: id,
 		}
 
-		//删除平台
+		//删除模拟器
 		err := sim.DeleteById()
 		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		//删除rom独立模拟器cmd配置
+		if err = (&db.RomCmd{SimId:id}).ClearBySimId();err != nil{
 			return errorMsg(w, err.Error())
 		}
 		return sciter.NewValue(args[0].String())
@@ -648,6 +654,50 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NewValue(string(jsonInfo))
 	})
 
+	//读取rom独立模拟器cmd数据
+	w.DefineFunction("GetRomSimCmd", func(args ...*sciter.Value) *sciter.Value {
+		romId := uint64(utils.ToInt(args[0].String()))
+		simId := uint32(utils.ToInt(args[1].String()))
+
+		//数据库中读取rom详情
+		rom, err := (&db.RomCmd{}).Get(romId,simId)
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NewValue(rom.Cmd)
+	})
+
+	//更新rom独立模拟器参数
+	w.DefineFunction("UpdateRomSimCmd", func(args ...*sciter.Value) *sciter.Value {
+		romId := uint64(utils.ToInt(args[0].String()))
+		simId := uint32(utils.ToInt(args[1].String()))
+		cmd := args[2].String()
+
+		//数据库中读取rom详情
+		rom, err := (&db.RomCmd{}).Get(romId,simId)
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		romCmd := &db.RomCmd{
+			Id:rom.Id,
+			SimId:simId,
+			RomId:romId,
+			Cmd:cmd,
+		}
+
+		if rom.Id != 0{
+			if err = romCmd.Add();err != nil{
+				return errorMsg(w, err.Error())
+			}
+		}else{
+			if err = romCmd.UpdateSimCmd();err != nil{
+				return errorMsg(w, err.Error())
+			}
+		}
+
+		return sciter.NullValue()
+	})
 	//设为我的最爱
 	w.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))

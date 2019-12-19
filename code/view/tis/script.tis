@@ -47,20 +47,6 @@ view.root.on("ready", function(){
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ================= 事件 =================
     //方向键选择rom
     self.on("keyup", function(evt) {
@@ -137,9 +123,6 @@ view.root.on("ready", function(){
         search();
     });
 
-
-  
-
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
@@ -168,6 +151,37 @@ view.root.on("ready", function(){
     //设置喜爱
     self.on("click", "#right_favorite", function(evt) {
         setFavorite(this);
+    });
+
+    //更新一个rom的模拟器参数
+    self.on("click", "#xxxxxxxx > dd", function(evt) {
+        alert("go to set Cmd");
+
+        var romId = obj.attributes["rid"];
+        var simId = obj.attributes["sid"];
+        var name = obj.attributes["name"];
+
+        var cmd = view.GetRomSimCmd(id,simid);
+
+        var result =  view.dialog({
+            url:self.url(ROOTPATH + "dialog/set_rom_cmd.html"),
+            width:300,
+            height:158,
+            parameters: {
+                name:name,
+                simId:simId,
+                romId:romId,
+                cmd:cmd,
+
+            }
+        });
+
+        if(result == undefined){
+            return;
+        }
+
+        //更新一个rom的模拟器的参数配置
+        var result = view.UpdateRomSimCmd(id,simid,cmd);
     });
 
     //分页
