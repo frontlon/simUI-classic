@@ -154,6 +154,7 @@ view.root.on("ready", function(){
     });
 
     //更新一个rom的模拟器参数
+    /*
     self.on("click", "#xxxxxxxx > dd", function(evt) {
         alert("go to set Cmd");
 
@@ -183,7 +184,7 @@ view.root.on("ready", function(){
         //更新一个rom的模拟器的参数配置
         var result = view.UpdateRomSimCmd(id,simid,cmd);
     });
-
+*/
     //分页
     $(#center).onScroll = function(evt) {
         scrollLoadRom(evt);
