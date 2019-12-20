@@ -266,16 +266,8 @@ function openSidebar(obj){
 
     if(pfObj.SimList.length > 0 ){
         var simliststr = "";
-
-        simliststr += "<li filename='' rom='1' sim='2'><p>的算啊算啊</p><button><i style='font-size:10dip'>&#xe61d;</i></button></li>";
-        simliststr += "<li filename='' rom='1' sim='2'><p>的算啊算啊</p><button><i style='font-size:10dip'>&#xe715;</i></button></li>";
-        simliststr += "<li filename='' rom='1' sim='2'><p>的算啊算啊</p><button><i style='font-size:10dip'>&#xe6eb;</i></button></li>";
-        simliststr += "<li filename='' rom='1' sim='2'><p>的算啊算啊</p><button><i style='font-size:10dip'>&#xe61f;</i></button></li>";
-
-
-
         for(var obj in pfObj.SimList) {
-            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button>E</button></li>";
+            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button><i>&#xe61f;</i></button></li>";
         }
         $(#sim_select).html = simliststr;
         if(pfObj.SimList.length > 1){

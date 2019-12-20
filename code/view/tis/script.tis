@@ -298,6 +298,38 @@ view.root.on("ready", function(){
         view.SetRomSimulator(romid,simid);
     });
 
+
+    //设置rom的cmd
+    self.on("click", "#sim_select > li button", function(evt) {
+        var obj = this.parent;
+        var romId = obj.attributes["rom"];
+        var simId = obj.attributes["sim"];
+        var name = obj.select("p").html;
+        var cmd = "";
+       // var cmd = view.GetRomCmd(romId,simId);
+
+        var result =  view.dialog({
+            url:self.url(ROOTPATH + "dialog/set_rom_cmd.html"),
+            width:300,
+            height:158,
+            parameters: {
+                name:name,
+                simId:simId,
+                romId:romId,
+                cmd:cmd,
+            }
+        });
+
+        if(result == undefined){
+            return;
+        }
+
+        //更新一个rom的模拟器的参数配置
+        //var result = view.UpdateRomSimCmd(id,simid,cmd);
+
+    });
+
+
 });
 
 //侧边栏缩略图滑动特效

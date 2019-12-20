@@ -655,7 +655,7 @@ func defineViewFunction(w *window.Window) {
 	})
 
 	//读取rom独立模拟器cmd数据
-	w.DefineFunction("GetRomSimCmd", func(args ...*sciter.Value) *sciter.Value {
+	w.DefineFunction("GetRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
@@ -668,7 +668,7 @@ func defineViewFunction(w *window.Window) {
 	})
 
 	//更新rom独立模拟器参数
-	w.DefineFunction("UpdateRomSimCmd", func(args ...*sciter.Value) *sciter.Value {
+	w.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		cmd := args[2].String()
