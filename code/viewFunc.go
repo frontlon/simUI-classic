@@ -43,11 +43,14 @@ func defineViewFunction(w *window.Window) {
 	//运行游戏
 	w.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
 
-		id := uint64(utils.ToInt(args[0].String()))
+		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
 		//数据库中读取rom详情
-		rom, err := (&db.Rom{}).GetById(id)
+		rom, err := (&db.Rom{}).GetById(romId)
+
+		romCmd,_ := (&db.RomCmd{RomId:romId, SimId:simId,}).Get()
+
 		if err != nil {
 			return errorMsg(w, err.Error())
 		}
@@ -82,6 +85,11 @@ func defineViewFunction(w *window.Window) {
 
 		ext := utils.GetFileExt(rom.RomPath)
 
+		//如果rom运行参数存在，则使用rom的参数
+		if romCmd.Cmd != ""{
+			sim.Cmd = romCmd.Cmd
+		}
+
 		//如果是可执行程序，则不依赖模拟器直接运行
 		if utils.InSliceString(ext, Config.Default.ExeExt) {
 			cmd = append(cmd, rom.RomPath)
@@ -100,6 +108,10 @@ func defineViewFunction(w *window.Window) {
 					cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
 				}
 			}
+
+
+
+
 			err = runGame(sim.Path, cmd)
 		}
 
@@ -660,44 +672,48 @@ func defineViewFunction(w *window.Window) {
 		simId := uint32(utils.ToInt(args[1].String()))
 
 		//数据库中读取rom详情
-		rom, err := (&db.RomCmd{}).Get(romId,simId)
-		if err != nil {
-			return errorMsg(w, err.Error())
-		}
-		return sciter.NewValue(rom.Cmd)
+		rom, _ := (&db.RomCmd{RomId:romId, SimId:simId,}).Get()
+
+		romJson, _ := json.Marshal(&rom)
+		return sciter.NewValue(string(romJson))
 	})
 
-	//更新rom独立模拟器参数
-	w.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
+	//添加rom独立模拟器参数
+	w.DefineFunction("AddRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		cmd := args[2].String()
 
-		//数据库中读取rom详情
-		rom, err := (&db.RomCmd{}).Get(romId,simId)
-		if err != nil {
-			return errorMsg(w, err.Error())
-		}
-
 		romCmd := &db.RomCmd{
-			Id:rom.Id,
-			SimId:simId,
 			RomId:romId,
+			SimId:simId,
 			Cmd:cmd,
 		}
 
-		if rom.Id != 0{
-			if err = romCmd.Add();err != nil{
-				return errorMsg(w, err.Error())
-			}
-		}else{
-			if err = romCmd.UpdateSimCmd();err != nil{
-				return errorMsg(w, err.Error())
-			}
+		if err := romCmd.Add();err != nil{
+			return errorMsg(w, err.Error())
 		}
 
 		return sciter.NullValue()
 	})
+
+	//更新rom独立模拟器参数
+	w.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
+		id := uint32(utils.ToInt(args[0].String()))
+		cmd := args[1].String()
+
+		romCmd := &db.RomCmd{
+			Id:id,
+			Cmd:cmd,
+		}
+
+		if err := romCmd.UpdateCmd();err != nil{
+			return errorMsg(w, err.Error())
+		}
+
+		return sciter.NullValue()
+	})
+
 	//设为我的最爱
 	w.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))

@@ -108,12 +108,13 @@ function createRomList(cls=0){
         //读取缩略图地址
         romPath = URL.parse(obj.RomPath);
         thumb = getRomPicPath("thumb",obj.Platform,romPath.name);
+
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
             thumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
-      
-        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()   +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
+
+        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString() +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
     }
     romlist.append(data);
     SCROLL_PAGE++;
@@ -396,20 +397,19 @@ function numSearch(evt){
     evt.state.current = true;
 }
 
-
-
 //读取一个rom的展示图地址
 function getRomPicPath(type,platform,name){
         var path = "";
         //检查图片类型，拼接图片地址和文件名
         if(type == "thumb"){
-                path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
         }else if(type == "snap"){
-                path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
         }else{
             return "";
         }
-        var exts = ["png","jpg","gif","jpeg","bmp"]; //支持的图片类型
+
+        var exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
         var isset = false; //图片是否存在
         var pic = ""; //图片地址
         for(var ext in exts) {

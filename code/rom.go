@@ -10,7 +10,7 @@ import (
 
 var constSeparator = "__"                                    //rom子分隔符
 var DOC_EXTS = []string{".txt", ".md", ".html", ".htm"}      //doc文档支持的扩展名
-var PIC_EXTS = []string{".png", ".jpg", ".gif", ".jpeg", ".bmp"}; //支持的图片类型
+var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}; //支持的图片类型
 
 type RomDetail struct {
 	Info            *db.Rom

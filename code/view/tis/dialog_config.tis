@@ -48,7 +48,28 @@ view.root.on("ready", function(){
             //更新到数据库
             view.parameters.updatePlatformSort(newObj);
         }  
-    }
+    };
+
+
+    //平台拖拽排序
+    DragDrop{
+        what      : "#table_shortcut tr",
+        where     : "#table_shortcut",
+        container : "#table_shortcut",        
+        dropped : function(){
+            //var lis = $$(#table_shortcut > li);
+            //var id = "";
+            //var newObj = {};
+            //for(var li in lis) {
+                //id = li.attributes["value"];
+                //newObj[id] = li.index;
+            //}
+            //更新到数据库
+            //view.parameters.updatePlatformSort(newObj);
+        }  
+    };
+
+
 });
 
 //平台列表点击
@@ -107,6 +128,9 @@ event click $(#platform_list li) {
         of.state.disabled = false;
     }
 }
+
+
+
 
 //更新通用配置信息
 event click $(#config_submit) {

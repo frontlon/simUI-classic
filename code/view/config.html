@@ -35,6 +35,11 @@
 
     #table_default td:first-child{width:120dip;}
 
+    #table_shortcut td{padding:0;text-align:left;}
+    #table_shortcut td:first-child{width:50dip}
+    #table_shortcut td:last-child{width:18dip}
+    #table_shortcut input[type='text']{width:*;border-radius:2dip}
+    
     .platform_control{height:16dip;flow:horizontal-flow;}
     .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
     .platform_control button:hover{background:#eee;cursor: pointer}
@@ -49,6 +54,8 @@
     <strip>
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
+      <label for="third">电子书</label>
+      <label for="fourth">快捷软件</label>
     </strip>
     <panels>
       <section id="first">
@@ -59,7 +66,7 @@
               <tr><td>{{PicSearchEngines}}</td><td><input type="text" title="{{PicSearchEnginesTitle}}" id="config_search_engines" style="width:280dip"></td></tr>
               <tr><td>{{ExeExt}}</td><td><input type="text" title="{{ExeExtTitle}}" id="config_exe_ext" style="width:280dip"></td></tr>
               <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
-             </table>
+          </table>
         </div>
       </section>
       <section id="second">
@@ -94,6 +101,39 @@
         </div>
       </section>
 
+      <section id="third">
+        
+          <div class="wrapper">
+              <table id="table_shortcut">
+                  <tr>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
+                      <td><button>删除</button></td>
+                  </tr>
+                  <tr>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
+                      <td><button>删除</button></td>
+                  </tr>
+                  <tr>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
+                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
+                      <td><button>删除</button></td>
+                  </tr>
+                  <!--
+                  <tr><td colspan="3">&nbsp;</td></tr>
+                  <tr><td colspan="3" style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+                  -->
+              </table>
+            </div>
+
+
+
+      </section>
+      <section id="fourth">fourth</section>
+
+
+
     </panels>
   </tabs>
 
@@ -104,14 +144,14 @@
   </div>
 
   <script type="text/tiscript">
-    try{
+//    try{
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_config.tis";
-  }catch(e){
-    view.msgbox(#alert,e);
-  }
+ // }catch(e){
+ //   view.msgbox(#alert,e);
+ // }
 
 
   </script>

@@ -305,8 +305,9 @@ view.root.on("ready", function(){
         var romId = obj.attributes["rom"];
         var simId = obj.attributes["sim"];
         var name = obj.select("p").html;
-        var cmd = "";
-       // var cmd = view.GetRomCmd(romId,simId);
+        var cmdstr = view.GetRomCmd(romId,simId);
+        var cmdObj = JSON.parse(cmdstr);
+
 
         var result =  view.dialog({
             url:self.url(ROOTPATH + "dialog/set_rom_cmd.html"),
@@ -316,7 +317,7 @@ view.root.on("ready", function(){
                 name:name,
                 simId:simId,
                 romId:romId,
-                cmd:cmd,
+                cmd:cmdObj.Cmd,
             }
         });
 
@@ -324,8 +325,13 @@ view.root.on("ready", function(){
             return;
         }
 
-        //更新一个rom的模拟器的参数配置
-        //var result = view.UpdateRomSimCmd(id,simid,cmd);
+        if (cmdObj.Id == 0){
+            //添加一个rom的模拟器的参数配置
+            view.AddRomCmd(romId,simId,result);
+        }else{
+            //更新一个rom的模拟器的参数配置
+            view.UpdateRomCmd(cmdObj.Id,result);
+        }
 
     });
 
