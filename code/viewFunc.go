@@ -118,9 +118,6 @@ func defineViewFunction(w *window.Window) {
 				}
 			}
 
-
-
-
 			err = runGame(sim.Path, cmd)
 		}
 
@@ -144,6 +141,30 @@ func defineViewFunction(w *window.Window) {
 			return errorMsg(w, err.Error())
 		}
 		return sciter.NullValue()
+	})
+
+	//运行攻略文件
+	w.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
+
+		id := uint64(utils.ToInt(args[0].String()))
+		//游戏游戏详细数据
+		info, err := (&db.Rom{}).GetById(id)
+		if err != nil {
+			return errorMsg(w, err.Error())
+		}
+
+		//读取文件名
+		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+
+		docName := ""
+		for _, v := range RUN_EXTS {
+			docName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
+			if utils.FileExists(docName) {
+				err = runGame("explorer", []string{docName})
+				return sciter.NewValue("1")
+			}
+		}
+		return sciter.NewValue("0")
 	})
 
 	//打开rom目录
@@ -702,7 +723,10 @@ func defineViewFunction(w *window.Window) {
 			Unzip: uint8(utils.ToInt(d["unzip"])),
 		}
 
-		if romCmd.Cmd == "" && romCmd.Unzip == 0{
+
+		//如果当前配置和模拟器默认配置一样，则不用添加
+		sim,_ := (&db.Simulator{}).GetById(simId)
+		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip{
 			return sciter.NullValue()
 		}
 
@@ -716,7 +740,8 @@ func defineViewFunction(w *window.Window) {
 	//更新rom独立模拟器参数
 	w.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
-		data := args[1].String()
+		simId := uint32(utils.ToInt(args[1].String()))
+		data := args[2].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
 
@@ -726,6 +751,16 @@ func defineViewFunction(w *window.Window) {
 			Unzip: uint8(utils.ToInt(d["unzip"])),
 		}
 
+		//如果当前配置和模拟器默认配置一样，则删除该记录
+		sim,_ := (&db.Simulator{}).GetById(simId)
+		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip{
+			if err := romCmd.DeleteById();err != nil{
+				return errorMsg(w, err.Error())
+			}
+			return sciter.NullValue()
+		}
+
+		//开始更新
 		if err := romCmd.UpdateCmd();err != nil{
 			return errorMsg(w, err.Error())
 		}

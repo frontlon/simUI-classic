@@ -9,8 +9,9 @@ import (
 )
 
 var constSeparator = "__"                                    //rom子分隔符
-var DOC_EXTS = []string{".txt", ".md", ".html", ".htm"}      //doc文档支持的扩展名
+var DOC_EXTS = []string{".txt", ".md"} //doc文档支持的扩展名
 var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}; //支持的图片类型
+var RUN_EXTS = []string{".html", ".htm",".rtf",".pdf",".chm",".exe",".cmd",".bat",".url",".doc",".docx",".ppt",".pptx",".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp",".mp4",".avi",".wmv"} //可直接运行的doc文档支持的扩展名
 
 type RomDetail struct {
 	Info            *db.Rom

@@ -270,6 +270,14 @@ view.root.on("ready", function(){
             return;
         }
 
+        //检查运行攻略文件
+        var isOpen = view.RunStrategy(this.attributes["rid"]);
+
+        if (isOpen == "1"){
+            return;
+        }
+
+        //如果攻略文件不是可运行程序，则窗口运行
         other = view.window{
           type:View.FRAME_WINDOW,
           url: self.url("desc.html"),
@@ -329,7 +337,7 @@ view.root.on("ready", function(){
             view.AddRomCmd(romId,simId,result);
         }else{
             //更新一个rom的模拟器的参数配置
-            view.UpdateRomCmd(cmdObj.Id,result);
+            view.UpdateRomCmd(cmdObj.Id,simId,result);
         }
 
     });

@@ -64,3 +64,14 @@ func (r *RomCmd) ClearBySimId() (error) {
 	}
 	return nil
 }
+
+//删除模拟器时，删除所有rom参数
+func (r *RomCmd) DeleteById() (error) {
+	sql := "DELETE FROM rom_cmd WHERE id = " + utils.ToString(r.Id)
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
