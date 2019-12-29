@@ -24,7 +24,7 @@ func (r *RomCmd) Add() error {
 	}
 
 	//开始写入父rom
-	_, err = stmt.Exec(r.RomId, r.SimId, r.Cmd);
+	_, err = stmt.Exec(r.RomId, r.SimId, r.Cmd,r.Unzip);
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -35,7 +35,7 @@ func (r *RomCmd) Add() error {
 //查询
 func (r *RomCmd) Get() (*RomCmd, error) {
 	vo := &RomCmd{}
-	sql := "SELECT id,rom_id,sim_id,cmd,unzip FROM rom_cmd WHERE sim_id= " + utils.ToString(r.SimId) + " AND rom_id = " + utils.ToString(r.RomId)
+	sql := "SELECT id,rom_id,sim_id,cmd,unzip FROM rom_cmd WHERE rom_id= " + utils.ToString(r.RomId) + " AND sim_id = " + utils.ToString(r.SimId)
 	rows := sqlite.QueryRow(sql)
 	err := rows.Scan(&vo.Id, &vo.RomId, &vo.SimId, &vo.Cmd,&vo.Unzip)
 	return vo, err

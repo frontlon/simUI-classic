@@ -2,18 +2,34 @@
 <head>
     <title></title>
     <style>
-        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0}
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
         input{width:*;}
-        .input_wrapper{padding:0 10dip 10dip 10dip;}
+        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
         .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;}
         h4{margin:7dip 0}
+
+        table td{vertical-align: middle;padding-bottom:5dip}
+        table td:first-child{width:50dip}
+
     </style>
 
 </head>
 <body>
     <div class="input_wrapper">
         <h4 id="desc"></h4>
-        <input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" />
+
+        <table>
+            <tr>
+                <td>模拟器参数</td>
+                <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
+            </tr>
+            <tr>
+                <td>解压后运行</td>
+                <td><select id="unzip"><option value="0">否</option><option value="1">是</option></select></td>
+            </tr>
+
+        </table>
+
     </div>
     <div class="submit_wrapper">
         <button id="close-dialog" role="default-button">{{Yes}}</button>
@@ -29,11 +45,17 @@
             $(#cmd).value = view.parameters.cmd;
             $(#cmd).setState(Element.STATE_FOCUS);
             $(#desc).html = view.parameters.name;
+            $(#unzip).value = view.parameters.unzip;
             view.windowCaption =  CONF.Lang.EditRomCmd;
         });
 
         event click $(#close-dialog){
-            view.close($(#cmd).value);
+            var data = {
+                cmd:$(#cmd).value,
+                unzip:$(#unzip).value.toString()
+            }
+            var datastr = JSON.stringify(data);
+            view.close(datastr);
         }
     </script>
 </body>

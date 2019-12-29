@@ -307,17 +307,16 @@ view.root.on("ready", function(){
         var name = obj.select("p").html;
         var cmdstr = view.GetRomCmd(romId,simId);
         var cmdObj = JSON.parse(cmdstr);
-
-
         var result =  view.dialog({
             url:self.url(ROOTPATH + "dialog/set_rom_cmd.html"),
-            width:300,
-            height:158,
+            width:350,
+            height:206,
             parameters: {
                 name:name,
                 simId:simId,
                 romId:romId,
                 cmd:cmdObj.Cmd,
+                unzip:cmdObj.Unzip,
             }
         });
 

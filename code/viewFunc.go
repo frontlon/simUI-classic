@@ -691,12 +691,19 @@ func defineViewFunction(w *window.Window) {
 	w.DefineFunction("AddRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
-		cmd := args[2].String()
+		data := args[2].String()
+		d := make(map[string]string)
+		json.Unmarshal([]byte(data), &d)
 
 		romCmd := &db.RomCmd{
 			RomId:romId,
 			SimId:simId,
-			Cmd:cmd,
+			Cmd:d["cmd"],
+			Unzip: uint8(utils.ToInt(d["unzip"])),
+		}
+
+		if romCmd.Cmd == "" && romCmd.Unzip == 0{
+			return sciter.NullValue()
 		}
 
 		if err := romCmd.Add();err != nil{
@@ -709,11 +716,14 @@ func defineViewFunction(w *window.Window) {
 	//更新rom独立模拟器参数
 	w.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
-		cmd := args[1].String()
+		data := args[1].String()
+		d := make(map[string]string)
+		json.Unmarshal([]byte(data), &d)
 
 		romCmd := &db.RomCmd{
 			Id:id,
-			Cmd:cmd,
+			Cmd:d["cmd"],
+			Unzip: uint8(utils.ToInt(d["unzip"])),
 		}
 
 		if err := romCmd.UpdateCmd();err != nil{

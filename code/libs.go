@@ -11,6 +11,7 @@ import (
 )
 
 var dict = pinyin.NewDict()
+var unzipDir = "%TEMP%"
 
 /**
  * 字符转拼音
