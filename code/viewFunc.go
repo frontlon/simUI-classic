@@ -48,7 +48,6 @@ func defineViewFunction(w *window.Window) {
 
 		//数据库中读取rom详情
 		rom, err := (&db.Rom{}).GetById(romId)
-
 		romCmd,_ := (&db.RomCmd{RomId:romId, SimId:simId,}).Get()
 
 		if err != nil {
@@ -72,6 +71,16 @@ func defineViewFunction(w *window.Window) {
 		_, err = os.Stat(sim.Path)
 		if err != nil {
 			return errorMsg(w, err.Error())
+		}
+
+		//解压zip包
+		if sim.Unzip == 1 || romCmd.Unzip == 1{
+			rom.RomPath,err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
+			if err != nil{
+				return errorMsg(w, err.Error())
+			}
+		}else{
+			rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
 		}
 
 		//检测rom文件是否存在

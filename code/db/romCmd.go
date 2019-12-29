@@ -11,12 +11,13 @@ type RomCmd struct {
 	RomId uint64
 	SimId uint32
 	Cmd   string
+	Unzip uint8
 }
 
 //插入rom数据
 func (r *RomCmd) Add() error {
 
-	stmt, err := sqlite.Prepare("INSERT INTO rom_cmd (rom_id,sim_id,cmd) values(?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO rom_cmd (rom_id,sim_id,cmd,unzip) values(?,?,?,?)")
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -34,9 +35,9 @@ func (r *RomCmd) Add() error {
 //查询
 func (r *RomCmd) Get() (*RomCmd, error) {
 	vo := &RomCmd{}
-	sql := "SELECT id,rom_id,sim_id,cmd FROM rom_cmd WHERE sim_id= " + utils.ToString(r.SimId) + " AND rom_id = " + utils.ToString(r.RomId)
+	sql := "SELECT id,rom_id,sim_id,cmd,unzip FROM rom_cmd WHERE sim_id= " + utils.ToString(r.SimId) + " AND rom_id = " + utils.ToString(r.RomId)
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.RomId, &vo.SimId, &vo.Cmd)
+	err := rows.Scan(&vo.Id, &vo.RomId, &vo.SimId, &vo.Cmd,&vo.Unzip)
 	return vo, err
 }
 
@@ -44,6 +45,7 @@ func (r *RomCmd) Get() (*RomCmd, error) {
 func (r *RomCmd) UpdateCmd() error {
 	sql := `UPDATE rom_cmd SET `
 	sql += `cmd = '` + utils.ToString(r.Cmd) + `'`
+	sql += `, unzip = ` + utils.ToString(r.Unzip)
 	sql += ` WHERE id = ` + utils.ToString(r.Id)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
