@@ -8,16 +8,21 @@ import (
 	"path/filepath"
 )
 
-var constSeparator = "__"                                    //rom子分隔符
-var DOC_EXTS = []string{".txt", ".md"} //doc文档支持的扩展名
-var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}; //支持的图片类型
-var RUN_EXTS = []string{".html", ".htm",".rtf",".pdf",".chm",".exe",".cmd",".bat",".url",".doc",".docx",".ppt",".pptx",".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp",".mp4",".avi",".wmv"} //可直接运行的doc文档支持的扩展名
+var constSeparator = "__"                                                    //rom子分隔符
+var DOC_EXTS = []string{".txt", ".md"}                                       //doc文档支持的扩展名
+var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}     //支持的图片类型
+var RUN_EXTS = []string{
+	".html", ".htm", ".mht", ".mhtml", ".url",
+	".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
+	".exe", ".com", ".cmd", ".bat", ".lnk",
+	".ico", ".png", ".jpg", ".gif", ".jpeg", ".bmp", ".mp4", ".avi", ".wmv"} //可直接运行的doc文档支持的扩展名
 
 type RomDetail struct {
-	Info            *db.Rom
-	DocContent      string
-	StrategyContent string
-	Sublist         []*db.Rom
+	Info            *db.Rom   //基础信息
+	DocContent      string    //简介内容
+	StrategyContent string    //攻略内容
+	StrategyFile    string    //攻略文件
+	Sublist         []*db.Rom //子游戏
 }
 
 /**

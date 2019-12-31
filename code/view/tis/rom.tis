@@ -246,8 +246,8 @@ function openSidebar(obj){
         
     }
 
-    //打开攻略窗口按钮
-    if(detailObj.StrategyContent != ""){
+    //如果存在攻略文件
+    if(detailObj.StrategyFile != "" || detailObj.StrategyContent != ""){
         $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
         $(#right_desc).attributes.removeClass("right_desc_disable");
     }else{
@@ -259,11 +259,7 @@ function openSidebar(obj){
 
     //生成模拟器列表
     $(#sim_select).html = ""; //先清空所有模拟器
-    $(#sim_select).style["display"] = "none";
     var pfObj = CONF.Platform[info.Platform.toString()];
-
-
- 
 
     if(pfObj.SimList.length > 0 ){
         var simliststr = "";
@@ -271,9 +267,7 @@ function openSidebar(obj){
             simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button><i>&#xe61f;</i></button></li>";
         }
         $(#sim_select).html = simliststr;
-        if(pfObj.SimList.length > 1){
-            $(#sim_select).style["display"] = "block";
-        }
+
     }
 
     //如果该平台有模拟器

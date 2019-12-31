@@ -84,7 +84,6 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//检测rom文件是否存在
-		rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
 		if utils.FileExists(rom.RomPath) == false {
 			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
 		}
@@ -100,7 +99,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//如果是可执行程序，则不依赖模拟器直接运行
-		if utils.InSliceString(ext, Config.Default.ExeExt) {
+		if utils.InSliceString(ext, RUN_EXTS) {
 			cmd = append(cmd, rom.RomPath)
 			err = runGame("explorer", cmd)
 		} else {
@@ -145,26 +144,15 @@ func defineViewFunction(w *window.Window) {
 
 	//运行攻略文件
 	w.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
-
-		id := uint64(utils.ToInt(args[0].String()))
-		//游戏游戏详细数据
-		info, err := (&db.Rom{}).GetById(id)
-		if err != nil {
+		f := args[0].String()
+		if (f == ""){
+			return sciter.NullValue()
+		}
+		if err := runGame("explorer", []string{f});err != nil{
 			return errorMsg(w, err.Error())
 		}
+		return sciter.NullValue()
 
-		//读取文件名
-		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
-
-		docName := ""
-		for _, v := range RUN_EXTS {
-			docName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
-			if utils.FileExists(docName) {
-				err = runGame("explorer", []string{docName})
-				return sciter.NewValue("1")
-			}
-		}
-		return sciter.NewValue("0")
 	})
 
 	//打开rom目录
@@ -428,12 +416,12 @@ func defineViewFunction(w *window.Window) {
 		sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
 
 		res.Info = info
+		res.StrategyFile = ""
 		res.Sublist = sub
 
 		//读取文档内容
 		romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
 		if Config.Platform[info.Platform].DocPath != "" {
-
 			docFileName := "";
 			for _, v := range DOC_EXTS {
 				docFileName = Config.Platform[info.Platform].DocPath + separator + romName + v
@@ -442,20 +430,32 @@ func defineViewFunction(w *window.Window) {
 					break
 				}
 			}
-
 		}
-		if Config.Platform[info.Platform].StrategyPath != "" {
 
+		if Config.Platform[info.Platform].StrategyPath != "" {
+			//检测攻略可执行文件是否存在
 			strategyFileName := "";
-			for _, v := range DOC_EXTS {
+			for _, v := range RUN_EXTS {
 				strategyFileName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
-				res.StrategyContent = getDocContent(strategyFileName)
-				if res.StrategyContent != "" {
+				if utils.FileExists(strategyFileName){
+					res.StrategyFile = strategyFileName
 					break
 				}
 			}
 
+			//如果没有执行运行的文件，则读取文档内容
+			if strategyFileName != ""{
+				for _, v := range DOC_EXTS {
+					strategyFileName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
+					res.StrategyContent = getDocContent(strategyFileName)
+					if res.StrategyContent != "" {
+						break
+					}
+				}
+			}
+
 		}
+
 		jsonMenu, _ := json.Marshal(&res)
 		return sciter.NewValue(string(jsonMenu))
 	})

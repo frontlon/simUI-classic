@@ -271,13 +271,15 @@ view.root.on("ready", function(){
         }
 
         //检查运行攻略文件
-        var isOpen = view.RunStrategy(this.attributes["rid"]);
+        var getjson = view.GetGameDetail(this.attributes["rid"]);
+        var detailObj = JSON.parse(getjson);
 
-        if (isOpen == "1"){
+        if(detailObj.StrategyFile != ""){
+            view.RunStrategy(detailObj.StrategyFile);
             return;
         }
 
-        //如果攻略文件不是可运行程序，则窗口运行
+        //如果攻略文件不是可运行程序，则窗口运行        
         other = view.window{
           type:View.FRAME_WINDOW,
           url: self.url("desc.html"),
@@ -286,10 +288,11 @@ view.root.on("ready", function(){
           width : 1280,
           height : 800,
           parameters: {
-                getRomDetail:getRomDetail,
+                content:detailObj.StrategyContent,
+                title:detailObj.Info.Name,
                 id:this.attributes["rid"],
                 conf:CONF,
-            };
+          };
         };
     });
 
