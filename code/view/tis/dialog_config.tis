@@ -166,7 +166,7 @@ event click $(#platform_submit) {
 //添加模拟器
 event click $(#add_sim) {
     var res = view.dialog({
-        url:self.url(ROOTPATH + "config_sim.html"),
+        url:self.url(ROOTPATH + "dialog/edit_sim.html"),
         width:440,
         height:250,
         parameters: {
@@ -188,7 +188,7 @@ event click $(#add_sim) {
 event change $(#platform_sim) {
    if(this.value == 0){return true;}
    var res = view.dialog({
-        url:self.url(ROOTPATH + "config_sim.html"),
+        url:self.url(ROOTPATH + "dialog/edit_sim.html"),
         width:440,
         height:250,
         parameters: {
