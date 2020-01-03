@@ -11,6 +11,10 @@ view.root.on("ready", function(){
 
     /********** 数据初始化 **********/
 
+    //改变默认窗口尺寸
+    //view.state = View.WINDOW_FULL_SCREEN;
+    //view.state = View.WINDOW_SHOWN;
+
     //初始化全局配置
     initConfig("0");
 
@@ -48,6 +52,30 @@ view.root.on("ready", function(){
 
 
     // ================= 事件 =================
+
+
+        //视图窗口大小发生改变时
+        //sizing
+        view.on("size", function(sizingParams) {
+            view.msgbox(#alert,"大小改变" + sizingParams.x.toString() +  sizingParams.y.toString() +  sizingParams.width.toString() +  sizingParams.height.toString());
+            //view.dump("大小改变", sizingParams.x, sizingParams.y, sizingParams.width, sizingParams.height);
+            //view.UpdateConfig("window_width",sizingParams.width);
+            //view.UpdateConfig("window_height",sizingParams.height);
+        });
+        //视图窗口状态改变时
+        view.on("statechange", function() {
+            //view.dump(view.state);
+            view.msgbox(#alert,"statechange 1:" + view.state.toString());
+            view.msgbox(#alert,"statechange 2:" + View.WINDOW_FULL_SCREEN + "-" +view.state = View.WINDOW_SHOWN);
+
+            /*
+            if(view.state == "maximized" || view.state == "shown"){
+                view.UpdateConfig("window_state",view.state);
+            }
+            */
+        });
+
+
     //方向键选择rom
     self.on("keyup", function(evt) {
 
@@ -107,6 +135,8 @@ view.root.on("ready", function(){
             if (rom != undefined){
                 view.RunGame(rom.attributes["rid"],"");
             }
+        }else if(evt.keyCode == Event.VK_F5){ //f5刷新缓存
+            createAllCache("1");
         }
         //else{
         //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}

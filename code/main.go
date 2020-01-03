@@ -28,8 +28,6 @@ func main() {
 	Config.Separator = separator //系统的目录分隔符
 	errConf := InitConf()
 
-	left :=Config.Default.WindowLeft
-	top := Config.Default.WindowTop
 	width := Config.Default.WindowWidth
 	height := Config.Default.WindowHeight
 
@@ -39,7 +37,7 @@ func main() {
 			//sciter.SW_RESIZEABLE|
 			//sciter.SW_CONTROLS|
 			sciter.SW_ENABLE_DEBUG,
-		&sciter.Rect{Left: int32(left), Top: int32(top), Right: int32(width), Bottom: int32(height)});
+		&sciter.Rect{Left: 0, Top: 0, Right: int32(width), Bottom: int32(height)});
 	if err != nil {
 		log.Fatal(err);
 	}

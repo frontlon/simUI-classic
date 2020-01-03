@@ -6,6 +6,7 @@ import (
 	"github.com/Lofanmi/pinyin-golang/pinyin"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -102,7 +103,7 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 }
 
 /*
- zip解压
+ 清理解压缓存
 */
 func ClearZipRom() error {
 	err := os.RemoveAll(unzipDir)
@@ -111,3 +112,16 @@ func ClearZipRom() error {
 	}
 	return nil
 }
+
+/*
+ 杀掉进程
+*/
+func TaskKill(t string) error{
+	if t == ""{
+		return nil
+	}
+	c := exec.Command("taskkill.exe", "/f", "/im", t)
+	err := c.Start()
+	return err
+}
+

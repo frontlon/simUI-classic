@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 )
 
+var LAST_PROCESS = ""; //最后运行的模拟器进程
 var constSeparator = "__"                                                    //rom子分隔符
 var DOC_EXTS = []string{".txt", ".md"}                                       //doc文档支持的扩展名
 var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}     //支持的图片类型

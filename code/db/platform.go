@@ -14,6 +14,8 @@ type Platform struct {
 	RomPath      string
 	ThumbPath    string
 	SnapPath     string
+	PosterPath   string
+	PackingPath  string
 	DocPath      string
 	StrategyPath string
 	Romlist      string
@@ -26,7 +28,7 @@ type Platform struct {
 //添加平台
 func (v *Platform) Add() (uint32, error) {
 
-	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, strategy_path, romlist, pinyin) values(?,?,?,?,?,?,?,?,?)")
+	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, rom_exts, rom_path, thumb_path, snap_path, poster_path, packing_path, doc_path, strategy_path, romlist, pinyin) values(?,?,?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -35,7 +37,7 @@ func (v *Platform) Add() (uint32, error) {
 
 	//开始写入父rom
 	exts := ""
-	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath, v.DocPath, v.StrategyPath, v.Romlist, v.Pinyin);
+	res, err := stmt.Exec(v.Name, exts, v.RomPath, v.ThumbPath, v.SnapPath, v.PosterPath, v.PackingPath, v.DocPath, v.StrategyPath, v.Romlist, v.Pinyin);
 	if err != nil {
 	}
 	id, _ := res.LastInsertId()
@@ -47,7 +49,7 @@ func (*Platform) GetAll() ([]*Platform, error) {
 
 	volist := []*Platform{}
 	exts := ""
-	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path,strategy_path, romlist,sort FROM platform  ORDER BY sort ASC,pinyin ASC"
+	sql := "SELECT id,`name`, rom_exts, rom_path, thumb_path, snap_path, poster_path, packing_path, doc_path,strategy_path, romlist,sort FROM platform  ORDER BY sort ASC,pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
 	if err != nil {
@@ -55,12 +57,12 @@ func (*Platform) GetAll() ([]*Platform, error) {
 	}
 	for rows.Next() {
 		v := &Platform{}
-		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist,&v.Sort)
+		err = rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.PosterPath, &v.PackingPath, &v.DocPath, &v.StrategyPath, &v.Romlist, &v.Sort)
 		if err != nil {
 			return volist, err
 		}
 		v.RomExts = strings.Split(exts, ",") //拆分rom扩展名
-		volist = append(volist,v)
+		volist = append(volist, v)
 	}
 	return volist, nil
 }
@@ -69,10 +71,10 @@ func (*Platform) GetAll() ([]*Platform, error) {
 func (*Platform) GetById(id uint32) (*Platform, error) {
 	v := &Platform{}
 	exts := ""
-	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path, doc_path, strategy_path,romlist"
+	field := "id,`name`, rom_exts, rom_path, thumb_path, snap_path,  poster_path, packing_path, doc_path, strategy_path, romlist"
 	sql := "SELECT " + field + " FROM platform WHERE id = " + utils.ToString(id)
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.DocPath, &v.StrategyPath, &v.Romlist)
+	err := rows.Scan(&v.Id, &v.Name, &exts, &v.RomPath, &v.ThumbPath, &v.SnapPath, &v.PosterPath, &v.PackingPath, &v.DocPath, &v.StrategyPath, &v.Romlist)
 	v.RomExts = strings.Split(exts, ",") //拆分rom扩展名
 	return v, err
 }
@@ -85,6 +87,8 @@ func (pf *Platform) UpdateById() error {
 	sql += `,rom_path = '` + pf.RomPath + `'`
 	sql += `,thumb_path = '` + pf.ThumbPath + `'`
 	sql += `,snap_path = '` + pf.SnapPath + `'`
+	sql += `,poster_path = '` + pf.PosterPath + `'`
+	sql += `,packing_path = '` + pf.PackingPath + `'`
 	sql += `,strategy_path = '` + pf.StrategyPath + `'`
 	sql += `,doc_path = '` + pf.DocPath + `'`
 	sql += `,romlist = '` + pf.Romlist + `'`

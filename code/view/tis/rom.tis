@@ -107,7 +107,7 @@ function createRomList(cls=0){
 
         //读取缩略图地址
         romPath = URL.parse(obj.RomPath);
-        thumb = getRomPicPath("thumb",obj.Platform,romPath.name);
+        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romPath.name);
 
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
@@ -216,8 +216,12 @@ function openSidebar(obj){
     var romPath = URL.parse(info.RomPath);
     var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
     var snap = getRomPicPath("snap",info.Platform,romPath.name); //场景图
+    var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
+    var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
+    if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
+    if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
     //游戏缩略图
     if(thumb != ""){
         pics += "<img src='"+ thumb +"' />";
@@ -393,30 +397,39 @@ function numSearch(evt){
 
 //读取一个rom的展示图地址
 function getRomPicPath(type,platform,name){
-        var path = "";
-        //检查图片类型，拼接图片地址和文件名
-        if(type == "thumb"){
+    var path = "";
+    //检查图片类型，拼接图片地址和文件名
+    switch(type){
+        case "thumb":
             path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
-        }else if(type == "snap"){
+            break;
+        case "snap":
             path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
-        }else{
+            break;
+        case "poster":
+            path = CONF.Platform[platform.toString()].PosterPath + "\\" + name ;
+            break;
+        case "packing":
+            path = CONF.Platform[platform.toString()].PackingPath + "\\" + name ;
+            break;
+        default:
             return "";
-        }
+    }
 
-        var exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
-        var isset = false; //图片是否存在
-        var pic = ""; //图片地址
-        for(var ext in exts) {
-            pic = path +"."+ext;
-            if(System.scanFiles(pic)){ //检查图片是否存在
-                isset = true;
-                break;
-            }
+    var exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
+    var isset = false; //图片是否存在
+    var pic = ""; //图片地址
+    for(var ext in exts) {
+        pic = path +"."+ext;
+        if(System.scanFiles(pic)){ //检查图片是否存在
+            isset = true;
+            break;
         }
+    }
 
-        if (isset == true){
-            return URL.fromPath(pic);
-        }else{
-            return "";
-        }
+    if (isset == true){
+        return URL.fromPath(pic);
+    }else{
+        return "";
+    }
 }
