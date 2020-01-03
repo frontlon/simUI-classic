@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"strings"
 )
 
 type RomCmd struct {
@@ -65,9 +66,22 @@ func (r *RomCmd) ClearBySimId() (error) {
 	return nil
 }
 
-//删除模拟器时，删除所有rom参数
+//删除一个游戏的模拟器参数记录
 func (r *RomCmd) DeleteById() (error) {
 	sql := "DELETE FROM rom_cmd WHERE id = " + utils.ToString(r.Id)
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+//根据id列表删除数据
+func (r *RomCmd) ClearByRomIds(ids []string) (error) {
+	idsStr := strings.Join(ids, ",")
+
+	sql := "DELETE FROM rom_cmd WHERE rom_id in (" + idsStr +")"
 	_, err := sqlite.Exec(sql)
 	if err != nil {
 		fmt.Println(err.Error())

@@ -288,7 +288,11 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
 	}
 	//删除主记录
-	_, err := sqlite.Exec(sql)
+	result , err := sqlite.Exec(sql)
+
+	fmt.Println("删除的id组")
+	fmt.Println(result.LastInsertId())
+
 	if err != nil {
 		return err
 	}
