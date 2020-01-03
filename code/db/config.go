@@ -17,7 +17,7 @@ type Config struct {
 	RootPath      string
 	WindowWidth   uint16
 	WindowHeight  uint16
-	WindowState    string
+	WindowState    uint8
 }
 
 //根据id查询一条数据

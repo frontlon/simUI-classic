@@ -11,12 +11,12 @@ view.root.on("ready", function(){
 
     /********** 数据初始化 **********/
 
-    //改变默认窗口尺寸
-    //view.state = View.WINDOW_FULL_SCREEN;
-    //view.state = View.WINDOW_SHOWN;
-
     //初始化全局配置
     initConfig("0");
+
+
+    //改变默认窗口尺寸
+    view.state = CONF.Default.WindowState.toInteger();
 
     //初始化rom
     var pf = CONF.Default.Platform;
@@ -53,28 +53,21 @@ view.root.on("ready", function(){
 
     // ================= 事件 =================
 
+   //调整窗口大小
+    view.on("sizing", function(evt) {
+        //还原平台拉条位置
+        platformResize(evt);
+        //更新默认配置
+        view.UpdateConfig("window_width",evt.width);
+        view.UpdateConfig("window_height",evt.height);
+    });
 
-        //视图窗口大小发生改变时
-        //sizing
-        view.on("size", function(sizingParams) {
-            view.msgbox(#alert,"大小改变" + sizingParams.x.toString() +  sizingParams.y.toString() +  sizingParams.width.toString() +  sizingParams.height.toString());
-            //view.dump("大小改变", sizingParams.x, sizingParams.y, sizingParams.width, sizingParams.height);
-            //view.UpdateConfig("window_width",sizingParams.width);
-            //view.UpdateConfig("window_height",sizingParams.height);
-        });
-        //视图窗口状态改变时
-        view.on("statechange", function() {
-            //view.dump(view.state);
-            view.msgbox(#alert,"statechange 1:" + view.state.toString());
-            view.msgbox(#alert,"statechange 2:" + View.WINDOW_FULL_SCREEN + "-" +view.state = View.WINDOW_SHOWN);
-
-            /*
-            if(view.state == "maximized" || view.state == "shown"){
-                view.UpdateConfig("window_state",view.state);
-            }
-            */
-        });
-
+    //视图窗口状态改变时
+    view.on("statechange", function() {
+        if(view.state == 1 || view.state == 3){
+            view.UpdateConfig("window_state",view.state);
+        }
+    });
 
     //方向键选择rom
     self.on("keyup", function(evt) {
@@ -286,11 +279,6 @@ view.root.on("ready", function(){
         $(#loading).style["display"]="none";
     });
 
-    //调整窗口大小
-    view.on("size", function(evt) {
-        //还原平台拉条位置
-        platformResize(evt);
-    });
 
     //攻略弹窗按钮
     $(#right_desc).on("click", function(evt) {

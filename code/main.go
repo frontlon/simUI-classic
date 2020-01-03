@@ -51,7 +51,6 @@ func main() {
 	//解析资源
 	w.OpenArchive(res)
 
-
 	//加载文件
 	err = w.LoadFile(constMainFile);
 	if err != nil {
@@ -65,7 +64,6 @@ func main() {
 		os.Exit(1)
 		return
 	}
-
 
 	if len(Config.Lang) == 0{
 		errorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")

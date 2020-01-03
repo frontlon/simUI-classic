@@ -2,13 +2,14 @@ package main
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/utils"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
-var LAST_PROCESS = ""; //最后运行的模拟器进程
+var LAST_PROCESS = 0;                                                        //最后运行的模拟器进程
 var constSeparator = "__"                                                    //rom子分隔符
 var DOC_EXTS = []string{".txt", ".md"}                                       //doc文档支持的扩展名
 var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}     //支持的图片类型
@@ -60,5 +61,23 @@ func runGame(exeFile string, cmd []string) error {
 		return err
 	}
 
+	//保存进程id
+	LAST_PROCESS = result.Process.Pid
+
 	return nil
+}
+
+/**
+ * 关闭游戏
+ **/
+func killGame() error {
+
+	if LAST_PROCESS == 0 {
+		return nil
+	}
+	c := exec.Command("taskkill.exe", "/T", "/PID", utils.ToString(LAST_PROCESS))
+	err := c.Start()
+
+	LAST_PROCESS = 0
+	return err
 }

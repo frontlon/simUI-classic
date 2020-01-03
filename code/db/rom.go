@@ -289,9 +289,10 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
 	}
 	//删除主记录
 	result , err := sqlite.Exec(sql)
+	fmt.Println("sql:",sql)
 
 	fmt.Println("删除的id组")
-	fmt.Println(result.LastInsertId())
+	fmt.Println(result.RowsAffected())
 
 	if err != nil {
 		return err

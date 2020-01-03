@@ -98,15 +98,14 @@ func defineViewFunction(w *window.Window) {
 			sim.Cmd = romCmd.Cmd
 		}
 
-		//先杀掉之前运行的程序
-		if err = TaskKill(LAST_PROCESS);err != nil {
+		//运行游戏前，先杀掉之前运行的程序
+		if err = killGame();err != nil {
 			return errorMsg(w, err.Error())
 		}
 		//如果是可执行程序，则不依赖模拟器直接运行
 		if utils.InSliceString(ext, RUN_EXTS) {
 			cmd = append(cmd, rom.RomPath)
 			err = runGame("explorer", cmd)
-			LAST_PROCESS = rom.RomPath //最后运行的进程
 		} else {
 			//如果依赖模拟器
 			if sim.Cmd == "" {
@@ -121,9 +120,7 @@ func defineViewFunction(w *window.Window) {
 					cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
 				}
 			}
-
 			err = runGame(sim.Path, cmd)
-			LAST_PROCESS = sim.Path //最后运行的进程
 		}
 
 		if err != nil {
