@@ -68,7 +68,9 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 		return "", nil
 	}
 
-	fpath := filepath.Join(unzipDir, romFile.Name)
+	//拼接解压路径
+	zipfileName := utils.GetFileName(zipFile)
+	fpath := filepath.Join(unzipDir, zipfileName,romFile.Name)
 
 	//如果文件存在，则无需解压了
 	if utils.FileExists(fpath) {
@@ -77,9 +79,11 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 
 	//开始解压
 	if romFile.FileInfo().IsDir() {
-		os.MkdirAll(fpath, os.ModePerm)
+		if err = utils.CreateDir(fpath);err != nil{
+			return fpath,err
+		}
 	} else {
-		if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
+		if err = utils.CreateDir(filepath.Dir(fpath)); err != nil {
 			return fpath, err
 		}
 

@@ -26,7 +26,7 @@ func GetFileExt(p string) string {
 /*
  从路径中读取文件名+扩展名
 */
-func GetFullFileName(p string) string {
+func GetFileNameAndExt(p string) string {
 	return filepath.Base(p);
 }
 
