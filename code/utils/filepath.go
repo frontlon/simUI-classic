@@ -52,7 +52,7 @@ func FileExists(path string) bool {
 /**
  * 检测路径是否存在
  **/
-func PathExists(path string) bool {
+func FolderExists(path string) bool {
 	ff, err := os.Stat(path)
 	if err != nil {
 		return false
@@ -62,3 +62,29 @@ func PathExists(path string) bool {
 	}
 	return true
 }
+
+/**
+ * 判断文件夹或文件是否存在
+ **/
+func IsExist(f string) bool {
+	_, err := os.Stat(f)
+	return err == nil || os.IsExist(err)
+}
+
+
+/**
+ * 创建多层文件夹
+ **/
+func CreateDir(p string) error {
+	err := os.MkdirAll(p, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	if err := os.Chmod(p, os.ModePerm);err != nil{
+		return err
+	}
+	return nil
+}
+
+
+

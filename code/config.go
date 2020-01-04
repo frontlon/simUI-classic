@@ -49,22 +49,27 @@ func InitConf() error {
 	}
 	Config.Default, err = getDefault()
 	if err != nil {
+		WriteLog(err.Error())
 		return err
 	}
 	Config.LangList, err = getLangList()
 	if err != nil {
+		WriteLog(err.Error())
 		return err
 	}
 	Config.Lang, err = getLang(Config.Default.Lang)
 	if err != nil {
+		WriteLog(err.Error())
 		return err
 	}
 	Config.PlatformList, Config.Platform, err = getPlatform()
 	if err != nil {
+		WriteLog(err.Error())
 		return err
 	}
 	Config.Theme, err = getTheme()
 	if err != nil {
+		WriteLog(err.Error())
 		return err
 	}
 	return nil

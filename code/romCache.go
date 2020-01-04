@@ -140,7 +140,13 @@ func UpdateRomDB(platform uint32,romlist []*db.Rom) error{
 	}
 
 	//删除当前平台下，不存在的rom
-	if err := (&db.Rom{}).DeleteNotExists(platform, uniqs); err != nil {
+	delIds,err := (&db.Rom{}).DeleteNotExists(platform, uniqs)
+	if err != nil {
+		return err
+	}
+
+	//删除romcmd数据
+	if err := (&db.RomCmd{}).DeleteByRomIds(delIds);err != nil{
 		return err
 	}
 

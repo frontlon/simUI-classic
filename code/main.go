@@ -2,9 +2,9 @@ package main
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/utils"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,6 +17,12 @@ var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //
 //var constMainFile = "this://app/main.html" //主文件路径（正式）
 
 func main() {
+
+	defer func() {
+		if r := recover(); r != nil {
+			WriteLog(utils.ToString(r))
+		}
+	}()
 
 	//连接数据库
 	db.Conn()
@@ -39,7 +45,7 @@ func main() {
 			sciter.SW_ENABLE_DEBUG,
 		&sciter.Rect{Left: 0, Top: 0, Right: int32(width), Bottom: int32(height)});
 	if err != nil {
-		log.Fatal(err);
+		WriteLog(err.Error())
 	}
 
 	//设置view权限
@@ -66,6 +72,7 @@ func main() {
 	}
 
 	if len(Config.Lang) == 0{
+		WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		errorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		os.Exit(1)
 		return
@@ -105,6 +112,7 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 
 //调用alert框
 func errorMsg(w *window.Window,err string) *sciter.Value {
+
 	if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
 	}
 	return sciter.NullValue();

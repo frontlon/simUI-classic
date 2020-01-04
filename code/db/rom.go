@@ -276,28 +276,38 @@ func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
 }
 
 //删除指定平台下，不存在的rom
-func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) (error) {
+func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string,error) {
 
+	sql_query := ""
 	sql := ""
+	ids := []string{}
 	//如果为空，说明目录下没有rom，全部删除
 	if len(uniq) == 0 {
+		sql_query = "SELECT id FROM rom WHERE platform = " + utils.ToString(platform)
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform)
 	} else {
 		uniqStr := strings.Join(uniq, "\",\"")
 		uniqStr = "\"" + uniqStr + "\""
+		sql_query = "SELECT id FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
 	}
-	//删除主记录
-	result , err := sqlite.Exec(sql)
-	fmt.Println("sql:",sql)
 
-	fmt.Println("删除的id组")
-	fmt.Println(result.RowsAffected())
-
-	if err != nil {
-		return err
+	 //先把要删除的id查询出来
+	if rows, err := sqlite.Query(sql_query);err != nil{
+		return ids, err
+	}else{
+		for rows.Next() {
+			var id = ""
+			err = rows.Scan(&id)
+			ids = append(ids,id)
+		}
 	}
-	return nil
+
+	//删除记录
+	if _ , err := sqlite.Exec(sql); err != nil {
+		return ids,err
+	}
+	return ids,nil
 }
 
 //删除不存在的平台下的所有rom
