@@ -17,7 +17,7 @@ function delPlatform(id){
     //删除平台
     var result = view.DelPlatform(id);
     //生成缓存
-    createAllCache("0");
+    createAllCache();
     return result;
 }
 

@@ -2,6 +2,7 @@
 <head>
     <title></title>
     <style>
+        @import "this://app/public.css";
         html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
         #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
         input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
@@ -18,14 +19,24 @@
         <table>
             <tr><td>{{Name}}</td><td><input type="text" id="sim_name" value="">
             <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
-            <tr><td>{{Path}}</td><td><input type="text" id="sim_path" value=""><button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button></td></tr>
+            <tr><td>{{Path}}</td><td>
+                <input type="text" id="sim_path" value="">
+                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
+            </td></tr>
             <tr><td>{{Params}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
-            <select id="set_cmd">
+                <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
                 <option value="-g {RomName} -w">FBAS</option>
                 <option value="{RomName}">Winkawaks</option>
             </select>
+            </td></tr>
+            <tr><td>解压缩：</td><td>
+                <select id="">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+                <input type="text" id="" value="" novalue="压缩包中可执行的扩展名">
             </td></tr>
             <tr><th colspan="2"></th></tr>
             <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>

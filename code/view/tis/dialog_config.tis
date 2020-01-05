@@ -147,7 +147,6 @@ event click $(#config_submit) {
 }
 
 //更新平台信息
-
 event click $(#platform_submit) {
     var data = {
         id       : $(#platform_list).select("li:current").attributes["value"].toString();
@@ -176,7 +175,7 @@ event click $(#add_sim) {
     var res = view.dialog({
         url:self.url(ROOTPATH + "dialog/edit_sim.html"),
         width:440,
-        height:250,
+        height:290,
         parameters: {
             id:0,
             platform:pfId,

@@ -32,6 +32,9 @@ func main() {
 	var rootpath, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 	Config.RootPath = rootpath + separator //当前软件的绝对路径
 	Config.Separator = separator //系统的目录分隔符
+	Config.CachePath = rootpath + separator + "cache" + separator//缓存路径
+	Config.UnzipPath = Config.CachePath + "unzip" + separator//rom解压路径
+
 	errConf := InitConf()
 
 	width := Config.Default.WindowWidth

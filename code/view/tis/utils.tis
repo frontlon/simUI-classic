@@ -17,3 +17,11 @@ function errorBox(str){
 function alert(str){
     view.msgbox(#alert,str);
 }
+
+function startLoading(){
+    $(#loading).style['display'] = 'block';
+}
+
+function endLoading(){
+    $(#loading).style['display'] = 'none';
+}

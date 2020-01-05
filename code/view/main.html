@@ -5,12 +5,11 @@
 <title></title>
 <div id="themefile"></div>
 <style type="text/css">
+    @import "this://app/public.css";
+    
     html{min-width:800dip;width:*;background:transparent;border:1dip solid color(window-outside-border-color);}
-    @font-face{font-family:iconfont;src:url(iconfont.ttf)}
-    i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle}
-    *{margin:0;padding:0;}
     a{text-decoration:none}
-    body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover}
+    body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover;margin:0}
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
     #left{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative;}
@@ -32,17 +31,16 @@
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
     #tb_right{text-align:right;width:262dip;display:inline;}
     #tb_right i{font-size:18dip;line-height:36dip;display:block}
-    #tb_right > button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;}
+    #tb_right > button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
     #tb_right > button:hover{opacity:0.7;cursor:pointer}
 
     /* 平台按钮 */
-    #platform_ul{position:absolute;height:36dip;left:0;overflow:visible;width:*;background:color(platform-background-color);}
+    #platform_ul{position:absolute;height:36dip;left:0;overflow:visible;width:*;background:color(platform-background-color);margin:0;padding:0}
     #platform_ul > li{display:block;height:36dip;float:left;}
     #platform_ul > li:hover{opacity:0.7;cursor:pointer}
     #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;}
-    #platform_ul button{color:color(platform-text-color);background:none;width:36dip;height:36dip;display:inline-block;overflow:hidden}    
+    #platform_ul button{color:color(platform-text-color);background:none;width:36dip;height:36dip;display:inline-block;overflow:hidden}
     #platform_ul button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark)}
-    #platform_ul button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-dark);border-right:1dip solid color(platform-arrow-border-light)}    
     #platform_ul > li:current button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
     #platform_ul > li:current button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-light);border-right:color(platform-active-background-color)}
 
@@ -61,7 +59,7 @@
     .search .submit:hover{opacity: 0.7;}
  
     /* 字母选择 */
-    #num_search{position:fixed;display:block;top:100dip;height:*;}
+    #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;}
     #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
     #num_search li:hover{color:color(num-index-hover-text-color)}
     #num_search li:current{color:color(num-index-active-text-color);}

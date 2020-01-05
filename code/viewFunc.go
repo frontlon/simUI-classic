@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -32,7 +33,7 @@ func defineViewFunction(w *window.Window) {
 			//初始化配置
 			if (isfresh == "1") {
 				//如果是刷新，则重新生成配置项
-				if err := InitConf();err != nil{
+				if err := InitConf(); err != nil {
 				}
 			}
 			getjson, _ := json.Marshal(Config)
@@ -49,12 +50,12 @@ func defineViewFunction(w *window.Window) {
 
 		//数据库中读取rom详情
 		rom, err := (&db.Rom{}).GetById(romId)
-		romCmd,_ := (&db.RomCmd{RomId:romId, SimId:simId,}).Get()
-
 		if err != nil {
-			WriteLog(err.Error())
-			return errorMsg(w, err.Error())
+			WriteLog("没有找到游戏")
+			return errorMsg(w, "没有找到游戏")
 		}
+
+		romCmd, _ := (&db.RomCmd{RomId: romId, SimId: simId,}).Get()
 
 		sim := &db.Simulator{}
 		if simId == 0 {
@@ -79,19 +80,21 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//解压zip包
-		if sim.Unzip == 1 || romCmd.Unzip == 1{
-			rom.RomPath,err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
-			if err != nil{
+		rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
+		if sim.Unzip == 1 || romCmd.Unzip == 1 {
+			rom.RomPath, err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
+
+			fmt.Println("解压后文件:", rom.RomPath)
+
+			if err != nil {
 				WriteLog(err.Error())
 				return errorMsg(w, err.Error())
 			}
-		}else{
-			rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
 		}
 
 		//检测rom文件是否存在
 		if utils.FileExists(rom.RomPath) == false {
-			WriteLog(Config.Lang["RomNotFound"]+rom.RomPath)
+			WriteLog(Config.Lang["RomNotFound"] + rom.RomPath)
 			return errorMsg(w, Config.Lang["RomNotFound"]+rom.RomPath)
 		}
 
@@ -101,12 +104,12 @@ func defineViewFunction(w *window.Window) {
 		ext := utils.GetFileExt(rom.RomPath)
 
 		//如果rom运行参数存在，则使用rom的参数
-		if romCmd.Cmd != ""{
+		if romCmd.Cmd != "" {
 			sim.Cmd = romCmd.Cmd
 		}
 
 		//运行游戏前，先杀掉之前运行的程序
-		if err = killGame();err != nil {
+		if err = killGame(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -159,10 +162,10 @@ func defineViewFunction(w *window.Window) {
 	//运行攻略文件
 	w.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
 		f := args[0].String()
-		if (f == ""){
+		if (f == "") {
 			return sciter.NullValue()
 		}
-		if err := runGame("explorer", []string{f});err != nil{
+		if err := runGame("explorer", []string{f}); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -311,35 +314,45 @@ func defineViewFunction(w *window.Window) {
 
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
-		//先检查平台，将不存在的平台数据先干掉
-		if err := ClearPlatform(); err != nil {
-			WriteLog(err.Error())
-			return errorMsg(w, err.Error())
-		}
 
-		//开始重建缓存
-		for platform, _ := range Config.Platform {
+		go func() *sciter.Value {
 
-			//创建rom数据
-			romlist, menu, err := CreateRomCache(platform)
-			if err != nil {
+			//先检查平台，将不存在的平台数据先干掉
+			if err := ClearPlatform(); err != nil {
 				WriteLog(err.Error())
 				return errorMsg(w, err.Error())
 			}
 
-			//更新rom数据
-			if err := UpdateRomDB(platform, romlist); err != nil {
-				WriteLog(err.Error())
-				return errorMsg(w, err.Error())
+			//开始重建缓存
+			for platform, _ := range Config.Platform {
+
+				//创建rom数据
+				romlist, menu, err := CreateRomCache(platform)
+				if err != nil {
+					WriteLog(err.Error())
+					return errorMsg(w, err.Error())
+				}
+
+				//更新rom数据
+				if err := UpdateRomDB(platform, romlist); err != nil {
+					WriteLog(err.Error())
+					return errorMsg(w, err.Error())
+				}
+
+				//更新menu数据
+				if err := UpdateMenuDB(platform, menu); err != nil {
+					WriteLog(err.Error())
+					return errorMsg(w, err.Error())
+				}
+
 			}
 
-			//更新menu数据
-			if err := UpdateMenuDB(platform, menu); err != nil {
-				WriteLog(err.Error())
-				return errorMsg(w, err.Error())
+			//数据更新完成后，页面回调，更新页面DOM
+			if _, err := w.Call("createAllCache"); err != nil {
 			}
+			return sciter.NullValue()
+		}()
 
-		}
 		return sciter.NullValue()
 	})
 
@@ -472,14 +485,14 @@ func defineViewFunction(w *window.Window) {
 			strategyFileName := "";
 			for _, v := range RUN_EXTS {
 				strategyFileName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
-				if utils.FileExists(strategyFileName){
+				if utils.FileExists(strategyFileName) {
 					res.StrategyFile = strategyFileName
 					break
 				}
 			}
 
 			//如果没有执行运行的文件，则读取文档内容
-			if strategyFileName != ""{
+			if strategyFileName != "" {
 				for _, v := range DOC_EXTS {
 					strategyFileName = Config.Platform[info.Platform].StrategyPath + separator + romName + v
 					res.StrategyContent = getDocContent(strategyFileName)
@@ -524,17 +537,17 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//删除rom数据
-		if err := rom.DeleteByPlatform();err !=nil{
+		if err := rom.DeleteByPlatform(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
 		//删除模拟器
-		if err := sim.DeleteByPlatform();err !=nil{
+		if err := sim.DeleteByPlatform(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
 		//删除平台
-		if err := platform.DeleteById();err !=nil{
+		if err := platform.DeleteById(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -689,7 +702,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//删除rom独立模拟器cmd配置
-		if err = (&db.RomCmd{SimId:id}).ClearBySimId();err != nil{
+		if err = (&db.RomCmd{SimId: id}).ClearBySimId(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -755,7 +768,7 @@ func defineViewFunction(w *window.Window) {
 		simId := uint32(utils.ToInt(args[1].String()))
 
 		//数据库中读取rom详情
-		rom, _ := (&db.RomCmd{RomId:romId, SimId:simId,}).Get()
+		rom, _ := (&db.RomCmd{RomId: romId, SimId: simId,}).Get()
 
 		romJson, _ := json.Marshal(&rom)
 		return sciter.NewValue(string(romJson))
@@ -770,20 +783,19 @@ func defineViewFunction(w *window.Window) {
 		json.Unmarshal([]byte(data), &d)
 
 		romCmd := &db.RomCmd{
-			RomId:romId,
-			SimId:simId,
-			Cmd:d["cmd"],
+			RomId: romId,
+			SimId: simId,
+			Cmd:   d["cmd"],
 			Unzip: uint8(utils.ToInt(d["unzip"])),
 		}
 
-
 		//如果当前配置和模拟器默认配置一样，则不用添加
-		sim,_ := (&db.Simulator{}).GetById(simId)
-		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip{
+		sim, _ := (&db.Simulator{}).GetById(simId)
+		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip {
 			return sciter.NullValue()
 		}
 
-		if err := romCmd.Add();err != nil{
+		if err := romCmd.Add(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -800,15 +812,15 @@ func defineViewFunction(w *window.Window) {
 		json.Unmarshal([]byte(data), &d)
 
 		romCmd := &db.RomCmd{
-			Id:id,
-			Cmd:d["cmd"],
+			Id:    id,
+			Cmd:   d["cmd"],
 			Unzip: uint8(utils.ToInt(d["unzip"])),
 		}
 
 		//如果当前配置和模拟器默认配置一样，则删除该记录
-		sim,_ := (&db.Simulator{}).GetById(simId)
-		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip{
-			if err := romCmd.DeleteById();err != nil{
+		sim, _ := (&db.Simulator{}).GetById(simId)
+		if romCmd.Cmd == sim.Cmd && romCmd.Unzip == sim.Unzip {
+			if err := romCmd.DeleteById(); err != nil {
 				WriteLog(err.Error())
 				return errorMsg(w, err.Error())
 			}
@@ -816,7 +828,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//开始更新
-		if err := romCmd.UpdateCmd();err != nil{
+		if err := romCmd.UpdateCmd(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -836,7 +848,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//更新数据
-		if err := rom.UpdateStar();err != nil{
+		if err := rom.UpdateStar(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -855,7 +867,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//更新数据
-		if err := rom.UpdateSimulator();err != nil {
+		if err := rom.UpdateSimulator(); err != nil {
 			WriteLog(err.Error())
 			return errorMsg(w, err.Error())
 		}
@@ -901,7 +913,7 @@ func defineViewFunction(w *window.Window) {
 		}
 
 		//开始备份原图
-		bakFolder := cacheDir + "thumb_bak/"
+		bakFolder := Config.CachePath + "thumb_bak/"
 		RomFileName := utils.GetFileName(vo.RomPath)
 
 		//检测bak文件夹是否存在，不存在这创建bak目录
@@ -933,6 +945,23 @@ func defineViewFunction(w *window.Window) {
 		io.Copy(f, res.Body)
 
 		return sciter.NewValue(newFileName)
+	})
+
+	w.DefineFunction("GetRsync", func(args ...*sciter.Value) *sciter.Value {
+
+		fmt.Println("进入异步了")
+
+		go func() {
+			time.Sleep(3 * time.Second)
+
+			//	endLoading(w,"")
+
+		}()
+
+		fmt.Println("完成异步了")
+
+		return sciter.NullValue()
+
 	})
 
 }

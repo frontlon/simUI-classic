@@ -79,6 +79,11 @@ func (r *RomCmd) DeleteById() (error) {
 
 //根据id列表删除数据
 func (r *RomCmd) DeleteByRomIds(ids []string) (error) {
+
+	if len(ids) == 0{
+		return nil
+	}
+
 	idsStr := strings.Join(ids, ",")
 	sql := "DELETE FROM rom_cmd WHERE rom_id in (" + idsStr +")"
 	_, err := sqlite.Exec(sql)
@@ -86,6 +91,5 @@ func (r *RomCmd) DeleteByRomIds(ids []string) (error) {
 		fmt.Println(err.Error())
 		return err
 	}
-	fmt.Println("删除romCmd：",sql)
 	return nil
 }

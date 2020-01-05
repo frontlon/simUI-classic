@@ -39,8 +39,6 @@ func getDocContent(f string) string {
 	if err != nil {
 		return content
 	}
-	//enc := mahonia.NewDecoder("gbk")
-	//content = enc.ConvertString(string(text))
 	content = string(text)
 	return content
 }

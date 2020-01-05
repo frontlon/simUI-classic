@@ -129,7 +129,8 @@ view.root.on("ready", function(){
                 view.RunGame(rom.attributes["rid"],"");
             }
         }else if(evt.keyCode == Event.VK_F5){ //f5刷新缓存
-            createAllCache("1");
+            startLoading(); 
+            view.CreateRomCache();
         }
         //else{
         //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}
@@ -176,38 +177,6 @@ view.root.on("ready", function(){
         setFavorite(this);
     });
 
-    //更新一个rom的模拟器参数
-    /*
-    self.on("click", "#xxxxxxxx > dd", function(evt) {
-        alert("go to set Cmd");
-
-        var romId = obj.attributes["rid"];
-        var simId = obj.attributes["sid"];
-        var name = obj.attributes["name"];
-
-        var cmd = view.GetRomSimCmd(id,simid);
-
-        var result =  view.dialog({
-            url:self.url(ROOTPATH + "dialog/edit_rom_cmd.html"),
-            width:300,
-            height:158,
-            parameters: {
-                name:name,
-                simId:simId,
-                romId:romId,
-                cmd:cmd,
-
-            }
-        });
-
-        if(result == undefined){
-            return;
-        }
-
-        //更新一个rom的模拟器的参数配置
-        var result = view.UpdateRomSimCmd(id,simid,cmd);
-    });
-*/
     //分页
     $(#center).onScroll = function(evt) {
         scrollLoadRom(evt);
@@ -225,7 +194,8 @@ view.root.on("ready", function(){
 
     //生成缓存
     self.on("click", "#create", function(evt) {
-        createAllCache("1");
+        startLoading(); 
+        view.CreateRomCache();
     });
 
     //启动电子书
@@ -261,7 +231,7 @@ view.root.on("ready", function(){
         view.dialog({
             url:self.url(ROOTPATH + "config.html"),
             width:650,
-            height:650,
+            height:720,
             parameters: {
                 getPlatform:getPlatform,
                 getPlatformById:getPlatformById,
@@ -274,9 +244,9 @@ view.root.on("ready", function(){
             };
         });
        
-        $(#loading).style["display"]="block";
+        startLoading();
         initConfig("1");
-        $(#loading).style["display"]="none";
+        endLoading();
     });
 
 

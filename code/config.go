@@ -18,8 +18,10 @@ var Config *ConfStruct
 
 //配置文件
 type ConfStruct struct {
-	RootPath     string                  //exe文件的当前路径
-	Separator    string                  //exe文件的当前路径
+	RootPath  string //exe文件的当前路径
+	Separator string //exe文件的当前路径
+	CachePath string //缓存路径
+	UnzipPath string //rom解压路径
 	Default      *db.Config              //默认配置
 	LangList     map[string]string       //语言列表
 	Theme        map[string]*ThemeStruct //主题列表
@@ -318,4 +320,3 @@ func getLangList() (map[string]string, error) {
 	}
 	return lang, nil
 }
-
