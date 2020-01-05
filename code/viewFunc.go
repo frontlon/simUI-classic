@@ -525,33 +525,37 @@ func defineViewFunction(w *window.Window) {
 
 	//删除一个平台
 	w.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
-		id := uint32(utils.ToInt(args[0].String()))
-		platform := &db.Platform{
-			Id: id,
-		}
-		sim := &db.Simulator{
-			Platform: id,
-		}
-		rom := &db.Rom{
-			Platform: id,
-		}
 
-		//删除rom数据
-		if err := rom.DeleteByPlatform(); err != nil {
-			WriteLog(err.Error())
-			return errorMsg(w, err.Error())
-		}
-		//删除模拟器
-		if err := sim.DeleteByPlatform(); err != nil {
-			WriteLog(err.Error())
-			return errorMsg(w, err.Error())
-		}
-		//删除平台
-		if err := platform.DeleteById(); err != nil {
-			WriteLog(err.Error())
-			return errorMsg(w, err.Error())
-		}
+		go func() *sciter.Value {
 
+			id := uint32(utils.ToInt(args[0].String()))
+			platform := &db.Platform{
+				Id: id,
+			}
+			sim := &db.Simulator{
+				Platform: id,
+			}
+			rom := &db.Rom{
+				Platform: id,
+			}
+
+			//删除rom数据
+			if err := rom.DeleteByPlatform(); err != nil {
+				WriteLog(err.Error())
+				return errorMsg(w, err.Error())
+			}
+			//删除模拟器
+			if err := sim.DeleteByPlatform(); err != nil {
+				WriteLog(err.Error())
+				return errorMsg(w, err.Error())
+			}
+			//删除平台
+			if err := platform.DeleteById(); err != nil {
+				WriteLog(err.Error())
+				return errorMsg(w, err.Error())
+			}
+			return sciter.NullValue()
+		}()
 		return sciter.NewValue("1")
 	})
 
@@ -945,23 +949,6 @@ func defineViewFunction(w *window.Window) {
 		io.Copy(f, res.Body)
 
 		return sciter.NewValue(newFileName)
-	})
-
-	w.DefineFunction("GetRsync", func(args ...*sciter.Value) *sciter.Value {
-
-		fmt.Println("进入异步了")
-
-		go func() {
-			time.Sleep(3 * time.Second)
-
-			//	endLoading(w,"")
-
-		}()
-
-		fmt.Println("完成异步了")
-
-		return sciter.NullValue()
-
 	})
 
 }
