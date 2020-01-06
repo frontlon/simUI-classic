@@ -63,13 +63,14 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 		fileExt := filepath.Ext(f.Name)
 
 		//找到压缩包中的可执行文件
-		for _, v := range romExt {
-			if v == fileExt {
-				runPath = fpath
-				break
+		if runPath == ""{
+			for _, v := range romExt {
+				if v == fileExt {
+					runPath = fpath
+					break
+				}
 			}
 		}
-
 		//如果文件存在，则无需解压了
 		if utils.FileExists(fpath) {
 			continue

@@ -9,7 +9,7 @@
         label{font-size:11dip;}
         table{width:100%;}
         th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-        td:first-child{font-size:11dip;text-align:left;padding:8dip 0;}
+        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
         tr:last-child td{text-align: center;padding-bottom:0}
         .submit{margin:0 8dip}
     </style>
@@ -23,7 +23,7 @@
                 <input type="text" id="sim_path" value="">
                 <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
             </td></tr>
-            <tr><td>{{Params}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            <tr><td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>{{Params}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
@@ -31,12 +31,11 @@
                 <option value="{RomName}">Winkawaks</option>
             </select>
             </td></tr>
-            <tr><td>解压缩：</td><td>
+            <tr><td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>解压后运行：</td><td>
                 <select id="">
                     <option value="0">否</option>
                     <option value="1">是</option>
                 </select>
-                <input type="text" id="" value="" novalue="压缩包中可执行的扩展名">
             </td></tr>
             <tr><th colspan="2"></th></tr>
             <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>

@@ -4,7 +4,6 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
-	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -51,8 +50,8 @@ func defineViewFunction(w *window.Window) {
 		//数据库中读取rom详情
 		rom, err := (&db.Rom{}).GetById(romId)
 		if err != nil {
-			WriteLog("没有找到游戏")
-			return errorMsg(w, "没有找到游戏")
+			WriteLog(Config.Lang["GameNotFound"])
+			return errorMsg(w, Config.Lang["GameNotFound"])
 		}
 
 		romCmd, _ := (&db.RomCmd{RomId: romId, SimId: simId,}).Get()
@@ -83,12 +82,13 @@ func defineViewFunction(w *window.Window) {
 		rom.RomPath = Config.Platform[rom.Platform].RomPath + separator + rom.RomPath;
 		if sim.Unzip == 1 || romCmd.Unzip == 1 {
 			rom.RomPath, err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
-
-			fmt.Println("解压后文件:", rom.RomPath)
-
 			if err != nil {
 				WriteLog(err.Error())
 				return errorMsg(w, err.Error())
+			}
+			if rom.RomPath == ""{
+				return errorMsg(w, Config.Lang["UnzipExeNotFound"])
+
 			}
 		}
 
@@ -525,10 +525,10 @@ func defineViewFunction(w *window.Window) {
 
 	//删除一个平台
 	w.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
+		id := uint32(utils.ToInt(args[0].String()))
 
-		go func() *sciter.Value {
+		go func(id uint32) *sciter.Value {
 
-			id := uint32(utils.ToInt(args[0].String()))
 			platform := &db.Platform{
 				Id: id,
 			}
@@ -555,7 +555,7 @@ func defineViewFunction(w *window.Window) {
 				return errorMsg(w, err.Error())
 			}
 			return sciter.NullValue()
-		}()
+		}(id)
 		return sciter.NewValue("1")
 	})
 

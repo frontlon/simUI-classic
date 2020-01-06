@@ -80,6 +80,7 @@ event click $(#platform_list li) {
 
     //读取平台信息
     
+
     var info = view.parameters.getPlatformById(pfId);
     var exts = info.RomExts.join(",");
     $(#platform_name).value = info.Name;
@@ -117,7 +118,7 @@ event click $(#platform_list li) {
     $(#platform_thumb).state.disabled = false;
     $(#platform_snap).state.disabled = false;
     $(#platform_poster).state.disabled = false;
-    $(#platform_Packing).state.disabled = false;
+    $(#platform_packing).state.disabled = false;
     $(#platform_romlist).state.disabled = false;
 
     var openfile = $$(.openfile);
@@ -130,9 +131,6 @@ event click $(#platform_list li) {
         of.state.disabled = false;
     }
 }
-
-
-
 
 //更新通用配置信息
 event click $(#config_submit) {
@@ -174,7 +172,7 @@ event click $(#platform_submit) {
 event click $(#add_sim) {
     var res = view.dialog({
         url:self.url(ROOTPATH + "dialog/edit_sim.html"),
-        width:440,
+        width:460,
         height:290,
         parameters: {
             id:0,
@@ -196,8 +194,8 @@ event change $(#platform_sim) {
    if(this.value == 0){return true;}
    var res = view.dialog({
         url:self.url(ROOTPATH + "dialog/edit_sim.html"),
-        width:440,
-        height:250,
+        width:460,
+        height:290,
         parameters: {
             id:this.value,
             platform:pfId,
@@ -276,15 +274,13 @@ event click $(#platform_add){
 
 //删除平台
 event click $(#platform_del){
-    var pfId = $(#platform_list).value;
-    
+    var pfId = $(#platform_list li:current).attributes["value"];
     if (pfId == undefined){
         view.msgbox(#alert,CONF.Lang.NotSelectPlatform);
         return true;
     }
 
     //确认窗口
-    var name = $(#platform_list).select("option[value="+pfId+"]").html;
     var result = view.msgbox {
         type:#question, 
         content:CONF.Lang.DeletePlatformConfirm, 
@@ -302,7 +298,7 @@ event click $(#platform_del){
     //开始执行删除操作
     result = view.parameters.delPlatform(pfId);
     if(result == "1"){
-        $(#platform_list).select("option[value="+pfId+"]").remove();
+        $(#platform_list li:current).remove();
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);
     }
 }
