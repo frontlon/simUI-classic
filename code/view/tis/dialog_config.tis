@@ -163,6 +163,11 @@ event click $(#platform_submit) {
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
     if(data.exts == ""){view.msgbox(#alert,CONF.Lang.RomTypeCanNotBeEmpty);return true;}
     if(data.rom == ""){view.msgbox(#alert,CONF.Lang.RomMenuCanNotBeEmpty);return true;}
+
+    //检查并补全扩展名
+    data.exts = completeExt(data.exts);
+    //更新补全的扩展名到文本框中
+    $(#platform_exts).value = data.exts;
     //更新平台信息
     view.parameters.updatePlatform(data);
 }

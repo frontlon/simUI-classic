@@ -9,19 +9,38 @@ function createLang(){
 
 }
 
+//自动补全扩展名
+function completeExt(str){
+    var arr = str.split(",");
+    var newarr = [];
+    for(var a in arr) {
+        var head = a.substr(0,1);
+        if(head == "."){
+          newarr.push(a);
+        }else{
+          newarr.push("."+a);
+        }
+    }
+    var newstr = newarr.join(",");
+    return newstr;
+}
+
 //弹出错误窗口
 function errorBox(str){
     view.msgbox(#error,str);
 }
 
+//alert框
 function alert(str){
     view.msgbox(#alert,str);
 }
 
+//开启loading框
 function startLoading(){
     $(#loading).style['display'] = 'block';
 }
 
+//关闭loading框
 function endLoading(){
     $(#loading).style['display'] = 'none';
 }
