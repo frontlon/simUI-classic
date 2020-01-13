@@ -30,10 +30,30 @@ view.root.on("ready", function(){
 
     //平台拖拽排序
     DragDrop{
-        what      : "dl#menulist>dd:not(.fixed)",
-        where     : "dl#menulist",
-        container : "dl#menulist",        
-        notBefore : "dl#menulist>dd.fixed",
+        what      : "#platform_ul>li:not(.fixed)",
+        where     : "#platform_ul",
+        container : "#platform_ul",        
+        notBefore : "#platform_ul>li.fixed",
+        dropped : function(){
+            var lis = $$(#platform_ul > li);
+            var id = "";
+            var newObj = {};
+            for(var li in lis) {
+                id = li.attributes["platform"];
+                newObj[id] = li.index;
+            }
+            //更新到数据库
+            var datastr = JSON.stringify(newObj);
+            var result = view.UpdatePlatformSort(datastr);
+        }
+    }
+
+    //菜单拖拽排序
+    DragDrop{
+        what      : "#menulist>dd:not(.fixed)",
+        where     : "#menulist",
+        container : "#menulist",        
+        notBefore : "#menulist>dd.fixed",
         dropped : function(){
             if(ACTIVE_PLATFORM == 0){
                 return;
@@ -50,13 +70,12 @@ view.root.on("ready", function(){
         }
     }
 
-
     // ================= 事件 =================
 
    //调整窗口大小
     view.on("sizing", function(evt) {
         //还原平台拉条位置
-        platformResize(evt);
+       // platformResize(evt);
         //更新默认配置
         view.UpdateConfig("window_width",evt.width);
         view.UpdateConfig("window_height",evt.height);
@@ -238,7 +257,6 @@ view.root.on("ready", function(){
                 getSimulatorByPlatform:getSimulatorByPlatform,
                 updateConfig:updateConfig,
                 updatePlatform:updatePlatform,
-                updatePlatformSort:updatePlatformSort,
                 addPlatform:addPlatform,
                 delPlatform:delPlatform,
             };
@@ -376,5 +394,5 @@ function initConfig(isfresh){
     $(#num_search li).state.current = true;
 
     //动态设置平台栏宽度，滑动平台栏使用
-    setPlatformWidth();
+   // setPlatformWidth();
   }

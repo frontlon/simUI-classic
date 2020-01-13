@@ -30,11 +30,7 @@ function updatePlatform(data){
     }
 }
 
-//更新平台排序
-function updatePlatformSort(data){
-    var datastr = JSON.stringify(data);
-    var result = view.UpdatePlatformSort(datastr);
-}
+
 
 //读取一个平台的信息
 function getPlatformById(id){

@@ -20,11 +20,13 @@
 
     #table_default td:first-child{width:120dip;}
 
-    #table_shortcut td{padding:0;text-align:left;}
-    #table_shortcut td:first-child{width:50dip}
-    #table_shortcut td:last-child{width:18dip}
-    #table_shortcut input[type='text']{width:*;border-radius:2dip}
-    
+    #shortcut_ul{padding:0}
+    #shortcut_ul li{flow:row(input,input,button,button,label);display:block;}
+    #shortcut_ul li *{margin: 0 3dip;vertical-align: middle}
+    #shortcut_ul li input[type="text"]:nth-child(1){width:180px;}
+    #shortcut_ul li input[type="text"]:nth-child(2){width:250px;margin-right:3dip;}
+    #shortcut_ul li .openfile{margin-left:0;}
+
     .platform_control{height:16dip;flow:horizontal-flow;}
     .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
     .platform_control button:hover{background:#eee;cursor: pointer}
@@ -39,8 +41,7 @@
     <strip>
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
-      <label for="third">电子书</label>
-      <label for="fourth">快捷软件</label>
+      <label for="third">快捷软件</label>
     </strip>
     <panels>
       <section id="first">
@@ -97,35 +98,37 @@
       <section id="third">
         
           <div class="wrapper">
-              <table id="table_shortcut">
-                  <tr>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
-                      <td><button>删除</button></td>
-                  </tr>
-                  <tr>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
-                      <td><button>删除</button></td>
-                  </tr>
-                  <tr>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"></td>
-                      <td><input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}"><button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button></td>
-                      <td><button>删除</button></td>
-                  </tr>
-                  <!--
-                  <tr><td colspan="3">&nbsp;</td></tr>
-                  <tr><td colspan="3" style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
-                  -->
+            <ul id="shortcut_ul">
+              <li>
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
+                <button>删除</button>
+                <label title="拖拽排序"><i>&#xe839;</i></label>
+              </li>
+              <li>
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
+                <button>删除</button>
+                <label title="拖拽排序"><i>&#xe839;</i></label>
+              </li>
+              <li>
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
+                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
+                <button>删除</button>
+                <label title="拖拽排序"><i>&#xe839;</i></label>
+              </li>
+            </ul>
+       
+                  <table>
+                  <tr><td style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+                  </table>
               </table>
             </div>
 
-
-
       </section>
-      <section id="fourth">fourth</section>
-
-
 
     </panels>
   </tabs>

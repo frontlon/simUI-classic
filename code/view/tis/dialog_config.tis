@@ -30,30 +30,11 @@ view.root.on("ready", function(){
     }
     platform_list.html = pfdata;
 
-    //平台拖拽排序
+    //快捷软件拖动排序
     DragDrop{
-        what      : "ul#platform_list>li",
-        where     : "ul#platform_list",
-        container : "ul#platform_list",        
-        dropped : function(){
-            var lis = $$(#platform_list > li);
-            var id = "";
-            var newObj = {};
-            for(var li in lis) {
-                id = li.attributes["value"];
-                newObj[id] = li.index;
-            }
-            //更新到数据库
-            view.parameters.updatePlatformSort(newObj);
-        }  
-    };
-
-
-    //平台拖拽排序
-    DragDrop{
-        what      : "#table_shortcut tr",
-        where     : "#table_shortcut",
-        container : "#table_shortcut",        
+        what      : "#shortcut_ul li",
+        where     : "#shortcut_ul",
+        container : "#shortcut_ul",        
         dropped : function(){
             //var lis = $$(#table_shortcut > li);
             //var id = "";

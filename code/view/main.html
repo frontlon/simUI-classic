@@ -12,7 +12,8 @@
     body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover;margin:0}
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
-    #left{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative;}
+    #left_platform{background-color:color(sidebar-background-color);height:*;}
+    #left_menu{background-color:color(sidebar-background-color);height:*;}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
     #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;}
     
@@ -26,32 +27,20 @@
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
 
     /* 标题栏 */
-    #titlebar{background-color:color(titlebar-background-color);height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;}
-    #logo{ color:color(logo-text-color);width:160dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip}
+    #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
+    #logo{color:color(logo-text-color);width:210dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
-    #tb_right{text-align:right;width:262dip;display:inline;}
-    #tb_right i{font-size:18dip;line-height:36dip;display:block}
-    #tb_right > button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
-    #tb_right > button:hover{opacity:0.7;cursor:pointer}
+    #tb_right{text-align:right;width:262dip;display:inline;background-color:color(titlebar-background-color);}
+    #titlebar i{font-size:18dip;line-height:36dip;display:block}
+    #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
+    #titlebar button:hover{opacity:0.7;cursor:pointer}
+    #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
-    /* 平台按钮 */
-    #platform_ul{position:absolute;height:36dip;left:0;overflow:visible;width:*;background:color(platform-background-color);margin:0;padding:0}
-    #platform_ul > li{display:block;height:36dip;float:left;}
-    #platform_ul > li:hover{opacity:0.7;cursor:pointer}
-    #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;}
-    #platform_ul button{color:color(platform-text-color);background:none;width:36dip;height:36dip;display:inline-block;overflow:hidden}
-    #platform_ul button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark)}
-    #platform_ul > li:current button.platform{min-width:24dip;width:auto;padding:0 12dip ;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
-    #platform_ul > li:current button.platform_down{width:12dip;line-height:36dip;text-align:center;border-left:1dip solid color(platform-arrow-border-light);border-right:color(platform-active-background-color)}
 
     /* 状态栏 */
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
-    .statebar_btn{position:absolute;left:8dip;top:9dip;padding:0;}
-    .statebar_btn button{background:color(statebar-button-background-color);color:color(statebar-button-text-color);cursor: pointer;border-radius:2dip;margin-right:2px;display: inline-block;size:26dip;line-height:26dip;text-align:center;font-size:14.4dip;padding:0}
-    .statebar_btn button:hover{opacity: 0.8;}
-    .statebar_btn button i{display:block}
-    
+ 
     /* 搜索栏 */
     .search{height:26dip;background:color(search-background-color);margin:9dip;position:relative}
     .search .input{context-menu:none;color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:100dip;position:absolute;left:4dip}
@@ -64,12 +53,19 @@
     #num_search li:hover{color:color(num-index-hover-text-color)}
     #num_search li:current{color:color(num-index-active-text-color);}
 
+    /* 平台按钮 */
+    #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
+    #platform_ul > li{display:block;text-align:center;vertical-align: middle;line-height:1.4em;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul > li:hover{opacity:0.7;cursor:pointer}
+    #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
+    
+
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;}
     #menulist dt{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color)}
-    #menulist dd{color:color(menu-text-color);line-height:30dip;height:30dip;overflow:hidden;text-indent:1em;border-top:1dip solid color(menu-separator-color);position:relative;padding:0}
+    #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);}
     #menulist dd:hover{cursor:pointer}
-    #menulist dd:current{background:color(menu-active-background-color);color:color(menu-active-text-color);}
+    #menulist dd:current{background-color:color(menu-active-background-color);color:color(menu-active-text-color);}
     #platform_list dd:drag-source { background-color:#eee;}
 
     /* rom模块 */
@@ -160,10 +156,25 @@
 <menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo">{{SoftName}}</div>
-    <div id="tb_left"><ul id="platform_ul"></ul></div>
+    <div id="tb_left">
+        <!--
+        <ul>
+            <li id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></li>
+            <li id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></li>
+            <li id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></li>
+            <li id="xxxxx" value="1"><i>&#xe6b8;</i></li>
+            <li id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></li>
+        </ul>
+        -->
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
+        
+        
+    </div>
     <div id="tb_right">
-
-        <button id="xxxxx" value="1"><i>&#xe6b8;</i></button><button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button><button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
+        <!--
+        <button id="xxxxx" value="1"><i>&#xe6b8;</i></button><button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button>
+        -->
+        <button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
             <menu>
                 <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
                 <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
@@ -174,28 +185,31 @@
         <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
     </div>
 </div>
-
-<frameset cols="156dip,*,205dip">
-    <section id="left">
+<!--<frameset cols="156dip,*,205dip">-->
+<frameset cols="70dip,140dip,*,205dip" noresize="noresize">
+    <section id="left_platform">
+        <ul id="platform_ul"></ul>
+    </section>
+    <section id="left_menu">
         <div class="search">
             <input type="text" class="input" id="search_input" />
             <button type="submit" class="submit" id="search_submit"><i>&#xe873;</i></button>
         </div>
         <dl id="menulist"></dl>
     </section>
-<splitter id="left_splitter" />
+<!--<splitter id="left_splitter" />-->
     <section id="center" class="scrollbar">
 
         <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
 
         <div class="statebar">
-            
+            <!--
             <div class="statebar_btn">
                 <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button>
                 <button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button>
                 <button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
             </div>
-
+-->
             <div class="counnum">
                 <span id="rom_count_text">{{GameCount}}</span><span id="rom_count_num">0</span></div>
         </div>

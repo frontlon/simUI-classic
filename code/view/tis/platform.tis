@@ -8,6 +8,7 @@ view.root.on("ready", function(){
     });
 
     //平台列表鼠标移入，初始化一些常量参数
+    /*
     $(#tb_left).on("mouseenter", function(evt) {
         platformMouseEnter(evt);
     });
@@ -21,6 +22,7 @@ view.root.on("ready", function(){
     self.on("mousemove", "#tb_left", function(evt) {
         platformMouseMove(evt);
     });
+    */
 });
 
 //点击平台下拉菜单 - 打开目录
@@ -69,11 +71,11 @@ function createPlatform(){
     var pf = {};
     //如果有多个平台，才显示“全部平台”按钮
     if(CONF.Platform.length > 1){
-        dd += "<li platform='0'><button class='platform'>"+CONF.Lang.AllPlatform +"</button></li>";
+        dd += "<li platform='0'>"+CONF.Lang.AllPlatform +"</li>";
     }
     //遍历数据，生成dom
     for(var pf in CONF.PlatformList) {
-        dd += "<li platform='"+ pf.Id +"'><button class='platform'>" + pf.Name + "</button></li>";
+        dd += "<li platform='"+ pf.Id +"'>" + pf.Name + "</li>";
     }
     self.$(#platform_ul).html = dd; //生成dom
 
@@ -85,6 +87,7 @@ function createPlatform(){
 }
 
 //滑动平台列表参数
+/*
 var PLATFORM_OFFSET=0; //x坐标
 var PLATFORM_LEFT=0; //left值
 var PLATFORM_MUTEX=false; //互斥锁
@@ -154,3 +157,4 @@ function setPlatformWidth(){
     }
     $(#platform_ul).style["width"] = w;
 }
+*/

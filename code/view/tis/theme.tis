@@ -37,8 +37,9 @@ function setTheme(themeId){
 
     if(CONF.Theme[themeId].Params["body-opacity"] != undefined){
         $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
-        $(#left).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
-        $(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_platform).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_menu).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        //$(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
         $(#center).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
         $(#right).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
         $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
