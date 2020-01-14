@@ -86,7 +86,7 @@ func defineViewFunction(w *window.Window) {
 				WriteLog(err.Error())
 				return errorMsg(w, err.Error())
 			}
-			if rom.RomPath == ""{
+			if rom.RomPath == "" {
 				return errorMsg(w, Config.Lang["UnzipExeNotFound"])
 
 			}
@@ -951,4 +951,65 @@ func defineViewFunction(w *window.Window) {
 		return sciter.NewValue(newFileName)
 	})
 
+	//读取快捷工具
+	w.DefineFunction("GetShortcut", func(args ...*sciter.Value) *sciter.Value {
+		volist, err := (&db.Shortcut{}).GetAll()
+		if err != nil {
+			WriteLog(err.Error())
+			return errorMsg(w, err.Error())
+		}
+		romJson, _ := json.Marshal(&volist)
+		return sciter.NewValue(string(romJson))
+	})
+
+	//添加快捷工具
+	w.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
+		data := args[0].String()
+		d := make(map[string]string)
+		json.Unmarshal([]byte(data), &d)
+		shortcut := &db.Shortcut{
+			Name: d["name"],
+			Path: d["path"],
+			Sort: uint32(utils.ToInt(d["sort"])),
+		}
+
+		id , err := shortcut.Add();
+		if err != nil {
+			WriteLog(err.Error())
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NewValue(utils.ToString(id))
+	})
+
+	//更新快捷工具
+	w.DefineFunction("UpdateShortcut", func(args ...*sciter.Value) *sciter.Value {
+		data := args[0].String()
+		d := make(map[string]string)
+		json.Unmarshal([]byte(data), &d)
+		shortcut := &db.Shortcut{
+			Id:   uint32(utils.ToInt(d["id"])),
+			Name: d["name"],
+			Path: d["path"],
+			Sort: uint32(utils.ToInt(d["sort"])),
+		}
+		if err := shortcut.UpdateById(); err != nil {
+			WriteLog(err.Error())
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NullValue()
+	})
+
+	//删除快捷工具
+	w.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
+		id := uint32(utils.ToInt(args[1].String()))
+
+		shortcut := &db.Shortcut{
+			Id: id,
+		}
+		if err := shortcut.DeleteById(); err != nil {
+			WriteLog(err.Error())
+			return errorMsg(w, err.Error())
+		}
+		return sciter.NullValue()
+	})
 }

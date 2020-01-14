@@ -99,3 +99,29 @@ function getRomDetail(id){
     var obj = JSON.parse(result);
     return obj;
 }
+
+//读取快捷工具
+function getShortcut(){
+    var result = view.GetShortcut();
+    var obj = JSON.parse(result);
+    return obj;
+}
+//添加快捷工具
+function addShortcut(data){
+    var datastr = JSON.stringify(data);
+    var result = view.AddShortcut(datastr);
+    return result;
+}
+
+//编辑快捷工具
+function updateShortcut(data){
+    var datastr = JSON.stringify(data);
+    var result = view.UpdateShortcut(datastr);
+    return result;
+}
+
+//删除快捷工具
+function delShortcut(id){
+    var result = view.DelShortcut(id);
+    return result;
+}

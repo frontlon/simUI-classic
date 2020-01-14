@@ -259,6 +259,12 @@ view.root.on("ready", function(){
                 updatePlatform:updatePlatform,
                 addPlatform:addPlatform,
                 delPlatform:delPlatform,
+                getShortcut:GetShortcut,
+                addShortcut:addShortcut,
+                updateShortcut:updateShortcut,
+                delShortcut:delShortcut,
+
+                
             };
         });
        

@@ -30,6 +30,21 @@ view.root.on("ready", function(){
     }
     platform_list.html = pfdata;
 
+    //生成快捷工具列表
+    var shortcut = "";
+    var lists = view.parameters.getShortcut();
+    for(var s in lists) {
+        shortcut += "<li id='shortcut_li_"+ s.Id +"'>";
+        shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='xxxxxxxxxxx' />";
+        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Name +"' title='xxxxxxxxxxx' />";
+        shortcut += "<button class='openfile' for='shortcut_path_'" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>更新</button>";
+        shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>删除</button>";
+        shortcut += "<label title='xxxxxxxxxx'><i>&#xe839;</i></label>";
+        shortcut += "</li>";
+    }
+    $(#shortcut_ul).html = shortcut;
+
     //快捷软件拖动排序
     DragDrop{
         what      : "#shortcut_ul li",

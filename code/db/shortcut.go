@@ -7,52 +7,67 @@ import (
 )
 
 type Shortcut struct {
-	Id     uint32
-	Name   string
-	Path   uint32
-	Type   uint8
-	Pinyin string
+	Id   uint32
+	Name string
+	Path string
+	Sort uint32
 }
 
 //写入数据
-func (v *Shortcut) Add() error {
-	stmt, err := sqlite.Prepare("INSERT INTO shortcut (`name`,`type`,path,pinyin) values(?,?,?,?)")
+func (v *Shortcut) Add() (int64,error) {
+	stmt, err := sqlite.Prepare("INSERT INTO shortcut (sort) values(?)")
 	if err != nil {
 		fmt.Println(err.Error())
-		return err
+		return 0,err
 	}
-	_, err = stmt.Exec(v.Name, v.Type, v.Path, v.Pinyin);
+	result, err := stmt.Exec(v.Sort);
 	if err != nil {
 		fmt.Println(err.Error())
-		return err
+		return 0,err
 	}
-	return nil
+	return result.LastInsertId()
 }
 
-//根据id查询一条记录
-func (*Shortcut) GetById(id uint32) (*Shortcut, error) {
-	vo := &Shortcut{}
-	sql := "SELECT * FROM shortcut where id= " + utils.ToString(id)
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Name, &vo.Path, &vo.Type, &vo.Pinyin)
-	return vo, err
-}
-
-//读取一个类型下的所有数据
-func (sim *Shortcut) GetByType(t uint8) ([]*Shortcut,error) {
+//读取所有数据
+func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 	volist := []*Shortcut{}
-	sql := "SELECT * FROM rom WHERE type = " + utils.ToString(t) + " ORDER BY pinyin ASC"
+	sql := "SELECT * FROM rom WHERE ORDER BY sort ASC"
 	rows, err := sqlite.Query(sql)
 	if err != nil {
 		return volist, err
 	}
 	for rows.Next() {
 		vo := &Shortcut{}
-		err = rows.Scan(&vo.Id, &vo.Name, &vo.Path, &vo.Type, &vo.Pinyin)
+		err = rows.Scan(&vo.Id, &vo.Name, &vo.Path, &vo.Sort)
 		if err != nil {
 			return volist, err
 		}
 		volist = append(volist, vo)
 	}
-	return volist,nil
+	return volist, nil
+}
+
+//更新一条记录
+func (r *Shortcut) UpdateById() error {
+	sql := `UPDATE shortcut SET `
+	sql += `name = '` + utils.ToString(r.Name) + `'`
+	sql += `, path = '` + utils.ToString(r.Path) + `'`
+	sql += `, sort = ` + utils.ToString(r.Sort)
+	sql += ` WHERE id = ` + utils.ToString(r.Id)
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//删除一条记录
+func (r *Shortcut) DeleteById() (error) {
+	sql := "DELETE FROM shortcut WHERE id = " + utils.ToString(r.Id)
+	_, err := sqlite.Exec(sql)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
 }
