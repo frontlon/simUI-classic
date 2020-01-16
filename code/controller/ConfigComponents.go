@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"VirtualNesGUI/code/db"
@@ -18,11 +18,12 @@ var Config *ConfStruct
 
 //配置文件
 type ConfStruct struct {
-	RootPath  string //exe文件的当前路径
-	Separator string //exe文件的当前路径
-	CachePath string //缓存路径
-	UnzipPath string //rom解压路径
+	RootPath     string                  //exe文件的当前路径
+	Separator    string                  //exe文件的当前路径
+	CachePath    string                  //缓存路径
+	UnzipPath    string                  //rom解压路径
 	Default      *db.Config              //默认配置
+	Shortcut     []*db.Shortcut          //快捷工具
 	LangList     map[string]string       //语言列表
 	Theme        map[string]*ThemeStruct //主题列表
 	Lang         map[string]string       //语言项
@@ -43,7 +44,12 @@ type ThemeStruct struct {
 */
 func InitConf() error {
 
-	err := errors.New("")
+	separator := string(os.PathSeparator) //系统路径分隔符
+	rootpath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	Config.RootPath = rootpath + separator                        //当前软件的绝对路径
+	Config.Separator = separator                                  //系统的目录分隔符
+	Config.CachePath = rootpath + separator + "cache" + separator //缓存路径
+	Config.UnzipPath = Config.CachePath + "unzip" + separator     //rom解压路径
 
 	//更新缓存前，需要将工作目录换成默认目录
 	if err := os.Chdir(Config.RootPath); err != nil {
@@ -70,6 +76,11 @@ func InitConf() error {
 		return err
 	}
 	Config.Theme, err = getTheme()
+	if err != nil {
+		WriteLog(err.Error())
+		return err
+	}
+	Config.Shortcut, err = getShortcut()
 	if err != nil {
 		WriteLog(err.Error())
 		return err
@@ -171,16 +182,13 @@ func getDefault() (*db.Config, error) {
 			}
 		}
 	}
-	//相对路径转换为绝对路径
-	if vo.Book != "" {
-		vo.Book, _ = filepath.Abs(vo.Book)
-	}
+
 	return vo, nil
 }
 
 //读取主题列表
 func getTheme() (map[string]*ThemeStruct, error) {
-	dirPth := Config.RootPath + "theme" + separator
+	dirPth := Config.RootPath + "theme" + Config.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 
 	themelist := map[string]*ThemeStruct{}
@@ -279,7 +287,7 @@ func getRomAlias(platform uint32) (map[string]string, error) {
 
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
-	langpath := Config.RootPath + "lang" + separator
+	langpath := Config.RootPath + "lang" + Config.Separator
 	fpath := langpath + lang + ".ini"
 	section := make(map[string]string)
 
@@ -310,7 +318,7 @@ func getLang(lang string) (map[string]string, error) {
 //读取语言文件列表
 func getLangList() (map[string]string, error) {
 	lang := make(map[string]string)
-	dirPth := Config.RootPath + "lang" + separator
+	dirPth := Config.RootPath + "lang" + Config.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 	for _, fi := range lists {
 		if !fi.IsDir() { // 忽略目录
@@ -319,4 +327,13 @@ func getLangList() (map[string]string, error) {
 		}
 	}
 	return lang, nil
+}
+
+//读取快捷工具列表
+func getShortcut() ([]*db.Shortcut, error) {
+	shortcutList, _ := (&db.Shortcut{}).GetAll()
+	for k, v := range shortcutList {
+		shortcutList[k].Path, _ = filepath.Abs(v.Path)
+	}
+	return shortcutList, nil
 }

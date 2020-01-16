@@ -1,0 +1,15 @@
+﻿//生成快捷工具列表
+function createShortcutList(){
+    var li = ""; 
+    //遍历数据，生成dom
+    for(var obj in CONF.Shortcut) {
+        li += "<li path='"+ obj.Path +"'>"+ obj.Name + "</li>";
+    }
+    $(#shortcut menu).html = li; //生成dom
+}
+
+//运行快捷工具
+function runShortcut(obj){
+    var path = obj.attributes["path"];
+    view.RunShortcut(path);
+}

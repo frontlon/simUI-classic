@@ -13,7 +13,6 @@ type Config struct {
 	RomlistStyle  uint8
 	RomlistZoom   uint8
 	SearchEngines string
-	Book          string
 	RootPath      string
 	WindowWidth   uint16
 	WindowHeight  uint16
@@ -23,9 +22,9 @@ type Config struct {
 //根据id查询一条数据
 func (*Config) Get() (*Config, error) {
 	vo := &Config{}
-	sql := "SELECT lang, theme, platform, menu, thumb, romlist_style, romlist_zoom, search_engines, book, root_path, window_width, window_height, window_state FROM config where id= 1"
+	sql := "SELECT lang, theme, platform, menu, thumb, romlist_style, romlist_zoom, search_engines, root_path, window_width, window_height, window_state FROM config where id= 1"
 	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.Menu, &vo.Thumb, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines, &vo.Book, &vo.RootPath, &vo.WindowWidth, &vo.WindowHeight, &vo.WindowState)
+	err := rows.Scan(&vo.Lang, &vo.Theme, &vo.Platform, &vo.Menu, &vo.Thumb, &vo.RomlistStyle, &vo.RomlistZoom, &vo.SearchEngines, &vo.RootPath, &vo.WindowWidth, &vo.WindowHeight, &vo.WindowState)
 	return vo, err
 }
 

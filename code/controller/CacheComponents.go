@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"VirtualNesGUI/code/db"
@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 )
-
 
 /**
  * 创建缓存
@@ -28,7 +27,7 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 			}
 
 			//转换为相对路径
-			p = strings.Replace(p,RomPath + separator,"",-1)
+			p = strings.Replace(p,RomPath + Config.Separator,"",-1)
 
 			//整理目录格式，并转换为数组
 			newpath := strings.Replace(RomPath, "/", "\\", -1)
@@ -234,3 +233,11 @@ func UpdateMenuDB(platform uint32,menumap map[string]*db.Menu) error{
 
 }
 
+
+/**
+ * 读取文件唯一标识
+ **/
+func GetFileUniqId(f os.FileInfo) string {
+	str := f.Name() + utils.ToString(f.Size()) + f.ModTime().String()
+	return utils.Md5(str)
+}

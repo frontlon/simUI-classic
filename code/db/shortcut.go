@@ -47,12 +47,20 @@ func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 	return volist, nil
 }
 
+//查询所有记录数
+func (*Shortcut) Count() (int, error) {
+	count := 0
+	sql := "SELECT count(*) as count FROM shortcut"
+	rows := sqlite.QueryRow(sql)
+	err := rows.Scan(&count)
+	return count, err
+}
+
 //更新一条记录
 func (r *Shortcut) UpdateById() error {
 	sql := `UPDATE shortcut SET `
 	sql += `name = '` + utils.ToString(r.Name) + `'`
 	sql += `, path = '` + utils.ToString(r.Path) + `'`
-	sql += `, sort = ` + utils.ToString(r.Sort)
 	sql += ` WHERE id = ` + utils.ToString(r.Id)
 	_, err := sqlite.Exec(sql)
 	if err != nil {
@@ -60,6 +68,26 @@ func (r *Shortcut) UpdateById() error {
 	}
 	return nil
 }
+
+//更新排序
+func (r *Shortcut) UpdateSortById() error {
+	sql := `UPDATE shortcut SET `
+	sql += `sort = '` + utils.ToString(r.Sort) + `'`
+	sql += ` WHERE id = ` + utils.ToString(r.Id)
+
+	stmt, err := sqlite.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	_, err2 := stmt.Exec()
+	if err2 != nil {
+		return err2
+	} else {
+		return nil
+	}
+}
+
+
 
 //删除一条记录
 func (r *Shortcut) DeleteById() (error) {

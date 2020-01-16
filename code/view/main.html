@@ -172,8 +172,11 @@
     </div>
     <div id="tb_right">
         <!--
-        <button id="xxxxx" value="1"><i>&#xe6b8;</i></button><button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button>
+        <button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button>
         -->
+        <button id="shortcut" value="1"><i>&#xe6b8;</i>
+            <menu></menu>
+        </button>
         <button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
             <menu>
                 <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
@@ -249,6 +252,7 @@
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/platform.tis";
+    include ROOTPATH + "tis/shortcut.tis";
     include ROOTPATH + "tis/theme.tis";
     include ROOTPATH + "tis/rom.tis";
     include ROOTPATH + "tis/menu.tis";

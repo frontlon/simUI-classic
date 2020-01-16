@@ -107,9 +107,8 @@ function getShortcut(){
     return obj;
 }
 //添加快捷工具
-function addShortcut(data){
-    var datastr = JSON.stringify(data);
-    var result = view.AddShortcut(datastr);
+function addShortcut(){
+    var result = view.AddShortcut();
     return result;
 }
 
@@ -124,4 +123,10 @@ function updateShortcut(data){
 function delShortcut(id){
     var result = view.DelShortcut(id);
     return result;
+}
+
+//排序快捷工具
+function updateShortcutSort(data){
+    var datastr = JSON.stringify(data);
+    view.UpdateShortcutSort(datastr);
 }

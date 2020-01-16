@@ -217,9 +217,9 @@ view.root.on("ready", function(){
         view.CreateRomCache();
     });
 
-    //启动电子书
-    self.on("click", "#book", function(evt) {
-        view.RunBook();
+   //打开快捷工具
+    self.on("click", "#shortcut menu li", function(evt) {
+        runShortcut(this);
     });
 
     //切换主题
@@ -263,8 +263,7 @@ view.root.on("ready", function(){
                 addShortcut:addShortcut,
                 updateShortcut:updateShortcut,
                 delShortcut:delShortcut,
-
-                
+                updateShortcutSort:updateShortcutSort,
             };
         });
        
@@ -390,6 +389,7 @@ function initConfig(isfresh){
 
     createTheme(); //创建主题
     createPlatform(); //生成平台列表
+    createShortcutList(); //生成快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
    
     //生成菜单

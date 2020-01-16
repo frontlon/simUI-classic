@@ -20,12 +20,12 @@
 
     #table_default td:first-child{width:120dip;}
 
-    #shortcut_ul{padding:0}
-    #shortcut_ul li{flow:row(input,input,button,button,button,label);display:block;}
-    #shortcut_ul li *{margin: 0 3dip;vertical-align: middle}
-    #shortcut_ul li input[type="text"]:nth-child(1){width:180px;}
-    #shortcut_ul li input[type="text"]:nth-child(2){width:250px;margin-right:3dip;}
-    #shortcut_ul li .openfile{margin-left:0;}
+    #shortcut_list{padding:0}
+    #shortcut_list li{flow:row(input,input,button,button,button,label);display:block;}
+    #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
+    #shortshortcut_listcut_ul li input[type="text"]:nth-child(1){width:180px;}
+    #shortcut_list li input[type="text"]:nth-child(2){width:250px;margin-right:3dip;}
+    #shortcut_list li .openfile{margin-left:0;}
 
     .platform_control{height:16dip;flow:horizontal-flow;}
     .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
@@ -55,7 +55,6 @@
               <option value="packing">{{Packing}}</option>
             </select></td></tr>
 
-            <tr><td><div class="tip" title="{{BookTip}}">&#xf3c1;</div>{{Book}}</td><td><input type="text"  id="config_book" value="{{SelectBookFile}}"><button class="openfile" for="config_book" caption="" filter="exe chm Files (*.exe,*.chm)|*.exe;*.chm|All Files (*.*)|*.*">&#x2026;</button></td></tr>
               <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">&#xf3c1;</div>{{PicSearchEngines}}</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>
               <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
           </table>
@@ -96,41 +95,12 @@
       </section>
 
       <section id="third">
-        
-          <div class="wrapper">
-            <ul id="shortcut_ul">
-              <li>
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
-                <button>更新</button>
-                <button>删除</button>
-                <label title="拖拽排序"><i>&#xe839;</i></label>
-              </li>
-              <li>
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
-                <button>更新</button>
-                <button>删除</button>
-                <label title="拖拽排序"><i>&#xe839;</i></label>
-              </li>
-              <li>
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <input type="text" id="" value="{{SelectBookFile}}" title="{{BookTitle}}" />
-                <button class="openfile" for="config_book" caption="" filter="All Files (*.*)|*.*">&#x2026;</button>
-                <button>更新</button>
-                <button>删除</button>
-                <label title="拖拽排序"><i>&#xe839;</i></label>
-              </li>
-            </ul>
-       
-                  <table>
-                  <tr><td style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
-                  </table>
-              </table>
-            </div>
-
+        <div class="wrapper">
+          <ul id="shortcut_list"></ul>
+          <table>
+            <tr><td style="text-align:center"><button id="shortcut_add" disabled>添加</button></td></tr>
+          </table>
+        </div>
       </section>
 
     </panels>
