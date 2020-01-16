@@ -2,7 +2,7 @@ package controller
 
 import (
 	"VirtualNesGUI/code/db"
-	"github.com/gin-gonic/gin/json"
+	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -28,7 +28,6 @@ func ConfigController(w *window.Window) {
 				if err := InitConf(); err != nil {
 				}
 			}
-
 			getjson, _ := json.Marshal(Config)
 			data = string(getjson)
 		}

@@ -1,7 +1,6 @@
 ﻿//生成快捷工具列表
 function createShortcutList(){
     var li = ""; 
-    //遍历数据，生成dom
     for(var obj in CONF.Shortcut) {
         li += "<li path='"+ obj.Path +"'>"+ obj.Name + "</li>";
     }

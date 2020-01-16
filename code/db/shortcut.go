@@ -15,12 +15,12 @@ type Shortcut struct {
 
 //写入数据
 func (v *Shortcut) Add() (int64,error) {
-	stmt, err := sqlite.Prepare("INSERT INTO shortcut (sort) values(?)")
+	stmt, err := sqlite.Prepare("INSERT INTO shortcut (`name`,path,sort) values(?,?,?)")
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0,err
 	}
-	result, err := stmt.Exec(v.Sort);
+	result, err := stmt.Exec("","",v.Sort);
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0,err
@@ -31,7 +31,7 @@ func (v *Shortcut) Add() (int64,error) {
 //读取所有数据
 func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 	volist := []*Shortcut{}
-	sql := "SELECT * FROM rom WHERE ORDER BY sort ASC"
+	sql := "SELECT * FROM shortcut ORDER BY sort ASC"
 	rows, err := sqlite.Query(sql)
 	if err != nil {
 		return volist, err
@@ -86,8 +86,6 @@ func (r *Shortcut) UpdateSortById() error {
 		return nil
 	}
 }
-
-
 
 //删除一条记录
 func (r *Shortcut) DeleteById() (error) {

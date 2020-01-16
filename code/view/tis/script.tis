@@ -259,14 +259,13 @@ view.root.on("ready", function(){
                 updatePlatform:updatePlatform,
                 addPlatform:addPlatform,
                 delPlatform:delPlatform,
-                getShortcut:GetShortcut,
+                getShortcut:getShortcut,
                 addShortcut:addShortcut,
                 updateShortcut:updateShortcut,
                 delShortcut:delShortcut,
                 updateShortcutSort:updateShortcutSort,
             };
         });
-       
         startLoading();
         initConfig("1");
         endLoading();

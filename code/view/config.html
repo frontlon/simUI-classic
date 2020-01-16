@@ -9,7 +9,7 @@
     .frame_right{width:320dip;height:*;display:inline-block;padding-left:8dip;}
     .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip}
     
-    table{width:*}
+    table{width:*;display:block}
     th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
     td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
     tr:last-child td{text-align:center;padding-bottom:0}
@@ -20,11 +20,11 @@
 
     #table_default td:first-child{width:120dip;}
 
-    #shortcut_list{padding:0}
-    #shortcut_list li{flow:row(input,input,button,button,button,label);display:block;}
+    #shortcut_list{padding:0;}
+    #shortcut_list li{flow:row(input,input,button,button,button,label);}
     #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
-    #shortshortcut_listcut_ul li input[type="text"]:nth-child(1){width:180px;}
-    #shortcut_list li input[type="text"]:nth-child(2){width:250px;margin-right:3dip;}
+    #shortcut_list li input[type="text"]:nth-child(1){width:130px;}
+    #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
     #shortcut_list li .openfile{margin-left:0;}
 
     .platform_control{height:16dip;flow:horizontal-flow;}
@@ -97,9 +97,7 @@
       <section id="third">
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
-          <table>
-            <tr><td style="text-align:center"><button id="shortcut_add" disabled>添加</button></td></tr>
-          </table>
+          <table><tr><td style="text-align:center"><button id="shortcut_add">添加</button></td></tr></table>
         </div>
       </section>
 

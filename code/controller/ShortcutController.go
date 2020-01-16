@@ -28,9 +28,6 @@ func ShortcutController(w *window.Window) {
 
 	//添加快捷工具
 	w.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
-		data := args[0].String()
-		d := make(map[string]string)
-		json.Unmarshal([]byte(data), &d)
 
 		count,err := (&db.Shortcut{}).Count()
 		if err != nil {
@@ -69,16 +66,17 @@ func ShortcutController(w *window.Window) {
 
 	//删除快捷工具
 	w.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
-		id := uint32(utils.ToInt(args[1].String()))
+		id := uint32(utils.ToInt(args[0].String()))
 
 		shortcut := &db.Shortcut{
 			Id: id,
 		}
+
 		if err := shortcut.DeleteById(); err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
-		return sciter.NullValue()
+		return sciter.NewValue("1")
 	})
 
 	//更新快捷工具排序

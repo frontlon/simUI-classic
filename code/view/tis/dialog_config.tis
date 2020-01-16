@@ -30,12 +30,13 @@ view.root.on("ready", function(){
     platform_list.html = pfdata;
 
     //生成快捷工具列表
+    
     var shortcut = "";
-    var lists = view.parameters.getShortcut();
-    for(var s in lists) {
+    var shortcut_list = view.parameters.getShortcut();
+    for(var s in shortcut_list) {
         shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='xxxxxxxxxxx' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Name +"' title='xxxxxxxxxxx' />";
+        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='xxxxxxxxxxx' />";
         shortcut += "<button class='openfile' for='shortcut_path_'" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
         shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>更新</button>";
         shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>删除</button>";
@@ -323,17 +324,19 @@ event click $(#shortcut_add){
 event click $(.shortcut_update){
     var id = this.attributes["value"];
     var parentDom = $(#shortcut_list);
+    var name = parentDom.select("#shortcut_name_" + id).value;
+    var path = parentDom.select("#shortcut_path_" + id).value;
+    if(name == "" || name == undefined || path == "" || path == undefined){
+        view.msgbox(#alert,"xxxxxxxxxx为空了");
+        return;
+    }
     var obj = {
         id:id,
-        name:parentDom.select("#shortcut_name_" + id).value,
-        path:parentDom.select("#shortcut_path_" + id).value,
-    }
-
-    if(name == "" || path == ""){
-        view.msgbox(#alert,"为空了为空了");
-    }
-
-    result = view.parameters.updateShortcut(id);
+        name:name,
+        path:path,
+    };
+    view.parameters.updateShortcut(obj);
+    view.msgbox(#alert,"xxxxxxxxxx操作成功");
 }
 
 //删除快捷工具
@@ -342,7 +345,7 @@ event click $(.shortcut_delete){
     //确认窗口
     var result = view.msgbox {
         type:#question, 
-        content:CONF.Lang.DeletePlatformConfirm, 
+        content:"xxxxxxxxxxxxxxxxxxxxxxx确认山程度吗？", 
         caption:CONF.Lang.DeletePlatform,
         buttons:[
             {id:#yes,text:CONF.Lang.Delete},
@@ -355,7 +358,6 @@ event click $(.shortcut_delete){
     }
 
     var id = this.attributes["value"];
-    
     //开始执行删除操作
     result = view.parameters.delShortcut(id);
     if(result == "1"){
