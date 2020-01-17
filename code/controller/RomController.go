@@ -186,6 +186,38 @@ func RomController(w *window.Window) {
 					fileName = platform.SnapPath + Config.Separator
 				}
 			}
+
+
+		case "poster":
+			if platform.PosterPath != "" {
+				for _, v := range PIC_EXTS {
+					fileName = platform.PosterPath + Config.Separator + romName + v
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+				if fileName == "" {
+					isDir = true
+					fileName = platform.PosterPath + Config.Separator
+				}
+			}
+		case "packing":
+			if platform.PackingPath != "" {
+				for _, v := range PIC_EXTS {
+					fileName = platform.PackingPath + Config.Separator + romName + v
+					if utils.FileExists(fileName) {
+						break
+					} else {
+						fileName = ""
+					}
+				}
+				if fileName == "" {
+					isDir = true
+					fileName = platform.PackingPath + Config.Separator
+				}
+			}
 		case "doc":
 			if platform.DocPath != "" {
 				for _, v := range DOC_EXTS {

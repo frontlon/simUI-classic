@@ -106,6 +106,10 @@ func PlatformController(w *window.Window) {
 		d["thumb"] = strings.TrimRight(d["thumb"], `/`)
 		d["snap"] = strings.TrimRight(d["snap"], `\`)
 		d["snap"] = strings.TrimRight(d["snap"], `/`)
+		d["poster"] = strings.TrimRight(d["poster"], `\`)
+		d["poster"] = strings.TrimRight(d["poster"], `/`)
+		d["packing"] = strings.TrimRight(d["packing"], `\`)
+		d["packing"] = strings.TrimRight(d["packing"], `/`)
 		d["strategy"] = strings.TrimRight(d["strategy"], `\`)
 		d["strategy"] = strings.TrimRight(d["strategy"], `/`)
 		d["doc"] = strings.TrimRight(d["doc"], `\`)
@@ -120,6 +124,8 @@ func PlatformController(w *window.Window) {
 			RomPath:      d["rom"],
 			ThumbPath:    d["thumb"],
 			SnapPath:     d["snap"],
+			PosterPath:   d["poster"],
+			PackingPath:  d["packing"],
 			StrategyPath: d["strategy"],
 			DocPath:      d["doc"],
 			Romlist:      d["romlist"],

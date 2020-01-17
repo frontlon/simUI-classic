@@ -103,6 +103,14 @@ function romContextMenu(obj){
         btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='snap'>"+ CONF.Lang.LocationSnapFile +"</li>";
     }
 
+    if(CONF.Platform[pfId].PosterPath != ""){
+        btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='poster'>"+ CONF.Lang.OpenPosterFolder +"</li>";
+    }
+
+    if(CONF.Platform[pfId].PackingPath != ""){
+        btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='packing'>"+ CONF.Lang.OpenPackingFolder +"</li>";
+    }
+
     if(CONF.Platform[pfId].DocPath != ""){
         btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='doc'>"+ CONF.Lang.LocationDocFile +"</li>";
     }

@@ -229,6 +229,7 @@ function openSidebar(obj){
         pics += "<img src='"+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
     
+
     //滚动图
     $(#stack).html = pics;
     $(#stack).refresh();

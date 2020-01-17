@@ -106,7 +106,6 @@ view.root.on("ready", function(){
                 current = $(#romlist li);
                 current.state.current = true; //第一个
                 openSidebar(current);
-                $(#test).html = "first";
             }else{
                 //读取上一个节点
                 var pri = $(#romlist li:current).priorNode;
@@ -319,7 +318,6 @@ view.root.on("ready", function(){
         view.SetRomSimulator(romid,simid);
     });
 
-
     //设置rom的cmd
     self.on("click", "#sim_select > li button", function(evt) {
         var obj = this.parent;
@@ -355,16 +353,15 @@ view.root.on("ready", function(){
 
     });
 
+    //侧边栏缩略图滑动特效
+    self.on("click", "#rotate", function(evt) {
+        var container = $(div#stack);
+        var next = container.shown.next || container.first;
+        this.state.disabled = true;
+        rotateTo(next, :: (this super).state.disabled = false);
+    });
 
 });
-
-//侧边栏缩略图滑动特效
-$(#rotate) << event click() {     
-    var container = $(div#stack);
-    var next = container.shown.next || container.first;
-    this.state.disabled = true;
-    rotateTo(next, :: (this super).state.disabled = false);
-}
 
 //初始化配置
 function initConfig(isfresh){

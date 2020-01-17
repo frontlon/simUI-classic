@@ -13,15 +13,15 @@ import (
 	"strings"
 )
 
-var LAST_PROCESS = 0;                                                        //最后运行的模拟器进程
-var constSeparator = "__"                                                    //rom子分隔符
-var DOC_EXTS = []string{".txt", ".md"}                                       //doc文档支持的扩展名
-var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"}     //支持的图片类型
+var LAST_PROCESS = 0;                                                    //最后运行的模拟器进程
+var constSeparator = "__"                                                //rom子分隔符
+var DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
+var PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"} //支持的图片类型
 var RUN_EXTS = []string{
 	".html", ".htm", ".mht", ".mhtml", ".url",
 	".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 	".exe", ".com", ".cmd", ".bat", ".lnk",
-	".ico", ".png", ".jpg", ".gif", ".jpeg", ".bmp", ".mp4", ".avi", ".wmv"} //可直接运行的doc文档支持的扩展名
+}                                                                        //可直接运行的doc文档支持的扩展名
 
 type RomDetail struct {
 	Info            *db.Rom   //基础信息
@@ -84,7 +84,6 @@ func killGame() error {
 	return err
 }
 
-
 /*
  zip解压
 */
@@ -116,7 +115,7 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 		fileExt := filepath.Ext(f.Name)
 
 		//找到压缩包中的可执行文件
-		if runPath == ""{
+		if runPath == "" {
 			for _, v := range romExt {
 				if v == fileExt {
 					runPath = fpath

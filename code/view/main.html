@@ -30,7 +30,7 @@
     #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
     #logo{color:color(logo-text-color);width:210dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
-    #tb_right{text-align:right;width:262dip;display:inline;background-color:color(titlebar-background-color);}
+    #tb_right{text-align:right;width:226dip;display:inline;background-color:color(titlebar-background-color);}
     #titlebar i{font-size:18dip;line-height:36dip;display:block}
     #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
     #titlebar button:hover{opacity:0.7;cursor:pointer}
@@ -55,7 +55,7 @@
 
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
-    #platform_ul > li{display:block;text-align:center;vertical-align: middle;line-height:1.4em;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul > li{display:block;text-align:center;vertical-align: middle;line-height:1.4em;padding:5dip;min-height:45dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
     #platform_ul > li:hover{opacity:0.7;cursor:pointer}
     #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
     
@@ -123,7 +123,6 @@
     #sim_select li{behavior:shell-icon;display:block;height:19dip;line-height:19dip;padding:0 4dip 0 26dip;color:color(sim-switch-text-color);foreground-repeat:no-repeat;foreground-position:4dip 50%;flow:horizontal-flow;}
     #sim_select li p{display:block;width:*;vertical-align:middle;margin:0}
     #sim_select li button{display:block;width:12dip;height:12dip;vertical-align:middle;background:#333;color:#FFF;padding:0;cursor: pointer;}
-
     #sim_select li:hover{color:color(sim-switch-hover-text-color)}
     #sim_select li:current{color:color(sim-switch-active-text-color);background:color(sim-switch-active-background-color);}
 
@@ -157,25 +156,10 @@
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo">{{SoftName}}</div>
     <div id="tb_left">
-        <!--
-        <ul>
-            <li id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></li>
-            <li id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></li>
-            <li id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></li>
-            <li id="xxxxx" value="1"><i>&#xe6b8;</i></li>
-            <li id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></li>
-        </ul>
-        -->
         <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
-        
-        
     </div>
     <div id="tb_right">
-        <!--
-        <button id="book" value="1" title="{{OpenBook}}"><i>&#xe748;</i></button>
-        -->
-        <button id="shortcut" type="menu"><i>&#xe6b8;</i><menu></menu></button>
-        <button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
+        <button id="shortcut" type="menu"><i>&#xe6b8;</i><menu></menu></button><button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
             <menu>
                 <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
                 <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
@@ -186,8 +170,7 @@
         <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
     </div>
 </div>
-<!--<frameset cols="156dip,*,205dip">-->
-<frameset cols="70dip,140dip,*,205dip" noresize="noresize">
+<frameset cols="62dip,140dip,*,204dip" noresize="noresize">
     <section id="left_platform">
         <ul id="platform_ul"></ul>
     </section>
@@ -204,13 +187,7 @@
         <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
 
         <div class="statebar">
-            <!--
-            <div class="statebar_btn">
-                <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button>
-                <button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button>
-                <button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
-            </div>
--->
+
             <div class="counnum">
                 <span id="rom_count_text">{{GameCount}}</span><span id="rom_count_num">0</span></div>
         </div>

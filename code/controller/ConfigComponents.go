@@ -124,6 +124,16 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].SnapPath = platformList[k].SnapPath
 		}
 
+		if v.PosterPath != "" {
+			platformList[k].PosterPath, _ = filepath.Abs(v.PosterPath)
+			platform[v.Id].PosterPath = platformList[k].PosterPath
+		}
+
+		if v.PackingPath != "" {
+			platformList[k].PackingPath, _ = filepath.Abs(v.PackingPath)
+			platform[v.Id].PackingPath = platformList[k].PackingPath
+		}
+
 		if v.Romlist != "" {
 			platformList[k].Romlist, _ = filepath.Abs(v.Romlist)
 			platform[v.Id].Romlist = platformList[k].Romlist
