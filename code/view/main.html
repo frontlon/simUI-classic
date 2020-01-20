@@ -79,6 +79,7 @@
     .romblock > li div{background:color(rom-block-background-color);color:color(rom-block-text-color);text-align:center;padding:4dip;height:29dip;vertical-align:middle;display:block}
     .romblock > li p{overflow:hidden;max-height:2.5em;}
     .romblock > li span{display:none}
+
     .romblock.zoom1 > li{min-width:80dip;max-width:120dip;margin:9dip 12dip;font-size:10dip}
     .romblock.zoom2 > li{min-width:120dip;max-width:160dip;margin:12dip 16dip}
     .romblock.zoom3 > li{min-width:160dip;max-width:200dip;margin:9dip 12dip;}
@@ -144,6 +145,10 @@
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
 
+
+    #test{box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;}
+
+
     /* 侧边栏滚动图片 */
     #rotate{top:62dip;right:28dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
@@ -151,6 +156,8 @@
 </style>
 </head>
 <body>
+        <div id="test"></div>
+
 <div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
 <menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
@@ -235,6 +242,7 @@
     include ROOTPATH + "tis/thumb.tis";
     include ROOTPATH + "tis/romcontext.tis";
     include ROOTPATH + "tis/script.tis";
+    include ROOTPATH + "tis/keycode.tis";
 //}catch(e){
   //  view.msgbox(#alert,e);
 //}
