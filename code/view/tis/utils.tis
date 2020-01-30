@@ -44,3 +44,10 @@ function startLoading(){
 function endLoading(){
     $(#loading).style['display'] = 'none';
 }
+
+//测试用console框
+function consoleLog(str){
+    $(#console).style['display'] = 'block';
+    $(#console).append(str + '<br>');
+}
+

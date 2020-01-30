@@ -7,6 +7,26 @@ view.root.on("ready", function(){
         changePlatform(this);
     });
 
+    //平台拖拽排序
+    DragDrop{
+        what      : "#platform_ul>li:not(.fixed)",
+        where     : "#platform_ul",
+        container : "#platform_ul",        
+        notBefore : "#platform_ul>li.fixed",
+        dropped : function(){
+            var lis = $$(#platform_ul > li);
+            var id = "";
+            var newObj = {};
+            for(var li in lis) {
+                id = li.attributes["platform"];
+                newObj[id] = li.index;
+            }
+            //更新到数据库
+            var datastr = JSON.stringify(newObj);
+            var result = view.UpdatePlatformSort(datastr);
+        }
+    }
+
     //平台列表鼠标移入，初始化一些常量参数
     /*
     $(#tb_left).on("mouseenter", function(evt) {

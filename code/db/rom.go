@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var ROM_PAGE_NUM = 100; //每页加载rom数量
+
 type Rom struct {
 	Id       uint64
 	Pname    string // 所属主游戏
@@ -21,6 +23,7 @@ type Rom struct {
 	Pinyin   string // 拼音索引
 	Md5      string // 文件Md5
 }
+
 
 //插入rom数据
 func (r *Rom) Add() error {
@@ -42,7 +45,6 @@ func (r *Rom) Add() error {
 
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
-	num := 50 //每页显示100个
 
 	volist := []*Rom{}
 	field := "id,name,menu,platform,rom_path";
@@ -65,10 +67,10 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 		sql += " AND name LIKE '%" + keyword + "%'"
 	}
 
-	sql += "  ORDER BY pinyin ASC LIMIT " + utils.ToString(num)
+	sql += "  ORDER BY pinyin ASC LIMIT " + utils.ToString(ROM_PAGE_NUM)
 
 	if pages > 0 {
-		offset := pages * num
+		offset := pages * ROM_PAGE_NUM
 		sql += " OFFSET " + utils.ToString(offset)
 	}
 
@@ -123,7 +125,6 @@ func (*Rom) GetById(id uint64) (*Rom, error) {
 
 //根据拼音筛选
 func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
-	num := 50 //每页显示100个
 	volist := []*Rom{}
 	field := "id,name,menu,platform,rom_path";
 	sql := ""
@@ -147,9 +148,9 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	} else {
 		sql = "SELECT " + field + " FROM rom WHERE " + pf + " pinyin LIKE '" + keyword + "%'"
 	}
-	sql += " ORDER BY pinyin ASC LIMIT " + utils.ToString(num)
+	sql += " ORDER BY pinyin ASC LIMIT " + utils.ToString(ROM_PAGE_NUM)
 	if pages > 0 {
-		offset := pages * num
+		offset := pages * ROM_PAGE_NUM
 		sql += " OFFSET " + utils.ToString(offset)
 	}
 

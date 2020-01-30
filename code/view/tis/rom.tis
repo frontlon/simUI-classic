@@ -138,9 +138,9 @@ function search(){
 }
 
 //分页
-function scrollLoadRom(evt){
+function scrollLoadRom(evtPos){
 
-    var scrollPos = evt.scrollPos + $(#center).box(#height);
+    var scrollPos = evtPos.toInteger() + $(#center).box(#height);
     var boxHeight = $(#romwrapper).box(#height);
 
     if(SCROLL_POS == 0){
@@ -166,11 +166,12 @@ function scrollLoadRom(evt){
         ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE)
 
         if(ROMJSON != "[]"){
-            createRomList()
+            createRomList(0);
             SCROLL_POS = scrollPos;
             SCROLL_LOCK = false;
         }
     }
+
 }
 
 //初始化滚动分页功能

@@ -1,5 +1,31 @@
 ﻿var ACTIVE_MENU = ""; //当前选定的菜单
 
+view.root.on("ready", function(){
+
+
+    //菜单拖拽排序
+    DragDrop{
+        what      : "#menulist>dd:not(.fixed)",
+        where     : "#menulist",
+        container : "#menulist",        
+        notBefore : "#menulist>dd.fixed",
+        dropped : function(){
+            if(ACTIVE_PLATFORM == 0){
+                return;
+            }
+            var lis = $$(#menulist > dd);
+            var name = "";
+            var newObj = {};
+            for(var li in lis) {
+                name = li.attributes["opt"];
+                newObj[name] = li.index;
+            }
+            var datastr = JSON.stringify(newObj);
+            view.UpdateMenuSort(ACTIVE_PLATFORM.toString(),datastr);
+        }
+    }
+
+});
 
 //生成菜单列表
 function createMenuList(menujson){

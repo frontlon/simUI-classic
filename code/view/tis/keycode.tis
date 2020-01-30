@@ -2,105 +2,29 @@
 
     //方向键选择rom
     self.on("keyup", function(evt) {
+        
+        var switch_romlist = $(#switch_romlist).attributes["value"];
 
         if(evt.keyCode == Event.VK_TAB){
         }else if(evt.keyCode == Event.VK_UP){
-
-            //如果没有rom，则直接返回
-            if($$(#romlist li).length == 0){
-                return;
+            if(switch_romlist == "1"){ //模块
+                keyRomUp();
+            }else if(switch_romlist == "2"){ //列表
+                keyRomLeft();
             }
-
-            var current = $(#romlist li:current).index; //当前选中li的index值
-
-            //如果当前是第一个，则不跳转了
-            if(current == 0){
-                return;
+        }else if(evt.keyCode == Event.VK_DOWN){
+            if(switch_romlist == "1"){ //模块
+                keyRomDown();
+            }else if(switch_romlist == "2"){ //列表
+                keyRomRight();
             }
-
-            var idx = getRomlistRowNum(); //计算出每行li的数量
-            var next = current - idx  + 1; //要跳转到的位置
-            var nextDom = $(#romlist).select("li:nth-child("+ next +")");
-
-            if(nextDom == undefined){
-                nextDom = $(#romlist).select("li:first-child"); //定位到第一个
-            }
-            
-            nextDom.state.current = true;
-            openSidebar(nextDom);
-
-        }else if(evt.keyCode == Event.VK_DOWN){                    
-
-            //如果没有rom，则直接返回
-            if($$(#romlist li).length == 0){
-                return;
-            }
-
-            var current = $(#romlist li:current).index; //当前选中li的index值
-            var lastDom = $(#romlist).select("li:last-child").index;
-            //如果当前是最后一个，则不跳转了
-            if(current == lastDom){
-                return;
-            }
-
-            var idx = getRomlistRowNum(); //计算出每行li的数量
-            var next = current + idx + 1;
-            var nextDom = $(#romlist).select("li:nth-child("+ next +")"); //要跳转到的位置
-
-            if(nextDom == undefined){
-                nextDom = $(#romlist).select("li:last-child").state.current = true; //定位到最后一个
-            }
-
-            nextDom.state.current = true;
-            openSidebar(nextDom);
-
         }else if(evt.keyCode == Event.VK_LEFT){ //左键移动rom
-
-            //如果没有rom，则直接返回
-            if($$(#romlist li).length == 0){
-                return;
-            }
-
-            //如果当前没有选定，则选定第一个
-            var current = $(#romlist li:current);
-            if (current == undefined){
-                current = $(#romlist li);
-                current.state.current = true; //第一个
-                openSidebar(current);
-            }else{
-                //读取上一个节点
-                var pri = $(#romlist li:current).priorNode;
-                //如果没有上一个节点，直接返回
-                if(pri == undefined){
-                    return;
-                }else{
-                    pri.state.current = true;
-                    openSidebar(pri);
-                }
+            if(switch_romlist == "1"){ //模块
+                keyRomLeft();
             }
         }else if(evt.keyCode == Event.VK_RIGHT){ //右键移动rom
-
-            //如果没有rom，则直接返回
-            if($$(#romlist li).length == 0){
-                return;
-            }
-
-            //如果当前没有选定，则选定第一个
-            var current = $(#romlist li:current);
-            if (current == undefined){
-                current = $(#romlist li);
-                current.state.current = true; //第一个
-                openSidebar(current);
-            }else{
-                //读取上一个节点
-                var next = $(#romlist li:current).nextNode;
-                //如果没有上一个节点，直接返回
-                if(next == undefined){
-                    return;
-                }else{
-                    next.state.current = true;
-                    openSidebar(next);
-                }
+            if(switch_romlist == "1"){ //模块
+                keyRomRight();
             }
         }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
             var rom = $(#romlist).select("li:current");
@@ -119,15 +43,127 @@
 
 })
 
+/**
+ * rom模块
+**/
+
+function keyRomLeft(){
+    //如果没有rom，则直接返回
+    if($$(#romlist li).length == 0){
+        return;
+    }
+
+    //如果当前没有选定，则选定第一个
+    var current = $(#romlist li:current);
+    if (current == undefined){
+        current = $(#romlist li);
+        current.state.current = true; //第一个
+        openSidebar(current);
+    }else{
+        //读取上一个节点
+        var pri = $(#romlist li:current).priorNode;
+        //如果没有上一个节点，直接返回
+        if(pri == undefined){
+            return;
+        }else{
+            pri.state.current = true;
+            openSidebar(pri);
+        }
+    }
+}
+
+function keyRomRight(){
+   
+    //如果没有rom，则直接返回
+    if($$(#romlist li).length == 0){
+        return;
+    }
+
+    //如果当前没有选定，则选定第一个
+    var current = $(#romlist li:current);
+    if (current == undefined){
+        current = $(#romlist li);
+        current.state.current = true; //第一个
+        openSidebar(current);
+    }else{
+        //读取上一个节点
+        var next = $(#romlist li:current).nextNode;
+        //如果没有上一个节点，直接返回
+        if(next == undefined){
+            return;
+        }else{
+            next.state.current = true;
+            openSidebar(next);
+        }
+    } 
+}
+
+function keyRomUp(){
+    
+    //如果没有rom，则直接返回
+    if($$(#romlist li).length == 0){
+        return;
+    }
+
+    var current = $(#romlist li:current).index; //当前选中li的index值
+
+    //如果当前是第一个，则不跳转了
+    if(current == 0){
+        return;
+    }
+
+    var idx = getRomlistRowNum(); //计算出每行li的数量
+    var next = current - idx  + 1; //要跳转到的位置
+    var rootDom = $(#romlist);
+    var nextDom = rootDom.select("li:nth-child("+ next +")");
+
+    if(nextDom == undefined){
+        nextDom = rootDom.select("li:first-child"); //定位到第一个
+    }
+    
+    nextDom.state.current = true;
+    openSidebar(nextDom);
+
+}
+
+function keyRomDown(){
+
+    //如果没有rom，则直接返回
+    if($$(#romlist li).length == 0){
+        return;
+    }
+    var rootDom = $(#romlist);
+    var current = $(#romlist li:current).index; //当前选中li的index值
+    var lastDom = rootDom.select("li:last-child").index;
+    //如果当前是最后一个，则不跳转了
+    if(current == lastDom){
+        return;
+    }
+
+    var idx = getRomlistRowNum(); //计算出每行li的数量
+    var next = current + idx + 1;
+    var nextDom = rootDom.select("li:nth-child("+ next +")"); //要跳转到的位置
+
+    if(nextDom == undefined){
+        nextDom = rootDom.select("li:last-child").state.current = true; //定位到最后一个
+    }
+
+    nextDom.state.current = true;
+    openSidebar(nextDom);
+}
+
+
+
 
 //计算出每行li的数量
 function getRomlistRowNum(){
     var dom  = $(#romlist);
+    var domLi = $(#romlist li);
     var out = px(dom.box(#width));
     var outwidth = (out).toFloat(#dip);
-    var w = px($(#romlist li).box(#width));
-    var ml = $(#romlist li).style["margin-left"].toString();
-    var mr = $(#romlist li).style["margin-right"].toString();
+    var w = px(domLi.box(#width));
+    var ml = domLi.style["margin-left"].toString();
+    var mr = domLi.style["margin-right"].toString();
     w = (w).toFloat(#dip);
     ml = ml.replace("dip","").toInteger();
     mr = mr.replace("dip","").toInteger();

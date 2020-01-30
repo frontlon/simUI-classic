@@ -28,48 +28,6 @@ view.root.on("ready", function(){
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
-    //平台拖拽排序
-    DragDrop{
-        what      : "#platform_ul>li:not(.fixed)",
-        where     : "#platform_ul",
-        container : "#platform_ul",        
-        notBefore : "#platform_ul>li.fixed",
-        dropped : function(){
-            var lis = $$(#platform_ul > li);
-            var id = "";
-            var newObj = {};
-            for(var li in lis) {
-                id = li.attributes["platform"];
-                newObj[id] = li.index;
-            }
-            //更新到数据库
-            var datastr = JSON.stringify(newObj);
-            var result = view.UpdatePlatformSort(datastr);
-        }
-    }
-
-    //菜单拖拽排序
-    DragDrop{
-        what      : "#menulist>dd:not(.fixed)",
-        where     : "#menulist",
-        container : "#menulist",        
-        notBefore : "#menulist>dd.fixed",
-        dropped : function(){
-            if(ACTIVE_PLATFORM == 0){
-                return;
-            }
-            var lis = $$(#menulist > dd);
-            var name = "";
-            var newObj = {};
-            for(var li in lis) {
-                name = li.attributes["opt"];
-                newObj[name] = li.index;
-            }
-            var datastr = JSON.stringify(newObj);
-            view.UpdateMenuSort(ACTIVE_PLATFORM.toString(),datastr);
-        }
-    }
-
     // ================= 事件 =================
 
    //调整窗口大小
@@ -130,7 +88,7 @@ view.root.on("ready", function(){
 
     //分页
     $(#center).onScroll = function(evt) {
-        scrollLoadRom(evt);
+        view.scrollLoadRom(evt.scrollPos);
     };
 
     //切换rom列表样式

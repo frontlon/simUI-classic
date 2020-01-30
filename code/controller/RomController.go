@@ -274,10 +274,6 @@ func RomController(w *window.Window) {
 		return sciter.NullValue()
 	})
 
-
-
-
-
 	//读取游戏列表
 	w.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))        //平台
@@ -297,7 +293,6 @@ func RomController(w *window.Window) {
 		jsonRom, _ := json.Marshal(newlist)
 		return sciter.NewValue(string(jsonRom))
 	})
-
 
 	//读取游戏数量
 	w.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
@@ -365,10 +360,6 @@ func RomController(w *window.Window) {
 		jsonMenu, _ := json.Marshal(&res)
 		return sciter.NewValue(string(jsonMenu))
 	})
-
-
-
-
 
 	//设为我的最爱
 	w.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
@@ -461,6 +452,20 @@ func RomController(w *window.Window) {
 		io.Copy(f, res.Body)
 
 		return sciter.NewValue(newFileName)
+	})
+
+
+	//rom翻页
+	w.DefineFunction("scrollLoadRom", func(args ...*sciter.Value) *sciter.Value {
+		scrollPos := args[0].String()
+		go func(scrollPos string) *sciter.Value {
+			//数据更新完成后，页面回调，更新页面DOM
+			if _, err := w.Call("scrollLoadRom",sciter.NewValue(scrollPos)); err != nil {
+			}
+			return sciter.NullValue()
+		}(scrollPos)
+
+		return sciter.NullValue()
 	})
 
 }
