@@ -28,8 +28,6 @@ view.root.on("ready", function(){
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
     
-    
-
 });
 
 //更新模拟器信息

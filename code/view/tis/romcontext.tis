@@ -5,7 +5,6 @@
         romContextMenu(this);
     });
     
-   
     //右键菜单启动游戏
     self.on("click", "#romcontext .menu_run_game", function(evt) {
         view.RunGame(this.attributes["rid"],this.attributes['sim']);
@@ -48,11 +47,8 @@
         }else{
             view.OpenFolder(this.attributes["rid"],this.attributes["opt"],"");
         }
-
     });
-
 });
-
 
 //rom模块右键菜单
 function romContextMenu(obj){
@@ -90,7 +86,6 @@ function romContextMenu(obj){
     }else{
         btndata += "<li class='fav fav1' value='1' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.SetFavorite +"</li>";
     }
-
 
     btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
     btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";

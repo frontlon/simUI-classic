@@ -13,7 +13,7 @@
     th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
     td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
     tr:last-child td{text-align:center;padding-bottom:0}
-    .platform_list{width:*;height:570px;display:block;border:1dip solid #ccc;padding:0;margin:0}
+    .platform_list{width:*;height:610px;display:block;border:1dip solid #ccc;padding:0;margin:0}
     .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip}
     .platform_list li:current{background:#3399ff;color:#FFF}
     .platform_list li:drag-source { background-color:#eee;}
@@ -73,6 +73,7 @@
             <table>
                 <tr><th colspan="2" style="padding-top:0">{{BaseInfo}}</th></tr>
                 <tr><td>{{Title}}</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
+                <tr><td>{{Icon}}</td><td><input type="text"  id="platform_icon" value="" disabled> <button class="openfile" for="platform_icon" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
                 <tr><td>{{RomType}}</td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
                 <tr><td>{{Simulator}}</td><td>
                   <select id="platform_sim" disabled></select>

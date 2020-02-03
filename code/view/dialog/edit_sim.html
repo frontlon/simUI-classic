@@ -23,18 +23,21 @@
                 <input type="text" id="sim_path" value="">
                 <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
             </td></tr>
-            <tr><td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>{{Params}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
                 <option value="-g {RomName} -w">FBAS</option>
                 <option value="{RomName}">Winkawaks</option>
+                <option value='-loadbin "{RomFullPath}" -nogui'>ePsXe</option>
+                <option value="-e {RomFullPath}">Dolphin</option>
+                <option value="-rom={RomName}">Demul</option>
             </select>
             </td></tr>
-            <tr><td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>解压后运行：</td><td>
+            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td><td>
                 <select id="">
-                    <option value="0">否</option>
-                    <option value="1">是</option>
+                    <option value="0">{{No}}</option>
+                    <option value="1">{{Yes}}</option>
                 </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>

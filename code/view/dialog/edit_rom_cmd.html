@@ -21,19 +21,19 @@
 
         <table>
             <tr>
-                <td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>模拟器参数：</td>
+                <td><div class="tip" title="{{RomSimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td>
                 <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
             </tr>
             <tr>
-                <td><div class="tip" title="xxxxxxxxxxxxxx">&#xf3c1;</div>解压后运行：</td>
-                <td><select id="unzip"><option value="0">否</option><option value="1">是</option></select></td>
+                <td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td>
+                <td><select id="unzip"><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>
             </tr>
 
         </table>
 
     </div>
     <div class="submit_wrapper">
-        <button id="close-dialog" role="default-button">{{Yes}}</button>
+        <button id="close-dialog" role="default-button">{{Confirm}}</button>
     </div>
     <script type="text/tiscript">
 

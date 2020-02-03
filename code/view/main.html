@@ -55,7 +55,9 @@
 
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
-    #platform_ul > li{display:block;text-align:center;vertical-align: middle;line-height:1.4em;padding:5dip;min-height:45dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul > li{display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul > li img{size:28dip;margin:3dip auto 5dip auto}
+    #platform_ul > li p{margin:0;line-height:1.4em}
     #platform_ul > li:hover{opacity:0.7;cursor:pointer}
     #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
     
@@ -183,7 +185,6 @@
         </div>
         <dl id="menulist"></dl>
     </section>
-<!--<splitter id="left_splitter" />-->
     <section id="center" class="scrollbar">
 
         <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
@@ -220,7 +221,6 @@
 
 <script type="text/tiscript">
     
-    //try{
     //var ROOTPATH = "this://app/";
     var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
     include ROOTPATH + "tis/plugins/decorators.tis";
@@ -238,8 +238,5 @@
     include ROOTPATH + "tis/romcontext.tis";
     include ROOTPATH + "tis/script.tis";
     include ROOTPATH + "tis/keycode.tis";
-//}catch(e){
-  //  view.msgbox(#alert,e);
-//}
 </script>
 </html>

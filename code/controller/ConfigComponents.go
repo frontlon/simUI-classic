@@ -99,6 +99,11 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 	for k, v := range platformList {
 		platform[v.Id] = v
 
+		if v.Icon != "" {
+			platformList[k].Icon, _ = filepath.Abs(v.Icon)
+			platform[v.Id].Icon = platformList[k].Icon
+		}
+
 		if v.DocPath != "" {
 			platformList[k].DocPath, _ = filepath.Abs(v.DocPath)
 			platform[v.Id].DocPath = platformList[k].DocPath

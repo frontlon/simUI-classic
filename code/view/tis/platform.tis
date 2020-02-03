@@ -89,13 +89,19 @@ function createPlatform(){
     var simclass = "";
     var dd = "";
     var pf = {};
+    var img = "";
+
     //如果有多个平台，才显示“全部平台”按钮
     if(CONF.Platform.length > 1){
         dd += "<li platform='0'>"+CONF.Lang.AllPlatform +"</li>";
     }
     //遍历数据，生成dom
     for(var pf in CONF.PlatformList) {
-        dd += "<li platform='"+ pf.Id +"'>" + pf.Name + "</li>";
+        img = "";
+        if(pf.Icon != ""){
+            img = "<img src='"+ pf.Icon +"' />";
+        }
+        dd += "<li platform='"+ pf.Id +"'>" + img + "<p>" + pf.Name + "</p></li>";
     }
     self.$(#platform_ul).html = dd; //生成dom
 
@@ -105,76 +111,3 @@ function createPlatform(){
     }
     
 }
-
-//滑动平台列表参数
-/*
-var PLATFORM_OFFSET=0; //x坐标
-var PLATFORM_LEFT=0; //left值
-var PLATFORM_MUTEX=false; //互斥锁
-var PLATFORM_OUTER_WIDTH=0; //外框宽度
-var PLATFORM_INNER_WIDTH=0; //内部宽度
-
-//平台列表鼠标移入，初始化一些常量参数
-function platformMouseEnter(evt){
-    if(PLATFORM_MUTEX == true){
-        return;
-    }
-    PLATFORM_OFFSET = evt.x;
-    PLATFORM_LEFT = $(#platform_ul).style["left"].toString().replace("dip","").toInteger();
-    if(PLATFORM_LEFT < 0){
-        PLATFORM_LEFT = Math.abs(PLATFORM_LEFT);
-    }
-
-    PLATFORM_OUTER_WIDTH = $(#tb_left).box(#width).toInteger();
-    PLATFORM_INNER_WIDTH = $(#platform_ul).box(#width).toInteger();
-    PLATFORM_MUTEX = true; //互斥锁
-}
-//平台列表鼠标移出，销毁一些参数
-function platformMouseLeave(evt){
-     PLATFORM_MUTEX = false;
-}
-
-//平台列表鼠标移动，滑动功能
-function platformMouseMove(evt){
-
-    //初始化未完成，不执行逻辑
-    if(PLATFORM_MUTEX == false){
-        return;
-    }
-
-    //如果能全部显示，则不需要拖动
-    if(PLATFORM_OUTER_WIDTH >= PLATFORM_INNER_WIDTH){
-        return;
-    }
-
-    var left_value = -1 * (PLATFORM_LEFT + (evt.x - PLATFORM_OFFSET - 200));
-    if(evt.x - PLATFORM_OFFSET - 200 < 0){
-        //控制左侧
-        if (left_value > 0){
-            return;
-        }
-    }
-  
-    $(#platform_ul).style["left"] = left_value.toString() + "dip";
-}
-
-
-function platformResize(evt){
-     //还原平台拉条位置
-    var out = $(#tb_left).box(#width).toInteger();
-    var inner = $(#platform_ul).box(#width).toInteger();
-    if(out >= inner){
-        $(#platform_ul).style["left"] = "0";
-    }
-}
-
-//动态设置平台宽度，滑动使用
-function setPlatformWidth(){
-    var pfli = $$(#platform_ul li);
-    var w = 0;
-    for(var li in pfli) {
-        w += li.box(#width);
-    }
-    $(#platform_ul).style["width"] = w;
-}
-*/

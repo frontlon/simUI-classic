@@ -2,7 +2,6 @@
 
 view.root.on("ready", function(){
 
-
     //菜单拖拽排序
     DragDrop{
         what      : "#menulist>dd:not(.fixed)",

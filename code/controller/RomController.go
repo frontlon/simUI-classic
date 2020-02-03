@@ -83,10 +83,6 @@ func RomController(w *window.Window) {
 
 		ext := utils.GetFileExt(rom.RomPath)
 
-		//如果rom运行参数存在，则使用rom的参数
-		if romCmd.Cmd != "" {
-			sim.Cmd = romCmd.Cmd
-		}
 
 		//运行游戏前，先杀掉之前运行的程序
 		if err = killGame(); err != nil {
@@ -99,10 +95,20 @@ func RomController(w *window.Window) {
 			err = runGame("explorer", cmd)
 		} else {
 			//如果依赖模拟器
-			if sim.Cmd == "" {
+
+			simCmd := ""
+
+			if romCmd.Cmd != "" {
+				simCmd = romCmd.Cmd
+			}else if sim.Cmd != ""{
+				simCmd = sim.Cmd
+			}
+
+			if simCmd == "" {
 				cmd = append(cmd, rom.RomPath)
 			} else {
-				cmd = strings.Split(sim.Cmd, " ")
+				//如果rom运行参数存在，则使用rom的参数
+				cmd = strings.Split(simCmd, " ")
 				filename := filepath.Base(rom.RomPath) //exe运行文件路径
 				//替换变量
 				for k, _ := range cmd {

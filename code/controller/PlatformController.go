@@ -120,6 +120,7 @@ func PlatformController(w *window.Window) {
 		platform := &db.Platform{
 			Id:           id,
 			Name:         d["name"],
+			Icon:         d["icon"],
 			RomExts:      exts,
 			RomPath:      d["rom"],
 			ThumbPath:    d["thumb"],

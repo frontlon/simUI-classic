@@ -1,18 +1,32 @@
 ﻿view.root.on("ready", function(){
 
+
+    //禁用系统默认滚动
+    self.on("keydown", "#center", function(evt) {
+         return true;
+    });
+
     //方向键选择rom
+    
     self.on("keyup", function(evt) {
         
         var switch_romlist = $(#switch_romlist).attributes["value"];
 
         if(evt.keyCode == Event.VK_TAB){
         }else if(evt.keyCode == Event.VK_UP){
+            //div滚动
+            scrollUp(switch_romlist);
+
             if(switch_romlist == "1"){ //模块
                 keyRomUp();
             }else if(switch_romlist == "2"){ //列表
                 keyRomLeft();
             }
         }else if(evt.keyCode == Event.VK_DOWN){
+
+            //div滚动
+            scrollDown(switch_romlist);
+
             if(switch_romlist == "1"){ //模块
                 keyRomDown();
             }else if(switch_romlist == "2"){ //列表
@@ -39,7 +53,6 @@
         //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}
         //}
     });
-
 
 })
 
@@ -129,7 +142,7 @@ function keyRomUp(){
 function keyRomDown(){
 
     //如果没有rom，则直接返回
-    if($$(#romlist li).length == 0){
+    if($(#romlist li) == undefined){
         return;
     }
     var rootDom = $(#romlist);
@@ -169,4 +182,42 @@ function getRomlistRowNum(){
     mr = mr.replace("dip","").toInteger();
     var domWidth = w + ml + mr ;
     return Math.ceil(outwidth / domWidth).toInteger(); //每行的li数量
+}
+
+//向上滚动
+function scrollUp(listType){
+    var centerScroll = $(#center).scroll(#top); //滚动条高度
+    var(x,liY,w,liH) = $(#romlist li:current).box(#rectw,#margin,#parent);
+    var titlebarHeight = $(#titlebar).box(#height); //标题栏高度
+    var scro = 0;
+    if (centerScroll > liY){
+        if(listType == "1"){
+                scro = liY - liH + titlebarHeight;
+        }else{
+                scro = liY + liH;
+        }
+        $(#center).scrollTo(0,scro, false); // increment scroll position by 100px, no animation
+    }
+}
+
+//向下滚动
+function scrollDown(listType){
+
+    var centerScroll = $(#center).scroll(#top); //滚动条高度
+    var centerHeight = $(#center).box(#height) + centerScroll; //滚动层高度 + 滚动条高度
+    var(x,liY,w,liH) = $(#romlist li:current).box(#rectw,#margin,#parent);
+    var titlebarHeight = $(#titlebar).box(#height); //标题栏高度
+    var scrHeight = 0;
+
+    if(listType == "1"){
+        scrHeight = liY + titlebarHeight + liH + liH;
+    }else{
+        scrHeight = liY + titlebarHeight + liH + liH + liH;
+    }
+
+    if (scrHeight > centerHeight){
+        var scro = centerScroll + liH;
+        $(#center).scrollTo(0,scro, false);
+    }
+
 }

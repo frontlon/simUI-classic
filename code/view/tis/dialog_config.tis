@@ -35,12 +35,12 @@ view.root.on("ready", function(){
     var shortcut_list = view.parameters.getShortcut();
     for(var s in shortcut_list) {
         shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
-        shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='xxxxxxxxxxx' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='xxxxxxxxxxx' />";
+        shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
+        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
         shortcut += "<button class='openfile' for='shortcut_path_'" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
-        shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>更新</button>";
-        shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>删除</button>";
-        shortcut += "<label title='xxxxxxxxxx'><i>&#xe839;</i></label>";
+        shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
+        shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
         shortcut += "</li>";
     }
     $(#shortcut_list).html = shortcut;
@@ -75,11 +75,10 @@ event click $(#platform_list li) {
     this.state.current = true;
 
     //读取平台信息
-    
-
     var info = view.parameters.getPlatformById(pfId);
     var exts = info.RomExts.join(",");
     $(#platform_name).value = info.Name;
+    $(#platform_icon).value = info.Icon;
     $(#platform_exts).value = exts;
     $(#platform_doc).value = info.DocPath;
     $(#platform_strategy).value = info.StrategyPath;
@@ -107,6 +106,7 @@ event click $(#platform_list li) {
     $(#add_sim).state.disabled = false;
     $(#platform_sim).state.disabled = false;
     $(#platform_name).state.disabled = false;
+    $(#platform_icon).state.disabled = false;
     $(#platform_exts).state.disabled = false;
     $(#platform_doc).state.disabled = false;
     $(#platform_strategy).state.disabled = false;
@@ -144,6 +144,7 @@ event click $(#platform_submit) {
     var data = {
         id       : $(#platform_list).select("li:current").attributes["value"].toString();
         name     : $(#platform_name).value,
+        icon     : $(#platform_icon).value,
         exts     : $(#platform_exts).value,
         rom      : $(#platform_rom).value,
         thumb    : $(#platform_thumb).value,
@@ -309,12 +310,12 @@ event click $(#shortcut_add){
     if(insertId != "0"){
         var shortcut = "";
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
-        shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='xxxxxxxxxxx' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='xxxxxxxxxxx' />";
+        shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
+        shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
         shortcut += "<button class='openfile' for='shortcut_path_'" + insertId + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
-        shortcut += "<button class='shortcut_update' value='"+ insertId +"'>更新</button>";
-        shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>删除</button>";
-        shortcut += "<label title='xxxxxxxxxx'><i>&#xe839;</i></label>";
+        shortcut += "<button class='shortcut_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
+        shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
         shortcut += "</li>";
         $(#shortcut_list).append(shortcut);
     }
@@ -326,17 +327,24 @@ event click $(.shortcut_update){
     var parentDom = $(#shortcut_list);
     var name = parentDom.select("#shortcut_name_" + id).value;
     var path = parentDom.select("#shortcut_path_" + id).value;
-    if(name == "" || name == undefined || path == "" || path == undefined){
-        view.msgbox(#alert,"xxxxxxxxxx为空了");
+    if(name == "" || name == undefined ){
+        view.msgbox(#alert,CONF.Lang.ShortcutNameNotFound);
         return;
     }
+
+    if(path == "" || path == undefined){
+        view.msgbox(#alert,CONF.Lang.ShortcutPathNotFound);
+        return;
+    }
+
     var obj = {
         id:id,
         name:name,
         path:path,
     };
     view.parameters.updateShortcut(obj);
-    view.msgbox(#alert,"xxxxxxxxxx操作成功");
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+    
 }
 
 //删除快捷工具
@@ -345,7 +353,7 @@ event click $(.shortcut_delete){
     //确认窗口
     var result = view.msgbox {
         type:#question, 
-        content:"xxxxxxxxxxxxxxxxxxxxxxx确认山程度吗？", 
+        content:CONF.Lang.DeleteConfirm, 
         caption:CONF.Lang.DeletePlatform,
         buttons:[
             {id:#yes,text:CONF.Lang.Delete},

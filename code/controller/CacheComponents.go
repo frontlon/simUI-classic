@@ -26,6 +26,7 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 				return err
 			}
 
+
 			//转换为相对路径
 			p = strings.Replace(p,RomPath + Config.Separator,"",-1)
 
@@ -48,7 +49,7 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 				}
 
 				py := TextToPinyin(title)
-				md5 := GetFileUniqId(f)
+				md5 := GetFileUniqId(p,f)
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := constMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -180,9 +181,6 @@ func UpdateRomDB(platform uint32,romlist []*db.Rom) error{
 	return nil
 }
 
-
-
-
 /**
  * 更新rom cache
  **/
@@ -230,14 +228,13 @@ func UpdateMenuDB(platform uint32,menumap map[string]*db.Menu) error{
 	menumap = map[string]*db.Menu{}
 
 	return nil
-
 }
 
 
 /**
  * 读取文件唯一标识
  **/
-func GetFileUniqId(f os.FileInfo) string {
-	str := f.Name() + utils.ToString(f.Size()) + f.ModTime().String()
+func GetFileUniqId(p string,f os.FileInfo) string {
+	str := p + utils.ToString(f.Size()) + f.ModTime().String()
 	return utils.Md5(str)
 }

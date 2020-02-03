@@ -1,11 +1,9 @@
-﻿
-var CONF; //读取的config配置
+﻿var CONF; //读取的config配置
 var ROMJSON;//rom列表
 var SCROLL_PAGE = 0; //当前滚动条翻页页数
 var SCROLL_LOCK = false; //滚动条锁
 var SCROLL_POS = 0; //默认滚动条位置
 var MAXZOOM = 5; //最大缩放等级
-
 
 view.root.on("ready", function(){
 
@@ -13,7 +11,6 @@ view.root.on("ready", function(){
 
     //初始化全局配置
     initConfig("0");
-
 
     //改变默认窗口尺寸
     view.state = CONF.Default.WindowState.toInteger();
@@ -32,8 +29,6 @@ view.root.on("ready", function(){
 
    //调整窗口大小
     view.on("sizing", function(evt) {
-        //还原平台拉条位置
-       // platformResize(evt);
         //更新默认配置
         view.UpdateConfig("window_width",evt.width);
         view.UpdateConfig("window_height",evt.height);
@@ -101,6 +96,11 @@ view.root.on("ready", function(){
         romBlockZoom(this);
     });
 
+   //列表图标缩放
+    self.on("click", "#zoom", function(evt) {
+        romBlockZoom(this);
+    });
+    
     //生成缓存
     self.on("click", "#create", function(evt) {
         startLoading(); 
@@ -140,7 +140,7 @@ view.root.on("ready", function(){
         view.dialog({
             url:self.url(ROOTPATH + "config.html"),
             width:650,
-            height:720,
+            height:760,
             parameters: {
                 getPlatform:getPlatform,
                 getPlatformById:getPlatformById,
@@ -286,6 +286,6 @@ function initConfig(isfresh){
     //激活第一个字母索引
     $(#num_search li).state.current = true;
 
-    //动态设置平台栏宽度，滑动平台栏使用
-   // setPlatformWidth();
   }
+
+
