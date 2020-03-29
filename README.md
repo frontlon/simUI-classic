@@ -16,7 +16,7 @@
 &nbsp;
 ## 下载地址
 
-二进制下载地址请见：[http://www.simui.net/](https://www.simui.net/)
+二进制下载地址请见：[http://www.simui.net/](http://www.simui.net/)
 
 ## 更新说明
 
