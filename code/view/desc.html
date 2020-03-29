@@ -4,13 +4,12 @@
     <div id="themefile"></div>
     <style type="text/css">
       @import "this://app/public.css";
-      body{flow:vertical;size:*;}
+      body{flow:vertical;size:*;padding:0;margin:0}
       body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.8);}
       body>header>caption{width:*;height:32dip;}
-      body>main{size:*;overflow:hidden}
-      button.window{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center}
-      button.window:hover{background:color(desc-titlebar-hover-background-color)}
-   
+      body>header>button{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center;}
+      body>header>button:hover{background:color(desc-titlebar-hover-background-color);}
+      body>main{size:*;overflow:hidden;}
       .left{background-color:morph(color(desc-background-color),opacity:0.8);}
       .right{display:block;padding:0 16dip 16dip 24dip;background-color:morph(color(desc-background-color),opacity:0.8);}
       splitter{background:morph(color(desc-background-color),opacity:0.8);}

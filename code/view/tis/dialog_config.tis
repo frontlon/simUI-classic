@@ -37,7 +37,7 @@ view.root.on("ready", function(){
         shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
         shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_'" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
         shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
         shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
@@ -164,6 +164,9 @@ event click $(#platform_submit) {
     data.exts = completeExt(data.exts);
     //更新补全的扩展名到文本框中
     $(#platform_exts).value = data.exts;
+    //更新名称到列表中
+    $(#platform_list).select("li:current").html = data.name;
+
     //更新平台信息
     view.parameters.updatePlatform(data);
 }
@@ -267,7 +270,7 @@ event click $(#platform_add){
     //开始添加平台
     var insertId = view.parameters.addPlatform(name);
     if(insertId != "0"){
-        var newopt = "<option value='"+ insertId +"'>"+ name +"</option>";
+        var newopt = "<li value='"+ insertId +"'>"+ name +"</li>";
         $(#platform_list).append(newopt);
         view.msgbox(#alert,CONF.Lang.AddSuccess);
     }
@@ -312,7 +315,7 @@ event click $(#shortcut_add){
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
         shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_'" + insertId + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
         shortcut += "<button class='shortcut_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";
         shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";

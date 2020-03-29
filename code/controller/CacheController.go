@@ -44,7 +44,6 @@ func CacheController(w *window.Window) {
 			//开始重建缓存
 			for platform, _ := range Config.Platform {
 
-				//创建rom数据
 				romlist, menu, err := CreateRomCache(platform)
 				if err != nil {
 					WriteLog(err.Error())
@@ -56,7 +55,6 @@ func CacheController(w *window.Window) {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}
-
 				//更新menu数据
 				if err := UpdateMenuDB(platform, menu); err != nil {
 					WriteLog(err.Error())

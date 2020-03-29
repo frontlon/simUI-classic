@@ -96,9 +96,9 @@ view.root.on("ready", function(){
         romBlockZoom(this);
     });
 
-   //列表图标缩放
-    self.on("click", "#zoom", function(evt) {
-        romBlockZoom(this);
+   //回到顶端
+    self.on("click", "#istop", function(evt) {
+        $(#center).scrollTo(0,0, false);
     });
     
     //生成缓存
@@ -198,7 +198,7 @@ view.root.on("ready", function(){
 
     //设置菜单 帮助按钮
     $(#help).on("click", function(evt) {
-        Sciter.launch("http://www.simui.net/");
+        runHelp();
     });
 
     //侧边栏切换模拟器
@@ -289,3 +289,7 @@ function initConfig(isfresh){
   }
 
 
+//启动帮助
+function runHelp(){
+    Sciter.launch("http://www.simui.net/");
+}

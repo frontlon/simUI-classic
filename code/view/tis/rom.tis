@@ -310,7 +310,15 @@ function closeSidebar(){
 }
 
 
-//重新生成缓存
+//心跳
+function heartbeat(str){
+    if (str == "1"){
+        $(#ping).style["display"] = "block";
+    }else{
+        $(#ping).style["display"] = "none";
+    }
+}
+
 function createAllCache(){
 
     //更新配置
@@ -367,7 +375,6 @@ function numSearch(evt){
     //重复点击拦截
     var current = $(#num_search).select("li:current");
     if(current != undefined && current.html == evt.html){
-        view.msgbox(#alert,"repeat");
         return;
     }
 

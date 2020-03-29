@@ -9,11 +9,12 @@ view.root.on("ready", function(){
 
     var keyword = view.parameters.keyword;
     ID = view.parameters.id;
-    $(#search_input).value = keyword;
-    searchPic(keyword,1);
 
     //创建语言
     createLang();
+
+    $(#search_input).value = keyword;
+    searchPic(keyword,1);
 
     //分页
     self.onScroll = function(evt) {
@@ -50,6 +51,7 @@ view.root.on("ready", function(){
             }
             SCROLL_LOCK = false;
         }
+
     };
 });
 

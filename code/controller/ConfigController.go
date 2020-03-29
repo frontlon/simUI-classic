@@ -26,6 +26,7 @@ func ConfigController(w *window.Window) {
 			if (isfresh == "1") {
 				//如果是刷新，则重新生成配置项
 				if err := InitConf(); err != nil {
+					return ErrorMsg(w, err.Error())
 				}
 			}
 			getjson, _ := json.Marshal(Config)

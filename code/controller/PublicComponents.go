@@ -2,24 +2,32 @@ package controller
 
 import (
 	"VirtualNesGUI/code/utils"
-	"github.com/Lofanmi/pinyin-golang/pinyin"
+
+	//"github.com/Lofanmi/pinyin-golang/pinyin"
+	"github.com/chain-zhang/pinyin"
+
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
 	"os"
 	"runtime"
 	"strconv"
-	"strings"
 	"time"
 )
 
-var dict = pinyin.NewDict()
+//var dict = pinyin.NewDict()
 
 /**
  * 字符转拼音
  **/
 func TextToPinyin(str string) string {
-	return strings.Replace(dict.Sentence(str).ASCII(), " ", "", -1)
+
+	str, err := pinyin.New(str).Split("").Mode(pinyin.WithoutTone).Convert()
+	if err != nil {
+		// 错误处理
+	}
+	return str
+	//return strings.Replace(dict.Sentence(str).ASCII(), " ", "", -1)
 }
 
 /*

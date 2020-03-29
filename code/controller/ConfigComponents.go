@@ -43,14 +43,8 @@ type ThemeStruct struct {
  @author frontLon
 */
 func InitConf() error {
-	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	separator := string(os.PathSeparator) //系统路径分隔符
-	rootpath, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	Config = &ConfStruct{}
-	Config.RootPath = rootpath + separator                        //当前软件的绝对路径
-	Config.Separator = separator                                  //系统的目录分隔符
-	Config.CachePath = rootpath + separator + "cache" + separator //缓存路径
-	Config.UnzipPath = Config.CachePath + "unzip" + separator     //rom解压路径
+
+	err := errors.New("")
 
 	//更新缓存前，需要将工作目录换成默认目录
 	if err := os.Chdir(Config.RootPath); err != nil {

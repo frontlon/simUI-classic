@@ -30,7 +30,8 @@ func (*Config) Get() (*Config, error) {
 
 //更新一个字段
 func (*Config) UpdateField(field string, value string) error {
-	sql := `UPDATE config SET ` + field + ` = "` + value + `" WHERE id = 1`
+	sql := `UPDATE config SET ` + field + ` = '` + value + `' WHERE id = 1`
+
 	stmt, err := sqlite.Prepare(sql)
 	if err != nil {
 		return err

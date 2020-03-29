@@ -58,8 +58,12 @@ func RomController(w *window.Window) {
 			return ErrorMsg(w, err.Error())
 		}
 
+		//如果是相对路径，转换成绝对路径
+		if !strings.Contains(rom.RomPath,":"){
+			rom.RomPath = Config.Platform[rom.Platform].RomPath + Config.Separator + rom.RomPath;
+		}
+
 		//解压zip包
-		rom.RomPath = Config.Platform[rom.Platform].RomPath + Config.Separator + rom.RomPath;
 		if sim.Unzip == 1 || romCmd.Unzip == 1 {
 			rom.RomPath, err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
 			if err != nil {
@@ -68,7 +72,6 @@ func RomController(w *window.Window) {
 			}
 			if rom.RomPath == "" {
 				return ErrorMsg(w, Config.Lang["UnzipExeNotFound"])
-
 			}
 		}
 
@@ -429,13 +432,17 @@ func RomController(w *window.Window) {
 		bakFolder := Config.CachePath + "thumb_bak/"
 		RomFileName := utils.GetFileName(vo.RomPath)
 
-		//检测bak文件夹是否存在，不存在这创建bak目录
+		//检测bak文件夹是否存在，不存在则创建bak目录
 		folder := utils.FolderExists(bakFolder)
 		if folder == false {
-			_ = os.Mkdir(bakFolder, os.ModePerm);
+
+			if err := utils.CreateDir(bakFolder); err != nil {
+				WriteLog(err.Error())
+				return ErrorMsg(w, err.Error())
+			}
 		}
 		for _, ext := range PIC_EXTS {
-			oldFileName := RomFileName + ext //老图片文件名
+			oldFileName := platformPath + Config.Separator + RomFileName + ext //老图片文件名
 			if utils.FileExists(oldFileName) {
 				bakFileName := RomFileName + "_" + utils.ToString(time.Now().Unix()) + ext //生成备份文件名
 				err := os.Rename(oldFileName, bakFolder+bakFileName)                       //移动文件

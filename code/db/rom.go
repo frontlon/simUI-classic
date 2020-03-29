@@ -74,6 +74,8 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 		sql += " OFFSET " + utils.ToString(offset)
 	}
 
+	fmt.Println("sql",sql)
+
 	rows, err := sqlite.Query(sql)
 	if err != nil {
 		return volist, err
@@ -87,7 +89,7 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 	return volist, err
 }
 
-//根据条件，查询多条数据
+//读取子rom
 func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 
 	volist := []*Rom{}
@@ -128,14 +130,18 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	volist := []*Rom{}
 	field := "id,name,menu,platform,rom_path";
 	sql := ""
-	pf := ""
+	pf := "1=1"
+
 	if platform != 0 {
-		pf = " platform=" + utils.ToString(platform) + " AND "
+		pf += " AND platform=" + utils.ToString(platform)
 	}
 
 	if menu != "" {
-		pf = " menu = '" + menu + "' AND "
+		pf += " AND menu = '" + menu + "'"
 	}
+
+	pf += " AND pname='' AND "
+
 
 	if keyword == "#" {
 		subsql := "SELECT id FROM rom WHERE " + pf + " (pinyin LIKE 'a%'"

@@ -3,6 +3,7 @@ package controller
 import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -13,7 +14,9 @@ import (
  * 创建缓存
  **/
 func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
+
 	romlist := []*db.Rom{}
+
 	menuList := map[string]*db.Menu{}            //分类目录
 	RomPath := Config.Platform[platform].RomPath //rom文件路径
 	RomExt := Config.Platform[platform].RomExts  //rom扩展名
@@ -26,9 +29,8 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 				return err
 			}
 
-
 			//转换为相对路径
-			p = strings.Replace(p,RomPath + Config.Separator,"",-1)
+			p = strings.Replace(p, RomPath+Config.Separator, "", -1)
 
 			//整理目录格式，并转换为数组
 			newpath := strings.Replace(RomPath, "/", "\\", -1)
@@ -40,16 +42,19 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
 
 			//如果该文件是游戏rom
-			if f.IsDir() == false && utils.InSliceString(romExt,RomExt) {
+			if f.IsDir() == false && utils.InSliceString(romExt, RomExt) {
 				romName := utils.GetFileName(f.Name())
 				title := romName
+
 				//如果有别名配置，则读取别名
 				if _, ok := RomAlias[title]; ok {
-					title = RomAlias[title]
+					if RomAlias[title] != "" {
+						title = RomAlias[title]
+					}
 				}
 
 				py := TextToPinyin(title)
-				md5 := GetFileUniqId(p,f)
+				md5 := GetFileUniqId(title, p, f)
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := constMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -74,7 +79,9 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Pinyin:   py,
 						Md5:      md5,
 					}
-					romlist = append(romlist, sinfo)
+
+					romlist = append(romlist,sinfo)
+
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
@@ -86,31 +93,31 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Pinyin:   py,
 						Md5:      md5,
 					}
+					romlist = append(romlist,rinfo)
 
-					//rom列表
-					romlist = append(romlist, rinfo)
 					//分类列表
 					if menu != constMenuRootKey {
 						menuList[menu] = &db.Menu{
 							Platform: platform,
 							Name:     menu,
-							Pinyin:   TextToPinyin(menu),
+							//Pinyin:   TextToPinyin(menu),
 						}
 					}
 				}
+
 			}
 			return nil
 		}); err != nil {
+		fmt.Println(err)
 	}
 
-	return romlist, menuList,nil
+	return romlist, menuList, nil
 }
-
 
 /**
  * 删除不存在平台的缓存数据
  **/
-func ClearPlatform() error{
+func ClearPlatform() error {
 	pfs := []string{}
 	for k, _ := range Config.Platform {
 		pfs = append(pfs, utils.ToString(k))
@@ -131,22 +138,22 @@ func ClearPlatform() error{
 /**
  * 更新rom cache
  **/
-func UpdateRomDB(platform uint32,romlist []*db.Rom) error{
+func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 
 	uniqs := []string{}
 
-	for _,v := range romlist{
-		uniqs = append(uniqs,v.Md5)
+	for _, v := range romlist {
+		uniqs = append(uniqs, v.Md5)
 	}
 
 	//删除当前平台下，不存在的rom
-	delIds,err := (&db.Rom{}).DeleteNotExists(platform, uniqs)
+	delIds, err := (&db.Rom{}).DeleteNotExists(platform, uniqs)
 	if err != nil {
 		return err
 	}
 
 	//删除romcmd数据
-	if err := (&db.RomCmd{}).DeleteByRomIds(delIds);err != nil{
+	if err := (&db.RomCmd{}).DeleteByRomIds(delIds); err != nil {
 		return err
 	}
 
@@ -184,15 +191,15 @@ func UpdateRomDB(platform uint32,romlist []*db.Rom) error{
 /**
  * 更新rom cache
  **/
-func UpdateMenuDB(platform uint32,menumap map[string]*db.Menu) error{
+func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 
 	menus := []string{}
-	if len(menumap) > 0{
-		for k,_ := range menumap{
-			if k == constMenuRootKey{
+	if len(menumap) > 0 {
+		for k, _ := range menumap {
+			if k == constMenuRootKey {
 				continue
 			}
-			menus = append(menus,k)
+			menus = append(menus, k)
 		}
 	}
 
@@ -230,11 +237,10 @@ func UpdateMenuDB(platform uint32,menumap map[string]*db.Menu) error{
 	return nil
 }
 
-
 /**
  * 读取文件唯一标识
  **/
-func GetFileUniqId(p string,f os.FileInfo) string {
-	str := p + utils.ToString(f.Size()) + f.ModTime().String()
+func GetFileUniqId(title string, p string, f os.FileInfo) string {
+	str := title + p + utils.ToString(f.Size()) + f.ModTime().String()
 	return utils.Md5(str)
 }

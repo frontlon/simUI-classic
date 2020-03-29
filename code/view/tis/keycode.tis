@@ -11,22 +11,16 @@
     self.on("keyup", function(evt) {
         
         var switch_romlist = $(#switch_romlist).attributes["value"];
-
-        if(evt.keyCode == Event.VK_TAB){
-        }else if(evt.keyCode == Event.VK_UP){
-            //div滚动
-            scrollUp(switch_romlist);
-
+        
+        if(evt.keyCode == Event.VK_UP){
+            scrollUp(switch_romlist); //div滚动
             if(switch_romlist == "1"){ //模块
                 keyRomUp();
             }else if(switch_romlist == "2"){ //列表
                 keyRomLeft();
             }
         }else if(evt.keyCode == Event.VK_DOWN){
-
-            //div滚动
-            scrollDown(switch_romlist);
-
+            scrollDown(switch_romlist); //div滚动
             if(switch_romlist == "1"){ //模块
                 keyRomDown();
             }else if(switch_romlist == "2"){ //列表
@@ -34,10 +28,12 @@
             }
         }else if(evt.keyCode == Event.VK_LEFT){ //左键移动rom
             if(switch_romlist == "1"){ //模块
+                scrollUp(switch_romlist); //div滚动
                 keyRomLeft();
             }
         }else if(evt.keyCode == Event.VK_RIGHT){ //右键移动rom
             if(switch_romlist == "1"){ //模块
+                scrollDown(switch_romlist); //div滚动
                 keyRomRight();
             }
         }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
@@ -45,13 +41,12 @@
             if (rom != undefined){
                 view.RunGame(rom.attributes["rid"],"");
             }
-        }else if(evt.keyCode == Event.VK_F5){ //f5刷新缓存
+        }else if(evt.keyCode == Event.VK_F5){ //F5刷新缓存
             startLoading(); 
             view.CreateRomCache();
+        }else if(evt.keyCode == Event.VK_F1){ //F1启动帮助
+            runHelp();
         }
-        //else{
-        //if((evt.keyCode>47 && evt.keyCode<58) || (evt.keyCode>64 && evt.keyCode<91)  || (evt.keyCode>95 && evt.keyCode<106)){}
-        //}
     });
 
 })

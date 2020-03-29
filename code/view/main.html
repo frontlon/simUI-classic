@@ -25,10 +25,12 @@
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);cursor:pointer}
     menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
+    menu li > label{padding-left:15dip;}
+    menu hr{display:none}
 
     /* 标题栏 */
     #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
-    #logo{color:color(logo-text-color);width:210dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
+    #logo{color:color(logo-text-color);width:202dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
     #tb_right{text-align:right;width:226dip;display:inline;background-color:color(titlebar-background-color);}
     #titlebar i{font-size:18dip;line-height:36dip;display:block}
@@ -36,17 +38,16 @@
     #titlebar button:hover{opacity:0.7;cursor:pointer}
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
-
     /* 状态栏 */
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
  
     /* 搜索栏 */
     .search{height:26dip;background:color(search-background-color);margin:9dip;position:relative}
-    .search .input{context-menu:none;color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:100dip;position:absolute;left:4dip}
-    .search .submit{color:color(search-ico-text-color);height:26dip;width:21dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none;cursor: pointer}
+    .search .input{color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:95dip;position:absolute;left:4dip;padding:0}
+    .search .submit{color:color(search-ico-text-color);height:26dip;width:12dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none;cursor: pointer;}
     .search .submit:hover{opacity: 0.7;}
- 
+
     /* 字母选择 */
     #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;}
     #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
@@ -61,7 +62,6 @@
     #platform_ul > li:hover{opacity:0.7;cursor:pointer}
     #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
     
-
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;}
     #menulist dt{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color)}
@@ -125,7 +125,7 @@
     #sim_select{margin:0 0 9dip 0;display:block;padding:0}
     #sim_select li{behavior:shell-icon;display:block;height:19dip;line-height:19dip;padding:0 4dip 0 26dip;color:color(sim-switch-text-color);foreground-repeat:no-repeat;foreground-position:4dip 50%;flow:horizontal-flow;}
     #sim_select li p{display:block;width:*;vertical-align:middle;margin:0}
-    #sim_select li button{display:block;width:12dip;height:12dip;vertical-align:middle;background:#333;color:#FFF;padding:0;cursor: pointer;}
+    #sim_select li button{display:block;size:12dip;vertical-align:middle;text-align:center;background:color(sim-switch-button-background-color);color:color(sim-switch-button-text-color);padding:0;cursor: pointer;font-size: 10dip}
     #sim_select li:hover{color:color(sim-switch-hover-text-color)}
     #sim_select li:current{color:color(sim-switch-active-text-color);background:color(sim-switch-active-background-color);}
 
@@ -140,13 +140,14 @@
     #romcontext caption{background: #1b2128;color:#FFF;padding:5dip 16dip 5dip 9dip;font-weight: bold}
     #romcontext > li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
     #romcontext .file{behavior: shell-icon;foreground-repeat:no-repeat;foreground-position:4dip 50%;}
-    #romcontext .folder{background-image:url(images/fileico_folder.png);}
-    #romcontext .thumb{background-image:url(images/fileico_thumbs.png);}
-    #romcontext .fav0{background-image:url(images/fileico_fav_0.png);}
-    #romcontext .fav1{background-image:url(images/fileico_fav_1.png);}
+    #romcontext .folder{background-image:url(this://app/images/fileico_folder.png);}
+    #romcontext .thumb{background-image:url(this://app/images/fileico_thumbs.png);}
+    #romcontext .fav0{background-image:url(this://app/images/fileico_fav_0.png);}
+    #romcontext .fav1{background-image:url(this://app/images/fileico_fav_1.png);}
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
 
+    #ping{width:1;height:1;position: absolute;top:0;left:0;6}
     /* 侧边栏滚动图片 */
     #rotate{top:62dip;right:28dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
@@ -154,6 +155,7 @@
 </style>
 </head>
 <body>
+    <div id="ping"></div>
 <div id="console" style="box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none"></div>
 <div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
 <menu id="romcontext"></menu>
@@ -200,7 +202,7 @@
     </section>
     <splitter id="right_splitter" />
     <section id="right">
-        <div id="mask"><img src="" /><p>{{SoftName}}</p></div>
+        <div id="mask"><img src="" /></div>
         <h2>{{FunButton}}</h2>
         <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
         <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
@@ -220,9 +222,8 @@
 </body>
 
 <script type="text/tiscript">
-    
-    //var ROOTPATH = "this://app/";
-    var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
+    var ROOTPATH = "this://app/";
+    //var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

@@ -73,7 +73,7 @@
             <table>
                 <tr><th colspan="2" style="padding-top:0">{{BaseInfo}}</th></tr>
                 <tr><td>{{Title}}</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
-                <tr><td>{{Icon}}</td><td><input type="text"  id="platform_icon" value="" disabled> <button class="openfile" for="platform_icon" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
+                <tr><td><div class="tip" title="{{PlatformIconTip}}">&#xf3c1;</div>{{Icon}}</td><td><input type="text"  id="platform_icon" value="" disabled> <button class="openfile" for="platform_icon" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
                 <tr><td>{{RomType}}</td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
                 <tr><td>{{Simulator}}</td><td>
                   <select id="platform_sim" disabled></select>
@@ -112,16 +112,10 @@
   </div>
 
   <script type="text/tiscript">
-//    try{
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog_config.tis";
- // }catch(e){
- //   view.msgbox(#alert,e);
- // }
-
-
   </script>
 </body>
 </html>

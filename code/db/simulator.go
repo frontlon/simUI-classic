@@ -24,7 +24,7 @@ func (sim *Simulator) Add() (uint32, error) {
 		fmt.Println(err.Error())
 		return 0, err
 	}
-	res, err := stmt.Exec(sim.Name, sim.Platform, sim.Path, sim.Cmd, sim.Default, sim.Pinyin);
+	res, err := stmt.Exec(sim.Name, sim.Platform, sim.Path, sim.Cmd, sim.Unzip,sim.Default, sim.Pinyin);
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0, err
