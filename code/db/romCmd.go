@@ -19,6 +19,7 @@ type RomCmd struct {
 func (r *RomCmd) Add() error {
 
 	stmt, err := sqlite.Prepare("INSERT INTO rom_cmd (rom_id,sim_id,cmd,unzip) values(?,?,?,?)")
+	defer stmt.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return err

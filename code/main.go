@@ -132,12 +132,14 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 }
 
 func heartbeat(w *window.Window) {
+
 	go func() {
 		//先休息5秒
 		time.Sleep(5 * time.Second)
 		status := 0
 		for {
-			time.Sleep(1 * time.Second)
+			db.Ping()
+			time.Sleep(5 * time.Second)
 			if status == 0 {
 				status = 1
 			} else {

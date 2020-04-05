@@ -30,7 +30,7 @@ type Platform struct {
 func (v *Platform) Add() (uint32, error) {
 
 	stmt, err := sqlite.Prepare("INSERT INTO platform (`name`, icon,rom_exts, rom_path, thumb_path, snap_path, poster_path, packing_path, doc_path, strategy_path, romlist, pinyin) values(?,?,?,?,?,?,?,?,?,?,?,?)")
-
+	defer stmt.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0, err
@@ -53,6 +53,7 @@ func (*Platform) GetAll() ([]*Platform, error) {
 	sql := "SELECT id,`name`, icon,rom_exts, rom_path, thumb_path, snap_path, poster_path, packing_path, doc_path,strategy_path, romlist,sort FROM platform  ORDER BY sort ASC,pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return volist, err
 	}
@@ -98,6 +99,7 @@ func (pf *Platform) UpdateById() error {
 	sql += ` WHERE id = ` + utils.ToString(pf.Id)
 
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
@@ -127,6 +129,7 @@ func (pf *Platform) UpdateSortById() error {
 	sql += ` WHERE id = ` + utils.ToString(pf.Id)
 
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}

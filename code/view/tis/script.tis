@@ -25,7 +25,48 @@ view.root.on("ready", function(){
     var romCount = view.GetGameCount(pf,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
 
+
     // ================= 事件 =================
+
+
+
+    //目录单击
+    self.on("click", "#close_platform", function(evt) {
+
+        var dom = $(#left_platform);
+
+        if (dom.style["display"] == "block"){
+            dom.style["display"] = "none";
+        }else{
+            dom.style["display"] = "block";
+        }
+
+    });
+
+  self.on("click", "#close_menu", function(evt) {
+
+        var dom = $(#left_menu);
+
+        if (dom.style["display"] == "block"){
+            dom.style["display"] = "none";
+        }else{
+            dom.style["display"] = "block";
+        }
+
+    });
+
+      self.on("click", "#close_right", function(evt) {
+
+        var dom = $(#right);
+
+        if (dom.style["display"] == "block"){
+            dom.style["display"] = "none";
+        }else{
+            dom.style["display"] = "block";
+        }
+
+    });
+
 
    //调整窗口大小
     view.on("sizing", function(evt) {

@@ -20,6 +20,7 @@ type Simulator struct {
 //写入数据
 func (sim *Simulator) Add() (uint32, error) {
 	stmt, err := sqlite.Prepare("INSERT INTO simulator (`name`, platform, path, cmd, unzip, `default`,pinyin) values(?,?,?,?,?,?,?)")
+	defer stmt.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0, err
@@ -57,6 +58,7 @@ func (*Simulator) GetByPlatform(platform uint32) (map[uint32]*Simulator, error) 
 	sql := "SELECT id, platform, name, path, cmd, unzip,`default` FROM simulator " + where + " ORDER BY `default` DESC,pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return volist, err
@@ -83,7 +85,7 @@ func (sim *Simulator) UpdateById() error {
 	sql += `,pinyin = '` + sim.Pinyin + `'`
 	sql += ` WHERE id = ` + utils.ToString(sim.Id)
 	stmt, err := sqlite.Prepare(sql)
-
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
@@ -101,6 +103,7 @@ func (*Simulator) UpdateDefault(platform uint32, id uint32) error {
 	//先将平台下的所有参数都设为0
 	sql := "UPDATE simulator SET `default` = 0 WHERE `platform` = '" + utils.ToString(platform) + "' AND `default` = 1"
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
@@ -112,6 +115,7 @@ func (*Simulator) UpdateDefault(platform uint32, id uint32) error {
 	//将指定的模拟器更换为默认模拟器
 	sql = "UPDATE simulator SET `default` = 1 WHERE id = " + utils.ToString(id)
 	stmt, err = sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}

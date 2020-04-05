@@ -31,11 +31,12 @@ func (*Config) Get() (*Config, error) {
 //更新一个字段
 func (*Config) UpdateField(field string, value string) error {
 	sql := `UPDATE config SET ` + field + ` = '` + value + `' WHERE id = 1`
-
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
+
 	_, err2 := stmt.Exec()
 	if err2 != nil {
 		return err2

@@ -24,11 +24,11 @@ type Rom struct {
 	Md5      string // 文件Md5
 }
 
-
 //插入rom数据
 func (r *Rom) Add() error {
 
 	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin,md5) values(?,?,?,?,?,?,?)")
+	defer stmt.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -74,9 +74,8 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 		sql += " OFFSET " + utils.ToString(offset)
 	}
 
-	fmt.Println("sql",sql)
-
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return volist, err
 	}
@@ -104,6 +103,7 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 	sql += " ORDER BY pinyin ASC"
 
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return volist, err
 	}
@@ -142,7 +142,6 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 
 	pf += " AND pname='' AND "
 
-
 	if keyword == "#" {
 		subsql := "SELECT id FROM rom WHERE " + pf + " (pinyin LIKE 'a%'"
 		//查询b-z
@@ -161,6 +160,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	}
 
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return volist, err
 	}
@@ -249,6 +249,7 @@ func (sim *Rom) GetIdsByPlatform(platform uint32, menu string) ([]uint64, error)
 	ids := []uint64{}
 	sql := "SELECT id FROM rom WHERE platform = " + utils.ToString(platform) + " AND menu = '" + menu + "'"
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return ids, err
 	}
@@ -270,6 +271,7 @@ func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
 	md5List := []string{}
 	sql := "SELECT md5 FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 in (" + uniqStr + ")"
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return md5List, err
 	}
@@ -283,7 +285,7 @@ func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
 }
 
 //删除指定平台下，不存在的rom
-func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string,error) {
+func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string, error) {
 
 	sql_query := ""
 	sql := ""
@@ -299,22 +301,24 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string,error)
 		sql = "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 not in (" + uniqStr + ")"
 	}
 
-	 //先把要删除的id查询出来
-	if rows, err := sqlite.Query(sql_query);err != nil{
+	//先把要删除的id查询出来
+	rows, err := sqlite.Query(sql_query)
+	defer rows.Close()
+	if err != nil {
 		return ids, err
-	}else{
+	} else {
 		for rows.Next() {
 			var id = ""
 			err = rows.Scan(&id)
-			ids = append(ids,id)
+			ids = append(ids, id)
 		}
 	}
 
 	//删除记录
-	if _ , err := sqlite.Exec(sql); err != nil {
-		return ids,err
+	if _, err := sqlite.Exec(sql); err != nil {
+		return ids, err
 	}
-	return ids,nil
+	return ids, nil
 }
 
 //删除不存在的平台下的所有rom

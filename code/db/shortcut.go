@@ -16,6 +16,7 @@ type Shortcut struct {
 //写入数据
 func (v *Shortcut) Add() (int64,error) {
 	stmt, err := sqlite.Prepare("INSERT INTO shortcut (`name`,path,sort) values(?,?,?)")
+	defer stmt.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0,err
@@ -33,6 +34,7 @@ func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 	volist := []*Shortcut{}
 	sql := "SELECT * FROM shortcut ORDER BY sort ASC"
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return volist, err
 	}
@@ -76,6 +78,7 @@ func (r *Shortcut) UpdateSortById() error {
 	sql += ` WHERE id = ` + utils.ToString(r.Id)
 
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}

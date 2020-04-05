@@ -103,6 +103,7 @@ func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 	nameList := []string{}
 	sql := "SELECT name FROM menu WHERE platform = " + utils.ToString(platform) + " AND name in (" + nameStr + ")"
 	rows, err := sqlite.Query(sql)
+	defer rows.Close()
 	if err != nil {
 		return nameList, err
 	}
@@ -131,6 +132,7 @@ func (menu *Menu) UpdateSortByName() error {
 	sql += ` WHERE name = '` + utils.ToString(menu.Name) + `'`
 
 	stmt, err := sqlite.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}

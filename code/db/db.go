@@ -14,3 +14,9 @@ func Conn() {
 	//关闭同步
 	sqlite.Exec("PRAGMA synchronous = OFF;")
 }
+
+func Ping() {
+
+	if err := sqlite.Ping();err != nil{
+	}
+}
