@@ -17,133 +17,99 @@ type Simulator struct {
 	Pinyin   string
 }
 
+func (*Simulator) TableName() string {
+	return "simulator"
+}
+
 //写入数据
-func (sim *Simulator) Add() (uint32, error) {
-	stmt, err := sqlite.Prepare("INSERT INTO simulator (`name`, platform, path, cmd, unzip, `default`,pinyin) values(?,?,?,?,?,?,?)")
-	defer stmt.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-		return 0, err
+func (m *Simulator) Add() (uint32, error) {
+	result := getDb().Create(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	res, err := stmt.Exec(sim.Name, sim.Platform, sim.Path, sim.Cmd, sim.Unzip,sim.Default, sim.Pinyin);
-	if err != nil {
-		fmt.Println(err.Error())
-		return 0, err
-	}
-	//返回插入的id
-	id, err := res.LastInsertId()
-	return uint32(id), nil
+	return m.Id, result.Error
 }
 
 //根据ID查询一个模拟器参数
 func (*Simulator) GetById(id uint32) (*Simulator, error) {
-	v := &Simulator{}
-	field := "id, platform, name, path, cmd, unzip,`default`"
-	sql := "SELECT " + field + " FROM simulator WHERE id = " + utils.ToString(id)
-
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&v.Id, &v.Platform, &v.Name, &v.Path, &v.Cmd, &v.Unzip, &v.Default)
-	return v, err
+	vo := &Simulator{}
+	result := getDb().Select("id, platform, name, path, cmd, unzip,`default`").Where("id=?", id).First(&vo)
+	return vo, result.Error
 }
 
 //根据条件，查询多条数据
 func (*Simulator) GetByPlatform(platform uint32) (map[uint32]*Simulator, error) {
 
-	volist := map[uint32]*Simulator{}
+	volist := []*Simulator{}
+	vomap := map[uint32]*Simulator{}
 	where := ""
 
 	if platform != 0 {
-		where += " where platform = '" + utils.ToString(platform) + "'"
+		where += "platform = '" + utils.ToString(platform) + "'"
 	}
-	sql := "SELECT id, platform, name, path, cmd, unzip,`default` FROM simulator " + where + " ORDER BY `default` DESC,pinyin ASC"
 
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-		return volist, err
+	result := getDb().Select("id, platform, name, path, cmd, unzip,`default`").Where(where).Order("`default` DESC,pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	for rows.Next() {
-		v := &Simulator{}
-		err = rows.Scan(&v.Id, &v.Platform, &v.Name, &v.Path, &v.Cmd, &v.Unzip, &v.Default)
-		if err != nil {
-			fmt.Println(err.Error())
-			return volist, err
-		}
-		volist[v.Id] = v
+	for _, v := range volist {
+		vomap[v.Id] = v
 	}
-	return volist, nil
+
+	return vomap, nil
 }
 
 //更新
-func (sim *Simulator) UpdateById() error {
-	sql := `UPDATE simulator SET `
-	sql += `name = '` + sim.Name + `'`
-	sql += `,path = '` + sim.Path + `'`
-	sql += `,cmd = '` + sim.Cmd + `'`
-	sql += `,unzip = '` + utils.ToString(sim.Unzip) + `'`
-	sql += `,pinyin = '` + sim.Pinyin + `'`
-	sql += ` WHERE id = ` + utils.ToString(sim.Id)
-	stmt, err := sqlite.Prepare(sql)
-	defer stmt.Close()
-	if err != nil {
-		return err
+func (m *Simulator) UpdateById() error {
+
+	fmt.Println("unzip",m.Unzip)
+	create := map[string]interface{}{
+		"name":   m.Name,
+		"path":   m.Path,
+		"cmd":    m.Cmd,
+		"unzip":  m.Unzip,
+		"pinyin": m.Pinyin,
 	}
-	_, err2 := stmt.Exec()
-	if err2 != nil {
-		return err2
-	} else {
-		return nil
+	result := getDb().Table(m.TableName()).Where("id=(?)", m.Id).Updates(create)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
+	return result.Error
 }
 
 //更新模拟器为默认模拟器
-func (*Simulator) UpdateDefault(platform uint32, id uint32) error {
+func (m *Simulator) UpdateDefault(platform uint32, id uint32) error {
 
 	//先将平台下的所有参数都设为0
-	sql := "UPDATE simulator SET `default` = 0 WHERE `platform` = '" + utils.ToString(platform) + "' AND `default` = 1"
-	stmt, err := sqlite.Prepare(sql)
-	defer stmt.Close()
-	if err != nil {
-		return err
-	}
-	_, err2 := stmt.Exec()
-	if err2 != nil {
-		return err2
+	result := getDb().Table(m.TableName()).Where("platform=? AND `default`=?", platform, 1).Update("default", 0)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 
 	//将指定的模拟器更换为默认模拟器
-	sql = "UPDATE simulator SET `default` = 1 WHERE id = " + utils.ToString(id)
-	stmt, err = sqlite.Prepare(sql)
-	defer stmt.Close()
-	if err != nil {
-		return err
+	result = getDb().Table(m.TableName()).Where("id=?", id).Update("default", 1)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	_, err2 = stmt.Exec()
-	if err2 != nil {
-		return err2
-	}
-	return nil
+
+	return result.Error
 }
 
 //删除一个模拟器
-func (sim *Simulator) DeleteById() (error) {
-	sql := "DELETE FROM simulator WHERE id = " + utils.ToString(sim.Id)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+func (m *Simulator) DeleteById() (error) {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }
 
 //删除一个平台下的所有模拟器
-func (sim *Simulator) DeleteByPlatform() (error) {
-	sql := "DELETE FROM simulator WHERE platform = " + utils.ToString(sim.Platform)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+func (m *Simulator) DeleteByPlatform() (error) {
+	result := getDb().Where("platform=?", m.Platform).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }

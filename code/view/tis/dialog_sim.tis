@@ -13,6 +13,7 @@ view.root.on("ready", function(){
         action = "add";
         $(#sim_submit).value = CONF.Lang.AddSimulator;
         $(#sim_delete).style['display'] = "none";
+        $(#unzip).value = "0";
         view.windowCaption = CONF.Lang.AddSimulator;
     }else{
         
@@ -25,6 +26,7 @@ view.root.on("ready", function(){
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
         $(#sim_cmd).value = sim.Cmd;
+        $(#unzip).value = sim.Unzip;
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
     
@@ -32,6 +34,7 @@ view.root.on("ready", function(){
 
 //更新模拟器信息
 event click $(#sim_submit) {
+
     var def = $(#sim_default).value == undefined ? 0 : 1;
     var result = "";
     var data = {
@@ -41,15 +44,16 @@ event click $(#sim_submit) {
         platform : pfId.toString(),
         path:$(#sim_path).value,
         cmd:$(#sim_cmd).value,
+        unzip:$(#unzip).value,
     };
 
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
     if(data.sim_path == ""){view.msgbox(#alert,CONF.Lang.SimulatorPathCanNotBeEmpty);return true;}
     if(data.platform == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
-
     if(id == 0){
         //添加模拟器
         result = view.parameters.addSimulator(data);
+       
         if(result != ""){
             view.msgbox(#alert,CONF.Lang.AddSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回

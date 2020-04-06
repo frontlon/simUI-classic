@@ -24,68 +24,52 @@ type Rom struct {
 	Md5      string // 文件Md5
 }
 
+func (*Rom) TableName() string {
+	return "rom"
+}
+
 //插入rom数据
-func (r *Rom) Add() error {
+func (m *Rom) Add() error {
 
-	stmt, err := sqlite.Prepare("INSERT INTO rom (`name`,pname,menu,platform,rom_path,pinyin,md5) values(?,?,?,?,?,?,?)")
-	defer stmt.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+	result := getDb().Create(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 
-	//开始写入父rom
-	_, err = stmt.Exec(r.Name, r.Pname, r.Menu, r.Platform, r.RomPath, r.Pinyin, r.Md5);
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-	return nil
+	return result.Error
 }
 
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
 
 	volist := []*Rom{}
-	field := "id,name,menu,platform,rom_path";
-	sql := "SELECT " + field + " FROM rom WHERE 1=1"
+	where := map[string]interface{}{}
 	if platform != 0 {
-		sql += " AND platform = '" + utils.ToString(platform) + "'"
+		where["platform"] = platform
 	}
 
 	if menu != "" {
 		if menu == "favorite" {
-			sql += " AND star = '1'"
+			where["star"] = 1
 		} else {
-			sql += " AND menu = '" + menu + "'"
+			where["menu"] = menu
 		}
 	}
-
-	sql += " AND pname = ''"
+	where["pname"] = ""
 
 	if keyword != "" {
-		sql += " AND name LIKE '%" + keyword + "%'"
+		where["name LIKE"] = "%" + keyword + "%"
 	}
 
-	sql += "  ORDER BY pinyin ASC LIMIT " + utils.ToString(ROM_PAGE_NUM)
+	offset := pages * ROM_PAGE_NUM
 
-	if pages > 0 {
-		offset := pages * ROM_PAGE_NUM
-		sql += " OFFSET " + utils.ToString(offset)
+	result := getDb().Select("id,name,menu,platform,rom_path").Where(where).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return volist, err
-	}
-	for rows.Next() {
-		vo := &Rom{}
-		err = rows.Scan(&vo.Id, &vo.Name, &vo.Menu, &vo.Platform, &vo.RomPath)
-		volist = append(volist, vo)
-	}
-
-	return volist, err
+	return volist, result.Error
 }
 
 //读取子rom
@@ -97,81 +81,60 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 		return volist, nil
 	}
 
-	field := "id,name,pname";
-	sql := "SELECT " + field + " FROM rom WHERE 1=1"
-	sql += " AND platform = '" + utils.ToString(platform) + "' AND pname = '" + pname + "'"
-	sql += " ORDER BY pinyin ASC"
-
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return volist, err
+	result := getDb().Select("id,name,pname").Where("platform=? AND pname=?", platform, pname).Order("pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	for rows.Next() {
-		vo := &Rom{}
-		err = rows.Scan(&vo.Id, &vo.Name, &vo.Pname)
-		volist = append(volist, vo)
-	}
-
-	return volist, err
+	return volist, result.Error
 }
 
 //根据id查询一条数据
 func (*Rom) GetById(id uint64) (*Rom, error) {
+
 	vo := &Rom{}
-	sql := "SELECT * FROM rom where id= '" + utils.ToString(id) + "'"
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.SimId, &vo.RunNum, &vo.RunTime, &vo.Pinyin, &vo.Md5)
-	return vo, err
+
+	result := getDb().Where("id=?", id).First(&vo)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return vo, result.Error
 }
 
 //根据拼音筛选
 func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
-	volist := []*Rom{}
-	field := "id,name,menu,platform,rom_path";
-	sql := ""
-	pf := "1=1"
+	where := map[string]interface{}{}
 
 	if platform != 0 {
-		pf += " AND platform=" + utils.ToString(platform)
+		where["platform"] = platform
 	}
 
 	if menu != "" {
-		pf += " AND menu = '" + menu + "'"
+		where["menu"] = menu
 	}
 
-	pf += " AND pname='' AND "
-
+	where["pname"] = ""
+	offset := pages * ROM_PAGE_NUM
+	volist := []*Rom{}
+	field := "id,name,menu,platform,rom_path"
+	result := getDb().Select(field).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset)
 	if keyword == "#" {
-		subsql := "SELECT id FROM rom WHERE " + pf + " (pinyin LIKE 'a%'"
-		//查询b-z
-		for i := 98; i <= 122; i++ {
-			subsql += " OR pinyin LIKE '" + string(i) + "%'"
+
+		//查询0-9数字rom
+		subWhere := "pinyin LIKE '0%'"
+		for i := 1; i <= 9; i++ {
+			subWhere += " OR pinyin LIKE '" + utils.ToString(i) + "%'"
 		}
-		subsql += ")"
-		sql += "SELECT " + field + " FROM rom WHERE " + pf + " id not in (" + subsql + ")"
+		result.Where(where).Where(subWhere).Find(&volist)
 	} else {
-		sql = "SELECT " + field + " FROM rom WHERE " + pf + " pinyin LIKE '" + keyword + "%'"
-	}
-	sql += " ORDER BY pinyin ASC LIMIT " + utils.ToString(ROM_PAGE_NUM)
-	if pages > 0 {
-		offset := pages * ROM_PAGE_NUM
-		sql += " OFFSET " + utils.ToString(offset)
+		result.Where(where).Where("pinyin LIKE ?",keyword+"%").Find(&volist)
 	}
 
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return volist, err
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 
-	for rows.Next() {
-		vo := &Rom{}
-		err = rows.Scan(&vo.Id, &vo.Name, &vo.Menu, &vo.Platform, &vo.RomPath)
-		volist = append(volist, vo)
-	}
-
-	return volist, err
+	return volist, result.Error
 }
 
 //查询star
@@ -190,98 +153,83 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 }
 */
 //根据满足条件的rom数量
-func (*Rom) Count(platform uint32, menu string, keyword string) (int, error) {
+func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	count := 0
-	sql := "SELECT count(*) as count FROM rom WHERE 1=1"
-	if platform != 0 {
-		sql += " AND platform = '" + utils.ToString(platform) + "' AND pname=''"
-	}
-	if menu != "" {
-		sql += " AND menu = '" + menu + "'"
-	}
-	if keyword != "" {
-		sql += " AND name LIKE '%" + keyword + "%'"
+	where := map[string]interface{}{
 	}
 
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&count)
-	return count, err
+	if platform != 0 {
+		where["platform"] = platform
+		where["pname"] = ""
+	}
+	if menu != "" {
+		where["menu"] = menu
+	}
+	if keyword != "" {
+		where["name LIKE"] = "%" + keyword + "%'"
+	}
+	result := getDb().Table(m.TableName()).Where(where).Count(&count)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return count, result.Error
 }
 
 //更新喜爱状态
-func (r *Rom) UpdateStar() error {
-	sql := `UPDATE rom SET `
-	sql += `star = ` + utils.ToString(r.Star)
-	sql += ` WHERE id = ` + utils.ToString(r.Id)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		return err
+func (m *Rom) UpdateStar() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("star", m.Star)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }
 
 //更新模拟器
-func (r *Rom) UpdateSimulator() error {
-	sql := `UPDATE rom SET `
-	sql += `sim_id = ` + utils.ToString(r.SimId)
-	sql += ` WHERE id = ` + utils.ToString(r.Id)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		return err
+func (m *Rom) UpdateSimulator() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sim_id", m.SimId)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }
 
 //删除一个平台下的所有rom数据
-func (sim *Rom) DeleteByPlatform() (error) {
-	sql := "DELETE FROM rom WHERE platform = " + utils.ToString(sim.Platform)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+func (m *Rom) DeleteByPlatform() (error) {
+	result := getDb().Where("platform=? ", m.Platform).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }
 
 //读取id列表
 func (sim *Rom) GetIdsByPlatform(platform uint32, menu string) ([]uint64, error) {
+	volist := []*Rom{}
+	result := getDb().Select("id").Where("platform=? AND menu=?", platform, menu).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 
 	ids := []uint64{}
-	sql := "SELECT id FROM rom WHERE platform = " + utils.ToString(platform) + " AND menu = '" + menu + "'"
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return ids, err
+	for _, v := range volist {
+		ids = append(ids, v.Id)
 	}
-
-	for rows.Next() {
-		id := 0
-		err = rows.Scan(&id)
-		ids = append(ids, uint64(id))
-	}
-	return ids, err
+	return ids, result.Error
 }
 
 //根据一组dm5，查询存在的md5，用于取交集
 func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
-
-	uniqStr := strings.Join(uniq, "\",\"")
-	uniqStr = "\"" + uniqStr + "\""
+	volist := []*Rom{}
+	result := getDb().Select("md5").Where("platform=? AND md5 in (?)", platform, uniq).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 
 	md5List := []string{}
-	sql := "SELECT md5 FROM rom WHERE platform = " + utils.ToString(platform) + " AND md5 in (" + uniqStr + ")"
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return md5List, err
+	for _, v := range volist {
+		md5List = append(md5List, v.Md5)
 	}
-
-	for rows.Next() {
-		md5 := ""
-		err = rows.Scan(&md5)
-		md5List = append(md5List, md5)
-	}
-	return md5List, err
+	return md5List, result.Error
 }
 
 //删除指定平台下，不存在的rom
@@ -322,28 +270,19 @@ func (sim *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string, error
 }
 
 //删除不存在的平台下的所有rom
-func (sim *Rom) ClearByPlatform(platforms []string) (error) {
-
-	sql := "DELETE FROM rom "
-
-	if len(platforms) > 0 {
-		namesStr := strings.Join(platforms, ",")
-		sql += " WHERE platform not in (" + namesStr + ")"
+func (m *Rom) ClearByPlatform(platforms []string) (error) {
+	result := getDb().Where("platform not in (?) AND menu=?", platforms).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-	return nil
+	return result.Error
 }
 
 //清空表数据
-func (sim *Rom) Truncate() (error) {
-	_, err := sqlite.Exec("DELETE FROM rom")
-	if err != nil {
-		return err
+func (m *Rom) Truncate() (error) {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }

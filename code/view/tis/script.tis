@@ -28,46 +28,6 @@ view.root.on("ready", function(){
 
     // ================= 事件 =================
 
-
-
-    //目录单击
-    self.on("click", "#close_platform", function(evt) {
-
-        var dom = $(#left_platform);
-
-        if (dom.style["display"] == "block"){
-            dom.style["display"] = "none";
-        }else{
-            dom.style["display"] = "block";
-        }
-
-    });
-
-  self.on("click", "#close_menu", function(evt) {
-
-        var dom = $(#left_menu);
-
-        if (dom.style["display"] == "block"){
-            dom.style["display"] = "none";
-        }else{
-            dom.style["display"] = "block";
-        }
-
-    });
-
-      self.on("click", "#close_right", function(evt) {
-
-        var dom = $(#right);
-
-        if (dom.style["display"] == "block"){
-            dom.style["display"] = "none";
-        }else{
-            dom.style["display"] = "block";
-        }
-
-    });
-
-
    //调整窗口大小
     view.on("sizing", function(evt) {
         //更新默认配置
@@ -293,6 +253,19 @@ view.root.on("ready", function(){
         rotateTo(next, :: (this super).state.disabled = false);
     });
 
+    //开启关闭平台栏
+    self.on("click", "#close_platform", function(evt) {
+        togglePlatform();
+    });
+    //开启关闭菜单栏
+    self.on("click", "#close_menu", function(evt) {
+        toggleMenu();
+    });
+    //开启关闭侧边栏
+    self.on("click", "#close_right", function(evt) {
+        toggleSidebar();
+    });
+
 });
 
 //初始化配置
@@ -333,4 +306,33 @@ function initConfig(isfresh){
 //启动帮助
 function runHelp(){
     Sciter.launch("http://www.simui.net/");
+}
+
+
+//开启关闭平台栏
+function togglePlatform(){
+    var dom = $(#left_platform);
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+    }else{
+        dom.style["display"] = "block";
+    }
+}
+//开启关闭菜单栏
+function toggleMenu(){
+    var dom = $(#left_menu);
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+    }else{
+        dom.style["display"] = "block";
+    }
+}
+//开启关闭侧边栏
+function toggleSidebar(){
+    var dom = $(#right);
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+    }else{
+        dom.style["display"] = "block";
+    }
 }

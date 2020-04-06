@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"github.com/astaxie/beego/config"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -17,16 +18,17 @@ func SimulatorController(w *window.Window) {
 	//添加模拟器
 	w.DefineFunction("AddSimulator", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
-		d := make(map[string]string)
+		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
 		pfId := uint32(utils.ToInt(d["platform"]))
 
 		sim := &db.Simulator{
-			Name:     d["name"],
+			Name:     config.ToString(d["name"]),
 			Platform: pfId,
-			Path:     d["path"],
-			Cmd:      d["cmd"],
-			Pinyin:   TextToPinyin(d["name"]),
+			Path:     utils.ToString(d["path"]),
+			Cmd:      config.ToString(d["cmd"]),
+			Unzip:    uint8(utils.ToInt(d["unzip"])),
+			Pinyin:   TextToPinyin(config.ToString(d["name"])),
 		}
 		id, err := sim.Add()
 
@@ -46,7 +48,7 @@ func SimulatorController(w *window.Window) {
 	//更新模拟器
 	w.DefineFunction("UpdateSimulator", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
-		d := make(map[string]string)
+		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
 
 		id := uint32(utils.ToInt(d["id"]))
@@ -54,11 +56,12 @@ func SimulatorController(w *window.Window) {
 		def := uint8(utils.ToInt(d["default"]))
 		sim := &db.Simulator{
 			Id:       id,
-			Name:     d["name"],
+			Name:     utils.ToString(d["name"]),
 			Platform: pfId,
-			Path:     d["path"],
-			Cmd:      d["cmd"],
-			Pinyin:   TextToPinyin(d["name"]),
+			Path:     utils.ToString(d["path"]),
+			Cmd:      utils.ToString(d["cmd"]),
+			Pinyin:   TextToPinyin(utils.ToString(d["name"])),
+			Unzip:    uint8(utils.ToInt(d["unzip"])),
 		}
 
 		//更新模拟器
@@ -102,8 +105,6 @@ func SimulatorController(w *window.Window) {
 		return sciter.NewValue(args[0].String())
 	})
 
-
-
 	//读取模拟器详情
 	w.DefineFunction("GetSimulatorById", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
@@ -131,7 +132,6 @@ func SimulatorController(w *window.Window) {
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
 	})
-
 
 	//设置rom的模拟器
 	w.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {

@@ -1,7 +1,6 @@
 package db
 
 import (
-	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -13,38 +12,28 @@ type Shortcut struct {
 	Sort uint32
 }
 
+func (*Shortcut) TableName() string {
+	return "shortcut"
+}
+
 //写入数据
-func (v *Shortcut) Add() (int64,error) {
-	stmt, err := sqlite.Prepare("INSERT INTO shortcut (`name`,path,sort) values(?,?,?)")
-	defer stmt.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-		return 0,err
+func (m *Shortcut) Add() (int64, error) {
+
+	result := getDb().Create(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	result, err := stmt.Exec("","",v.Sort);
-	if err != nil {
-		fmt.Println(err.Error())
-		return 0,err
-	}
-	return result.LastInsertId()
+
+	return int64(m.Id), result.Error
 }
 
 //读取所有数据
 func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 	volist := []*Shortcut{}
-	sql := "SELECT * FROM shortcut ORDER BY sort ASC"
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return volist, err
-	}
-	for rows.Next() {
-		vo := &Shortcut{}
-		err = rows.Scan(&vo.Id, &vo.Name, &vo.Path, &vo.Sort)
-		if err != nil {
-			return volist, err
-		}
-		volist = append(volist, vo)
+	result := getDb().Order("sort ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 	return volist, nil
 }
@@ -52,51 +41,41 @@ func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 //查询所有记录数
 func (*Shortcut) Count() (int, error) {
 	count := 0
-	sql := "SELECT count(*) as count FROM shortcut"
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&count)
-	return count, err
+	result := getDb().Count(&count)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return count, result.Error
 }
 
 //更新一条记录
-func (r *Shortcut) UpdateById() error {
-	sql := `UPDATE shortcut SET `
-	sql += `name = '` + utils.ToString(r.Name) + `'`
-	sql += `, path = '` + utils.ToString(r.Path) + `'`
-	sql += ` WHERE id = ` + utils.ToString(r.Id)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		return err
+func (m *Shortcut) UpdateById() error {
+	create := map[string]interface{}{
+		"name": m.Name,
+		"path": m.Path,
 	}
-	return nil
+	result := getDb().Where("id=?", m.Id).Updates(create)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
 }
 
 //更新排序
-func (r *Shortcut) UpdateSortById() error {
-	sql := `UPDATE shortcut SET `
-	sql += `sort = '` + utils.ToString(r.Sort) + `'`
-	sql += ` WHERE id = ` + utils.ToString(r.Id)
-
-	stmt, err := sqlite.Prepare(sql)
-	defer stmt.Close()
-	if err != nil {
-		return err
+func (m *Shortcut) UpdateSortById() error {
+	result := getDb().Where("id=?", m.Id).Update("sort", m.Sort)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	_, err2 := stmt.Exec()
-	if err2 != nil {
-		return err2
-	} else {
-		return nil
-	}
+	return result.Error
 }
 
 //删除一条记录
-func (r *Shortcut) DeleteById() (error) {
-	sql := "DELETE FROM shortcut WHERE id = " + utils.ToString(r.Id)
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+func (m *Shortcut) DeleteById() (error) {
+	result := getDb().Where("id=?", m.Id).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+	return result.Error
 }

@@ -2,21 +2,29 @@ package db
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	"errors"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var sqlite = &sql.DB{}
+var engine *gorm.DB
 
 //连接数据库
 func Conn() {
 	//连接数据库
-	sqlite, _ = sql.Open("sqlite3", `./data.dll`)
-	//关闭同步
-	sqlite.Exec("PRAGMA synchronous = OFF;")
+	err := errors.New("")
+	engine, err = gorm.Open("sqlite3", "data.dll")
+	if err != nil {
+		panic("连接数据库失败")
+	}
+	//调试模式下 打印日志
+	engine.LogMode(true)
+
+	//禁用同步模式
+	engine.Exec("PRAGMA synchronous = OFF;")
 }
 
-func Ping() {
-
-	if err := sqlite.Ping();err != nil{
-	}
+func getDb() *gorm.DB {
+	return engine
 }

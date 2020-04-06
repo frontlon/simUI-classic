@@ -88,11 +88,13 @@
     .romblock.zoom4 > li{min-width:200dip;max-width:280dip;margin:12dip 16dip}
     .romblock.zoom5 > li{min-width:240dip;max-width:320dip;margin:12dip 16dip}
 
+
+
     /* rom列表 */
-    .romlist{width:*;margin-top:24dip;margin-left:28dip;list-style-type:none;padding:0}
-    .romlist > li{height:36dip;line-height:36dip;padding:0 12dip;margin:0;position:relative;}
-    .romlist > li:nth-child(odd){ background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
-    .romlist > li:nth-child(even){ background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
+    .romlist{width:*;margin-top:24dip;margin-left:28dip;list-style-type:none;padding:0;}
+    .romlist > li{height:36dip;line-height:36dip;padding:0 12dip;margin:0;position:relative;context-menu:selector(menu#romcontext);}
+    .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
+    .romlist > li:nth-child(even){background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
     .romlist > li:hover{cursor:pointer}
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
@@ -144,6 +146,7 @@
     #romcontext .thumb{background-image:url(this://app/images/fileico_thumbs.png);}
     #romcontext .fav0{background-image:url(this://app/images/fileico_fav_0.png);}
     #romcontext .fav1{background-image:url(this://app/images/fileico_fav_1.png);}
+    #romcontext .rename{background-image:url(this://app/images/rename.png);}
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
 
@@ -222,8 +225,8 @@
 </body>
 
 <script type="text/tiscript">
-    var ROOTPATH = "this://app/";
-    //var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
+    //var ROOTPATH = "this://app/";
+    var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

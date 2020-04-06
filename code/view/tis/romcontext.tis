@@ -1,7 +1,7 @@
 ﻿view.root.on("ready", function(){
 
     //rom展开右键菜单
-    self.on("contextmenusetup", "#romlist > li", function(evt) {
+    self.on("contextmenusetup", "#romlist li", function(evt) {
         romContextMenu(this);
     });
     
@@ -87,6 +87,7 @@ function romContextMenu(obj){
         btndata += "<li class='fav fav1' value='1' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.SetFavorite +"</li>";
     }
 
+    btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
     btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
     btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
 

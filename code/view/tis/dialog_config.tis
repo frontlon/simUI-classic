@@ -68,7 +68,7 @@ view.root.on("ready", function(){
 
 //平台列表点击
 event click $(#platform_list li) {
-    
+
     pfId = this.attributes["value"].toString();
 
     //激活按钮改变样式
@@ -76,10 +76,9 @@ event click $(#platform_list li) {
 
     //读取平台信息
     var info = view.parameters.getPlatformById(pfId);
-    var exts = info.RomExts.join(",");
     $(#platform_name).value = info.Name;
     $(#platform_icon).value = info.Icon;
-    $(#platform_exts).value = exts;
+    $(#platform_exts).value = info.RomExts;
     $(#platform_doc).value = info.DocPath;
     $(#platform_strategy).value = info.StrategyPath;
     $(#platform_rom).value = info.RomPath;
@@ -88,11 +87,10 @@ event click $(#platform_list li) {
     $(#platform_poster).value = info.PosterPath;
     $(#platform_packing).value = info.PackingPath;
     $(#platform_romlist).value = info.Romlist;
-
     //模拟器数据
     var platform_sim = $(#platform_sim);
     platform_sim.options.clear();
-     
+   
     //读取模拟器列表
     var sims = view.parameters.getSimulatorByPlatform(pfId);
     platform_sim.options.$append(<option value=0>{CONF.Lang.EditSimulator}</option>);
@@ -126,6 +124,7 @@ event click $(#platform_list li) {
     for(var of in openfolders) {
         of.state.disabled = false;
     }
+
 }
 
 //更新通用配置信息

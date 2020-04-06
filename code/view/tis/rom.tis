@@ -115,6 +115,7 @@ function createRomList(cls=0){
         }
 
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString() +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
+     // data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>1</li>";
     }
     romlist.append(data);
     SCROLL_PAGE++;
@@ -432,4 +433,8 @@ function getRomPicPath(type,platform,name){
     }else{
         return "";
     }
+}
+
+function RomRename(){
+    
 }

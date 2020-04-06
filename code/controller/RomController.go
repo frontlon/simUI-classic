@@ -59,13 +59,14 @@ func RomController(w *window.Window) {
 		}
 
 		//如果是相对路径，转换成绝对路径
-		if !strings.Contains(rom.RomPath,":"){
+		if !strings.Contains(rom.RomPath, ":") {
 			rom.RomPath = Config.Platform[rom.Platform].RomPath + Config.Separator + rom.RomPath;
 		}
 
 		//解压zip包
 		if sim.Unzip == 1 || romCmd.Unzip == 1 {
-			rom.RomPath, err = UnzipRom(rom.RomPath, Config.Platform[rom.Platform].RomExts)
+			RomExts := strings.Split(Config.Platform[rom.Platform].RomExts, ",")
+			rom.RomPath, err = UnzipRom(rom.RomPath, RomExts)
 			if err != nil {
 				WriteLog(err.Error())
 				return ErrorMsg(w, err.Error())
@@ -86,7 +87,6 @@ func RomController(w *window.Window) {
 
 		ext := utils.GetFileExt(rom.RomPath)
 
-
 		//运行游戏前，先杀掉之前运行的程序
 		if err = killGame(); err != nil {
 			WriteLog(err.Error())
@@ -103,7 +103,7 @@ func RomController(w *window.Window) {
 
 			if romCmd.Cmd != "" {
 				simCmd = romCmd.Cmd
-			}else if sim.Cmd != ""{
+			} else if sim.Cmd != "" {
 				simCmd = sim.Cmd
 			}
 
@@ -195,7 +195,6 @@ func RomController(w *window.Window) {
 					fileName = platform.SnapPath + Config.Separator
 				}
 			}
-
 
 		case "poster":
 			if platform.PosterPath != "" {
@@ -467,13 +466,12 @@ func RomController(w *window.Window) {
 		return sciter.NewValue(newFileName)
 	})
 
-
 	//rom翻页
 	w.DefineFunction("scrollLoadRom", func(args ...*sciter.Value) *sciter.Value {
 		scrollPos := args[0].String()
 		go func(scrollPos string) *sciter.Value {
 			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := w.Call("scrollLoadRom",sciter.NewValue(scrollPos)); err != nil {
+			if _, err := w.Call("scrollLoadRom", sciter.NewValue(scrollPos)); err != nil {
 			}
 			return sciter.NullValue()
 		}(scrollPos)

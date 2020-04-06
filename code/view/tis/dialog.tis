@@ -30,8 +30,6 @@ function updatePlatform(data){
     }
 }
 
-
-
 //读取一个平台的信息
 function getPlatformById(id){
     var result = view.GetPlatformById(id);

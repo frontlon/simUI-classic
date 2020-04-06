@@ -1,10 +1,9 @@
 package db
 
 import (
-	"VirtualNesGUI/code/utils"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
-	"strings"
 )
 
 type Menu struct {
@@ -14,44 +13,31 @@ type Menu struct {
 	Sort     uint32
 }
 
+func (*Menu) TableName() string {
+	return "menu"
+}
+
 //写入cate数据
-func (v *Menu) Add() error {
-	stmt, err := sqlite.Prepare("INSERT INTO menu (`name`,platform,pinyin) values(?,?,?)")
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+func (m *Menu) Add() error {
+	result := getDb().Create(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	_, err = stmt.Exec(v.Name, v.Platform, v.Pinyin);
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
+
 	return nil
 }
 
 //根据条件，查询多条数据
 func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
+	where := map[string]interface{}{
+		"platform": platform,
+	}
 
 	volist := []*Menu{}
-
-	where := ""
-
-	if platform != 0 {
-		where += " WHERE platform = " + utils.ToString(platform)
-	}
-	sql := "SELECT name,platform FROM menu " + where + " ORDER BY sort ASC,pinyin ASC"
-
-	rows, err := sqlite.Query(sql)
-	if err != nil {
-		return volist, err
-	}
-	for rows.Next() {
-		v := &Menu{}
-		err = rows.Scan(&v.Name, &v.Platform)
-		if err != nil {
-			return volist, err
-		}
-		volist = append(volist, v)
+	result := getDb().Select("name,platform").Where(where).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 	return volist, nil
 }
@@ -59,87 +45,63 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 //删除一个平台下不存在的目录
 func (*Menu) DeleteNotExists(platform uint32, menus []string) (error) {
 
-	sql := ""
-	//如果没有菜单，则全部删除
+	result := &gorm.DB{}
+	m := []*Menu{}
 	if len(menus) == 0 {
-		sql = "DELETE FROM menu WHERE platform = " + utils.ToString(platform)
+		result = getDb().Where("platform=?", platform).Delete(&m)
 	} else {
-		menuStr := strings.Join(menus, "\",\"")
-		menuStr = "\"" + menuStr + "\""
-		sql = "DELETE FROM menu WHERE platform = " + utils.ToString(platform) + " AND name not in (" + menuStr + ")"
+		result = getDb().Where("platform=?", platform).Not("name", menus).Delete(&m)
 	}
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	return nil
+
+	return result.Error
 }
 
 //删除不存在的平台下的所有menu
 func (*Menu) ClearByPlatform(platforms []string) (error) {
+	m := []*Menu{}
+	result := getDb().Not("platform", platforms).Delete(&m)
 
-	sql := "DELETE FROM menu "
-
-	if len(platforms) > 0 {
-		namesStr := strings.Join(platforms, ",")
-		sql += " WHERE platform not in (" + namesStr + ")"
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 
-	_, err := sqlite.Exec(sql)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-	return nil
+	return result.Error
 }
 
 //根据一组名称，查询存在的名称，用于取交集
 func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 
-	nameStr := strings.Join(names, "\",\"")
-	nameStr = "\"" + nameStr + "\""
+	volist := []*Menu{}
+	result := getDb().Select("name").Where("platform = (?) AND name in (?)", platform, names).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 
+	//仅读取name
 	nameList := []string{}
-	sql := "SELECT name FROM menu WHERE platform = " + utils.ToString(platform) + " AND name in (" + nameStr + ")"
-	rows, err := sqlite.Query(sql)
-	defer rows.Close()
-	if err != nil {
-		return nameList, err
+	if len(volist) > 0 {
+		for _, v := range volist {
+			nameList = append(nameList, v.Name)
+		}
 	}
-
-	for rows.Next() {
-		n := ""
-		err = rows.Scan(&n)
-		nameList = append(nameList, n)
-	}
-	return nameList, err
+	return nameList, result.Error
 }
 
 //清空表数据
 func (*Menu) Truncate() (error) {
-	_, err := sqlite.Exec("DELETE FROM menu")
-	if err != nil {
-		return err
-	}
-	return nil
+	result := getDb().Delete([]*Menu{})
+	return result.Error
 }
 
 //更新排序
-func (menu *Menu) UpdateSortByName() error {
-	sql := `UPDATE menu SET `
-	sql += `sort = ` + utils.ToString(menu.Sort)
-	sql += ` WHERE name = '` + utils.ToString(menu.Name) + `'`
-
-	stmt, err := sqlite.Prepare(sql)
-	defer stmt.Close()
-	if err != nil {
-		return err
+func (m *Menu) UpdateSortByName() error {
+	result := getDb().Table(m.TableName()).Where("name = (?)", m.Name).Update("sort", m.Sort)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
-	_, err2 := stmt.Exec()
-	if err2 != nil {
-		return err2
-	} else {
-		return nil
-	}
+	return result.Error
 }

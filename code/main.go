@@ -3,7 +3,7 @@ package main
 import (
 	"VirtualNesGUI/code/controller"
 	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/utils"
+	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"os"
@@ -13,21 +13,10 @@ import (
 )
 
 //路径分隔符
-//var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-var constMainFile = "this://app/main.html" //主文件路径（正式）
-
+var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+//var constMainFile = "this://app/main.html" //主文件路径（正式）
 func main() {
 
-	defer func() {
-		if r := recover(); r != nil {
-			controller.WriteLog(utils.ToString(r))
-		}
-	}()
-
-	//连接数据库
-	db.Conn()
-
-	//初始化配置
 	controller.Config = &controller.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	separator := string(os.PathSeparator)                                           //系统路径分隔符
@@ -35,6 +24,18 @@ func main() {
 	controller.Config.Separator = separator                                         //系统的目录分隔符
 	controller.Config.CachePath = rootpath + separator + "cache" + separator        //缓存路径
 	controller.Config.UnzipPath = controller.Config.CachePath + "unzip" + separator //rom解压路径
+
+	defer func() {
+		if r := recover(); r != nil {
+			controller.WriteLog("recover:"+fmt.Sprintf("%s",r))
+			fmt.Println("recover:",fmt.Sprintf("%s",r))
+		}
+	}()
+
+	//连接数据库
+	db.Conn()
+
+	//初始化配置
 	errConf := controller.InitConf()
 
 	//读取宽高
@@ -138,7 +139,6 @@ func heartbeat(w *window.Window) {
 		time.Sleep(5 * time.Second)
 		status := 0
 		for {
-			db.Ping()
 			time.Sleep(5 * time.Second)
 			if status == 0 {
 				status = 1

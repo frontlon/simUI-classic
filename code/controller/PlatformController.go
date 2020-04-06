@@ -26,6 +26,7 @@ func PlatformController(w *window.Window) {
 			return ErrorMsg(w, err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
+
 		return sciter.NewValue(string(jsonInfo))
 	})
 
@@ -115,13 +116,11 @@ func PlatformController(w *window.Window) {
 		d["doc"] = strings.TrimRight(d["doc"], `\`)
 		d["doc"] = strings.TrimRight(d["doc"], `/`)
 
-		exts := strings.Split(d["exts"], ",")
-
 		platform := &db.Platform{
 			Id:           id,
 			Name:         d["name"],
 			Icon:         d["icon"],
-			RomExts:      exts,
+			RomExts:      d["exts"],
 			RomPath:      d["rom"],
 			ThumbPath:    d["thumb"],
 			SnapPath:     d["snap"],

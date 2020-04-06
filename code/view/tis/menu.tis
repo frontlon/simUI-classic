@@ -94,3 +94,4 @@ function changeMenu(obj){
     //更新配置文件
     view.UpdateConfig("menu",ACTIVE_MENU);
 }
+

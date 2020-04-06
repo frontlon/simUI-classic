@@ -17,10 +17,10 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 
 	romlist := []*db.Rom{}
 
-	menuList := map[string]*db.Menu{}            //分类目录
-	RomPath := Config.Platform[platform].RomPath //rom文件路径
-	RomExt := Config.Platform[platform].RomExts  //rom扩展名
-	RomAlias, _ := getRomAlias(platform)         //别名配置
+	menuList := map[string]*db.Menu{}                               //分类目录
+	RomPath := Config.Platform[platform].RomPath                    //rom文件路径
+	RomExt := strings.Split(Config.Platform[platform].RomExts, ",") //rom扩展名
+	RomAlias, _ := getRomAlias(platform) //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
@@ -80,7 +80,7 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Md5:      md5,
 					}
 
-					romlist = append(romlist,sinfo)
+					romlist = append(romlist, sinfo)
 
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
@@ -93,7 +93,7 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Pinyin:   py,
 						Md5:      md5,
 					}
-					romlist = append(romlist,rinfo)
+					romlist = append(romlist, rinfo)
 
 					//分类列表
 					if menu != constMenuRootKey {
