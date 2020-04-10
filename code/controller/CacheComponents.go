@@ -13,14 +13,15 @@ import (
 /**
  * 创建缓存
  **/
-func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
+func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, error) {
 
-	romlist := []*db.Rom{}
+	romlist := map[string]*db.Rom{}
+	md5list := []string{}
 
 	menuList := map[string]*db.Menu{}                               //分类目录
 	RomPath := Config.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(Config.Platform[platform].RomExts, ",") //rom扩展名
-	RomAlias, _ := getRomAlias(platform) //别名配置
+	RomAlias, _ := getRomAlias(platform)                            //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
@@ -80,8 +81,8 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Md5:      md5,
 					}
 
-					romlist = append(romlist, sinfo)
-
+					romlist[md5] = sinfo
+					md5list = append(md5list, sinfo.Md5)
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
@@ -93,14 +94,15 @@ func CreateRomCache(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						Pinyin:   py,
 						Md5:      md5,
 					}
-					romlist = append(romlist, rinfo)
+					romlist[md5] = rinfo
+					md5list = append(md5list, rinfo.Md5)
 
 					//分类列表
 					if menu != constMenuRootKey {
 						menuList[menu] = &db.Menu{
 							Platform: platform,
 							Name:     menu,
-							//Pinyin:   TextToPinyin(menu),
+							Pinyin:   TextToPinyin(menu),
 						}
 					}
 				}
@@ -138,52 +140,30 @@ func ClearPlatform() error {
 /**
  * 更新rom cache
  **/
-func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
+func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
-	uniqs := []string{}
+	fileUniqs := []string{} //磁盘文件
 
-	for _, v := range romlist {
-		uniqs = append(uniqs, v.Md5)
+	for k, _ := range romlist {
+		fileUniqs = append(fileUniqs, k)
 	}
 
-	//删除当前平台下，不存在的rom
-	delIds, err := (&db.Rom{}).DeleteNotExists(platform, uniqs)
+	DbUniqs, _ := (&db.Rom{}).GetMd5ByPlatform(platform) //数据库的md5
+
+	addUniq := utils.SliceDiff(fileUniqs, DbUniqs)
+	subUniq := utils.SliceDiff(DbUniqs, fileUniqs)
+
+	//删除rom数据
+	err := (&db.Rom{}).DeleteByMd5(platform, subUniq)
 	if err != nil {
 		return err
-	}
-
-	//删除romcmd数据
-	if err := (&db.RomCmd{}).DeleteByRomIds(delIds); err != nil {
-		return err
-	}
-
-	//查询已存在的记录
-	issetMd5, err := (&db.Rom{}).GetMd5ByMd5(platform, uniqs)
-	if err != nil {
-		return err
-	}
-
-	//取出需要写入数据库的rom数据。
-	saveRomlist := []*db.Rom{}
-
-	for _, v := range romlist {
-		if utils.InSliceString(v.Md5, issetMd5) == false {
-			saveRomlist = append(saveRomlist, v)
-		}
 	}
 
 	//保存新数据到数据库rom表
-	if len(saveRomlist) > 0 {
-		for _, v := range saveRomlist {
-			if err := v.Add(); err != nil {
-				return err
-			}
-		}
-	}
+	(&db.Rom{}).BatchAdd(addUniq,romlist)
 
 	//这些变量可能过大，清空变量
-	romlist = []*db.Rom{}
-	saveRomlist = []*db.Rom{}
+	romlist = map[string]*db.Rom{}
 
 	return nil
 }

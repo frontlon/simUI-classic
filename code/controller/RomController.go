@@ -466,17 +466,4 @@ func RomController(w *window.Window) {
 		return sciter.NewValue(newFileName)
 	})
 
-	//rom翻页
-	w.DefineFunction("scrollLoadRom", func(args ...*sciter.Value) *sciter.Value {
-		scrollPos := args[0].String()
-		go func(scrollPos string) *sciter.Value {
-			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := w.Call("scrollLoadRom", sciter.NewValue(scrollPos)); err != nil {
-			}
-			return sciter.NullValue()
-		}(scrollPos)
-
-		return sciter.NullValue()
-	})
-
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/sciter-sdk/go-sciter/window"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -16,6 +17,8 @@ import (
 var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
 //var constMainFile = "this://app/main.html" //主文件路径（正式）
 func main() {
+
+	runtime.LockOSThread()
 
 	controller.Config = &controller.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))

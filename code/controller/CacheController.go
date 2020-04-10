@@ -44,7 +44,14 @@ func CacheController(w *window.Window) {
 			//开始重建缓存
 			for platform, _ := range Config.Platform {
 
-				romlist, menu, err := CreateRomCache(platform)
+				if platform != 17{
+					continue
+				}
+
+
+
+				romlist, menu, err := CreateRomData(platform)
+
 				if err != nil {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())

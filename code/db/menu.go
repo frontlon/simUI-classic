@@ -75,6 +75,11 @@ func (*Menu) ClearByPlatform(platforms []string) (error) {
 //根据一组名称，查询存在的名称，用于取交集
 func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 
+	nameList := []string{}
+	if len(names) == 0 {
+		return nameList, nil
+	}
+
 	volist := []*Menu{}
 	result := getDb().Select("name").Where("platform = (?) AND name in (?)", platform, names).Find(&volist)
 	if result.Error != nil {
@@ -82,7 +87,6 @@ func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 	}
 
 	//仅读取name
-	nameList := []string{}
 	if len(volist) > 0 {
 		for _, v := range volist {
 			nameList = append(nameList, v.Name)

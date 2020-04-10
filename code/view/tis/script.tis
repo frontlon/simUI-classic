@@ -84,7 +84,7 @@ view.root.on("ready", function(){
 
     //分页
     $(#center).onScroll = function(evt) {
-        view.scrollLoadRom(evt.scrollPos);
+        scrollLoadRom(evt.scrollPos);
     };
 
     //切换rom列表样式
