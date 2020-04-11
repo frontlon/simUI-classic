@@ -34,7 +34,7 @@ func RomController(w *window.Window) {
 			return ErrorMsg(w, Config.Lang["GameNotFound"])
 		}
 
-		romCmd, _ := (&db.RomCmd{RomId: romId, SimId: simId,}).Get()
+		romCmd, _ := (&db.Rom{}).GetSimConf(romId, simId)
 
 		sim := &db.Simulator{}
 		if simId == 0 {

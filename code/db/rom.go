@@ -16,7 +16,8 @@ type Rom struct {
 	Platform uint32 // 平台
 	RomPath  string // rom路径
 	Star     uint8  // 喜好，星级
-	SimId    uint32 // 使用的模拟器id
+	SimId    uint32 // 正在使用的模拟器id
+	SimConf  string // 模拟器参数独立配置
 	RunNum   uint64 // 运行次数
 	RunTime  uint32 // 最后运行时间
 	Pinyin   string // 拼音索引
@@ -288,12 +289,10 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	sql := "";
 	subsql := "";
-
 	for k, uniq := range uniqs {
-		subsql += uniq+"','";
-
-		if k % 990 == 0{
-			sql = "DELETE FROM rom where md5 in ('"+subsql+"')";
+		subsql += uniq + "','";
+		if k%990 == 0 {
+			sql = "DELETE FROM rom where md5 in ('" + subsql + "')";
 			tx := getDb().Begin()
 			tx.Exec(sql)
 			result := tx.Commit()
@@ -304,8 +303,9 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 		}
 	}
 
-	if subsql != ""{
-		sql = "DELETE FROM rom where md5 in ('"+subsql+"')";
+	//删除剩余数据
+	if subsql != "" {
+		sql = "DELETE FROM rom where md5 in ('" + subsql + "')";
 		tx := getDb().Begin()
 		tx.Exec(sql)
 		result := tx.Commit()

@@ -23,12 +23,12 @@ func SimulatorController(w *window.Window) {
 		pfId := uint32(utils.ToInt(d["platform"]))
 
 		sim := &db.Simulator{
-			Name:     config.ToString(d["name"]),
+			Name:     utils.ToString(d["name"]),
 			Platform: pfId,
 			Path:     utils.ToString(d["path"]),
-			Cmd:      config.ToString(d["cmd"]),
+			Cmd:      utils.ToString(d["cmd"]),
 			Unzip:    uint8(utils.ToInt(d["unzip"])),
-			Pinyin:   TextToPinyin(config.ToString(d["name"])),
+			Pinyin:   TextToPinyin(utils.ToString(d["name"])),
 		}
 		id, err := sim.Add()
 
@@ -93,12 +93,6 @@ func SimulatorController(w *window.Window) {
 		//删除模拟器
 		err := sim.DeleteById()
 		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
-		}
-
-		//删除rom独立模拟器cmd配置
-		if err = (&db.RomCmd{SimId: id}).ClearBySimId(); err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
