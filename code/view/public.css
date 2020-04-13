@@ -2,8 +2,8 @@
 i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle}
 #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
 #loading img{display:block;margin:0 auto 9dip auto;}
-.tip{width:11dip;height:11dip;display: inline-block;text-align:center;vertical-align: middle;background:#3399ff;border-radius:100%;color:#FFF;margin-right:3dip;cursor:help;font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;}
-.tip:hover{background: #67b1fb}
+.tip{width:11dip;height:11dip;display:inline-block;text-align:center;vertical-align:middle;background:#3399ff;border-radius:100%;color:#FFF;margin-right:3dip;cursor:help;font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;}
+.tip:hover{background:#67b1fb}
 
 tabs{font:system;prototype:Tabs;size:*;display:block;flow:vertical}
 tabs>strip{display:block;flow:horizontal;margin-bottom:-1dip;padding:2dip 2dip 0 2dip}

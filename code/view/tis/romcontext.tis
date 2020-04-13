@@ -16,6 +16,32 @@
         thumbDown(this.attributes["rid"],this.attributes["rname"]);
     });
 
+
+    //重命名
+    self.on("click", "#romcontext .rename", function(evt) {
+
+        var getjson = view.GetGameDetail(this.attributes["rid"])
+        var detailObj = JSON.parse(getjson);
+
+        var data = view.dialog({
+            url:self.url(ROOTPATH + "dialog/rom_rename.html"),
+            width:300,
+            height:200,
+            parameters: {
+                name:detailObj.Info.Name,
+                type:CONF.Default.RenameType,
+            };
+        });
+
+        if(data == undefined){
+            alert("cancel");
+            return;
+        }
+
+        view.RomRename(data.type,detailObj.Info.Id,data.name);
+    });
+
+
     //右键菜单设置喜爱
     self.on("click", "#romcontext .fav", function(evt) {
     var result = view.SetFavorite(this.attributes["rid"],this.attributes["value"]);

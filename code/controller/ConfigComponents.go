@@ -51,6 +51,7 @@ func InitConf() error {
 		return err
 	}
 	Config.Default, err = getDefault()
+
 	if err != nil {
 		WriteLog(err.Error())
 		return err

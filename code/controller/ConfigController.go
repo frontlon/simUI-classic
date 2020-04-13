@@ -42,6 +42,8 @@ func ConfigController(w *window.Window) {
 
 		err := (&db.Config{}).UpdateField(field, value)
 
+
+
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())

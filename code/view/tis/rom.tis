@@ -26,6 +26,12 @@ function initRomListStyle(){
     $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
 }
 
+//初始化字体大小
+function initFontSize(){
+    $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
+    $(#romlist).attributes.addClass('fontsize'+CONF.Default.FontSize);
+}
+
 //列表图标缩放
 function romBlockZoom(obj){
 
@@ -221,15 +227,26 @@ function openSidebar(obj){
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     
+
+        pics += "<video controls src='D:/work/go/src/VirtualNesGUI/app/1.wmv' />";
+
+
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
     //游戏缩略图
+
+
+
+
     if(thumb != ""){
         pics += "<img src='"+ thumb +"' />";
     }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
         pics += "<img src='"+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
+
+
+
     
 
     //滚动图
@@ -320,7 +337,7 @@ function heartbeat(str){
     }
 }
 
-function createAllCache(){
+function CB_createCache(){
 
     //更新配置
     initConfig("1");
@@ -336,6 +353,9 @@ function createAllCache(){
     var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","");
     $(#rom_count_num).html = romCount; //初始化在线人数
     endLoading(); //关闭loading框
+
+    $(#create).state.disabled = false;
+    $(#create).attributes.removeClass("disabled");
 }
 
 //设置我的喜爱

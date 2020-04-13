@@ -97,15 +97,46 @@ view.root.on("ready", function(){
         romBlockZoom(this);
     });
 
+    //文字大小
+    self.on("click", "#font_size", function(evt) {
+
+        var  val = this.attributes['value'].toInteger();
+        var dom = $(#romlist);
+        val ++;
+        if (val >= 11){
+            if ($(#switch_romlist).attributes["value"] == 1){
+                val = 0;
+            }else{
+                val = 1;
+            }
+        }
+        for (var i = 0; i <= 10; i++){
+           dom.attributes.removeClass('fontsize'+i);
+        }
+
+        dom.attributes.addClass('fontsize'+val);
+        this.attributes['value'] = val;
+        view.UpdateConfig("font_size",val)
+
+    });
+
    //回到顶端
     self.on("click", "#istop", function(evt) {
         $(#center).scrollTo(0,0, false);
     });
     
     //生成缓存
-    self.on("click", "#create", function(evt) {
-        startLoading(); 
-        view.CreateRomCache();
+    self.on("click", "#create_cache", function(evt) {
+        $(#create).state.disabled = true;
+        $(#create).attributes.addClass("disabled");
+        startLoading();
+        var opt = this.attributes["opt"];
+        var platform = 0;
+
+        if (opt == "platform"){
+            platform = ACTIVE_PLATFORM;
+        }
+        view.CreateRomCache(platform);
     });
 
    //打开快捷工具
@@ -162,7 +193,6 @@ view.root.on("ready", function(){
         endLoading();
     });
 
-
     //攻略弹窗按钮
     $(#right_desc).on("click", function(evt) {
 
@@ -218,10 +248,10 @@ view.root.on("ready", function(){
         var name = obj.select("p").html;
         var cmdstr = view.GetRomCmd(romId,simId);
         var cmdObj = JSON.parse(cmdstr);
-        var result =  view.dialog({
+        var simJson =  view.dialog({
             url:self.url(ROOTPATH + "dialog/edit_rom_cmd.html"),
-            width:350,
-            height:206,
+            width:360,
+            height:215,
             parameters: {
                 name:name,
                 simId:simId,
@@ -231,18 +261,10 @@ view.root.on("ready", function(){
             }
         });
 
-        if(result == undefined){
+        if(simJson == undefined){
             return;
         }
-
-        if (cmdObj.Id == 0){
-            //添加一个rom的模拟器的参数配置
-            view.AddRomCmd(romId,simId,result);
-        }else{
-            //更新一个rom的模拟器的参数配置
-            view.UpdateRomCmd(cmdObj.Id,simId,result);
-        }
-
+        view.UpdateRomCmd(romId,simId,simJson);
     });
 
     //侧边栏缩略图滑动特效
@@ -292,7 +314,8 @@ function initConfig(isfresh){
     createPlatform(); //生成平台列表
     createShortcutList(); //生成快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
-   
+    initFontSize(); //初始化字体大小
+
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform);
     createMenuList(menujson);

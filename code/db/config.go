@@ -19,6 +19,8 @@ type Config struct {
 	WindowWidth   uint16
 	WindowHeight  uint16
 	WindowState   uint8
+	RenameType    uint8
+	FontSize      uint8
 }
 
 func (*Config) TableName() string {
@@ -42,7 +44,7 @@ func (*Config) Get() (*Config, error) {
 func (m *Config) UpdateField(field string, value interface{}) error {
 
 	switch field {
-	case "platform", "romlist_style", "romlist_zoom", "window_width", "window_height", "window_state":
+	case "platform", "romlist_style", "romlist_zoom", "window_width", "window_height", "window_state","font_size","RenameType":
 		value = utils.ToInt(value)
 	default:
 		value = utils.ToString(value)

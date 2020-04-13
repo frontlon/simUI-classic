@@ -62,7 +62,6 @@ func (*Simulator) GetByPlatform(platform uint32) (map[uint32]*Simulator, error) 
 //更新
 func (m *Simulator) UpdateById() error {
 
-	fmt.Println("unzip",m.Unzip)
 	create := map[string]interface{}{
 		"name":   m.Name,
 		"path":   m.Path,

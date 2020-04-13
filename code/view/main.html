@@ -36,6 +36,7 @@
     #titlebar i{font-size:18dip;line-height:36dip;display:block}
     #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
     #titlebar button:hover{opacity:0.7;cursor:pointer}
+    #titlebar button.disabled{opacity:0.3;}
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
     /* 状态栏 */
@@ -56,11 +57,13 @@
 
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
-    #platform_ul > li{display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
-    #platform_ul > li img{size:28dip;margin:3dip auto 5dip auto}
-    #platform_ul > li p{margin:0;line-height:1.4em}
-    #platform_ul > li:hover{opacity:0.7;cursor:pointer}
-    #platform_ul > li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
+    #platform_ul  li{display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul  li .imgdiv{display: block}
+    #platform_ul  li img{size:28dip;margin:3dip auto 5dip auto;}
+
+    #platform_ul  li p{margin:0;line-height:1.4em;display:block}
+    #platform_ul  li:hover{opacity:0.7;cursor:pointer}
+    #platform_ul  li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
     
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;}
@@ -82,13 +85,25 @@
     .romblock > li p{overflow:hidden;max-height:2.5em;}
     .romblock > li span{display:none}
 
-    .romblock.zoom1 > li{min-width:80dip;max-width:120dip;margin:9dip 12dip;font-size:10dip}
+    #romlist.fontsize0 li div{display:none}
+
+
+    #romlist.fontsize1 li{display:inherit;font-size: 8dip}
+    #romlist.fontsize2 li{display:inherit;font-size: 9dip}
+    #romlist.fontsize3 li{display:inherit;font-size: 10dip}
+    #romlist.fontsize4 li{display:inherit;font-size:11dip}
+    #romlist.fontsize5 li{display:inherit;font-size: 12dip}
+    #romlist.fontsize6 li{display:inherit;font-size: 13dip}
+    #romlist.fontsize7 li{display:inherit;font-size: 14dip}
+    #romlist.fontsize8 li{display:inherit;font-size: 15dip}
+    #romlist.fontsize9 li{display:inherit;font-size: 16dip}
+    #romlist.fontsize10 li{display:inherit;font-size: 17dip}
+
+    .romblock.zoom1 > li{min-width:80dip;max-width:120dip;margin:9dip 12dip;}
     .romblock.zoom2 > li{min-width:120dip;max-width:160dip;margin:12dip 16dip}
     .romblock.zoom3 > li{min-width:160dip;max-width:200dip;margin:9dip 12dip;}
     .romblock.zoom4 > li{min-width:200dip;max-width:280dip;margin:12dip 16dip}
     .romblock.zoom5 > li{min-width:240dip;max-width:320dip;margin:12dip 16dip}
-
-
 
     /* rom列表 */
     .romlist{width:*;margin-top:24dip;margin-left:28dip;list-style-type:none;padding:0;}
@@ -155,21 +170,49 @@
     #rotate{top:62dip;right:28dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
     #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);}
+
+    video[controls] {style-set:"video-controls"; aspect:VideoControls url(this://app/tis/video-controls.tis);}
+    @set video-controls {
+    :root { flow:vertical; overflow:hidden;}
+    :root > div.bar {width:*; height:30dip; margin-top:* 0 0 0;transform:translate(0,0);flow:horizontal;border-top:1px solid rgba(245,245,245,0.5); background-color:rgba(45,45,45,0.75); color:white;padding:4dip;border-spacing:4dip;}
+    :root > div.bar.hidden {transform:translate(0,100%);transition:transform(quart-in-out,400ms);}
+    :root > div.bar > * {display:block; margin:* 0;}
+    :root > div.bar > svg.command {behavior:button; size:30dip; background:transparent; border-radius:4dip;}
+    :root > div.bar > svg.command:hover {background:rgba(255,255,255,0.5);}
+    :root > div.bar > svg.command:active {background:rgba(204,204,221,0.5);}
+    :root > div.bar > svg.command > path {fill:#fff; stroke:none; display:none;}
+    :root[mode=stopped] > div.bar > svg.command > path.play   {display:block;}
+    :root[mode=playing] > div.bar > svg.command > path.stop   {display:block;}
+    :root[mode=ended]   > div.bar > svg.command > path.rewind {display:block;}
+    :root > div.bar > :first-child {margin-left:*;}
+    :root > div.bar > :last-child {margin-right:*;}
+    :root > div.bar > input.position {width:*; max-width:8em; min-width:2em}
+    :root > div.bar > input.volume {width:*; max-width:2em;  min-width:1em}
+
+    }
+
+    video {size:*;image-rendering:optimize-quality;}
+  
 </style>
 </head>
 <body>
-    <div id="ping"></div>
+<div id="ping"></div>
 <div id="console" style="box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none"></div>
 <div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
 <menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo">{{SoftName}}</div>
     <div id="tb_left">
-            <button id="close_platform" value="" title="关闭平台"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="关闭平台"><i>&#xe7e2;</i></button><button id="close_right" value="" title="关闭平台"><i>&#xe7ac;</i></button>
-        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
+        <button id="close_platform" value="" title="关闭平台"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="关闭平台"><i>&#xe7e2;</i></button><button id="close_right" value="" title="关闭平台"><i>&#xe7ac;</i></button>
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="font_size" value="1" title="{{FontSize}}"><i>&#xe695;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
     </div>
     <div id="tb_right">
-        <button id="shortcut" type="menu"><i>&#xe6b8;</i><menu></menu></button><button id="create" title="{{CreateCache}}"><i>&#xe637;</i></button><button type="menu"><i>&#xe602;</i>
+        <button id="shortcut" type="menu" title="{{Shortcut}}"><i>&#xe6b8;</i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i>&#xe637;</i>
+            <menu>
+                <li id="create_cache" opt="platform"><i>&#xe637;</i><span>{{CreateCachePlatform}}</span></li>
+                <li id="create_cache" opt="all"><i>&#xe637;</i><span>{{CreateCacheAll}}</span></li>
+            </menu>
+        </button><button type="menu" title="{{Config}}"><i>&#xe602;</i>
             <menu>
                 <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
                 <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>

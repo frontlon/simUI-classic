@@ -64,7 +64,7 @@ func RomController(w *window.Window) {
 		}
 
 		//解压zip包
-		if sim.Unzip == 1 || romCmd.Unzip == 1 {
+		if (sim.Unzip == 1 && romCmd.Unzip == 2) || romCmd.Unzip == 1 {
 			RomExts := strings.Split(Config.Platform[rom.Platform].RomExts, ",")
 			rom.RomPath, err = UnzipRom(rom.RomPath, RomExts)
 			if err != nil {
@@ -464,6 +464,31 @@ func RomController(w *window.Window) {
 		io.Copy(f, res.Body)
 
 		return sciter.NewValue(newFileName)
+	})
+
+	//重命名
+	w.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
+		settype := uint8(utils.ToInt(args[0].String()))
+		id := uint64(utils.ToInt(args[1].String()))
+		name := args[2].String()
+
+		//更新数据库rom表
+		err := (&db.Rom{Id: id, Name: name, Pinyin: TextToPinyin(name)}).UpdateName()
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+
+		//更新配置
+		err = (&db.Config{}).UpdateField("rename_type", settype)
+		Config.Default.RenameType = settype
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+		return sciter.NullValue()
+
+		return sciter.NullValue()
 	})
 
 }

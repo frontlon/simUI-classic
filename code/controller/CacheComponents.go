@@ -54,7 +54,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					}
 				}
 
-				py := TextToPinyin(title)
+				//py := TextToPinyin(title)
 				md5 := GetFileUniqId(title, p, f)
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := constMenuRootKey //无目录，读取默认参数
@@ -77,8 +77,9 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Menu:     menu,
 						Platform: platform,
 						Star:     0,
-						Pinyin:   py,
+						Pinyin:   TextToPinyin(sub[1]),
 						Md5:      md5,
+						SimConf:  "{}",
 					}
 
 					romlist[md5] = sinfo
@@ -91,9 +92,14 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Platform: platform,
 						RomPath:  p,
 						Star:     0,
-						Pinyin:   py,
+						Pinyin:   TextToPinyin(title),
 						Md5:      md5,
+						SimConf:  "{}",
 					}
+
+
+
+
 					romlist[md5] = rinfo
 					md5list = append(md5list, rinfo.Md5)
 
@@ -160,10 +166,13 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 	}
 
 	//保存新数据到数据库rom表
-	(&db.Rom{}).BatchAdd(addUniq,romlist)
+	(&db.Rom{}).BatchAdd(addUniq, romlist)
 
 	//这些变量可能过大，清空变量
 	romlist = map[string]*db.Rom{}
+	addUniq = []string{}
+	subUniq = []string{}
+	DbUniqs = []string{}
 
 	return nil
 }
