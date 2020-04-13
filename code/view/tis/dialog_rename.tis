@@ -1,0 +1,22 @@
+﻿view.root.on("ready", function(){
+
+    //创建语言
+    createLang();
+
+    var romname = view.parameters.name.toString();
+    var romtype = view.parameters.type.toString();
+    view.windowCaption = CONF.Lang.Rename;
+    $(#romname).value = romname;
+
+    self.select("#type"+romtype).checked = true;  
+});
+
+//确定
+event click $(#confirm-dialog) {
+    var data = {
+        name : $(#romname).value,
+        type : $(input[name='romtype']:checked).value,
+    };
+    if(data.name == ""){view.msgbox(#alert,CONF.Lang.RomNameCanNotBeEmpty);return true;}
+    view.close(data); //如果更新成功，则关闭窗口，并把修改后的数据返回
+}
