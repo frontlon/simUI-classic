@@ -19,7 +19,7 @@ func Conn() {
 		panic("连接数据库失败")
 	}
 	//调试模式下 打印日志
-	engine.LogMode(true)
+	engine.LogMode(false)
 
 	//禁用同步模式
 	engine.Exec("PRAGMA synchronous = OFF;")

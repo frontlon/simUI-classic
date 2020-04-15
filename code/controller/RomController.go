@@ -468,19 +468,28 @@ func RomController(w *window.Window) {
 
 	//重命名
 	w.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
-		settype := uint8(utils.ToInt(args[0].String()))
+		settype := uint8(utils.ToInt(args[0].String())) //1:alias,2:filename
 		id := uint64(utils.ToInt(args[1].String()))
 		name := args[2].String()
 
 		//更新数据库rom表
-		err := (&db.Rom{Id: id, Name: name, Pinyin: TextToPinyin(name)}).UpdateName()
-		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+		if settype == 2{
+			err := (&db.Rom{Id: id, Name: name, Pinyin: TextToPinyin(name)}).UpdateName()
+			if err != nil {
+				WriteLog(err.Error())
+				return ErrorMsg(w, err.Error())
+			}
+		}else{
+			/*rom,_ := (&db.Rom{}).GetById(id)
+			subRom ,_ := (&db.Rom{}).GetSubRom(rom.Platform,rom.Name)*/
+
+
+
+
 		}
 
 		//更新配置
-		err = (&db.Config{}).UpdateField("rename_type", settype)
+		err := (&db.Config{}).UpdateField("rename_type", settype)
 		Config.Default.RenameType = settype
 		if err != nil {
 			WriteLog(err.Error())

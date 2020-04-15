@@ -175,8 +175,8 @@ event click $(#platform_submit) {
 event click $(#add_sim) {
     var res = view.dialog({
         url:self.url(ROOTPATH + "dialog/edit_sim.html"),
-        width:460,
-        height:290,
+        width:490,
+        height:300,
         parameters: {
             id:0,
             platform:pfId,
@@ -197,8 +197,8 @@ event change $(#platform_sim) {
    if(this.value == 0){return true;}
    var res = view.dialog({
         url:self.url(ROOTPATH + "dialog/edit_sim.html"),
-        width:460,
-        height:290,
+        width:490,
+        height:300,
         parameters: {
             id:this.value,
             platform:pfId,
@@ -257,8 +257,8 @@ event click $(.openfile){
 event click $(#platform_add){
     var name =  view.dialog({
         url:self.url(ROOTPATH + "dialog/add_platform.html"),
-        width:300,
-        height:158,
+        width:310,
+        height:170,
         parameters: {};
     });
 

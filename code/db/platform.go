@@ -20,8 +20,8 @@ type Platform struct {
 	Romlist      string
 	Pinyin       string
 	Sort         uint32
-	SimList      map[uint32]*Simulator
-	UseSim       *Simulator //当前使用的模拟器
+	SimList      map[uint32]*Simulator `gorm:"-"`
+	UseSim       *Simulator `gorm:"-"` //当前使用的模拟器
 }
 
 func (*Platform) TableName() string {

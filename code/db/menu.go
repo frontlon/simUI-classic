@@ -96,8 +96,11 @@ func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 }
 
 //清空表数据
-func (*Menu) Truncate() (error) {
-	result := getDb().Delete([]*Menu{})
+func (m *Menu) Truncate() (error) {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 	return result.Error
 }
 

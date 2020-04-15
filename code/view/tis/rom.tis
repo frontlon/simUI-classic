@@ -121,7 +121,6 @@ function createRomList(cls=0){
         }
 
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString() +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
-     // data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>1</li>";
     }
     romlist.append(data);
     SCROLL_PAGE++;
@@ -219,7 +218,6 @@ function openSidebar(obj){
         favorite.attributes.addClass("funbtn_0");
     }
 
-
     var pics = "";
     var romPath = URL.parse(info.RomPath);
     var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
@@ -227,27 +225,16 @@ function openSidebar(obj){
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     
-
-        pics += "<video controls src='D:/work/go/src/VirtualNesGUI/app/1.wmv' />";
-
-
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
+
     //游戏缩略图
-
-
-
-
     if(thumb != ""){
         pics += "<img src='"+ thumb +"' />";
     }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
         pics += "<img src='"+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
     }
-
-
-
-    
 
     //滚动图
     $(#stack).html = pics;

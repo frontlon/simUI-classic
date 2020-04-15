@@ -3,7 +3,6 @@ package controller
 import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
-	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -35,7 +34,16 @@ func CacheController(w *window.Window) {
 	//生成所有缓存
 	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
-		getPlatform := uint32(utils.ToInt(args[0].String()))
+		var getPlatform uint32 = 0
+		if len(args) > 0{
+			getPlatform = uint32(utils.ToInt(args[0].String()))
+		}
+
+		if len(Config.Platform) == 0{
+			if _, err := w.Call("CB_createCache"); err != nil {
+			}
+			return sciter.NullValue()
+		}
 
 		go func() *sciter.Value {
 
@@ -58,8 +66,6 @@ func CacheController(w *window.Window) {
 			}
 			//开始重建缓存
 			for platform, _ := range PlatformList {
-
-				fmt.Println("更新平台：", platform)
 
 				romlist, menu, err := CreateRomData(platform)
 

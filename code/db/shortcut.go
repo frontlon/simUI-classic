@@ -39,9 +39,9 @@ func (sim *Shortcut) GetAll() ([]*Shortcut, error) {
 }
 
 //查询所有记录数
-func (*Shortcut) Count() (int, error) {
+func (m *Shortcut) Count() (int, error) {
 	count := 0
-	result := getDb().Count(&count)
+	result := getDb().Table(m.TableName()).Count(&count)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -54,7 +54,7 @@ func (m *Shortcut) UpdateById() error {
 		"name": m.Name,
 		"path": m.Path,
 	}
-	result := getDb().Where("id=?", m.Id).Updates(create)
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(create)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -64,7 +64,7 @@ func (m *Shortcut) UpdateById() error {
 
 //更新排序
 func (m *Shortcut) UpdateSortById() error {
-	result := getDb().Where("id=?", m.Id).Update("sort", m.Sort)
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sort", m.Sort)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

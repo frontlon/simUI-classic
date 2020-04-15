@@ -51,7 +51,7 @@ view.root.on("ready", function(){
     self.on("click", "#search_submit", function(evt) {
         search();
     });
-
+6
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
@@ -171,7 +171,7 @@ view.root.on("ready", function(){
     self.on("click", "#config", function(evt) {
         view.dialog({
             url:self.url(ROOTPATH + "config.html"),
-            width:650,
+            width:655,
             height:760,
             parameters: {
                 getPlatform:getPlatform,
@@ -298,11 +298,7 @@ function initConfig(isfresh){
 
     //如果初始路径不同，则刷新数据
     if(CONF.RootPath != CONF.Default.RootPath){
-        //删除所有缓存后，重建数据库rom
-        view.TruncateRomCache();
-        view.CreateRomCache();
         view.UpdateConfig("root_path",CONF.RootPath);
-        view.msgbox(#alert,CONF.Lang.FirstBootCreateCache);
     }
 
     //创建语言
