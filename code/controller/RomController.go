@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -476,6 +477,11 @@ func RomController(w *window.Window) {
 		name := args[2].String()
 
 		rom, _ := (&db.Rom{}).GetById(id)
+
+		if name == rom.Name{
+			return sciter.NullValue()
+		}
+
 		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
 		platform := rom.Platform
 
@@ -486,7 +492,7 @@ func RomController(w *window.Window) {
 		//修改别名文件
 		if settype == 1 {
 			if p == "" || !utils.IsExist(p) {
-				p = Config.RootPath + Config.Platform[platform].Name + "ini"
+				p = Config.RootPath + Config.Platform[platform].Name + ".ini"
 				iniCfg = ini.Empty()
 				Config.Platform[platform].Romlist = p
 			} else {
@@ -513,7 +519,33 @@ func RomController(w *window.Window) {
 			//直接修改文件名
 			fileExt := utils.GetFileExt(rom.RomPath)
 			//主rom
-			err = os.Rename(rom.RomPath, name+fileExt)
+
+
+
+
+
+
+
+
+
+
+
+
+			oldp := ""
+			newp := ""
+			if filepath.IsAbs(rom.RomPath){ //绝对路径
+
+				fmt.Println("aa",filepath.Base(test))
+				oldp = rom.RomPath
+				p := filepath.Dir(rom.RomPath)
+
+			}else{ //相对路径
+				oldp = Config.Platform[platform].RomPath + Config.Separator + rom.RomPath
+				newp = Config.Platform[platform].RomPath + Config.Separator + name+fileExt
+				// name+fileExt
+			}
+
+			err = os.Rename(oldp, newp)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -573,3 +605,4 @@ func RomController(w *window.Window) {
 	})
 
 }
+

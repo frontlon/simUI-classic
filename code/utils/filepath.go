@@ -24,6 +24,27 @@ func GetFileExt(p string) string {
 }
 
 /*
+ 读取文件的相对路径
+*/
+func GetFileRelPath(p string) string {
+	return filepath.Dir(p)
+}
+
+/*
+ 读取文件的相对绝对
+*/
+func GetFileAbsPath(p string) string {
+
+	if path.IsAbs(p){
+		return filepath.Dir(p)
+	}else{
+
+	}
+
+	return filepath.Dir(p)
+}
+
+/*
  从路径中读取文件名+扩展名
 */
 func GetFileNameAndExt(p string) string {

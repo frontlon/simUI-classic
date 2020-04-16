@@ -34,10 +34,10 @@
         });
 
         if(data == undefined){
-            alert("cancel");
             return;
         }
 
+        $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
         view.RomRename(data.type,detailObj.Info.Id,data.name);
     });
 

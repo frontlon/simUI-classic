@@ -20,3 +20,7 @@ event click $(#confirm-dialog) {
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.RomNameCanNotBeEmpty);return true;}
     view.close(data); //如果更新成功，则关闭窗口，并把修改后的数据返回
 }
+
+event click $(#close-dialog) {
+    view.close();
+}
