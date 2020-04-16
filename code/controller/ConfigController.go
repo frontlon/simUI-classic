@@ -7,8 +7,6 @@ import (
 	"github.com/sciter-sdk/go-sciter/window"
 )
 
-
-
 /**
  * 定义view用function
  **/
@@ -42,12 +40,38 @@ func ConfigController(w *window.Window) {
 
 		err := (&db.Config{}).UpdateField(field, value)
 
-
-
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
+		return sciter.NullValue()
+	})
+
+	//备份配置文件
+	w.DefineFunction("BackupConfig", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+
+		go func() {
+			err := backupConfig(p)
+			if err != nil {
+				WriteLog(err.Error())
+				ErrorMsg(w, err.Error())
+			}
+		}()
+		return sciter.NullValue()
+	})
+
+	//还原配置文件
+	w.DefineFunction("RestoreConfig", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+
+		go func() {
+			err := restoreConfig(p)
+			if err != nil {
+				WriteLog(err.Error())
+				ErrorMsg(w, err.Error())
+			}
+		}()
 		return sciter.NullValue()
 	})
 }

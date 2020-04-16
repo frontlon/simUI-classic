@@ -37,10 +37,24 @@ func (m *Platform) Add() (uint32, error) {
 	return uint32(m.Id), result.Error
 }
 
+//批量插入数据
+func (m *Platform) BatchAdd(platforms []*Platform) {
+
+	if len(platforms) == 0 {
+		return
+	}
+
+	tx := getDb().Begin()
+	for _, v := range platforms {
+		tx.Create(&v)
+	}
+	tx.Commit()
+}
+
 //根据条件，查询多条数据
 func (*Platform) GetAll() ([]*Platform, error) {
 	volist := []*Platform{}
-	result := getDb().Select("id,`name`, icon,rom_exts, rom_path, thumb_path, snap_path, poster_path, packing_path, doc_path,strategy_path, romlist,sort").Order("sort ASC,pinyin ASC").Find(&volist)
+	result := getDb().Order("sort ASC,pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -85,6 +99,14 @@ func (m *Platform) UpdateSortById() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sort", m.Sort)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+func (m *Platform) Truncate() (error) {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
 	}
 	return result.Error
 }

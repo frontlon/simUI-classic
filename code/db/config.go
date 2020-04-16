@@ -58,3 +58,16 @@ func (m *Config) UpdateField(field string, value interface{}) error {
 
 	return result.Error
 }
+
+func (m *Config) Add() {
+	getDb().Create(&m)
+}
+
+//清空表数据
+func (m *Config) Truncate() error {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}

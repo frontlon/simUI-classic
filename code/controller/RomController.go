@@ -4,6 +4,9 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/go-ini/ini"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 	"io"
@@ -472,24 +475,94 @@ func RomController(w *window.Window) {
 		id := uint64(utils.ToInt(args[1].String()))
 		name := args[2].String()
 
-		//更新数据库rom表
-		if settype == 2{
-			err := (&db.Rom{Id: id, Name: name, Pinyin: TextToPinyin(name)}).UpdateName()
-			if err != nil {
-				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
+		rom, _ := (&db.Rom{}).GetById(id)
+		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
+		platform := rom.Platform
+
+		//alias
+		iniCfg := &ini.File{}
+		err := errors.New("")
+		p := Config.Platform[rom.Platform].Romlist
+		//修改别名文件
+		if settype == 1 {
+			if p == "" || !utils.IsExist(p) {
+				p = Config.RootPath + Config.Platform[platform].Name + "ini"
+				iniCfg = ini.Empty()
+				Config.Platform[platform].Romlist = p
+			} else {
+				iniCfg, err = ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, p)
+				if err != nil {
+					fmt.Println(err)
+				}
 			}
-		}else{
-			/*rom,_ := (&db.Rom{}).GetById(id)
-			subRom ,_ := (&db.Rom{}).GetSubRom(rom.Platform,rom.Name)*/
 
+			//修改主rom
+			k := utils.GetFileName(rom.RomPath)
+			iniCfg.Section("Alias").NewKey(k, name)
+			//修改子rom
+			for _, v := range subRom {
+				fileName := utils.GetFileName(v.RomPath)
+				subName, _ := iniCfg.Section("Alias").GetKey(k) //修改主rom
+				ns := strings.Replace(subName.String(), rom.Name+"__", name+"__", 1)
+				iniCfg.Section("Alias").NewKey(fileName, ns)
+			}
 
+			if err := iniCfg.SaveTo(p); err != nil {
+			}
+		} else {
+			//直接修改文件名
+			fileExt := utils.GetFileExt(rom.RomPath)
+			//主rom
+			err = os.Rename(rom.RomPath, name+fileExt)
+			if err != nil {
+				fmt.Println(err)
+			}
 
+			//子rom
+			for _, v := range subRom {
+				fileName := utils.GetFileName(v.RomPath)
+				ns := strings.Replace(fileName, rom.Name+"__", name+"__", 1)
+				err = os.Rename(v.RomPath, ns+fileExt)
+			}
 
 		}
 
+		//更新数据库
+		err = (&db.Rom{Id: id, Name: name, Pinyin: TextToPinyin(name)}).UpdateName()
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+
+		// 重命名文件
+		/*file := `./app.ini`
+		err1 := os.Rename(file, `app2.txt`)
+		if err1 != nil {
+			fmt.Println(err1)
+		} else {
+			fmt.Println(`文件重命名成功`)
+		}*/
+
+		//如果文件不存在，创建文件
+		/*cfg := ini.Empty()
+		err,s := cfg.Section("Alias").NewKey("aaa", "章三")
+		b := cfg.SaveTo("app.ini")
+		fmt.Println(err,s,b)
+		*/
+
+		/*p := "./romlist.ini"
+		cfg, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true, SkipUnrecognizableLines: true}, p)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		aa,b := cfg.Section("Alias").NewKey("aaa", "vvv")
+		bc := cfg.SaveTo(p)
+		fmt.Println(aa,b,bc)
+		*/
+
 		//更新配置
-		err := (&db.Config{}).UpdateField("rename_type", settype)
+		err = (&db.Config{}).UpdateField("rename_type", settype)
 		Config.Default.RenameType = settype
 		if err != nil {
 			WriteLog(err.Error())
@@ -497,7 +570,6 @@ func RomController(w *window.Window) {
 		}
 		return sciter.NullValue()
 
-		return sciter.NullValue()
 	})
 
 }

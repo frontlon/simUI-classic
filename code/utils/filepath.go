@@ -52,8 +52,11 @@ func FileExists(path string) bool {
 /**
  * 检测路径是否存在
  **/
-func FolderExists(path string) bool {
-	ff, err := os.Stat(path)
+func FolderExists(p string) bool {
+	if p == ""{
+		return false
+	}
+	ff, err := os.Stat(p)
 	if err != nil {
 		return false
 	}
@@ -67,6 +70,9 @@ func FolderExists(path string) bool {
  * 判断文件夹或文件是否存在
  **/
 func IsExist(f string) bool {
+	if f == ""{
+		return false
+	}
 	_, err := os.Stat(f)
 	return err == nil || os.IsExist(err)
 }

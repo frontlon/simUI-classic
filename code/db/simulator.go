@@ -30,6 +30,19 @@ func (m *Simulator) Add() (uint32, error) {
 	return m.Id, result.Error
 }
 
+func (m *Simulator) BatchAdd(simulators []*Simulator) {
+
+	if len(simulators) == 0 {
+		return
+	}
+
+	tx := getDb().Begin()
+	for _, v := range simulators {
+		tx.Create(&v)
+	}
+	tx.Commit()
+}
+
 //根据ID查询一个模拟器参数
 func (*Simulator) GetById(id uint32) (*Simulator, error) {
 	vo := &Simulator{}
@@ -57,6 +70,17 @@ func (*Simulator) GetByPlatform(platform uint32) (map[uint32]*Simulator, error) 
 	}
 
 	return vomap, nil
+}
+
+//根据条件，查询多条数据
+func (*Simulator) GetAll() ([]*Simulator, error) {
+	volist := []*Simulator{}
+	result := getDb().Order("`default` DESC,pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return volist, nil
 }
 
 //更新
@@ -107,6 +131,14 @@ func (m *Simulator) DeleteById() (error) {
 //删除一个平台下的所有模拟器
 func (m *Simulator) DeleteByPlatform() (error) {
 	result := getDb().Where("platform=?", m.Platform).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+func (m *Simulator) Truncate() (error) {
+	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
