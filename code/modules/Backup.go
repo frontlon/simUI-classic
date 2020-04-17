@@ -1,4 +1,4 @@
-package controller
+package modules
 
 import (
 	"VirtualNesGUI/code/db"
@@ -9,7 +9,7 @@ import (
 )
 
 //备份配置
-func backupConfig(p string) error {
+func BackupConfig(p string) error {
 	if p == "" {
 		return nil
 	}
@@ -53,7 +53,7 @@ func backupConfig(p string) error {
 
 //还原配置
 
-func restoreConfig(p string) error {
+func RestoreConfig(p string) error {
 	if p == "" {
 		return nil
 	}

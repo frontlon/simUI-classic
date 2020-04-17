@@ -2,6 +2,7 @@ package controller
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
@@ -34,17 +35,8 @@ func RomCmdController(w *window.Window) {
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
 
-		//如果当前配置和模拟器默认配置一样，则删除该记录
-		if d["cmd"] == "" && d["unzip"] == "2" {
-			if err := (&db.Rom{}).DelSimConf(id, simId); err != nil {
-				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
-			}
-			return sciter.NullValue()
-		}
-
-		//开始更新
-		if err := (&db.Rom{}).UpdateSimConf(id, simId, d["cmd"], uint8(utils.ToInt(d["unzip"]))); err != nil {
+		err := modules.UpdateRomCmd(id,simId,d)
+		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}

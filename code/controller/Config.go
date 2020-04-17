@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -23,11 +25,11 @@ func ConfigController(w *window.Window) {
 			//初始化配置
 			if (isfresh == "1") {
 				//如果是刷新，则重新生成配置项
-				if err := InitConf(); err != nil {
+				if err := config.InitConf(); err != nil {
 					return ErrorMsg(w, err.Error())
 				}
 			}
-			getjson, _ := json.Marshal(Config)
+			getjson, _ := json.Marshal(config.C)
 			data = string(getjson)
 		}
 		return sciter.NewValue(data)
@@ -52,7 +54,7 @@ func ConfigController(w *window.Window) {
 		p := args[0].String()
 
 		go func() {
-			err := backupConfig(p)
+			err := modules.BackupConfig(p)
 			if err != nil {
 				WriteLog(err.Error())
 				ErrorMsg(w, err.Error())
@@ -66,7 +68,7 @@ func ConfigController(w *window.Window) {
 		p := args[0].String()
 
 		go func() {
-			err := restoreConfig(p)
+			err := modules.RestoreConfig(p)
 			if err != nil {
 				WriteLog(err.Error())
 				ErrorMsg(w, err.Error())

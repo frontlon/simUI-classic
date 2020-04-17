@@ -1,6 +1,7 @@
 package main
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/controller"
 	"VirtualNesGUI/code/db"
 	"fmt"
@@ -20,18 +21,18 @@ func main() {
 
 	runtime.LockOSThread()
 
-	controller.Config = &controller.ConfStruct{}
+	config.C = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	separator := string(os.PathSeparator)                                           //系统路径分隔符
-	controller.Config.RootPath = rootpath + separator                               //当前软件的绝对路径
-	controller.Config.Separator = separator                                         //系统的目录分隔符
-	controller.Config.CachePath = rootpath + separator + "cache" + separator        //缓存路径
-	controller.Config.UnzipPath = controller.Config.CachePath + "unzip" + separator //rom解压路径
+	separator := string(os.PathSeparator)                           //系统路径分隔符
+	config.C.RootPath = rootpath + separator                        //当前软件的绝对路径
+	config.C.Separator = separator                                  //系统的目录分隔符
+	config.C.CachePath = rootpath + separator + "cache" + separator //缓存路径
+	config.C.UnzipPath = config.C.CachePath + "unzip" + separator   //rom解压路径
 
 	defer func() {
 		if r := recover(); r != nil {
-			controller.WriteLog("recover:"+fmt.Sprintf("%s",r))
-			fmt.Println("recover:",fmt.Sprintf("%s",r))
+			controller.WriteLog("recover:" + fmt.Sprintf("%s", r))
+			fmt.Println("recover:", fmt.Sprintf("%s", r))
 		}
 	}()
 
@@ -39,11 +40,11 @@ func main() {
 	db.Conn()
 
 	//初始化配置
-	errConf := controller.InitConf()
+	errConf := config.InitConf()
 
 	//读取宽高
-	width := controller.Config.Default.WindowWidth
-	height := controller.Config.Default.WindowHeight
+	width := config.C.Default.WindowWidth
+	height := config.C.Default.WindowHeight
 
 	//创建window窗口
 	w, err := window.New(
@@ -79,7 +80,7 @@ func main() {
 		return
 	}
 
-	if len(controller.Config.Lang) == 0 {
+	if len(config.C.Lang) == 0 {
 		controller.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		controller.ErrorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		os.Exit(1)
@@ -87,7 +88,7 @@ func main() {
 	}
 
 	//设置标题
-	w.SetTitle(controller.Config.Lang["SoftName"]);
+	w.SetTitle(config.C.Lang["SoftName"]);
 	//定义view函数
 	defineViewFunction(w)
 

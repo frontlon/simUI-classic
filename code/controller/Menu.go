@@ -2,13 +2,14 @@ package controller
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
+	"gin-base/pkg/conv"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
 
-var constMenuRootKey = "_7b9"                                                //根子目录游戏的Menu参数
 
 /**
  * 定义view用function
@@ -21,39 +22,14 @@ func MenuController(w *window.Window) {
 	w.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		//读取数据库
-		menu, err := (&db.Menu{}).GetByPlatform(platform) //从数据库中读取当前平台的分类目录
-		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
-		}
-		//读取根目录下是否有rom
-		count, err := (&db.Rom{}).Count(platform, constMenuRootKey, "")
-		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
-		}
-		newMenu := []*db.Menu{}
 
-		//读取根目录下有rom，则显示未分类文件夹
-		if count > 0 {
-			root := &db.Menu{
-				Name:     constMenuRootKey,
-				Platform: platform,
-			}
-			newMenu = append(newMenu, root)
-			newMenu = append(newMenu, menu...)
-		} else {
-			newMenu = menu
-		}
-
+		menu,err := modules.GetMenuList(uint32(conv.ToInt(platform)))
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
 
-
-
-		getjson, _ := json.Marshal(newMenu)
+		getjson, _ := json.Marshal(menu)
 		return sciter.NewValue(string(getjson))
 	})
 

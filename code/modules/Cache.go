@@ -1,6 +1,7 @@
-package controller
+package modules
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"fmt"
@@ -19,9 +20,9 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	md5list := []string{}
 
 	menuList := map[string]*db.Menu{}                               //分类目录
-	RomPath := Config.Platform[platform].RomPath                    //rom文件路径
-	RomExt := strings.Split(Config.Platform[platform].RomExts, ",") //rom扩展名
-	RomAlias, _ := getRomAlias(platform)                            //别名配置
+	RomPath := config.C.Platform[platform].RomPath                    //rom文件路径
+	RomExt := strings.Split(config.C.Platform[platform].RomExts, ",") //rom扩展名
+	RomAlias, _ := config.GetRomAlias(platform)                            //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
@@ -31,7 +32,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 			}
 
 			//转换为相对路径
-			p = strings.Replace(p, RomPath+Config.Separator, "", -1)
+			p = strings.Replace(p, RomPath+config.C.Separator, "", -1)
 
 			//整理目录格式，并转换为数组
 			newpath := strings.Replace(RomPath, "/", "\\", -1)
@@ -57,17 +58,17 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				//py := TextToPinyin(title)
 				md5 := GetFileUniqId(title, p, f)
 				//如果游戏名称存在分隔符，说明是子游戏
-				menu := constMenuRootKey //无目录，读取默认参数
+				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
 				if len(subpath) > 1 {
 					menu = subpath[0]
 				}
 
 				//如果游戏名称存在分隔符，说明是子游戏
-				if strings.Contains(title, constSeparator) {
+				if strings.Contains(title, ConstSeparator) {
 
 					//拆分文件名
-					sub := strings.Split(title, constSeparator)
+					sub := strings.Split(title, ConstSeparator)
 
 					//去掉扩展名，生成标题
 					sinfo := &db.Rom{
@@ -77,7 +78,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Menu:     menu,
 						Platform: platform,
 						Star:     0,
-						Pinyin:   TextToPinyin(sub[1]),
+						Pinyin:   utils.TextToPinyin(sub[1]),
 						Md5:      md5,
 						SimConf:  "{}",
 					}
@@ -92,7 +93,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Platform: platform,
 						RomPath:  p,
 						Star:     0,
-						Pinyin:   TextToPinyin(title),
+						Pinyin:   utils.TextToPinyin(title),
 						Md5:      md5,
 						SimConf:  "{}",
 					}
@@ -104,11 +105,11 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					md5list = append(md5list, rinfo.Md5)
 
 					//分类列表
-					if menu != constMenuRootKey {
+					if menu != ConstMenuRootKey {
 						menuList[menu] = &db.Menu{
 							Platform: platform,
 							Name:     menu,
-							Pinyin:   TextToPinyin(menu),
+							Pinyin:   utils.TextToPinyin(menu),
 						}
 					}
 				}
@@ -127,7 +128,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
  **/
 func ClearPlatform() error {
 	pfs := []string{}
-	for k, _ := range Config.Platform {
+	for k, _ := range config.C.Platform {
 		pfs = append(pfs, utils.ToString(k))
 	}
 
@@ -185,7 +186,7 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 	menus := []string{}
 	if len(menumap) > 0 {
 		for k, _ := range menumap {
-			if k == constMenuRootKey {
+			if k == ConstMenuRootKey {
 				continue
 			}
 			menus = append(menus, k)

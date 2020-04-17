@@ -1,5 +1,6 @@
-package controller
+package config
 
+import "C"
 import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
@@ -14,8 +15,17 @@ import (
 )
 
 //配置文件
-var Config *ConfStruct
+var (
+	C        *ConfStruct                                                 //公共配置
+	DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
+	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"} //支持的图片类型
+	RUN_EXTS = []string{
+		".html", ".htm", ".mht", ".mhtml", ".url",
+		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
+		".exe", ".com", ".cmd", ".bat", ".lnk",
+	}                                                                    //可直接运行的doc文档支持的扩展名
 
+)
 //配置文件
 type ConfStruct struct {
 	RootPath     string                  //exe文件的当前路径
@@ -47,41 +57,34 @@ func InitConf() error {
 	err := errors.New("")
 
 	//更新缓存前，需要将工作目录换成默认目录
-	if err := os.Chdir(Config.RootPath); err != nil {
+	if err := os.Chdir(C.RootPath); err != nil {
 		return err
 	}
-	Config.Default, err = getDefault()
+	C.Default, err = getDefault()
 
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-	Config.LangList, err = getLangList()
+	C.LangList, err = getLangList()
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-	Config.Lang, err = getLang(Config.Default.Lang)
+	C.Lang, err = getLang(C.Default.Lang)
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-	Config.PlatformList, Config.Platform, err = getPlatform()
+	C.PlatformList, C.Platform, err = getPlatform()
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-	Config.Theme, err = getTheme()
+	C.Theme, err = getTheme()
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-	Config.Shortcut, err = getShortcut()
+	C.Shortcut, err = getShortcut()
 	if err != nil {
-		WriteLog(err.Error())
 		return err
 	}
-
 
 	return nil
 }
@@ -176,7 +179,7 @@ func getDefault() (*db.Config, error) {
 	}
 	//查看当前选定平台值是否是正常的
 	isset := false
-	for _, v := range (Config.Platform) {
+	for _, v := range (C.Platform) {
 		if vo.Platform == v.Id {
 			isset = true
 			break
@@ -186,7 +189,7 @@ func getDefault() (*db.Config, error) {
 	//如果没有匹配上platform，则读取config中的第一项
 	if vo.Platform != 0 {
 		if isset == false {
-			for _, v := range (Config.Platform) {
+			for _, v := range (C.Platform) {
 				vo.Platform = v.Id
 				//修复配置文件
 				if err := (&db.Config{}).UpdateField("platform", utils.ToString(vo.Platform)); err != nil {
@@ -201,7 +204,7 @@ func getDefault() (*db.Config, error) {
 
 //读取主题列表
 func getTheme() (map[string]*ThemeStruct, error) {
-	dirPth := Config.RootPath + "theme" + Config.Separator
+	dirPth := C.RootPath + "theme" + C.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 
 	themelist := map[string]*ThemeStruct{}
@@ -267,12 +270,12 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	}
 
 	if len(themelist) == 0 {
-		err := errors.New(Config.Lang["ThemeFileNotFound"])
+		err := errors.New(C.Lang["ThemeFileNotFound"])
 		return themelist, err
 	}
 
 	//如果当前的主题不存在，则将第一个主题更新到数据库
-	if _, ok := themelist[Config.Default.Theme]; !ok {
+	if _, ok := themelist[C.Default.Theme]; !ok {
 		themeId := ""
 		for k, _ := range themelist {
 			themeId = k
@@ -281,16 +284,16 @@ func getTheme() (map[string]*ThemeStruct, error) {
 		if err := (&db.Config{}).UpdateField("theme", themeId); err != nil {
 			return themelist, err
 		}
-		Config.Default.Theme = themeId
+		C.Default.Theme = themeId
 	}
 
 	return themelist, nil
 }
 
 //读取ROM别名配置参数
-func getRomAlias(platform uint32) (map[string]string, error) {
+func GetRomAlias(platform uint32) (map[string]string, error) {
 	section := make(map[string]string)
-	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, Config.Platform[platform].Romlist)
+	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, C.Platform[platform].Romlist)
 	if err != nil {
 		return section, err
 	}
@@ -300,14 +303,14 @@ func getRomAlias(platform uint32) (map[string]string, error) {
 
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
-	langpath := Config.RootPath + "lang" + Config.Separator
+	langpath := C.RootPath + "lang" + C.Separator
 	fpath := langpath + lang + ".ini"
 	section := make(map[string]string)
 
 	//如果默认语言不存在，则读取列表中的其他语言
 	if !utils.FileExists(fpath) {
-		if len(Config.LangList) > 0 {
-			for langName, langFile := range Config.LangList {
+		if len(C.LangList) > 0 {
+			for langName, langFile := range C.LangList {
 				fpath = langpath + langFile
 				//如果找到其他语言，则将第一项更新到数据库配置中
 				if err := (&db.Config{}).UpdateField("lang", langName); err != nil {
@@ -331,7 +334,7 @@ func getLang(lang string) (map[string]string, error) {
 //读取语言文件列表
 func getLangList() (map[string]string, error) {
 	lang := make(map[string]string)
-	dirPth := Config.RootPath + "lang" + Config.Separator
+	dirPth := C.RootPath + "lang" + C.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 	for _, fi := range lists {
 		if !fi.IsDir() { // 忽略目录

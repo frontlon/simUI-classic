@@ -47,7 +47,7 @@ func PlatformController(w *window.Window) {
 		name := args[0].String()
 		platform := &db.Platform{
 			Name:   name,
-			Pinyin: TextToPinyin(name),
+			Pinyin: utils.TextToPinyin(name),
 		}
 		id, err := platform.Add()
 		if err != nil {
@@ -129,7 +129,7 @@ func PlatformController(w *window.Window) {
 			StrategyPath: d["strategy"],
 			DocPath:      d["doc"],
 			Romlist:      d["romlist"],
-			Pinyin:       TextToPinyin(d["name"]),
+			Pinyin:       utils.TextToPinyin(d["name"]),
 		}
 
 		err := platform.UpdateById()

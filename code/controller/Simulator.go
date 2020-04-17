@@ -2,6 +2,7 @@ package controller
 
 import (
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
@@ -19,27 +20,11 @@ func SimulatorController(w *window.Window) {
 		data := args[0].String()
 		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
-		pfId := uint32(utils.ToInt(d["platform"]))
-
-		sim := &db.Simulator{
-			Name:     utils.ToString(d["name"]),
-			Platform: pfId,
-			Path:     utils.ToString(d["path"]),
-			Cmd:      utils.ToString(d["cmd"]),
-			Unzip:    uint8(utils.ToInt(d["unzip"])),
-			Pinyin:   TextToPinyin(utils.ToString(d["name"])),
+		sim, err := modules.AddSimulator(d)
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
 		}
-		id, err := sim.Add()
-
-		//更新默认模拟器
-		if utils.ToInt(d["default"]) == 1 {
-			err = sim.UpdateDefault(pfId, id)
-			if err != nil {
-				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
-			}
-		}
-		sim.Id = id
 		jsonData, _ := json.Marshal(&sim)
 		return sciter.NewValue(string(jsonData))
 	})
@@ -50,31 +35,10 @@ func SimulatorController(w *window.Window) {
 		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
 
-		id := uint32(utils.ToInt(d["id"]))
-		pfId := uint32(utils.ToInt(d["platform"]))
-		def := uint8(utils.ToInt(d["default"]))
-		sim := &db.Simulator{
-			Id:       id,
-			Name:     utils.ToString(d["name"]),
-			Platform: pfId,
-			Path:     utils.ToString(d["path"]),
-			Cmd:      utils.ToString(d["cmd"]),
-			Pinyin:   TextToPinyin(utils.ToString(d["name"])),
-			Unzip:    uint8(utils.ToInt(d["unzip"])),
-		}
-
-		//更新模拟器
-		if err := sim.UpdateById(); err != nil {
+		sim, err := modules.UpdateSimulator(d)
+		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
-		}
-
-		//如果设置了默认模拟器，则更新默认模拟器
-		if def == 1 {
-			if err := sim.UpdateDefault(pfId, id); err != nil {
-				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
-			}
 		}
 
 		jsonData, _ := json.Marshal(&sim)

@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -39,7 +41,7 @@ func CacheController(w *window.Window) {
 			getPlatform = uint32(utils.ToInt(args[0].String()))
 		}
 
-		if len(Config.Platform) == 0{
+		if len(config.C.Platform) == 0{
 			if _, err := w.Call("CB_createCache"); err != nil {
 			}
 			return sciter.NullValue()
@@ -50,16 +52,16 @@ func CacheController(w *window.Window) {
 			//检查更新一个平台还是所有平台
 			PlatformList := map[uint32]*db.Platform{}
 			if getPlatform == 0 { //所有平台
-				PlatformList = Config.Platform
+				PlatformList = config.C.Platform
 			} else { //一个平台
-				if _, ok := Config.Platform[getPlatform]; ok {
-					PlatformList[getPlatform] = Config.Platform[getPlatform]
+				if _, ok := config.C.Platform[getPlatform]; ok {
+					PlatformList[getPlatform] = config.C.Platform[getPlatform]
 				}
 			}
 
 			//先检查平台，将不存在的平台数据先干掉
 			if getPlatform == 0 {
-				if err := ClearPlatform(); err != nil {
+				if err := modules.ClearPlatform(); err != nil {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}
@@ -67,7 +69,7 @@ func CacheController(w *window.Window) {
 			//开始重建缓存
 			for platform, _ := range PlatformList {
 
-				romlist, menu, err := CreateRomData(platform)
+				romlist, menu, err := modules.CreateRomData(platform)
 
 				if err != nil {
 					WriteLog(err.Error())
@@ -75,12 +77,12 @@ func CacheController(w *window.Window) {
 				}
 
 				//更新rom数据
-				if err := UpdateRomDB(platform, romlist); err != nil {
+				if err := modules.UpdateRomDB(platform, romlist); err != nil {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}
 				//更新menu数据
-				if err := UpdateMenuDB(platform, menu); err != nil {
+				if err := modules.UpdateMenuDB(platform, menu); err != nil {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
@@ -110,11 +111,11 @@ func ShortcutController(w *window.Window) {
 		//检测执行文件是否存在
 		_, err := os.Stat(shortcut)
 		if err != nil {
-			WriteLog(Config.Lang["ShortcutNotExists"])
-			return ErrorMsg(w, Config.Lang["ShortcutNotExists"])
+			WriteLog(config.C.Lang["ShortcutNotExists"])
+			return ErrorMsg(w, config.C.Lang["ShortcutNotExists"])
 		}
 
-		err = runGame("explorer", []string{shortcut})
+		err = utils.RunGame("explorer", []string{shortcut})
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
