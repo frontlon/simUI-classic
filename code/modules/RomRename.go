@@ -5,6 +5,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"errors"
+	"fmt"
 	"github.com/go-ini/ini"
 	"strings"
 )
@@ -34,14 +35,26 @@ func RomRename(setType uint8, id uint64, name string) error {
 	}
 
 	//更新数据库
-	err = (&db.Rom{Id: id, Name: name, Pinyin: utils.TextToPinyin(name)}).UpdateName()
+	fmt.Println("更新数据库", id, name)
+
+	fname := rom.RomPath
+
+	fmt.Println("setType",setType)
+	if setType == 2 {
+		fpath := utils.GetFilePath(rom.RomPath)
+		fext := utils.GetFileExt(rom.RomPath)
+		fname = fpath + "/" + name + fext
+		fmt.Println("fname",fname)
+	}
+
+	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName()
 	if err != nil {
 		return err
 	}
 
 	//更新配置
 	err = (&db.Config{}).UpdateField("rename_type", setType)
-	config.C.Default.RenameType = setType
+	config.Cfg.Default.RenameType = setType
 	if err != nil {
 		return err
 	}
@@ -53,11 +66,16 @@ func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 	platform := rom.Platform
 	iniCfg := &ini.File{}
 	err := errors.New("")
-	p := config.C.Platform[rom.Platform].Romlist
+	p := config.Cfg.Platform[rom.Platform].Romlist
 	if p == "" || !utils.IsExist(p) {
-		p = config.C.RootPath + config.C.Platform[platform].Name + ".ini"
+		p = config.Cfg.RootPath + config.Cfg.Platform[platform].Name + ".ini"
 		iniCfg = ini.Empty()
-		config.C.Platform[platform].Romlist = p
+		config.Cfg.Platform[platform].Romlist = p
+		//更新数据库字段
+		if err = (&db.Platform{Id: platform}).UpdateFieldById("romlist", p); err != nil {
+			return err
+		}
+
 	} else {
 		iniCfg, err = ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, p)
 		if err != nil {
@@ -86,8 +104,15 @@ func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	platform := rom.Platform
 
+	fmt.Println("修改文件名")
+
 	//主rom
-	if err := utils.Rename(rom.RomPath, name); err != nil {
+	rompath := config.Cfg.Platform[platform].RomPath + "/" + rom.RomPath
+	if utils.IsAbsPath(rom.RomPath) {
+		rompath = rom.RomPath
+	}
+	fmt.Println("raneme", rompath, name)
+	if err := utils.Rename(rompath, name); err != nil {
 		return err
 	}
 
@@ -95,7 +120,13 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	for _, v := range subRom {
 		fileName := utils.GetFileName(v.RomPath)
 		newName := strings.Replace(fileName, rom.Name+"__", name+"__", 1)
-		if err := utils.Rename(v.RomPath, newName); err != nil {
+		rompath := config.Cfg.Platform[platform].RomPath + "/" + v.RomPath
+		if utils.IsAbsPath(v.RomPath) {
+			rompath = v.RomPath
+		}
+		fmt.Println("sub raneme", rompath, newName)
+
+		if err := utils.Rename(rompath, newName); err != nil {
 			return err
 		}
 	}
@@ -103,9 +134,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	//修改资源文件
 	oldfileName := utils.GetFileName(rom.RomPath)
 
-	if config.C.Platform[platform].PackingPath != "" {
+	if config.Cfg.Platform[platform].PackingPath != "" {
 		for _, ext := range config.PIC_EXTS {
-			picpath := config.C.Platform[platform].PackingPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].PackingPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err
@@ -115,9 +146,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
-	if config.C.Platform[platform].SnapPath != "" {
+	if config.Cfg.Platform[platform].SnapPath != "" {
 		for _, ext := range config.PIC_EXTS {
-			picpath := config.C.Platform[platform].SnapPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].SnapPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err
@@ -127,9 +158,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
-	if config.C.Platform[platform].ThumbPath != "" {
+	if config.Cfg.Platform[platform].ThumbPath != "" {
 		for _, ext := range config.PIC_EXTS {
-			picpath := config.C.Platform[platform].ThumbPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].ThumbPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err
@@ -139,9 +170,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
-	if config.C.Platform[platform].PosterPath != "" {
+	if config.Cfg.Platform[platform].PosterPath != "" {
 		for _, ext := range config.PIC_EXTS {
-			picpath := config.C.Platform[platform].PosterPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].PosterPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err
@@ -151,9 +182,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
-	if config.C.Platform[platform].DocPath != "" {
+	if config.Cfg.Platform[platform].DocPath != "" {
 		for _, ext := range config.DOC_EXTS {
-			picpath := config.C.Platform[platform].DocPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].DocPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err
@@ -162,9 +193,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 			}
 		}
 	}
-	if config.C.Platform[platform].StrategyPath != "" {
+	if config.Cfg.Platform[platform].StrategyPath != "" {
 		for _, ext := range config.RUN_EXTS {
-			picpath := config.C.Platform[platform].StrategyPath + "/" + oldfileName + ext
+			picpath := config.Cfg.Platform[platform].StrategyPath + "/" + oldfileName + ext
 			if (utils.FileExists(picpath)) {
 				if err := utils.Rename(picpath, name); err != nil {
 					return err

@@ -16,7 +16,7 @@ import (
 
 //配置文件
 var (
-	C        *ConfStruct                                                 //公共配置
+	Cfg        *ConfStruct                                                 //公共配置
 	DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
 	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"} //支持的图片类型
 	RUN_EXTS = []string{
@@ -57,31 +57,32 @@ func InitConf() error {
 	err := errors.New("")
 
 	//更新缓存前，需要将工作目录换成默认目录
-	if err := os.Chdir(C.RootPath); err != nil {
+	if err := os.Chdir(Cfg.RootPath); err != nil {
 		return err
 	}
-	C.Default, err = getDefault()
+
+	Cfg.Default, err = getDefault()
 
 	if err != nil {
 		return err
 	}
-	C.LangList, err = getLangList()
+	Cfg.LangList, err = getLangList()
 	if err != nil {
 		return err
 	}
-	C.Lang, err = getLang(C.Default.Lang)
+	Cfg.Lang, err = getLang(Cfg.Default.Lang)
 	if err != nil {
 		return err
 	}
-	C.PlatformList, C.Platform, err = getPlatform()
+	Cfg.PlatformList, Cfg.Platform, err = getPlatform()
 	if err != nil {
 		return err
 	}
-	C.Theme, err = getTheme()
+	Cfg.Theme, err = getTheme()
 	if err != nil {
 		return err
 	}
-	C.Shortcut, err = getShortcut()
+	Cfg.Shortcut, err = getShortcut()
 	if err != nil {
 		return err
 	}
@@ -179,7 +180,7 @@ func getDefault() (*db.Config, error) {
 	}
 	//查看当前选定平台值是否是正常的
 	isset := false
-	for _, v := range (C.Platform) {
+	for _, v := range (Cfg.Platform) {
 		if vo.Platform == v.Id {
 			isset = true
 			break
@@ -189,7 +190,7 @@ func getDefault() (*db.Config, error) {
 	//如果没有匹配上platform，则读取config中的第一项
 	if vo.Platform != 0 {
 		if isset == false {
-			for _, v := range (C.Platform) {
+			for _, v := range (Cfg.Platform) {
 				vo.Platform = v.Id
 				//修复配置文件
 				if err := (&db.Config{}).UpdateField("platform", utils.ToString(vo.Platform)); err != nil {
@@ -204,7 +205,7 @@ func getDefault() (*db.Config, error) {
 
 //读取主题列表
 func getTheme() (map[string]*ThemeStruct, error) {
-	dirPth := C.RootPath + "theme" + C.Separator
+	dirPth := Cfg.RootPath + "theme" + Cfg.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 
 	themelist := map[string]*ThemeStruct{}
@@ -270,12 +271,12 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	}
 
 	if len(themelist) == 0 {
-		err := errors.New(C.Lang["ThemeFileNotFound"])
+		err := errors.New(Cfg.Lang["ThemeFileNotFound"])
 		return themelist, err
 	}
 
 	//如果当前的主题不存在，则将第一个主题更新到数据库
-	if _, ok := themelist[C.Default.Theme]; !ok {
+	if _, ok := themelist[Cfg.Default.Theme]; !ok {
 		themeId := ""
 		for k, _ := range themelist {
 			themeId = k
@@ -284,7 +285,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 		if err := (&db.Config{}).UpdateField("theme", themeId); err != nil {
 			return themelist, err
 		}
-		C.Default.Theme = themeId
+		Cfg.Default.Theme = themeId
 	}
 
 	return themelist, nil
@@ -293,7 +294,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 //读取ROM别名配置参数
 func GetRomAlias(platform uint32) (map[string]string, error) {
 	section := make(map[string]string)
-	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, C.Platform[platform].Romlist)
+	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, Cfg.Platform[platform].Romlist)
 	if err != nil {
 		return section, err
 	}
@@ -303,14 +304,14 @@ func GetRomAlias(platform uint32) (map[string]string, error) {
 
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
-	langpath := C.RootPath + "lang" + C.Separator
+	langpath := Cfg.RootPath + "lang" + Cfg.Separator
 	fpath := langpath + lang + ".ini"
 	section := make(map[string]string)
 
 	//如果默认语言不存在，则读取列表中的其他语言
 	if !utils.FileExists(fpath) {
-		if len(C.LangList) > 0 {
-			for langName, langFile := range C.LangList {
+		if len(Cfg.LangList) > 0 {
+			for langName, langFile := range Cfg.LangList {
 				fpath = langpath + langFile
 				//如果找到其他语言，则将第一项更新到数据库配置中
 				if err := (&db.Config{}).UpdateField("lang", langName); err != nil {
@@ -334,7 +335,7 @@ func getLang(lang string) (map[string]string, error) {
 //读取语言文件列表
 func getLangList() (map[string]string, error) {
 	lang := make(map[string]string)
-	dirPth := C.RootPath + "lang" + C.Separator
+	dirPth := Cfg.RootPath + "lang" + Cfg.Separator
 	lists, _ := ioutil.ReadDir(dirPth)
 	for _, fi := range lists {
 		if !fi.IsDir() { // 忽略目录

@@ -1,11 +1,12 @@
 package utils
 
 import (
-	"go-yii/src/limicommon/utils"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
+
+var LAST_PROCESS int = 0
 
 /**
  * 运行游戏
@@ -37,7 +38,8 @@ func KillGame() error {
 	if LAST_PROCESS == 0 {
 		return nil
 	}
-	c := exec.Command("taskkill.exe", "/T", "/PID", utils.ToString(LAST_PROCESS))
+
+	c := exec.Command("taskkill.exe", "/T", "/PID", ToString(LAST_PROCESS))
 	err := c.Start()
 
 	LAST_PROCESS = 0

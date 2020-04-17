@@ -20,8 +20,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	md5list := []string{}
 
 	menuList := map[string]*db.Menu{}                               //分类目录
-	RomPath := config.C.Platform[platform].RomPath                    //rom文件路径
-	RomExt := strings.Split(config.C.Platform[platform].RomExts, ",") //rom扩展名
+	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
+	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
 	RomAlias, _ := config.GetRomAlias(platform)                            //别名配置
 
 	//进入循环，遍历文件
@@ -32,7 +32,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 			}
 
 			//转换为相对路径
-			p = strings.Replace(p, RomPath+config.C.Separator, "", -1)
+			p = strings.Replace(p, RomPath+config.Cfg.Separator, "", -1)
 
 			//整理目录格式，并转换为数组
 			newpath := strings.Replace(RomPath, "/", "\\", -1)
@@ -128,7 +128,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
  **/
 func ClearPlatform() error {
 	pfs := []string{}
-	for k, _ := range config.C.Platform {
+	for k, _ := range config.Cfg.Platform {
 		pfs = append(pfs, utils.ToString(k))
 	}
 

@@ -35,7 +35,8 @@ func Rename(oldpath string, filename string) error {
  从完整路径中获取文件路径，不包含结尾  /
 */
 func GetFilePath(p string) string {
-	return filepath.Dir(p)
+	dir := filepath.Dir(p)
+	return strings.Replace(dir, "./", "", 1)
 }
 
 /*
@@ -43,6 +44,13 @@ func GetFilePath(p string) string {
 */
 func GetFileNameAndExt(p string) string {
 	return filepath.Base(p);
+}
+
+/*
+ 检查路径是否为绝对路径
+*/
+func IsAbsPath(p string) bool {
+	return filepath.IsAbs(p)
 }
 
 /**
@@ -68,14 +76,14 @@ func FileExists(path string) bool {
  * 检测路径是否存在
  **/
 func FolderExists(p string) bool {
-	if p == ""{
+	if p == "" {
 		return false
 	}
 	ff, err := os.Stat(p)
 	if err != nil {
 		return false
 	}
-	if ff.IsDir() == false{
+	if ff.IsDir() == false {
 		return false
 	}
 	return true
@@ -85,13 +93,12 @@ func FolderExists(p string) bool {
  * 判断文件夹或文件是否存在
  **/
 func IsExist(f string) bool {
-	if f == ""{
+	if f == "" {
 		return false
 	}
 	_, err := os.Stat(f)
 	return err == nil || os.IsExist(err)
 }
-
 
 /**
  * 创建多层文件夹
@@ -101,11 +108,8 @@ func CreateDir(p string) error {
 	if err != nil {
 		return err
 	}
-	if err := os.Chmod(p, os.ModePerm);err != nil{
+	if err := os.Chmod(p, os.ModePerm); err != nil {
 		return err
 	}
 	return nil
 }
-
-
-

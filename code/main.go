@@ -21,13 +21,13 @@ func main() {
 
 	runtime.LockOSThread()
 
-	config.C = &config.ConfStruct{}
+	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	separator := string(os.PathSeparator)                           //系统路径分隔符
-	config.C.RootPath = rootpath + separator                        //当前软件的绝对路径
-	config.C.Separator = separator                                  //系统的目录分隔符
-	config.C.CachePath = rootpath + separator + "cache" + separator //缓存路径
-	config.C.UnzipPath = config.C.CachePath + "unzip" + separator   //rom解压路径
+	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
+	config.Cfg.Separator = separator                                  //系统的目录分隔符
+	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
+	config.Cfg.UnzipPath = config.Cfg.CachePath + "unzip" + separator   //rom解压路径
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -43,8 +43,8 @@ func main() {
 	errConf := config.InitConf()
 
 	//读取宽高
-	width := config.C.Default.WindowWidth
-	height := config.C.Default.WindowHeight
+	width := config.Cfg.Default.WindowWidth
+	height := config.Cfg.Default.WindowHeight
 
 	//创建window窗口
 	w, err := window.New(
@@ -80,7 +80,7 @@ func main() {
 		return
 	}
 
-	if len(config.C.Lang) == 0 {
+	if len(config.Cfg.Lang) == 0 {
 		controller.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		controller.ErrorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		os.Exit(1)
@@ -88,7 +88,7 @@ func main() {
 	}
 
 	//设置标题
-	w.SetTitle(config.C.Lang["SoftName"]);
+	w.SetTitle(config.Cfg.Lang["SoftName"]);
 	//定义view函数
 	defineViewFunction(w)
 

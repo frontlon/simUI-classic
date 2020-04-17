@@ -41,7 +41,7 @@ func CacheController(w *window.Window) {
 			getPlatform = uint32(utils.ToInt(args[0].String()))
 		}
 
-		if len(config.C.Platform) == 0{
+		if len(config.Cfg.Platform) == 0{
 			if _, err := w.Call("CB_createCache"); err != nil {
 			}
 			return sciter.NullValue()
@@ -52,10 +52,10 @@ func CacheController(w *window.Window) {
 			//检查更新一个平台还是所有平台
 			PlatformList := map[uint32]*db.Platform{}
 			if getPlatform == 0 { //所有平台
-				PlatformList = config.C.Platform
+				PlatformList = config.Cfg.Platform
 			} else { //一个平台
-				if _, ok := config.C.Platform[getPlatform]; ok {
-					PlatformList[getPlatform] = config.C.Platform[getPlatform]
+				if _, ok := config.Cfg.Platform[getPlatform]; ok {
+					PlatformList[getPlatform] = config.Cfg.Platform[getPlatform]
 				}
 			}
 

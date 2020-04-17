@@ -1,6 +1,7 @@
 package db
 
 import (
+	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -21,7 +22,7 @@ type Platform struct {
 	Pinyin       string
 	Sort         uint32
 	SimList      map[uint32]*Simulator `gorm:"-"`
-	UseSim       *Simulator `gorm:"-"` //当前使用的模拟器
+	UseSim       *Simulator            `gorm:"-"` //当前使用的模拟器
 }
 
 func (*Platform) TableName() string {
@@ -79,6 +80,23 @@ func (*Platform) GetById(id uint32) (*Platform, error) {
 //更新平台信息
 func (m *Platform) UpdateById() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(m)
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//更新平台的一个字段
+func (m *Platform) UpdateFieldById(field string, value interface{}) error {
+
+	switch field {
+	case "id", "sort":
+		value = utils.ToInt(value)
+	default:
+		value = utils.ToString(value)
+	}
+
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update(field, value)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}

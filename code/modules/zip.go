@@ -37,7 +37,7 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
 
 		//拼接解压路径
 		zipfileName := utils.GetFileName(zipFile)
-		fpath := filepath.Join(config.C.UnzipPath, zipfileName, f.Name)
+		fpath := filepath.Join(config.Cfg.UnzipPath, zipfileName, f.Name)
 
 		fileExt := filepath.Ext(f.Name)
 
@@ -91,7 +91,7 @@ func UnzipRom(zipFile string, romExt []string) (string, error) {
  清理解压缓存
 */
 func ClearZipRom() error {
-	err := os.RemoveAll(config.C.UnzipPath)
+	err := os.RemoveAll(config.Cfg.UnzipPath)
 	if err != nil {
 		return err
 	}

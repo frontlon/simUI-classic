@@ -39,15 +39,15 @@ func RunGame(romId uint64, simId uint32) error {
 
 	sim := &db.Simulator{}
 	if simId == 0 {
-		sim = config.C.Platform[rom.Platform].UseSim
+		sim = config.Cfg.Platform[rom.Platform].UseSim
 		if sim == nil {
-			return errors.New(config.C.Lang["SimulatorNotFound"])
+			return errors.New(config.Cfg.Lang["SimulatorNotFound"])
 		}
 	} else {
-		if config.C.Platform[rom.Platform].SimList == nil {
-			return errors.New(config.C.Lang["SimulatorNotFound"])
+		if config.Cfg.Platform[rom.Platform].SimList == nil {
+			return errors.New(config.Cfg.Lang["SimulatorNotFound"])
 		}
-		sim = config.C.Platform[rom.Platform].SimList[simId];
+		sim = config.Cfg.Platform[rom.Platform].SimList[simId];
 	}
 
 	//检测执行文件是否存在
@@ -58,24 +58,24 @@ func RunGame(romId uint64, simId uint32) error {
 
 	//如果是相对路径，转换成绝对路径
 	if !strings.Contains(rom.RomPath, ":") {
-		rom.RomPath = config.C.Platform[rom.Platform].RomPath + config.C.Separator + rom.RomPath;
+		rom.RomPath = config.Cfg.Platform[rom.Platform].RomPath + config.Cfg.Separator + rom.RomPath;
 	}
 
 	//解压zip包
 	if (sim.Unzip == 1 && romCmd.Unzip == 2) || romCmd.Unzip == 1 {
-		RomExts := strings.Split(config.C.Platform[rom.Platform].RomExts, ",")
+		RomExts := strings.Split(config.Cfg.Platform[rom.Platform].RomExts, ",")
 		rom.RomPath, err = UnzipRom(rom.RomPath, RomExts)
 		if err != nil {
 			return err
 		}
 		if rom.RomPath == "" {
-			return errors.New(config.C.Lang["UnzipExeNotFound"])
+			return errors.New(config.Cfg.Lang["UnzipExeNotFound"])
 		}
 	}
 
 	//检测rom文件是否存在
 	if utils.FileExists(rom.RomPath) == false {
-		return errors.New(config.C.Lang["RomNotFound"] + rom.RomPath)
+		return errors.New(config.Cfg.Lang["RomNotFound"] + rom.RomPath)
 	}
 
 	//加载运行参数
@@ -124,7 +124,7 @@ func RunGame(romId uint64, simId uint32) error {
 func OpenFolder(id uint64, opt string, simId uint32) error {
 
 	info, err := (&db.Rom{}).GetById(id)
-	platform := config.C.Platform[info.Platform] //读取当前平台信息
+	platform := config.Cfg.Platform[info.Platform] //读取当前平台信息
 	if err != nil {
 		return err
 	}
@@ -133,11 +133,11 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	isDir := false
 	switch opt {
 	case "rom":
-		fileName = platform.RomPath + config.C.Separator + info.RomPath
+		fileName = platform.RomPath + config.Cfg.Separator + info.RomPath
 	case "thumb":
 		if platform.ThumbPath != "" {
 			for _, v := range config.PIC_EXTS {
-				fileName = platform.ThumbPath + config.C.Separator + romName + v
+				fileName = platform.ThumbPath + config.Cfg.Separator + romName + v
 
 				if utils.FileExists(fileName) {
 					break
@@ -155,7 +155,7 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	case "snap":
 		if platform.SnapPath != "" {
 			for _, v := range config.PIC_EXTS {
-				fileName = platform.SnapPath + config.C.Separator + romName + v
+				fileName = platform.SnapPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					break
 				} else {
@@ -164,14 +164,14 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 			if fileName == "" {
 				isDir = true
-				fileName = platform.SnapPath + config.C.Separator
+				fileName = platform.SnapPath + config.Cfg.Separator
 			}
 		}
 
 	case "poster":
 		if platform.PosterPath != "" {
 			for _, v := range config.PIC_EXTS {
-				fileName = platform.PosterPath + config.C.Separator + romName + v
+				fileName = platform.PosterPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					break
 				} else {
@@ -180,13 +180,13 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 			if fileName == "" {
 				isDir = true
-				fileName = platform.PosterPath + config.C.Separator
+				fileName = platform.PosterPath + config.Cfg.Separator
 			}
 		}
 	case "packing":
 		if platform.PackingPath != "" {
 			for _, v := range config.PIC_EXTS {
-				fileName = platform.PackingPath + config.C.Separator + romName + v
+				fileName = platform.PackingPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					break
 				} else {
@@ -195,13 +195,13 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 			if fileName == "" {
 				isDir = true
-				fileName = platform.PackingPath + config.C.Separator
+				fileName = platform.PackingPath + config.Cfg.Separator
 			}
 		}
 	case "doc":
 		if platform.DocPath != "" {
 			for _, v := range config.DOC_EXTS {
-				fileName = platform.DocPath + config.C.Separator + romName + v
+				fileName = platform.DocPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					break
 				} else {
@@ -216,7 +216,7 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	case "strategy":
 		if platform.StrategyPath != "" {
 			for _, v := range config.DOC_EXTS {
-				fileName = platform.StrategyPath + config.C.Separator + romName + v
+				fileName = platform.StrategyPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					break
 				} else {
@@ -245,7 +245,7 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 		}
 	} else {
-		return errors.New(config.C.Lang["PathNotFound"])
+		return errors.New(config.Cfg.Lang["PathNotFound"])
 	}
 	return nil
 }
@@ -268,10 +268,10 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 
 	//读取文档内容
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
-	if config.C.Platform[info.Platform].DocPath != "" {
+	if config.Cfg.Platform[info.Platform].DocPath != "" {
 		docFileName := "";
 		for _, v := range config.DOC_EXTS {
-			docFileName = config.C.Platform[info.Platform].DocPath + config.C.Separator + romName + v
+			docFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
 			res.DocContent = GetDocContent(docFileName)
 			if res.DocContent != "" {
 				break
@@ -279,11 +279,11 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 		}
 	}
 
-	if config.C.Platform[info.Platform].StrategyPath != "" {
+	if config.Cfg.Platform[info.Platform].StrategyPath != "" {
 		//检测攻略可执行文件是否存在
 		strategyFileName := "";
 		for _, v := range config.RUN_EXTS {
-			strategyFileName = config.C.Platform[info.Platform].StrategyPath + config.C.Separator + romName + v
+			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
 			if utils.FileExists(strategyFileName) {
 				res.StrategyFile = strategyFileName
 				break
@@ -293,7 +293,7 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 		//如果没有执行运行的文件，则读取文档内容
 		if strategyFileName != "" {
 			for _, v := range config.DOC_EXTS {
-				strategyFileName = config.C.Platform[info.Platform].StrategyPath + config.C.Separator + romName + v
+				strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
 				res.StrategyContent = GetDocContent(strategyFileName)
 				if res.StrategyContent != "" {
 					break
@@ -344,17 +344,17 @@ func UpdateRomThumbs(typeId int, id uint64, newPath string) (string, error) {
 	platformPath := ""
 	//原图存在，则备份
 	if typeId == 1 {
-		platformPath = config.C.Platform[vo.Platform].ThumbPath
+		platformPath = config.Cfg.Platform[vo.Platform].ThumbPath
 	} else {
-		platformPath = config.C.Platform[vo.Platform].SnapPath
+		platformPath = config.Cfg.Platform[vo.Platform].SnapPath
 	}
 
 	if platformPath == "" {
-		return "", errors.New(config.C.Lang["NoSetThumbDir"])
+		return "", errors.New(config.Cfg.Lang["NoSetThumbDir"])
 	}
 
 	//开始备份原图
-	bakFolder := config.C.CachePath + "thumb_bak/"
+	bakFolder := config.Cfg.CachePath + "thumb_bak/"
 	RomFileName := utils.GetFileName(vo.RomPath)
 
 	//检测bak文件夹是否存在，不存在则创建bak目录
@@ -366,7 +366,7 @@ func UpdateRomThumbs(typeId int, id uint64, newPath string) (string, error) {
 		}
 	}
 	for _, ext := range config.PIC_EXTS {
-		oldFileName := platformPath + config.C.Separator + RomFileName + ext //老图片文件名
+		oldFileName := platformPath + config.Cfg.Separator + RomFileName + ext //老图片文件名
 		if utils.FileExists(oldFileName) {
 			bakFileName := RomFileName + "_" + utils.ToString(time.Now().Unix()) + ext //生成备份文件名
 			err := os.Rename(oldFileName, bakFolder+bakFileName)                       //移动文件
@@ -379,7 +379,7 @@ func UpdateRomThumbs(typeId int, id uint64, newPath string) (string, error) {
 	//生成新文件
 	platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
 
-	newFileName := platformPathAbs + config.C.Separator + RomFileName + utils.GetFileExt(newPath) //生成新文件的完整绝路路径地址
+	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + utils.GetFileExt(newPath) //生成新文件的完整绝路路径地址
 	f, err := os.Create(newFileName)
 	if err != nil {
 		return "", err

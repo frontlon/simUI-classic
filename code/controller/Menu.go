@@ -5,7 +5,6 @@ import (
 	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
-	"gin-base/pkg/conv"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -23,7 +22,9 @@ func MenuController(w *window.Window) {
 		platform := uint32(utils.ToInt(args[0].String()))
 		//读取数据库
 
-		menu,err := modules.GetMenuList(uint32(conv.ToInt(platform)))
+
+
+		menu,err := modules.GetMenuList(uint32(utils.ToInt(platform)))
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())

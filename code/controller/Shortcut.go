@@ -111,8 +111,8 @@ func ShortcutController(w *window.Window) {
 		//检测执行文件是否存在
 		_, err := os.Stat(shortcut)
 		if err != nil {
-			WriteLog(config.C.Lang["ShortcutNotExists"])
-			return ErrorMsg(w, config.C.Lang["ShortcutNotExists"])
+			WriteLog(config.Cfg.Lang["ShortcutNotExists"])
+			return ErrorMsg(w, config.Cfg.Lang["ShortcutNotExists"])
 		}
 
 		err = utils.RunGame("explorer", []string{shortcut})

@@ -182,8 +182,9 @@ func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 func (m *Rom) UpdateName() error {
 
 	create := map[string]interface{}{
-		"name":   m.Name,
+		"name":     m.Name,
 		"pinyin":   m.Pinyin,
+		"rom_path": m.RomPath,
 	}
 
 	vo := &Rom{}
@@ -197,13 +198,12 @@ func (m *Rom) UpdateName() error {
 		fmt.Println(result.Error)
 	}
 
-	result = getDb().Table(m.TableName()).Where("platform=? AND pname=?",vo.Platform,vo.Name).Update("pname",m.Name)
+	result = getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("pname", m.Name)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 	return result.Error
 }
-
 
 //更新喜爱状态
 func (m *Rom) UpdateStar() error {

@@ -29,7 +29,7 @@ func ConfigController(w *window.Window) {
 					return ErrorMsg(w, err.Error())
 				}
 			}
-			getjson, _ := json.Marshal(config.C)
+			getjson, _ := json.Marshal(config.Cfg)
 			data = string(getjson)
 		}
 		return sciter.NewValue(data)
