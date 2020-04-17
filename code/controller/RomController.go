@@ -13,7 +13,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -478,7 +477,7 @@ func RomController(w *window.Window) {
 
 		rom, _ := (&db.Rom{}).GetById(id)
 
-		if name == rom.Name{
+		if name == rom.Name {
 			return sciter.NullValue()
 		}
 
@@ -515,46 +514,86 @@ func RomController(w *window.Window) {
 
 			if err := iniCfg.SaveTo(p); err != nil {
 			}
-		} else {
-			//直接修改文件名
-			fileExt := utils.GetFileExt(rom.RomPath)
+		} else { //修改文件名
 			//主rom
-
-
-
-
-
-
-
-
-
-
-
-
-			oldp := ""
-			newp := ""
-			if filepath.IsAbs(rom.RomPath){ //绝对路径
-
-				fmt.Println("aa",filepath.Base(test))
-				oldp = rom.RomPath
-				p := filepath.Dir(rom.RomPath)
-
-			}else{ //相对路径
-				oldp = Config.Platform[platform].RomPath + Config.Separator + rom.RomPath
-				newp = Config.Platform[platform].RomPath + Config.Separator + name+fileExt
-				// name+fileExt
-			}
-
-			err = os.Rename(oldp, newp)
-			if err != nil {
-				fmt.Println(err)
+			if err := utils.Rename(rom.RomPath, name); err != nil {
 			}
 
 			//子rom
 			for _, v := range subRom {
 				fileName := utils.GetFileName(v.RomPath)
-				ns := strings.Replace(fileName, rom.Name+"__", name+"__", 1)
-				err = os.Rename(v.RomPath, ns+fileExt)
+				newName := strings.Replace(fileName, rom.Name+"__", name+"__", 1)
+				if err := utils.Rename(v.RomPath, newName); err != nil {
+				}
+			}
+
+
+			//修改资源文件
+			oldfileName := utils.GetFileName(rom.RomPath)
+
+			if Config.Platform[platform].PackingPath != "" {
+				for _, ext := range PIC_EXTS {
+					picpath := Config.Platform[platform].PackingPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
+			}
+
+			if Config.Platform[platform].SnapPath != "" {
+				for _, ext := range PIC_EXTS {
+					picpath := Config.Platform[platform].SnapPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
+			}
+
+			if Config.Platform[platform].ThumbPath != "" {
+				for _, ext := range PIC_EXTS {
+					picpath := Config.Platform[platform].ThumbPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
+			}
+
+			if Config.Platform[platform].PosterPath != "" {
+				for _, ext := range PIC_EXTS {
+					picpath := Config.Platform[platform].PosterPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
+			}
+
+			if Config.Platform[platform].DocPath != "" {
+				for _, ext := range DOC_EXTS {
+					picpath := Config.Platform[platform].DocPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
+			}
+			if Config.Platform[platform].StrategyPath != "" {
+				for _, ext := range RUN_EXTS {
+					picpath := Config.Platform[platform].StrategyPath + "/" + oldfileName + ext
+					if (utils.FileExists(picpath)) {
+						if err := utils.Rename(picpath, name); err != nil {
+						}
+						break
+					}
+				}
 			}
 
 		}
@@ -565,33 +604,6 @@ func RomController(w *window.Window) {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
-
-		// 重命名文件
-		/*file := `./app.ini`
-		err1 := os.Rename(file, `app2.txt`)
-		if err1 != nil {
-			fmt.Println(err1)
-		} else {
-			fmt.Println(`文件重命名成功`)
-		}*/
-
-		//如果文件不存在，创建文件
-		/*cfg := ini.Empty()
-		err,s := cfg.Section("Alias").NewKey("aaa", "章三")
-		b := cfg.SaveTo("app.ini")
-		fmt.Println(err,s,b)
-		*/
-
-		/*p := "./romlist.ini"
-		cfg, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true, SkipUnrecognizableLines: true}, p)
-
-		if err != nil {
-			fmt.Println(err)
-		}
-		aa,b := cfg.Section("Alias").NewKey("aaa", "vvv")
-		bc := cfg.SaveTo(p)
-		fmt.Println(aa,b,bc)
-		*/
 
 		//更新配置
 		err = (&db.Config{}).UpdateField("rename_type", settype)
@@ -605,4 +617,3 @@ func RomController(w *window.Window) {
 	})
 
 }
-

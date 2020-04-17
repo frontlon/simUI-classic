@@ -90,13 +90,13 @@ func restoreConfig(p string) error {
 	}
 
 	if section["config"] != "" {
-		config := &db.Config{}
+		configDb := &db.Config{}
 		confDec := utils.Base64Decode(section["config"])
-		if err := json.Unmarshal([]byte(confDec), &config); err != nil {
+		if err := json.Unmarshal([]byte(confDec), &configDb); err != nil {
 			return err
 		}
 		//复写数据
-		config.Add()
+		configDb.Add()
 	}
 
 	if section["platform"] != "" {

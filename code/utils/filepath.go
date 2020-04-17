@@ -24,23 +24,17 @@ func GetFileExt(p string) string {
 }
 
 /*
- 读取文件的相对路径
+ 重命名
 */
-func GetFileRelPath(p string) string {
-	return filepath.Dir(p)
+func Rename(oldpath string, filename string) error {
+	newpath := filepath.Dir(oldpath) + "/" + filename + path.Ext(oldpath)
+	return os.Rename(oldpath, newpath)
 }
 
 /*
- 读取文件的相对绝对
+ 从完整路径中获取文件路径，不包含结尾  /
 */
-func GetFileAbsPath(p string) string {
-
-	if path.IsAbs(p){
-		return filepath.Dir(p)
-	}else{
-
-	}
-
+func GetFilePath(p string) string {
 	return filepath.Dir(p)
 }
 
