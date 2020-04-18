@@ -35,16 +35,14 @@ func RomRename(setType uint8, id uint64, name string) error {
 	}
 
 	//更新数据库
-	fmt.Println("更新数据库", id, name)
-
 	fname := rom.RomPath
-
-	fmt.Println("setType",setType)
 	if setType == 2 {
 		fpath := utils.GetFilePath(rom.RomPath)
 		fext := utils.GetFileExt(rom.RomPath)
-		fname = fpath + "/" + name + fext
-		fmt.Println("fname",fname)
+		fname = name + fext
+		if fpath != "."{
+			fname = fpath + "/" + name + fext
+		}
 	}
 
 	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName()
