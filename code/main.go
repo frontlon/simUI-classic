@@ -11,13 +11,19 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 )
 
-//路径分隔符
-var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-//var constMainFile = "this://app/main.html" //主文件路径（正式）
 func main() {
+
+	debug := true //调试模式
+
+	constMainFile := "" //主文件路径（正式）
+	if debug == true{
+		db.LogMode = true
+		constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+	}else{
+		constMainFile = "this://app/main.html" //主文件路径（正式）
+	}
 
 	runtime.LockOSThread()
 
@@ -89,14 +95,12 @@ func main() {
 
 	//设置标题
 	w.SetTitle(config.Cfg.Lang["SoftName"]);
+
 	//定义view函数
 	defineViewFunction(w)
 
 	//显示窗口
 	w.Show();
-
-	//心跳
-	heartbeat(w)
 
 	//运行窗口，进入消息循环
 	w.Run();
@@ -134,23 +138,4 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
-}
-
-func heartbeat(w *window.Window) {
-
-	go func() {
-		//先休息5秒
-		time.Sleep(5 * time.Second)
-		status := 0
-		for {
-			time.Sleep(5 * time.Second)
-			if status == 0 {
-				status = 1
-			} else {
-				status = 0
-			}
-			if _, err := w.Call("heartbeat", sciter.NewValue(status)); err != nil {
-			}
-		}
-	}()
 }

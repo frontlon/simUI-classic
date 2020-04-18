@@ -76,4 +76,16 @@ func ConfigController(w *window.Window) {
 		}()
 		return sciter.NullValue()
 	})
+
+	//读取还原数据的统计信息
+	w.DefineFunction("GetRestoreInfo", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+		info, err := modules.GetRestoreInfo(p)
+		if err != nil {
+			WriteLog(err.Error())
+			ErrorMsg(w, err.Error())
+		}
+		jsonInfo, _ := json.Marshal(&info)
+		return sciter.NewValue(string(jsonInfo))
+	})
 }

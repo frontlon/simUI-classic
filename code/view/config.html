@@ -42,6 +42,7 @@
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
       <label for="third">快捷软件</label>
+      <label for="fourth">备份/恢复</label>
     </strip>
     <panels>
       <section id="first">
@@ -99,6 +100,37 @@
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
           <table><tr><td style="text-align:center"><button id="shortcut_add">添加</button></td></tr></table>
+        </div>
+      </section>
+
+      <section id="fourth">
+        <div class="wrapper">
+          
+        
+        
+          <table>
+            <tr><th colspan="2" style="padding-top:0">备份</th></tr>
+            <tr><td>备份</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
+            
+            <tr><th colspan="2">恢复</th></tr>
+            <tr><td>恢复</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
+            <tr><td></td><td>
+
+              备份时间：2020-12-12
+              平台信息：5
+              模拟器信息：8
+              快捷软件：20
+
+              <input type="text"  id="platform_rom" value="" disabled> 
+            </td></tr>
+            <tr><th colspan="2"></th></tr>
+            <tr><td colspan="2""><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+        </table>
+        
+        
+        
+        
+        
         </div>
       </section>
 

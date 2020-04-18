@@ -19,14 +19,15 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	romlist := map[string]*db.Rom{}
 	md5list := []string{}
 
-	menuList := map[string]*db.Menu{}                               //分类目录
+	menuList := map[string]*db.Menu{}                                   //分类目录
 	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
-	RomAlias, _ := config.GetRomAlias(platform)                            //别名配置
+	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
 		func(p string, f os.FileInfo, err error) (error) {
+
 			if f == nil {
 				return err
 			}
@@ -51,9 +52,14 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				//如果有别名配置，则读取别名
 				if _, ok := RomAlias[title]; ok {
 					if RomAlias[title] != "" {
+						if RomAlias[title] == "-"{ //如果是-，则忽略这个rom
+							return nil
+						}
 						title = RomAlias[title]
 					}
 				}
+
+
 
 				//py := TextToPinyin(title)
 				md5 := GetFileUniqId(title, p, f)
@@ -97,9 +103,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Md5:      md5,
 						SimConf:  "{}",
 					}
-
-
-
 
 					romlist[md5] = rinfo
 					md5list = append(md5list, rinfo.Md5)

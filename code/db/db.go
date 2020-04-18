@@ -9,7 +9,7 @@ import (
 
 var sqlite = &sql.DB{}
 var engine *gorm.DB
-
+var LogMode bool = true
 //连接数据库
 func Conn() {
 	//连接数据库
@@ -19,7 +19,7 @@ func Conn() {
 		panic("连接数据库失败")
 	}
 	//调试模式下 打印日志
-	engine.LogMode(false)
+	engine.LogMode(LogMode)
 
 	//禁用同步模式
 	engine.Exec("PRAGMA synchronous = OFF;")
