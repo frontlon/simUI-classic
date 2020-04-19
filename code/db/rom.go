@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"strings"
 )
 
 var ROM_PAGE_NUM = 100; //每页加载rom数量
@@ -34,10 +35,11 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	if len(uniqs) == 0 {
 		return
 	}
-
+	fmt.Println("开始批量写库", len(uniqs))
 	tx := getDb().Begin()
 	for _, md5 := range uniqs {
 		v := romlist[md5]
+		fmt.Println("v=", v)
 		tx.Create(&v)
 	}
 	tx.Commit()
@@ -84,7 +86,7 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 		return volist, nil
 	}
 
-	result := getDb().Select("id,name,pname").Where("platform=? AND pname=?", platform, pname).Order("pinyin ASC").Find(&volist)
+	result := getDb().Select("id,name,pname,rom_path").Where("platform=? AND pname=?", platform, pname).Order("pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -179,7 +181,7 @@ func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 }
 
 //更新名称
-func (m *Rom) UpdateName() error {
+func (m *Rom) UpdateName(setType uint8) error {
 
 	create := map[string]interface{}{
 		"name":     m.Name,
@@ -198,9 +200,29 @@ func (m *Rom) UpdateName() error {
 		fmt.Println(result.Error)
 	}
 
-	result = getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("pname", m.Name)
+	roms := []*Rom{}
+	result = getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Find(&roms)
 	if result.Error != nil {
 		fmt.Println(result.Error)
+	}
+	if len(roms) > 0 {
+		for _, v := range roms {
+			newName := strings.Replace(v.RomPath, vo.Name+"__", m.Name+"__", 1)
+
+			createSub := map[string]string{}
+			if setType == 1 { //别名文件
+				createSub = map[string]string{
+					"pname": m.Name,
+				}
+			} else { //文件名
+				createSub = map[string]string{
+					"pname":    m.Name,
+					"rom_path": newName,
+				}
+			}
+
+			result = getDb().Table(m.TableName()).Where("id=?", v.Id).Updates(createSub)
+		}
 	}
 	return result.Error
 }
@@ -232,82 +254,6 @@ func (m *Rom) DeleteByPlatform() (error) {
 	return result.Error
 }
 
-//读取id列表
-/*func (sim *Rom) GetIdsByPlatform(platform uint32, menu string) ([]uint64, error) {
-	volist := []*Rom{}
-	result := getDb().Select("id").Where("platform=? AND menu=?", platform, menu).Find(&volist)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-
-	ids := []uint64{}
-	for _, v := range volist {
-		ids = append(ids, v.Id)
-	}
-	return ids, result.Error
-}*/
-
-//根据一组dm5，查询存在的md5，用于取交集
-/*func (sim *Rom) GetMd5ByMd5(platform uint32, uniq []string) ([]string, error) {
-	volist := []*Rom{}
-	result := getDb().Select("md5").Where("platform=? AND md5 in (?)", platform, uniq).Find(&volist)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-
-	md5List := []string{}
-	for _, v := range volist {
-		md5List = append(md5List, v.Md5)
-	}
-	return md5List, result.Error
-}*/
-
-//删除指定平台下，不存在的rom
-/*func (m *Rom) DeleteNotExists(platform uint32, uniq []string) ([]string, error) {
-
-	volist := []*Rom{}
-	volist2 := []*Rom{}
-	//如果为空，说明目录下没有rom，全部删除
-	if len(uniq) == 0 {
-		//先把要删除的数据读取出来
-		getDb().Select("id").Where("platform=?", platform).Find(&volist)
-		getDb().Select("id").Where("platform=?", platform).Delete(&volist2)
-
-		for _,v := range volist2{
-			fmt.Println(v.Id,v.Name)
-		}
-		fmt.Println("删除的1")
-
-
-	} else {
-
-		//先把要删除的数据读取出来
-		getDb().Select("id").Where("platform=? AND md5 NOT IN (?)", platform,uniq).Find(&volist)
-		getDb().Select("id").Where("platform=? AND md5 NOT IN (?)", platform,uniq).Delete(&volist2)
-
-
-		for _,v := range volist2{
-			fmt.Println(v.Id,v.Name)
-		}
-		fmt.Println("删除的2")
-
-
-	}
-
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-
-	idList := []string{}
-	for _, v := range volist {
-		idList = append(idList, utils.ToString(v.Id))
-	}
-	return idList,nil
-
-
-
-}
-*/
 func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	if len(uniqs) == 0 {

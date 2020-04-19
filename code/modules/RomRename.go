@@ -5,7 +5,6 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"errors"
-	"fmt"
 	"github.com/go-ini/ini"
 	"strings"
 )
@@ -40,12 +39,12 @@ func RomRename(setType uint8, id uint64, name string) error {
 		fpath := utils.GetFilePath(rom.RomPath)
 		fext := utils.GetFileExt(rom.RomPath)
 		fname = name + fext
-		if fpath != "."{
+		if fpath != "." {
 			fname = fpath + "/" + name + fext
 		}
 	}
 
-	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName()
+	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName(setType)
 	if err != nil {
 		return err
 	}
@@ -87,8 +86,13 @@ func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 	//修改子rom
 	for _, v := range subRom {
 		fileName := utils.GetFileName(v.RomPath)
-		subName, _ := iniCfg.Section("Alias").GetKey(k) //修改主rom
-		ns := strings.Replace(subName.String(), rom.Name+"__", name+"__", 1)
+		subName, _ := iniCfg.Section("Alias").GetKey(k)
+		ns := ""
+		if subName.String() == "" {
+			ns = name+"__" + fileName
+		} else {
+			ns = name+"__" + v.Name
+		}
 		iniCfg.Section("Alias").NewKey(fileName, ns)
 	}
 
@@ -102,14 +106,12 @@ func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	platform := rom.Platform
 
-	fmt.Println("修改文件名")
-
 	//主rom
 	rompath := config.Cfg.Platform[platform].RomPath + "/" + rom.RomPath
+
 	if utils.IsAbsPath(rom.RomPath) {
 		rompath = rom.RomPath
 	}
-	fmt.Println("raneme", rompath, name)
 	if err := utils.Rename(rompath, name); err != nil {
 		return err
 	}
@@ -122,8 +124,6 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		if utils.IsAbsPath(v.RomPath) {
 			rompath = v.RomPath
 		}
-		fmt.Println("sub raneme", rompath, newName)
-
 		if err := utils.Rename(rompath, newName); err != nil {
 			return err
 		}
