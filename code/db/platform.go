@@ -7,22 +7,23 @@ import (
 )
 
 type Platform struct {
-	Id           uint32
-	Name         string
-	Icon         string
-	RomExts      string
-	RomPath      string
-	ThumbPath    string
-	SnapPath     string
-	PosterPath   string
-	PackingPath  string
-	DocPath      string
-	StrategyPath string
-	Romlist      string
-	Pinyin       string
-	Sort         uint32
-	SimList      map[uint32]*Simulator `gorm:"-"`
-	UseSim       *Simulator            `gorm:"-"` //当前使用的模拟器
+	Id             uint32
+	Name           string
+	Icon           string
+	RomExts        string
+	RomPath        string
+	ThumbPath      string
+	SnapPath       string
+	PosterPath     string
+	PackingPath    string
+	DocPath        string
+	StrategyPath   string
+	BackgroundPath string
+	Romlist        string
+	Pinyin         string
+	Sort           uint32
+	SimList        map[uint32]*Simulator `gorm:"-"`
+	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
 }
 
 func (*Platform) TableName() string {

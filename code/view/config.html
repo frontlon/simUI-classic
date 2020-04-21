@@ -112,12 +112,10 @@
         
         
           <table id="table_backup">
-            <tr><td>备份</td><td><button id="xxxx">点击备份</button></td></tr>
+            <tr><td>备份</td><td><button id="backupConfig" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">开始备份</button></td></tr>
 
-
-        
-            
-            <tr><td>恢复</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button> <button id="xxxx">开始恢复</button></td></tr>
+            <tr><td>恢复</td><td>
+              <input type="text"  id="platform_rom" value=""> <button id="getRestoreConfig" for="platform_rom" caption="{{SelectFolder}}">&#x2026;</button> <button id="restoreConfig">开始恢复</button></td></tr>
             <tr><td></td><td class="backup_info">
               备份时间：2020-12-12<br>
               平台信息：5<br>

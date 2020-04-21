@@ -128,3 +128,20 @@ function updateShortcutSort(data){
     var datastr = JSON.stringify(data);
     view.UpdateShortcutSort(datastr);
 }
+
+//备份配置
+function backupConfig(p){
+    view.BackupConfig(p);
+}
+
+//读取配置信息
+function getRestoreInfo(p){
+    var infostr = view.GetRestoreInfo(p);
+    var obj = JSON.parse(result);
+    return obj;
+}
+
+//还原配置
+function restoreConfig(p){
+    view.RestoreConfig(p);
+}

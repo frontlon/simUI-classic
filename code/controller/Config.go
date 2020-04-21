@@ -59,6 +59,8 @@ func ConfigController(w *window.Window) {
 				WriteLog(err.Error())
 				ErrorMsg(w, err.Error())
 			}
+			//if _, err := w.Call("alert", sciter.NewValue("222222")); err != nil {}
+
 		}()
 		return sciter.NullValue()
 	})
@@ -73,6 +75,7 @@ func ConfigController(w *window.Window) {
 				WriteLog(err.Error())
 				ErrorMsg(w, err.Error())
 			}
+			//if _, err := w.Call("alert", sciter.NewValue("11111")); err != nil {}
 		}()
 		return sciter.NullValue()
 	})

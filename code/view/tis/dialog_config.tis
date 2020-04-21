@@ -252,7 +252,6 @@ event click $(.openfile){
     }
 }
 
-
 //添加平台
 event click $(#platform_add){
     var name =  view.dialog({
@@ -373,4 +372,38 @@ event click $(.shortcut_delete){
     if(result == "1"){
         self.select("#shortcut_li_" + id).remove();
     }
+}
+
+
+//备份文件
+event click $(#backupConfig){
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = this.attributes["filter"];
+    const caption = this.attributes["caption"];
+    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
+    if(url){
+        url = URL.toPath(url);
+        backupConfig(url);
+    }
+}
+
+//读取配置信息
+event click $(#getRestoreConfig){
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = this.attributes["filter"];
+    const caption = this.attributes["caption"];
+    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
+    if(url){
+        url = URL.toPath(url);
+        var obj = getRestoreInfo(url);
+        alert(obj.date);
+    }
+}
+
+//还原配置
+event click $(#restoreConfig){
+    var url = $(#getRestoreConfig).value;
+    restoreConfig(url);
 }

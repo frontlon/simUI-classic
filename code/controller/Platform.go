@@ -115,21 +115,24 @@ func PlatformController(w *window.Window) {
 		d["strategy"] = strings.TrimRight(d["strategy"], `/`)
 		d["doc"] = strings.TrimRight(d["doc"], `\`)
 		d["doc"] = strings.TrimRight(d["doc"], `/`)
+		d["background"] = strings.TrimRight(d["background"], `\`)
+		d["background"] = strings.TrimRight(d["background"], `/`)
 
 		platform := &db.Platform{
-			Id:           id,
-			Name:         d["name"],
-			Icon:         d["icon"],
-			RomExts:      d["exts"],
-			RomPath:      d["rom"],
-			ThumbPath:    d["thumb"],
-			SnapPath:     d["snap"],
-			PosterPath:   d["poster"],
-			PackingPath:  d["packing"],
-			StrategyPath: d["strategy"],
-			DocPath:      d["doc"],
-			Romlist:      d["romlist"],
-			Pinyin:       utils.TextToPinyin(d["name"]),
+			Id:             id,
+			Name:           d["name"],
+			Icon:           d["icon"],
+			RomExts:        d["exts"],
+			RomPath:        d["rom"],
+			ThumbPath:      d["thumb"],
+			SnapPath:       d["snap"],
+			PosterPath:     d["poster"],
+			PackingPath:    d["packing"],
+			StrategyPath:   d["strategy"],
+			DocPath:        d["doc"],
+			BackgroundPath: d["background"],
+			Romlist:        d["romlist"],
+			Pinyin:         utils.TextToPinyin(d["name"]),
 		}
 
 		err := platform.UpdateById()
