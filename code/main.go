@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -18,10 +20,10 @@ func main() {
 	debug := true //调试模式
 
 	constMainFile := "" //主文件路径（正式）
-	if debug == true{
+	if debug == true {
 		db.LogMode = true
 		constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-	}else{
+	} else {
 		constMainFile = "this://app/main.html" //主文件路径（正式）
 	}
 
@@ -29,11 +31,11 @@ func main() {
 
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	separator := string(os.PathSeparator)                           //系统路径分隔符
+	separator := string(os.PathSeparator)                             //系统路径分隔符
 	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
 	config.Cfg.Separator = separator                                  //系统的目录分隔符
 	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
-	config.Cfg.UnzipPath = config.Cfg.CachePath + "unzip" + separator   //rom解压路径
+	config.Cfg.UnzipPath = config.Cfg.CachePath + "unzip" + separator //rom解压路径
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -102,6 +104,9 @@ func main() {
 	//显示窗口
 	w.Show();
 
+	//检测升级
+	checkUpgrade(w)
+
 	//运行窗口，进入消息循环
 	w.Run();
 }
@@ -138,4 +143,22 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
+}
+
+//检测升级
+func checkUpgrade(w *window.Window) {
+	go func() {
+		resp, err := http.Get("http://upgrade.simui.net/check.html")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if resp.StatusCode == 200 {
+			if _, err := w.Call("upgrade", sciter.NewValue(string(body))); err != nil {
+			}
+		}
+	}()
+
 }
