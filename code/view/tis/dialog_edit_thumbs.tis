@@ -1,0 +1,76 @@
+﻿var ID;
+var PAGE=0;
+var PAGENUM = 30;
+var SCROLL_POS = 0;
+var SCROLL_LOCK = false;
+view.root.on("ready", function(){
+
+   // view.windowCaption = CONF.Lang.ThumbsDown;
+
+    //var keyword = view.parameters.keyword;
+   // ID = view.parameters.id;
+
+    //创建语言
+    //createLang();
+
+
+ 
+});
+
+
+class FileDropZone : Element 
+{
+    this var filter;  
+    this var files = []; // filtered files
+
+    function checkFiles(list) {
+    if(typeof list != #array )
+        list = [list];
+    const patterns = this.filter;
+    function flt(fn) {
+        for(var x in patterns)
+        if( fn like x ) return true;
+        return false;
+    }
+    this.files = list.filter(flt);
+    return this.files.length > 0;
+    }
+
+    function attached() {
+    this.filter = (this.attributes["accept-drop"] || "*").split(";");
+    debug filter: this.filter;
+    }
+
+    event dragaccept (evt) {
+    if(evt.draggingDataType == #file && this.checkFiles(evt.dragging))
+        return true; // accept only files
+    return false;
+    }
+
+    event dragenter (evt) 
+    {
+    this.attributes.addClass("active-target");
+    return true;
+    }  
+
+    event dragleave (evt) 
+    {
+    this.attributes.removeClass("active-target");
+    return true;
+    }  
+
+    event drag (evt) 
+    {
+    stdout.println(evt.x,evt.y);
+    return true;
+    }  
+
+    event drop (evt) 
+    {
+    this.attributes.removeClass("active-target");
+    view.msgbox(#information, String.printf("Dropped:%V",this.files));
+    view.msgbox(#information, String.printf("Opt:%V",this.attributes["opt"]));
+    return true;
+    }  
+     
+   }

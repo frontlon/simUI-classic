@@ -395,15 +395,44 @@ event click $(#getRestoreConfig){
     const filter = this.attributes["filter"];
     const caption = this.attributes["caption"];
     var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
+    var out = self.select("#"+this.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
+        out.value = url;
         var obj = getRestoreInfo(url);
-        alert(obj.date);
+
+        $(#backup_info_date).html = obj.date;
+        $(#backup_info_platform).html = obj.platform.toString();
+        $(#backup_info_shortcut).html = obj.shortcut.toString();
+        $(#backup_info_simulator).html = obj.simulator.toString();
     }
 }
 
 //还原配置
 event click $(#restoreConfig){
-    var url = $(#getRestoreConfig).value;
+    var url = $(#restore_input).value;
+
+    if (url == ""){
+        alert(CONF.Lang.RestoreConfigFileNotExists);
+        return;
+    }
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.RestoreConfigConfirm, 
+        caption:CONF.Lang.RestoreConfigTitlle,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Restore},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
     restoreConfig(url);
+   alert(CONF.Lang.RestoreFinish);
+
 }

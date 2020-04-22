@@ -86,7 +86,7 @@ func ConfigController(w *window.Window) {
 		info, err := modules.GetRestoreInfo(p)
 		if err != nil {
 			WriteLog(err.Error())
-			ErrorMsg(w, err.Error())
+			ErrorMsg(w,config.Cfg.Lang["RestoreConfigFileError"])
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))

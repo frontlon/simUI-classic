@@ -137,7 +137,7 @@ function backupConfig(p){
 //读取配置信息
 function getRestoreInfo(p){
     var infostr = view.GetRestoreInfo(p);
-    var obj = JSON.parse(result);
+    var obj = JSON.parse(infostr);
     return obj;
 }
 

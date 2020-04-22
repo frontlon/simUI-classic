@@ -12,10 +12,14 @@
 
    
     //右键菜单图片下载
-    self.on("click", "#romcontext .thumb", function(evt) {
+    self.on("click", "#romcontext .open_down_thumb", function(evt) {
         thumbDown(this.attributes["rid"],this.attributes["rname"]);
     });
 
+    //右键编辑图片封面
+    self.on("click", "#romcontext .edit_thumb", function(evt) {
+        thumbEdit(this.attributes["rid"],this.attributes["rname"]);
+    });
 
     //重命名
     self.on("click", "#romcontext .rename", function(evt) {
@@ -107,6 +111,11 @@ function romContextMenu(obj){
     btndata += "<caption>"+ CONF.Lang.Function +"</caption>";
     btndata += "<li class='thumb open_down_thumb' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.ThumbsDown +"</li>";
     
+
+    btndata += "<li class='thumb edit_thumb' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditThumbs +"</li>";
+
+
+
     if( detailObj.Info.Star == 1){
         btndata += "<li class='fav fav0' value='0' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.CancelFavorite +"</li>";
     }else{

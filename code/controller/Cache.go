@@ -5,6 +5,7 @@ import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
+	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -42,7 +43,7 @@ func CacheController(w *window.Window) {
 		}
 
 		if len(config.Cfg.Platform) == 0{
-			if _, err := w.Call("CB_createCache"); err != nil {
+			if _, err := w.Call("CB_createCache",sciter.NewValue("")); err != nil {
 			}
 			return sciter.NullValue()
 		}
@@ -90,7 +91,8 @@ func CacheController(w *window.Window) {
 			}
 
 			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := w.Call("CB_createCache"); err != nil {
+			if _, err := w.Call("CB_createCache",sciter.NewValue("")); err != nil {
+				fmt.Print(err)
 			}
 			return sciter.NullValue()
 		}()

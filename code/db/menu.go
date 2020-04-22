@@ -46,7 +46,7 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 func (*Menu) DeleteNotExists(platform uint32, menus []string) (error) {
 
 	result := &gorm.DB{}
-	m := []*Menu{}
+	m := &Menu{}
 	if len(menus) == 0 {
 		result = getDb().Where("platform=?", platform).Delete(&m)
 	} else {
@@ -62,7 +62,7 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) (error) {
 
 //删除不存在的平台下的所有menu
 func (*Menu) ClearByPlatform(platforms []string) (error) {
-	m := []*Menu{}
+	m := &Menu{}
 	result := getDb().Not("platform", platforms).Delete(&m)
 
 	if result.Error != nil {

@@ -1,0 +1,70 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+      @import "this://app/public.css";
+      html,body{width:*; height:*;margin:0;padding:0;color:#000;background:#fff;}
+      section {
+      size:*;
+      flow:grid(1 2 3,
+                4 5 6);
+      }
+    
+      section>div{padding:15dip;}
+
+      .button-wrapper{text-align:center;padding:10dip 0}
+
+      div.file-drop-zone {
+        prototype: FileDropZone;
+        size:200px;
+        color: gray;
+        border: 4px dashed;
+        vertical-align:middle;
+        text-align:center;
+      }
+      div.file-drop-zone.active-target {
+        background:gold;
+      }
+
+    </style>
+</head>
+<body>
+
+
+<section>
+  <div>
+      <p>展示图</p>
+      <div.file-drop-zone opt="thumb" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 1</div>
+      <div.button-wrapper><button>上传图片</button>&nbsp;&nbsp;<button>清除图片</button></div>
+  </div>
+  <div>
+      <p>插画</p>
+      <div.file-drop-zone  opt="snap" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 2</div>
+  </div>
+  <div>
+      <p>海报</p>
+      <div.file-drop-zone  opt="poster" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 3</div>
+  </div>
+  <div>
+      <p>包装盒</p>
+      <div.file-drop-zone  opt="packing" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 4</div>
+  </div>
+  <div>
+      <p>背景图</p>
+      <div.file-drop-zone  opt="background" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 5</div>
+  </div>
+  <div>
+      <p>视频</p>
+      <div.file-drop-zone  opt="video" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.tiff">Drop only images here 6</div>
+  </div>
+</section>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog_edit_thumbs.tis";
+
+
+    
+</script>
+</body>
+</html>

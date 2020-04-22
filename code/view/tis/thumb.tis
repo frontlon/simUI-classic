@@ -12,3 +12,18 @@ function thumbDown(id,keyword){
         };
     });
 }
+
+//启动图片下载
+function thumbEdit(id,keyword){
+    view.dialog({
+        url:self.url(ROOTPATH + "edit_thumbs.html"),
+        caption:CONF.Lang.ThumbsDown,
+        width:1024,
+        height:750,
+        parameters: {
+            id:id,
+            keyword:keyword,
+            updateRomThumbs:updateRomThumbs,
+        };
+    });
+}
