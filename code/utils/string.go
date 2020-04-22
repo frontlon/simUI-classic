@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"VirtualNesGUI/code/utils/pinyin"
 	"crypto/md5"
 	"fmt"
-	"github.com/chain-zhang/pinyin"
+	//"github.com/chain-zhang/pinyin"
 )
 
 /**
@@ -19,7 +20,6 @@ func Md5(str string) string {
  * 字符转拼音
  **/
 func TextToPinyin(str string) string {
-
 	str, err := pinyin.New(str).Split("").Mode(pinyin.WithoutTone).Convert()
 	if err != nil {
 		// 错误处理
