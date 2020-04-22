@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 )
-
+//复制文件
 func Copy(src, dst string) (error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
@@ -28,6 +28,6 @@ func Copy(src, dst string) (error) {
 	}
 
 	defer destination.Close()
-	_, err := io.Copy(destination, source)
+	_, err = io.Copy(destination, source)
 	return err
 }
