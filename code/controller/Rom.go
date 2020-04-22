@@ -121,12 +121,25 @@ func RomController(w *window.Window) {
 		return sciter.NewValue("1")
 	})
 
-	//更新rom图片
-	w.DefineFunction("UpdateRomThumbs", func(args ...*sciter.Value) *sciter.Value {
+	//下载rom图片
+	w.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeId := utils.ToInt(args[0].String())
 		id := uint64(utils.ToInt(args[1].String()))
 		newPath := args[2].String()
-		newFileName, err := modules.UpdateRomThumbs(typeId, id, newPath)
+		newFileName, err := modules.DownloadRomThumbs(typeId, id, newPath)
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+		return sciter.NewValue(newFileName)
+	})
+
+	//编辑图片
+	w.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
+		typeName := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		newPath := args[2].String()
+		newFileName, err := modules.EditRomThumbs(typeName, id, newPath)
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())

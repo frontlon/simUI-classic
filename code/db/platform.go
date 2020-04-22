@@ -19,10 +19,11 @@ type Platform struct {
 	DocPath        string
 	StrategyPath   string
 	BackgroundPath string
+	VideoPath      string
 	Romlist        string
 	Pinyin         string
 	Sort           uint32
-	SimList        map[uint32]*Simulator `gorm:"-"`
+	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
 	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
 }
 
@@ -66,11 +67,8 @@ func (*Platform) GetAll() ([]*Platform, error) {
 
 //根据ID查询一个平台参数
 func (*Platform) GetById(id uint32) (*Platform, error) {
-
 	vo := &Platform{}
-	field := "id,`name`, icon, rom_exts, rom_path, thumb_path, snap_path,  poster_path, packing_path, doc_path, strategy_path, romlist"
-
-	result := getDb().Select(field).Where("id=?", id).Order("sort ASC,pinyin ASC").First(&vo)
+	result := getDb().Where("id=?", id).Order("sort ASC,pinyin ASC").First(&vo)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

@@ -79,8 +79,8 @@ function delSimulator(id){
 }
 
 //更新rom的展示图片
-function updateRomThumbs(type,id,newpath){
-    var result = view.UpdateRomThumbs(type,id,newpath);
+function downloadRomThumbs(type,id,newpath){
+    var result = view.DownloadRomThumbs(type,id,newpath);
 
     //如果是展示图，则刷新rom列表图片
     if(result != ""){
