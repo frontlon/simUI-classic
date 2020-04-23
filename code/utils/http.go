@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -17,14 +18,22 @@ func GetHttp(uri string) string {
 	client.Timeout = 3 * time.Second
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 
 	resp, err := client.Do(req)
 	if resp != nil {
+		fmt.Println(err)
 		defer resp.Body.Close()
 	}
-	if err != nil || resp.StatusCode != 200 {
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+
+	if resp.StatusCode != 200 {
+		fmt.Println("StatusCode", resp.StatusCode)
 		return ""
 	}
 
