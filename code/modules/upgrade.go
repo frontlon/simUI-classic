@@ -28,6 +28,7 @@ func BootCheckUpgrade(w *window.Window) {
 		ver := &Version{}
 		if err := json.Unmarshal([]byte(body), &ver); err != nil {
 		}
+
 		//如果是启动检测，则验证是否需要显示
 		if ver.Id > config.Cfg.Default.UpgradeId {
 			if _, err := w.Call("upgrade", sciter.NewValue(string(body))); err != nil {
