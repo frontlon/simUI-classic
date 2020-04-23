@@ -1,0 +1,31 @@
+﻿//发现更新
+function upgrade(data){
+    
+    var dataObj = JSON.parse(data);
+
+    //选择窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeletePlatformConfirm, 
+        caption:CONF.Lang.DeletePlatform,
+        buttons:[
+            {id:#download,text:"下载新版本"},
+            {id:#never,text:"不再提醒"},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    switch(result){
+        case "download":
+            Sciter.launch("http://www.simui.net/");
+            break;
+        case "never":
+            var data = {
+                upgrade_id : dataObj.Id.toString();
+            };
+            //更新平台信息
+            view.parameters.updateConfig(data);
+            break;
+    }
+
+}

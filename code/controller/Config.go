@@ -53,15 +53,12 @@ func ConfigController(w *window.Window) {
 	w.DefineFunction("BackupConfig", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 
-		go func() {
-			err := modules.BackupConfig(p)
-			if err != nil {
-				WriteLog(err.Error())
-				ErrorMsg(w, err.Error())
-			}
-			//if _, err := w.Call("alert", sciter.NewValue("222222")); err != nil {}
+		err := modules.BackupConfig(p)
+		if err != nil {
+			WriteLog(err.Error())
+			ErrorMsg(w, err.Error())
+		}
 
-		}()
 		return sciter.NullValue()
 	})
 
@@ -69,14 +66,12 @@ func ConfigController(w *window.Window) {
 	w.DefineFunction("RestoreConfig", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 
-		go func() {
-			err := modules.RestoreConfig(p)
-			if err != nil {
-				WriteLog(err.Error())
-				ErrorMsg(w, err.Error())
-			}
-			//if _, err := w.Call("alert", sciter.NewValue("11111")); err != nil {}
-		}()
+		err := modules.RestoreConfig(p)
+		if err != nil {
+			WriteLog(err.Error())
+			ErrorMsg(w, err.Error())
+		}
+
 		return sciter.NullValue()
 	})
 
@@ -86,9 +81,17 @@ func ConfigController(w *window.Window) {
 		info, err := modules.GetRestoreInfo(p)
 		if err != nil {
 			WriteLog(err.Error())
-			ErrorMsg(w,config.Cfg.Lang["RestoreConfigFileError"])
+			ErrorMsg(w, config.Cfg.Lang["RestoreConfigFileError"])
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
 	})
+
+	//检查更新
+	w.DefineFunction("CheckUpgrade", func(args ...*sciter.Value) *sciter.Value {
+		body := modules.CheckUpgrade(w)
+		return sciter.NewValue(body)
+	})
+
+
 }

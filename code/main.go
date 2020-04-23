@@ -4,11 +4,10 @@ import (
 	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/controller"
 	"VirtualNesGUI/code/db"
+	"VirtualNesGUI/code/modules"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -104,8 +103,8 @@ func main() {
 	//显示窗口
 	w.Show();
 
-	//检测升级
-	checkUpgrade(w)
+	//软件启动时检测升级
+	modules.BootCheckUpgrade(w)
 
 	//运行窗口，进入消息循环
 	w.Run();
@@ -143,22 +142,4 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
-}
-
-//检测升级
-func checkUpgrade(w *window.Window) {
-	go func() {
-		resp, err := http.Get("http://upgrade.simui.net/check.html")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if resp.StatusCode == 200 {
-			if _, err := w.Call("upgrade", sciter.NewValue(string(body))); err != nil {
-			}
-		}
-	}()
-
 }

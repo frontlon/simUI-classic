@@ -21,7 +21,8 @@ type Config struct {
 	WindowState   uint8
 	RenameType    uint8
 	FontSize      uint8
-	Version       uint64
+	UpgradeId     uint64
+	EnableUpgrade uint8
 }
 
 func (*Config) TableName() string {
