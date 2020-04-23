@@ -51,7 +51,7 @@ view.root.on("ready", function(){
     self.on("click", "#search_submit", function(evt) {
         search();
     });
-6
+
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
@@ -157,6 +157,16 @@ view.root.on("ready", function(){
     //按字母搜索rom
     self.on("click", "#num_search li", function(evt) {
         numSearch(this);
+    });
+
+
+    self.on("click", "#upgrade", function(evt) {        
+        var data = view.CheckUpgrade();
+        if(data != ""){
+            upgrade(data)
+        }else{
+            view.msgbox(#laert,"当前是最新版本");
+        }
     });
 
     //弹出关于窗口
@@ -354,4 +364,36 @@ function toggleSidebar(){
     }else{
         dom.style["display"] = "block";
     }
+}
+
+//发现更新
+function upgrade(data){
+    
+    var dataObj = JSON.parse(data);
+
+    //选择窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeletePlatformConfirm, 
+        caption:CONF.Lang.DeletePlatform,
+        buttons:[
+            {id:#download,text:"下载新版本"},
+            {id:#never,text:"不再提醒"},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    switch(result){
+        case "download":
+            Sciter.launch("http://www.simui.net/");
+            break;
+        case "never":
+            var data = {
+                upgrade_id : dataObj.Id.toString();
+            };
+            //更新平台信息
+            view.parameters.updateConfig(data);
+            break;
+    }
+
 }

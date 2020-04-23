@@ -39,10 +39,13 @@ func BootCheckUpgrade(w *window.Window) {
 //检查更新
 func CheckUpgrade(w *window.Window) string {
 	body := utils.GetHttp(upgradeUrl)
-	return body
-}
+	ver := &Version{}
+	if err := json.Unmarshal([]byte(body), &ver); err != nil {
+	}
 
-//更新升级id
-func updateUpgradeId(){
+	if ver.Id > config.Cfg.Default.UpgradeId {
+		return body
+	}
 
+	return ""
 }
