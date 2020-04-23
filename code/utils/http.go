@@ -1,21 +1,35 @@
 package utils
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 //get请求
 func GetHttp(uri string) string {
-	resp, err := http.Get(uri)
-	if err != nil {
-		fmt.Println(err)
+
+	if uri == "" {
 		return ""
 	}
-	defer resp.Body.Close()
+
+	client := &http.Client{}
+	client.Timeout = 3 * time.Second
+	req, err := http.NewRequest("GET", uri, nil)
+	if err != nil {
+		return ""
+	}
+
+	resp, err := client.Do(req)
+	if resp != nil {
+		defer resp.Body.Close()
+	}
+	if err != nil || resp.StatusCode != 200 {
+		return ""
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
-	if resp.StatusCode != 200 {
+	if err != nil {
 		return ""
 	}
 	return string(body)
