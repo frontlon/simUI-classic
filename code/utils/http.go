@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -8,10 +9,10 @@ import (
 )
 
 //get请求
-func GetHttp(uri string) string {
+func GetHttp(uri string) (string, error) {
 
 	if uri == "" {
-		return ""
+		return "", nil
 	}
 
 	client := &http.Client{}
@@ -19,7 +20,7 @@ func GetHttp(uri string) string {
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
 
 	resp, err := client.Do(req)
@@ -29,17 +30,17 @@ func GetHttp(uri string) string {
 	}
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
 
 	if resp.StatusCode != 200 {
 		fmt.Println("StatusCode", resp.StatusCode)
-		return ""
+		return "", errors.New(ToString(resp.StatusCode))
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return ""
+		return "", err
 	}
-	return string(body)
+	return string(body), nil
 }

@@ -371,6 +371,9 @@ function upgrade(data){
     alert(data);
     if (data == ""){
         return;
+    }else if (data == "error"){
+        view.msgbox(#warning,"网络请求错误");
+        return;
     }
  
     var dataObj = JSON.parse(data);

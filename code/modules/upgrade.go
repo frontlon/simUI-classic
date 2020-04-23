@@ -24,7 +24,11 @@ func BootCheckUpgrade(w *window.Window) {
 		return
 	}
 	go func() {
-		body := utils.GetHttp(upgradeUrl)
+		body,err := utils.GetHttp(upgradeUrl)
+		if err != nil{
+			if _, err := w.Call("upgrade", sciter.NewValue("error")); err != nil {
+			}
+		}
 		ver := &Version{}
 		if err := json.Unmarshal([]byte(body), &ver); err != nil {
 		}
@@ -39,7 +43,11 @@ func BootCheckUpgrade(w *window.Window) {
 
 //检查更新
 func CheckUpgrade(w *window.Window) string {
-	body := utils.GetHttp(upgradeUrl)
+	body,err := utils.GetHttp(upgradeUrl)
+	if err != nil{
+		return "error"
+	}
+
 	ver := &Version{}
 	if err := json.Unmarshal([]byte(body), &ver); err != nil {
 	}
