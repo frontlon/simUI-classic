@@ -93,5 +93,4 @@ func ConfigController(w *window.Window) {
 		return sciter.NewValue(body)
 	})
 
-
 }

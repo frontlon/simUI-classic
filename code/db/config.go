@@ -46,7 +46,7 @@ func (*Config) Get() (*Config, error) {
 func (m *Config) UpdateField(field string, value interface{}) error {
 
 	switch field {
-	case "platform", "romlist_style", "romlist_zoom", "window_width", "window_height", "window_state", "font_size", "RenameType":
+	case "platform", "romlist_style", "romlist_zoom", "window_width", "window_height", "window_state", "font_size", "rename_type", "upgrade_id", "enable_upgrade":
 		value = utils.ToInt(value)
 	default:
 		value = utils.ToString(value)

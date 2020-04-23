@@ -165,7 +165,7 @@ view.root.on("ready", function(){
         if(data != ""){
             upgrade(data)
         }else{
-            view.msgbox(#laert,"当前是最新版本");
+            view.msgbox(#info,CONF.Lang.Latestversion);
         }
     });
 
@@ -368,11 +368,10 @@ function toggleSidebar(){
 
 //发现更新
 function upgrade(data){
-    alert(data);
     if (data == ""){
         return;
     }else if (data == "error"){
-        view.msgbox(#warning,"网络请求错误");
+        view.msgbox(#warning,CONF.Lang.NetworkRequestFailed);
         return;
     }
  
@@ -389,19 +388,15 @@ function upgrade(data){
             {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
         ]
     };
- /*  
+
     switch(result){
         case "download":
             Sciter.launch("http://www.simui.net/");
             break;
         case "never":
-            var data = {
-                upgrade_id : dataObj.Id.toString();
-            };
             //更新平台信息
-            view.parameters.updateConfig(data);
+            view.UpdateConfig("upgrade_id",dataObj.id.toString());
             break;
     }
-*/
 }
 

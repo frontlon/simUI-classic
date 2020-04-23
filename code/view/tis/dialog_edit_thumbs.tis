@@ -5,13 +5,13 @@ var SCROLL_POS = 0;
 var SCROLL_LOCK = false;
 view.root.on("ready", function(){
 
-   // view.windowCaption = CONF.Lang.ThumbsDown;
+    view.windowCaption = CONF.Lang.EditThumbs;
 
     //var keyword = view.parameters.keyword;
    // ID = view.parameters.id;
 
     //创建语言
-    //createLang();
+    createLang();
 
 
  
@@ -68,8 +68,8 @@ class FileDropZone : Element
     event drop (evt) 
     {
     this.attributes.removeClass("active-target");
-    view.msgbox(#information, String.printf("Dropped:%V",this.files));
-    view.msgbox(#information, String.printf("id:%V",this.attributes["id"]));
+    //view.msgbox(#information, String.printf("Dropped:%V",this.files));
+    //view.msgbox(#information, String.printf("id:%V",this.attributes["id"]));
     var img = "<img src='"+ this.files +"'>";
     this.html = img;
     return true;
