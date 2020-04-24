@@ -3,7 +3,7 @@
     <title></title>
     <div id="themefile"></div>
     <style type="text/css">
-      @import "this://app/public.css";
+      @import "this://app/images/public.css";
       body{flow:vertical;size:*;padding:0;margin:0}
       body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.8);}
       body>header>caption{width:*;height:32dip;}
@@ -63,7 +63,10 @@
 <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/markdown.tis";
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog_desc.tis";
+    include ROOTPATH + "tis/dialog/desc.tis";
+    event click $(a) {
+        openWebPage(this);
+    }
 </script>
 </body>
 </html>

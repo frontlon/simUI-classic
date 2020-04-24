@@ -2,8 +2,12 @@
 var action;
 var pfId;
 view.root.on("ready", function(){
+    Init(); //初始化
+});
 
-    //创建语言
+//初始化
+function Init(){
+   //创建语言
     createLang();
 
     id = view.parameters.id.toString();
@@ -17,8 +21,8 @@ view.root.on("ready", function(){
         view.windowCaption = CONF.Lang.AddSimulator;
     }else{
         
-        var sim = view.parameters.getSimulatorById(id);
-        
+        var sim = JSON.parse(mainView.GetSimulatorById(id));
+
         action = "update";
         $(#sim_submit).value = CONF.Lang.SaveConfig;
         view.windowCaption = CONF.Lang.EditSimulator;
@@ -30,11 +34,10 @@ view.root.on("ready", function(){
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
     
-});
+}
 
 //更新模拟器信息
-event click $(#sim_submit) {
-
+function simSubmit(evt){
     var def = $(#sim_default).value == undefined ? 0 : 1;
     var result = "";
     var data = {
@@ -52,15 +55,16 @@ event click $(#sim_submit) {
     if(data.platform == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
     if(id == 0){
         //添加模拟器
-        result = view.parameters.addSimulator(data);
-       
+        result = mainView.AddSimulator(JSON.stringify(data));
+
         if(result != ""){
             view.msgbox(#alert,CONF.Lang.AddSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }else{
         //修改模拟器信息
-        result = view.parameters.updateSimulator(data);
+        result = mainView.UpdateSimulator(JSON.stringify(data));
+
         if(result != ""){
             view.msgbox(#alert,CONF.Lang.UpdateSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
@@ -69,8 +73,7 @@ event click $(#sim_submit) {
 }
 
 //删除模拟器
-event click $(#sim_delete) {
-
+function simDelete(evt){
     var result = view.msgbox {
         type:#warning, 
         content:CONF.Lang.DeleteSimulatorConfirm, 
@@ -86,7 +89,8 @@ event click $(#sim_delete) {
     }
 
     //开始删除
-    result = view.parameters.delSimulator(id);
+    result = mainView.DelSimulator(id);
+
     if(result != "0"){
         var data = {
             Opt:"delete",
@@ -99,13 +103,13 @@ event click $(#sim_delete) {
 }
 
 //选择文件
-event click $(.openfile){
+function openFile(evt){
     const defaultExt = "";
     const initialPath = "";
-    const filter = this.attributes["filter"];
-    const caption = this.attributes["caption"];
-    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+this.attributes["for"]);  
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    var out = self.select("#"+evt.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
         url = url.split("\/").join(CONF.Separator.toString());
@@ -115,6 +119,6 @@ event click $(.openfile){
 }
 
 //设置命令代码
-event change $(#set_cmd) {
-    $(#sim_cmd).value = this.value;
+function setCmd(evt){
+    $(#sim_cmd).value = evt.value;
 }

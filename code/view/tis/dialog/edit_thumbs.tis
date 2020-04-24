@@ -1,9 +1,9 @@
-﻿var ID;
-var PAGE=0;
-var PAGENUM = 30;
-var SCROLL_POS = 0;
-var SCROLL_LOCK = false;
-view.root.on("ready", function(){
+﻿view.root.on("ready", function(){
+    Init(); //初始化
+});
+
+//初始化
+function Init(){
 
     view.windowCaption = CONF.Lang.EditThumbs;
 
@@ -12,11 +12,7 @@ view.root.on("ready", function(){
 
     //创建语言
     createLang();
-
-
- 
-});
-
+}
 
 class FileDropZone : Element 
 {

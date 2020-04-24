@@ -1,84 +1,60 @@
-﻿view.root.on("ready", function(){
+﻿//右键菜单启动游戏
+function contextRunGame(evt){
+    view.RunGame(evt.attributes["rid"],evt.attributes['sim']);
+}
 
-    //rom展开右键菜单
-    self.on("contextmenusetup", "#romlist li", function(evt) {
-        romContextMenu(this);
-    });
-    
-    //右键菜单启动游戏
-    self.on("click", "#romcontext .menu_run_game", function(evt) {
-        view.RunGame(this.attributes["rid"],this.attributes['sim']);
-    });
-
-   
-    //右键菜单图片下载
-    self.on("click", "#romcontext .open_down_thumb", function(evt) {
-        thumbDown(this.attributes["rid"],this.attributes["rname"]);
-    });
-
-    //右键编辑图片封面
-    self.on("click", "#romcontext .edit_thumb", function(evt) {
-        thumbEdit(this.attributes["rid"],this.attributes["rname"]);
-    });
-
-    //重命名
-    self.on("click", "#romcontext .rename", function(evt) {
-
-        var getjson = view.GetGameDetail(this.attributes["rid"])
-        var detailObj = JSON.parse(getjson);
-
-        var data = view.dialog({
-            url:self.url(ROOTPATH + "dialog/rom_rename.html"),
-            width:300,
-            height:200,
-            parameters: {
-                name:detailObj.Info.Name,
-                type:CONF.Default.RenameType,
-            };
-        });
-
-        if(data == undefined){
+//右键菜单定位目录
+function openFolder(evt){
+  if(evt.attributes["opt"] == "" || evt.attributes["opt"] == undefined){
             return;
         }
 
-        $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
-        view.RomRename(data.type,detailObj.Info.Id,data.name);
-    });
+        if(evt.attributes["opt"] == "sim"){
+            view.OpenFolder(evt.attributes["rid"],evt.attributes["opt"],evt.attributes["sid"]);
+        }else{
+            view.OpenFolder(evt.attributes["rid"],evt.attributes["opt"],"");
+        }
+}
 
+//右键菜单设置喜爱
+function contextSetFavorite(evt){
+    var result = view.SetFavorite(evt.attributes["rid"],evt.attributes["value"]);
 
-    //右键菜单设置喜爱
-    self.on("click", "#romcontext .fav", function(evt) {
-    var result = view.SetFavorite(this.attributes["rid"],this.attributes["value"]);
-
-    if( this.attributes["value"] == 1){
-        this.attributes.removeClass('fav1');
-        this.attributes.addClass('fav0');
-        this.attributes["value"] = 0;
-        this.html = CONF.Lang.CancelFavorite;
+    if( evt.attributes["value"] == 1){
+        evt.attributes.removeClass('fav1');
+        evt.attributes.addClass('fav0');
+        evt.attributes["value"] = 0;
+        evt.html = CONF.Lang.CancelFavorite;
         
     }else{
-        this.attributes.removeClass('fav0');
-        this.attributes.addClass('fav1');
-        this.attributes["value"] = 1;
-        this.html = CONF.Lang.SetFavorite;
+        evt.attributes.removeClass('fav0');
+        evt.attributes.addClass('fav1');
+        evt.attributes["value"] = 1;
+        evt.html = CONF.Lang.SetFavorite;
+    }
+}
+//重命名
+function rename(evt){
+    var getjson = view.GetGameDetail(evt.attributes["rid"])
+    var detailObj = JSON.parse(getjson);
+
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "rom_rename.html"),
+        width:300,
+        height:200,
+        parameters: {
+            name:detailObj.Info.Name,
+            type:CONF.Default.RenameType,
+        };
+    });
+
+    if(data == undefined){
+        return;
     }
 
-    });
-
-    //右键菜单定位目录
-    self.on("click", "#romcontext .folder", function(evt) {
-
-        if(this.attributes["opt"] == "" || this.attributes["opt"] == undefined){
-            return;
-        }
-
-        if(this.attributes["opt"] == "sim"){
-            view.OpenFolder(this.attributes["rid"],this.attributes["opt"],this.attributes["sid"]);
-        }else{
-            view.OpenFolder(this.attributes["rid"],this.attributes["opt"],"");
-        }
-    });
-});
+    $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
+    view.RomRename(data.type,detailObj.Info.Id,data.name);
+}
 
 //rom模块右键菜单
 function romContextMenu(obj){

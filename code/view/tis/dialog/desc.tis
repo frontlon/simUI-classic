@@ -1,7 +1,12 @@
 ﻿var conf;
 view.root.on("ready", function(){
+    //初始化
+    Init();
+});
 
-    conf = view.parameters.conf;
+//初始化
+function Init(){
+   conf = view.parameters.conf;
     
     //默认主题
     var cssfile = "";
@@ -22,15 +27,14 @@ view.root.on("ready", function(){
 
     //创建语言
     createLang();
+}
 
-    //打开网址
-    self.on("click", "a", function(evt) {
-        var href = this.attributes["href"];
-        Sciter.launch(href);
-        return true;
-    });
-
-});
+//打开网址
+function openWebPage(evt){
+    var href = evt.attributes["href"];
+    Sciter.launch(href);
+    return true;
+}
 
 //设置主题样式
 function setTheme(themeId){

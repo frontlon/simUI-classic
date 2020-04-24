@@ -2,7 +2,7 @@
   <head>
   <title></title>
   <style>
-    @import "this://app/public.css";
+    @import "this://app/images/public.css";
     html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
     .wrapper{width:*;height:*;flow:horizontal-flow;overflow:hidden;padding:8dip;}
     .frame_left{width:120dip;height:*;display:inline-block;}
@@ -65,7 +65,7 @@
                 <option value="1">启用</option>
                 <option value="0">禁止</option>
               </select>
-              
+              </td></tr>
               <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
           </table>
         </div>
@@ -99,7 +99,7 @@
                 <tr><td>{{StrategyMenu}}</td><td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
                 <tr><td><div class="tip" title="{{RomlistTip}}">&#xf3c1;</div>{{Romlist}}</td><td><input type="text"  id="platform_romlist" value="" disabled> <button class="openfile" for="platform_romlist" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
                 <tr><th colspan="2"></th></tr>
-                <tr><td colspan="2""><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+                <tr><td colspan="2"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
             </table>
           </div>
         </div>
@@ -118,10 +118,10 @@
         
         
           <table id="table_backup">
-            <tr><td>备份</td><td><button id="backupConfig" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">开始备份</button></td></tr>
+            <tr><td>备份</td><td><button id="backup_config" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">开始备份</button></td></tr>
 
             <tr><td>恢复</td><td>
-              <input type="text"  id="restore_input" value=""> <button id="getRestoreConfig" for="restore_input" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" >&#x2026;</button> <button id="restoreConfig">开始恢复</button></td></tr>
+              <input type="text"  id="restore_input" value=""> <button id="get_restore_config" for="restore_input" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" >&#x2026;</button> <button id="restore_config">开始恢复</button></td></tr>
             <tr><td></td><td class="backup_info">
               备份时间：<span id="backup_info_date"></span><br>
               平台信息：<span id="backup_info_platform"></span></span><br>
@@ -150,7 +150,83 @@
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog_config.tis";
-  </script>
+    //include ROOTPATH + "tis/dialog_config.tis";
+    include ROOTPATH + "tis/dialog/config.tis";
+
+    //平台列表点击
+    event click $(#platform_list li) {
+      GetPlatformLitem(this);
+    }
+
+    //更新通用配置信息
+    event click $(#config_submit) {
+      configSubmit(this);
+    }
+
+    //更新平台信息
+    event click $(#platform_submit) {
+      platformSubmit(this);
+    }
+
+    //添加模拟器
+    event click $(#add_sim) {
+      addSim(this);
+    };
+
+    //修改模拟器模拟器
+    event change $(#platform_sim) {
+      editSim(this);
+    }
+
+    //选择文件夹
+    event click $(.openfolder){
+        openFolder(this);
+    }
+
+    //选择文件
+    event click $(.openfile){
+      openFile(this);
+    }
+
+    //添加平台
+    event click $(#platform_add){
+        platformAdd(this);
+    }
+
+    //删除平台
+    event click $(#platform_del){
+      platformDel(this);
+    }
+
+    //添加快捷工具
+    event click $(#shortcut_add){
+        shortcutAdd(this);
+    }
+
+    //更新快捷工具
+    event click $(.shortcut_update){
+        shortcutUpdate(this);
+    }
+
+    //删除快捷工具
+    event click $(.shortcut_delete){
+        shortcutDelete(this);
+    }
+
+    //备份文件
+    event click $(#backup_config){
+        backupConfig(this);
+    }
+
+    //读取配置信息
+    event click $(#get_restore_config){
+        getRestoreConfig(this);
+    }
+
+    //还原配置
+    event click $(#restore_config){
+        restoreConfig(this);
+}
+</script>
 </body>
 </html>

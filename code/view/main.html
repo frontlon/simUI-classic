@@ -5,7 +5,7 @@
 <title></title>
 <div id="themefile"></div>
 <style type="text/css">
-    @import "this://app/public.css";
+    @import "this://app/images/public.css";
     
     html{min-width:800dip;width:*;background:transparent;border:1dip solid color(window-outside-border-color);}
     a{text-decoration:none}
@@ -246,6 +246,8 @@
 </body>
 
 <script type="text/tiscript">
+
+    const mainView = view;
     //var ROOTPATH = "this://app/";
     var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
     include ROOTPATH + "tis/plugins/decorators.tis";
@@ -253,15 +255,16 @@
     include ROOTPATH + "tis/plugins/markdown.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/rom.tis";
     include ROOTPATH + "tis/platform.tis";
     include ROOTPATH + "tis/shortcut.tis";
     include ROOTPATH + "tis/theme.tis";
-    include ROOTPATH + "tis/rom.tis";
     include ROOTPATH + "tis/menu.tis";
-    include ROOTPATH + "tis/dialog.tis";
     include ROOTPATH + "tis/thumb.tis";
     include ROOTPATH + "tis/romcontext.tis";
-    include ROOTPATH + "tis/script.tis";
+    include ROOTPATH + "tis/config.tis";
     include ROOTPATH + "tis/keycode.tis";
+    include ROOTPATH + "tis/others.tis";
+    include ROOTPATH + "tis/event.tis";
 </script>
 </html>

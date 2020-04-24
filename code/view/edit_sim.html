@@ -2,7 +2,7 @@
 <head>
     <title></title>
     <style>
-        @import "this://app/public.css";
+        @import "this://app/images/public.css";
         html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
         #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
         input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
@@ -47,7 +47,28 @@
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog_sim.tis";
+    include ROOTPATH + "tis/dialog/edit_sim.tis";
+ 
+    //更新模拟器信息
+    event click $(#sim_submit) {
+        simSubmit(this);
+    }
+
+    //删除模拟器
+    event click $(#sim_delete) {
+        simDelete(this);
+    }
+
+    //选择文件
+    event click $(.openfile){
+        openFile(this);
+    }
+
+    //设置命令代码
+    event change $(#set_cmd) {
+        setCmd(this);
+    }
+
 </script>
 </body>
 </html>

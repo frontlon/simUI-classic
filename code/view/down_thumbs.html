@@ -2,7 +2,7 @@
 <head>
     <title></title>
     <style>
-        @import "this://app/public.css";
+        @import "this://app/images/public.css";
         html,body{width:*; height:*;margin:0;padding:0;color:#000;background:#fff;}
         #loading{text-align: center;padding-bottom:16dip;}
         #down_thumb_list{padding:0;margin:16dip 0 0 0;display:block;width:100%;flow:horizontal-flow;overflow: hidden;}
@@ -33,7 +33,17 @@
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog_down_thumbs.tis";
+    include ROOTPATH + "tis/dialog/down_thumbs.tis";
+
+    //点击图片
+    event click $(#down_thumb_list li){
+        DownThumb(this);
+    }
+
+    //点击搜索按钮
+    event click $(.submit){
+        searchThumb(this);
+    }
 </script>
 </body>
 </html>

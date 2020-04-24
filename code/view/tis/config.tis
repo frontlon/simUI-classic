@@ -1,0 +1,31 @@
+﻿
+//初始化配置
+function initConfig(isfresh){
+
+    var confstr = view.InitData("config",isfresh);
+    CONF = JSON.parse(confstr);
+
+    //如果初始路径不同，则刷新数据
+    if(CONF.RootPath != CONF.Default.RootPath){
+        view.UpdateConfig("root_path",CONF.RootPath);
+    }
+
+    //创建语言
+    if (isfresh == "0"){
+        createLang();
+    }
+
+    createTheme(); //创建主题
+    createPlatform(); //生成平台列表
+    createShortcutList(); //生成快捷工具列表
+    initRomListStyle(); //初始化游戏列表样式
+    initFontSize(); //初始化字体大小
+
+    //生成菜单
+    var menujson = view.GetMenuList(CONF.Default.Platform);
+    createMenuList(menujson);
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
+
+}

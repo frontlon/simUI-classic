@@ -2,7 +2,7 @@
 <head>
     <title></title>
     <style>
-        @import "this://app/public.css";
+        @import "this://app/images/public.css";
         html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
         #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
         input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;width:200dip;margin-bottom:5dip}
@@ -30,7 +30,13 @@
     </div>
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog_rename.tis";
+    include ROOTPATH + "tis/dialog/rom_rename.tis";
+
+    //确定
+    event click $(#confirm-dialog) {
+        confirmDialog(this);
+    }
+
 </script>
 </body>
 </html>

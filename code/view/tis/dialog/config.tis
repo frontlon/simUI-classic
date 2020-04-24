@@ -1,49 +1,8 @@
 ﻿var pfId;
 view.root.on("ready", function(){
- 
-    //渲染语言
-    createLang();
 
-    //定义标题
-    view.windowCaption = CONF.Lang.Config;
-
-    //生成语言列表
-    var langdata = "";
-    var config_lang = $(#config_lang);
-    for(var lang in CONF.LangList) {
-        config_lang.options.$append(<option value={lang}>{lang}</option>);
-    }
-
-    $(#config_lang).value = CONF.Default.Lang;
-    $(#config_thumb).value = CONF.Default.Thumb;
-
-    //图片搜索引擎
-    $(#config_search_engines).value = CONF.Default.SearchEngines;
-
-    //生成平台列表
-    var pfdata = "";
-    var lists = view.parameters.getPlatform();
-    var platform_list = $(#platform_list);
-    for(var pf in lists) {
-        pfdata += '<li value="'+ pf.Id +'">'+ pf.Name +'</li>';
-    }
-    platform_list.html = pfdata;
-
-    //生成快捷工具列表
-    
-    var shortcut = "";
-    var shortcut_list = view.parameters.getShortcut();
-    for(var s in shortcut_list) {
-        shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
-        shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
-        shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
-        shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
-        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
-        shortcut += "</li>";
-    }
-    $(#shortcut_list).html = shortcut;
+    //初始化方法
+    Init();
 
     //快捷软件拖动排序
     DragDrop{
@@ -59,23 +18,74 @@ view.root.on("ready", function(){
                 newObj[id] = li.index;
             }
             //更新到数据库
-            view.parameters.updateShortcutSort(newObj);
+            mainView.UpdateShortcutSort(JSON.stringify(newObj));
         }  
     };
 
-
 });
 
-//平台列表点击
-event click $(#platform_list li) {
+//初始化方法
+function Init(){
+    //渲染语言
+    createLang();
 
-    pfId = this.attributes["value"].toString();
+    //定义标题
+    view.windowCaption = CONF.Lang.Config;
+
+    //生成语言列表
+    var langdata = "";
+    var config_lang = $(#config_lang);
+    for(var lang in CONF.LangList) {
+        config_lang.options.$append(<option value={lang}>{lang}</option>);
+    }
+
+    $(#config_lang).value = CONF.Default.Lang;
+    $(#config_thumb).value = CONF.Default.Thumb;
+    $(#config_enable_upgrade).value = CONF.Default.EnableUpgrade;
+
+    //图片搜索引擎
+    $(#config_search_engines).value = CONF.Default.SearchEngines;
+
+    //生成平台列表
+    var pfdata = "";
+    
+    var liststr = mainView.GetPlatform();
+    var lists = JSON.parse(liststr);
+    
+    var platform_list = $(#platform_list);
+    for(var pf in lists) {
+        pfdata += '<li value="'+ pf.Id +'">'+ pf.Name +'</li>';
+    }
+    platform_list.html = pfdata;
+
+    //生成快捷工具列表
+    
+    var shortcut = "";
+    var shortcut_list = JSON.parse(mainView.GetShortcut());
+
+    for(var s in shortcut_list) {
+        shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
+        shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
+        shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
+        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
+        shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
+        shortcut += "</li>";
+    }
+    $(#shortcut_list).html = shortcut;
+}
+
+//平台列表点击
+function GetPlatformLitem(evt){
+
+    pfId = evt.attributes["value"].toString();
 
     //激活按钮改变样式
-    this.state.current = true;
+    evt.state.current = true;
 
     //读取平台信息
-    var info = view.parameters.getPlatformById(pfId);
+    var info = JSON.parse(mainView.GetPlatformById(pfId));
     $(#platform_name).value = info.Name;
     $(#platform_icon).value = info.Icon;
     $(#platform_exts).value = info.RomExts;
@@ -92,7 +102,8 @@ event click $(#platform_list li) {
     platform_sim.options.clear();
    
     //读取模拟器列表
-    var sims = view.parameters.getSimulatorByPlatform(pfId);
+    var sims = JSON.parse(mainView.GetSimulatorByPlatform(pfId));
+
     platform_sim.options.$append(<option value=0>{CONF.Lang.EditSimulator}</option>);
     for(var simId in sims) {
         platform_sim.options.$append(<option value={sims[simId].Id}>{sims[simId].Name}</option>);
@@ -128,19 +139,25 @@ event click $(#platform_list li) {
 }
 
 //更新通用配置信息
-event click $(#config_submit) {
+function configSubmit(evt){
+
     var data = {
-        lang : $(#config_lang).value.toString();
-        search_engines : $(#config_search_engines).value.toString();
-        thumb : $(#config_thumb).value.toString();
-        enable_upgrade : $(#enable_upgrade).value.toString();
+        lang : $(#config_lang).value.toString(),
+        search_engines : $(#config_search_engines).value.toString(),
+        thumb : $(#config_thumb).value.toString(),
+        enable_upgrade :$(#config_enable_upgrade).value,
     };
+
     //更新平台信息
-    view.parameters.updateConfig(data);
+    for(var k in data) {
+        var result = mainView.UpdateConfig(k,data[k]);
+    }
+
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
 
 //更新平台信息
-event click $(#platform_submit) {
+function platformSubmit(evt){
     var data = {
         id       : $(#platform_list).select("li:current").attributes["value"].toString();
         name     : $(#platform_name).value,
@@ -159,29 +176,31 @@ event click $(#platform_submit) {
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
     if(data.exts == ""){view.msgbox(#alert,CONF.Lang.RomTypeCanNotBeEmpty);return true;}
     if(data.rom == ""){view.msgbox(#alert,CONF.Lang.RomMenuCanNotBeEmpty);return true;}
-
     //检查并补全扩展名
     data.exts = completeExt(data.exts);
     //更新补全的扩展名到文本框中
     $(#platform_exts).value = data.exts;
     //更新名称到列表中
     $(#platform_list).select("li:current").html = data.name;
-
     //更新平台信息
-    view.parameters.updatePlatform(data);
+    var result = mainView.UpdatePlatform(JSON.stringify(data));
+    if( result.toString() == "1"){
+        view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+    }
+
 }
 
 
 //添加模拟器
-event click $(#add_sim) {
+function addSim(evt) {
+
     var res = view.dialog({
-        url:self.url(ROOTPATH + "dialog/edit_sim.html"),
+        url:self.url(ROOTPATH + "edit_sim.html"),
         width:490,
         height:300,
         parameters: {
             id:0,
             platform:pfId,
-            addSimulator:addSimulator,
         }
     })
 
@@ -194,23 +213,20 @@ event click $(#add_sim) {
 };
 
 //修改模拟器模拟器
-event change $(#platform_sim) {
-   if(this.value == 0){return true;}
+function editSim(evt) {
+   if(evt.value == 0){return true;}
    var res = view.dialog({
-        url:self.url(ROOTPATH + "dialog/edit_sim.html"),
+        url:self.url(ROOTPATH + "edit_sim.html"),
         width:490,
         height:300,
         parameters: {
-            id:this.value,
+            id:evt.value,
             platform:pfId,
-            updateSimulator:updateSimulator,
-            delSimulator:delSimulator,
-            getSimulatorById:getSimulatorById,
         };
     });
 
     //将选择还原回【选择模拟器】项目，防止项目被选定
-    this.value = 0;
+    evt.value = 0;
 
     //更新option选项
     if(res != ""){
@@ -226,9 +242,9 @@ event change $(#platform_sim) {
 }
 
 //选择文件夹
-event click $(.openfolder){
-    var url = view.selectFolder(this.attributes["caption"]);
-    var out = self.select("#"+this.attributes["for"]);
+function openFolder(evt) {
+    var url = view.selectFolder(evt.attributes["caption"]);
+    var out = self.select("#"+evt.attributes["for"]);
     if(url){
         url = URL.toPath(url);
         url = url.split("\/").join(CONF.Separator.toString());
@@ -238,13 +254,13 @@ event click $(.openfolder){
 }
 
 //选择文件
-event click $(.openfile){
+function openFile(evt) {
     const defaultExt = "";
     const initialPath = "";
-    const filter = this.attributes["filter"];
-    const caption = this.attributes["caption"];
-    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+this.attributes["for"]);  
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    var out = self.select("#"+evt.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
         url = url.split("\/").join(CONF.Separator.toString());
@@ -254,9 +270,9 @@ event click $(.openfile){
 }
 
 //添加平台
-event click $(#platform_add){
+function platformAdd(evt) {
     var name =  view.dialog({
-        url:self.url(ROOTPATH + "dialog/add_platform.html"),
+        url:self.url(ROOTPATH + "add_platform.html"),
         width:310,
         height:170,
         parameters: {};
@@ -267,7 +283,8 @@ event click $(#platform_add){
     }
 
     //开始添加平台
-    var insertId = view.parameters.addPlatform(name);
+    var insertId = mainView.AddPlatform(name);
+
     if(insertId != "0"){
         var newopt = "<li value='"+ insertId +"'>"+ name +"</li>";
         $(#platform_list).append(newopt);
@@ -276,7 +293,7 @@ event click $(#platform_add){
 }
 
 //删除平台
-event click $(#platform_del){
+function platformDel(evt) {
     var pfId = $(#platform_list li:current).attributes["value"];
     if (pfId == undefined){
         view.msgbox(#alert,CONF.Lang.NotSelectPlatform);
@@ -298,8 +315,11 @@ event click $(#platform_del){
         return true;
     }
 
-    //开始执行删除操作
-    result = view.parameters.delPlatform(pfId);
+    //删除平台
+    result = mainView.DelPlatform(pfId);
+    //生成缓存
+    createAllCache();
+
     if(result == "1"){
         $(#platform_list li:current).remove();
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);
@@ -307,8 +327,10 @@ event click $(#platform_del){
 }
 
 //添加快捷工具
-event click $(#shortcut_add){
-    var insertId = view.parameters.addShortcut();
+
+function shortcutAdd(evt) {
+    var insertId = mainView.AddShortcut();
+
     if(insertId != "0"){
         var shortcut = "";
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
@@ -324,8 +346,8 @@ event click $(#shortcut_add){
 }
 
 //更新快捷工具
-event click $(.shortcut_update){
-    var id = this.attributes["value"];
+function shortcutUpdate(evt) {
+    var id = evt.attributes["value"];
     var parentDom = $(#shortcut_list);
     var name = parentDom.select("#shortcut_name_" + id).value;
     var path = parentDom.select("#shortcut_path_" + id).value;
@@ -344,14 +366,15 @@ event click $(.shortcut_update){
         name:name,
         path:path,
     };
-    view.parameters.updateShortcut(obj);
+    var datastr = JSON.stringify(obj);
+    var result = mainView.UpdateShortcut(datastr);
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+ 
     
 }
 
 //删除快捷工具
-event click $(.shortcut_delete){
-    
+function shortcutDelete(evt) {
     //确认窗口
     var result = view.msgbox {
         type:#question, 
@@ -367,9 +390,9 @@ event click $(.shortcut_delete){
         return true;
     }
 
-    var id = this.attributes["value"];
+    var id = evt.attributes["value"];
     //开始执行删除操作
-    result = view.parameters.delShortcut(id);
+    result = mainView.DelShortcut(id);
     if(result == "1"){
         self.select("#shortcut_li_" + id).remove();
     }
@@ -377,30 +400,30 @@ event click $(.shortcut_delete){
 
 
 //备份文件
-event click $(#backupConfig){
+function backupConfig(evt) {
     const defaultExt = "";
     const initialPath = "";
-    const filter = this.attributes["filter"];
-    const caption = this.attributes["caption"];
-    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
     if(url){
         url = URL.toPath(url);
-        backupConfig(url);
+        mainView.BackupConfig(url);
     }
 }
 
 //读取配置信息
-event click $(#getRestoreConfig){
+function getRestoreConfig(evt) {
     const defaultExt = "";
     const initialPath = "";
-    const filter = this.attributes["filter"];
-    const caption = this.attributes["caption"];
-    var url = view.selectFile("#"+this.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+this.attributes["for"]);  
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    var out = self.select("#"+evt.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
         out.value = url;
-        var obj = getRestoreInfo(url);
+        var obj = JSON.parse(mainView.GetRestoreInfo(url));
 
         $(#backup_info_date).html = obj.date;
         $(#backup_info_platform).html = obj.platform.toString();
@@ -410,7 +433,7 @@ event click $(#getRestoreConfig){
 }
 
 //还原配置
-event click $(#restoreConfig){
+function restoreConfig(evt) {
     var url = $(#restore_input).value;
 
     if (url == ""){
@@ -433,7 +456,6 @@ event click $(#restoreConfig){
         return true;
     }
 
-    restoreConfig(url);
-   alert(CONF.Lang.RestoreFinish);
-
+    mainView.RestoreConfig(url);
+    alert(CONF.Lang.RestoreFinish);
 }

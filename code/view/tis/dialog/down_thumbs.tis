@@ -5,6 +5,12 @@ var SCROLL_POS = 0;
 var SCROLL_LOCK = false;
 view.root.on("ready", function(){
 
+    Init(); //初始化
+   
+});
+
+//初始化
+function Init(){
     view.windowCaption = CONF.Lang.ThumbsDown;
 
     var keyword = view.parameters.keyword;
@@ -43,21 +49,17 @@ view.root.on("ready", function(){
             }
 
             PAGE++;
-
             var result = searchPic(keyword,ctype);
-
             if(result == true){
                 SCROLL_POS = scrollPos;
             }
             SCROLL_LOCK = false;
         }
-
     };
-});
+}
 
 //点击图片
-event click $(#down_thumb_list li){
-
+function DownThumb(evt){
     var keyword = $(#search_input).value;
     var ctype = $(.submit.active).attributes['value'];
     var caption = "";
@@ -82,7 +84,15 @@ event click $(#down_thumb_list li){
     };
 
     if(result == "yes"){
-        var result = view.parameters.downloadRomThumbs(ctype,ID,this.select("img").attributes["src"]);
+        var result = mainView.DownloadRomThumbs(ctype,ID,this.select("img").attributes["src"]);
+
+        //如果是展示图，则刷新rom列表图片
+        if(result != ""){
+            if(type == "1"){
+                $(#romlist).select("li[rid="+id+"] img").attributes['src'] = newpath;
+            }
+        }
+
         if(result != ""){
             view.msgbox(#alert,CONF.Lang.ThumbsDownUpdateSuccess);
         }
@@ -90,8 +100,7 @@ event click $(#down_thumb_list li){
 }
 
 //点击搜索按钮
-event click $(.submit){
-
+function searchThumb(evt){
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){

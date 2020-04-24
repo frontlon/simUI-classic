@@ -8,7 +8,6 @@ function thumbDown(id,keyword){
         parameters: {
             id:id,
             keyword:keyword,
-            downloadRomThumbs:downloadRomThumbs,
         };
     });
 }
@@ -23,7 +22,6 @@ function thumbEdit(id,keyword){
         parameters: {
             id:id,
             keyword:keyword,
-            downloadRomThumbs:downloadRomThumbs,
         };
     });
 }
