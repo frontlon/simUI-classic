@@ -1,0 +1,118 @@
+﻿
+//游戏启动（侧边栏）
+function sidebarRunGame(evt){
+     var simdom = $(#sim_select).select("li:current");
+    var sim = "";
+    if(simdom != undefined){
+        sim = simdom.attributes["sim"];
+    }
+    view.RunGame(evt.attributes["rid"],sim);
+}
+
+//攻略弹窗按钮
+function openDesc(evt){
+    //如果是禁用状态
+    if(evt.attributes.hasClass("right_desc_disable") == true){
+        return;
+    }
+
+    //检查运行攻略文件
+    var getjson = view.GetGameDetail(evt.attributes["rid"]);
+    var detailObj = JSON.parse(getjson);
+
+    if(detailObj.StrategyFile != ""){
+        view.RunStrategy(detailObj.StrategyFile);
+        return;
+    }
+
+    //如果攻略文件不是可运行程序，则窗口运行        
+    other = view.window{
+        type:View.FRAME_WINDOW,
+        url: self.url("desc.html"),
+        alignment: 5,
+        screen:1,
+        width : 1280,
+        height : 800,
+        parameters: {
+            content:detailObj.StrategyContent,
+            title:detailObj.Info.Name,
+            id:evt.attributes["rid"],
+            conf:CONF,
+        };
+    };
+}
+
+//侧边栏切换模拟器
+function switchRomSim(evt){
+     evt.state.current = true;
+    var romid = evt.attributes["rom"];
+    var simid = evt.attributes["sim"];
+    view.SetRomSimulator(romid,simid);
+}
+
+//设置rom的cmd
+function SetRomCmd(evt){
+   var obj = evt.parent;
+        var romId = obj.attributes["rom"];
+        var simId = obj.attributes["sim"];
+        var name = obj.select("p").html;
+        var cmdstr = view.GetRomCmd(romId,simId);
+        var cmdObj = JSON.parse(cmdstr);
+        var simJson =  view.dialog({
+            url:self.url(ROOTPATH + "dialog/edit_rom_cmd.html"),
+            width:360,
+            height:215,
+            parameters: {
+                name:name,
+                simId:simId,
+                romId:romId,
+                cmd:cmdObj.Cmd,
+                unzip:cmdObj.Unzip,
+            }
+        });
+
+        if(simJson == undefined){
+            return;
+        }
+        view.UpdateRomCmd(romId,simId,simJson);
+}
+
+//侧边栏缩略图滑动特效
+function thumbSlider(evt){
+    var container = $(div#stack);
+    var next = container.shown.next || container.first;
+    evt.state.disabled = true;
+    rotateTo(next, :: (this super).state.disabled = false);
+}
+
+
+//侧边栏设置我的喜爱
+function setFavorite(evt){
+    var id = evt.attributes["rid"];
+    var star = evt.attributes["value"];
+
+    if(star == "1"){
+        star = "0";
+        evt.attributes.removeClass("funbtn_1");
+        evt.attributes.addClass("funbtn_0");
+    }else{
+        star = "1";
+        evt.attributes.removeClass("funbtn_0");
+        evt.attributes.addClass("funbtn_1");        
+    }
+
+    evt.attributes["value"] = star;
+
+    var result = view.SetFavorite(id,star);
+   
+    if(result != "1"){
+        view.msgbox(#alert,result);
+    }
+
+    //如果当前是喜好目录，则从rom列表中删除
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    var rdom = $(#romlist).select("li[rid="+id+"]");
+    if(menu == "favorite" && rdom != undefined){
+        rdom.remove();
+    }
+}

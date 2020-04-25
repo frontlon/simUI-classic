@@ -19,7 +19,6 @@ view.root.on("ready", function(){
        windowStateChange(this);
     });
  
-
  
     /**
      * 导航栏
@@ -97,9 +96,16 @@ view.root.on("ready", function(){
     });
 
 
+   /**
+    * 左侧平台边栏
+    **/
+
+    self.on("click", "#platform_ul > li", function(evt) {
+        changePlatform(this);
+    });
 
    /**
-    * 左侧边栏
+    * 左侧目录边栏
     **/
 
 

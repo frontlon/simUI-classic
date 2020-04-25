@@ -12,7 +12,7 @@ function thumbDown(id,keyword){
     });
 }
 
-//启动图片下载
+//打开图像编辑框
 function thumbEdit(id,keyword){
     view.dialog({
         url:self.url(ROOTPATH + "edit_thumbs.html"),

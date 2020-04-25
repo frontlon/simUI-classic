@@ -6,93 +6,6 @@ var SCROLL_PAGE = 0; //当前滚动条翻页页数
 var CONF; //读取的config配置
 var ROMJSON;//rom列表
 
-//初始化游戏列表样式
-function initRomListStyle(){
-    //初始化游戏列表样式
-    if(CONF.Default.RomlistStyle == "1"){
-        $(#switch_romlist).html = "<i>&#xe659;</i>";
-        $(#zoom).style["display"]="inline-block";
-        $(#romlist).attributes.addClass("romblock");
-    }else{
-        $(#switch_romlist).html = "<i>&#xe690;</i>";
-        $(#romlist).attributes.addClass("romlist");
-        $(#zoom).style["display"]="none";
-    }
-
-    var zoom = $(#zoom);
-    zoom.attributes["value"] = CONF.Default.RomlistZoom;
-
-    if(CONF.Default.RomlistZoom.toInteger() >= MAXZOOM){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
-    }
-
-    $(#romlist).attributes.addClass("zoom"+CONF.Default.RomlistZoom); //更新列表大小
-    $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
-}
-
-//初始化字体大小
-function initFontSize(){
-    $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
-    $(#romlist).attributes.addClass('fontsize'+CONF.Default.FontSize);
-}
-
-//列表图标缩放
-function romBlockZoom(obj){
-
-    var romlist = self.$(#romlist);
-
-    //先清除所有缩放样式
-    for(var i=1;i<=MAXZOOM;i++){
-        romlist.attributes.removeClass("zoom"+i);
-    }
-
-    var zoom = $(#zoom);
-    var current = zoom.attributes["value"].toInteger();
-    var next = 0;
-    if(current >= MAXZOOM){
-        next = 1;
-    }else{
-        next = current+1;
-    }
-
-    //更改按钮图标
-    if(current == MAXZOOM-1){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
-    }
-
-    //更新缩放值
-    zoom.attributes["value"] = next;
-
-    //更新列表样式
-    romlist.attributes.addClass("zoom"+next);
-
-    //更新配置文件
-    view.UpdateConfig("romlist_zoom",next)
-}
-
- //切换rom列表样式
-function switchRomListStyle(obj){
-    if(obj.attributes["value"] == "1"){
-        obj.attributes["value"] = "2";
-        obj.html = "<i>&#xe690;</i>";
-        self.$(#romlist).attributes.removeClass("romblock");
-        self.$(#romlist).attributes.addClass("romlist");
-        self.$(#zoom).style["display"]="none";
-    }else{
-        obj.attributes["value"] = "1";
-        obj.html = "<i>&#xe659;</i>";
-        self.$(#romlist).attributes.removeClass("romlist");
-        self.$(#romlist).attributes.addClass("romblock");
-        self.$(#zoom).style["display"]="inline-block";
-    }
-    //更新配置文件
-    view.UpdateConfig("romlist_style",obj.attributes["value"])
-}
-
 //创建游戏rom dom
 function createRomList(cls=0){
     var romobj = JSON.parse(ROMJSON);
@@ -133,21 +46,6 @@ function createRomList(cls=0){
 
 }
 
-//rom搜索功能
-function search(){
-    var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var val = self.$(#search_input).value;
-
-    //重置滚动翻页数据
-    resetScroll();
-
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
-    $(#rom_count_num).html = romCount; //初始化在线人数
-
-    //生成游戏列表
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE);
-    createRomList(1)
-}
 
 //分页
 function scrollLoadRom(evtPos){
@@ -314,75 +212,6 @@ function openSidebar(obj){
     self.$(#buttons).html = btndata;
 }
 
-//关闭侧边栏
-function closeSidebar(){
-    $(#right).style["display"] = "none";
-    $(#right).attributes.removeClass("ready");
-}
-
-
-//心跳
-function heartbeat(str){
-    if (str == "1"){
-        $(#ping).style["display"] = "block";
-    }else{
-        $(#ping).style["display"] = "none";
-    }
-}
-
-function CB_createCache(){
-
-    //更新配置
-    initConfig("1");
-
-    //重置滚动翻页数据
-    resetScroll();
-
-    //初始化rom
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0)
-
-    createRomList(1); //生成rom列表
-    //生成rom数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","");
-    $(#rom_count_num).html = romCount; //初始化在线人数
-    endLoading(); //关闭loading框
-
-    $(#create).state.disabled = false;
-    $(#create).attributes.removeClass("disabled");
-}
-
-//设置我的喜爱
-function setFavorite(evt){
-    var id = evt.attributes["rid"];
-    var star = evt.attributes["value"];
-
-    if(star == "1"){
-        star = "0";
-        evt.attributes.removeClass("funbtn_1");
-        evt.attributes.addClass("funbtn_0");
-    }else{
-        star = "1";
-        evt.attributes.removeClass("funbtn_0");
-        evt.attributes.addClass("funbtn_1");        
-    }
-
-    evt.attributes["value"] = star;
-
-    var result = view.SetFavorite(id,star);
-   
-    if(result != "1"){
-        view.msgbox(#alert,result);
-    }
-
-    //如果当前是喜好目录，则从rom列表中删除
-    var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var rdom = $(#romlist).select("li[rid="+id+"]");
-    if(menu == "favorite" && rdom != undefined){
-        rdom.remove();
-    }
-}
-
-
 //字母搜索
 function numSearch(evt){
 
@@ -446,8 +275,4 @@ function getRomPicPath(type,platform,name){
     }else{
         return "";
     }
-}
-
-function RomRename(){
-    
 }

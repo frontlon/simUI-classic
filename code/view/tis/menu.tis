@@ -95,3 +95,19 @@ function changeMenu(obj){
     view.UpdateConfig("menu",ACTIVE_MENU);
 }
 
+
+//rom搜索功能
+function search(){
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    var val = self.$(#search_input).value;
+
+    //重置滚动翻页数据
+    resetScroll();
+
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //生成游戏列表
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE);
+    createRomList(1)
+}

@@ -65,7 +65,7 @@ class FileDropZone : Element
     {
     this.attributes.removeClass("active-target");
     //view.msgbox(#information, String.printf("Dropped:%V",this.files));
-    //view.msgbox(#information, String.printf("id:%V",this.attributes["id"]));
+    //view.msgbox(#information, String.printf("id:%V",this.attributes["opt"]));
     var img = "<img src='"+ this.files +"'>";
     this.html = img;
     return true;
