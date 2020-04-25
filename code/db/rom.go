@@ -36,11 +36,9 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	if len(uniqs) == 0 {
 		return
 	}
-	fmt.Println("开始批量写库", len(uniqs))
 	tx := getDb().Begin()
 	for _, md5 := range uniqs {
 		v := romlist[md5]
-		fmt.Println("v=", v)
 		tx.Create(&v)
 	}
 	tx.Commit()

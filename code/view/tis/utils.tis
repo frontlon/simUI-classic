@@ -38,7 +38,7 @@ function alert(str){
 //开启loading框
 function startLoading(str = ""){
     $(#loading).style['display'] = 'block';
-    if str != ""{
+    if (str != ""){
         $(#loading p).html = str;
     }else{
         $(#loading p).html = CONF.Lang.Loading;
