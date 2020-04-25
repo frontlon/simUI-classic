@@ -36,8 +36,13 @@ function alert(str){
 }
 
 //开启loading框
-function startLoading(){
+function startLoading(str = ""){
     $(#loading).style['display'] = 'block';
+    if str != ""{
+        $(#loading p).html = str;
+    }else{
+        $(#loading p).html = CONF.Lang.Loading;
+    }
 }
 
 //关闭loading框

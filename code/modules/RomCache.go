@@ -52,17 +52,15 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				//如果有别名配置，则读取别名
 				if _, ok := RomAlias[title]; ok {
 					if RomAlias[title] != "" {
-						if RomAlias[title] == "-"{ //如果是-，则忽略这个rom
+						if RomAlias[title] == "-" { //如果是-，则忽略这个rom
 							return nil
 						}
 						title = RomAlias[title]
 					}
 				}
 
-
-
-				//py := TextToPinyin(title)
-				md5 := GetFileUniqId(title, p, f)
+				pathMd5 := GetPathMd5(title, p) //路径md5，可变
+				fileId := GetFileId(f)          //文件id，不可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -85,12 +83,13 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Platform: platform,
 						Star:     0,
 						Pinyin:   utils.TextToPinyin(sub[1]),
-						Md5:      md5,
+						PathMd5:  pathMd5,
+						FileId:   fileId,
 						SimConf:  "{}",
 					}
 
-					romlist[md5] = sinfo
-					md5list = append(md5list, sinfo.Md5)
+					romlist[pathMd5] = sinfo
+					md5list = append(md5list, sinfo.PathMd5)
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
@@ -100,12 +99,13 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						RomPath:  p,
 						Star:     0,
 						Pinyin:   utils.TextToPinyin(title),
-						Md5:      md5,
+						PathMd5:  pathMd5,
+						FileId:   fileId,
 						SimConf:  "{}",
 					}
 
-					romlist[md5] = rinfo
-					md5list = append(md5list, rinfo.Md5)
+					romlist[pathMd5] = rinfo
+					md5list = append(md5list, rinfo.PathMd5)
 
 					//分类列表
 					if menu != ConstMenuRootKey {
@@ -152,24 +152,33 @@ func ClearPlatform() error {
  **/
 func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
-	fileUniqs := []string{} //磁盘文件
+	md5s := []string{}    //磁盘文件
+	fileIds := []string{} //磁盘文件
 
-	for k, _ := range romlist {
-		fileUniqs = append(fileUniqs, k)
+	for k, v := range romlist {
+		md5s = append(md5s, k)
+		fileIds = append(fileIds, v.FileId)
 	}
 
 	DbUniqs, _ := (&db.Rom{}).GetMd5ByPlatform(platform) //数据库的md5
 
-	addUniq := utils.SliceDiff(fileUniqs, DbUniqs)
-	subUniq := utils.SliceDiff(DbUniqs, fileUniqs)
+	DbFileIds, _ := (&db.Rom{}).GetFileIdByFileId(platform, fileIds) //数据库的file_id
+	addUniq := utils.SliceDiff(md5s, DbUniqs)
+	subUniq := utils.SliceDiff(DbUniqs, md5s)
 
-	//删除rom数据
-	err := (&db.Rom{}).DeleteByMd5(platform, subUniq)
+	//1.更新现有rom
+	err := (&db.Rom{}).BatchUpdateByFileId(DbFileIds, romlist)
 	if err != nil {
 		return err
 	}
 
-	//保存新数据到数据库rom表
+	//2.删除不存在的rom
+	err = (&db.Rom{}).DeleteByMd5(platform, subUniq)
+	if err != nil {
+		return err
+	}
+
+	//3.保存新数据到数据库rom表
 	(&db.Rom{}).BatchAdd(addUniq, romlist)
 
 	//这些变量可能过大，清空变量
@@ -177,6 +186,7 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 	addUniq = []string{}
 	subUniq = []string{}
 	DbUniqs = []string{}
+	DbFileIds = []string{}
 
 	return nil
 }
@@ -230,10 +240,13 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 	return nil
 }
 
-/**
- * 读取文件唯一标识
- **/
-func GetFileUniqId(title string, p string, f os.FileInfo) string {
-	str := title + p + utils.ToString(f.Size()) + f.ModTime().String()
+//读取路径Md5
+func GetPathMd5(title string, p string) string {
+	str := title + p
 	return utils.Md5(str)
+}
+
+//读取文件唯一ID
+func GetFileId(f os.FileInfo) string {
+	return utils.ToString(f.Size()) + utils.ToString(f.ModTime().UnixNano())
 }

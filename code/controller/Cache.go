@@ -69,6 +69,7 @@ func CacheController(w *window.Window) {
 			}
 			//开始重建缓存
 			for platform, _ := range PlatformList {
+				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [1/3] 扫描磁盘rom文件") //loading框
 
 				romlist, menu, err := modules.CreateRomData(platform)
 
@@ -76,12 +77,16 @@ func CacheController(w *window.Window) {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}
+				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [2/3] 更新rom数据") //loading框
 
 				//更新rom数据
 				if err := modules.UpdateRomDB(platform, romlist); err != nil {
 					WriteLog(err.Error())
 					return ErrorMsg(w, err.Error())
 				}
+
+				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [3/3] 更新目录数据") //loading框
+
 				//更新menu数据
 				if err := modules.UpdateMenuDB(platform, menu); err != nil {
 					WriteLog(err.Error())

@@ -19,6 +19,15 @@ func ErrorMsg(w *window.Window, err string) *sciter.Value {
 	return sciter.NullValue();
 }
 
+//调用loading框
+func Loading(w *window.Window, str string) *sciter.Value {
+	if _, err := w.Call("startLoading", sciter.NewValue(str)); err != nil {
+	}
+	return sciter.NullValue();
+}
+
+
+
 /*
  写日志
 */

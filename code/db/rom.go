@@ -22,7 +22,8 @@ type Rom struct {
 	RunNum   uint64 // 运行次数
 	RunTime  uint32 // 最后运行时间
 	Pinyin   string // 拼音索引
-	Md5      string // 文件Md5
+	PathMd5  string // 文件Md5
+	FileId   string //唯一标识
 }
 
 func (*Rom) TableName() string {
@@ -43,6 +44,23 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 		tx.Create(&v)
 	}
 	tx.Commit()
+}
+
+//根据fileid更新现有的rom
+func (m *Rom) BatchUpdateByFileId(fileIds []string, romlist map[string]*Rom) error {
+	tx := getDb().Begin()
+
+	for _, v := range romlist {
+		if utils.InSliceString(v.FileId, fileIds) {
+			result := getDb().Where("file_id=?", v.FileId).Updates(&v)
+			if result.Error != nil {
+				fmt.Println(result.Error)
+			}
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //根据条件，查询多条数据
@@ -265,7 +283,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 	for k, uniq := range uniqs {
 		subsql += uniq + "','";
 		if k%990 == 0 {
-			sql = "DELETE FROM rom where md5 in ('" + subsql + "')";
+			sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')";
 			tx := getDb().Begin()
 			tx.Exec(sql)
 			result := tx.Commit()
@@ -278,7 +296,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	//删除剩余数据
 	if subsql != "" {
-		sql = "DELETE FROM rom where md5 in ('" + subsql + "')";
+		sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')";
 		tx := getDb().Begin()
 		tx.Exec(sql)
 		result := tx.Commit()
@@ -293,16 +311,33 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 //读取一个平台下的所有md5
 func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 	volist := []*Rom{}
-	result := getDb().Select("md5").Where("platform=?", platform).Find(&volist)
+	result := getDb().Select("path_md5").Where("platform=?", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
 	md5List := []string{}
 	for _, v := range volist {
-		md5List = append(md5List, v.Md5)
+		md5List = append(md5List, v.PathMd5)
 	}
 	return md5List, result.Error
+}
+
+//根据file_id取file_id，交集
+func (sim *Rom) GetFileIdByFileId(platform uint32, fileIds []string) ([]string, error) {
+	volist := []*Rom{}
+	result := getDb().Select("file_id").Where("platform=?", platform).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	fileIdList := []string{}
+	for _, v := range volist {
+		if utils.InSliceString(v.FileId, fileIds) {
+			fileIdList = append(fileIdList, v.FileId)
+		}
+	}
+	return fileIdList, result.Error
 }
 
 //删除不存在的平台下的所有rom
