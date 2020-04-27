@@ -24,11 +24,7 @@ func BootCheckUpgrade(w *window.Window) {
 		return
 	}
 	go func() {
-		body,err := utils.GetHttp(upgradeUrl)
-		if err != nil{
-			if _, err := w.Call("upgrade", sciter.NewValue("error")); err != nil {
-			}
-		}
+		body,_ := utils.GetHttp(upgradeUrl)
 		ver := &Version{}
 		if err := json.Unmarshal([]byte(body), &ver); err != nil {
 		}

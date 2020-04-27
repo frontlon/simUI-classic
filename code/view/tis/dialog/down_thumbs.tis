@@ -4,9 +4,7 @@ var PAGENUM = 30;
 var SCROLL_POS = 0;
 var SCROLL_LOCK = false;
 view.root.on("ready", function(){
-
     Init(); //初始化
-   
 });
 
 //初始化
@@ -24,83 +22,71 @@ function Init(){
 
     //分页
     self.onScroll = function(evt) {
-
-        var scrollPos = evt.scrollPos + self.box(#height);
-        var boxHeight = $(#down_thumb_list).box(#height);
-
-        if(SCROLL_POS == 0){
-            SCROLL_POS = scrollPos;
-        }
-
-        if ((boxHeight - scrollPos <=50) && (scrollPos > SCROLL_POS)){
-
-            //如果加锁中，则不执行后续逻辑，防止重复触发
-            if (SCROLL_LOCK == true){
-                return;
-            }
-            SCROLL_LOCK = true; //加锁
-
-            var keyword = $(#search_input).value;
-            var ctype = $(.submit.active).attributes['value'];
-
-            //插画加动图
-            if(ctype == 2){
-                keyword += " "+CONF.Lang.Animation;
-            }
-
-            PAGE++;
-            var result = searchPic(keyword,ctype);
-            if(result == true){
-                SCROLL_POS = scrollPos;
-            }
-            SCROLL_LOCK = false;
-        }
+        pages(evt);
     };
 }
+
+//分页
+function pages(evt){
+
+    var scrollPos = evt.scrollPos + self.box(#height);
+    var boxHeight = $(#down_thumb_list).box(#height);
+
+    if(SCROLL_POS == 0){
+        SCROLL_POS = scrollPos;
+    }
+
+    if ((boxHeight - scrollPos <=50) && (scrollPos > SCROLL_POS)){
+
+        //如果加锁中，则不执行后续逻辑，防止重复触发
+        if (SCROLL_LOCK == true){
+            return;
+        }
+        SCROLL_LOCK = true; //加锁
+
+        var keyword = $(#search_input).value;
+        var ctype = $(.submit.active).attributes['value'];
+
+        PAGE++;
+        var result = searchPic(keyword,ctype);
+        if(result == true){
+            SCROLL_POS = scrollPos;
+        }
+        SCROLL_LOCK = false;
+    }
+}
+
 
 //点击图片
 function DownThumb(evt){
     var keyword = $(#search_input).value;
-    var ctype = $(.submit.active).attributes['value'];
+    var ctype = view.parameters.type;
+
     var caption = "";
     var content = "";
-     if(ctype == 1){ //展示图
-        caption = CONF.Lang.Thumb;
-        content = CONF.Lang.SetThumbConfirm;
-    }else{ //插画、动画
-        keyword += " "+ CONF.Lang.Snap;
-        caption = " "+CONF.Lang.SetSnap;;
-        content = CONF.Lang.SetSnapConfirm;
-    }
-
+    // if(ctype == 1){ //展示图
+    caption = CONF.Lang.Thumb;
+    content = CONF.Lang.SetThumbConfirm;
+   
     var result = view.msgbox {
         type:#question, 
-        caption:caption, 
+        caption:caption,
         content:content,
         buttons:[
             {id:#yes,text:CONF.Lang.Yes},
             {id:#cancel,text:CONF.Lang.Cancel},
         ]
     };
-
     if(result == "yes"){
-        var result = mainView.DownloadRomThumbs(ctype,ID,this.select("img").attributes["src"]);
-
-        //如果是展示图，则刷新rom列表图片
-        if(result != ""){
-            if(type == "1"){
-                $(#romlist).select("li[rid="+id+"] img").attributes['src'] = newpath;
-            }
-        }
-
-        if(result != ""){
-            view.msgbox(#alert,CONF.Lang.ThumbsDownUpdateSuccess);
-        }
+        //下载图片
+        var newpath = mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
+        view.close(evt.select("img").attributes["src"]);
     }
 }
 
 //点击搜索按钮
 function searchThumb(evt){
+    alert("aa");
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){
@@ -111,25 +97,17 @@ function searchThumb(evt){
     //按钮样式
     this.attributes.addClass('active');
 
-    if(this.attributes['value'] == 1){ //展示图
-            $(#search_submit_2).attributes.removeClass('active');
-
-    }else{ //插画、动画
-        keyword += " "+CONF.Lang.Animation;
-        $(#search_submit_1).attributes.removeClass('active');
-    }
-
     //清空数据
     $(#down_thumb_list).clear();
 
     PAGE = 0;
 
     //搜索内容
-    searchPic(keyword,this.attributes['value']);
+    searchPic(keyword);
 }
 
 //图片搜索
-function searchPic(keyword,ctype){
+function searchPic(keyword){
 
     //过滤特殊字符
     keyword = keyword.replace(/[\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\;\'\:\"\'\,\.\/\<\>\?\-\=\_\+]/g,"");
@@ -154,12 +132,6 @@ function searchPic(keyword,ctype){
             var content = "";
             for(var item in data.data) {
                 if(item.thumbURL != undefined){
-                    //如果是展示图，不允许设置动画
-                    if (ctype == 1){
-                        if(item.is_gif == 1){
-                            continue;
-                        }
-                    }
                     content +="<li><img src='"+item.thumbURL+"'/></li>";
                 }
             }

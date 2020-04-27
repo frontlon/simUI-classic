@@ -1,27 +1,22 @@
-﻿//启动图片下载
-function thumbDown(id,keyword){
-    view.dialog({
-        url:self.url(ROOTPATH + "down_thumbs.html"),
-        caption:CONF.Lang.ThumbsDown,
-        width:1024,
-        height:750,
-        parameters: {
-            id:id,
-            keyword:keyword,
-        };
-    });
-}
-
-//打开图像编辑框
-function thumbEdit(id,keyword){
-    view.dialog({
+﻿//打开图像编辑框
+function thumbEdit(evt){
+    var thumb = view.dialog({
         url:self.url(ROOTPATH + "edit_thumbs.html"),
         caption:CONF.Lang.ThumbsDown,
         width:990,
         height:890,
         parameters: {
-            id:id,
-            keyword:keyword,
+            id:evt.attributes["rid"],
+            platform:ACTIVE_PLATFORM,
+            name:evt.attributes["rname"],
         };
     });
+    if(thumb == ""){
+        return true;
+    }else if(thumb == "delete"){
+        var emptythumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+        self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = emptythumb;
+    }else{
+        self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = thumb;
+    }
 }

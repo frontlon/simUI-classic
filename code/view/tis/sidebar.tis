@@ -81,7 +81,6 @@ function SetRomCmd(evt){
 function thumbSlider(evt){
     var container = $(div#stack);
     var next = container.shown.next || container.first;
-    evt.state.disabled = true;
     rotateTo(next, :: (this super).state.disabled = false);
 }
 

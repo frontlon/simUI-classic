@@ -123,10 +123,10 @@ func RomController(w *window.Window) {
 
 	//下载rom图片
 	w.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
-		typeId := utils.ToInt(args[0].String())
+		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		newPath := args[2].String()
-		newFileName, err := modules.DownloadRomThumbs(typeId, id, newPath)
+		newFileName, err := modules.DownloadRomThumbs(typeName, id, newPath)
 		if err != nil {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
@@ -135,7 +135,7 @@ func RomController(w *window.Window) {
 	})
 
 	//编辑图片
-	w.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
+	w.DefineFunction("EditRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		newPath := args[2].String()
@@ -145,6 +145,18 @@ func RomController(w *window.Window) {
 			return ErrorMsg(w, err.Error())
 		}
 		return sciter.NewValue(newFileName)
+	})
+
+	//删除图片
+	w.DefineFunction("DeleteThumbs", func(args ...*sciter.Value) *sciter.Value {
+		typeName := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		err := modules.DeleteThumbs(typeName, id)
+		if err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+		return sciter.NullValue()
 	})
 
 	//重命名

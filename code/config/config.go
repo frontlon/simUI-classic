@@ -16,16 +16,17 @@ import (
 
 //配置文件
 var (
-	Cfg        *ConfStruct                                                 //公共配置
+	Cfg      *ConfStruct                                                 //公共配置
 	DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
 	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                    //可直接运行的doc文档支持的扩展名
+	} //可直接运行的doc文档支持的扩展名
 
 )
+
 //配置文件
 type ConfStruct struct {
 	RootPath     string                  //exe文件的当前路径
@@ -180,7 +181,7 @@ func getDefault() (*db.Config, error) {
 	}
 	//查看当前选定平台值是否是正常的
 	isset := false
-	for _, v := range (Cfg.Platform) {
+	for _, v := range Cfg.Platform {
 		if vo.Platform == v.Id {
 			isset = true
 			break
@@ -190,7 +191,7 @@ func getDefault() (*db.Config, error) {
 	//如果没有匹配上platform，则读取config中的第一项
 	if vo.Platform != 0 {
 		if isset == false {
-			for _, v := range (Cfg.Platform) {
+			for _, v := range Cfg.Platform {
 				vo.Platform = v.Id
 				//修复配置文件
 				if err := (&db.Config{}).UpdateField("platform", utils.ToString(vo.Platform)); err != nil {
@@ -211,7 +212,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" { // 忽略目录
+		if !fi.IsDir() && ext == ".css" {           // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件
@@ -243,17 +244,17 @@ func getTheme() (map[string]*ThemeStruct, error) {
 					continue
 				}
 				strarr := strings.Split(lineText, ":")
-				if (len(strarr) == 2) {
+				if len(strarr) == 2 {
 					//标题
 					if id == "" {
-						first := strings.Index(strarr[1], "(");
-						last := strings.Index(strarr[1], ")");
+						first := strings.Index(strarr[1], "(")
+						last := strings.Index(strarr[1], ")")
 						id = strarr[1][first+1 : last]
 						continue
 					}
 					//内容
-					first := strings.Index(strarr[0], "(");
-					last := strings.Index(strarr[0], ")");
+					first := strings.Index(strarr[0], "(")
+					last := strings.Index(strarr[0], ")")
 					key := strings.Trim(strarr[0][first+1:last], " ")
 					value := strings.Trim(strings.Replace(strarr[1], ";", "", 1), " ")
 					if key != "" && value != "" {

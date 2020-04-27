@@ -96,6 +96,7 @@ function GetPlatformLitem(evt){
     $(#platform_snap).value = info.SnapPath;
     $(#platform_poster).value = info.PosterPath;
     $(#platform_packing).value = info.PackingPath;
+    $(#platform_background).value = info.BackgroundPath;
     $(#platform_romlist).value = info.Romlist;
     //模拟器数据
     var platform_sim = $(#platform_sim);
@@ -124,6 +125,7 @@ function GetPlatformLitem(evt){
     $(#platform_snap).state.disabled = false;
     $(#platform_poster).state.disabled = false;
     $(#platform_packing).state.disabled = false;
+    $(#platform_background).state.disabled = false;
     $(#platform_romlist).state.disabled = false;
 
     var openfile = $$(.openfile);
@@ -169,6 +171,7 @@ function platformSubmit(evt){
         poster   : $(#platform_poster).value,
         packing  : $(#platform_packing).value,
         strategy : $(#platform_strategy).value,
+        background : $(#platform_background).value,
         doc      : $(#platform_doc).value,
         romlist  : $(#platform_romlist).value,
     };

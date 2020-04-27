@@ -109,7 +109,6 @@ function openSidebar(obj){
     $(#right_thumb_down).attributes["rid"] = info.Id;
     $(#right_thumb_down).attributes["rname"] = info.Name;
 
-
     //生成喜好按钮
     var favorite = $(#right_favorite);
     favorite.attributes["rid"] = info.Id.toHtmlString();
@@ -135,20 +134,21 @@ function openSidebar(obj){
 
     //游戏缩略图
     if(thumb != ""){
-        pics += "<img src='"+ thumb +"' />";
+        pics += "<img src=\""+ thumb +"\" />";
     }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        pics += "<img src='"+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
+        pics += "<img src=\""+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"\" />";
     }
 
     //滚动图
     $(#stack).html = pics;
     $(#stack).refresh();
     rotateAttached();
-    if($$(#stack > img).length == 1){
-        $(#rotate).style["display"] = "none";
-    }else{
-        $(#rotate).style["display"] = undefined;
-    }
+    
+    // if($$(#stack > img).length == 1){
+    //     $(#rotate).style["display"] = "none";
+    // }else{
+    //     $(#rotate).style["display"] = undefined;
+    // }
 
     //显示简介
     if(detailObj.DocContent != ""){
@@ -254,6 +254,9 @@ function getRomPicPath(type,platform,name){
             break;
         case "packing":
             path = CONF.Platform[platform.toString()].PackingPath + "\\" + name ;
+            break;
+        case "background":
+            path = CONF.Platform[platform.toString()].BackgroundPath + "\\" + name ;
             break;
         default:
             return "";

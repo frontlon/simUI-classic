@@ -13,9 +13,8 @@
         .thumb_bg{width:100%;height:200dip;background:url(this://app/images/down_thumbs.jpg) no-repeat center center;clear:both}
         .thumb_search{width:384dip;height:38dip;margin:80dip auto 0 auto;padding:0;}
         .thumb_search .input{opacity: 0.8;background:#fff;height:38dip;line-height:38dip;border:0;display:block;float:left;width:240dip;color:#333;font-size:14dip;text-align:center;padding:0;border-radius: 6dip 0 0 6dip}
-        .thumb_search .submit{opacity: 0.8;height:38dip;width:56dip;line-height:38dip;border:0;display:block;float:left;font-size:11dip;background:#ddd;color:#666;text-align:center;margin:0;border-radius: 0 6dip 6dip 0;cursor:pointer}
-        .thumb_search .submit.active{background: #09f;color: #FFF}
-        #search_submit_1{border-radius: 0}
+        .submit{opacity: 0.8;height:38dip;width:56dip;line-height:38dip;border:0;display:block;float:left;font-size:11dip;background:#ddd;color:#666;text-align:center;margin:0;border-radius: 0 6dip 6dip 0;cursor:pointer}
+        .submit.active{background: #09f;color: #FFF}
         .description{text-align:center;display:block;position:relative;width:100%;color:#FFF;padding-top: 16dip}
     </style>
 </head>
@@ -23,10 +22,9 @@
     <div class="thumb_bg">
         <div class="thumb_search">
             <input type="text" class="input" id="search_input" novalue="{{InputKeyword}}" value="" />
-            <button class="submit active" id="search_submit_1" value="1">{{Thumb}}</button>
-            <button class="submit" id="search_submit_2" value="2">{{Snap}}</button>
+            <button id="submit" class="submit active" value="1">{{Search}}</button>
         </div>
-        <div class="description">{{Description}}</div>      
+        <div class="description">{{Description}}</div>
     </div>
     <ul id="down_thumb_list"></ul>
     <div id="loading"><p>{{Loading}}</p></div>
@@ -41,7 +39,7 @@
     }
 
     //点击搜索按钮
-    event click $(.submit){
+    event click $(#submit){
         searchThumb(this);
     }
 </script>

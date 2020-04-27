@@ -181,7 +181,7 @@ view.root.on("ready", function(){
 
     //设置rom的cmd（侧边栏）
     self.on("click", "#sim_select > li button", function(evt) {
-     SetRomCmd(this);
+        SetRomCmd(this);
     });
 
     //缩略图滑动特效（侧边栏）
@@ -208,14 +208,9 @@ view.root.on("ready", function(){
         contextRunGame(this);
     });
 
-    //右键菜单图片下载
-    self.on("click", "#romcontext .open_down_thumb", function(evt) {
-        thumbDown(this.attributes["rid"],this.attributes["rname"]);
-    });
-
     //右键编辑图片封面
     self.on("click", "#romcontext .edit_thumb", function(evt) {
-        thumbEdit(this.attributes["rid"],this.attributes["rname"]);
+        thumbEdit(this);
     });
 
     //重命名
