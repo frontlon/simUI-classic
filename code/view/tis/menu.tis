@@ -95,7 +95,6 @@ function changeMenu(obj){
     view.UpdateConfig("menu",ACTIVE_MENU);
 }
 
-
 //rom搜索功能
 function search(){
     var menu = $(#menulist).select("dd:current").attributes["opt"];

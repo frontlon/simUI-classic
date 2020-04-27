@@ -64,7 +64,6 @@ function DownThumb(evt){
 
     var caption = "";
     var content = "";
-    // if(ctype == 1){ //展示图
     caption = CONF.Lang.Thumb;
     content = CONF.Lang.SetThumbConfirm;
    
@@ -86,7 +85,7 @@ function DownThumb(evt){
 
 //点击搜索按钮
 function searchThumb(evt){
-    alert("aa");
+     try{
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){
@@ -95,7 +94,7 @@ function searchThumb(evt){
     }
 
     //按钮样式
-    this.attributes.addClass('active');
+    evt.attributes.addClass('active');
 
     //清空数据
     $(#down_thumb_list).clear();
@@ -103,7 +102,11 @@ function searchThumb(evt){
     PAGE = 0;
 
     //搜索内容
+   
     searchPic(keyword);
+    }catch(e){
+        alert(e);
+    }
 }
 
 //图片搜索

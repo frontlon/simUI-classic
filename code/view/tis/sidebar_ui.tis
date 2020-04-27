@@ -1,0 +1,128 @@
+﻿
+//单击游戏侧边栏详情
+function openSidebar(obj){
+
+    obj.state.current = true;
+
+    if(MASK == true){
+        MASK = false;
+        $(#mask).style["display"] = "none";
+    }
+
+    var getjson = view.GetGameDetail(obj.attributes["rid"]);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+
+    //图片下载页面
+    $(#right_thumb_down).attributes["rid"] = info.Id;
+    $(#right_thumb_down).attributes["rname"] = info.Name;
+
+    //生成喜好按钮
+    var favorite = $(#right_favorite);
+    favorite.attributes["rid"] = info.Id.toHtmlString();
+    favorite.attributes["value"] = info.Star.toHtmlString();
+    if(info.Star == "1"){
+        favorite.attributes.removeClass("funbtn_0");
+        favorite.attributes.addClass("funbtn_1");
+    }else{
+        favorite.attributes.removeClass("funbtn_1");
+        favorite.attributes.addClass("funbtn_0");
+    }
+
+    //创建滑动图
+    _createRotate(info);
+    
+    //显示简介
+    if(detailObj.DocContent != ""){
+        $(#doc_title).style["display"] = "block";
+        $(#doc).style["display"] = "block";
+        $(#doc).html = markdown.parse(detailObj.DocContent);
+    }else{
+        $(#doc_title).style["display"] = "none";
+        $(#doc).style["display"] = "none";
+        
+    }
+
+    //如果存在攻略文件
+    if(detailObj.StrategyFile != "" || detailObj.StrategyContent != ""){
+        $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
+        $(#right_desc).attributes.removeClass("right_desc_disable");
+    }else{
+        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
+        $(#right_desc).attributes.addClass("right_desc_disable");
+
+    }
+    $(#right_desc).attributes["rid"] = info.Id;
+
+    //生成模拟器列表
+    $(#sim_select).html = ""; //先清空所有模拟器
+    var pfObj = CONF.Platform[info.Platform.toString()];
+
+    if(pfObj.SimList.length > 0 ){
+        var simliststr = "";
+        for(var obj in pfObj.SimList) {
+            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button><i>&#xe61f;</i></button></li>";
+        }
+        $(#sim_select).html = simliststr;
+
+    }
+
+    //如果该平台有模拟器
+    if($(#sim_select li) != undefined){
+        //先找rom对应的模拟器
+        var SimDom = $(#sim_select).select("li[sim="+info.SimId+"]");
+
+        //找不到rom对应的模拟器，找平台默认模拟器
+        if(info.SimId == 0 || SimDom == undefined){
+            SimDom = $(#sim_select).select("li[sim="+ pfObj.UseSim["Id"] +"]");
+        }
+
+        //如果平台模拟器也不存在，则读取第一个模拟器
+        if(SimDom == undefined){
+            SimDom = $(#sim_select li)
+        }
+
+        //选定模拟器
+        SimDom.state.current = true;
+    }
+
+    //生成按钮
+    var btndata = "<div class='run' rid='"+ info.Id +"'>"+info.Name.toHtmlString()+"</div>";
+    for(var sub in detailObj.Sublist) {
+        btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name.toHtmlString()+"</div>";
+    }
+    self.$(#buttons).html = btndata;
+}
+
+
+//滑动图
+function _createRotate(info){
+    var pics = "";
+    var romPath = URL.parse(info.RomPath);
+    var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
+    var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
+    var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
+    var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
+    
+    if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
+    if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
+    if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
+
+    //游戏缩略图
+    if(thumb != ""){
+        pics += "<img src=\""+ thumb +"\" />";
+    }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+        pics += "<img src=\""+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"\" />";
+    }
+
+    //滚动图
+    $(#stack).html = pics;
+    $(#stack).refresh();
+    rotateAttached();
+    if($$(#stack > img).length == 1){
+        $(#rotate).style["display"] = "none";
+    }else{
+        $(#rotate).style["display"] = undefined;
+    }
+    return pics
+}

@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" window-icon="this://app/images/ico.png" window-resizable window-frame="transparent">
+<head>
+<meta charset="utf-8" />
+<title></title>
+<div id="themefile"></div>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<div id="console" style="box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none"></div>
+<div id="loading"><img src="images/loading.gif" /><p>{{Loading}}</p></div>
+<menu id="romcontext"></menu>
+<div class="titlebar" id="titlebar" role=window-caption>
+    <div id="logo">{{SoftName}}</div>
+    <div id="tb_left">
+        <button id="close_platform" value="" title="关闭平台"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="关闭平台"><i>&#xe7e2;</i></button><button id="close_right" value="" title="关闭平台"><i>&#xe7ac;</i></button>
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="font_size" value="1" title="{{FontSize}}"><i>&#xe695;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
+    </div>
+    <div id="tb_right">
+        <button id="shortcut" type="menu" title="{{Shortcut}}"><i>&#xe6b8;</i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i>&#xe637;</i>
+            <menu>
+                <li id="create_cache" opt="platform"><i>&#xe637;</i><span>{{CreateCachePlatform}}</span></li>
+                <li id="create_cache" opt="all"><i>&#xe637;</i><span>{{CreateCacheAll}}</span></li>
+            </menu>
+        </button><button type="menu" title="{{Config}}"><i>&#xe602;</i>
+            <menu>
+                <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
+                <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
+                <li id="about"><i>&#xe7b9;</i><span>{{About}}</span></li>
+                <li id="help"><i>&#xf3c1;</i><span>{{Help}}</span></li>
+                <li id="upgrade"><i>&#xf3c1;</i><span>检查更新</span></li>
+            </menu>
+        </button>     
+        <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
+    </div>
+</div>
+<frameset cols="62dip,140dip,*,204dip" noresize="noresize">
+    <section id="left_platform">
+        <ul id="platform_ul"></ul>
+    </section>
+    <section id="left_menu">
+        <div class="search">
+            <input type="text" class="input" id="search_input" />
+            <button type="submit" class="submit" id="search_submit"><i>&#xe873;</i></button>
+        </div>
+        <dl id="menulist"></dl>
+    </section>
+    <section id="center" class="scrollbar">
+
+        <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
+
+        <div class="statebar">
+
+            <div class="counnum">
+                <span id="rom_count_text">{{GameCount}}</span><span id="rom_count_num">0</span></div>
+        </div>
+        <div id="romwrapper">
+            <ul id="romlist"></ul>
+        </div>
+    </section>
+    <splitter id="right_splitter" />
+    <section id="right">
+        <div id="mask"><img src="" /></div>
+        <h2>{{FunButton}}</h2>
+        <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
+        <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
+        <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
+        <h2>{{Thumb}}</h2>
+        <button id="rotate" class="funbtn">&gt;</button>
+        <div id="stack"></div>
+        <h2 id="doc_title">{{Doc}}</h2>
+        <div id="doc" class="doc"></div>
+        <h2>{{RunGame}}</h2>
+        <ul id="sim_select"></ul>
+        <div id="buttons"></div>
+    </section>
+    
+</frameset>
+</body>
+
+<script type="text/tiscript">
+    const mainView = view;
+    //var ROOTPATH = "this://app/";
+    var ROOTPATH = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\";
+    include ROOTPATH + "tis/plugins/decorators.tis";
+    include ROOTPATH + "tis/plugins/rotator.tis";
+    include ROOTPATH + "tis/plugins/markdown.tis";
+    include ROOTPATH + "tis/plugins/dragdrop.tis";
+    include ROOTPATH + "tis/utils.tis";
+    
+</script>
+</html>
