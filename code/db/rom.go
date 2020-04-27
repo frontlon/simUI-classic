@@ -3,8 +3,10 @@ package db
 import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
+	"time"
 )
 
 var ROM_PAGE_NUM = 100; //每页加载rom数量
@@ -246,6 +248,19 @@ func (m *Rom) UpdateName(setType uint8) error {
 //更新喜爱状态
 func (m *Rom) UpdateStar() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("star", m.Star)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+//更新玩的次数
+func (m *Rom) UpdatePlayNum() error {
+	update := map[string]interface{}{
+		"run_num": gorm.Expr("run_num + 1"),
+		"run_time" : time.Now().Unix(),
+	}
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(update)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
