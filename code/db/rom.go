@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var ROM_PAGE_NUM = 100; //每页加载rom数量
+var ROM_PAGE_NUM = 100 //每页加载rom数量
 
 type Rom struct {
 	Id       uint64
@@ -81,13 +81,14 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 	}
 	where["pname"] = ""
 
+	likeWhere := ""
 	if keyword != "" {
-		where["name LIKE"] = "%" + keyword + "%"
+		likeWhere = `name LIKE "%` + keyword + `%"`
 	}
 
 	offset := pages * ROM_PAGE_NUM
 
-	result := getDb().Select("id,name,menu,platform,rom_path").Where(where).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
+	result := getDb().Select("id,name,menu,platform,rom_path").Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -188,10 +189,11 @@ func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	if menu != "" {
 		where["menu"] = menu
 	}
+	likeWhere := ""
 	if keyword != "" {
-		where["name LIKE"] = "%" + keyword + "%'"
+		likeWhere = `name LIKE "%` + keyword + `%"`
 	}
-	result := getDb().Table(m.TableName()).Where(where).Count(&count)
+	result := getDb().Table(m.TableName()).Where(where).Where(likeWhere).Count(&count)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -257,8 +259,8 @@ func (m *Rom) UpdateStar() error {
 //更新玩的次数
 func (m *Rom) UpdatePlayNum() error {
 	update := map[string]interface{}{
-		"run_num": gorm.Expr("run_num + 1"),
-		"run_time" : time.Now().Unix(),
+		"run_num":  gorm.Expr("run_num + 1"),
+		"run_time": time.Now().Unix(),
 	}
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(update)
 	if result.Error != nil {
@@ -277,7 +279,7 @@ func (m *Rom) UpdateSimulator() error {
 }
 
 //删除一个平台下的所有rom数据
-func (m *Rom) DeleteByPlatform() (error) {
+func (m *Rom) DeleteByPlatform() error {
 	result := getDb().Where("platform=? ", m.Platform).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -291,12 +293,12 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 		return nil
 	}
 
-	sql := "";
-	subsql := "";
+	sql := ""
+	subsql := ""
 	for k, uniq := range uniqs {
-		subsql += uniq + "','";
+		subsql += uniq + "','"
 		if k%990 == 0 {
-			sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')";
+			sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')"
 			tx := getDb().Begin()
 			tx.Exec(sql)
 			result := tx.Commit()
@@ -309,7 +311,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	//删除剩余数据
 	if subsql != "" {
-		sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')";
+		sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')"
 		tx := getDb().Begin()
 		tx.Exec(sql)
 		result := tx.Commit()
@@ -354,7 +356,7 @@ func (sim *Rom) GetFileIdByFileId(platform uint32, fileIds []string) ([]string, 
 }
 
 //删除不存在的平台下的所有rom
-func (m *Rom) ClearByPlatform(platforms []string) (error) {
+func (m *Rom) ClearByPlatform(platforms []string) error {
 	result := getDb().Where("platform not in (?)", platforms).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -363,7 +365,7 @@ func (m *Rom) ClearByPlatform(platforms []string) (error) {
 }
 
 //清空表数据
-func (m *Rom) Truncate() (error) {
+func (m *Rom) Truncate() error {
 	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
