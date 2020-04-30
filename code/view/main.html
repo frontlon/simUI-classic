@@ -14,7 +14,7 @@
     #left_platform{background-color:color(sidebar-background-color);height:*;}
     #left_menu{background-color:color(sidebar-background-color);height:*;}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
-    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;}
+    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;min-width:220dip;max-width:500dip}
     
     /* 菜单 */
     menu{display:none;border:1dip solid color(context-border-color);padding:0}
@@ -49,7 +49,7 @@
     .search .submit:hover{opacity: 0.7;}
 
     /* 字母选择 */
-    #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;}
+    #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;width:30dip}
     #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
     #num_search li:hover{color:color(num-index-hover-text-color)}
     #num_search li:current{color:color(num-index-active-text-color);}
@@ -131,8 +131,8 @@
     #right .right_desc_disable:hover{cursor: default;background: none}
    
     /* 右侧边栏遮罩 */
-    #mask{width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:table-cell;background-color:color(sidebar-background-color);}
-    #mask img{width:60%;display:block;margin:0 auto;opacity: 0.3;}
+    #mask{width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background:color(sidebar-background-color) no-repeat center center;background-size:50%;border:1px solid #f00}
+    #mask img{width:60%;display:block;opacity: 0.3;}
     #mask p{font-size:16dip;display: block;opacity: 0.5;margin-bottom:50dip}
 
     /* 模拟器选择 */
@@ -164,7 +164,6 @@
 
     /* 侧边栏滚动图片 */
     #rotate{top:62dip;right:10dip;position:absolute;}
-
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
     #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);}  
 </style>
@@ -197,7 +196,7 @@
         <button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
     </div>
 </div>
-<frameset cols="62dip,140dip,*,204dip" noresize="noresize">
+<frameset cols="62dip,140dip,*,220dip" noresize="noresize">
     <section id="left_platform">
         <ul id="platform_ul"></ul>
     </section>
@@ -223,7 +222,7 @@
     </section>
     <splitter id="right_splitter" />
     <section id="right">
-        <div id="mask"><img src="" /></div>
+        <div id="mask"></div>
         <h2>{{FunButton}}</h2>
         <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
         <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
@@ -253,7 +252,6 @@
     include ROOTPATH + "tis/rom.tis";
     include ROOTPATH + "tis/platform.tis";
     include ROOTPATH + "tis/menu.tis";
-    include ROOTPATH + "tis/sidebar_ui.tis";
     include ROOTPATH + "tis/sidebar.tis";
     include ROOTPATH + "tis/statebar.tis";
     include ROOTPATH + "tis/thumb.tis";

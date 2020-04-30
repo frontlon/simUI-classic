@@ -208,7 +208,7 @@ function setTheme(themeId){
     }
 
     if(CONF.Theme[themeId].Params["sidebar-image"] != undefined){
-        $(#mask img).attributes["src"] = URL.fromPath(themePath + CONF.Theme[themeId].Params["sidebar-image"]);
+        $(#mask).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[themeId].Params["sidebar-image"])];
     }    
 }
 
