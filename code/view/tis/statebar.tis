@@ -248,7 +248,7 @@ function openConfig(evt){
     view.dialog({
         url:self.url(ROOTPATH + "config.html"),
         width:655,
-        height:760
+        height:780
     });
     startLoading();
     initConfig("1");

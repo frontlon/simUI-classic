@@ -42,8 +42,6 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}
@@ -93,8 +91,6 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}
@@ -112,7 +108,6 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 	platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
 	RomFileName := utils.GetFileName(vo.RomPath)
 	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + utils.GetFileExt(picPath) //生成新文件的完整绝路路径地址
-
 	//复制文件
 	if err := utils.Copy(picPath, newFileName); err != nil {
 		return "", err
@@ -146,8 +141,6 @@ func DeleteThumbs(typeName string, id uint64) error {
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}

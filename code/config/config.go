@@ -18,7 +18,7 @@ import (
 var (
 	Cfg      *ConfStruct                                                 //公共配置
 	DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
-	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp"} //支持的图片类型
+	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp","wmv"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
@@ -137,6 +137,11 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 		if v.PackingPath != "" {
 			platformList[k].PackingPath, _ = filepath.Abs(v.PackingPath)
 			platform[v.Id].PackingPath = platformList[k].PackingPath
+		}
+
+		if v.VideoPath != "" {
+			platformList[k].VideoPath, _ = filepath.Abs(v.VideoPath)
+			platform[v.Id].VideoPath = platformList[k].VideoPath
 		}
 
 		if v.Romlist != "" {

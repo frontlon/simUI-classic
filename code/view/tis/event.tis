@@ -141,7 +141,7 @@ view.root.on("ready", function(){
 
     //分页
     $(#center).onScroll = function(evt) {
-        scrollLoadRom(evt.scrollPos);
+        scrllLoadRom(evt.scrollPos);
     };
 
     //按字母搜索rom
@@ -164,9 +164,14 @@ view.root.on("ready", function(){
         setFavorite(this);
     });
 
-    //启动图片下载（侧边栏）
+   //设置喜爱（侧边栏）
+    self.on("click", "#right_hide", function(evt) {
+        setHide(this);
+    });
+
+    //图片编辑（侧边栏）
     self.on("click", "#right_thumb_down", function(evt) {
-        thumbDown(this.attributes["rid"],this.attributes["rname"]);
+        thumbEdit(this);
     });
 
     //攻略弹窗按钮（侧边栏）
@@ -189,6 +194,10 @@ view.root.on("ready", function(){
         thumbSlider(this);
     });
 
+    //控制视频播放
+    self.on("click", "#right_video", function(evt) {
+        videoControl(this);
+    });
 
 
    
@@ -221,6 +230,11 @@ view.root.on("ready", function(){
     //右键菜单设置喜爱
     self.on("click", "#romcontext .fav", function(evt) {
         contextSetFavorite(this);
+    });
+
+   //右键菜单设置隐藏
+    self.on("click", "#romcontext .hide", function(evt) {
+        contextSetHide(this);
     });
 
     //右键菜单定位目录

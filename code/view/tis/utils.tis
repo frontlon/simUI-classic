@@ -56,3 +56,15 @@ function consoleLog(str){
     $(#console).append(str + '<br>');
 }
 
+
+//时间戳转日期
+function unixToDate(timestamp) {
+timestamp = timestamp.toString() + "000";
+var time = new Date(timestamp.toFloat());
+var y = time.year;
+var m = time.month;
+var d = time.day;
+var h = time.hour;
+var mm = time.minute;
+return y+'-'+m+'-'+d+' '+h+':'+mm;
+}

@@ -120,6 +120,7 @@ function numSearch(evt){
 function getRomPicPath(type,platform,name){
     var path = "";
     //检查图片类型，拼接图片地址和文件名
+
     switch(type){
         case "thumb":
             path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
@@ -133,18 +134,25 @@ function getRomPicPath(type,platform,name){
         case "packing":
             path = CONF.Platform[platform.toString()].PackingPath + "\\" + name ;
             break;
-        case "background":
-            path = CONF.Platform[platform.toString()].BackgroundPath + "\\" + name ;
+        case "video":
+            path = CONF.Platform[platform.toString()].VideoPath + "\\" + name ;
             break;
         default:
             return "";
     }
 
-    var exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
+    var exts = [];
+    if (type == "video"){
+         exts = ["wmv","mp4"]; //支持的视频类型
+    }else{
+         exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
+    }
+    
     var isset = false; //图片是否存在
     var pic = ""; //图片地址
     for(var ext in exts) {
         pic = path +"."+ext;
+
         if(System.scanFiles(pic)){ //检查图片是否存在
             isset = true;
             break;
@@ -157,3 +165,4 @@ function getRomPicPath(type,platform,name){
         return "";
     }
 }
+

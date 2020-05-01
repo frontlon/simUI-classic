@@ -52,9 +52,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				//如果有别名配置，则读取别名
 				if _, ok := RomAlias[title]; ok {
 					if RomAlias[title] != "" {
-						if RomAlias[title] == "-" { //如果是-，则忽略这个rom
-							return nil
-						}
 						title = RomAlias[title]
 					}
 				}

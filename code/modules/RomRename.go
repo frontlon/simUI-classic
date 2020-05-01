@@ -180,18 +180,6 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
-	if config.Cfg.Platform[platform].BackgroundPath != "" {
-		for _, ext := range config.PIC_EXTS {
-			picpath := config.Cfg.Platform[platform].BackgroundPath + "/" + oldfileName + ext
-			if (utils.FileExists(picpath)) {
-				if err := utils.Rename(picpath, name); err != nil {
-					return err
-				}
-				break
-			}
-		}
-	}
-
 	if config.Cfg.Platform[platform].DocPath != "" {
 		for _, ext := range config.DOC_EXTS {
 			picpath := config.Cfg.Platform[platform].DocPath + "/" + oldfileName + ext

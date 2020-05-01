@@ -28,6 +28,18 @@ function openSidebar(obj){
         favorite.attributes.addClass("funbtn_0");
     }
 
+    //生成隐藏按钮
+  var hide = $(#right_hide);
+    hide.attributes["rid"] = info.Id.toHtmlString();
+    hide.attributes["value"] = info.Hide.toHtmlString();
+    if(info.Hide == "1"){
+        hide.attributes.removeClass("funbtn_0");
+        hide.attributes.addClass("funbtn_1");
+    }else{
+        hide.attributes.removeClass("funbtn_1");
+        hide.attributes.addClass("funbtn_0");
+    }
+
     //创建滑动图
     _createRotate(info);
     
@@ -60,7 +72,7 @@ function openSidebar(obj){
     if(pfObj.SimList.length > 0 ){
         var simliststr = "";
         for(var obj in pfObj.SimList) {
-            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button><i>&#xe61f;</i></button></li>";
+            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
         }
         $(#sim_select).html = simliststr;
 
@@ -91,6 +103,16 @@ function openSidebar(obj){
         btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name.toHtmlString()+"</div>";
     }
     self.$(#buttons).html = btndata;
+
+
+    //显示游戏时间
+    $(#right_play_num).text = info.RunNum;
+    if(info.RunTime == "0"){
+        $(#right_play_time).text = CONF.Lang.NoPlay;
+    }else{
+        $(#right_play_time).text = unixToDate(info.RunTime);
+    }
+    
 }
 
 
@@ -102,7 +124,9 @@ function _createRotate(info){
     var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
-    
+    var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
+
+    if (movie != ""){ pics += "<video id='right_video' />";}
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
@@ -123,6 +147,18 @@ function _createRotate(info){
     }else{
         $(#rotate).style["display"] = undefined;
     }
+
+    //如果有视频，自动播放视频
+    if (movie != ""){
+        self.timer(200, function() { 
+            var vdom = $(#right_video);
+                vdom.videoStop();
+                vdom.videoUnload();
+                vdom.videoLoad(movie)
+                vdom.videoPlay(); 
+        });
+    }
+
     return pics
 }
 
@@ -240,5 +276,52 @@ function setFavorite(evt){
     var rdom = $(#romlist).select("li[rid="+id+"]");
     if(menu == "favorite" && rdom != undefined){
         rdom.remove();
+    }
+}
+
+//侧边栏设置隐藏
+function setHide(evt){
+    var id = evt.attributes["rid"];
+    var hide = evt.attributes["value"];
+
+    if(hide == "1"){
+        hide = "0";
+        evt.attributes.removeClass("funbtn_1");
+        evt.attributes.addClass("funbtn_0");
+    }else{
+        hide = "1";
+        evt.attributes.removeClass("funbtn_0");
+        evt.attributes.addClass("funbtn_1");        
+    }
+
+    evt.attributes["value"] = hide;
+
+    var result = view.SetHide(id,hide);
+   
+    if(result != "1"){
+        view.msgbox(#alert,result);
+    }
+
+    //如果当前是隐藏目录，则从rom列表中删除
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    var rdom = $(#romlist).select("li[rid="+id+"]");
+    if(menu == "hide" && rdom != undefined){
+        rdom.remove();
+    }
+}
+
+//控制视频播放
+function videoControl(evt){
+    var position = evt.videoPosition();
+    var duration = evt.videoDuration();
+    if (evt.videoIsPlaying()){
+        evt.videoStop();
+    }else{
+        if (position == duration){
+            evt.videoPlay(0.0);
+        }else{
+            evt.videoPlay(position);
+        }
+        
     }
 }

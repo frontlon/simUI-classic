@@ -25,6 +25,7 @@ type Rom struct {
 	RunTime  uint32 // 最后运行时间
 	Pinyin   string // 拼音索引
 	PathMd5  string // 文件Md5
+	Hide     uint8  // 是否隐藏
 	FileId   string //唯一标识
 }
 
@@ -68,6 +69,7 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 
 	volist := []*Rom{}
 	where := map[string]interface{}{}
+	where["hide"] = 0
 	if platform != 0 {
 		where["platform"] = platform
 	}
@@ -75,9 +77,12 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 	if menu != "" {
 		if menu == "favorite" {
 			where["star"] = 1
+		} else if menu == "hide" {
+			where["hide"] = 1
 		} else {
 			where["menu"] = menu
 		}
+
 	}
 	where["pname"] = ""
 
@@ -250,6 +255,15 @@ func (m *Rom) UpdateName(setType uint8) error {
 //更新喜爱状态
 func (m *Rom) UpdateStar() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("star", m.Star)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+//更新隐藏状态
+func (m *Rom) UpdateHide() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("hide", m.Hide)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

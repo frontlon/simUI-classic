@@ -33,6 +33,24 @@ function contextSetFavorite(evt){
         evt.html = CONF.Lang.SetFavorite;
     }
 }
+
+//右键菜单设为隐藏
+function contextSetHide(evt){
+    var result = view.SetHide(evt.attributes["rid"],evt.attributes["value"]);
+
+    if( evt.attributes["value"] == 1){
+        evt.attributes.removeClass('hide1');
+        evt.attributes.addClass('hide0');
+        evt.attributes["value"] = 0;
+        evt.html = CONF.Lang.CancelHide;
+        
+    }else{
+        evt.attributes.removeClass('hide0');
+        evt.attributes.addClass('hide1');
+        evt.attributes["value"] = 1;
+        evt.html = CONF.Lang.SetHide;
+    }
+}
 //重命名
 function rename(evt){
     var getjson = view.GetGameDetail(evt.attributes["rid"])
@@ -92,6 +110,12 @@ function romContextMenu(obj){
         btndata += "<li class='fav fav0' value='0' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.CancelFavorite +"</li>";
     }else{
         btndata += "<li class='fav fav1' value='1' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.SetFavorite +"</li>";
+    }
+
+    if( detailObj.Info.Hide == 1){
+        btndata += "<li class='hide hide0' value='0' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.CancelHide +"</li>";
+    }else{
+        btndata += "<li class='hide hide1' value='1' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.SetHide +"</li>";
     }
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";

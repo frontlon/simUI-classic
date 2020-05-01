@@ -121,6 +121,26 @@ func RomController(w *window.Window) {
 		return sciter.NewValue("1")
 	})
 
+	//设为隐藏
+	w.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		ishide := uint8(utils.ToInt(args[1].String()))
+
+		//更新rom表
+		rom := &db.Rom{
+			Id:   id,
+			Hide: ishide,
+		}
+
+		//更新数据
+		if err := rom.UpdateHide(); err != nil {
+			WriteLog(err.Error())
+			return ErrorMsg(w, err.Error())
+		}
+
+		return sciter.NewValue("1")
+	})
+
 	//下载rom图片
 	w.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()

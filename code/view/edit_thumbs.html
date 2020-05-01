@@ -14,10 +14,11 @@
       .button-wrapper{text-align:center;padding:10dip 0}
       .button-wrapper button{background:#FFF;border: 2px dashed #ccc;}
       .button-wrapper button:hover{background:#fff;border: 2px dashed #999;}
-      .file-drop-zone {prototype: FileDropZone;width:216dip;height:216dip;line-height:216dip;color: gray;border: 4px dashed;text-align:center;}
+      .file-drop-zone {prototype: FileDropZone;width:216dip;height:216dip;color: gray;border: 4px dashed;text-align:center;vertical-align:center;}
       .file-drop-zone.disabled{border:4px dashed #eee}
       .file-drop-zone.active-target {background:gold;}
       .file-drop-zone img{width:auto;height:auto;max-width:100%;max-height:100%;}
+      video{size:*;}
     </style>
 </head>
 <body>
@@ -25,57 +26,47 @@
 
 <section>
   <div id="widget_thumb">
-      <p>展示图</p>
-      <div.file-drop-zone opt="thumb" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}</div>
+      <p>{{Thumb}}</p>
+      <div.file-drop-zone opt="thumb" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}<br>({{PicExts}})</div>
       <div.button-wrapper>
-        <button class="openfile" for="thumb" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="thumb">网络图片</button>
-        <button class="thumb_delete" value="thumb">删除图片</button>
+        <button class="openfile" for="thumb" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</button>
+        <button class="thumb_down" value="thumb">{{NetPic}}</button>
+        <button class="thumb_delete" value="thumb">{{DeletePic}}</button>
       </div>
   </div>
   <div id="widget_snap">
-      <p>插画</p>
-      <div.file-drop-zone  opt="snap" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}</div>
+      <p>{{Snap}}</p>
+      <div.file-drop-zone  opt="snap" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}<br>({{PicExts}})</div>
       <div.button-wrapper>
-        <button class="openfile" for="snap" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="snap">网络图片</button>
-        <button class="thumb_delete" value="snap">删除图片</button>
+        <button class="openfile" for="snap" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</button>
+        <button class="thumb_down" value="snap">{{NetPic}}</button>
+        <button class="thumb_delete" value="snap">{{DeletePic}}</button>
       </div>
   </div>
   <div id="widget_poster">
-      <p>海报</p>
-      <div.file-drop-zone disabled  opt="poster" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}</div>
+      <p>{{Poster}}</p>
+      <div.file-drop-zone disabled  opt="poster" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}<br>({{PicExts}})</div>
       <div.button-wrapper>
-        <button class="openfile" for="poster" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="poster">网络图片</button>
-        <button class="thumb_delete" value="poster">删除图片</button>
+        <button class="openfile" for="poster" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</button>
+        <button class="thumb_down" value="poster">{{NetPic}}</button>
+        <button class="thumb_delete" value="poster">{{DeletePic}}</button>
       </div>
   </div>
   <div id="widget_packing">
-      <p>包装盒</p>
-      <div.file-drop-zone  opt="packing" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}</div>
+      <p>{{Packing}}</p>
+      <div.file-drop-zone  opt="packing" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}<br>({{PicExts}})</div>
       <div.button-wrapper>
-        <button class="openfile" for="packing" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="packing">网络图片</button>
-        <button class="thumb_delete" value="packing">删除图片</button>
-      </div>
-  </div>
-  <div id="widget_background">
-      <p>背景图</p>
-      <div.file-drop-zone  opt="background" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp">{{DropPicToHere}}</div>
-      <div.button-wrapper>
-        <button class="openfile" for="background" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="background">网络图片</button>
-        <button class="thumb_delete" value="background">删除图片</button>
+        <button class="openfile" for="packing" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</button>
+        <button class="thumb_down" value="packing">{{NetPic}}</button>
+        <button class="thumb_delete" value="packing">{{DeletePic}}</button>
       </div>
   </div>
   <div id="widget_video">
-      <p>视频</p>
-      <div.file-drop-zone  opt="video" accept-drop="*.mp4">{{DropPicToHere}}</div>
+      <p>{{Video}}</p>
+      <div.file-drop-zone  opt="video" accept-drop="*.wmv">{{DropVideoToHere}}<br>({{VideoExts}})</div>
       <div.button-wrapper>
-        <button class="openfile" for="video" caption="{{SelectConfigFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">选择图片</button>
-        <button class="thumb_down" value="video">网络图片</button>
-        <button class="thumb_delete" value="video">删除图片</button>
+        <button class="openfile" for="video" caption="{{SelectVideoFile}}" filter="wmv Files (*.wmv)|.wmv|All Files (*.*)|*.*">{{SelectVideo}}</button>
+        <button class="thumb_delete" value="video">{{DeleteVideo}}</button>
       </div>
   </div>
 </section>

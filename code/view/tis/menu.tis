@@ -49,6 +49,8 @@ function createMenuList(menujson){
         }
         dd += "<dd opt='"+  obj.Name +"' class='menuitem "+ fixed +"'>"+ name + "</dd>";
     }
+    dd += "<dd opt='hide' class='menuitem fixed'>"+ CONF.Lang.Hide +"</dd>";
+
     menulist.html = dd; //生成dom
 
     //设置全局变量

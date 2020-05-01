@@ -38,7 +38,7 @@ function openWebPage(evt){
 
 //设置主题样式
 function setTheme(themeId){
-    if(conf.Theme[themeId].Params["desc-background-image"] != undefined){
-        $(body).style["background-image"] = [url:URL.fromPath(conf.RootPath + "theme\\" + conf.Theme[themeId].Params["desc-background-image"])];
+    if(conf.Theme[themeId].Params["window-background-image"] != undefined){
+        $(body).style["background-image"] = [url:URL.fromPath(conf.RootPath + "theme\\" + conf.Theme[themeId].Params["window-background-image"])];
     }
 }

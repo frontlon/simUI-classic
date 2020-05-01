@@ -63,17 +63,11 @@ function Init(){
         $(#widget_packing .file-drop-zone).attributes.addClass("disabled");
 
     }
-    if(platform.BackgroundPath == ""){
-        $(#widget_background).state.disabled = true;
-        $(#widget_background .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
-        $(#widget_background .file-drop-zone).attributes.addClass("disabled");
 
-    }
     if(platform.VideoPath == ""){
         $(#widget_video).state.disabled = true;
         $(#widget_video .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
         $(#widget_video .file-drop-zone).attributes.addClass("disabled");
-
     }
     
 
@@ -81,14 +75,14 @@ function Init(){
     var snap = getRomPicPath("snap",pfid,name);
     var poster = getRomPicPath("poster",pfid,name);
     var packing = getRomPicPath("packing",pfid,name);
-    var background = getRomPicPath("background",pfid,name);
+    var video = getRomPicPath("video",pfid,name);
 
 
     if(thumb != ""){$(.file-drop-zone[opt=thumb]).html = "<img src='"+ thumb +"'>";}
     if(snap != ""){$(.file-drop-zone[opt=snap]).html = "<img src='"+ snap +"'>";}
     if(poster != ""){$(.file-drop-zone[opt=poster]).html = "<img src='"+ poster +"'>";}
     if(packing != ""){$(.file-drop-zone[opt=packing]).html = "<img src='"+ packing +"'>";}
-    if(background != ""){$(.file-drop-zone[opt=background]).html = "<img src='"+ background +"'>";}
+    if(video != ""){$(.file-drop-zone[opt=video]).html = "<video src='"+ video +"' />";}
 
 }
 
@@ -145,9 +139,17 @@ class FileDropZone : Element
         var opt = this.attributes["opt"];
         var id = view.parameters.id;
         var uri = URL.toPath(this.files.toString());
-        THUMB = uri;
+        var img = "";
+        if (opt == "thumb"){
+            THUMB = uri;
+        }
         mainView.EditRomThumbs(opt,id,uri);
-        var img = "<img src='"+ this.files +"'>";
+
+        if(opt == "video"){
+            img = "<video src='"+ this.files +"'/>";
+        }else{
+            img = "<img src='"+ this.files +"'>";
+        }
         this.html = img;
         return true;
     }       

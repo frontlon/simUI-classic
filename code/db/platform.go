@@ -18,7 +18,6 @@ type Platform struct {
 	PackingPath    string
 	DocPath        string
 	StrategyPath   string
-	BackgroundPath string
 	VideoPath      string
 	Romlist        string
 	Pinyin         string
