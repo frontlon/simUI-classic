@@ -7,6 +7,17 @@ function Init(){
     //改变默认窗口尺寸
     view.state = CONF.Default.WindowState.toInteger();
 
+    //窗口面板显示状态
+    if (CONF.Default.PanelPlatform.toInteger() == 0){
+        $(#left_platform).style["display"] = "none"
+    }
+    if (CONF.Default.PanelMenu.toInteger() == 0){
+        $(#left_menu).style["display"] = "none"
+    }
+    if (CONF.Default.PanelSidebar.toInteger() == 0){
+        $(#right).style["display"] = "none"
+    }
+
     //初始化rom
     var pf = CONF.Default.Platform;
     var menu =  $(#menulist).select("dd:current").attributes["opt"];

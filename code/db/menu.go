@@ -30,8 +30,10 @@ func (m *Menu) Add() error {
 
 //根据条件，查询多条数据
 func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
-	where := map[string]interface{}{
-		"platform": platform,
+	where := map[string]interface{}{}
+
+	if platform > 0 {
+		where["platform"] = platform
 	}
 
 	volist := []*Menu{}
@@ -43,7 +45,7 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 }
 
 //删除一个平台下不存在的目录
-func (*Menu) DeleteNotExists(platform uint32, menus []string) (error) {
+func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 
 	result := &gorm.DB{}
 	m := &Menu{}
@@ -61,7 +63,7 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) (error) {
 }
 
 //删除不存在的平台下的所有menu
-func (*Menu) ClearByPlatform(platforms []string) (error) {
+func (*Menu) ClearByPlatform(platforms []string) error {
 	m := &Menu{}
 	result := getDb().Not("platform", platforms).Delete(&m)
 
@@ -96,7 +98,7 @@ func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 }
 
 //清空表数据
-func (m *Menu) Truncate() (error) {
+func (m *Menu) Truncate() error {
 	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)

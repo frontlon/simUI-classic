@@ -64,29 +64,46 @@ function initTheme(){
 //开启关闭平台栏
 function togglePlatform(){
     var dom = $(#left_platform);
+    var val = 0;
     if (dom.style["display"] == "block"){
         dom.style["display"] = "none";
+        val = 0;
     }else{
         dom.style["display"] = "block";
+        val = 1;
     }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_platform",val);
 }
 //开启关闭菜单栏
 function toggleMenu(){
     var dom = $(#left_menu);
+    var val = 0;
     if (dom.style["display"] == "block"){
         dom.style["display"] = "none";
+        val = 0;
     }else{
         dom.style["display"] = "block";
+        val = 1;
     }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_menu",val);
 }
 //开启关闭侧边栏
 function toggleSidebar(){
     var dom = $(#right);
+    var val = 0;
     if (dom.style["display"] == "block"){
         dom.style["display"] = "none";
+        val = 0;
     }else{
         dom.style["display"] = "block";
+        val = 1;
     }
+    //更新数据库配置
+    view.UpdateConfig("panel_sidebar",val);
 }
 
  //切换rom列表样式
