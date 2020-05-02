@@ -113,7 +113,7 @@ func RestoreConfig(p string) error {
 
 	}
 
-	if section["shortcut"] == "" {
+	if section["shortcut"] != "" {
 		shortcut := []*db.Shortcut{}
 		shortcutDec := utils.Base64Decode(section["shortcut"])
 		if err := json.Unmarshal([]byte(shortcutDec), &shortcut); err != nil {
@@ -123,7 +123,7 @@ func RestoreConfig(p string) error {
 
 	}
 
-	if section["simulator"] == "" {
+	if section["simulator"] != "" {
 		simulator := []*db.Simulator{}
 		simulatorDec := utils.Base64Decode(section["simulator"])
 		if err := json.Unmarshal([]byte(simulatorDec), &simulator); err != nil {
@@ -171,7 +171,7 @@ func GetRestoreInfo(p string) (map[string]interface{}, error) {
 		result["platform"] = len(platform)
 	}
 
-	if section["shortcut"] == "" {
+	if section["shortcut"] != "" {
 		shortcut := []*db.Shortcut{}
 		shortcutDec := utils.Base64Decode(section["shortcut"])
 		if err := json.Unmarshal([]byte(shortcutDec), &shortcut); err != nil {
@@ -180,7 +180,7 @@ func GetRestoreInfo(p string) (map[string]interface{}, error) {
 		result["shortcut"] = len(shortcut)
 	}
 
-	if section["simulator"] == "" {
+	if section["simulator"] != "" {
 		simulator := []*db.Simulator{}
 		simulatorDec := utils.Base64Decode(section["simulator"])
 		if err := json.Unmarshal([]byte(simulatorDec), &simulator); err != nil {

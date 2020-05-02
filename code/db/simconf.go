@@ -9,6 +9,7 @@ import (
 type SimConf struct {
 	Cmd   string
 	Unzip uint8
+	File  string
 }
 
 //设置一个Rom的模拟器配置
@@ -25,12 +26,12 @@ func (*Rom) GetSimConf(romId uint64, simId uint32) (*SimConf, error) {
 	if vo.SimConf != "" {
 		if err := json.Unmarshal([]byte(vo.SimConf), &sim); err != nil {
 			fmt.Println(err.Error())
-			return &SimConf{Unzip:2}, nil
+			return &SimConf{Unzip: 2}, nil
 		}
 		if _, ok := sim[simId]; ok {
 			return sim[simId], nil
 		} else {
-			return &SimConf{Unzip:2}, nil
+			return &SimConf{Unzip: 2}, nil
 		}
 	}
 
@@ -38,7 +39,7 @@ func (*Rom) GetSimConf(romId uint64, simId uint32) (*SimConf, error) {
 }
 
 //设置rom模拟器参数
-func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8) error {
+func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8, unzipFile string) error {
 
 	vo := &Rom{}
 	result := getDb().Select("sim_conf,name,platform").Where("id=?", romId).First(&vo)
@@ -48,12 +49,13 @@ func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8)
 
 	sim := map[uint32]*SimConf{}
 
-	if err := json.Unmarshal([]byte(vo.SimConf), &sim);err != nil{
+	if err := json.Unmarshal([]byte(vo.SimConf), &sim); err != nil {
 		fmt.Println(err.Error())
 	}
 	sim[simId] = &SimConf{
-		Cmd:cmd,
-		Unzip:unzip,
+		Cmd:   cmd,
+		Unzip: unzip,
+		File:  unzipFile,
 	}
 	jsonInfo, _ := json.Marshal(&sim)
 	//更新到数据库
@@ -63,7 +65,7 @@ func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8)
 	}
 
 	//更新所有子游戏
-	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform,vo.Name).Update("sim_conf", jsonInfo)
+	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("sim_conf", jsonInfo)
 
 	return result.Error
 }
@@ -93,7 +95,7 @@ func (m *Rom) DelSimConf(romId uint64, simId uint32) error {
 	}
 
 	//更新所有子游戏
-	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform,vo.Name).Update("sim_conf", jsonInfo)
+	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("sim_conf", jsonInfo)
 
 	return result.Error
 }

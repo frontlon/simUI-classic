@@ -166,3 +166,10 @@ function getRomPicPath(type,platform,name){
     }
 }
 
+//rom列表运行游戏
+function romListRunGame(evt){
+    var getjson = view.GetGameDetail(evt.attributes["rid"]);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+    view.RunGame(evt.attributes["rid"],info.SimId);
+}

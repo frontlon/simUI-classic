@@ -28,6 +28,10 @@
                 <td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td>
                 <td><select id="unzip"><option value="2">{{UnzipDefault}}</option><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>
             </tr>
+             <tr id="file_tr">
+                <td><div class="tip" title="{{RomCmdFileTip}}">&#xf3c1;</div>{{RomCmdFile}}</td>
+                <td><input id="file" value="" /></td>
+            </tr>
 
         </table>
 
@@ -47,17 +51,28 @@
             $(#cmd).setState(Element.STATE_FOCUS);
             $(#desc).html = view.parameters.name;
             $(#unzip).value = view.parameters.unzip;
+            $(#file).value = view.parameters.file;
             view.windowCaption =  CONF.Lang.EditRomCmd;
         });
 
         event click $(#close-dialog){
             var data = {
                 cmd:$(#cmd).value,
-                unzip:$(#unzip).value.toString()
+                unzip:$(#unzip).value.toString(),
+                file:$(#file).value.toString(),
             }
             var datastr = JSON.stringify(data);
             view.close(datastr);
         }
+
+        event change $(#unzip){
+           if(this.value == 1){
+            $(#file_tr).style["display"] = "block";
+           }else{
+            $(#file_tr).style["display"] = "none";
+           }
+        }
+
     </script>
 </body>
 </html>

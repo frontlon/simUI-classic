@@ -1,6 +1,4 @@
-﻿
-
-view.root.on("ready", function(){
+﻿view.root.on("ready", function(){
 
     //数据初始化
     Init();
@@ -131,7 +129,7 @@ view.root.on("ready", function(){
 
     //双击游戏模块，启动游戏
     self.on("dblclick", "#romlist li[class=romitem]", function(evt) {
-        view.RunGame(this.attributes["rid"],"");
+        romListRunGame(this);
     });
 
     //点击模块，打开侧边栏
@@ -141,7 +139,7 @@ view.root.on("ready", function(){
 
     //分页
     $(#center).onScroll = function(evt) {
-        scrllLoadRom(evt.scrollPos);
+        scrollLoadRom(evt.scrollPos);
     };
 
     //按字母搜索rom

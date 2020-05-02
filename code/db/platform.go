@@ -7,23 +7,23 @@ import (
 )
 
 type Platform struct {
-	Id             uint32
-	Name           string
-	Icon           string
-	RomExts        string
-	RomPath        string
-	ThumbPath      string
-	SnapPath       string
-	PosterPath     string
-	PackingPath    string
-	DocPath        string
-	StrategyPath   string
-	VideoPath      string
-	Romlist        string
-	Pinyin         string
-	Sort           uint32
-	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
-	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
+	Id           uint32
+	Name         string
+	Icon         string
+	RomExts      string
+	RomPath      string
+	ThumbPath    string
+	SnapPath     string
+	PosterPath   string
+	PackingPath  string
+	DocPath      string
+	StrategyPath string
+	VideoPath    string
+	Romlist      string
+	Pinyin       string
+	Sort         uint32
+	SimList      map[uint32]*Simulator `gorm:"-"` //模拟器列表
+	UseSim       *Simulator            `gorm:"-"` //当前使用的模拟器
 }
 
 func (*Platform) TableName() string {
@@ -77,7 +77,24 @@ func (*Platform) GetById(id uint32) (*Platform, error) {
 
 //更新平台信息
 func (m *Platform) UpdateById() error {
-	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(m)
+
+	create := map[string]interface{}{
+		"name":          m.Name,
+		"icon":          m.Icon,
+		"rom_exts":      m.RomExts,
+		"rom_path":      m.RomPath,
+		"thumb_path":    m.ThumbPath,
+		"snap_path":     m.SnapPath,
+		"poster_path":   m.PosterPath,
+		"packing_path":  m.PackingPath,
+		"strategy_path": m.StrategyPath,
+		"video_path":    m.VideoPath,
+		"doc_path":      m.DocPath,
+		"romlist":       m.Romlist,
+		"pinyin":        m.Pinyin,
+	}
+
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(create)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}
@@ -103,7 +120,7 @@ func (m *Platform) UpdateFieldById(field string, value interface{}) error {
 
 //删除一个平台
 func (m *Platform) DeleteById() error {
-	result := getDb().Where("platform=?", m.Id).Delete(&m)
+	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}
@@ -119,7 +136,7 @@ func (m *Platform) UpdateSortById() error {
 	return result.Error
 }
 
-func (m *Platform) Truncate() (error) {
+func (m *Platform) Truncate() error {
 	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var ROM_PAGE_NUM = 100 //每页加载rom数量
+var ROM_PAGE_NUM = 50 //每页加载rom数量
 
 type Rom struct {
 	Id       uint64
@@ -49,11 +49,14 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 
 //根据fileid更新现有的rom
 func (m *Rom) BatchUpdateByFileId(fileIds []string, romlist map[string]*Rom) error {
+	if len(fileIds) == 0 || len(romlist) == 0 {
+		return nil
+	}
 	tx := getDb().Begin()
 
 	for _, v := range romlist {
 		if utils.InSliceString(v.FileId, fileIds) {
-			result := getDb().Where("file_id=?", v.FileId).Updates(&v)
+			result := getDb().Table(m.TableName()).Where("file_id=?", v.FileId).Updates(&v)
 			if result.Error != nil {
 				fmt.Println(result.Error)
 			}
@@ -338,33 +341,32 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 }
 
 //读取一个平台下的所有md5
-func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
+func (sim *Rom) GetMd5AndFileIdByPlatform(platform uint32) ([]string, []string, error) {
 	volist := []*Rom{}
-	result := getDb().Select("path_md5").Where("platform=?", platform).Find(&volist)
+	result := getDb().Select("path_md5,file_id").Where("platform=?", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
 	md5List := []string{}
+	fileIdList := []string{}
 	for _, v := range volist {
 		md5List = append(md5List, v.PathMd5)
+		fileIdList = append(fileIdList, v.FileId)
 	}
-	return md5List, result.Error
+	return md5List, fileIdList, result.Error
 }
 
 //根据file_id取file_id，交集
-func (sim *Rom) GetFileIdByFileId(platform uint32, fileIds []string) ([]string, error) {
+func (sim *Rom) GetFileIdByPlatform(platform uint32) ([]string, error) {
 	volist := []*Rom{}
 	result := getDb().Select("file_id").Where("platform=?", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
-
 	fileIdList := []string{}
 	for _, v := range volist {
-		if utils.InSliceString(v.FileId, fileIds) {
-			fileIdList = append(fileIdList, v.FileId)
-		}
+		fileIdList = append(fileIdList, v.FileId)
 	}
 	return fileIdList, result.Error
 }

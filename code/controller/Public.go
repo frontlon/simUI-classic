@@ -34,7 +34,7 @@ func Loading(w *window.Window, str string) *sciter.Value {
 func WriteLog(str string) {
 	fileName := "log.txt"
 
-	cachePath := "./caches/"
+	cachePath := "./cache/"
 	if !utils.IsExist(cachePath) {
 		if err := utils.CreateDir(cachePath); err != nil {
 			return

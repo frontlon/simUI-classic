@@ -4,6 +4,7 @@ import (
 	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -26,7 +27,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
-		func(p string, f os.FileInfo, err error) (error) {
+		func(p string, f os.FileInfo, err error) error {
 
 			if f == nil {
 				return err
@@ -151,20 +152,29 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
 	md5s := []string{}    //磁盘文件
 	fileIds := []string{} //磁盘文件
-
+	err := errors.New("")
 	for k, v := range romlist {
-		md5s = append(md5s, k)
-		fileIds = append(fileIds, v.FileId)
+		md5s = append(md5s, k)              //文件的md5
+		fileIds = append(fileIds, v.FileId) //文件的
 	}
 
-	DbUniqs, _ := (&db.Rom{}).GetMd5ByPlatform(platform) //数据库的md5
+	//数据库中读取md5和fileid
+	DbMd5s, DbFileIds, _ := (&db.Rom{}).GetMd5AndFileIdByPlatform(platform)
 
-	DbFileIds, _ := (&db.Rom{}).GetFileIdByFileId(platform, fileIds) //数据库的file_id
-	addUniq := utils.SliceDiff(md5s, DbUniqs)
-	subUniq := utils.SliceDiff(DbUniqs, md5s)
+	addDiffUniq := utils.SliceDiff(md5s, DbMd5s) //新增的
+	subUniq := utils.SliceDiff(DbMd5s, md5s)     //删除的
+	addUniq := []string{}                        //更新的
+	updateFileId := []string{}                   //更新的
+	for _, v := range addDiffUniq {
+		if utils.InSliceString(romlist[v].FileId, DbFileIds) {
+			updateFileId = append(updateFileId, romlist[v].FileId)
+		} else {
+			addUniq = append(addUniq, romlist[v].PathMd5)
+		}
+	}
 
 	//1.更新现有rom
-	err := (&db.Rom{}).BatchUpdateByFileId(DbFileIds, romlist)
+	err = (&db.Rom{}).BatchUpdateByFileId(updateFileId, romlist)
 	if err != nil {
 		return err
 	}
@@ -175,15 +185,8 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 		return err
 	}
 
-	//3.保存新数据到数据库rom表
+	//3.添加新rom
 	(&db.Rom{}).BatchAdd(addUniq, romlist)
-
-	//这些变量可能过大，清空变量
-	romlist = map[string]*db.Rom{}
-	addUniq = []string{}
-	subUniq = []string{}
-	DbUniqs = []string{}
-	DbFileIds = []string{}
 
 	return nil
 }

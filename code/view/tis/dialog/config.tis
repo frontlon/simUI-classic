@@ -277,7 +277,7 @@ function platformAdd(evt) {
     var name =  view.dialog({
         url:self.url(ROOTPATH + "add_platform.html"),
         width:310,
-        height:170,
+        height:172,
         parameters: {};
     });
 
@@ -320,9 +320,6 @@ function platformDel(evt) {
 
     //删除平台
     result = mainView.DelPlatform(pfId);
-    //生成缓存
-    createAllCache();
-
     if(result == "1"){
         $(#platform_list li:current).remove();
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);

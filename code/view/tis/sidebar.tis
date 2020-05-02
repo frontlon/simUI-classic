@@ -222,15 +222,16 @@ function SetRomCmd(evt){
         var cmdstr = view.GetRomCmd(romId,simId);
         var cmdObj = JSON.parse(cmdstr);
         var simJson =  view.dialog({
-            url:self.url(ROOTPATH + "dialog/edit_rom_cmd.html"),
+            url:self.url(ROOTPATH + "edit_rom_cmd.html"),
             width:360,
-            height:215,
+            height:255,
             parameters: {
                 name:name,
                 simId:simId,
                 romId:romId,
                 cmd:cmdObj.Cmd,
                 unzip:cmdObj.Unzip,
+                file:cmdObj.File,
             }
         });
 

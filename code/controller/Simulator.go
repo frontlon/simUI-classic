@@ -25,6 +25,7 @@ func SimulatorController(w *window.Window) {
 			WriteLog(err.Error())
 			return ErrorMsg(w, err.Error())
 		}
+
 		jsonData, _ := json.Marshal(&sim)
 		return sciter.NewValue(string(jsonData))
 	})

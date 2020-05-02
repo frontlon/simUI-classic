@@ -68,6 +68,12 @@ func RunGame(romId uint64, simId uint32) error {
 		if rom.RomPath == "" {
 			return errors.New(config.Cfg.Lang["UnzipExeNotFound"])
 		}
+
+		//如果指定了执行文件
+		if romCmd.File != ""{
+			rom.RomPath = utils.GetFilePath(rom.RomPath) + "/" + romCmd.File
+		}
+
 	}
 
 	//检测rom文件是否存在
@@ -331,7 +337,7 @@ func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
 		}
 	} else {
 		//开始更新
-		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"]))); err != nil {
+		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])),data["file"]); err != nil {
 			return err
 		}
 	}

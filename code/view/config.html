@@ -44,8 +44,8 @@
     <strip>
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
-      <label for="third">快捷软件</label>
-      <label for="fourth">备份/恢复配置</label>
+      <label for="third">{{Shortcut}}</label>
+      <label for="fourth">{{BackupAndRestore}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -61,9 +61,9 @@
 
               <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">&#xf3c1;</div>{{PicSearchEngines}}</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>
               
-              <tr><td>启动时检查更新</td><td><select id="config_enable_upgrade">
-                <option value="1">启用</option>
-                <option value="0">禁止</option>
+              <tr><td>{{StartCheckUpgrade}}</td><td><select id="config_enable_upgrade">
+                <option value="1">{{Yes}}</option>
+                <option value="0">{{No}}</option>
               </select>
               </td></tr>
               <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
@@ -109,49 +109,35 @@
       <section id="third">
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
-          <table><tr><td style="text-align:center"><button id="shortcut_add">添加</button></td></tr></table>
+          <table><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
         </div>
       </section>
 
       <section id="fourth">
         <div class="wrapper">
-          
-        
-        
-          <table id="table_backup">
-            <tr><td>备份</td><td><button id="backup_config" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">开始备份</button></td></tr>
 
-            <tr><td>恢复</td><td>
-              <input type="text"  id="restore_input" value=""> <button id="get_restore_config" for="restore_input" caption="{{SelectConfigFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" >&#x2026;</button> <button id="restore_config">开始恢复</button></td></tr>
+          <table id="table_backup">
+            <tr><td>{{Backup}}</td><td><button id="backup_config" caption="{{SelectBackupFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">{{StartBackup}}</button></td></tr>
+            <tr><td>{{Restore}}</td><td>
+              <input type="text"  id="restore_input" value=""> <button id="get_restore_config" for="restore_input" caption="{{SelectBackupFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" >&#x2026;</button> <button id="restore_config">{{StartRestore}}</button></td></tr>
             <tr><td></td><td class="backup_info">
-              备份时间：<span id="backup_info_date"></span><br>
-              平台信息：<span id="backup_info_platform"></span></span><br>
-              模拟器信息：<span id="backup_info_simulator"></span></span><br>
-              快捷软件：<span id="backup_info_shortcut"></span></span><br>
+              {{BackupTime}}：<span id="backup_info_date"></span><br>
+              {{PlatformInfo}}<span id="backup_info_platform"></span></span><br>
+              {{SimInfo}}<span id="backup_info_simulator"></span></span><br>
+              {{Shortcut}}：<span id="backup_info_shortcut"></span></span><br>
             </td></tr>
-        </table>
-        
-        
-        
-        
-        
+          </table>
+
         </div>
       </section>
 
     </panels>
   </tabs>
 
-
-  <!-- 添加平台框 -->
-  <div id="msg-box-contnent" style="display:none">
-      <label>Name:</label><input name="namess" type="text" />
-  </div>
-
   <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
-    //include ROOTPATH + "tis/dialog_config.tis";
     include ROOTPATH + "tis/dialog/config.tis";
 
     //平台列表点击

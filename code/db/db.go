@@ -1,19 +1,25 @@
 package db
 
 import (
-	"database/sql"
+	"VirtualNesGUI/code/utils"
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-var sqlite = &sql.DB{}
 var engine *gorm.DB
 var LogMode bool = true
 //连接数据库
-func Conn() {
+func Conn() error {
 	//连接数据库
 	err := errors.New("")
+
+	if !utils.FileExists("data.dll"){
+		fmt.Println("数据库文件data.dll不存在")
+		return errors.New("数据库文件data.dll不存在\n Database does not exist")
+	}
+
 	engine, err = gorm.Open("sqlite3", "data.dll")
 	if err != nil {
 		panic("连接数据库失败")
@@ -23,8 +29,14 @@ func Conn() {
 
 	//禁用同步模式
 	engine.Exec("PRAGMA synchronous = OFF;")
+	return nil
 }
 
 func getDb() *gorm.DB {
 	return engine
+}
+
+//关闭数据库
+func CloseDb(){
+	engine.Close()
 }
