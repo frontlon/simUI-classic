@@ -58,7 +58,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				}
 
 				pathMd5 := GetPathMd5(title, p) //路径md5，可变
-				fileId := GetFileId(f)          //文件id，不可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -82,7 +81,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Star:     0,
 						Pinyin:   utils.TextToPinyin(sub[1]),
 						PathMd5:  pathMd5,
-						FileId:   fileId,
 						SimConf:  "{}",
 					}
 
@@ -98,7 +96,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Star:     0,
 						Pinyin:   utils.TextToPinyin(title),
 						PathMd5:  pathMd5,
-						FileId:   fileId,
 						SimConf:  "{}",
 					}
 
@@ -151,33 +148,16 @@ func ClearPlatform() error {
 func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
 	md5s := []string{}    //磁盘文件
-	fileIds := []string{} //磁盘文件
 	err := errors.New("")
-	for k, v := range romlist {
+	for k, _ := range romlist {
 		md5s = append(md5s, k)              //文件的md5
-		fileIds = append(fileIds, v.FileId) //文件的
 	}
 
 	//数据库中读取md5和fileid
-	DbMd5s, DbFileIds, _ := (&db.Rom{}).GetMd5AndFileIdByPlatform(platform)
+	DbMd5s, _ := (&db.Rom{}).GetMd5ByPlatform(platform)
 
-	addDiffUniq := utils.SliceDiff(md5s, DbMd5s) //新增的
+	addUniq := utils.SliceDiff(md5s, DbMd5s) //新增的
 	subUniq := utils.SliceDiff(DbMd5s, md5s)     //删除的
-	addUniq := []string{}                        //更新的
-	updateFileId := []string{}                   //更新的
-	for _, v := range addDiffUniq {
-		if utils.InSliceString(romlist[v].FileId, DbFileIds) {
-			updateFileId = append(updateFileId, romlist[v].FileId)
-		} else {
-			addUniq = append(addUniq, romlist[v].PathMd5)
-		}
-	}
-
-	//1.更新现有rom
-	err = (&db.Rom{}).BatchUpdateByFileId(updateFileId, romlist)
-	if err != nil {
-		return err
-	}
 
 	//2.删除不存在的rom
 	err = (&db.Rom{}).DeleteByMd5(platform, subUniq)
@@ -244,9 +224,4 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 func GetPathMd5(title string, p string) string {
 	str := title + p
 	return utils.Md5(str)
-}
-
-//读取文件唯一ID
-func GetFileId(f os.FileInfo) string {
-	return utils.ToString(f.Size()) + utils.ToString(f.ModTime().UnixNano())
 }

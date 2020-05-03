@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var ROM_PAGE_NUM = 50 //每页加载rom数量
+var ROM_PAGE_NUM = 100 //每页加载rom数量
 
 type Rom struct {
 	Id       uint64
@@ -26,7 +26,6 @@ type Rom struct {
 	Pinyin   string // 拼音索引
 	PathMd5  string // 文件Md5
 	Hide     uint8  // 是否隐藏
-	FileId   string //唯一标识
 }
 
 func (*Rom) TableName() string {
@@ -48,24 +47,24 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 }
 
 //根据fileid更新现有的rom
-func (m *Rom) BatchUpdateByFileId(fileIds []string, romlist map[string]*Rom) error {
-	if len(fileIds) == 0 || len(romlist) == 0 {
-		return nil
-	}
-	tx := getDb().Begin()
-
-	for _, v := range romlist {
-		if utils.InSliceString(v.FileId, fileIds) {
-			result := getDb().Table(m.TableName()).Where("file_id=?", v.FileId).Updates(&v)
-			if result.Error != nil {
-				fmt.Println(result.Error)
-			}
-		}
-	}
-
-	tx.Commit()
-	return nil
-}
+//func (m *Rom) BatchUpdateByFileId(fileIds []string, romlist map[string]*Rom) error {
+//	if len(fileIds) == 0 || len(romlist) == 0 {
+//		return nil
+//	}
+//	tx := getDb().Begin()
+//
+//	for _, v := range romlist {
+//		if utils.InSliceString(v.FileId, fileIds) {
+//			result := getDb().Table(m.TableName()).Where("file_id=?", v.FileId).Updates(&v)
+//			if result.Error != nil {
+//				fmt.Println(result.Error)
+//			}
+//		}
+//	}
+//
+//	tx.Commit()
+//	return nil
+//}
 
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
@@ -169,21 +168,6 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	return volist, result.Error
 }
 
-//查询star
-/*func (*Rom) GetByStar(platform uint32, star uint8) (*Rom, error) {
-	vo := &Rom{}
-
-	where := ""
-	if platform != 0 {
-		where = " platform=" + utils.ToString(platform) + " AND "
-	}
-
-	sql := "SELECT * FROM rom WHERE " + where + " star = " + utils.ToString(star)
-	rows := sqlite.QueryRow(sql)
-	err := rows.Scan(&vo.Id, &vo.Platform, &vo.Menu, &vo.Name, &vo.Pname, &vo.RomPath, &vo.Star, &vo.Pinyin,&vo.Md5)
-	return vo, err
-}
-*/
 //根据满足条件的rom数量
 func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	count := 0
@@ -341,34 +325,18 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 }
 
 //读取一个平台下的所有md5
-func (sim *Rom) GetMd5AndFileIdByPlatform(platform uint32) ([]string, []string, error) {
+func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 	volist := []*Rom{}
-	result := getDb().Select("path_md5,file_id").Where("platform=?", platform).Find(&volist)
+	result := getDb().Select("path_md5").Where("platform=?", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
 	md5List := []string{}
-	fileIdList := []string{}
 	for _, v := range volist {
 		md5List = append(md5List, v.PathMd5)
-		fileIdList = append(fileIdList, v.FileId)
 	}
-	return md5List, fileIdList, result.Error
-}
-
-//根据file_id取file_id，交集
-func (sim *Rom) GetFileIdByPlatform(platform uint32) ([]string, error) {
-	volist := []*Rom{}
-	result := getDb().Select("file_id").Where("platform=?", platform).Find(&volist)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-	fileIdList := []string{}
-	for _, v := range volist {
-		fileIdList = append(fileIdList, v.FileId)
-	}
-	return fileIdList, result.Error
+	return md5List, result.Error
 }
 
 //删除不存在的平台下的所有rom

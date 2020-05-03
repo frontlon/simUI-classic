@@ -4,32 +4,28 @@
     <div id="themefile"></div>
     <style type="text/css">
       @import "this://app/images/public.css";
-      body{flow:vertical;size:*;padding:0;margin:0}
-      body>header{width:*;flow:horizontal;background-color:morph(color(COLORD),opacity:0.8);}
-      body>header>caption{width:*;height:32dip;}
-      body>header>button{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(COLORI);text-align:center;}
-      body>header>button:hover{background:color(COLORC);}
-      body>main{size:*;overflow:hidden;}
-      .left{background-color:morph(color(COLORA),opacity:0.9);}
-      .right{display:block;padding:0 16dip 16dip 24dip;background-color:morph(color(COLORA),opacity:0.9);}
-      splitter{background:morph(color(COLORA),opacity:0.9);}
-      splitter:hover{background:morph(color(COLORA),opacity:0.9);}
-
-      .desc{display:none;color:color(COLORG);height:*;}
+      html{padding:0;margin:0;border:1px solid color(desc-border-color)}
+      body{flow:vertical;size:*;padding:0;margin:0;border:0}
+      body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.9);}
+      body>header>caption{width:*;height:32dip;line-height:32dip;padding-left:10dip;color:color(desc-title-text-color);}
+      body>header>button{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center;}
+      body>header>button i {display:block}
+      body>header>button:hover{background:color(desc-titlebar-hover-background-color);}
+      body>main{size:*;overflow:hidden;background-color:color(desc-background-color)}
+      .wrapper{display:block;height:*}
+      .desc{color:color(desc-content-text-color);padding:0 15dip;}
       .desc p{line-height:1.5em;}
-      .title_h1{display:block;font-size:14dip;font-style:italic;font-weight:normal;margin:80dip 8dip 40dip 0;text-align:right;color:color(COLORI);line-height:2em;padding-left:40dip}
-
       .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
       .markdown p{margin-bottom:13dip}
-      .markdown a{color:color(COLORG)}
+      .markdown a{color:color(desc-content-text-color)}
       .markdown a:hover{opacity: 0.5;}
       .markdown img{margin:0 auto;display:block;}
       .markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{line-height:2em;display:block;margin-bottom:13dip}
       .markdown h1,.markdown h2{border-bottom:1px solid;}
-      .markdown hr{border:0;border-bottom:1dip solid color(COLORG);margin:12dip 0}
-      .markdown pre,.markdown code{margin:10dip;border:1dip solid color(COLORG);opacity: 0.5; padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+      .markdown hr{border:0;border-bottom:1dip solid color(desc-content-text-color);margin:12dip 0}
+      .markdown pre,.markdown code{margin:10dip;border:1dip solid color(desc-content-text-color);opacity: 0.5; padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
       .markdown table{width:*}
-      .markdown blockquote{border-left:3dip solid color(COLORG);padding-left:10dip;margin:15dip 0 15dip 20dip;opacity: 0.5;}
+      .markdown blockquote{border-left:3dip solid color(desc-content-text-color);padding-left:10dip;margin:15dip 0 15dip 20dip;opacity: 0.5;}
       .markdown table[border]{border-spacing:-1dip;border:none;margin:1em 0}
       .markdown table[border] td{border:1dip solid #bbb;padding:2dip 4dip}
       .markdown table[border] th{border:1dip solid #bbb;padding:2dip 4dip;background:#eee}
@@ -43,21 +39,15 @@
   </head>
 <body>
   <header>
-    <caption role="window-caption">&nbsp;</caption>
+    <caption role="window-caption" id="title">&nbsp;</caption>
     <button class="window" id="minimize" role="window-minimize"><i>&#xe661;</i></button>
     <button class="window" id="maximize" role="window-maximize"><i>&#xe66b;</i></button>
     <button class="window" id="close" role="window-close"><i>&#xe605;</i></button>
   </header>
-  <main>
-    <frameset cols="200dip,*">
-        <section class="left">
-          <h1 class="title_h1" id="title"></h1>
-        </section>
-        <splitter />
-        <section class="right">
-          <div class="desc markdown" id="desc"></div>
-        </section>
-    </frameset>
+  <main>    
+    <section class="wrapper">
+    <div class="desc markdown" id="desc"></div>
+    </section>
   </main>
 
 <script type="text/tiscript">

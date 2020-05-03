@@ -22,11 +22,10 @@ function Init(){
     view.windowCaption = view.parameters.title;
     $(#title).html = view.parameters.title;
 
+
     //内容
     $(#desc).html = markdown.parse(view.parameters.content);
 
-    //创建语言
-    createLang();
 }
 
 //打开网址

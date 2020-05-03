@@ -231,7 +231,7 @@ function setTheme(themeId){
 
 //生成缓存
 function createCache(evt){
-    $(#create).state.disabled = true;
+    $(body).state.disabled = true;
     $(#create).attributes.addClass("disabled");
     startLoading();
     var opt = evt.attributes["opt"];
@@ -315,6 +315,8 @@ function upgrade(data){
 //更新缓存回调
 function CB_createCache(){
 
+    $(body).state.disabled = false;
+
     //更新配置
     initConfig("1");
 
@@ -330,6 +332,5 @@ function CB_createCache(){
     $(#rom_count_num).html = romCount; //初始化在线人数
     endLoading(); //关闭loading框
 
-    $(#create).state.disabled = false;
     $(#create).attributes.removeClass("disabled");
 }

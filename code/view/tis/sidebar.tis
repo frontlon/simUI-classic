@@ -194,7 +194,7 @@ function openDesc(evt){
         url: self.url("desc.html"),
         alignment: 5,
         screen:1,
-        width : 1280,
+        width : 800,
         height : 800,
         parameters: {
             content:detailObj.StrategyContent,
