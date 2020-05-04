@@ -26,6 +26,7 @@ type Config struct {
 	PanelPlatform uint8  // 当前是否显示平台面板
 	PanelMenu     uint8  // 当前是否显示菜单面板
 	PanelSidebar  uint8  // 当前是否显示侧边栏
+	SoftName      string // 软件名称
 }
 
 func (*Config) TableName() string {

@@ -183,6 +183,12 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 //读取缓存配置
 func getDefault() (*db.Config, error) {
 	vo, err := (&db.Config{}).Get()
+
+	//如果软件名称是图片，则转换为绝对路径
+	if utils.FileExists(vo.SoftName) == true {
+		vo.SoftName, _ = filepath.Abs(vo.SoftName)
+	}
+
 	if err != nil {
 		return vo, err
 	}

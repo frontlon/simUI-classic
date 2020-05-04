@@ -40,6 +40,7 @@ function Init(){
     }
 
     $(#config_lang).value = CONF.Default.Lang;
+    $(#config_soft_name).value = CONF.Default.SoftName;
     $(#config_thumb).value = CONF.Default.Thumb;
     $(#config_enable_upgrade).value = CONF.Default.EnableUpgrade;
 
@@ -145,6 +146,7 @@ function configSubmit(evt){
 
     var data = {
         lang : $(#config_lang).value.toString(),
+        soft_name : $(#config_soft_name).value.toString(),
         search_engines : $(#config_search_engines).value.toString(),
         thumb : $(#config_thumb).value.toString(),
         enable_upgrade :$(#config_enable_upgrade).value,

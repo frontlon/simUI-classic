@@ -40,6 +40,13 @@ function initConfig(isfresh){
         view.UpdateConfig("root_path",CONF.RootPath);
     }
 
+    //软件名称
+    if(System.scanFiles(CONF.Default.SoftName)){ //图片logo
+        $(#logo).html = "<img src='"+ CONF.Default.SoftName +"' />";
+    }else{
+         $(#logo).html =  CONF.Default.SoftName; //文字logo
+    }
+
     //创建语言
     if (isfresh == "0"){
         createLang();

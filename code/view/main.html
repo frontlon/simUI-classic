@@ -31,6 +31,7 @@
     /* 标题栏 */
     #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
     #logo{color:color(logo-text-color);width:202dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
+    #logo img{max-width:202dip;max-height:36dip;width:auto;}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
     #tb_right{text-align:right;width:222dip;display:inline;background-color:color(titlebar-background-color);}
     #titlebar i{font-size:18dip;line-height:36dip;display:block}
@@ -181,7 +182,7 @@
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
 <menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
-    <div id="logo">{{SoftName}}</div>
+    <div id="logo"></div>
     <div id="tb_left">
         <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i>&#xe7e2;</i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i>&#xe7ac;</i></button>
         <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="font_size" value="1" title="{{FontSize}}"><i>&#xe695;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
