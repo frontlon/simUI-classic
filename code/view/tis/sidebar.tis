@@ -3,6 +3,11 @@ function openSidebar(obj){
 
     obj.state.current = true;
 
+    //侧边栏隐藏的情况下，不执行操作
+    if ($(#right).style["display"] == "none"){
+        return;
+    }
+
     if(MASK == true){
         MASK = false;
         $(#mask).style["display"] = "none";
