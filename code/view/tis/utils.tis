@@ -44,7 +44,7 @@ function startLoading(str = "",platform=""){
         $(#loading_text).html = CONF.Lang.Loading;
     }
     if (platform != ""){
-        $(#loading_platform).html = platform;
+        $(#loading_platform).html = "[" + platform + "]";
     }
 }
 
