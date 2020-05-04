@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"errors"
 	"github.com/go-ini/ini"
+	"github.com/sciter-sdk/go-sciter/window"
 	"io/ioutil"
 	"os"
 	"path"
@@ -16,19 +17,20 @@ import (
 
 //配置文件
 var (
-	Cfg      *ConfStruct                                                 //公共配置
-	DOC_EXTS = []string{".txt", ".md"}                                   //doc文档支持的扩展名
-	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp","wmv"} //支持的图片类型
+	Cfg      *ConfStruct                                                        //公共配置
+	DOC_EXTS = []string{".txt", ".md"}                                          //doc文档支持的扩展名
+	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	} //可直接运行的doc文档支持的扩展名
+	}                                                                           //可直接运行的doc文档支持的扩展名
 
 )
 
 //配置文件
 type ConfStruct struct {
+	Window       *window.Window          //窗体
 	RootPath     string                  //exe文件的当前路径
 	Separator    string                  //exe文件的当前路径
 	CachePath    string                  //缓存路径
@@ -217,7 +219,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" {           // 忽略目录
+		if !fi.IsDir() && ext == ".css" { // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件

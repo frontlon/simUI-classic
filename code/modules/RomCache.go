@@ -155,7 +155,6 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
 	//数据库中读取md5和fileid
 	DbMd5s, _ := (&db.Rom{}).GetMd5ByPlatform(platform)
-
 	addUniq := utils.SliceDiff(md5s, DbMd5s) //新增的
 	subUniq := utils.SliceDiff(DbMd5s, md5s)     //删除的
 

@@ -5,7 +5,6 @@ import (
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
 )
 
 //更新url
@@ -18,7 +17,7 @@ type Version struct {
 }
 
 //启动时自动检测更新
-func BootCheckUpgrade(w *window.Window) {
+func BootCheckUpgrade() {
 	//检测是否启动更新
 	if config.Cfg.Default.EnableUpgrade == 0 {
 		return
@@ -31,14 +30,14 @@ func BootCheckUpgrade(w *window.Window) {
 
 		//如果是启动检测，则验证是否需要显示
 		if ver.Id > config.Cfg.Default.UpgradeId {
-			if _, err := w.Call("upgrade", sciter.NewValue(string(body))); err != nil {
+			if _, err := config.Cfg.Window.Call("upgrade", sciter.NewValue(string(body))); err != nil {
 			}
 		}
 	}()
 }
 
 //检查更新
-func CheckUpgrade(w *window.Window) string {
+func CheckUpgrade() string {
 	body,err := utils.GetHttp(upgradeUrl)
 	if err != nil{
 		return "error"

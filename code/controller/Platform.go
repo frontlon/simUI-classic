@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
 	"strings"
 )
 
@@ -13,17 +13,17 @@ import (
  * 定义view用function
  **/
 
-func PlatformController(w *window.Window) {
+func PlatformController() {
 
 	//读取平台详情
-	w.DefineFunction("GetPlatformById", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("GetPlatformById", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetById(id)
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 
@@ -31,19 +31,19 @@ func PlatformController(w *window.Window) {
 	})
 
 	//读取平台列表
-	w.DefineFunction("GetPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("GetPlatform", func(args ...*sciter.Value) *sciter.Value {
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetAll()
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		jsonInfo, _ := json.Marshal(&info)
 		return sciter.NewValue(string(jsonInfo))
 	})
 
 	//添加一个平台
-	w.DefineFunction("AddPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("AddPlatform", func(args ...*sciter.Value) *sciter.Value {
 		name := args[0].String()
 		platform := &db.Platform{
 			Name:   name,
@@ -52,13 +52,13 @@ func PlatformController(w *window.Window) {
 		id, err := platform.Add()
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NewValue(utils.ToString(id))
 	})
 
 	//删除一个平台
-	w.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		go func(id uint32) *sciter.Value {
@@ -76,17 +76,17 @@ func PlatformController(w *window.Window) {
 			//删除rom数据
 			if err := rom.DeleteByPlatform(); err != nil {
 				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
+				return ErrorMsg(err.Error())
 			}
 			//删除模拟器
 			if err := sim.DeleteByPlatform(); err != nil {
 				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
+				return ErrorMsg(err.Error())
 			}
 			//删除平台
 			if err := platform.DeleteById(); err != nil {
 				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
+				return ErrorMsg(err.Error())
 			}
 			return sciter.NullValue()
 		}(id)
@@ -94,7 +94,7 @@ func PlatformController(w *window.Window) {
 	})
 
 	//更新平台信息
-	w.DefineFunction("UpdatePlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("UpdatePlatform", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
@@ -138,13 +138,13 @@ func PlatformController(w *window.Window) {
 		err := platform.UpdateById()
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NewValue("1")
 	})
 
 	//更新平台排序
-	w.DefineFunction("UpdatePlatformSort", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("UpdatePlatformSort", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[uint32]uint32)
 		json.Unmarshal([]byte(data), &d)
@@ -161,7 +161,7 @@ func PlatformController(w *window.Window) {
 			err := platform.UpdateSortById()
 			if err != nil {
 				WriteLog(err.Error())
-				return ErrorMsg(w, err.Error())
+				return ErrorMsg(err.Error())
 			}
 		}
 		return sciter.NewValue("1")

@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/utils"
 	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
 	"io"
 	"os"
 	"runtime"
@@ -12,16 +12,16 @@ import (
 )
 
 //调用alert框
-func ErrorMsg(w *window.Window, err string) *sciter.Value {
+func ErrorMsg(err string) *sciter.Value {
 
-	if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
+	if _, err := config.Cfg.Window.Call("errorBox", sciter.NewValue(err)); err != nil {
 	}
 	return sciter.NullValue();
 }
 
 //调用loading框
-func Loading(w *window.Window, str string) *sciter.Value {
-	if _, err := w.Call("startLoading", sciter.NewValue(str)); err != nil {
+func Loading(str string,platform string) *sciter.Value {
+	if _, err := config.Cfg.Window.Call("startLoading", sciter.NewValue(str),sciter.NewValue(platform)); err != nil {
 	}
 	return sciter.NullValue();
 }

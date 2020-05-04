@@ -36,12 +36,15 @@ function alert(str){
 }
 
 //开启loading框
-function startLoading(str = ""){
+function startLoading(str = "",platform=""){
     $(#loading).style['display'] = 'block';
     if (str != ""){
-        $(#loading p).html = str;
+        $(#loading_text).html = str;
     }else{
-        $(#loading p).html = CONF.Lang.Loading;
+        $(#loading_text).html = CONF.Lang.Loading;
+    }
+    if (platform != ""){
+        $(#loading_platform).html = platform;
     }
 }
 

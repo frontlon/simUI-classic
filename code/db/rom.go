@@ -1,6 +1,7 @@
 package db
 
 import (
+	"VirtualNesGUI/code/controller"
 	"VirtualNesGUI/code/utils"
 	"fmt"
 	"github.com/jinzhu/gorm"
@@ -39,9 +40,11 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 		return
 	}
 	tx := getDb().Begin()
-	for _, md5 := range uniqs {
+	count := len(uniqs)
+	for k, md5 := range uniqs {
 		v := romlist[md5]
 		tx.Create(&v)
+		controller.Loading("[3/4]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "") //loading框
 	}
 	tx.Commit()
 }
@@ -296,8 +299,10 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	sql := ""
 	subsql := ""
+	count := len(uniqs)
 	for k, uniq := range uniqs {
 		subsql += uniq + "','"
+		controller.Loading("[2/4]开始清理缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "") //loading框
 		if k%990 == 0 {
 			sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')"
 			tx := getDb().Begin()

@@ -6,7 +6,6 @@ import (
 	"VirtualNesGUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
 	"os"
 )
 
@@ -14,26 +13,26 @@ import (
  * 定义view用function
  **/
 
-func ShortcutController(w *window.Window) {
+func ShortcutController() {
 
 	//读取快捷工具
-	w.DefineFunction("GetShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("GetShortcut", func(args ...*sciter.Value) *sciter.Value {
 		volist, err := (&db.Shortcut{}).GetAll()
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		romJson, _ := json.Marshal(&volist)
 		return sciter.NewValue(string(romJson))
 	})
 
 	//添加快捷工具
-	w.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
 
 		count,err := (&db.Shortcut{}).Count()
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		count++
 		shortcut := &db.Shortcut{
@@ -43,13 +42,13 @@ func ShortcutController(w *window.Window) {
 		id, err := shortcut.Add();
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NewValue(utils.ToString(id))
 	})
 
 	//更新快捷工具
-	w.DefineFunction("UpdateShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("UpdateShortcut", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
@@ -60,13 +59,13 @@ func ShortcutController(w *window.Window) {
 		}
 		if err := shortcut.UpdateById(); err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NullValue()
 	})
 
 	//删除快捷工具
-	w.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		shortcut := &db.Shortcut{
@@ -75,13 +74,13 @@ func ShortcutController(w *window.Window) {
 
 		if err := shortcut.DeleteById(); err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NewValue("1")
 	})
 
 	//更新快捷工具排序
-	w.DefineFunction("UpdateShortcutSort", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("UpdateShortcutSort", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 
 		d := make(map[uint32]uint32)
@@ -104,7 +103,7 @@ func ShortcutController(w *window.Window) {
 
 
 	//运行快捷工具
-	w.DefineFunction("RunShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("RunShortcut", func(args ...*sciter.Value) *sciter.Value {
 
 		shortcut := args[0].String()
 
@@ -112,13 +111,13 @@ func ShortcutController(w *window.Window) {
 		_, err := os.Stat(shortcut)
 		if err != nil {
 			WriteLog(config.Cfg.Lang["ShortcutNotExists"])
-			return ErrorMsg(w, config.Cfg.Lang["ShortcutNotExists"])
+			return ErrorMsg( config.Cfg.Lang["ShortcutNotExists"])
 		}
 
 		err = utils.RunGame("explorer", []string{shortcut})
 		if err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 		return sciter.NullValue()
 	})

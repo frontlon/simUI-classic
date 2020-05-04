@@ -7,35 +7,34 @@ import (
 	"VirtualNesGUI/code/utils"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
 )
 
 /**
  * 定义view用function
  **/
 
-func CacheController(w *window.Window) {
+func CacheController() {
 
 	//删除所有缓存
-	w.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
 		//清空rom表
 		if err := (&db.Rom{}).Truncate(); err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 
 		//清空menu表
 		if err := (&db.Menu{}).Truncate(); err != nil {
 			WriteLog(err.Error())
-			return ErrorMsg(w, err.Error())
+			return ErrorMsg(err.Error())
 		}
 
 		return sciter.NullValue()
 	})
 
 	//生成所有缓存
-	w.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
+	config.Cfg.Window.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
 		var getPlatform uint32 = 0
 		if len(args) > 0{
@@ -43,7 +42,7 @@ func CacheController(w *window.Window) {
 		}
 
 		if len(config.Cfg.Platform) == 0{
-			if _, err := w.Call("CB_createCache",sciter.NewValue("")); err != nil {
+			if _, err := config.Cfg.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
 			}
 			return sciter.NullValue()
 		}
@@ -64,39 +63,38 @@ func CacheController(w *window.Window) {
 			if getPlatform == 0 {
 				if err := modules.ClearPlatform(); err != nil {
 					WriteLog(err.Error())
-					return ErrorMsg(w, err.Error())
+					return ErrorMsg(err.Error())
 				}
 			}
 			//开始重建缓存
 			for platform, _ := range PlatformList {
-				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [1/3] 扫描磁盘rom文件") //loading框
+				Loading("[1/4]开始扫描目录",config.Cfg.Platform[platform].Name) //loading框
 
 				romlist, menu, err := modules.CreateRomData(platform)
 
 				if err != nil {
 					WriteLog(err.Error())
-					return ErrorMsg(w, err.Error())
+					return ErrorMsg(err.Error())
 				}
-				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [2/3] 更新rom数据") //loading框
 
 				//更新rom数据
 				if err := modules.UpdateRomDB(platform, romlist); err != nil {
 					WriteLog(err.Error())
-					return ErrorMsg(w, err.Error())
+					return ErrorMsg(err.Error())
 				}
 
-				Loading(w,"["+config.Cfg.Platform[platform].Name+"] [3/3] 更新目录数据") //loading框
+				Loading("[4/4]开始更新目录数据","") //loading框
 
 				//更新menu数据
 				if err := modules.UpdateMenuDB(platform, menu); err != nil {
 					WriteLog(err.Error())
-					return ErrorMsg(w, err.Error())
+					return ErrorMsg(err.Error())
 				}
 
 			}
 
 			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := w.Call("CB_createCache",sciter.NewValue("")); err != nil {
+			if _, err := config.Cfg.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
 				fmt.Print(err)
 			}
 			return sciter.NullValue()
