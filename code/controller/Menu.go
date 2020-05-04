@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
@@ -18,14 +17,14 @@ func MenuController() {
 
 
 	//读取目录列表
-	config.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
+	utils.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		//读取数据库
 
 		menu,err := modules.GetMenuList(uint32(utils.ToInt(platform)))
 		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(err.Error())
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
 		}
 
 		getjson, _ := json.Marshal(menu)
@@ -33,7 +32,7 @@ func MenuController() {
 	})
 
 	//更新菜单排序
-	config.Window.DefineFunction("UpdateMenuSort", func(args ...*sciter.Value) *sciter.Value {
+	utils.Window.DefineFunction("UpdateMenuSort", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		data := args[1].String()
 

@@ -1,32 +1,12 @@
-package controller
+package utils
 
 import (
-	"VirtualNesGUI/code/config"
-	"VirtualNesGUI/code/utils"
-	"github.com/sciter-sdk/go-sciter"
 	"io"
 	"os"
 	"runtime"
 	"strconv"
 	"time"
 )
-
-//调用alert框
-func ErrorMsg(err string) *sciter.Value {
-
-	if _, err := config.Window.Call("errorBox", sciter.NewValue(err)); err != nil {
-	}
-	return sciter.NullValue();
-}
-
-//调用loading框
-func Loading(str string,platform string) *sciter.Value {
-	if _, err := config.Window.Call("startLoading", sciter.NewValue(str),sciter.NewValue(platform)); err != nil {
-	}
-	return sciter.NullValue();
-}
-
-
 
 /*
  写日志
@@ -35,8 +15,8 @@ func WriteLog(str string) {
 	fileName := "log.txt"
 
 	cachePath := "./cache/"
-	if !utils.IsExist(cachePath) {
-		if err := utils.CreateDir(cachePath); err != nil {
+	if !IsExist(cachePath) {
+		if err := CreateDir(cachePath); err != nil {
 			return
 		}
 	}

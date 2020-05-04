@@ -5,6 +5,7 @@ import (
 	"VirtualNesGUI/code/controller"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/modules"
+	"VirtualNesGUI/code/utils"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -38,7 +39,7 @@ func main() {
 
 	defer func() {
 		if r := recover(); r != nil {
-			controller.WriteLog("recover:" + fmt.Sprintf("%s", r))
+			utils.WriteLog("recover:" + fmt.Sprintf("%s", r))
 			fmt.Println("recover:", fmt.Sprintf("%s", r))
 		}
 	}()
@@ -62,10 +63,10 @@ func main() {
 			sciter.SW_ENABLE_DEBUG,
 		&sciter.Rect{Left: 0, Top: 0, Right: int32(width), Bottom: int32(height)});
 	if err != nil {
-		controller.WriteLog(err.Error())
+		utils.WriteLog(err.Error())
 	}
 
-	config.Window = w
+	utils.Window = w
 
 	//设置view权限
 	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO);
@@ -79,20 +80,20 @@ func main() {
 	//加载文件
 	err = w.LoadFile(constMainFile);
 	if err != nil {
-		controller.ErrorMsg(err.Error())
+		utils.ErrorMsg(err.Error())
 		return
 	}
 
 	//配置出先错误
 	if errConf != nil {
-		controller.ErrorMsg(errConf.Error())
+		utils.ErrorMsg(errConf.Error())
 		os.Exit(1)
 		return
 	}
 
 	if len(config.Cfg.Lang) == 0 {
-		controller.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
-		controller.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		utils.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		utils.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		os.Exit(1)
 		return
 	}

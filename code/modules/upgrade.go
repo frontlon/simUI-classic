@@ -30,7 +30,7 @@ func BootCheckUpgrade() {
 
 		//如果是启动检测，则验证是否需要显示
 		if ver.Id > config.Cfg.Default.UpgradeId {
-			if _, err := config.Window.Call("upgrade", sciter.NewValue(string(body))); err != nil {
+			if _, err := utils.Window.Call("upgrade", sciter.NewValue(string(body))); err != nil {
 			}
 		}
 	}()

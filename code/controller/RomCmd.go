@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"VirtualNesGUI/code/config"
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/modules"
 	"VirtualNesGUI/code/utils"
@@ -16,7 +15,7 @@ import (
 func RomCmdController() {
 
 	//读取rom独立模拟器cmd数据
-	config.Window.DefineFunction("GetRomCmd", func(args ...*sciter.Value) *sciter.Value {
+	utils.Window.DefineFunction("GetRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
@@ -28,7 +27,7 @@ func RomCmdController() {
 	})
 
 	//更新rom独立模拟器参数
-	config.Window.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
+	utils.Window.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		data := args[2].String()
@@ -37,8 +36,8 @@ func RomCmdController() {
 
 		err := modules.UpdateRomCmd(id, simId, d)
 		if err != nil {
-			WriteLog(err.Error())
-			return ErrorMsg(err.Error())
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
 		}
 
 		return sciter.NullValue()

@@ -1,6 +1,5 @@
 package config
 
-import "C"
 import (
 	"VirtualNesGUI/code/db"
 	"VirtualNesGUI/code/utils"
