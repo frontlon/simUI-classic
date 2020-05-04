@@ -16,7 +16,7 @@ import (
 func SimulatorController() {
 
 	//添加模拟器
-	config.Cfg.Window.DefineFunction("AddSimulator", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("AddSimulator", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
@@ -31,7 +31,7 @@ func SimulatorController() {
 	})
 
 	//更新模拟器
-	config.Cfg.Window.DefineFunction("UpdateSimulator", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateSimulator", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]interface{})
 		json.Unmarshal([]byte(data), &d)
@@ -47,7 +47,7 @@ func SimulatorController() {
 	})
 
 	//删除一个模拟器
-	config.Cfg.Window.DefineFunction("DelSimulator", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("DelSimulator", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		sim := &db.Simulator{
@@ -64,7 +64,7 @@ func SimulatorController() {
 	})
 
 	//读取模拟器详情
-	config.Cfg.Window.DefineFunction("GetSimulatorById", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetSimulatorById", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
@@ -78,7 +78,7 @@ func SimulatorController() {
 	})
 
 	//读取一个平台下的所有模拟器
-	config.Cfg.Window.DefineFunction("GetSimulatorByPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetSimulatorByPlatform", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
@@ -92,7 +92,7 @@ func SimulatorController() {
 	})
 
 	//设置rom的模拟器
-	config.Cfg.Window.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		//更新rom表

@@ -16,7 +16,7 @@ import (
 func ShortcutController() {
 
 	//读取快捷工具
-	config.Cfg.Window.DefineFunction("GetShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetShortcut", func(args ...*sciter.Value) *sciter.Value {
 		volist, err := (&db.Shortcut{}).GetAll()
 		if err != nil {
 			WriteLog(err.Error())
@@ -27,7 +27,7 @@ func ShortcutController() {
 	})
 
 	//添加快捷工具
-	config.Cfg.Window.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
 
 		count,err := (&db.Shortcut{}).Count()
 		if err != nil {
@@ -48,7 +48,7 @@ func ShortcutController() {
 	})
 
 	//更新快捷工具
-	config.Cfg.Window.DefineFunction("UpdateShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateShortcut", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
@@ -65,7 +65,7 @@ func ShortcutController() {
 	})
 
 	//删除快捷工具
-	config.Cfg.Window.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("DelShortcut", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		shortcut := &db.Shortcut{
@@ -80,7 +80,7 @@ func ShortcutController() {
 	})
 
 	//更新快捷工具排序
-	config.Cfg.Window.DefineFunction("UpdateShortcutSort", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateShortcutSort", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 
 		d := make(map[uint32]uint32)
@@ -103,7 +103,7 @@ func ShortcutController() {
 
 
 	//运行快捷工具
-	config.Cfg.Window.DefineFunction("RunShortcut", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("RunShortcut", func(args ...*sciter.Value) *sciter.Value {
 
 		shortcut := args[0].String()
 

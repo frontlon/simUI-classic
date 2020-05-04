@@ -65,7 +65,7 @@ func main() {
 		controller.WriteLog(err.Error())
 	}
 
-	config.Cfg.Window = w
+	config.Window = w
 
 	//设置view权限
 	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO);

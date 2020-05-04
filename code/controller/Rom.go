@@ -17,7 +17,7 @@ import (
 func RomController() {
 
 	//运行游戏
-	config.Cfg.Window.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("RunGame", func(args ...*sciter.Value) *sciter.Value {
 
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
@@ -31,7 +31,7 @@ func RomController() {
 	})
 
 	//运行攻略文件
-	config.Cfg.Window.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
 		f := args[0].String()
 		if (f == "") {
 			return sciter.NullValue()
@@ -45,7 +45,7 @@ func RomController() {
 	})
 
 	//打开rom目录
-	config.Cfg.Window.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
 
 		id := uint64(utils.ToInt(args[0].String()))
 		opt := args[1].String()
@@ -61,7 +61,7 @@ func RomController() {
 	})
 
 	//读取游戏列表
-	config.Cfg.Window.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))        //平台
 		catname := strings.Trim(args[1].String(), " ")           //分类
 		keyword := strings.Trim(args[2].String(), " ")           //关键字
@@ -81,7 +81,7 @@ func RomController() {
 	})
 
 	//读取游戏数量
-	config.Cfg.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		catname := strings.Trim(args[1].String(), " ")
 		keyword := strings.Trim(args[2].String(), " ")
@@ -90,7 +90,7 @@ func RomController() {
 	})
 
 	//读取rom详情
-	config.Cfg.Window.DefineFunction("GetGameDetail", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetGameDetail", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		res, err := modules.GetGameDetail(id)
 		if err != nil {
@@ -102,7 +102,7 @@ func RomController() {
 	})
 
 	//设为我的最爱
-	config.Cfg.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		star := uint8(utils.ToInt(args[1].String()))
 
@@ -122,7 +122,7 @@ func RomController() {
 	})
 
 	//设为隐藏
-	config.Cfg.Window.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		ishide := uint8(utils.ToInt(args[1].String()))
 
@@ -142,7 +142,7 @@ func RomController() {
 	})
 
 	//下载rom图片
-	config.Cfg.Window.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		newPath := args[2].String()
@@ -155,7 +155,7 @@ func RomController() {
 	})
 
 	//编辑图片
-	config.Cfg.Window.DefineFunction("EditRomThumbs", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("EditRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		newPath := args[2].String()
@@ -168,7 +168,7 @@ func RomController() {
 	})
 
 	//删除图片
-	config.Cfg.Window.DefineFunction("DeleteThumbs", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("DeleteThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		err := modules.DeleteThumbs(typeName, id)
@@ -180,7 +180,7 @@ func RomController() {
 	})
 
 	//重命名
-	config.Cfg.Window.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
 		setType := uint8(utils.ToInt(args[0].String())) //1:alias,2:filename
 		id := uint64(utils.ToInt(args[1].String()))
 		name := args[2].String()

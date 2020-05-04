@@ -14,14 +14,14 @@ import (
 //调用alert框
 func ErrorMsg(err string) *sciter.Value {
 
-	if _, err := config.Cfg.Window.Call("errorBox", sciter.NewValue(err)); err != nil {
+	if _, err := config.Window.Call("errorBox", sciter.NewValue(err)); err != nil {
 	}
 	return sciter.NullValue();
 }
 
 //调用loading框
 func Loading(str string,platform string) *sciter.Value {
-	if _, err := config.Cfg.Window.Call("startLoading", sciter.NewValue(str),sciter.NewValue(platform)); err != nil {
+	if _, err := config.Window.Call("startLoading", sciter.NewValue(str),sciter.NewValue(platform)); err != nil {
 	}
 	return sciter.NullValue();
 }

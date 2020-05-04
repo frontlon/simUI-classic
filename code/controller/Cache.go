@@ -16,7 +16,7 @@ import (
 func CacheController() {
 
 	//删除所有缓存
-	config.Cfg.Window.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
 		//清空rom表
 		if err := (&db.Rom{}).Truncate(); err != nil {
@@ -34,15 +34,14 @@ func CacheController() {
 	})
 
 	//生成所有缓存
-	config.Cfg.Window.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
-
+	config.Window.DefineFunction("CreateRomCache", func(args ...*sciter.Value) *sciter.Value {
 		var getPlatform uint32 = 0
 		if len(args) > 0{
 			getPlatform = uint32(utils.ToInt(args[0].String()))
 		}
 
 		if len(config.Cfg.Platform) == 0{
-			if _, err := config.Cfg.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
+			if _, err := config.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
 			}
 			return sciter.NullValue()
 		}
@@ -94,7 +93,7 @@ func CacheController() {
 			}
 
 			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := config.Cfg.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
+			if _, err := config.Window.Call("CB_createCache",sciter.NewValue("")); err != nil {
 				fmt.Print(err)
 			}
 			return sciter.NullValue()

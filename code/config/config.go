@@ -25,12 +25,12 @@ var (
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
 	}                                                                           //可直接运行的doc文档支持的扩展名
+	Window *window.Window                                                       //窗体
 
 )
 
 //配置文件
 type ConfStruct struct {
-	Window       *window.Window          //窗体
 	RootPath     string                  //exe文件的当前路径
 	Separator    string                  //exe文件的当前路径
 	CachePath    string                  //缓存路径

@@ -16,7 +16,7 @@ import (
 func PlatformController() {
 
 	//读取平台详情
-	config.Cfg.Window.DefineFunction("GetPlatformById", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetPlatformById", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		//游戏游戏详细数据
@@ -31,7 +31,7 @@ func PlatformController() {
 	})
 
 	//读取平台列表
-	config.Cfg.Window.DefineFunction("GetPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetPlatform", func(args ...*sciter.Value) *sciter.Value {
 		//游戏游戏详细数据
 		info, err := (&db.Platform{}).GetAll()
 		if err != nil {
@@ -43,7 +43,7 @@ func PlatformController() {
 	})
 
 	//添加一个平台
-	config.Cfg.Window.DefineFunction("AddPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("AddPlatform", func(args ...*sciter.Value) *sciter.Value {
 		name := args[0].String()
 		platform := &db.Platform{
 			Name:   name,
@@ -58,7 +58,7 @@ func PlatformController() {
 	})
 
 	//删除一个平台
-	config.Cfg.Window.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("DelPlatform", func(args ...*sciter.Value) *sciter.Value {
 		id := uint32(utils.ToInt(args[0].String()))
 
 		go func(id uint32) *sciter.Value {
@@ -94,7 +94,7 @@ func PlatformController() {
 	})
 
 	//更新平台信息
-	config.Cfg.Window.DefineFunction("UpdatePlatform", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdatePlatform", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
@@ -144,7 +144,7 @@ func PlatformController() {
 	})
 
 	//更新平台排序
-	config.Cfg.Window.DefineFunction("UpdatePlatformSort", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdatePlatformSort", func(args ...*sciter.Value) *sciter.Value {
 		data := args[0].String()
 		d := make(map[uint32]uint32)
 		json.Unmarshal([]byte(data), &d)

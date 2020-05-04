@@ -18,7 +18,7 @@ func MenuController() {
 
 
 	//读取目录列表
-	config.Cfg.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		//读取数据库
 
@@ -33,7 +33,7 @@ func MenuController() {
 	})
 
 	//更新菜单排序
-	config.Cfg.Window.DefineFunction("UpdateMenuSort", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateMenuSort", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		data := args[1].String()
 

@@ -13,7 +13,7 @@ import (
  **/
 
 func ConfigController() {
-	config.Cfg.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 
 		ctype := args[0].String()
 		isfresh := args[1].String()
@@ -35,7 +35,7 @@ func ConfigController() {
 	})
 
 	//更新配置文件
-	config.Cfg.Window.DefineFunction("UpdateConfig", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateConfig", func(args ...*sciter.Value) *sciter.Value {
 		field := args[0].String()
 		value := args[1].String()
 
@@ -49,7 +49,7 @@ func ConfigController() {
 	})
 
 	//备份配置文件
-	config.Cfg.Window.DefineFunction("BackupConfig", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("BackupConfig", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 
 		err := modules.BackupConfig(p)
@@ -62,7 +62,7 @@ func ConfigController() {
 	})
 
 	//还原配置文件
-	config.Cfg.Window.DefineFunction("RestoreConfig", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("RestoreConfig", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 
 		err := modules.RestoreConfig(p)
@@ -75,7 +75,7 @@ func ConfigController() {
 	})
 
 	//读取还原数据的统计信息
-	config.Cfg.Window.DefineFunction("GetRestoreInfo", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetRestoreInfo", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 		info, err := modules.GetRestoreInfo(p)
 		if err != nil {
@@ -87,7 +87,7 @@ func ConfigController() {
 	})
 
 	//检查更新
-	config.Cfg.Window.DefineFunction("CheckUpgrade", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("CheckUpgrade", func(args ...*sciter.Value) *sciter.Value {
 		body := modules.CheckUpgrade()
 		return sciter.NewValue(body)
 	})

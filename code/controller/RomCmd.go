@@ -16,7 +16,7 @@ import (
 func RomCmdController() {
 
 	//读取rom独立模拟器cmd数据
-	config.Cfg.Window.DefineFunction("GetRomCmd", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("GetRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
@@ -28,7 +28,7 @@ func RomCmdController() {
 	})
 
 	//更新rom独立模拟器参数
-	config.Cfg.Window.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
+	config.Window.DefineFunction("UpdateRomCmd", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		data := args[2].String()
