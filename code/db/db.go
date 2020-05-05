@@ -1,7 +1,7 @@
 package db
 
 import (
-	"VirtualNesGUI/code/utils"
+	"simUI/code/utils"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"

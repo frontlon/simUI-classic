@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"VirtualNesGUI/code/config"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/config"
+	"simUI/code/utils"
 	"archive/zip"
 	"github.com/axgle/mahonia"
 	"io"

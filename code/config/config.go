@@ -1,8 +1,8 @@
 package config
 
 import (
-	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"bufio"
 	"errors"
 	"github.com/go-ini/ini"

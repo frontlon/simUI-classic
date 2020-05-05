@@ -1,7 +1,7 @@
 package modules
 
 import (
-	"VirtualNesGUI/code/db"
+	"simUI/code/db"
 )
 
 //读取菜单列表

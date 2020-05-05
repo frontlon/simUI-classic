@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
 	"strings"

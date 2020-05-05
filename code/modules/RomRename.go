@@ -1,9 +1,9 @@
 package modules
 
 import (
-	"VirtualNesGUI/code/config"
-	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/config"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"errors"
 	"github.com/go-ini/ini"
 	"strings"

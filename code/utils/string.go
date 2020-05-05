@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"VirtualNesGUI/code/utils/pinyin"
+	"simUI/code/utils/pinyin"
 	"crypto/md5"
 	"fmt"
 	//"github.com/chain-zhang/pinyin"

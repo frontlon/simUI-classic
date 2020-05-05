@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"encoding/json"
 	"fmt"
 	"github.com/go-ini/ini"

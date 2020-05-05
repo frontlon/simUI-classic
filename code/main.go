@@ -1,11 +1,11 @@
 package main
 
 import (
-	"VirtualNesGUI/code/config"
-	"VirtualNesGUI/code/controller"
-	"VirtualNesGUI/code/db"
-	"VirtualNesGUI/code/modules"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/config"
+	"simUI/code/controller"
+	"simUI/code/db"
+	"simUI/code/modules"
+	"simUI/code/utils"
 	"fmt"
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -22,7 +22,7 @@ func main() {
 	constMainFile := "" //主文件路径（正式）
 	if debug == true {
 		db.LogMode = true
-		constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
+		constMainFile = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //主文件路径（测试用）
 	} else {
 		constMainFile = "this://app/main.html" //主文件路径（正式）
 	}

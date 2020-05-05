@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"VirtualNesGUI/code/config"
-	"VirtualNesGUI/code/utils"
+	"simUI/code/config"
+	"simUI/code/utils"
 	"encoding/json"
 	"github.com/sciter-sdk/go-sciter"
 )

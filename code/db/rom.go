@@ -1,7 +1,7 @@
 package db
 
 import (
-	"VirtualNesGUI/code/utils"
+	"simUI/code/utils"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"

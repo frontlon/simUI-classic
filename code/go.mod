@@ -1,4 +1,4 @@
-module VirtualNesGUI/code
+module simUI/code
 
 go 1.14
 
