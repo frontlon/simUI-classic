@@ -53,7 +53,7 @@
 
 ```
 .
-├── config                      # 配置
+├── config                      // 配置
 │   └── config.go               # 项目配置包
 ├── controller                  # 控制器（业务入口）
 │   ├── Cache.go                # 缓存
