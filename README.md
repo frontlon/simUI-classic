@@ -10,103 +10,136 @@
 
 支持ROM别名，ROM子游戏； 
 
-支持展示图、场景图显示、支持gif动画；  
+支持多种展示图、场景展示视频、支持gif动画；  
 
 支持游戏简介、游戏攻略，支持富文本显示，支持txt、markdown、html三种语法，并可以混合运用；  
 
 支持自定义皮肤、支持多语言；
 
-还支持懒加载、软件改名、一键下载缩略图、启动电子书等诸多功能。
-
-**软件完全免费，你可随意制作合集、并进行传播。**
-
-
+还支持懒加载、软件改名、一键下载缩略图、快捷工具等诸多功能。
 
 
 
 ![](readme/thumb.jpg)
 
 &nbsp;
-## 下载地址
+## 软件地址
 
-二进制下载地址请见：[http://www.simui.net/](https://www.simui.net/)
+[www.simui.net/](http://www.simui.net/)
 
-## 更新说明
 
-**v2.2.3**
 
-1. 解决了更新缓存时，无法删除旧rom的问题
-2. 解决了添加平台按钮错位的问题
+## 编译工具
 
-**v2.2.2**
+静态资源编译工具：
 
-1. 解决了在大量rom下，更新缓存非常慢的问题。如果你的rom非常多，请升级到该版本
-2. 在没有rom攻略的情况下，不再允许打开攻略窗口
+`packfolder.bat`
 
-**v2.2.1**
+编译测试包：
 
-1. 修复了一些rom无故消失的问题
+`build/build_dev.bat`
 
-**v2.2**
+编译32位系统正式包（需在32位系统下执行）：
 
-1. 对底层大部分功能都进行了重构
-2. 支持街机平台，支持MAME、winKawaks、FBAS等模拟器。
-3. 现在一个平台支持多个模拟器了，且可以根据rom自行选择模拟器。
-4. 新增rom收藏功能，把你常玩的游戏收藏起来，不用每次费力寻找了。
-5. 加入通过字母检索rom的功能
-6. 优化搜索功能， 输入文字时会实时搜索
-7. 现在可以通过设置界面来对平台和模拟器进行设置，不再通过费力研究配置文件了
-8. rom展示图中加入了场景图，现在一个游戏支持封面图和场景图两种。
-9. 现在可以快捷的通过网络下载封面图和场景图了
-10. 加入了攻略文本功能。可以为游戏设置攻略，攻略支持富文本格式。
-11. 加入启动电子书按钮，如果你有一本常用的攻略（出招表）电子书，这里在可以一键启动。
-12. 现在可以自定义主题颜色、自定义更换主题背景图片和窗体透明度了。
-13. 平台列表中加入了【全部平台】按钮，可以显示所有平台中的游戏了
-14. 支持左右键来跳转rom，但该功能目前不是很完善。使用起来并不是很舒服
+`build/build_product_32.bat`
 
-bug修复：
+编译64位系统正式包：
 
-1. 修复了侧边栏中文乱码问题
-2. 修复了4k显示器变形问题
-3. 修复了侧边栏rom太长显示不全的问题
-4. 修复了平台过多后显示不全的问题
+`build/build_product_64.bat`
 
-**v2.1**
 
-1. 加入懒加载技术，解决软件启动时由于rom过多导致的卡死问题
-2. 支持自定义添加平台
-3. 加入romlist功能，街机游戏可以自定义名称了
-4. 加入了子游戏功能，同类型的游戏可以合并到一起了
-5. 加入了游戏gif动画显示功能
-6. 加入了游戏简介的显示功能
-7. 对页面样式做了修改，并加入了5种主题
-8. 加入了rom模块/列表两种显示方式，以及模块的缩放功能
-9. 加入了多语言功能
-10. 修改了软件图标
 
-**v2.0**
+## 代码结构
 
-1. 现在支持多种模拟器了
-2. 现在支持FC、SFC、MD、GB、PCE、街机五种游戏平台
-3. 由于支持了多种模拟器，所以软件改成为TinyGameUI
-4. 加入配置文件，可从配置文件中灵活配置软件
-
-**v1.1.1**
-
-1. 修复了游戏列表底部显示不全的问题
-2. 修复了32位系统无法启动问题
-3. 侧边栏可以拖动改变宽度了
-4. 修复了标题栏不显示图标的问题
-
-**v1.1**
-
-1. 美化了页面
-2. 游戏菜单中加入了【未分类】项
-3. 加入了游戏搜索功能
-4. 加入了游戏统计数量
-5. 优化了读取rom列表的性能
-
-**v1.0**
-
-1. 软件第一版上线，仅支持FC平台下的VirtualNes模拟器
+```
+.
+├── config                      # 配置
+│   └── config.go               # 项目配置包
+├── controller                  # 控制器（业务入口）
+│   ├── Cache.go                # 缓存
+│   ├── Config.go               # 配置
+│   ├── Menu.go                 # 菜单
+│   ├── Platform.go             # 平台
+│   ├── Public.go               # 公共函数
+│   ├── Rom.go                  # 游戏rom
+│   ├── RomCmd.go               # 游戏单一模拟器参数
+│   ├── Shortcut.go             # 快捷工具
+│   └── Simulator.go            # 模拟器
+├── db                          # 数据库module
+│   ├── config.go               # 配置表
+│   ├── db.go                   # 初始化方法
+│   ├── menu.go                 # 菜单表
+│   ├── platform.go             # 平台表
+│   ├── rom.go                  # rom表
+│   ├── shortcut.go             # 快捷工具表
+│   ├── simconf.go              # rom表（rom表的模拟器配置）
+│   └── simulator.go            # 模拟器表
+├── go.mod
+├── go.sum
+├── main.go                      # 入口函数
+├── modules                      # 功能模块
+│   ├── Backup.go                # 备份恢复相关方法
+│   ├── Rom.go                   # rom相关方法
+│   ├── RomCache.go              # rom缓存相关方法
+│   ├── RomRename.go             # rom重命名相关方法
+│   ├── menu.go                  # 菜单相关方法
+│   ├── simulator.go             # 模拟器相关方法
+│   ├── thumb.go                 # 缩略图相关方法
+│   ├── upgrade.go               # 软件更新相关方法
+│   └── zip.go                   # 压缩相关方法
+├── res.go                       # 静态资源打包文件
+├── res.syso                     # 静态资源syso
+├── utils                        # 公共方法
+│   ├── conv.go                  # 数据转换方法
+│   ├── encode.go                # 编码方法
+│   ├── file.go                  # 文件方法
+│   ├── filepath.go              # 路径方法
+│   ├── http.go                  # http方法
+│   ├── pinyin                   # 拼音转换方法
+│   │   ├── ...
+│   ├── rom.go                   # 游戏相关方法
+│   ├── slice.go                 # 切片方法
+│   └── string.go                # 字符串方法
+└── view                         # 视图
+│    ├── about.html              # 关于页面
+│    ├── add_platform.html       # 添加平台页面
+│    ├── config.html             # 配置页面
+│    ├── desc.html               # 攻略页面
+│    ├── down_thumbs.html        # 下载缩略图页面 
+│    ├── edit_rom_cmd.html       # 编辑模拟器参数页面
+│    ├── edit_sim.html           # 编辑模拟器页面
+│    ├── edit_thumbs.html        # 编辑缩略图页面
+│    ├── main.html               # 首页
+│    ├── rom_rename.html         # 重命名页面
+│    └── tis                     # 脚本
+│    │   ├── event.tis           # 公共事件
+│    │   ├── keycode.tis         # 键盘快捷键
+│    │   ├── menu.tis            # 菜单
+│    │   ├── platform.tis        # 平台
+│    │   ├── rom.tis             # rom
+│    │   ├── sidebar.tis         # 侧边栏
+│    │   ├── statebar.tis        # 状态栏
+│    │   ├── thumb.tis           # 缩略图
+│    │   ├── utils.tis           # 公共方法
+│    │   └── window.tis          # 窗体相关
+│    │   ├── context.tis         # 右键菜单
+│    │   ├── dialog              # 子页面脚本
+│    │   │   ├── config.tis      # 配置
+│    │   │   ├── desc.tis        # 攻略
+│    │   │   ├── down_thumbs.tis # 下载缩略图
+│    │   │   ├── edit_sim.tis    # 编辑模拟器
+│    │   │   ├── edit_thumbs.tis # 编辑rom模拟器参数
+│    │   │   └── rom_rename.tis  # 重命名
+│    │   ├── plugins             # sciter插件
+│    │   │   ├── decorators.tis  # 快捷键支持
+│    │   │   ├── dragdrop.tis    # 拖拽换图
+│    │   │   ├── markdown.tis    # markdown
+│    │   │   ├── rotator.tis     # 滑动焦点图
+│    │   │   ├── tabs.tis        # tab
+│    │   │   └── vlist.tis       # 列表
+│    ├── images                  # 图片资源
+│    │   ├── *.jpg/png           # 图片资源
+│    │   ├── iconfont.ttf        # 字体图标
+│    │   ├── public.css          #  样式文件
+```
 
