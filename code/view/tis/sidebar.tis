@@ -135,7 +135,7 @@ function _createRotate(info){
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
 
-    if (movie != ""){ pics += "<video id='right_video' />";}
+    if (movie != ""){ pics += "<video id='right_video' sizing='cover' />";}
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
