@@ -167,6 +167,11 @@
         setHide(this);
     });
 
+   //重命名（侧边栏）
+    self.on("click", "#right_rename", function(evt) {
+        rename(this);
+    });
+
     //图片编辑（侧边栏）
     self.on("click", "#right_thumb_down", function(evt) {
         thumbEdit(this);

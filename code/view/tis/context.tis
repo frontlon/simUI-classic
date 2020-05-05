@@ -104,7 +104,8 @@ function romContextMenu(obj){
 
     btndata += "<caption>"+ CONF.Lang.Function +"</caption>";
 
-    btndata += "<li class='thumb edit_thumb' rname = '"+ detailObj.Info.Name.toHtmlString() +"' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditThumbs +"</li>";
+    var romPath = URL.parse(detailObj.Info.RomPath);
+    btndata += "<li class='thumb edit_thumb' rname = \""+ romPath.name +"\" rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditThumbs +"</li>";
 
     if( detailObj.Info.Star == 1){
         btndata += "<li class='fav fav0' value='0' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.CancelFavorite +"</li>";

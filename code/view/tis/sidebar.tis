@@ -17,9 +17,13 @@ function openSidebar(obj){
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
 
+    //重命名功能
+    $(#right_rename).attributes["rid"] = info.Id;
+
     //图片下载页面
+    var romPath = URL.parse(info.RomPath);
     $(#right_thumb_down).attributes["rid"] = info.Id;
-    $(#right_thumb_down).attributes["rname"] = info.Name;
+    $(#right_thumb_down).attributes["rname"] = romPath.name;
 
     //生成喜好按钮
     var favorite = $(#right_favorite);

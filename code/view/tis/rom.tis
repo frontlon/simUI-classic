@@ -1,5 +1,4 @@
 ﻿var MASK = true;
-var MAXZOOM = 5; //最大缩放等级
 var SCROLL_POS = 0; //默认滚动条位置
 var SCROLL_LOCK = false;
 var SCROLL_PAGE = 0; //当前滚动条翻页页数

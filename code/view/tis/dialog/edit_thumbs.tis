@@ -37,7 +37,6 @@ function Init(){
     var name = view.parameters.name;
     var platform = CONF.Platform[pfid.toString()];
 
-
     if(platform.ThumbPath == ""){
         $(#widget_thumb).state.disabled = true;
         $(#widget_thumb .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
@@ -76,7 +75,6 @@ function Init(){
     var poster = getRomPicPath("poster",pfid,name);
     var packing = getRomPicPath("packing",pfid,name);
     var video = getRomPicPath("video",pfid,name);
-
 
     if(thumb != ""){$(.file-drop-zone[opt=thumb]).html = "<img src='"+ thumb +"'>";}
     if(snap != ""){$(.file-drop-zone[opt=snap]).html = "<img src='"+ snap +"'>";}

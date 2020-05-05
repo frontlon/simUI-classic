@@ -1,4 +1,6 @@
-﻿//初始化字体大小
+﻿var MAXZOOM = 6; //最大缩放等级
+
+//初始化字体大小
 function initFontSize(){
     $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
     $(#romlist).attributes.addClass('fontsize'+CONF.Default.FontSize);
