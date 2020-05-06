@@ -10,12 +10,13 @@
         #down_thumb_list li:hover{box-shadow:0 0 12dip #666}
         #down_thumb_list li:active{transform:scale(0.95);transition:transform(bounce-in,0s,bounce-out);}
         #down_thumb_list li img{width:100%;height:width(80%);}
-        .thumb_bg{width:100%;height:200dip;background:url(this://app/images/down_thumbs.jpg) no-repeat center center;clear:both}
-        .thumb_search{width:384dip;height:38dip;margin:80dip auto 0 auto;padding:0;}
+        .thumb_bg{width:100%;height:200dip;background:url(this://app/images/down_thumbs.jpg) no-repeat center center;clear:both;}
+        .thumb_search{width:320dip;height:38dip;padding:0;margin:80dip auto 0 250dip;}
         .thumb_search .input{opacity: 0.8;background:#fff;height:38dip;line-height:38dip;border:0;display:block;float:left;width:240dip;color:#333;font-size:14dip;text-align:center;padding:0;border-radius: 6dip 0 0 6dip}
         .submit{opacity: 0.8;height:38dip;width:56dip;line-height:38dip;border:0;display:block;float:left;font-size:11dip;background:#ddd;color:#666;text-align:center;margin:0;border-radius: 0 6dip 6dip 0;cursor:pointer}
         .submit.active{background: #09f;color: #FFF}
         .description{text-align:center;display:block;position:relative;width:100%;color:#FFF;padding-top: 16dip}
+        .clearfix{clear:both;}
     </style>
 </head>
 <body>
@@ -23,11 +24,12 @@
         <div class="thumb_search">
             <input type="text" class="input" id="search_input" novalue="{{InputKeyword}}" value="" />
             <button id="submit" class="submit active" value="1">{{Search}}</button>
+            <div class="clearfix"></div>
         </div>
         <div class="description">{{Description}}</div>
     </div>
     <ul id="down_thumb_list"></ul>
-    <div id="loading"><p>{{Loading}}</p></div>
+    <div id="loading"><p><span id="loading_text">{{Loading}}</span></p></div>
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";

@@ -173,6 +173,7 @@ function openFile(evt) {
 function thumbDown(evt){
     var id = view.parameters.id;
     var name = view.parameters.name;
+    var keyword = view.parameters.keyword;
     var type = evt.attributes["value"];
     var result = view.dialog({
         url:self.url(ROOTPATH + "down_thumbs.html"),
@@ -181,7 +182,8 @@ function thumbDown(evt){
         height:750,
         parameters: {
             id:id,
-            keyword:name,
+            name:name,
+            keyword:keyword,
             type:type,
         };
     });

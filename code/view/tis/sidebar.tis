@@ -24,6 +24,7 @@ function openSidebar(obj){
     var romPath = URL.parse(info.RomPath);
     $(#right_thumb_down).attributes["rid"] = info.Id;
     $(#right_thumb_down).attributes["rname"] = romPath.name;
+    $(#right_thumb_down).attributes["rkeyword"] = info.Name;
 
     //生成喜好按钮
     var favorite = $(#right_favorite);
@@ -135,7 +136,7 @@ function _createRotate(info){
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
 
-    if (movie != ""){ pics += "<video id='right_video' sizing='cover' />";}
+    if (movie != ""){ pics += "<video id='right_video' />";}
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }

@@ -9,6 +9,7 @@ function thumbEdit(evt){
             id:evt.attributes["rid"],
             platform:ACTIVE_PLATFORM,
             name:evt.attributes["rname"],
+            keyword:evt.attributes["rkeyword"],
         };
     });
     if(thumb == ""){
