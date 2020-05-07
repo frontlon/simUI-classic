@@ -36,7 +36,8 @@ func getDb() *gorm.DB {
 	return engine
 }
 
-//关闭数据库
-func CloseDb(){
-	engine.Close()
+
+//收缩数据库
+func Vacuum(){
+	engine.Exec("VACUUM;")
 }

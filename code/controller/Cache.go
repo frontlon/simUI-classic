@@ -89,6 +89,9 @@ func CacheController() {
 
 			}
 
+			//收缩数据库
+			db.Vacuum()
+
 			//数据更新完成后，页面回调，更新页面DOM
 			if _, err := utils.Window.Call("CB_createCache", sciter.NewValue("")); err != nil {
 				fmt.Print(err)

@@ -1,5 +1,9 @@
 bak/
-app/
+app/cache
+app/games
+app/simUI.exe
+app/simUI-32.exe
+app/simUI-64.exe
 .idea/
 test/
 code/res.go
