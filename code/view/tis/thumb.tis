@@ -7,9 +7,6 @@ function thumbEdit(evt){
         height:890,
         parameters: {
             id:evt.attributes["rid"],
-            platform:ACTIVE_PLATFORM,
-            name:evt.attributes["rname"],
-            keyword:evt.attributes["rkeyword"],
         };
     });
     if(thumb == ""){

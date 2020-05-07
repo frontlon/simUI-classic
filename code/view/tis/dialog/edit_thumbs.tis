@@ -1,5 +1,5 @@
 ﻿var THUMB = "";
-
+var keyword="";
 view.root.on("ready", function(){
     Init(); //初始化
 });
@@ -32,10 +32,14 @@ function Init(){
     //创建语言
     createLang();
 
-    var id = view.parameters.id;
-    var pfid = view.parameters.platform;
-    var name = view.parameters.name;
+    var getjson = mainView.GetGameDetail(view.parameters.id);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+    var romPath = URL.parse(info.RomPath);
+    var pfid = info.Platform;
+    var name = romPath.name;
     var platform = CONF.Platform[pfid.toString()];
+    keyword = info.Name;
 
     if(platform.ThumbPath == ""){
         $(#widget_thumb).state.disabled = true;
@@ -173,7 +177,6 @@ function openFile(evt) {
 function thumbDown(evt){
     var id = view.parameters.id;
     var name = view.parameters.name;
-    var keyword = view.parameters.keyword;
     var type = evt.attributes["value"];
     var result = view.dialog({
         url:self.url(ROOTPATH + "down_thumbs.html"),
