@@ -1,5 +1,4 @@
 bak/
-app/
 .idea/
-test/
 code/res.go
+app/
