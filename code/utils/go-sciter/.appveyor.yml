@@ -1,0 +1,59 @@
+version: 0.4.0.{build}
+
+branches:
+  only:
+    - master
+    - travis
+
+image:
+  - Visual Studio 2015
+
+environment:
+  matrix:
+  - TARGET: Go 1.10.0
+    ARCH: 64
+    ARCHGO:
+    VERGO: 110
+    MGWVER: x86_64-7.2.0-posix-seh-rt_v5-rev1
+
+  - TARGET: Go 1.10.0
+    ARCH: 32
+    ARCHGO: -x86
+    VERGO: 110
+    MGWVER: i686-6.3.0-posix-dwarf-rt_v5-rev1
+
+install:
+  - cmd: echo Testing sciter%ARCH% with %TARGET%.
+  - cmd: echo Current directory is %APPVEYOR_BUILD_FOLDER%
+  - cmd: set PATH=C:\projects\deps;C:\go%VERGO%%ARCHGO%\bin;C:\mingw-w64\%MGWVER%\mingw%ARCH%\bin;%PATH%
+
+  - gcc --version
+  - go version
+
+  - mkdir C:\projects\deps
+  - curl -so "C:\projects\deps\sciter.dll" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin/%ARCH%/sciter.dll"
+
+before_build:
+  - cmd: set GOROOT=C:\go%VERGO%%ARCHGO%
+  - cmd: set GOPATH=C:\projects\gopath
+  - cmd: set PATH=%GOPATH%\bin;%PATH%
+  - cmd: mkdir %GOPATH%
+  - go env
+  - go get -u github.com/lxn/win
+  - go get -u github.com/GeertJohan/go.rice
+  - go get -u github.com/GeertJohan/go.rice/rice
+  - go get -u github.com/kardianos/osext
+
+
+build_script:
+  - cmd: echo Building library
+  - cmd: cd
+  - go build -x
+
+  - go get simUI/code/utils/go-sciter
+
+  - cmd: echo Building examples
+  - cmd: cd examples
+  - cmd: go build ./...
+
+test: off
