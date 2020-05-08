@@ -95,11 +95,13 @@
 │   ├── file.go                  # 文件方法
 │   ├── filepath.go              # 路径方法
 │   ├── http.go                  # http方法
-│   ├── pinyin                   # 拼音转换方法
-│   │   ├── ...
 │   ├── rom.go                   # 游戏相关方法
 │   ├── slice.go                 # 切片方法
 │   └── string.go                # 字符串方法
+│   ├── pinyin                   # 拼音转换库
+│   │   ├── ...
+│   ├── sciter                   # go-sciter库
+│   │   ├── ...
 └── view                         # 视图
 │    ├── about.html              # 关于页面
 │    ├── add_platform.html       # 添加平台页面
@@ -141,5 +143,26 @@
 │    │   ├── *.jpg/png           # 图片资源
 │    │   ├── iconfont.ttf        # 字体图标
 │    │   ├── public.css          #  样式文件
+```
+
+
+
+simUI二进制包目录结构
+
+```
+── app
+│   ├── data.dll        # sqlite数据库文件
+│   ├── sciter-32.dll   # sciter32位引擎
+│   ├── sciter-64.dll   # sciter64位引擎
+│   ├── sciter-32.exe   # simIO32位执行文件
+│   ├── sciter-64.exe   # simUI64位执行文件
+│   ├── theme           # 主题目录
+│   │   ├── *.css       # 主题css文件
+│   │   ├── *.png/jpg   # 主题相关图片文件
+│   ├── icons           # 平台图标目录
+│   │   ├── *.ico
+│   ├── lang            # 语言
+│   │   ├── 简体中文.ini  # 简体中文语言文件
+│   │   └── 繁体中文.ini  # 繁体中文语言文件
 ```
 
