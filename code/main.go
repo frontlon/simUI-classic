@@ -7,8 +7,11 @@ import (
 	"simUI/code/modules"
 	"simUI/code/utils"
 	"fmt"
-	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
+	"simUI/code/utils/go-sciter"
+	"simUI/code/utils/go-sciter/window"
+
+	//"simUI/code/utils/go-sciter"
+	//"simUI/code/utils/go-sciter/window"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -26,6 +29,8 @@ func main() {
 	} else {
 		constMainFile = "this://app/main.html" //主文件路径（正式）
 	}
+
+
 
 	runtime.LockOSThread()
 
@@ -53,6 +58,9 @@ func main() {
 	//读取宽高
 	width := config.Cfg.Default.WindowWidth
 	height := config.Cfg.Default.WindowHeight
+
+
+
 
 	//创建window窗口
 	//err := errors.New("")
