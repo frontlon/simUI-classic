@@ -3,7 +3,7 @@ package utils
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/chain-zhang/pinyin"
+	"simUI/code/utils/pinyin"
 )
 
 /**

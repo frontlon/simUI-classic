@@ -9,9 +9,6 @@ import (
 	"fmt"
 	"simUI/code/utils/go-sciter"
 	"simUI/code/utils/go-sciter/window"
-
-	//"simUI/code/utils/go-sciter"
-	//"simUI/code/utils/go-sciter/window"
 	"os"
 	"path/filepath"
 	"runtime"
