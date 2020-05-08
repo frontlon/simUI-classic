@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
+	"simUI/code/utils/go-sciter"
+	"simUI/code/utils/go-sciter/window"
 )
 
 var Window *window.Window //窗体

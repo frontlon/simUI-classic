@@ -4,7 +4,7 @@ import (
 	"simUI/code/config"
 	"simUI/code/utils"
 	"encoding/json"
-	"github.com/sciter-sdk/go-sciter"
+	"simUI/code/utils/go-sciter"
 )
 
 //更新url

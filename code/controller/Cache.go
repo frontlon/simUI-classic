@@ -6,7 +6,7 @@ import (
 	"simUI/code/modules"
 	"simUI/code/utils"
 	"fmt"
-	"github.com/sciter-sdk/go-sciter"
+	"simUI/code/utils/go-sciter"
 )
 
 /**

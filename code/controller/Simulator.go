@@ -5,7 +5,7 @@ import (
 	"simUI/code/modules"
 	"simUI/code/utils"
 	"encoding/json"
-	"github.com/sciter-sdk/go-sciter"
+	"simUI/code/utils/go-sciter"
 )
 
 /**

@@ -6,7 +6,7 @@ import (
 	"bufio"
 	"errors"
 	"github.com/go-ini/ini"
-	"github.com/sciter-sdk/go-sciter/window"
+	"simUI/code/utils/go-sciter/window"
 	"io/ioutil"
 	"os"
 	"path"
