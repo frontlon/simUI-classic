@@ -1,33 +1,34 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime"
 	"simUI/code/config"
 	"simUI/code/controller"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"fmt"
 	"simUI/code/utils/go-sciter"
 	"simUI/code/utils/go-sciter/window"
-	"os"
-	"path/filepath"
-	"runtime"
 	"strings"
 )
 
 func main() {
 
-	debug := true //调试模式
+	isDebug := true //是否为调试模式
 
-	constMainFile := "" //主文件路径（正式）
-	if debug == true {
+	if isDebug { //debug模式
 		db.LogMode = true
-		constMainFile = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //主文件路径（测试用）
-	} else {
-		constMainFile = "this://app/main.html" //主文件路径（正式）
+		config.GO_ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
+		config.VIEW_ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";       //view用路径
+
+	} else { //正式模式
+		db.LogMode = false
+		config.GO_ROOTPATH = "this://app/main.html" //go用路径
+		config.VIEW_ROOTPATH = "this://app/";       //view用路径
 	}
-
-
 
 	runtime.LockOSThread()
 
@@ -56,9 +57,6 @@ func main() {
 	width := config.Cfg.Default.WindowWidth
 	height := config.Cfg.Default.WindowHeight
 
-
-
-
 	//创建window窗口
 	//err := errors.New("")
 	w, err := window.New(
@@ -83,7 +81,7 @@ func main() {
 	w.OpenArchive(res)
 
 	//加载文件
-	err = w.LoadFile(constMainFile);
+	err = w.LoadFile(config.GO_ROOTPATH);
 	if err != nil {
 		utils.ErrorMsg(err.Error())
 		return

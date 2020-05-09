@@ -14,6 +14,12 @@ import (
  **/
 
 func ConfigController() {
+
+	//根据环境，返回视图用的根路径
+	utils.Window.DefineFunction("GetViewRootPath", func(args ...*sciter.Value) *sciter.Value {
+		return sciter.NewValue(config.VIEW_ROOTPATH)
+	})
+
 	utils.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 
 		ctype := args[0].String()

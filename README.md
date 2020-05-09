@@ -1,6 +1,6 @@
 
 
-![](readme/logo.jpg)
+![](readme/logo.png)
 
 
 
@@ -39,13 +39,23 @@
 
 `build/build_dev.bat`
 
+编译64位系统正式包：
+
+`build/build_product_64.bat`
+
 编译32位系统正式包（需在32位系统下执行）：
 
 `build/build_product_32.bat`
 
-编译64位系统正式包：
 
-`build/build_product_64.bat`
+
+## 部署方法
+
+1. clone本项目
+2. 将simUI完整二进制项目放进项目app目录
+3. 根据环境情况配置 main.go文件中的`isDebug`变量，是否开启调试模式
+4. 执行`build/build_dev.bat`编译项目
+5. 生成app/sciter-64.exe文件完成，启动项目
 
 
 
