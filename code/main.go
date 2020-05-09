@@ -18,16 +18,13 @@ import (
 func main() {
 
 	isDebug := true //是否为调试模式
-
+	ROOTPATH := ""
 	if isDebug { //debug模式
 		db.LogMode = true
-		config.GO_ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
-		config.VIEW_ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";       //view用路径
-
+		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
 	} else { //正式模式
 		db.LogMode = false
-		config.GO_ROOTPATH = "this://app/main.html" //go用路径
-		config.VIEW_ROOTPATH = "this://app/";       //view用路径
+		ROOTPATH = "this://app/main.html" //go用路径
 	}
 
 	runtime.LockOSThread()
@@ -81,7 +78,7 @@ func main() {
 	w.OpenArchive(res)
 
 	//加载文件
-	err = w.LoadFile(config.GO_ROOTPATH);
+	err = w.LoadFile(ROOTPATH);
 	if err != nil {
 		utils.ErrorMsg(err.Error())
 		return

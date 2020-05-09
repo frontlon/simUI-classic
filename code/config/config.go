@@ -16,9 +16,6 @@ import (
 
 //配置文件
 var (
-	GO_ROOTPATH string //golang根目录
-	VIEW_ROOTPATH string //视图根目录
-
 	Cfg      *ConfStruct                                                        //公共配置
 	DOC_EXTS = []string{".txt", ".md"}                                          //doc文档支持的扩展名
 	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv"} //支持的图片类型
