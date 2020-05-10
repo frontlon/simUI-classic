@@ -1,0 +1,73 @@
+﻿//生成语言
+function createLang(){
+    var content = $(body).html;
+    for(var key in CONF.Lang) {
+        content = content.replace("{{"+ key +"}}",CONF.Lang[key]);
+    }
+    $(body).html = content;
+    self.update();
+
+}
+
+//自动补全扩展名
+function completeExt(str){
+    var arr = str.split(",");
+    var newarr = [];
+    for(var a in arr) {
+        var head = a.substr(0,1);
+        if(head == "."){
+          newarr.push(a);
+        }else{
+          newarr.push("."+a);
+        }
+    }
+    var newstr = newarr.join(",");
+    return newstr;
+}
+
+//弹出错误窗口
+function errorBox(str){
+    view.msgbox(#error,str);
+}
+
+//alert框
+function alert(str){
+    view.msgbox(#alert,str);
+}
+
+//开启loading框
+function startLoading(str = "",platform=""){
+    $(#loading).style['display'] = 'block';
+    if (str != ""){
+        $(#loading_text).html = str;
+    }else{
+        $(#loading_text).html = CONF.Lang.Loading;
+    }
+    if (platform != ""){
+        $(#loading_platform).html = "[" + platform + "]";
+    }
+}
+
+//关闭loading框
+function endLoading(){
+    $(#loading).style['display'] = 'none';
+}
+
+//测试用console框
+function consoleLog(str){
+    $(#console).style['display'] = 'block';
+    $(#console).append(str + '<br>');
+}
+
+
+//时间戳转日期
+function unixToDate(timestamp) {
+timestamp = timestamp.toString() + "000";
+var time = new Date(timestamp.toFloat());
+var y = time.year;
+var m = time.month;
+var d = time.day;
+var h = time.hour;
+var mm = time.minute;
+return y+'-'+m+'-'+d+' '+h+':'+mm;
+}

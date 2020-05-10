@@ -1,0 +1,225 @@
+﻿var THUMB = "";
+var keyword="";
+view.root.on("ready", function(){
+    Init(); //初始化
+});
+
+//关闭窗口
+view.root << event closerequest (evt) {
+    view.close(THUMB);
+}
+
+//选择文件
+event click $(.openfile){
+    openFile(this);
+}
+
+//下载缩略图
+event click $(.thumb_down){
+    thumbDown(this);
+}
+
+//清除图片
+event click $(.thumb_delete){
+    DeleteThumb(this);
+}
+
+//初始化
+function Init(){
+
+    view.windowCaption = CONF.Lang.EditThumbs;
+
+    //创建语言
+    createLang();
+
+    var getjson = mainView.GetGameDetail(view.parameters.id);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+    var romPath = URL.parse(info.RomPath);
+    var pfid = info.Platform;
+    var name = romPath.name;
+    var platform = CONF.Platform[pfid.toString()];
+    keyword = info.Name;
+
+    if(platform.ThumbPath == ""){
+        $(#widget_thumb).state.disabled = true;
+        $(#widget_thumb .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_thumb .file-drop-zone).attributes.addClass("disabled");
+
+    }
+    if(platform.SnapPath == ""){
+        $(#widget_snap).state.disabled = true;
+        $(#widget_snap .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_snap .file-drop-zone).attributes.addClass("disabled");
+
+
+    }
+    if(platform.PosterPath == ""){
+        $(#widget_poster).state.disabled = true;
+        $(#widget_poster .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_poster .file-drop-zone).attributes.addClass("disabled");
+
+    }
+    if(platform.PackingPath == ""){
+        $(#widget_packing).state.disabled = true;
+        $(#widget_packing .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_packing .file-drop-zone).attributes.addClass("disabled");
+
+    }
+
+    if(platform.VideoPath == ""){
+        $(#widget_video).state.disabled = true;
+        $(#widget_video .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_video .file-drop-zone).attributes.addClass("disabled");
+    }
+    
+
+    var thumb = getRomPicPath("thumb",pfid,name);
+    var snap = getRomPicPath("snap",pfid,name);
+    var poster = getRomPicPath("poster",pfid,name);
+    var packing = getRomPicPath("packing",pfid,name);
+    var video = getRomPicPath("video",pfid,name);
+
+    if(thumb != ""){$(.file-drop-zone[opt=thumb]).html = "<img src='"+ thumb +"'>";}
+    if(snap != ""){$(.file-drop-zone[opt=snap]).html = "<img src='"+ snap +"'>";}
+    if(poster != ""){$(.file-drop-zone[opt=poster]).html = "<img src='"+ poster +"'>";}
+    if(packing != ""){$(.file-drop-zone[opt=packing]).html = "<img src='"+ packing +"'>";}
+    if(video != ""){$(.file-drop-zone[opt=video]).html = "<video src='"+ video +"' />";}
+
+}
+
+class FileDropZone : Element 
+{
+    this var filter;  
+    this var files = []; // filtered files
+
+    function checkFiles(list) {
+    if(typeof list != #array )
+        list = [list];
+    const patterns = this.filter;
+    function flt(fn) {
+        for(var x in patterns)
+        if( fn like x ) return true;
+        return false;
+    }
+    this.files = list.filter(flt);
+    return this.files.length > 0;
+    }
+
+    function attached() {
+    this.filter = (this.attributes["accept-drop"] || "*").split(";");
+    debug filter: this.filter;
+    }
+
+    event dragaccept (evt) {
+    if(evt.draggingDataType == #file && this.checkFiles(evt.dragging))
+        return true; // accept only files
+    return false;
+    }
+
+    event dragenter (evt) 
+    {
+    this.attributes.addClass("active-target");
+    return true;
+    }  
+
+    event dragleave (evt) 
+    {
+    this.attributes.removeClass("active-target");
+    return true;
+    }
+
+    event drag (evt) 
+    {
+    stdout.println(evt.x,evt.y);
+    return true;
+    }  
+
+    event drop (evt) 
+    {
+        this.attributes.removeClass("active-target");
+        var opt = this.attributes["opt"];
+        var id = view.parameters.id;
+        var uri = URL.toPath(this.files.toString());
+        var img = "";
+        if (opt == "thumb"){
+            THUMB = uri;
+        }
+        mainView.EditRomThumbs(opt,id,uri);
+
+        if(opt == "video"){
+            img = "<video src='"+ this.files +"'/>";
+        }else{
+            img = "<img src='"+ this.files +"'>";
+        }
+        this.html = img;
+        return true;
+    }       
+}
+
+//选择文件
+function openFile(evt) {
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    //var out = self.select("#"+evt.attributes["for"]);
+    
+     if(url){
+        url = URL.toPath(url);
+        var out = self.select(".file-drop-zone[opt="+ evt.attributes["for"] +"]");
+        out.html = "<img src='"+ url +"'>";
+     }
+}
+
+//启动图片下载
+function thumbDown(evt){
+    var id = view.parameters.id;
+    var name = view.parameters.name;
+    var type = evt.attributes["value"];
+    var result = view.dialog({
+        url:self.url(ROOTPATH + "down_thumbs.html"),
+        caption:CONF.Lang.ThumbsDown,
+        width:1024,
+        height:750,
+        parameters: {
+            id:id,
+            name:name,
+            keyword:keyword,
+            type:type,
+        };
+    });
+
+    if(result != undefined){
+        if (type == "thumb"){
+            THUMB = result;
+        }
+        self.select(".file-drop-zone[opt="+ type +"]").html = "<img src='"+ result +"'>";
+    }
+
+}
+
+function DeleteThumb(evt){
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        caption:CONF.Lang.DeleteThumb,
+        content:CONF.Lang.DeleteThumbConfirm, 
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+    var type = evt.attributes["value"];
+    var id = view.parameters.id;
+    mainView.DeleteThumbs(type,id);
+    THUMB = "delete";
+    self.select(".file-drop-zone[opt="+ type +"]").html = CONF.Lang.DropPicToHere;
+}

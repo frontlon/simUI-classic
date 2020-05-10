@@ -1,51 +1,75 @@
 package main
 
 import (
-	"VirtualNesGUI/code/db"
-	"github.com/sciter-sdk/go-sciter"
-	"github.com/sciter-sdk/go-sciter/window"
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
+	"simUI/code/config"
+	"simUI/code/controller"
+	"simUI/code/db"
+	"simUI/code/modules"
+	"simUI/code/utils"
+	"simUI/code/utils/go-sciter"
+	"simUI/code/utils/go-sciter/window"
 	"strings"
 )
 
-var separator = string(os.PathSeparator) //系统路径分隔符
-//路径分隔符
-var constMenuRootKey = "_7b9"                                                //根子目录游戏的Menu参数
-var constMainFile = "D:\\work\\go\\src\\VirtualNesGUI\\code\\view\\main.html" //主文件路径（测试用）
-//var constMainFile = "this://app/main.html" //主文件路径（正式）
-
 func main() {
+
+	isDebug := false //是否为调试模式
+	ROOTPATH := ""
+	if isDebug { //debug模式
+		db.LogMode = true
+		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
+	} else { //正式模式
+		db.LogMode = false
+		ROOTPATH = "this://app/main.html" //go用路径
+	}
+
+	runtime.LockOSThread()
+
+	config.Cfg = &config.ConfStruct{}
+	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	separator := string(os.PathSeparator)                             //系统路径分隔符
+	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
+	config.Cfg.Separator = separator                                  //系统的目录分隔符
+	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
+	config.Cfg.UnzipPath = config.Cfg.CachePath + "unzip" + separator //rom解压路径
+
+	defer func() {
+		if r := recover(); r != nil {
+			utils.WriteLog("recover:" + fmt.Sprintf("%s", r))
+			fmt.Println("recover:", fmt.Sprintf("%s", r))
+		}
+	}()
 
 	//连接数据库
 	db.Conn()
 
 	//初始化配置
-	Config = &ConfStruct{}
-	var rootpath, _ = filepath.Abs(filepath.Dir(os.Args[0]))
-	Config.RootPath = rootpath + separator //当前软件的绝对路径
-	Config.Separator = separator //系统的目录分隔符
-	errConf := InitConf()
+	errConf := config.InitConf()
 
-	left :=Config.Default.WindowLeft
-	top := Config.Default.WindowTop
-	width := Config.Default.WindowWidth
-	height := Config.Default.WindowHeight
+	//读取宽高
+	width := config.Cfg.Default.WindowWidth
+	height := config.Cfg.Default.WindowHeight
 
 	//创建window窗口
+	//err := errors.New("")
 	w, err := window.New(
 		sciter.SW_MAIN|
-			//sciter.SW_RESIZEABLE|
-			//sciter.SW_CONTROLS|
+		//sciter.SW_RESIZEABLE|
+		//sciter.SW_CONTROLS|
 			sciter.SW_ENABLE_DEBUG,
-		&sciter.Rect{Left: int32(left), Top: int32(top), Right: int32(width), Bottom: int32(height)});
+		&sciter.Rect{Left: 0, Top: 0, Right: int32(width), Bottom: int32(height)});
 	if err != nil {
-		log.Fatal(err);
+		utils.WriteLog(err.Error())
 	}
 
+	utils.Window = w
+
 	//设置view权限
-	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO | sciter.ALLOW_FILE_IO |sciter.ALLOW_SOCKET_IO);
+	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO);
 
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))
@@ -53,36 +77,53 @@ func main() {
 	//解析资源
 	w.OpenArchive(res)
 
-
 	//加载文件
-	err = w.LoadFile(constMainFile);
+	err = w.LoadFile(ROOTPATH);
 	if err != nil {
-		errorMsg(w, err.Error())
+		utils.ErrorMsg(err.Error())
 		return
 	}
 
 	//配置出先错误
-	if errConf != nil{
-		errorMsg(w, errConf.Error())
+	if errConf != nil {
+		utils.ErrorMsg(errConf.Error())
 		os.Exit(1)
 		return
 	}
 
-
-	if len(Config.Lang) == 0{
-		errorMsg(w, "没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+	if len(config.Cfg.Lang) == 0 {
+		utils.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		utils.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
 		os.Exit(1)
 		return
 	}
 
 	//设置标题
-	w.SetTitle(Config.Lang["SoftName"]);
+	w.SetTitle(config.Cfg.Lang["SoftName"]);
+
 	//定义view函数
-	defineViewFunction(w)
+	defineViewFunction()
+
 	//显示窗口
-	w.Show();
+	w.Show()
+
+	//软件启动时检测升级
+	modules.BootCheckUpgrade()
+
 	//运行窗口，进入消息循环
-	w.Run();
+	w.Run()
+}
+
+//定义控制器方法
+func defineViewFunction() {
+	controller.CacheController()
+	controller.ConfigController()
+	controller.MenuController()
+	controller.PlatformController()
+	controller.RomCmdController()
+	controller.RomController()
+	controller.ShortcutController()
+	controller.SimulatorController()
 }
 
 //资源加载
@@ -105,11 +146,4 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
-}
-
-//调用alert框
-func errorMsg(w *window.Window,err string) *sciter.Value {
-	if _, err := w.Call("errorBox", sciter.NewValue(err)); err != nil {
-	}
-	return sciter.NullValue();
 }

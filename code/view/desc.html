@@ -3,29 +3,18 @@
     <title></title>
     <div id="themefile"></div>
     <style type="text/css">
-      @font-face{font-family:iconfont;src:url(iconfont.ttf)}
-      i{font-family:iconfont;font-style:normal;font-weight:normal;font-rendering-mode:sub-pixel;text-align:center;vertical-align:middle;display:block}
-      *{margin:0;padding:0}
-      html{}
-      body{flow:vertical;size:*;}
-      body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.8);}
-      body>header>caption{width:*;height:32dip;}
-      body>main{size:*;overflow:hidden}
-      button.window{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center}
-      button.window:hover{background:color(desc-titlebar-hover-background-color)}
-   
-      .left{background-color:morph(color(desc-background-color),opacity:0.8);}
-      .left ul{list-style:none;}
-      .left ul li{height:40dip;line-height:40dip;color:color(desc-menu-text-color);padding-left:24dip;display:none}
-      .left ul li:current{background:color(desc-menu-active-background-color);}
-      .right{display:block;padding:0 16dip 16dip 24dip;background-color:morph(color(desc-background-color),opacity:0.8);}
-      splitter{background:morph(color(desc-background-color),opacity:0.8);}
-      splitter:hover{background:morph(color(desc-background-color),opacity:0.8);}
-
-      .desc{display:none;color:color(desc-content-text-color);height:*;}
+      @import "this://app/images/public.css";
+      html{padding:0;margin:0;border:1px solid color(desc-border-color)}
+      body{flow:vertical;size:*;padding:0;margin:0;border:0}
+      body>header{width:*;flow:horizontal;background-color:morph(color(desc-background-color),opacity:0.9);}
+      body>header>caption{width:*;height:32dip;line-height:32dip;padding-left:10dip;color:color(desc-title-text-color);}
+      body>header>button{display:block;size:32dip;line-height:26dip;margin:0;padding:0;background:none;color:color(desc-titlebar-text-color);text-align:center;}
+      body>header>button i {display:block}
+      body>header>button:hover{background:color(desc-titlebar-hover-background-color);}
+      body>main{size:*;overflow:hidden;background-color:color(desc-background-color)}
+      .wrapper{display:block;height:*}
+      .desc{color:color(desc-content-text-color);padding:0 15dip;}
       .desc p{line-height:1.5em;}
-      .title_h1{display:block;font-size:14dip;font-style:italic;font-weight:normal;margin:80dip 8dip 40dip 0;text-align:right;color:color(desc-title-text-color);line-height:2em;padding-left:40dip}
-
       .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
       .markdown p{margin-bottom:13dip}
       .markdown a{color:color(desc-content-text-color)}
@@ -50,31 +39,24 @@
   </head>
 <body>
   <header>
-    <caption role="window-caption">&nbsp;</caption>
+    <caption role="window-caption" id="title">&nbsp;</caption>
     <button class="window" id="minimize" role="window-minimize"><i>&#xe661;</i></button>
     <button class="window" id="maximize" role="window-maximize"><i>&#xe66b;</i></button>
     <button class="window" id="close" role="window-close"><i>&#xe605;</i></button>
   </header>
-  <main>
-    <frameset cols="200dip,*">
-        <section class="left">
-          <h1 class="title_h1" id="title"></h1>
-            <ul>
-                <li id="btn_desc_strategy"></li>
-                <li id="btn_desc_doc"></li>
-              </ul>
-        </section>
-        <splitter />
-        <section class="right">
-          <div class="desc markdown" id="desc_strategy"></div>
-          <div class="desc markdown" id="desc_doc"></div>
-        </section>
-    </frameset>
+  <main>    
+    <section class="wrapper">
+    <div class="desc markdown" id="desc"></div>
+    </section>
   </main>
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/plugins/markdown.tis";
-    include ROOTPATH + "tis/dialog_desc.tis";
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/desc.tis";
+    event click $(a) {
+        openWebPage(this);
+    }
 </script>
 </body>
 </html>

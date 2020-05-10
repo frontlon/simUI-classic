@@ -1,0 +1,153 @@
+﻿var ID;
+var PAGE=0;
+var PAGENUM = 30;
+var SCROLL_POS = 0;
+var SCROLL_LOCK = false;
+view.root.on("ready", function(){
+    Init(); //初始化
+});
+
+//初始化
+function Init(){
+    view.windowCaption = CONF.Lang.ThumbsDown;
+
+    var keyword = view.parameters.keyword;
+    ID = view.parameters.id;
+
+    //创建语言
+    createLang();
+
+    $(#search_input).value = keyword;
+    searchPic(keyword,1);
+
+    //分页
+    self.onScroll = function(evt) {
+        pages(evt);
+    };
+}
+
+//分页
+function pages(evt){
+
+    var scrollPos = evt.scrollPos + self.box(#height);
+    var boxHeight = $(#down_thumb_list).box(#height);
+
+    if(SCROLL_POS == 0){
+        SCROLL_POS = scrollPos;
+    }
+
+    if ((boxHeight - scrollPos <=50) && (scrollPos > SCROLL_POS)){
+
+        //如果加锁中，则不执行后续逻辑，防止重复触发
+        if (SCROLL_LOCK == true){
+            return;
+        }
+        SCROLL_LOCK = true; //加锁
+
+        var keyword = $(#search_input).value;
+        var ctype = $(.submit.active).attributes['value'];
+
+        PAGE++;
+        var result = searchPic(keyword,ctype);
+        if(result == true){
+            SCROLL_POS = scrollPos;
+        }
+        SCROLL_LOCK = false;
+    }
+}
+
+
+//点击图片
+function DownThumb(evt){
+    var keyword = $(#search_input).value;
+    var ctype = view.parameters.type;
+
+    var caption = "";
+    var content = "";
+    caption = CONF.Lang.Thumb;
+    content = CONF.Lang.SetThumbConfirm;
+   
+    var result = view.msgbox {
+        type:#question, 
+        caption:caption,
+        content:content,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Yes},
+            {id:#cancel,text:CONF.Lang.Cancel},
+        ]
+    };
+    if(result == "yes"){
+        //下载图片
+        var newpath = mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
+        view.close(evt.select("img").attributes["src"]);
+    }
+}
+
+//点击搜索按钮
+function searchThumb(evt){
+     try{
+    var keyword  = $(#search_input).value;
+
+    if(keyword == ""){
+        view.msgbox(#alert,CONF.Lang.InputKeyword);
+        return true;
+    }
+
+    //按钮样式
+    evt.attributes.addClass('active');
+
+    //清空数据
+    $(#down_thumb_list).clear();
+
+    PAGE = 0;
+
+    //搜索内容
+   
+    searchPic(keyword);
+    }catch(e){
+        alert(e);
+    }
+}
+
+//图片搜索
+function searchPic(keyword){
+
+    //过滤特殊字符
+    keyword = keyword.replace(/[\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\;\'\:\"\'\,\.\/\<\>\?\-\=\_\+]/g,"");
+    var newkeyword = keyword.urlEscape(); //unicode转码
+    var num = PAGE*PAGENUM;
+
+    //载入url
+    var url = CONF.Default.SearchEngines;
+    //替换关键字
+    url = url.replace("{$keyword}",keyword);
+    url = url.replace("{$NumIndex}",num.toString());
+    url = url.replace("{$pageNum}",PAGENUM.toString());
+
+    startLoading();
+
+    //生成平台列表    
+	view.request({
+        type:#get,
+        url:url,
+        protocol:#json,
+        success:function(data,status){
+            var content = "";
+            for(var item in data.data) {
+                if(item.thumbURL != undefined){
+                    content +="<li><img src='"+item.thumbURL+"'/></li>";
+                }
+            }
+            $(#down_thumb_list).append(content);
+            endLoading();
+
+            return true;
+        },
+        error:function(err,status){
+            view.msgbox(#alert,CONF.Lang.NetworkRequestFailed);
+            endLoading();
+            return false;
+        }
+	});
+    return false;
+}

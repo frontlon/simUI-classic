@@ -1,0 +1,74 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
+        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
+        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
+        label{font-size:11dip;}
+        table{width:100%;}
+        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
+        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
+        tr:last-child td{text-align: center;padding-bottom:0}
+        .submit{margin:0 8dip}
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <table>
+            <tr><td>{{Name}}</td><td><input type="text" id="sim_name" value="">
+            <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
+            <tr><td>{{Path}}</td><td>
+                <input type="text" id="sim_path" value="">
+                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
+            </td></tr>
+            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+                <select id="set_cmd">
+                <option value="">Default</option>
+                <option value="{RomName}">MAME</option>
+                <option value="-g {RomName} -w">FBAS</option>
+                <option value="{RomName}">Winkawaks</option>
+                <option value='-loadbin {RomFullPath} -nogui'>ePsXe</option>
+                <option value="-e {RomFullPath}">Dolphin</option>
+                <option value="-rom={RomName}">Demul</option>
+            </select>
+            </td></tr>
+            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td><td>
+                <select id="unzip">
+                    <option value="0">{{No}}</option>
+                    <option value="1">{{Yes}}</option>
+                </select>
+            </td></tr>
+            <tr><th colspan="2"></th></tr>
+            <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>
+        </table>
+    </div>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/edit_sim.tis";
+ 
+    //更新模拟器信息
+    event click $(#sim_submit) {
+        simSubmit(this);
+    }
+
+    //删除模拟器
+    event click $(#sim_delete) {
+        simDelete(this);
+    }
+
+    //选择文件
+    event click $(.openfile){
+        openFile(this);
+    }
+
+    //设置命令代码
+    event change $(#set_cmd) {
+        setCmd(this);
+    }
+
+</script>
+</body>
+</html>

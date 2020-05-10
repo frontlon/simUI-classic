@@ -1,0 +1,90 @@
+﻿//初始化
+function Init(){
+    
+    //初始化全局配置
+    initConfig("0");
+
+    //改变默认窗口尺寸
+    view.state = CONF.Default.WindowState.toInteger();
+
+    //窗口面板显示状态
+    if (CONF.Default.PanelPlatform.toInteger() == 0){
+        $(#left_platform).style["display"] = "none"
+    }
+    if (CONF.Default.PanelMenu.toInteger() == 0){
+        $(#left_menu).style["display"] = "none"
+    }
+    if (CONF.Default.PanelSidebar.toInteger() == 0){
+        $(#right).style["display"] = "none"
+    }
+
+    //初始化rom
+    var pf = CONF.Default.Platform;
+    var menu =  $(#menulist).select("dd:current").attributes["opt"];
+    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE)
+
+    createRomList(0); //生成rom列表
+    //生成rom数量
+    var romCount = view.GetGameCount(pf,"","");
+    $(#rom_count_num).html = romCount; //初始化在线人数
+}
+
+//初始化配置
+function initConfig(isfresh){
+
+    var confstr = view.InitData("config",isfresh);
+    CONF = JSON.parse(confstr);
+
+    //如果初始路径不同，则刷新数据
+    if(CONF.RootPath != CONF.Default.RootPath){
+        view.UpdateConfig("root_path",CONF.RootPath);
+    }
+
+    //软件名称
+    if(System.scanFiles(CONF.Default.SoftName)){ //图片logo
+        $(#logo).html = "<img src='"+ CONF.Default.SoftName +"' />";
+    }else{
+         $(#logo).html =  CONF.Default.SoftName; //文字logo
+    }
+
+    //创建语言
+    if (isfresh == "0"){
+        createLang();
+    }
+
+    initTheme(); //创建主题
+    initPlatform(); //生成平台列表
+    initShortcutList(); //初始化快捷工具列表
+    initRomListStyle(); //初始化游戏列表样式
+    initFontSize(); //初始化字体大小
+
+    //生成菜单
+    var menujson = view.GetMenuList(CONF.Default.Platform);
+    createMenuList(menujson);
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
+
+}
+
+//视图窗口状态改变时
+function windowStateChange(evt){
+     if(view.state == 1 || view.state == 3){
+            view.UpdateConfig("window_state",view.state);
+        }
+}
+//调整窗口大小
+function windowSizing(evt){
+     //更新默认配置
+        view.UpdateConfig("window_width",evt.width);
+        view.UpdateConfig("window_height",evt.height);
+}
+
+//心跳
+function heartbeat(str){
+    if (str == "1"){
+        $(#ping).style["display"] = "block";
+    }else{
+        $(#ping).style["display"] = "none";
+    }
+}

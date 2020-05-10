@@ -1,30 +1,71 @@
-﻿//生成菜单列表
+﻿var ACTIVE_MENU = ""; //当前选定的菜单
+
+view.root.on("ready", function(){
+
+    //菜单拖拽排序
+    DragDrop{
+        what      : "#menulist>dd:not(.fixed)",
+        where     : "#menulist",
+        container : "#menulist",        
+        notBefore : "#menulist>dd.fixed",
+        dropped : function(){
+            if(ACTIVE_PLATFORM == 0){
+                return;
+            }
+            var lis = $$(#menulist > dd);
+            var name = "";
+            var newObj = {};
+            for(var li in lis) {
+                name = li.attributes["opt"];
+                newObj[name] = li.index;
+            }
+            var datastr = JSON.stringify(newObj);
+            view.UpdateMenuSort(ACTIVE_PLATFORM.toString(),datastr);
+        }
+    }
+
+});
+
+//生成菜单列表
 function createMenuList(menujson){
     var menuobj = JSON.parse(menujson);
     var menulist = self.$(#menulist);
     var dd = "";
     var name ="";
+    var fixed = "";
     menulist.clear();
     dd += "<dt>"+ CONF.Lang.Cate +"</dt>";
-    dd += "<dd opt='' class='menuitem'>"+ CONF.Lang.AllGames +"</dd>";
-    dd += "<dd opt='favorite' class='menuitem'>"+ CONF.Lang.Favorite +"</dd>";
-    //dd += "<dd opt='_7b9' class='menuitem'>"+ CONF.Lang.Uncate +"</dd>";
-    
+    dd += "<dd opt='' class='menuitem fixed'>"+ CONF.Lang.AllGames +"</dd>";
+    dd += "<dd opt='favorite' class='menuitem fixed'>"+ CONF.Lang.Favorite +"</dd>";
+
     //遍历数据，生成dom
     for(var obj in menuobj) {
         if(obj.Name == "_7b9"){
-            name = CONF.Lang.Uncate
+            name = CONF.Lang.Uncate;
+            fixed = "fixed";
         }else{
-            name = obj.Name
+            name = obj.Name;
+            fixed = "";
         }
-        dd += "<dd opt='"+  obj.Name +"' class='menuitem'>"+ name + "</dd>";
+        dd += "<dd opt='"+  obj.Name +"' class='menuitem "+ fixed +"'>"+ name + "</dd>";
     }
+    dd += "<dd opt='hide' class='menuitem fixed'>"+ CONF.Lang.Hide +"</dd>";
+
     menulist.html = dd; //生成dom
 
-    //激活默认按钮
-    var first =  menulist.select("dd[opt='']");
-    if (first != undefined){
-        first.state.current = true;
+    //设置全局变量
+    ACTIVE_MENU = CONF.Default.Menu;
+
+   //设置默认激活按钮
+    var active =  $(#menulist).select("dd[opt="+ ACTIVE_MENU +"]");
+    if (active != undefined){
+        active.state.current = true;
+    }else{
+        //没有找到默认激活的按钮，则读取全部菜单
+        active =  $(#menulist).select("dd[opt='']");
+        if (active != undefined){
+            active.state.current = true;
+        }
     }
 
 }
@@ -32,15 +73,18 @@ function createMenuList(menujson){
 //目录单击
 function changeMenu(obj){
 
+    //设置全局变量
+    ACTIVE_MENU = obj.attributes["opt"];
+
     //重置滚动翻页数据
     resetScroll();
     
     //生成游戏列表
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,obj.attributes["opt"],"","",SCROLL_PAGE);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",SCROLL_PAGE);
     createRomList(1);
     
     //统计游戏数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,obj.attributes["opt"],""); //必须在获取rom的方法下面
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,ACTIVE_MENU,""); //必须在获取rom的方法下面
     $(#rom_count_num).html = romCount; //初始化在线人数
 
     //改变样式
@@ -48,4 +92,23 @@ function changeMenu(obj){
 
     //激活第一个字母索引
     $(#num_search li).state.current = true;
+
+    //更新配置文件
+    view.UpdateConfig("menu",ACTIVE_MENU);
+}
+
+//rom搜索功能
+function search(){
+    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    var val = self.$(#search_input).value;
+
+    //重置滚动翻页数据
+    resetScroll();
+
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //生成游戏列表
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE);
+    createRomList(1)
 }

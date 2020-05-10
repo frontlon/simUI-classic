@@ -1,0 +1,78 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        input{width:*;}
+        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
+        .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;}
+        h4{margin:7dip 0}
+
+        table td{vertical-align: middle;padding-bottom:5dip}
+        table td:first-child{width:50dip}
+
+    </style>
+
+</head>
+<body>
+    <div class="input_wrapper">
+        <h4 id="desc"></h4>
+
+        <table>
+            <tr>
+                <td><div class="tip" title="{{RomSimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td>
+                <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
+            </tr>
+            <tr>
+                <td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td>
+                <td><select id="unzip"><option value="2">{{UnzipDefault}}</option><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>
+            </tr>
+             <tr id="file_tr">
+                <td><div class="tip" title="{{RomCmdFileTip}}">&#xf3c1;</div>{{RomCmdFile}}</td>
+                <td><input id="file" value="" /></td>
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="submit_wrapper">
+        <button id="close-dialog" role="default-button">{{Confirm}}</button>
+    </div>
+    <script type="text/tiscript">
+
+        include ROOTPATH + "tis/utils.tis";
+
+        //创建语言
+        createLang();
+ 
+        view.root.on("ready", function(){
+            $(#cmd).value = view.parameters.cmd;
+            $(#cmd).setState(Element.STATE_FOCUS);
+            $(#desc).html = view.parameters.name;
+            $(#unzip).value = view.parameters.unzip;
+            $(#file).value = view.parameters.file;
+            view.windowCaption =  CONF.Lang.EditRomCmd;
+        });
+
+        event click $(#close-dialog){
+            var data = {
+                cmd:$(#cmd).value,
+                unzip:$(#unzip).value.toString(),
+                file:$(#file).value.toString(),
+            }
+            var datastr = JSON.stringify(data);
+            view.close(datastr);
+        }
+
+        event change $(#unzip){
+           if(this.value == 1){
+            $(#file_tr).style["display"] = "block";
+           }else{
+            $(#file_tr).style["display"] = "none";
+           }
+        }
+
+    </script>
+</body>
+</html>

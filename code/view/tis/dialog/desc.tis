@@ -1,0 +1,43 @@
+﻿var conf;
+view.root.on("ready", function(){
+    //初始化
+    Init();
+});
+
+//初始化
+function Init(){
+   conf = view.parameters.conf;
+    
+    //默认主题
+    var cssfile = "";
+    for(var themeId in conf.Theme) {
+        cssfile += "<style src='"+  conf.Theme[themeId].Path +"' />"; //引入文件
+    }
+    
+    $(#themefile).html = cssfile;
+    self.attributes["theme"] = conf.Default.Theme;
+    setTheme(conf.Default.Theme);
+
+    //定义标题
+    view.windowCaption = view.parameters.title;
+    $(#title).html = view.parameters.title;
+
+
+    //内容
+    $(#desc).html = markdown.parse(view.parameters.content);
+
+}
+
+//打开网址
+function openWebPage(evt){
+    var href = evt.attributes["href"];
+    Sciter.launch(href);
+    return true;
+}
+
+//设置主题样式
+function setTheme(themeId){
+    if(conf.Theme[themeId].Params["window-background-image"] != undefined){
+        $(body).style["background-image"] = [url:URL.fromPath(conf.RootPath + "theme\\" + conf.Theme[themeId].Params["window-background-image"])];
+    }
+}

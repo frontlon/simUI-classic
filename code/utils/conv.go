@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -89,6 +90,8 @@ func ToInt(str interface{}) int {
 			val = 0
 		}
 	default:
+		fmt.Println("cvcvcvcvcv")
+
 		val = 0
 	}
 	return val

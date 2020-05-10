@@ -1,83 +1,9 @@
-﻿//初始化游戏列表样式
-function initRomListStyle(){
-    //初始化游戏列表样式
-    if(CONF.Default.RomlistStyle == "1"){
-        $(#switch_romlist).html = "<i>&#xe659;</i>";
-        $(#zoom).style["display"]="inline-block";
-        $(#romlist).attributes.addClass("romblock");
-    }else{
-        $(#switch_romlist).html = "<i>&#xe690;</i>";
-        $(#romlist).attributes.addClass("romlist");
-        $(#zoom).style["display"]="none";
-    }
-
-    var zoom = $(#zoom);
-    zoom.attributes["value"] = CONF.Default.RomlistZoom;
-
-    if(CONF.Default.RomlistZoom.toInteger() >= MAXZOOM){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
-    }
-
-    $(#romlist).attributes.addClass("zoom"+CONF.Default.RomlistZoom); //更新列表大小
-    $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
-}
-
-//列表图标缩放
-function romBlockZoom(obj){
-
-    var romlist = self.$(#romlist);
-
-    //先清除所有缩放样式
-    for(var i=1;i<=MAXZOOM;i++){
-        romlist.attributes.removeClass("zoom"+i);
-    }
-
-    var zoom = $(#zoom);
-    var current = zoom.attributes["value"].toInteger();
-    var next = 0;
-    if(current >= MAXZOOM){
-        next = 1;
-    }else{
-        next = current+1;
-    }
-
-    //更改按钮图标
-    if(current == MAXZOOM-1){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
-    }
-
-    //更新缩放值
-    zoom.attributes["value"] = next;
-
-    //更新列表样式
-    romlist.attributes.addClass("zoom"+next);
-
-    //更新配置文件
-    view.UpdateConfig("romlist_zoom",next)
-}
-
- //切换rom列表样式
-function switchRomListStyle(obj){
-    if(obj.attributes["value"] == "1"){
-        obj.attributes["value"] = "2";
-        obj.html = "<i>&#xe690;</i>";
-        self.$(#romlist).attributes.removeClass("romblock");
-        self.$(#romlist).attributes.addClass("romlist");
-        self.$(#zoom).style["display"]="none";
-    }else{
-        obj.attributes["value"] = "1";
-        obj.html = "<i>&#xe659;</i>";
-        self.$(#romlist).attributes.removeClass("romlist");
-        self.$(#romlist).attributes.addClass("romblock");
-        self.$(#zoom).style["display"]="inline-block";
-    }
-    //更新配置文件
-    view.UpdateConfig("romlist_style",obj.attributes["value"])
-}
+﻿var MASK = true;
+var SCROLL_POS = 0; //默认滚动条位置
+var SCROLL_LOCK = false;
+var SCROLL_PAGE = 0; //当前滚动条翻页页数
+var CONF; //读取的config配置
+var ROMJSON;//rom列表
 
 //创建游戏rom dom
 function createRomList(cls=0){
@@ -87,7 +13,7 @@ function createRomList(cls=0){
     var switch_romlist = $(#switch_romlist).attributes["value"];
     var title = "";
     var thumb = "";
-     var romPath = "";
+    var romPath = "";
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
         romlist.clear();
@@ -105,39 +31,24 @@ function createRomList(cls=0){
 
         //读取缩略图地址
         romPath = URL.parse(obj.RomPath);
-        thumb = getRomPicPath("thumb",obj.Platform,romPath.name);
+        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romPath.name);
+
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-            thumb = URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+            thumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
-      
-        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString()   +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
+
+        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString() +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
     }
     romlist.append(data);
     SCROLL_PAGE++;
 
 }
 
-//rom搜索功能
-function search(){
-    var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var val = self.$(#search_input).value;
-
-    //重置滚动翻页数据
-    resetScroll();
-
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
-    $(#rom_count_num).html = romCount; //初始化在线人数
-
-    //生成游戏列表
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE);
-    createRomList(1)
-}
-
 //分页
-function scrollLoadRom(evt){
+function scrollLoadRom(evtPos){
 
-    var scrollPos = evt.scrollPos + $(#center).box(#height);
+    var scrollPos = evtPos.toInteger() + $(#center).box(#height);
     var boxHeight = $(#romwrapper).box(#height);
 
     if(SCROLL_POS == 0){
@@ -163,11 +74,12 @@ function scrollLoadRom(evt){
         ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE)
 
         if(ROMJSON != "[]"){
-            createRomList()
+            createRomList(0);
             SCROLL_POS = scrollPos;
             SCROLL_LOCK = false;
         }
     }
+
 }
 
 //初始化滚动分页功能
@@ -177,207 +89,12 @@ function resetScroll(){
     SCROLL_POS = 0
 }
 
-//单击游戏侧边栏详情
-function openSidebar(obj){
-
-    //判断重复点击
-    if (ACTIVE_ROM == obj.attributes["rid"]){
-        return;
-    }
-    ACTIVE_ROM = obj.attributes["rid"];
-
-    obj.state.current = true;
-
-    if($(#right).style["display"] == "none"){
-        $(#right).style["display"] = "block";
-        $(#right).attributes.addClass("ready");
-    }else{
-        $(#right).attributes.removeClass("ready");
-    }
-    var getjson = view.GetGameDetail(obj.attributes["rid"]);
-    var detailObj = JSON.parse(getjson);
-    var info = detailObj.Info;
-
-    //图片下载页面
-    $(#right_thumb_down).attributes["rid"] = info.Id;
-    $(#right_thumb_down).attributes["rname"] = info.Name;
-
-
-    //生成喜好按钮
-    var favorite = $(#right_favorite);
-    favorite.attributes["rid"] = info.Id.toHtmlString();
-    favorite.attributes["value"] = info.Star.toHtmlString();
-    if(info.Star == "1"){
-        favorite.attributes.removeClass("funbtn_0");
-        favorite.attributes.addClass("funbtn_1");
-    }else{
-        favorite.attributes.removeClass("funbtn_1");
-        favorite.attributes.addClass("funbtn_0");
-    }
-
-
-    var pics = "";
-    var romPath = URL.parse(info.RomPath);
-    var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
-    var snap = getRomPicPath("snap",info.Platform,romPath.name); //场景图
-    
-    if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
-    //游戏缩略图
-    if(thumb != ""){
-        pics += "<img src='"+ thumb +"' />";
-    }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        pics += "<img src='"+ URL.fromPath(CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"' />";
-    }
-    
-    //滚动图
-    $(#stack).html = pics;
-    $(#stack).refresh();
-    rotateAttached();
-    if($$(#stack > img).length == 1){
-        $(#rotate).style["display"] = "none";
-    }else{
-        $(#rotate).style["display"] = undefined;
-    }
-
-    //显示简介
-    if(detailObj.DocContent != ""){
-        $(#doc_title).style["display"] = "block";
-        $(#doc).style["display"] = "block";
-        $(#doc).html = markdown.parse(detailObj.DocContent);
-    }else{
-        $(#doc_title).style["display"] = "none";
-        $(#doc).style["display"] = "none";
-        
-    }
-
-    //打开攻略窗口按钮
-    if(detailObj.StrategyContent != ""){
-        $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
-        $(#right_desc).attributes.removeClass("right_desc_disable");
-    }else{
-        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
-        $(#right_desc).attributes.addClass("right_desc_disable");
-
-    }
-    $(#right_desc).attributes["rid"] = info.Id;
-
-    //生成模拟器列表
-    $(#sim_select).html = ""; //先清空所有模拟器
-    $(#sim_select).style["display"] = "none";
-    var pfObj = CONF.Platform[info.Platform.toString()];
-    if(pfObj.SimList.length > 0 ){
-        var simliststr = "";
-        for(var obj in pfObj.SimList) {
-            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'>"+ pfObj.SimList[obj].Name +"</li>";
-        }
-        $(#sim_select).html = simliststr;
-        if(pfObj.SimList.length > 1){
-            $(#sim_select).style["display"] = "block";
-        }
-    }
-
-    //如果该平台有模拟器
-    if($(#sim_select li) != undefined){
-        //先找rom对应的模拟器
-        var SimDom = $(#sim_select).select("li[sim="+info.SimId+"]");
-
-        //找不到rom对应的模拟器，找平台默认模拟器
-        if(info.SimId == 0 || SimDom == undefined){
-            SimDom = $(#sim_select).select("li[sim="+ pfObj.UseSim["Id"] +"]");
-        }
-
-        //如果平台模拟器也不存在，则读取第一个模拟器
-        if(SimDom == undefined){
-            SimDom = $(#sim_select li)
-        }
-
-        //选定模拟器
-        SimDom.state.current = true;
-    }
-
-    //生成按钮
-    var btndata = "<div class='run' rid='"+ info.Id +"'>"+info.Name+"</div>";
-    for(var sub in detailObj.Sublist) {
-        btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name+"</div>";
-    }
-    self.$(#buttons).html = btndata;
-}
-
-//关闭侧边栏
-function closeSidebar(){
-    $(#right).style["display"] = "none";
-    $(#right).attributes.removeClass("ready");
-}
-
-
-//重新生成缓存
-function createAllCache(showMsgbox){
-        $(#loading).style["display"]="block";
-        self.timer(300,function(){
-            
-            //刷新数据库rom
-            view.CreateRomCache();
-            
-            //更新配置
-            initConfig("1");
-
-            //重置滚动翻页数据
-            resetScroll();
-
-            //初始化rom
-            var pf = CONF.Default.Platform;
-            ROMJSON = view.GetGameList(pf,"","","",0)
-
-            createRomList(1); //生成rom列表
-            //生成rom数量
-            var romCount = view.GetGameCount(pf,"","");
-            $(#rom_count_num).html = romCount; //初始化在线人数
-            $(#loading).style["display"]="none";
-            if(showMsgbox == "1"){
-                view.msgbox(#alert,CONF.Lang.CreateCacheSuccess);
-            }
-        });
-}
-
-//设置我的喜爱
-function setFavorite(evt){
-    var id = evt.attributes["rid"];
-    var star = evt.attributes["value"];
-
-    if(star == "1"){
-        star = "0";
-        evt.attributes.removeClass("funbtn_1");
-        evt.attributes.addClass("funbtn_0");
-    }else{
-        star = "1";
-        evt.attributes.removeClass("funbtn_0");
-        evt.attributes.addClass("funbtn_1");        
-    }
-
-    evt.attributes["value"] = star;
-
-    var result = view.SetFavorite(id,star);
-   
-    if(result != "1"){
-        view.msgbox(#alert,result);
-    }
-
-    //如果当前是喜好目录，则从rom列表中删除
-    var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var rdom = $(#romlist).select("li[rid="+id+"]");
-    if(menu == "favorite" && rdom != undefined){
-        rdom.remove();
-    }
-}
-
-
 //字母搜索
 function numSearch(evt){
 
     //重复点击拦截
     var current = $(#num_search).select("li:current");
     if(current != undefined && current.html == evt.html){
-        view.msgbox(#alert,"repeat");
         return;
     }
 
@@ -398,33 +115,60 @@ function numSearch(evt){
     evt.state.current = true;
 }
 
-
-
 //读取一个rom的展示图地址
 function getRomPicPath(type,platform,name){
-        var path = "";
-        //检查图片类型，拼接图片地址和文件名
-        if(type == "thumb"){
-                path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
-        }else if(type == "snap"){
-                path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
-        }else{
-            return "";
-        }
-        var exts = ["png","jpg","gif","jpeg","bmp"]; //支持的图片类型
-        var isset = false; //图片是否存在
-        var pic = ""; //图片地址
-        for(var ext in exts) {
-            pic = path +"."+ext;
-            if(System.scanFiles(pic)){ //检查图片是否存在
-                isset = true;
-                break;
-            }
-        }
+    var path = "";
+    //检查图片类型，拼接图片地址和文件名
 
-        if (isset == true){
-            return URL.fromPath(pic);
-        }else{
+    switch(type){
+        case "thumb":
+            path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
+            break;
+        case "snap":
+            path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
+            break;
+        case "poster":
+            path = CONF.Platform[platform.toString()].PosterPath + "\\" + name ;
+            break;
+        case "packing":
+            path = CONF.Platform[platform.toString()].PackingPath + "\\" + name ;
+            break;
+        case "video":
+            path = CONF.Platform[platform.toString()].VideoPath + "\\" + name ;
+            break;
+        default:
             return "";
+    }
+
+    var exts = [];
+    if (type == "video"){
+         exts = ["wmv","mp4"]; //支持的视频类型
+    }else{
+         exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
+    }
+    
+    var isset = false; //图片是否存在
+    var pic = ""; //图片地址
+    for(var ext in exts) {
+        pic = path +"."+ext;
+
+        if(System.scanFiles(pic)){ //检查图片是否存在
+            isset = true;
+            break;
         }
+    }
+
+    if (isset == true){
+        return URL.fromPath(pic);
+    }else{
+        return "";
+    }
+}
+
+//rom列表运行游戏
+function romListRunGame(evt){
+    var getjson = view.GetGameDetail(evt.attributes["rid"]);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+    view.RunGame(evt.attributes["rid"],info.SimId);
 }
