@@ -50,7 +50,7 @@ func RunGame(romId uint64, simId uint32) error {
 	//检测执行文件是否存在
 	_, err = os.Stat(sim.Path)
 	if err != nil {
-		return err
+		return errors.New(config.Cfg.Lang["SimulatorNotFound"]);
 	}
 
 	//如果是相对路径，转换成绝对路径
