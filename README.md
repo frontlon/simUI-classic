@@ -164,7 +164,7 @@ simUI二进制包目录结构
 │   ├── data.dll        # sqlite数据库文件
 │   ├── sciter-32.dll   # sciter32位引擎
 │   ├── sciter-64.dll   # sciter64位引擎
-│   ├── sciter-32.exe   # simIO32位执行文件
+│   ├── sciter-32.exe   # simUI32位执行文件
 │   ├── sciter-64.exe   # simUI64位执行文件
 │   ├── theme           # 主题目录
 │   │   ├── *.css       # 主题css文件
