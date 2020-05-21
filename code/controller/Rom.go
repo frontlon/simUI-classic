@@ -180,7 +180,7 @@ func RomController() {
 
 	//重命名
 	utils.Window.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
-		setType := uint8(utils.ToInt(args[0].String())) //1:alias,2:filename
+		setType := args[0].String() //1:alias,2:filename
 		id := uint64(utils.ToInt(args[1].String()))
 		name := args[2].String()
 

@@ -193,17 +193,17 @@ func getDefault() (*db.Config, error) {
 	//查看当前选定平台值是否是正常的
 	isset := false
 	for _, v := range Cfg.Platform {
-		if vo.Platform == v.Id {
+		if uint32(utils.ToInt(vo.Platform)) == v.Id {
 			isset = true
 			break
 		}
 	}
 
 	//如果没有匹配上platform，则读取config中的第一项
-	if vo.Platform != 0 {
+	if vo.Platform != "0" {
 		if isset == false {
 			for _, v := range Cfg.Platform {
-				vo.Platform = v.Id
+				vo.Platform = utils.ToString(v.Id)
 				//修复配置文件
 				if err := (&db.Config{}).UpdateField("platform", utils.ToString(vo.Platform)); err != nil {
 				}

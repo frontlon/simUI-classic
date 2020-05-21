@@ -19,7 +19,7 @@ type Version struct {
 //启动时自动检测更新
 func BootCheckUpgrade() {
 	//检测是否启动更新
-	if config.Cfg.Default.EnableUpgrade == 0 {
+	if config.Cfg.Default.EnableUpgrade == "0" {
 		return
 	}
 	go func() {
@@ -29,7 +29,7 @@ func BootCheckUpgrade() {
 		}
 
 		//如果是启动检测，则验证是否需要显示
-		if ver.Id > config.Cfg.Default.UpgradeId {
+		if ver.Id > uint64(utils.ToInt(config.Cfg.Default.UpgradeId)) {
 			if _, err := utils.Window.Call("upgrade", sciter.NewValue(string(body))); err != nil {
 			}
 		}
@@ -47,7 +47,7 @@ func CheckUpgrade() string {
 	if err := json.Unmarshal([]byte(body), &ver); err != nil {
 	}
 
-	if ver.Id > config.Cfg.Default.UpgradeId {
+	if ver.Id > uint64(utils.ToInt(config.Cfg.Default.UpgradeId)) {
 		return body
 	}
 

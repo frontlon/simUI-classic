@@ -10,7 +10,7 @@ import (
 )
 
 //rom重命名
-func RomRename(setType uint8, id uint64, name string) error {
+func RomRename(setType string, id uint64, name string) error {
 
 	//读取老信息
 	rom, _ := (&db.Rom{}).GetById(id)
@@ -23,7 +23,7 @@ func RomRename(setType uint8, id uint64, name string) error {
 
 	err := errors.New("")
 	//修改别名文件
-	if setType == 1 {
+	if setType == "1" {
 		if err = renameAlias(name, rom, subRom); err != nil {
 			return err
 		}
@@ -35,7 +35,7 @@ func RomRename(setType uint8, id uint64, name string) error {
 
 	//更新数据库
 	fname := rom.RomPath
-	if setType == 2 {
+	if setType == "2" {
 		fpath := utils.GetFilePath(rom.RomPath)
 		fext := utils.GetFileExt(rom.RomPath)
 		fname = name + fext
@@ -44,7 +44,7 @@ func RomRename(setType uint8, id uint64, name string) error {
 		}
 	}
 
-	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName(setType)
+	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName(uint8(utils.ToInt(setType)))
 	if err != nil {
 		return err
 	}

@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	isDebug := false //是否为调试模式
+	isDebug := true //是否为调试模式
 	ROOTPATH := ""
 	if isDebug { //debug模式
 		db.LogMode = true
@@ -61,7 +61,7 @@ func main() {
 		//sciter.SW_RESIZEABLE|
 		//sciter.SW_CONTROLS|
 			sciter.SW_ENABLE_DEBUG,
-		&sciter.Rect{Left: 0, Top: 0, Right: int32(width), Bottom: int32(height)});
+		&sciter.Rect{Left: 0, Top: 0, Right: int32(utils.ToInt(width)), Bottom: int32(utils.ToInt(height))});
 	if err != nil {
 		utils.WriteLog(err.Error())
 	}
