@@ -20,8 +20,7 @@ var Baseinfo map[string]*RomBase
 
 //读取详情文件
 func GetRomBase(platform uint32) (map[string]*RomBase, error) {
-
-	if config.Cfg.Platform[platform].RomBase == "" {
+	if config.Cfg.Platform[platform].Rombase == "" {
 		return map[string]*RomBase{}, nil
 	}
 
@@ -29,7 +28,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 		return Baseinfo, nil
 	}
 
-	records, err := utils.ReadCsv(config.Cfg.Platform[platform].RomBase)
+	records, err := utils.ReadCsv(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +51,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 
 func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 
-	if config.Cfg.Platform[platform].RomBase == "" {
+	if config.Cfg.Platform[platform].Rombase == "" {
 		return nil
 	}
 	
@@ -71,7 +70,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 		create = append(create, d)
 	}
 
-	if err := utils.WriteCsv(config.Cfg.Platform[platform].RomBase, create); err != nil {
+	if err := utils.WriteCsv(config.Cfg.Platform[platform].Rombase, create); err != nil {
 		return err
 	}
 

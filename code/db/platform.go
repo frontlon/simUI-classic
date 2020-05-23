@@ -22,7 +22,7 @@ type Platform struct {
 	StrategyPath   string
 	VideoPath      string
 	Romlist        string
-	RomBase        string
+	Rombase        string
 	Pinyin         string
 	Sort           uint32
 	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
@@ -96,7 +96,7 @@ func (m *Platform) UpdateById() error {
 		"video_path":      m.VideoPath,
 		"doc_path":        m.DocPath,
 		"romlist":         m.Romlist,
-		"rombase":         m.RomBase,
+		"rombase":         m.Rombase,
 		"pinyin":          m.Pinyin,
 	}
 

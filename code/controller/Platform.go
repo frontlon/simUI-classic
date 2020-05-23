@@ -110,6 +110,10 @@ func PlatformController() {
 		d["poster"] = strings.TrimRight(d["poster"], `/`)
 		d["packing"] = strings.TrimRight(d["packing"], `\`)
 		d["packing"] = strings.TrimRight(d["packing"], `/`)
+		d["title"] = strings.TrimRight(d["title"], `\`)
+		d["title"] = strings.TrimRight(d["title"], `/`)
+		d["background"] = strings.TrimRight(d["background"], `\`)
+		d["background"] = strings.TrimRight(d["background"], `/`)
 		d["video"] = strings.TrimRight(d["video"], `\`)
 		d["video"] = strings.TrimRight(d["video"], `/`)
 		d["strategy"] = strings.TrimRight(d["strategy"], `\`)
@@ -118,20 +122,22 @@ func PlatformController() {
 		d["doc"] = strings.TrimRight(d["doc"], `/`)
 
 		platform := &db.Platform{
-			Id:           id,
-			Name:         d["name"],
-			Icon:         d["icon"],
-			RomExts:      d["exts"],
-			RomPath:      d["rom"],
-			ThumbPath:    d["thumb"],
-			SnapPath:     d["snap"],
-			PosterPath:   d["poster"],
-			PackingPath:  d["packing"],
-			StrategyPath: d["strategy"],
-			VideoPath:    d["video"],
-			DocPath:      d["doc"],
-			Romlist:      d["romlist"],
-			Pinyin:       utils.TextToPinyin(d["name"]),
+			Id:             id,
+			Name:           d["name"],
+			Icon:           d["icon"],
+			RomExts:        d["exts"],
+			RomPath:        d["rom"],
+			ThumbPath:      d["thumb"],
+			SnapPath:       d["snap"],
+			PosterPath:     d["poster"],
+			PackingPath:    d["packing"],
+			TitlePath:      d["title"],
+			BackgroundPath: d["background"],
+			StrategyPath:   d["strategy"],
+			VideoPath:      d["video"],
+			DocPath:        d["doc"],
+			Romlist:        d["romlist"],
+			Pinyin:         utils.TextToPinyin(d["name"]),
 		}
 
 		err := platform.UpdateById()

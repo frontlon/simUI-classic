@@ -9,7 +9,6 @@ import (
 	"path"
 	"path/filepath"
 	"simUI/code/db"
-	"simUI/code/modules"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter/window"
 	"strings"
@@ -159,9 +158,9 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].Romlist = platformList[k].Romlist
 		}
 
-		if v.RomBase != "" {
-			platformList[k].RomBase, _ = filepath.Abs(v.RomBase)
-			platform[v.Id].RomBase = platformList[k].RomBase
+		if v.Rombase != "" {
+			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
+			platform[v.Id].Rombase = platformList[k].Rombase
 		}
 
 		//填充模拟器列表
@@ -375,18 +374,6 @@ func getLangList() (map[string]string, error) {
 
 //读取快捷工具列表
 func getShortcut() ([]*db.Shortcut, error) {
-	shortcutList, _ := (&db.Shortcut{}).GetAll()
-	for k, v := range shortcutList {
-		shortcutList[k].Path, _ = filepath.Abs(v.Path)
-	}
-	return shortcutList, nil
-}
-
-func getRomBase() (map[string]*modules.RomBase, error) {
-
-
-	getRomBase()
-
 	shortcutList, _ := (&db.Shortcut{}).GetAll()
 	for k, v := range shortcutList {
 		shortcutList[k].Path, _ = filepath.Abs(v.Path)

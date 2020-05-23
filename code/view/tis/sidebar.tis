@@ -16,20 +16,18 @@ function openSidebar(obj){
     var getjson = view.GetGameDetail(obj.attributes["rid"]);
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
-    var base = detailObj.BaseInfo;
-
+    var romPath = URL.parse(info.RomPath);
 
     //显示标题图
     var titlePic = getRomPicPath("title",info.Platform,romPath.name); //包装盒图
     if(titlePic != ""){
-        $(#right_title_pic).html = "<img src=\""+ thumb +"\" />";
+        $(#right_title_pic).html = "<img src=\""+ titlePic +"\" />";
     }
 
     //重命名功能
     $(#right_rename).attributes["rid"] = info.Id;
 
     //图片下载页面
-    var romPath = URL.parse(info.RomPath);
     $(#right_thumb_down).attributes["rid"] = info.Id;
 
     //生成喜好按钮
@@ -120,36 +118,27 @@ function openSidebar(obj){
     }
     self.$(#buttons).html = btndata;
 
-
     //显示游戏基础信息
-    var rombase = "";
-	if(base.RomName != "")  {rombase += CONF.Lang.BaseRomName   + base.RomName   + "<br>";}
-	if(base.EnName != "")   {rombase += CONF.Lang.BaseEnName    + base.EnName    + "<br>";}
-	if(base.CnName != "")   {rombase += CONF.Lang.BaseCnName    + base.CnName    + "<br>";}
-	if(base.Type != "")     {rombase += CONF.Lang.BaseType      + base.Type      + "<br>";}
-	if(base.Platform != "") {rombase += CONF.Lang.BasePlatform  + base.Platform  + "<br>";}
-	if(base.Year != "")     {rombase += CONF.Lang.BaseYear      + base.Year      + "<br>";}
-	if(base.Developer != ""){rombase += CONF.Lang.BaseDeveloper + base.Developer + "<br>";}
-	if(base.Publisher != ""){rombase += CONF.Lang.BasePublisher + base.Publisher + "<br>";}
+    if (detailObj.BaseInfo != undefined){
+        var base = detailObj.BaseInfo;
+        var rombase = "";
+        if(base.RomName != "")  {rombase += CONF.Lang.BaseRomName   + base.RomName   + "<br>";}
+        if(base.EnName != "")   {rombase += CONF.Lang.BaseEnName    + base.EnName    + "<br>";}
+        if(base.CnName != "")   {rombase += CONF.Lang.BaseCnName    + base.CnName    + "<br>";}
+        if(base.Type != "")     {rombase += CONF.Lang.BaseType      + base.Type      + "<br>";}
+        if(base.Platform != "") {rombase += CONF.Lang.BasePlatform  + base.Platform  + "<br>";}
+        if(base.Year != "")     {rombase += CONF.Lang.BaseYear      + base.Year      + "<br>";}
+        if(base.Developer != ""){rombase += CONF.Lang.BaseDeveloper + base.Developer + "<br>";}
+        if(base.Publisher != ""){rombase += CONF.Lang.BasePublisher + base.Publisher + "<br>";}
+        rombase += CONF.Lang.RunNum + info.RunNum + "<br>";
+        if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + CONF.Lang.NoPlay;}
+        else{rombase += CONF.Lang.LastRunTime + unixToDate(info.RunTime);}
+        $(#right_rombase).html = rombase;
+    }
 
 
-    /*
-    BaseRomName = rom文件名:
-    BaseEnName = 英文名:
-    BaseCnName = 中文名:
-    BaseType = 类型:
-    BasePlatform = 平台:
-    BaseYear = 年份:
-    BaseDeveloper = 开发商:
-    BasePublisher = 发行商:
-    Rombase = 基础信息
-    RombaseTip = xxxx
-    */
-
-    rombase += CONF.Lang.RunNum + info.RunNum + "<br>";
-    if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + CONF.Lang.NoPlay;}
-    else{rombase += CONF.Lang.LastRunTime + unixToDate(info.RunTime);}
-    $(#right_rombase).html = rombase
+    
+   
 
 }
 
