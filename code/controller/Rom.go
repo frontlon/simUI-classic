@@ -190,7 +190,34 @@ func RomController() {
 			return utils.ErrorMsg(err.Error())
 		}
 		return sciter.NullValue()
+	})
 
+	//编辑rom基础信息
+	utils.Window.DefineFunction("SetRomBase", func(args ...*sciter.Value) *sciter.Value {
+
+		data := args[0].String()
+		d := make(map[string]string)
+		json.Unmarshal([]byte(data), &d)
+		platform := uint32(utils.ToInt(args[0].String()))
+
+		romBase := &modules.RomBase{
+			RomName:   d["rom_name"],
+			EnName:    d["en_name"],
+			CnName:    d["cn_name"],
+			Type:      d["type"],
+			Platform:  d["platform"],
+			Year:      d["year"],
+			Developer: d["developer"],
+			Publisher: d["publisher"],
+		}
+
+		//写入配置文件
+		if err := modules.WriteRomBaseFile(platform,romBase);err != nil{
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NullValue()
 	})
 
 }

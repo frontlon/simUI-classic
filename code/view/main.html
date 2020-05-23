@@ -132,7 +132,7 @@
     #right .funbtn_1{color:color(func-button-active-text-color)}
     #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
     #right .right_desc_disable:hover{cursor: default;background: none}
-    #right .play_info{color:color(play-info-text-color);margin-bottom:10dip}
+    #right .right_rombase{color:color(play-info-text-color);margin-bottom:10dip}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -249,10 +249,7 @@
         <h2>{{RunGame}}</h2>
         <ul id="sim_select"></ul>
         <div id="buttons"></div>
-        <div class="play_info">
-            {{RunNum}}<span id="right_play_num"></span><br>
-            {{LastRunTime}}<span id="right_play_time"></span>
-        </div>
+        <div class="right_rombase"></div>
     </section>
     
 </frameset>

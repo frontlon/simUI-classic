@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 	"simUI/code/db"
+	"simUI/code/modules"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter/window"
 	"strings"
@@ -374,6 +375,18 @@ func getLangList() (map[string]string, error) {
 
 //读取快捷工具列表
 func getShortcut() ([]*db.Shortcut, error) {
+	shortcutList, _ := (&db.Shortcut{}).GetAll()
+	for k, v := range shortcutList {
+		shortcutList[k].Path, _ = filepath.Abs(v.Path)
+	}
+	return shortcutList, nil
+}
+
+func getRomBase() (map[string]*modules.RomBase, error) {
+
+
+	getRomBase()
+
 	shortcutList, _ := (&db.Shortcut{}).GetAll()
 	for k, v := range shortcutList {
 		shortcutList[k].Path, _ = filepath.Abs(v.Path)

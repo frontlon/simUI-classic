@@ -1,14 +1,14 @@
 package modules
 
 import (
-	"simUI/code/config"
-	"simUI/code/db"
-	"simUI/code/utils"
 	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"simUI/code/config"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"strings"
 )
 
@@ -16,7 +16,8 @@ var ConstSeparator = "__"     //rom子分隔符
 var ConstMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 
 type RomDetail struct {
-	Info            *db.Rom   //基础信息
+	Info            *db.Rom   //rom信息
+	BaseInfo        *RomBase  //基础信息
 	DocContent      string    //简介内容
 	StrategyContent string    //攻略内容
 	StrategyFile    string    //攻略文件
@@ -70,7 +71,7 @@ func RunGame(romId uint64, simId uint32) error {
 		}
 
 		//如果指定了执行文件
-		if romCmd.File != ""{
+		if romCmd.File != "" {
 			rom.RomPath = utils.GetFilePath(rom.RomPath) + "/" + romCmd.File
 		}
 
@@ -122,7 +123,6 @@ func RunGame(romId uint64, simId uint32) error {
 
 		//记录游戏运行次数
 		err = (&db.Rom{Id: romId}).UpdatePlayNum();
-
 	}
 	return nil
 }
@@ -268,8 +268,15 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	}
 	//子游戏列表
 	sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
+	
+	//基础信息
+	base, err := GetRomBase(info.Platform)
+	if err != nil {
+		return res, err
+	}
 
 	res.Info = info
+	res.BaseInfo = base[utils.GetFileName(info.RomPath)]
 	res.StrategyFile = ""
 	res.Sublist = sub
 
@@ -337,7 +344,7 @@ func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
 		}
 	} else {
 		//开始更新
-		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])),data["file"]); err != nil {
+		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])), data["file"]); err != nil {
 			return err
 		}
 	}
