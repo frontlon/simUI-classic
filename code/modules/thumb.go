@@ -1,14 +1,14 @@
 package modules
 
 import (
-	"simUI/code/config"
-	"simUI/code/db"
-	"simUI/code/utils"
 	"errors"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"simUI/code/config"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"time"
 )
 
@@ -42,6 +42,10 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
+	case "title":
+		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "background":
+		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}
@@ -91,6 +95,10 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
+	case "title":
+		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "background":
+		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}
@@ -141,6 +149,10 @@ func DeleteThumbs(typeName string, id uint64) error {
 		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
 	case "packing":
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
+	case "title":
+		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "background":
+		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
 	}
@@ -153,7 +165,7 @@ func DeleteThumbs(typeName string, id uint64) error {
 	if err := backupOldPic(platformPath, vo.RomPath); err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

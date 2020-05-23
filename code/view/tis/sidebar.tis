@@ -17,6 +17,13 @@ function openSidebar(obj){
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
 
+
+    //显示标题图
+    var titlePic = getRomPicPath("title",info.Platform,romPath.name); //包装盒图
+    if(titlePic != ""){
+        $(#right_title_pic).html = "<img src=\""+ thumb +"\" />";
+    }
+
     //重命名功能
     $(#right_rename).attributes["rid"] = info.Id;
 
@@ -37,7 +44,7 @@ function openSidebar(obj){
     }
 
     //生成隐藏按钮
-  var hide = $(#right_hide);
+    var hide = $(#right_hide);
     hide.attributes["rid"] = info.Id.toHtmlString();
     hide.attributes["value"] = info.Hide.toHtmlString();
     if(info.Hide == "1"){

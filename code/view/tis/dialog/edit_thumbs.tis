@@ -64,7 +64,18 @@ function Init(){
         $(#widget_packing).state.disabled = true;
         $(#widget_packing .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
         $(#widget_packing .file-drop-zone).attributes.addClass("disabled");
+    }
 
+    if(platform.TitlePath == ""){
+        $(#widget_title).state.disabled = true;
+        $(#widget_title .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_title .file-drop-zone).attributes.addClass("disabled");
+    }
+
+    if(platform.BackgroundPath == ""){
+        $(#widget_background).state.disabled = true;
+        $(#widget_background .file-drop-zone).html = CONF.Lang.PlatformNotSetPath;
+        $(#widget_background .file-drop-zone).attributes.addClass("disabled");
     }
 
     if(platform.VideoPath == ""){
@@ -78,12 +89,16 @@ function Init(){
     var snap = getRomPicPath("snap",pfid,name);
     var poster = getRomPicPath("poster",pfid,name);
     var packing = getRomPicPath("packing",pfid,name);
+    var title = getRomPicPath("title",pfid,name);
+    var background = getRomPicPath("background",pfid,name);
     var video = getRomPicPath("video",pfid,name);
 
     if(thumb != ""){$(.file-drop-zone[opt=thumb]).html = "<img src='"+ thumb +"'>";}
     if(snap != ""){$(.file-drop-zone[opt=snap]).html = "<img src='"+ snap +"'>";}
     if(poster != ""){$(.file-drop-zone[opt=poster]).html = "<img src='"+ poster +"'>";}
     if(packing != ""){$(.file-drop-zone[opt=packing]).html = "<img src='"+ packing +"'>";}
+    if(title != ""){$(.file-drop-zone[opt=title]).html = "<img src='"+ title +"'>";}
+    if(background != ""){$(.file-drop-zone[opt=background]).html = "<img src='"+ background +"'>";}
     if(video != ""){$(.file-drop-zone[opt=video]).html = "<video src='"+ video +"' />";}
 
 }

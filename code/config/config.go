@@ -1,16 +1,16 @@
 package config
 
 import (
-	"simUI/code/db"
-	"simUI/code/utils"
 	"bufio"
 	"errors"
 	"github.com/go-ini/ini"
-	"simUI/code/utils/go-sciter/window"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
+	"simUI/code/db"
+	"simUI/code/utils"
+	"simUI/code/utils/go-sciter/window"
 	"strings"
 )
 
@@ -138,7 +138,16 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platformList[k].PackingPath, _ = filepath.Abs(v.PackingPath)
 			platform[v.Id].PackingPath = platformList[k].PackingPath
 		}
+		
+		if v.TitlePath != "" {
+			platformList[k].TitlePath, _ = filepath.Abs(v.TitlePath)
+			platform[v.Id].TitlePath = platformList[k].TitlePath
+		}
 
+		if v.BackgroundPath != "" {
+			platformList[k].BackgroundPath, _ = filepath.Abs(v.BackgroundPath)
+			platform[v.Id].BackgroundPath = platformList[k].BackgroundPath
+		}
 		if v.VideoPath != "" {
 			platformList[k].VideoPath, _ = filepath.Abs(v.VideoPath)
 			platform[v.Id].VideoPath = platformList[k].VideoPath
