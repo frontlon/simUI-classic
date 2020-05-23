@@ -139,12 +139,14 @@ function _createRotate(info){
     var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
+    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
     var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
 
     if (movie != ""){ pics += "<video id='right_video' />";}
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
+    if(background != ""){ pics += "<img src=\""+ background +"\" />"; }
 
     //游戏缩略图
     if(thumb != ""){
