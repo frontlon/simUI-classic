@@ -36,18 +36,24 @@ func ReadDescFile(platform uint32) (map[string]*CsvStruct, error) {
 			Publisher: r[7],
 		}
 	}
+	delete(csvData, "rom名称") //删除第一列
 
 	return csvData, nil
 }
 
-func WriteDescFile(platform uint32,newData *CsvStruct) error {
+func WriteDescFile(platform uint32, newData *CsvStruct) error {
 	filename := "1.csv"
 
 	data, _ := ReadDescFile(platform) //读取老数据
-	data[newData.RomName] = newData //并入新数据
+	data[newData.RomName] = newData   //并入新数据
 
 	//转换为切片
 	create := [][]string{}
+
+	//表头
+	head := []string{"rom名称", "英文名", "中文名", "游戏类型", "平台", "年份", "开发商", "发行商"}
+	create = append(create, head)
+
 	for _, v := range data {
 		d := []string{v.RomName, v.EnName, v.CnName, v.Type, v.Platform, v.Year, v.Developer, v.Publisher}
 		create = append(create, d)
