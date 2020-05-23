@@ -1,0 +1,106 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
+        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
+        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
+        label{font-size:11dip;}
+        table{width:100%;}
+        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
+        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
+        tr:last-child td{text-align: center;padding-bottom:0}
+        .submit{margin:0 8dip}
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <table>
+            <tr><td>英文名</td><td><input type="text" id="sim_name" value=""></td></tr>
+            <tr><td>中文名</td><td><input type="text" id="sim_name" value=""></td></tr>
+            <tr><td>年份</td><td><input type="number" id="sim_path" value=""></td></tr>
+            <tr><td>游戏类型</td><td>
+                <select editable>
+                    <option value="ACT(动作过关)">ACT(动作过关)</option>
+                    <option value="RPG(角色扮演)">RPG(角色扮演)</option>
+                    <option value="ARPG(动作角色知扮演)">ARPG(动作角色知扮演)</option>
+                    <option value="SRPG(战略角色扮演)">SRPG(战略角色扮演)</option>
+                    <option value="AVG(冒险)">AVG(冒险)</option>
+                    <option value="FTG(格斗)">FTG(格斗)</option>
+                    <option value="MUG(音乐)">MUG(音乐)</option>
+                    <option value="RAC(赛车)">RAC(赛车)</option>
+                    <option value="SLG(策略模拟)">SLG(策略模拟)</option>
+                    <option value="SPT(体育)">SPT(体育)</option>
+                    <option value="STG(射击)">STG(射击)</option>
+                    <option value="TAB(桌面)">TAB(桌面)</option>
+                    <option value="PUZ(方块)">PUZ(方块)</option>
+                    <option value="FREE(完全反射视点)">FREE(完全反射视点)</option>
+                </select>
+            </tr></td>
+
+
+            <tr><td>平台</td><td>
+            <select editable>
+                <option value="3DS">3DS</option>
+                <option value="ARC">ARC</option>
+                <option value="DC">DC</option>
+                <option value="FC">FC</option>
+                <option value="FUZE">FUZE</option>
+                <option value="GB">GB</option>
+                <option value="GBA">GBA</option>
+                <option value="MD">MD</option>
+                <option value="N64">N64</option>
+                <option value="NDS">NDS</option>
+                <option value="NGC">NGC</option>
+                <option value="PC">PC</option>
+                <option value="PCE">PCE</option>
+                <option value="PS">PS</option>
+                <option value="PS2">PS2</option>
+                <option value="PS3">PS3</option>
+                <option value="PS4">PS4</option>
+                <option value="PSP">PSP</option>
+                <option value="PSV">PSV</option>
+                <option value="SFC">SFC</option>
+                <option value="SS">SS</option>
+                <option value="Wii">Wii</option>
+                <option value="WiiU">WiiU</option>
+                <option value="X360">X360</option>
+                <option value="XBOX">XBOX</option>
+            </select>
+            </tr></td>
+
+            <tr><td>开发商</td><td>
+            <select editable>
+                <option value="Nintendo">Nintendo</option>
+                <option value="Ubisoft">Ubisoft</option>
+                <option value="Konami">Konami</option>
+                <option value="Sega">Sega</option>
+                <option value="Amaze">Amaze</option>
+                <option value="Capcom">Capcom</option>
+                <option value="Maxis">Maxis</option>
+                <option value="Bungie">Bungie</option>
+                <option value="Yuke's">Yuke's</option>
+            </select>
+            </tr></td>
+             <tr><td>发行商</td><td>
+            <select editable>
+                <option value="Nintendo">Nintendo</option>
+                <option value="Ubisoft">Ubisoft</option>
+                <option value="Konami">Konami</option>
+                <option value="Sega">Sega</option>
+                <option value="Amaze">Amaze</option>
+                <option value="Capcom">Capcom</option>
+                <option value="Maxis">Maxis</option>
+                <option value="Bungie">Bungie</option>
+                <option value="Yuke's">Yuke's</option>
+            </select>
+            </tr></td>
+            <tr><th colspan="2"></th></tr>
+            <tr><td colspan="2"><button class="submit" id="sim_submit">取消</button><button class="submit" id="sim_delete">确定</button></td></tr>
+        </table>
+    </div>
+
+
+</body>
+</html>

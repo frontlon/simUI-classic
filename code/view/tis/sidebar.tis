@@ -208,7 +208,7 @@ function openDesc(evt){
     //如果攻略文件不是可运行程序，则窗口运行        
     other = view.window{
         type:View.FRAME_WINDOW,
-        url: self.url("desc.html"),
+        url: self.url("docs.html"),
         alignment: 5,
         screen:1,
         width : 800,
