@@ -158,6 +158,11 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].Romlist = platformList[k].Romlist
 		}
 
+		if v.RomBase != "" {
+			platformList[k].RomBase, _ = filepath.Abs(v.RomBase)
+			platform[v.Id].RomBase = platformList[k].RomBase
+		}
+
 		//填充模拟器列表
 		simList, _ := DBSim.GetByPlatform(v.Id)
 		platform[v.Id].SimList = simList

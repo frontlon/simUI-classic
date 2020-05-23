@@ -101,6 +101,7 @@ function GetPlatformLitem(evt){
     $(#platform_background).value = info.BackgroundPath;
     $(#platform_video).value = info.VideoPath;
     $(#platform_romlist).value = info.Romlist;
+    $(#platform_rombase).value = info.RomBase;
     //模拟器数据
     var platform_sim = $(#platform_sim);
     platform_sim.options.clear();
@@ -132,6 +133,7 @@ function GetPlatformLitem(evt){
     $(#platform_background).state.disabled = false;
     $(#platform_video).state.disabled = false;
     $(#platform_romlist).state.disabled = false;
+    $(#platform_rombase).state.disabled = false;
 
     var openfile = $$(.openfile);
     for(var of in openfile) {
@@ -182,6 +184,7 @@ function platformSubmit(evt){
         strategy   : $(#platform_strategy).value,
         doc        : $(#platform_doc).value,
         romlist    : $(#platform_romlist).value,
+        rombase    : $(#platform_rombase).value,
     };
     if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
