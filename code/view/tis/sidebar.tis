@@ -19,10 +19,17 @@ function openSidebar(obj){
     var romPath = URL.parse(info.RomPath);
 
     //显示标题图
+   
     var titlePic = getRomPicPath("title",info.Platform,romPath.name); //包装盒图
     if(titlePic != ""){
+        $(#right_title_h2).style["display"] = "block";
+        $(#right_title_pic).style["display"] = "block";
         $(#right_title_pic).html = "<img src=\""+ titlePic +"\" />";
+    }else{
+        $(#right_title_h2).style["display"] = "none";
+        $(#right_title_pic).style["display"] = "none";
     }
+    
 
     //重命名功能
     $(#right_rename).attributes["rid"] = info.Id;
@@ -135,10 +142,6 @@ function openSidebar(obj){
         else{rombase += CONF.Lang.LastRunTime + unixToDate(info.RunTime);}
         $(#right_rombase).html = rombase;
     }
-
-
-    
-   
 
 }
 

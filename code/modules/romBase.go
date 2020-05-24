@@ -20,6 +20,7 @@ var Baseinfo map[string]*RomBase
 
 //读取详情文件
 func GetRomBase(platform uint32) (map[string]*RomBase, error) {
+
 	if config.Cfg.Platform[platform].Rombase == "" {
 		return map[string]*RomBase{}, nil
 	}
@@ -32,7 +33,33 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, r := range records {
+
+	Baseinfo = map[string]*RomBase{}
+
+	isUtf8 := false
+	if len(records) > 0 {
+		isUtf8 = utils.IsUTF8(records[0][0])
+	} else {
+		return Baseinfo, nil
+	}
+
+	for k, r := range records {
+
+		if k == 0 {
+			continue
+		}
+
+		if isUtf8 == false {
+			r[0] = utils.ToUTF8(r[0])
+			r[1] = utils.ToUTF8(r[1])
+			r[2] = utils.ToUTF8(r[2])
+			r[3] = utils.ToUTF8(r[3])
+			r[4] = utils.ToUTF8(r[4])
+			r[5] = utils.ToUTF8(r[5])
+			r[6] = utils.ToUTF8(r[6])
+			r[7] = utils.ToUTF8(r[7])
+		}
+
 		Baseinfo[r[0]] = &RomBase{
 			RomName:   r[0],
 			EnName:    r[1],
@@ -43,8 +70,8 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			Developer: r[6],
 			Publisher: r[7],
 		}
+
 	}
-	delete(Baseinfo, "rom名称") //删除第一列
 
 	return Baseinfo, nil
 }
@@ -54,7 +81,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	if config.Cfg.Platform[platform].Rombase == "" {
 		return nil
 	}
-	
+
 	Baseinfo, _ = GetRomBase(platform)  //读取老数据
 	Baseinfo[newData.RomName] = newData //并入新数据
 
