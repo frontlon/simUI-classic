@@ -51,7 +51,7 @@ func RunGame(romId uint64, simId uint32) error {
 	//检测执行文件是否存在
 	_, err = os.Stat(sim.Path)
 	if err != nil {
-		return errors.New(config.Cfg.Lang["SimulatorNotFound"]);
+		return errors.New(config.Cfg.Lang["SimulatorNotFound"])
 	}
 
 	//如果是相对路径，转换成绝对路径
@@ -122,7 +122,7 @@ func RunGame(romId uint64, simId uint32) error {
 		err = utils.RunGame(sim.Path, cmd)
 
 		//记录游戏运行次数
-		err = (&db.Rom{Id: romId}).UpdatePlayNum();
+		err = (&db.Rom{Id: romId}).UpdatePlayNum()
 	}
 	return nil
 }
@@ -325,6 +325,11 @@ func GetDocContent(f string) string {
 		return content
 	}
 	content = string(text)
+
+	/*if !utils.IsUTF8(content) {
+		content = utils.ToUTF8(content)
+	}*/
+
 	return content
 }
 

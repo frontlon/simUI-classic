@@ -28,6 +28,9 @@ function completeExt(str){
 //弹出错误窗口
 function errorBox(str){
     view.msgbox(#error,str);
+    $(#loading).style['display'] = 'none';
+    $(body).state.disabled = false;
+    $(#create).attributes.removeClass("disabled");
 }
 
 //alert框
