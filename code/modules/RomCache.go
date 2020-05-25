@@ -24,7 +24,9 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
 	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
+	BaseInfo, _ := GetRomBase(platform)
 
+	fmt.Println("RomBase", BaseInfo)
 	//进入循环，遍历文件
 	if err := filepath.Walk(RomPath,
 		func(p string, f os.FileInfo, err error) error {
@@ -50,11 +52,28 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				romName := utils.GetFileName(f.Name())
 				title := romName
 
-				//如果有别名配置，则读取别名
+				//先读取基础数据，如果没有基础数据，则读取别名
+				baseName := ""
+				base := &RomBase{}
+				aliasName := ""
+				if _, ok := BaseInfo[title]; ok {
+					base = BaseInfo[title]
+					if BaseInfo[title].Name != "" {
+						baseName = BaseInfo[title].Name
+					}
+				}
+
+
+
 				if _, ok := RomAlias[title]; ok {
 					if RomAlias[title] != "" {
-						title = RomAlias[title]
+						aliasName = RomAlias[title]
 					}
+				}
+				if baseName != "" {
+					title = baseName
+				} else if aliasName != "" {
+					title = aliasName
 				}
 
 				pathMd5 := GetPathMd5(title, p) //路径md5，可变
@@ -73,15 +92,19 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 
 					//去掉扩展名，生成标题
 					sinfo := &db.Rom{
-						Name:     sub[1],
-						Pname:    sub[0],
-						RomPath:  p,
-						Menu:     menu,
-						Platform: platform,
-						Star:     0,
-						Pinyin:   utils.TextToPinyin(sub[1]),
-						PathMd5:  pathMd5,
-						SimConf:  "{}",
+						Name:          sub[1],
+						Pname:         sub[0],
+						RomPath:       p,
+						Menu:          menu,
+						Platform:      platform,
+						Star:          0,
+						Pinyin:        utils.TextToPinyin(sub[1]),
+						PathMd5:       pathMd5,
+						SimConf:       "{}",
+						BaseType:      base.Type,
+						BaseYear:      base.Year,
+						BaseDeveloper: base.Developer,
+						BasePublisher: base.Publisher,
 					}
 
 					romlist[pathMd5] = sinfo
@@ -147,16 +170,16 @@ func ClearPlatform() error {
  **/
 func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
 
-	md5s := []string{}    //磁盘文件
+	md5s := []string{} //磁盘文件
 	err := errors.New("")
 	for k, _ := range romlist {
-		md5s = append(md5s, k)              //文件的md5
+		md5s = append(md5s, k) //文件的md5
 	}
 
 	//数据库中读取md5和fileid
 	DbMd5s, _ := (&db.Rom{}).GetMd5ByPlatform(platform)
 	addUniq := utils.SliceDiff(md5s, DbMd5s) //新增的
-	subUniq := utils.SliceDiff(DbMd5s, md5s)     //删除的
+	subUniq := utils.SliceDiff(DbMd5s, md5s) //删除的
 
 	//2.删除不存在的rom
 	err = (&db.Rom{}).DeleteByMd5(platform, subUniq)

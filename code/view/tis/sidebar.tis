@@ -19,7 +19,6 @@ function openSidebar(obj){
     var romPath = URL.parse(info.RomPath);
 
     //显示标题图
-   
     var titlePic = getRomPicPath("title",info.Platform,romPath.name); //包装盒图
     if(titlePic != ""){
         $(#right_title_h2).style["display"] = "block";
@@ -127,20 +126,22 @@ function openSidebar(obj){
 
     //显示游戏基础信息
     if (detailObj.BaseInfo != undefined){
+        $(#right_rombase).style["display"] = "block";
         var base = detailObj.BaseInfo;
         var rombase = "";
-        if(base.RomName != "")  {rombase += CONF.Lang.BaseRomName   + base.RomName   + "<br>";}
-        if(base.EnName != "")   {rombase += CONF.Lang.BaseEnName    + base.EnName    + "<br>";}
-        if(base.CnName != "")   {rombase += CONF.Lang.BaseCnName    + base.CnName    + "<br>";}
-        if(base.Type != "")     {rombase += CONF.Lang.BaseType      + base.Type      + "<br>";}
-        if(base.Platform != "") {rombase += CONF.Lang.BasePlatform  + base.Platform  + "<br>";}
-        if(base.Year != "")     {rombase += CONF.Lang.BaseYear      + base.Year      + "<br>";}
-        if(base.Developer != ""){rombase += CONF.Lang.BaseDeveloper + base.Developer + "<br>";}
-        if(base.Publisher != ""){rombase += CONF.Lang.BasePublisher + base.Publisher + "<br>";}
-        rombase += CONF.Lang.RunNum + info.RunNum + "<br>";
-        if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + CONF.Lang.NoPlay;}
-        else{rombase += CONF.Lang.LastRunTime + unixToDate(info.RunTime);}
+        if(base.EnName != "")   {rombase += CONF.Lang.BaseEnName    + "<span>" + base.EnName    + "</span><br>";}
+        if(base.CnName != "")   {rombase += CONF.Lang.BaseCnName    + "<span>" + base.CnName    + "</span><br>";}
+        if(base.Type != "")     {rombase += CONF.Lang.BaseType      + "<span>" + base.Type      + "</span><br>";}
+        if(base.Platform != "") {rombase += CONF.Lang.BasePlatform  + "<span>" + base.Platform  + "</span><br>";}
+        if(base.Year != "")     {rombase += CONF.Lang.BaseYear      + "<span>" + base.Year      + "</span><br>";}
+        if(base.Developer != ""){rombase += CONF.Lang.BaseDeveloper + "<span>" + base.Developer + "</span><br>";}
+        if(base.Publisher != ""){rombase += CONF.Lang.BasePublisher + "<span>" + base.Publisher + "</span><br>";}
+        rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
+        if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
+        else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
         $(#right_rombase).html = rombase;
+    }else{
+        $(#right_rombase).style["display"] = "none";
     }
 
 }

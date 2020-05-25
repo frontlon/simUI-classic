@@ -12,20 +12,24 @@ import (
 var ROM_PAGE_NUM = 100 //每页加载rom数量
 
 type Rom struct {
-	Id       uint64
-	Pname    string // 所属主游戏
-	Menu     string // 菜单名称
-	Name     string // 游戏名称
-	Platform uint32 // 平台
-	RomPath  string // rom路径
-	Star     uint8  // 喜好，星级
-	SimId    uint32 // 正在使用的模拟器id
-	SimConf  string // 模拟器参数独立配置
-	RunNum   uint64 // 运行次数
-	RunTime  uint32 // 最后运行时间
-	Pinyin   string // 拼音索引
-	PathMd5  string // 文件Md5
-	Hide     uint8  // 是否隐藏
+	Id            uint64
+	Pname         string // 所属主游戏
+	Menu          string // 菜单名称
+	Name          string // 游戏名称
+	Platform      uint32 // 平台
+	RomPath       string // rom路径
+	Star          uint8  // 喜好，星级
+	SimId         uint32 // 正在使用的模拟器id
+	SimConf       string // 模拟器参数独立配置
+	Hide          uint8  // 是否隐藏
+	BaseType      string // 游戏类型，如RPG
+	BaseYear      string // 游戏年份
+	BaseDeveloper string // 游戏开发商
+	BasePublisher string // 游戏发行商
+	RunNum        uint64 // 运行次数
+	RunTime       uint32 // 最后运行时间
+	Pinyin        string // 拼音索引
+	PathMd5       string // 文件Md5
 }
 
 func (*Rom) TableName() string {

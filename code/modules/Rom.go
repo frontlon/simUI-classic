@@ -268,15 +268,8 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	}
 	//子游戏列表
 	sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
-	
-	//基础信息
-	base, err := GetRomBase(info.Platform)
-	if err != nil {
-		return res, err
-	}
 
 	res.Info = info
-	res.BaseInfo = base[utils.GetFileName(info.RomPath)]
 	res.StrategyFile = ""
 	res.Sublist = sub
 

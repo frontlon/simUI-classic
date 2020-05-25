@@ -69,15 +69,15 @@ function initConfig(isfresh){
 
 //视图窗口状态改变时
 function windowStateChange(evt){
-     if(view.state == 1 || view.state == 3){
-            view.UpdateConfig("window_state",view.state);
-        }
+    if(view.state == 1 || view.state == 3){
+        view.UpdateConfig("window_state",view.state);
+    }
 }
 //调整窗口大小
-function windowSizing(evt){
-     //更新默认配置
-        view.UpdateConfig("window_width",evt.width);
-        view.UpdateConfig("window_height",evt.height);
+function windowSize(){
+    //更新默认配置
+    view.UpdateConfig("window_width",$(body).box(#width));
+    view.UpdateConfig("window_height",$(body).box(#height));
 }
 
 //心跳

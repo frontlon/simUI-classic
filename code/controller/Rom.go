@@ -21,7 +21,7 @@ func RomController() {
 		romId := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 
-		err := modules.RunGame(romId, simId);
+		err := modules.RunGame(romId, simId)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -32,7 +32,7 @@ func RomController() {
 	//运行攻略文件
 	utils.Window.DefineFunction("RunStrategy", func(args ...*sciter.Value) *sciter.Value {
 		f := args[0].String()
-		if (f == "") {
+		if f == "" {
 			return sciter.NullValue()
 		}
 		if err := utils.RunGame("explorer", []string{f}); err != nil {
@@ -202,17 +202,15 @@ func RomController() {
 
 		romBase := &modules.RomBase{
 			RomName:   d["rom_name"],
-			EnName:    d["en_name"],
-			CnName:    d["cn_name"],
+			Name:      d["name"],
 			Type:      d["type"],
-			Platform:  d["platform"],
 			Year:      d["year"],
 			Developer: d["developer"],
 			Publisher: d["publisher"],
 		}
 
 		//写入配置文件
-		if err := modules.WriteRomBaseFile(platform,romBase);err != nil{
+		if err := modules.WriteRomBaseFile(platform, romBase); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

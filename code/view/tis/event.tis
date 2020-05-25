@@ -7,16 +7,16 @@
     * 窗口
     **/
 
-   //调整窗口大小
-    view.on("sizing", function(evt) {
-       windowSizing(evt);
+    //调整窗口大小
+    view.on("size", function() {
+       windowSize();
     });
 
     //视图窗口状态改变时
     view.on("statechange", function() {
        windowStateChange(this);
     });
- 
+
  
     /**
      * 导航栏
