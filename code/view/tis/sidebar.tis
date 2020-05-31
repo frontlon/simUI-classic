@@ -127,18 +127,18 @@ function openSidebar(obj){
     }
     self.$(#buttons).html = btndata;
 
-        //显示游戏基础信息
-        var rombase = "";
-        rombase += "<tr><td>" + CONF.Lang.BaseName + "</td><td>" + info.Name  + "</td></tr>";
-        if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "</td><td>" + info.BaseType      + "</td></tr>";}
-        if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "</td><td>" + info.BaseYear      + "</td></tr>";}
-        if(info.BaseDeveloper != ""){rombase += "<tr><td>" + CONF.Lang.BaseDeveloper + "</td><td>" + info.BaseDeveloper + "</td></tr>";}
-        if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "</td><td>" + info.BasePublisher + "</td></tr>";}
-        rombase += "<tr><td>" + CONF.Lang.BaseRomName + "</td><td>" + info.RomPath + "</td></tr>";
-        //rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
-        //if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
-        //else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
-        $(#right_rombase).html = rombase;
+    //显示游戏基础信息
+    var rombase = "";
+    rombase += "<tr><td>" + CONF.Lang.BaseName + "：</td><td>" + info.Name  + "</td></tr>";
+    if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "：</td><td>" + info.BaseType      + "</td></tr>";}
+    if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "：</td><td>" + info.BaseYear      + "</td></tr>";}
+    if(info.BaseDeveloper != ""){rombase += "<tr><td>" + CONF.Lang.BaseDeveloper + "：</td><td>" + info.BaseDeveloper + "</td></tr>";}
+    if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "：</td><td>" + info.BasePublisher + "</td></tr>";}
+    rombase += "<tr><td>" + CONF.Lang.BaseRomName + "：</td><td>" + info.RomPath + "</td></tr>";
+    //rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
+    //if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
+    //else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
+    $(#right_rombase).html = rombase;
    
 
 }
@@ -146,19 +146,29 @@ function openSidebar(obj){
 //视频
 function _createVideo(info,romPath){
     var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
+    var vdom = $(#right_video);
+
     if (movie != ""){
-        $(#right_video).attributes["src"] = movie;
+        $(#video_h2).style["display"] = "block";
+        vdom.attributes["src"] = movie;
+        vdom.style["display"] = "block";
+    }else{
+        $(#video_h2).style["display"] = "none";
+        vdom.attributes["src"] = "";
+        vdom.style["display"] = "none";
     }
 
    //如果有视频，自动播放视频
     if (movie != ""){
-        self.timer(200, function() { 
-            var vdom = $(#right_video);
-                vdom.videoStop();
-                vdom.videoUnload();
-                vdom.videoLoad(movie)
-                vdom.videoPlay(); 
+        self.timer(200, function() {
+            vdom.videoStop();
+            vdom.videoUnload();
+            vdom.videoLoad(movie)
+            vdom.videoPlay(); 
         });
+    }else{
+        vdom.videoStop();
+        vdom.videoUnload();
     }
 }
 

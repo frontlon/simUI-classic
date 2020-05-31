@@ -17,13 +17,13 @@
 <body>
     <div id="wrapper">
         <table>
-            <tr><td>{{Name}}</td><td><input type="text" id="sim_name" value="">
+            <tr><td>{{Name}}：</td><td><input type="text" id="sim_name" value="">
             <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
-            <tr><td>{{Path}}</td><td>
+            <tr><td>{{Path}}：</td><td>
                 <input type="text" id="sim_path" value="">
                 <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
             </td></tr>
-            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
@@ -34,7 +34,7 @@
                 <option value="-rom={RomName}">Demul</option>
             </select>
             </td></tr>
-            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td><td>
+            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}：</td><td>
                 <select id="unzip">
                     <option value="0">{{No}}</option>
                     <option value="1">{{Yes}}</option>
