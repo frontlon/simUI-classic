@@ -60,6 +60,10 @@ function openSidebar(obj){
         hide.attributes.addClass("funbtn_0");
     }
 
+
+    //创建视频
+    _createVideo(info,romPath);
+
     //创建滑动图
     _createRotate(info);
     
@@ -71,7 +75,6 @@ function openSidebar(obj){
     }else{
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";
-        
     }
 
     //如果存在攻略文件
@@ -124,28 +127,40 @@ function openSidebar(obj){
     }
     self.$(#buttons).html = btndata;
 
-    //显示游戏基础信息
-    if (detailObj.BaseInfo != undefined){
-        $(#right_rombase).style["display"] = "block";
-        var base = detailObj.BaseInfo;
+        //显示游戏基础信息
         var rombase = "";
-        if(base.EnName != "")   {rombase += CONF.Lang.BaseEnName    + "<span>" + base.EnName    + "</span><br>";}
-        if(base.CnName != "")   {rombase += CONF.Lang.BaseCnName    + "<span>" + base.CnName    + "</span><br>";}
-        if(base.Type != "")     {rombase += CONF.Lang.BaseType      + "<span>" + base.Type      + "</span><br>";}
-        if(base.Platform != "") {rombase += CONF.Lang.BasePlatform  + "<span>" + base.Platform  + "</span><br>";}
-        if(base.Year != "")     {rombase += CONF.Lang.BaseYear      + "<span>" + base.Year      + "</span><br>";}
-        if(base.Developer != ""){rombase += CONF.Lang.BaseDeveloper + "<span>" + base.Developer + "</span><br>";}
-        if(base.Publisher != ""){rombase += CONF.Lang.BasePublisher + "<span>" + base.Publisher + "</span><br>";}
-        rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
-        if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
-        else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
+        rombase += "<tr><td>" + CONF.Lang.BaseName + "</td><td>" + info.Name  + "</td></tr>";
+        if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "</td><td>" + info.BaseType      + "</td></tr>";}
+        if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "</td><td>" + info.BaseYear      + "</td></tr>";}
+        if(info.BaseDeveloper != ""){rombase += "<tr><td>" + CONF.Lang.BaseDeveloper + "</td><td>" + info.BaseDeveloper + "</td></tr>";}
+        if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "</td><td>" + info.BasePublisher + "</td></tr>";}
+        rombase += "<tr><td>" + CONF.Lang.BaseRomName + "</td><td>" + info.RomPath + "</td></tr>";
+        //rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
+        //if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
+        //else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
         $(#right_rombase).html = rombase;
-    }else{
-        $(#right_rombase).style["display"] = "none";
-    }
+   
 
 }
 
+//视频
+function _createVideo(info,romPath){
+    var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
+    if (movie != ""){
+        $(#right_video).attributes["src"] = movie;
+    }
+
+   //如果有视频，自动播放视频
+    if (movie != ""){
+        self.timer(200, function() { 
+            var vdom = $(#right_video);
+                vdom.videoStop();
+                vdom.videoUnload();
+                vdom.videoLoad(movie)
+                vdom.videoPlay(); 
+        });
+    }
+}
 
 //滑动图
 function _createRotate(info){
@@ -156,9 +171,7 @@ function _createRotate(info){
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
-    var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
 
-    if (movie != ""){ pics += "<video id='right_video' />";}
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
@@ -179,17 +192,6 @@ function _createRotate(info){
         $(#rotate).style["display"] = "none";
     }else{
         $(#rotate).style["display"] = undefined;
-    }
-
-    //如果有视频，自动播放视频
-    if (movie != ""){
-        self.timer(200, function() { 
-            var vdom = $(#right_video);
-                vdom.videoStop();
-                vdom.videoUnload();
-                vdom.videoLoad(movie)
-                vdom.videoPlay(); 
-        });
     }
 
     return pics

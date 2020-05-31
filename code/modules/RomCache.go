@@ -26,8 +26,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
 	BaseInfo, err := GetRomBase(platform)
 
-	if err != nil{
-		return nil,nil,errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
+	if err != nil {
+		return nil, nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
 	}
 
 	//进入循环，遍历文件
@@ -66,8 +66,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					}
 				}
 
-
-
 				if _, ok := RomAlias[title]; ok {
 					if RomAlias[title] != "" {
 						aliasName = RomAlias[title]
@@ -79,7 +77,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					title = aliasName
 				}
 
-				pathMd5 := GetPathMd5(title, p) //路径md5，可变
+				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Developer, base.Publisher) //路径md5，可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -123,11 +121,16 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Pinyin:   utils.TextToPinyin(title),
 						PathMd5:  pathMd5,
 						SimConf:  "{}",
+						BaseType:      base.Type,
+						BaseYear:      base.Year,
+						BaseDeveloper: base.Developer,
+						BasePublisher: base.Publisher,
 					}
 
 					romlist[pathMd5] = rinfo
 					md5list = append(md5list, rinfo.PathMd5)
 
+					fmt.Println("rinfo",rinfo)
 					//分类列表
 					if menu != ConstMenuRootKey {
 						menuList[menu] = &db.Menu{
@@ -246,7 +249,7 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 }
 
 //读取路径Md5
-func GetPathMd5(title string, p string) string {
-	str := title + p
+func GetPathMd5(par... string) string {
+	str := strings.Join(par,",")
 	return utils.Md5(str)
 }

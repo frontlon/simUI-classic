@@ -124,7 +124,6 @@
     #right .run{padding:4dip;line-height:1.5em;height:auto;width:*;display:block;background:color(run-button-background-color);color:color(run-button-text-color);text-align:center;margin-bottom:9dip;overflow:hidden;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     #right .run:hover{color:color(run-button-hover-text-color);background:color(run-button-hover-background-color);cursor:pointer}
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
-    #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     #right .funbtn{height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
     #right .funbtn:hover{background:color(func-button-hover-background-color);cursor:pointer}
     #right .funbtn i{display:block}
@@ -132,15 +131,22 @@
     #right .funbtn_1{color:color(func-button-active-text-color)}
     #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
     #right .right_desc_disable:hover{cursor: default;background: none}
-    #right_rombase{color:color(play-info-text-color);margin-bottom:10dip}
-    #right_rombase span{color:#ccc}
+    #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    #right_rombase{width:*;}
+    #right_rombase tr{;color:color(right-doc-text-color);line-height:1.5em;}
+    #right_rombase tr:hover td{opacity:0.8}
+    #right_rombase td{border:1dip solid color(right-doc-border-color);padding:1dip 3dip;}
+    #right_rombase td:nth-child(1){text-align:center;width:20dip}
+    #right_rombase td:nth-child(2){color:#ccc;}
+
+    /* 视频 */
+    #video_wrapper video{width:100%;height:*;min-height:120dip;foreground-repeat:no-repeat;foreground-position:top center;}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
     #rotate{top:-56dip;right:0dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
     #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);}
-    #stack>video{size:*;foreground-repeat:no-repeat;foreground-position:top center}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -244,16 +250,20 @@
         <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
         <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
         
+        <h2>视频</h2>
+        <div id="video_wrapper"><video id="right_video" src="" /></div>
+        
         <h2>{{Thumb}}</h2>
         <div class="rotate_wrapper">
         <button id="rotate" class="funbtn">&gt;</button>
         <div id="stack"></div>
         </div>
-        <h2 id="doc_title">{{Doc}}</h2>
-        <div id="doc" class="doc"></div>
 
         <h2>基本信息</h2>
-        <div id="right_rombase"></div>
+        <table id="right_rombase"></table>
+
+        <h2 id="doc_title">{{Doc}}</h2>
+        <div id="doc" class="doc"></div>
 
         <h2>{{RunGame}}</h2>
         <ul id="sim_select"></ul>

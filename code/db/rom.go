@@ -47,6 +47,7 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	for k, md5 := range uniqs {
 		v := romlist[md5]
 		tx.Create(&v)
+		fmt.Println("v",v)
 		if k%500 == 0 {
 			utils.Loading("开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}

@@ -17,7 +17,6 @@ var ConstMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 
 type RomDetail struct {
 	Info            *db.Rom   //rom信息
-	BaseInfo        *RomBase  //基础信息
 	DocContent      string    //简介内容
 	StrategyContent string    //攻略内容
 	StrategyFile    string    //攻略文件
@@ -326,9 +325,9 @@ func GetDocContent(f string) string {
 	}
 	content = string(text)
 
-	/*if !utils.IsUTF8(content) {
+	if !utils.IsUTF8(content) {
 		content = utils.ToUTF8(content)
-	}*/
+	}
 
 	return content
 }
