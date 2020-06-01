@@ -77,15 +77,21 @@
     /* rom模块 */
     #romlist{display:block;}
     .romblock{flow:horizontal-flow;clear:both;padding:0;margin-left:20dip;}
-    .romblock > li{display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom}
+    .romblock > li{text-align:center;background:color(rom-block-background-color);color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom}
     .romblock > li:hover{box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color)}
     .romblock > li:current{border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);transform: scale(1.2);z-index:2;}
     .romblock > li img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);display:block;}
     .romblock > li img:hover{cursor:pointer}
-    .romblock > li div{background:color(rom-block-background-color);color:color(rom-block-text-color);text-align:center;padding:4dip;height:29dip;vertical-align:middle;display:block}
-    .romblock > li p{overflow:hidden;max-height:2.5em;}
-    .romblock > li span{display:none}
-    #romlist.fontsize0 li div{display:none}
+
+    .romblock li div:nth-child(1){}
+    .romblock li div:nth-child(2){padding:4dip;height:29dip;vertical-align:middle;display:block;overflow:hidden;}
+    .romblock li div:nth-child(3){display:none}
+    .romblock li div:nth-child(4){display:none}
+    .romblock li div:nth-child(5){display:none}
+    .romblock li div:nth-child(6){display:none}
+    .romblock li div:nth-child(7){display:none}
+    .romblock .romth{display:none!important}
+    #romlist.fontsize0 li div:nth-child(2){display:none}
     #romlist.fontsize1 li{display:inherit;font-size: 8dip}
     #romlist.fontsize2 li{display:inherit;font-size: 9dip}
     #romlist.fontsize3 li{display:inherit;font-size: 10dip}
@@ -103,18 +109,27 @@
     .romblock.zoom4 > li{min-width:140dip;max-width:180dip;margin:6dip 10dip}
     .romblock.zoom5 > li{min-width:170dip;max-width:200dip;margin:6dip 10dip}
     .romblock.zoom6 > li{min-width:200dip;max-width:300dip;margin:6dip 10dip}
+    
     /* rom列表 */
     .romlist{width:*;margin-top:24dip;margin-left:30dip;list-style-type:none;padding:0;}
-    .romlist > li{height:36dip;line-height:36dip;padding:0 12dip;margin:0;position:relative;context-menu:selector(menu#romcontext);}
+    .romlist > li{position:relative;flow:horizontal-flow;overflow:hidden;height:36dip;padding:0 12dip;margin:0;context-menu:selector(menu#romcontext);}
     .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
     .romlist > li:nth-child(even){background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
     .romlist > li:hover{cursor:pointer}
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
+    
+    
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
-    .romlist > li div{text-align:left;padding:0;height:auto;width:*;vertical-align:middle;display:block;position:absolute;top:0;left:40dip}
-    .romlist > li p{line-height:36dip;height:36dip;font-weight:bolder;display:inline}
-    .romlist > li span{line-height:36dip;height:36dip;color:color(rom-list-cate-text-color);font-weight:normal;padding-left:9dip;display:inline-block}
+    .romlist > li div{width:*;line-height:36dip;}
+    .romlist > li div:nth-child(1){display:inline-block;width:25dip}
+    .romlist > li div:nth-child(2){display:inline-block;}
+    .romlist > li div:nth-child(3){display:inline-block;width:20%;color:#999}
+    .romlist > li div:nth-child(4){display:inline-block;width:10%;color:#999}
+    .romlist > li div:nth-child(5){display:inline-block;width:10%;color:#999}
+    .romlist > li div:nth-child(6){display:inline-block;width:10%;color:#999}
+    .romlist > li div:nth-child(7){display:inline-block;width:10%;color:#999}
+    .romth div{color:#fff!important;font-weight:bold;}
 
     /* 右侧边栏 */
     #right_title_pic{text-align:center;margin-bottom:10dip}
@@ -132,12 +147,14 @@
     #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
     #right .right_desc_disable:hover{cursor: default;background: none}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-    #right_rombase{width:*;}
+    
+    /* 基础信息表格 */
+    #right_rombase{width:100%;}
     #right_rombase tr{;color:color(right-doc-text-color);line-height:1.5em;}
     #right_rombase tr:hover td{opacity:0.8}
     #right_rombase td{border:1dip solid color(right-doc-border-color);padding:1dip 3dip;}
-    #right_rombase td:nth-child(1){text-align:center;width:20dip}
-    #right_rombase td:nth-child(2){color:#ccc;}
+    #right_rombase td:nth-child(1){text-align:center;width:40%}
+    #right_rombase td:nth-child(2){color:#ccc;width:*;}
 
     /* 视频 */
     #video_wrapper video{width:100%;height:*;min-height:120dip;foreground-repeat:no-repeat;foreground-position:top center;}
@@ -235,7 +252,9 @@
                 <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>
         </div>
         <div id="romwrapper">
-            <ul id="romlist"></ul>
+            <ul id="romlist">
+                <li class="romth"><div></div><div>游戏名称</div><div>目录</div><div>游戏类型</div><div>年份</div><div>开发商</div><div>发行商</div></li>
+            </ul>
         </div>
     </section>
     <splitter id="right_splitter" />

@@ -103,8 +103,8 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 	}
 
 	offset := pages * ROM_PAGE_NUM
-
-	result := getDb().Select("id,name,menu,platform,rom_path").Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
+	field := "id,name,menu,platform,rom_path,base_type,base_year,base_developer,base_publisher"
+	result := getDb().Select(field).Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -156,7 +156,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	where["pname"] = ""
 	offset := pages * ROM_PAGE_NUM
 	volist := []*Rom{}
-	field := "id,name,menu,platform,rom_path"
+	field := "id,name,menu,platform,rom_path,base_type,base_year,base_developer,base_publisher"
 	result := getDb().Select(field).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset)
 	if keyword == "#" {
 

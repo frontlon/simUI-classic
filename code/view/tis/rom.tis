@@ -38,8 +38,18 @@ function createRomList(cls=0){
             thumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
 
-        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'><img src='"+ thumb +"' /><div><p>" + obj.Name.toHtmlString() +"</p><span>&nbsp;" + obj.Menu + "</span></div></li>";
+        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
+        data += "<div><img src='"+ thumb +"' /></div>";
+        data += "<div>"+ obj.Name.toHtmlString() +"</div>";
+        data += "<div>"+ obj.Menu.toHtmlString() +"</div>";
+        data += "<div>"+ obj.BaseType +"</div>";
+        data += "<div>"+ obj.BaseYear +"</div>";
+        data += "<div>"+ obj.BaseDeveloper +"</div>";
+        data += "<div>"+ obj.BasePublisher +"</div>";
+        data += "</li>"
+
     }
+
     romlist.append(data);
     SCROLL_PAGE++;
 
