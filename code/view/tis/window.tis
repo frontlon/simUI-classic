@@ -18,6 +18,19 @@ function Init(){
         $(#right).style["display"] = "none"
     }
 
+    //窗口框架宽度
+    if (CONF.Default.PanelPlatformWidth != ""){
+        $(#left_platform).style["width"] = CONF.Default.PanelPlatformWidth;
+    }
+
+    if (CONF.Default.PanelMenuWidth != ""){
+        $(#left_menu).style["width"] = CONF.Default.PanelMenuWidth;
+    }
+
+    if (CONF.Default.PanelSidebarWidth != ""){
+        $(#right).style["width"] = CONF.Default.PanelSidebarWidth;
+    }
+
     //初始化rom
     var pf = CONF.Default.Platform;
     var menu =  $(#menulist).select("dd:current").attributes["opt"];

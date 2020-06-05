@@ -17,6 +17,22 @@
        windowStateChange(this);
     });
 
+    //调整平台栏宽度
+    self.on("mouseup", "#platform_splitter", function(evt) {
+        var width = $(#left_platform).box(#width);
+        view.UpdateConfig("panel_platform_width",width);
+    });
+    //调整菜单栏宽度
+    self.on("mouseup", "#menu_splitter", function(evt) {
+        var width = $(#left_menu).box(#width);
+        view.UpdateConfig("panel_menu_width",width);
+    });
+    //调整侧边栏宽度
+    self.on("mouseup", "#right_splitter", function(evt) {
+        var width = $(#right).box(#width);
+        view.UpdateConfig("panel_sidebar_width",width);
+    });
+
  
     /**
      * 导航栏
