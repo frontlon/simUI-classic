@@ -1,11 +1,12 @@
 package db
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"io/ioutil"
+	"io"
 	"os"
 	"simUI/code/utils"
 )
@@ -45,47 +46,27 @@ func Vacuum() {
 
 //升级数据库
 func UpgradeDB() {
-
-	filename := "upgrade.dat"
-
-	if !utils.FileExists(filename){
-		return
-	}
-
-
-	/*f, err := os.Open(filename)
-	if err != nil {
-		return
-	}
-	defer f.Close()
-	defer os.Remove(filename)
-
-	rd := bufio.NewReader(f)
-	for {
-		line, err := rd.ReadString('\n') //以'\n'为结束符读入一行
-		if err != nil || io.EOF == err {
-			break
-		}
-		//alter table mydownload add column 'IsFree' varchar(100) default '1'
-		getDb().Exec(line)
-	}*/
-
+	
+	filename := "upgrade.sql"
 	f, err := os.Open(filename)
 	if err != nil {
 		fmt.Println("read file fail", err)
 		return
 	}
-	defer os.Remove(filename)
+	//	defer os.Remove(filename)
 	defer f.Close()
 
-	sql, err := ioutil.ReadAll(f)
-	if err != nil {
-		fmt.Println("read to fd fail", err)
-		return
+	br := bufio.NewReader(f)
+	for {
+		a, _, c := br.ReadLine()
+
+		if c == io.EOF {
+			break
+		}
+
+		if len(a) == 0 {
+			continue
+		}
+		getDb().Exec(string(a))
 	}
-	getDb().Exec(string(sql))
-
-	return
-
-
 }
