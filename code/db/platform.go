@@ -141,11 +141,3 @@ func (m *Platform) UpdateSortById() error {
 	}
 	return result.Error
 }
-
-func (m *Platform) Truncate() error {
-	result := getDb().Delete(&m)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-	return result.Error
-}

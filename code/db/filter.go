@@ -1,0 +1,49 @@
+package db
+
+import (
+	"fmt"
+	_ "github.com/mattn/go-sqlite3"
+)
+
+type Filter struct {
+	Id   string
+	Type string
+	Name string
+}
+
+func (*Filter) TableName() string {
+	return "filter"
+}
+
+//写入数据
+func (m *Filter) BatchAdd(data []*Filter) {
+
+	if len(data) == 0 {
+		return
+	}
+
+	tx := getDb().Begin()
+	for _, v := range data {
+		tx.Create(&v)
+	}
+	tx.Commit()
+}
+
+//根据条件，查询多条数据
+func (*Filter) GetByType(t string) ([]*Filter, error) {
+	volist := []*Filter{}
+	result := getDb().Select("name").Where("type=?", t).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return volist, nil
+}
+
+//清空表数据
+func (m *Filter) Truncate() error {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}

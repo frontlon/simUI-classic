@@ -87,6 +87,9 @@ func CacheController() {
 					return utils.ErrorMsg(err.Error())
 				}
 
+				//更新filter数据
+				modules.UpdateFilterDB();
+
 			}
 
 			//收缩数据库

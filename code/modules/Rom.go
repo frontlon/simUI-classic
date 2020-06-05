@@ -120,8 +120,6 @@ func RunGame(romId uint64, simId uint32) error {
 		}
 		err = utils.RunGame(sim.Path, cmd)
 
-		//记录游戏运行次数
-		err = (&db.Rom{Id: romId}).UpdatePlayNum()
 	}
 	return nil
 }

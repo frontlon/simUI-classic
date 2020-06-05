@@ -1,14 +1,14 @@
 package modules
 
 import (
-	"simUI/code/config"
-	"simUI/code/db"
-	"simUI/code/utils"
 	"errors"
 	"fmt"
 	"os"
 	"path"
 	"path/filepath"
+	"simUI/code/config"
+	"simUI/code/db"
+	"simUI/code/utils"
 	"strings"
 )
 
@@ -104,7 +104,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						SimConf:       "{}",
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
-						BaseDeveloper: base.Developer,
 						BasePublisher: base.Publisher,
 					}
 
@@ -113,24 +112,23 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
-						Menu:     menu,
-						Name:     title,
-						Platform: platform,
-						RomPath:  p,
-						Star:     0,
-						Pinyin:   utils.TextToPinyin(title),
-						PathMd5:  pathMd5,
-						SimConf:  "{}",
+						Menu:          menu,
+						Name:          title,
+						Platform:      platform,
+						RomPath:       p,
+						Star:          0,
+						Pinyin:        utils.TextToPinyin(title),
+						PathMd5:       pathMd5,
+						SimConf:       "{}",
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
-						BaseDeveloper: base.Developer,
 						BasePublisher: base.Publisher,
 					}
 
 					romlist[pathMd5] = rinfo
 					md5list = append(md5list, rinfo.PathMd5)
 
-					fmt.Println("rinfo",rinfo)
+					fmt.Println("rinfo", rinfo)
 					//分类列表
 					if menu != ConstMenuRootKey {
 						menuList[menu] = &db.Menu{
@@ -249,7 +247,51 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 }
 
 //读取路径Md5
-func GetPathMd5(par... string) string {
-	str := strings.Join(par,",")
+func GetPathMd5(par ...string) string {
+	str := strings.Join(par, ",")
 	return utils.Md5(str)
+}
+
+/**
+ * 更新filter cache
+ **/
+func UpdateFilterDB() {
+	_ = (&db.Filter{}).Truncate()
+
+	baseType, _ := (&db.Rom{}).GetFilter("BaseType")
+	baseYear, _ := (&db.Rom{}).GetFilter("BaseYear")
+	basePlatform, _ := (&db.Rom{}).GetFilter("BasePlatform")
+	basePublisher, _ := (&db.Rom{}).GetFilter("BasePublisher")
+
+	filters := []*db.Filter{}
+	for _, v := range baseType {
+		data := &db.Filter{
+			Name: v.BaseType,
+		}
+		filters = append(filters, data)
+	}
+
+	for _, v := range baseYear {
+		data := &db.Filter{
+			Name: v.BaseYear,
+		}
+		filters = append(filters, data)
+	}
+
+	for _, v := range basePlatform {
+		data := &db.Filter{
+			Name: v.BasePlatform,
+		}
+		filters = append(filters, data)
+	}
+
+	for _, v := range basePublisher {
+		data := &db.Filter{
+			Name: v.BasePlatform,
+		}
+		filters = append(filters, data)
+	}
+
+	(&db.Filter{}).BatchAdd(filters)
+
 }

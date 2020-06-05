@@ -92,11 +92,3 @@ func (m *Shortcut) DeleteById() (error) {
 	}
 	return result.Error
 }
-//清空表
-func (m *Shortcut) Truncate() (error) {
-	result := getDb().Delete(&m)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-	return result.Error
-}

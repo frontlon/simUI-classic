@@ -50,44 +50,6 @@ func ConfigController() {
 		return sciter.NullValue()
 	})
 
-	//备份配置文件
-	utils.Window.DefineFunction("BackupConfig", func(args ...*sciter.Value) *sciter.Value {
-		p := args[0].String()
-
-		err := modules.BackupConfig(p)
-		if err != nil {
-			utils.WriteLog(err.Error())
-			utils.ErrorMsg(err.Error())
-		}
-
-		return sciter.NullValue()
-	})
-
-	//还原配置文件
-	utils.Window.DefineFunction("RestoreConfig", func(args ...*sciter.Value) *sciter.Value {
-		p := args[0].String()
-
-		err := modules.RestoreConfig(p)
-		if err != nil {
-			utils.WriteLog(err.Error())
-			utils.ErrorMsg(err.Error())
-		}
-
-		return sciter.NullValue()
-	})
-
-	//读取还原数据的统计信息
-	utils.Window.DefineFunction("GetRestoreInfo", func(args ...*sciter.Value) *sciter.Value {
-		p := args[0].String()
-		info, err := modules.GetRestoreInfo(p)
-		if err != nil {
-			utils.WriteLog(err.Error())
-			utils.ErrorMsg(config.Cfg.Lang["RestoreConfigFileError"])
-		}
-		jsonInfo, _ := json.Marshal(&info)
-		return sciter.NewValue(string(jsonInfo))
-	})
-
 	//检查更新
 	utils.Window.DefineFunction("CheckUpgrade", func(args ...*sciter.Value) *sciter.Value {
 		body := modules.CheckUpgrade()

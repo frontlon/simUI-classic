@@ -136,11 +136,3 @@ func (m *Simulator) DeleteByPlatform() (error) {
 	}
 	return result.Error
 }
-
-func (m *Simulator) Truncate() (error) {
-	result := getDb().Delete(&m)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-	return result.Error
-}

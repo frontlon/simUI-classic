@@ -135,9 +135,6 @@ function openSidebar(obj){
     if(info.BaseDeveloper != ""){rombase += "<tr><td>" + CONF.Lang.BaseDeveloper + "：</td><td>" + info.BaseDeveloper + "</td></tr>";}
     if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "：</td><td>" + info.BasePublisher + "</td></tr>";}
     rombase += "<tr><td>" + CONF.Lang.BaseRomName + "：</td><td>" + info.RomPath + "</td></tr>";
-    //rombase += CONF.Lang.RunNum + "<span>" + info.RunNum + "</span><br>";
-    //if(info.RunTime == "0"){rombase += CONF.Lang.LastRunTime + "<span>" + CONF.Lang.NoPlay + "</span>";}
-    //else{rombase += CONF.Lang.LastRunTime + "<span>" + unixToDate(info.RunTime) + "</span>";}
     $(#right_rombase).html = rombase;
    
 

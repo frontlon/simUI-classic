@@ -1,12 +1,10 @@
 package db
 
 import (
-	"simUI/code/utils"
 	"fmt"
-	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
+	"simUI/code/utils"
 	"strings"
-	"time"
 )
 
 var ROM_PAGE_NUM = 100 //每页加载rom数量
@@ -23,11 +21,9 @@ type Rom struct {
 	SimConf       string // 模拟器参数独立配置
 	Hide          uint8  // 是否隐藏
 	BaseType      string // 游戏类型，如RPG
+	BasePlatform  string // 游戏平台
 	BaseYear      string // 游戏年份
-	BaseDeveloper string // 游戏开发商
-	BasePublisher string // 游戏发行商
-	RunNum        uint64 // 运行次数
-	RunTime       uint32 // 最后运行时间
+	BasePublisher string // 游戏出品公司
 	Pinyin        string // 拼音索引
 	PathMd5       string // 文件Md5
 }
@@ -47,7 +43,7 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	for k, md5 := range uniqs {
 		v := romlist[md5]
 		tx.Create(&v)
-		fmt.Println("v",v)
+		fmt.Println("v", v)
 		if k%500 == 0 {
 			utils.Loading("开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
@@ -266,19 +262,6 @@ func (m *Rom) UpdateHide() error {
 	return result.Error
 }
 
-//更新玩的次数
-func (m *Rom) UpdatePlayNum() error {
-	update := map[string]interface{}{
-		"run_num":  gorm.Expr("run_num + 1"),
-		"run_time": time.Now().Unix(),
-	}
-	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(update)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-	return result.Error
-}
-
 //更新模拟器
 func (m *Rom) UpdateSimulator() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sim_id", m.SimId)
@@ -350,6 +333,16 @@ func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 		md5List = append(md5List, v.PathMd5)
 	}
 	return md5List, result.Error
+}
+
+//读取一个过滤器分类
+func (sim *Rom) GetFilter(t string) ([]*Rom, error) {
+	volist := []*Rom{}
+	result := getDb().Select(t).Group(t).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return volist, result.Error
 }
 
 //删除不存在的平台下的所有rom

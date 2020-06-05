@@ -46,7 +46,7 @@ func Vacuum() {
 
 //升级数据库
 func UpgradeDB() {
-	
+
 	filename := "upgrade.sql"
 	f, err := os.Open(filename)
 	if err != nil {
