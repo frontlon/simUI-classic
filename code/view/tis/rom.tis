@@ -44,7 +44,7 @@ function createRomList(cls=0){
         data += "<div>"+ obj.Menu.toHtmlString() +"</div>";
         data += "<div>"+ obj.BaseType +"</div>";
         data += "<div>"+ obj.BaseYear +"</div>";
-        data += "<div>"+ obj.BaseDeveloper +"</div>";
+        data += "<div>"+ obj.BasePlatform +"</div>";
         data += "<div>"+ obj.BasePublisher +"</div>";
         data += "</li>"
 

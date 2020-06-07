@@ -246,6 +246,11 @@
         rename(this);
     });
 
+    //编辑基础信息
+    self.on("click", "#romcontext .baseinfo", function(evt) {
+        baseinfo(this);
+    });
+
     //右键菜单设置喜爱
     self.on("click", "#romcontext .fav", function(evt) {
         contextSetFavorite(this);

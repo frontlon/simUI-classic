@@ -37,7 +37,7 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 	}
 
 	volist := []*Menu{}
-	result := getDb().Select("name,platform").Where(where).Find(&volist)
+	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

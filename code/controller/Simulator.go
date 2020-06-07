@@ -107,4 +107,28 @@ func SimulatorController() {
 		}
 		return sciter.NewValue("1")
 	})
+
+	//更新平台排序
+	utils.Window.DefineFunction("UpdateSimSort", func(args ...*sciter.Value) *sciter.Value {
+		data := args[0].String()
+		d := make(map[uint32]uint32)
+		json.Unmarshal([]byte(data), &d)
+
+		if len(d) == 0 {
+			return sciter.NullValue()
+		}
+
+		for id, val := range d {
+			sim := &db.Simulator{
+				Id:   id,
+				Sort: val,
+			}
+			err := sim.UpdateSortById()
+			if err != nil {
+				utils.WriteLog(err.Error())
+				return utils.ErrorMsg(err.Error())
+			}
+		}
+		return sciter.NewValue("1")
+	})
 }

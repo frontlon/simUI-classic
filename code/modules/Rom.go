@@ -16,11 +16,12 @@ var ConstSeparator = "__"     //rom子分隔符
 var ConstMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 
 type RomDetail struct {
-	Info            *db.Rom   //rom信息
-	DocContent      string    //简介内容
-	StrategyContent string    //攻略内容
-	StrategyFile    string    //攻略文件
-	Sublist         []*db.Rom //子游戏
+	Info            *db.Rom         //rom信息
+	DocContent      string          //简介内容
+	StrategyContent string          //攻略内容
+	StrategyFile    string          //攻略文件
+	Sublist         []*db.Rom       //子游戏
+	Simlist         []*db.Simulator //模拟器
 }
 
 //运行游戏
@@ -269,6 +270,7 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	res.Info = info
 	res.StrategyFile = ""
 	res.Sublist = sub
+	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
 
 	//读取文档内容
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址

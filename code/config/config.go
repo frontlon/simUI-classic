@@ -23,8 +23,8 @@ var (
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                           //可直接运行的doc文档支持的扩展名
-	Window *window.Window                                                       //窗体
+	} //可直接运行的doc文档支持的扩展名
+	Window *window.Window //窗体
 )
 
 //配置文件
@@ -138,7 +138,7 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platformList[k].PackingPath, _ = filepath.Abs(v.PackingPath)
 			platform[v.Id].PackingPath = platformList[k].PackingPath
 		}
-		
+
 		if v.TitlePath != "" {
 			platformList[k].TitlePath, _ = filepath.Abs(v.TitlePath)
 			platform[v.Id].TitlePath = platformList[k].TitlePath
@@ -165,8 +165,12 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 
 		//填充模拟器列表
 		simList, _ := DBSim.GetByPlatform(v.Id)
-		platform[v.Id].SimList = simList
-		platformList[k].SimList = simList
+		vomap := map[uint32]*db.Simulator{}
+		for _, v := range simList {
+			vomap[v.Id] = v
+		}
+		platform[v.Id].SimList = vomap
+		platformList[k].SimList = vomap
 
 		platform[v.Id].UseSim = &db.Simulator{}
 		//找到默认模拟器
@@ -184,8 +188,8 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			//模拟器路径转换为绝对路径
 			if sim.Path != "" {
 				sim.Path, _ = filepath.Abs(sim.Path)
-				platformList[k].SimList[sk].Path = sim.Path
-				platform[v.Id].SimList[sk].Path = sim.Path
+				platformList[k].SimList[uint32(sk)].Path = sim.Path
+				platform[v.Id].SimList[uint32(sk)].Path = sim.Path
 			}
 		}
 	}
@@ -237,7 +241,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" { // 忽略目录
+		if !fi.IsDir() && ext == ".css" {           // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件

@@ -74,6 +74,29 @@ function rename(evt){
     view.RomRename(data.type,detailObj.Info.Id,data.name);
 }
 
+//基础信息
+function baseinfo(evt){
+    var getjson = view.GetGameDetail(evt.attributes["rid"])
+    var detailObj = JSON.parse(getjson);
+
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "edit_rombase.html"),
+        width:400,
+        height:600,
+        parameters: {
+            name:detailObj.Info.Name,
+            type:CONF.Default.RenameType,
+        };
+    });
+
+    if(data == undefined){
+        return;
+    }
+
+    $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
+    view.RomRename(data.type,detailObj.Info.Id,data.name);
+}
+
 //rom模块右键菜单
 function romContextMenu(obj){
     var romcontext = $(#romcontext);
@@ -120,6 +143,9 @@ function romContextMenu(obj){
     }
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
+
+    btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
+
     btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
     btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
 

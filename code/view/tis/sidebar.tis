@@ -1,4 +1,28 @@
-﻿//单击游戏侧边栏详情
+﻿view.root.on("ready", function(){
+
+    //平台拖拽排序
+    DragDrop{
+        what      : "#sim_select>li:not(.fixed)",
+        where     : "#sim_select",
+        container : "#sim_select",        
+        notBefore : "#sim_select>li.fixed",
+        dropped : function(){
+            var lis = $$(#sim_select > li);
+            var id = "";
+            var newObj = {};
+            for(var li in lis) {
+                id = li.attributes["sim"];
+                newObj[id] = li.index;
+            }
+            //更新到数据库
+            var datastr = JSON.stringify(newObj);
+            var result = view.UpdateSimSort(datastr);
+        }
+    }
+
+});
+
+//单击游戏侧边栏详情
 function openSidebar(obj){
 
     obj.state.current = true;
@@ -92,10 +116,12 @@ function openSidebar(obj){
     $(#sim_select).html = ""; //先清空所有模拟器
     var pfObj = CONF.Platform[info.Platform.toString()];
 
-    if(pfObj.SimList.length > 0 ){
+    var simlist = detailObj.Simlist;
+    
+    if(simlist.length > 0 ){
         var simliststr = "";
-        for(var obj in pfObj.SimList) {
-            simliststr += "<li filename='"+ pfObj.SimList[obj].Path +"' rom='"+ info.Id +"' sim='"+ pfObj.SimList[obj].Id +"'><p>"+ pfObj.SimList[obj].Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
+        for(var obj in simlist) {
+            simliststr += "<li filename='"+ obj.Path +"' rom='"+ info.Id +"' sim='"+ obj.Id +"'><p>"+ obj.Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
         }
         $(#sim_select).html = simliststr;
 
@@ -132,7 +158,7 @@ function openSidebar(obj){
     rombase += "<tr><td>" + CONF.Lang.BaseName + "：</td><td>" + info.Name  + "</td></tr>";
     if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "：</td><td>" + info.BaseType      + "</td></tr>";}
     if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "：</td><td>" + info.BaseYear      + "</td></tr>";}
-    if(info.BaseDeveloper != ""){rombase += "<tr><td>" + CONF.Lang.BaseDeveloper + "：</td><td>" + info.BaseDeveloper + "</td></tr>";}
+    if(info.BasePlatform != ""){rombase += "<tr><td>" + CONF.Lang.BasePlatform + "：</td><td>" + info.BasePlatform + "</td></tr>";}
     if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "：</td><td>" + info.BasePublisher + "</td></tr>";}
     rombase += "<tr><td>" + CONF.Lang.BaseRomName + "：</td><td>" + info.RomPath + "</td></tr>";
     $(#right_rombase).html = rombase;
