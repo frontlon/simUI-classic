@@ -61,7 +61,6 @@
     #platform_ul  li{display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
     #platform_ul  li .imgdiv{display: block}
     #platform_ul  li img{size:28dip;margin:3dip auto 5dip auto;}
-
     #platform_ul  li p{margin:0;line-height:1.4em;display:block}
     #platform_ul  li:hover{opacity:0.7;cursor:pointer}
     #platform_ul  li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
@@ -197,6 +196,7 @@
     #romcontext .hide0{background-image:url(this://app/images/fileico_hide_0.png);}
     #romcontext .hide1{background-image:url(this://app/images/fileico_hide_1.png);}
     #romcontext .rename{background-image:url(this://app/images/rename.png);}
+    #romcontext .baseinfo{background-image:url(this://app/images/rename.png);}
     
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
@@ -207,7 +207,7 @@
 <body>
 <div id="console" style="box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none"></div>
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
-<menu id="romcontext"></menu>
+<menu id="romcontext" type="menu"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo"></div>
     <div id="tb_left">

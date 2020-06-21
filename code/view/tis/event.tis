@@ -246,7 +246,7 @@
         rename(this);
     });
 
-    //编辑基础信息
+    //编辑资料
     self.on("click", "#romcontext .baseinfo", function(evt) {
         baseinfo(this);
     });

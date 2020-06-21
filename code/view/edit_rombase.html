@@ -17,9 +17,9 @@
 <body>
     <div id="wrapper">
         <table>
-            <tr><td>英文名</td><td><input type="text" id="sim_name" value=""></td></tr>
             <tr><td>中文名</td><td><input type="text" id="sim_name" value=""></td></tr>
-            <tr><td>年份</td><td><input type="number" id="sim_path" value=""></td></tr>
+            <tr><td>英文名</td><td><input type="text" id="sim_name" value=""></td></tr>
+            <tr><td>年份</td><td><input type="number" id="sim_path" value="" maxlength="4"></td></tr>
             <tr><td>游戏类型</td><td>
                 <select editable>
                     <option value="ACT(动作过关)">ACT(动作过关)</option>
@@ -101,6 +101,15 @@
         </table>
     </div>
 
+<script type="text/tiscript">
+
+
+view.root.on("ready", function(){
+    view.windowCaption = CONF.Lang.EditBaseInfo;
+});
+
+
+</script>
 
 </body>
 </html>

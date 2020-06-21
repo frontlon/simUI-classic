@@ -144,9 +144,14 @@ function romContextMenu(obj){
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
 
-    btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
+    btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
 
+
+ /*
     btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
+
+    btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='thumb'>66<menu><li>11</li><li>22</li><li>33</li></menu></li>";
+
     btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
 
     if(CONF.Platform[pfId].ThumbPath != ""){
@@ -173,6 +178,9 @@ function romContextMenu(obj){
         btndata += "<li class='folder' rid='"+ detailObj.Info.Id +"' opt='strategy'>"+ CONF.Lang.LocationStrategyFile +"</li>";
     }
 
+
+
+
     //定位模拟器目录
    if(CONF.Platform[pfId].SimList.length > 0){
         for(var simId in CONF.Platform[pfId].SimList) {
@@ -180,6 +188,6 @@ function romContextMenu(obj){
         }
 
     }
-
+*/
     romcontext.append(btndata);
 }
