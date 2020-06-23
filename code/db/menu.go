@@ -52,9 +52,13 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 	if len(menus) == 0 {
 		result = getDb().Where("platform=?", platform).Delete(&m)
 	} else {
-		result = getDb().Where("platform=?", platform).Not("name", menus).Delete(&m)
+		//数据量不会很大，慢慢删。
+		tx := getDb().Begin()
+		for _,v:= range menus{
+			tx.Where("platform=(?) AND name=(?)", platform,v).Delete(&m)
+		}
+		result = tx.Commit()
 	}
-
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -75,7 +79,7 @@ func (*Menu) ClearByPlatform(platforms []string) error {
 }
 
 //根据一组名称，查询存在的名称，用于取交集
-func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
+/*func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 
 	nameList := []string{}
 	if len(names) == 0 {
@@ -84,6 +88,26 @@ func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
 
 	volist := []*Menu{}
 	result := getDb().Select("name").Where("platform = (?) AND name in (?)", platform, names).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	//仅读取name
+	if len(volist) > 0 {
+		for _, v := range volist {
+			nameList = append(nameList, v.Name)
+		}
+	}
+	return nameList, result.Error
+}*/
+
+//读取一个平台下的所有menu数据
+func (*Menu) GetAllNamesByPlatform(platform uint32) ([]string, error) {
+
+	nameList := []string{}
+
+	volist := []*Menu{}
+	result := getDb().Select("name").Where("platform = (?)", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
