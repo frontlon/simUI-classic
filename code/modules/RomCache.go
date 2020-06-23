@@ -192,28 +192,18 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 		return err
 	}
 
-
 	add := utils.SliceDiff(diskMenus,dbNames)
 	sub := utils.SliceDiff(dbNames,diskMenus)
 
-
-
-//-----------------
 	//删除当前平台下不存在的菜单
 	if err := (&db.Menu{}).DeleteNotExists(platform, sub); err != nil {
 	}
-	/*
-		//查询已存在的记录
-		issetName, err := (&db.Menu{}).GetMenuByNames(platform, menus)
-		if err != nil {
-			return err
-		}
-	*/
+
 	//取出需要写入数据库的rom数据。
 	saveMenulist := []*db.Menu{}
-	for _, v := range menumap {
-		if utils.InSliceString(v.Name, add) == false {
-			saveMenulist = append(saveMenulist, v)
+	if len(add) > 0{
+		for _, v := range add {
+			saveMenulist = append(saveMenulist, menumap[v])
 		}
 	}
 
