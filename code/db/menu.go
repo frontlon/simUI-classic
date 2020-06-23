@@ -50,10 +50,15 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 	result := &gorm.DB{}
 	m := &Menu{}
 	if len(menus) == 0 {
-		result = getDb().Where("platform=?", platform).Delete(&m)
-	} else {
-		result = getDb().Where("platform=?", platform).Not("name", menus).Delete(&m)
+		return nil
 	}
+
+	//数据量不会很大，慢慢删。
+	tx := getDb().Begin()
+	for _,v:= range menus{
+		tx.Where("platform=(?) AND name=(?)", platform,v).Delete(&m)
+	}
+	result = tx.Commit()
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -74,16 +79,13 @@ func (*Menu) ClearByPlatform(platforms []string) error {
 	return result.Error
 }
 
-//根据一组名称，查询存在的名称，用于取交集
-func (*Menu) GetMenuByNames(platform uint32, names []string) ([]string, error) {
+//读取一个平台下的所有menu数据
+func (*Menu) GetAllNamesByPlatform(platform uint32) ([]string, error) {
 
 	nameList := []string{}
-	if len(names) == 0 {
-		return nameList, nil
-	}
 
 	volist := []*Menu{}
-	result := getDb().Select("name").Where("platform = (?) AND name in (?)", platform, names).Find(&volist)
+	result := getDb().Select("name").Where("platform = (?)", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

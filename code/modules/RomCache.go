@@ -201,31 +201,35 @@ func UpdateRomDB(platform uint32, romlist map[string]*db.Rom) error {
  **/
 func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 
-	menus := []string{}
+	//磁盘中目录列表
+	diskMenus := []string{}
 	if len(menumap) > 0 {
 		for k, _ := range menumap {
 			if k == ConstMenuRootKey {
 				continue
 			}
-			menus = append(menus, k)
+			diskMenus = append(diskMenus, k)
 		}
 	}
 
-	//删除当前平台下不存在的菜单
-	if err := (&db.Menu{}).DeleteNotExists(platform, menus); err != nil {
-	}
-
-	//查询已存在的记录
-	issetName, err := (&db.Menu{}).GetMenuByNames(platform, menus)
+	//数据库中目录列表
+	dbNames, err := (&db.Menu{}).GetAllNamesByPlatform(platform)
 	if err != nil {
 		return err
 	}
 
+	add := utils.SliceDiff(diskMenus,dbNames)
+	sub := utils.SliceDiff(dbNames,diskMenus)
+
+	//删除当前平台下不存在的菜单
+	if err := (&db.Menu{}).DeleteNotExists(platform, sub); err != nil {
+	}
+
 	//取出需要写入数据库的rom数据。
 	saveMenulist := []*db.Menu{}
-	for _, v := range menumap {
-		if utils.InSliceString(v.Name, issetName) == false {
-			saveMenulist = append(saveMenulist, v)
+	if len(add) > 0{
+		for _, v := range add {
+			saveMenulist = append(saveMenulist, menumap[v])
 		}
 	}
 
