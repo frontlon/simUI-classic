@@ -1,10 +1,11 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
 	"strings"
 )
@@ -196,23 +197,46 @@ func RomController() {
 	utils.Window.DefineFunction("SetRomBase", func(args ...*sciter.Value) *sciter.Value {
 
 		data := args[0].String()
+
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
-		platform := uint32(utils.ToInt(args[0].String()))
+
+		rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
+
+		romName := utils.GetFileName(rom.RomPath)
 
 		romBase := &modules.RomBase{
-			RomName:   d["rom_name"],
+			RomName:   romName,
 			Name:      d["name"],
 			Type:      d["type"],
 			Year:      d["year"],
-			Developer: d["developer"],
+			Platform:  d["platform"],
 			Publisher: d["publisher"],
 		}
 
 		//写入配置文件
-		if err := modules.WriteRomBaseFile(platform, romBase); err != nil {
+		if err := modules.WriteRomBaseFile(rom.Platform, romBase); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NullValue()
+	})
+
+	//读取rom基础信息
+	utils.Window.DefineFunction("GetRomBase", func(args ...*sciter.Value) *sciter.Value {
+
+		id := uint64(utils.ToInt(args[0].String()))
+		rom, _ := (&db.Rom{}).GetById(id)
+
+		romName := utils.GetFileName(rom.RomPath)
+		baseinfo,_ := modules.GetRomBase(rom.Platform)
+
+		fmt.Println("bbb",romName,baseinfo)
+
+		if _, ok := baseinfo[romName]; ok {
+			jsonMenu, _ := json.Marshal(baseinfo[romName])
+			return sciter.NewValue(string(jsonMenu))
 		}
 
 		return sciter.NullValue()

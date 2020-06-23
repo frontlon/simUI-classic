@@ -77,7 +77,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					title = aliasName
 				}
 
-				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Developer, base.Publisher) //路径md5，可变
+				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Platform, base.Publisher) //路径md5，可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -128,7 +128,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					romlist[pathMd5] = rinfo
 					md5list = append(md5list, rinfo.PathMd5)
 
-					fmt.Println("rinfo", rinfo)
 					//分类列表
 					if menu != ConstMenuRootKey {
 						menuList[menu] = &db.Menu{

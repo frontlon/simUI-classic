@@ -49,6 +49,15 @@ type ThemeStruct struct {
 	Params map[string]string //主题各项参数
 }
 
+type RomBase struct {
+	RomName   string // rom文件名
+	Name      string // 游戏名称
+	Type      string // 类型
+	Year      string // 年份
+	Platform  string // 平台
+	Publisher string // 出品公司
+}
+
 /*
  初始化读取配置
  @author frontLon
@@ -79,6 +88,8 @@ func InitConf() error {
 	if err != nil {
 		return err
 	}
+
+
 	Cfg.Theme, err = getTheme()
 	if err != nil {
 		return err

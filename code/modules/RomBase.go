@@ -10,11 +10,11 @@ type RomBase struct {
 	Name      string // 游戏名称
 	Type      string // 类型
 	Year      string // 年份
-	Developer string // 开发商
-	Publisher string // 发行商
+	Platform  string // 平台
+	Publisher string // 出品公司
 }
 
-var Baseinfo map[string]*RomBase
+var Baseinfo map[uint32]map[string]*RomBase
 
 //读取详情文件
 func GetRomBase(platform uint32) (map[string]*RomBase, error) {
@@ -23,27 +23,28 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 		return map[string]*RomBase{}, nil
 	}
 
-	if Baseinfo != nil {
-		return Baseinfo, nil
+	if Baseinfo[platform] != nil {
+		return Baseinfo[platform], nil
 	}
 
+	Baseinfo = map[uint32]map[string]*RomBase{}
+
+	des := map[string]*RomBase{}
 	records, err := utils.ReadCsv(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
 		return nil, err
 	}
 
-	Baseinfo = map[string]*RomBase{}
-
 	isUtf8 := false
 	if len(records) > 0 {
 		isUtf8 = utils.IsUTF8(records[0][0])
 	} else {
-		return Baseinfo, nil
+		return Baseinfo[platform], nil
 	}
 
 	for k, r := range records {
 
-		if k == 0 {
+		if k == 0 || r[0] == ""{
 			continue
 		}
 
@@ -56,18 +57,17 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			r[5] = utils.ToUTF8(r[5])
 		}
 
-		Baseinfo[r[0]] = &RomBase{
+		des[r[0]] = &RomBase{
 			RomName:   r[0],
 			Name:      r[1],
 			Type:      r[2],
 			Year:      r[3],
-			Developer: r[4],
+			Platform:  r[4],
 			Publisher: r[5],
 		}
-
 	}
-
-	return Baseinfo, nil
+	Baseinfo[platform] = des
+	return des, nil
 }
 
 func WriteRomBaseFile(platform uint32, newData *RomBase) error {
@@ -76,18 +76,18 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 		return nil
 	}
 
-	Baseinfo, _ = GetRomBase(platform)  //读取老数据
-	Baseinfo[newData.RomName] = newData //并入新数据
+	info, _ := GetRomBase(platform)  //读取老数据
+	info[newData.RomName] = newData //并入新数据
 
 	//转换为切片
 	create := [][]string{}
 
 	//表头
-	head := []string{"rom名称", "名称", "游戏类型", "年份", "开发商", "发行商"}
+	head := []string{"rom名称", "游戏名称", "游戏类型", "游戏平台", "发行年份", "出品公司"}
 	create = append(create, head)
 
-	for _, v := range Baseinfo {
-		d := []string{v.RomName, v.Name, v.Type, v.Year, v.Developer, v.Publisher}
+	for _, v := range info {
+		d := []string{v.RomName, v.Name, v.Type, v.Platform, v.Year, v.Publisher}
 		create = append(create, d)
 	}
 

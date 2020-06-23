@@ -76,25 +76,15 @@ function rename(evt){
 
 //基础信息
 function baseinfo(evt){
-    var getjson = view.GetGameDetail(evt.attributes["rid"])
-    var detailObj = JSON.parse(getjson);
-
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
         width:400,
-        height:600,
+        height:340,
         parameters: {
-            name:detailObj.Info.Name,
-            type:CONF.Default.RenameType,
+            id:evt.attributes["rid"],
         };
     });
 
-    if(data == undefined){
-        return;
-    }
-
-    $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
-    view.RomRename(data.type,detailObj.Info.Id,data.name);
 }
 
 //rom模块右键菜单

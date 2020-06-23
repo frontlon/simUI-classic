@@ -17,11 +17,10 @@
 <body>
     <div id="wrapper">
         <table>
-            <tr><td>中文名</td><td><input type="text" id="sim_name" value=""></td></tr>
-            <tr><td>英文名</td><td><input type="text" id="sim_name" value=""></td></tr>
-            <tr><td>年份</td><td><input type="number" id="sim_path" value="" maxlength="4"></td></tr>
+            <tr><td>游戏名称</td><td><input type="text" id="name" value=""></td></tr>
+            <tr><td>年份</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
             <tr><td>游戏类型</td><td>
-                <select editable>
+                <select id="type" editable>
                     <option value="ACT(动作过关)">ACT(动作过关)</option>
                     <option value="RPG(角色扮演)">RPG(角色扮演)</option>
                     <option value="ARPG(动作角色知扮演)">ARPG(动作角色知扮演)</option>
@@ -37,11 +36,11 @@
                     <option value="PUZ(方块)">PUZ(方块)</option>
                     <option value="FREE(完全反射视点)">FREE(完全反射视点)</option>
                 </select>
-            </tr></td>
+            </td></tr>
 
 
             <tr><td>平台</td><td>
-            <select editable>
+            <select id="platform" editable>
                 <option value="3DS">3DS</option>
                 <option value="ARC">ARC</option>
                 <option value="DC">DC</option>
@@ -68,10 +67,11 @@
                 <option value="X360">X360</option>
                 <option value="XBOX">XBOX</option>
             </select>
-            </tr></td>
+            </td></tr>
 
-            <tr><td>开发商</td><td>
-            <select editable>
+           
+             <tr><td>出品公司</td><td>
+            <select id="publisher" editable>
                 <option value="Nintendo">Nintendo</option>
                 <option value="Ubisoft">Ubisoft</option>
                 <option value="Konami">Konami</option>
@@ -82,22 +82,9 @@
                 <option value="Bungie">Bungie</option>
                 <option value="Yuke's">Yuke's</option>
             </select>
-            </tr></td>
-             <tr><td>发行商</td><td>
-            <select editable>
-                <option value="Nintendo">Nintendo</option>
-                <option value="Ubisoft">Ubisoft</option>
-                <option value="Konami">Konami</option>
-                <option value="Sega">Sega</option>
-                <option value="Amaze">Amaze</option>
-                <option value="Capcom">Capcom</option>
-                <option value="Maxis">Maxis</option>
-                <option value="Bungie">Bungie</option>
-                <option value="Yuke's">Yuke's</option>
-            </select>
-            </tr></td>
+            </td></tr>
             <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="sim_submit">取消</button><button class="submit" id="sim_delete">确定</button></td></tr>
+            <tr><td colspan="2"><button class="submit" id="submit">确定</button><button class="submit" id="cancel">取消</button></td></tr>
         </table>
     </div>
 
@@ -106,8 +93,30 @@
 
 view.root.on("ready", function(){
     view.windowCaption = CONF.Lang.EditBaseInfo;
+
+    var getjson = mainView.GetRomBase(view.parameters.id);
+    var info = JSON.parse(getjson);
+
+    if(info.Name != undefined && info.Name != ""){$(#name).value = info.Name;}
+    if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
+    if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
+    if(info.Platform != undefined && info.Platform != ""){$(#platform).value = info.Platform;}
+    if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
+
 });
 
+event click $(#submit){
+    var data = {
+        id:view.parameters.id;
+        name:$(#name).value,
+        year:$(#year).value.toString(),
+        type:$(#type).value,
+        platform:$(#platform).value,
+        publisher:$(#publisher).value,
+    }
+    mainView.SetRomBase(JSON.stringify(data));
+    view.close();
+}
 
 </script>
 
