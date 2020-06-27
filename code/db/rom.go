@@ -345,6 +345,30 @@ func (sim *Rom) GetFilter(t string) ([]*Rom, error) {
 	return volist, result.Error
 }
 
+//更新喜爱状态
+func (m *Rom) UpdateRomBase(id uint64) error {
+
+	create := map[string]string{
+		"base_type":      m.BaseType,
+		"base_year":      m.BaseYear,
+		"base_platform":  m.BasePlatform,
+		"base_publisher": m.BasePublisher,
+		"name":           m.Name,
+		"pinyin":         utils.TextToPinyin(m.Name),
+	}
+
+	/*if m.Name != "" {
+		create["name"] = m.Name
+		create["pinyin"] = utils.TextToPinyin(m.Name)
+	}*/
+
+	result := getDb().Table(m.TableName()).Where("id=?", id).Updates(create)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //删除不存在的平台下的所有rom
 func (m *Rom) ClearByPlatform(platforms []string) error {
 	result := getDb().Where("platform not in (?)", platforms).Delete(&m)

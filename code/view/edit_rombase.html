@@ -17,9 +17,9 @@
 <body>
     <div id="wrapper">
         <table>
-            <tr><td>游戏名称</td><td><input type="text" id="name" value=""></td></tr>
-            <tr><td>年份</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
-            <tr><td>游戏类型</td><td>
+            <tr><td>{{BaseName}}：</td><td><input type="text" id="name" value=""></td></tr>
+            <tr><td>{{BaseYear}}：</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
+            <tr><td>{{BaseType}}：</td><td>
                 <select id="type" editable>
                     <option value="ACT(动作过关)">ACT(动作过关)</option>
                     <option value="RPG(角色扮演)">RPG(角色扮演)</option>
@@ -39,7 +39,7 @@
             </td></tr>
 
 
-            <tr><td>平台</td><td>
+            <tr><td>{{BasePlatform}}：</td><td>
             <select id="platform" editable>
                 <option value="3DS">3DS</option>
                 <option value="ARC">ARC</option>
@@ -70,7 +70,7 @@
             </td></tr>
 
            
-             <tr><td>出品公司</td><td>
+             <tr><td>{{BasePublisher}}：</td><td>
             <select id="publisher" editable>
                 <option value="Nintendo">Nintendo</option>
                 <option value="Ubisoft">Ubisoft</option>
@@ -84,19 +84,21 @@
             </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="submit">确定</button><button class="submit" id="cancel">取消</button></td></tr>
+            <tr><td colspan="2"><button class="submit" id="submit">确定</button><button class="submit" id="close-dialog">取消</button></td></tr>
         </table>
     </div>
 
 <script type="text/tiscript">
-
+include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
+
+    //渲染语言
+    createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;
 
     var getjson = mainView.GetRomBase(view.parameters.id);
     var info = JSON.parse(getjson);
-
     if(info.Name != undefined && info.Name != ""){$(#name).value = info.Name;}
     if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
     if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
@@ -106,15 +108,27 @@ view.root.on("ready", function(){
 });
 
 event click $(#submit){
+
+    var year = "";
+    if($(#year).value != "" && $(#year).value != undefined){
+         year = $(#year).value.toString();
+    }else{
+         year = "";
+    }
+
     var data = {
         id:view.parameters.id;
         name:$(#name).value,
-        year:$(#year).value.toString(),
+        year:year,
         type:$(#type).value,
         platform:$(#platform).value,
         publisher:$(#publisher).value,
     }
-    mainView.SetRomBase(JSON.stringify(data));
+    var result = mainView.SetRomBase(JSON.stringify(data));
+    view.close(result);
+}
+
+event click $(#close-dialog){
     view.close();
 }
 

@@ -85,6 +85,17 @@ function baseinfo(evt){
         };
     });
 
+    if(data != undefined){
+        var info = JSON.parse(data);
+        var dom = self.select(".romitem[rid="+ evt.attributes['rid'] +"]");
+        dom.select("div:nth-child(4)").html = info.BaseType;
+        dom.select("div:nth-child(5)").html = info.BaseYear;
+        dom.select("div:nth-child(6)").html = info.BasePlatform;
+        dom.select("div:nth-child(7)").html = info.BasePublisher;
+        dom.select("div:nth-child(2)").html = info.Name;
+    }
+    
+
 }
 
 //rom模块右键菜单

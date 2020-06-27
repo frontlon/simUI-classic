@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
@@ -220,7 +219,29 @@ func RomController() {
 			return utils.ErrorMsg(err.Error())
 		}
 
-		return sciter.NullValue()
+		name := ""
+		if d["name"] == "" {
+			name = romName
+		} else {
+			name = d["name"]
+		}
+
+		//更新到数据库
+		dbRom := &db.Rom{
+			Name:          name,
+			BaseType:      d["type"],
+			BaseYear:      d["year"],
+			BasePlatform:  d["platform"],
+			BasePublisher: d["publisher"],
+		}
+		if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		jsonstr, _ := json.Marshal(&dbRom)
+		return sciter.NewValue(string(jsonstr))
+
 	})
 
 	//读取rom基础信息
@@ -230,9 +251,7 @@ func RomController() {
 		rom, _ := (&db.Rom{}).GetById(id)
 
 		romName := utils.GetFileName(rom.RomPath)
-		baseinfo,_ := modules.GetRomBase(rom.Platform)
-
-		fmt.Println("bbb",romName,baseinfo)
+		baseinfo, _ := modules.GetRomBase(rom.Platform)
 
 		if _, ok := baseinfo[romName]; ok {
 			jsonMenu, _ := json.Marshal(baseinfo[romName])

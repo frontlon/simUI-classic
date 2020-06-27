@@ -51,6 +51,7 @@ func WriteCsv(filename string, data [][]string) error {
 	file.WriteString("\xEF\xBB\xBF")
 	w := csv.NewWriter(file)
 	for _, d := range data {
+		fmt.Println("write",len(d),d)
 		w.Write(d)
 	}
 	w.Flush()

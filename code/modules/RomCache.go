@@ -105,6 +105,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
+						BasePlatform:  base.Platform,
 					}
 
 					romlist[pathMd5] = sinfo
@@ -123,6 +124,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
+						BasePlatform:  base.Platform,
 					}
 
 					romlist[pathMd5] = rinfo
@@ -218,8 +220,8 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 		return err
 	}
 
-	add := utils.SliceDiff(diskMenus,dbNames)
-	sub := utils.SliceDiff(dbNames,diskMenus)
+	add := utils.SliceDiff(diskMenus, dbNames)
+	sub := utils.SliceDiff(dbNames, diskMenus)
 
 	//删除当前平台下不存在的菜单
 	if err := (&db.Menu{}).DeleteNotExists(platform, sub); err != nil {
@@ -227,7 +229,7 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 
 	//取出需要写入数据库的rom数据。
 	saveMenulist := []*db.Menu{}
-	if len(add) > 0{
+	if len(add) > 0 {
 		for _, v := range add {
 			saveMenulist = append(saveMenulist, menumap[v])
 		}
