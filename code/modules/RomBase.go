@@ -78,7 +78,6 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 
 	info, _ := GetRomBase(platform)  //读取老数据
 
-
 	//如果全为空则删除当前记录
 	if newData.Name == "" && newData.Platform == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == ""{
 		delete(info,newData.RomName)

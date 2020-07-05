@@ -18,7 +18,6 @@ type Config struct {
 	WindowWidth        string // 当前窗口宽度
 	WindowHeight       string // 当前窗口高度
 	WindowState        string // 当前窗口显示状态
-	RenameType         string // 当前rom重命名类型
 	FontSize           string // 当前rom列表字体大小
 	UpgradeId          string // 当前版本id
 	EnableUpgrade      string // 启用更新

@@ -43,7 +43,13 @@
     /* 状态栏 */
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
- 
+    .statebar .filter{color:color(statebar-text-color);position:absolute;left:17dip;line-height:42dip}
+    .statebar .filter select{background:#333}
+
+    .statebar .filter select > button{background:#00f;color:#ff0;foreground:#fff}
+    .statebar .filter select > popup{background:#00f;color:#ff0;stroke:#fff}
+    .statebar .filter select > caption{text-selection: #f00 transparent;}
+
     /* 搜索栏 */
     .search{height:26dip;background:color(search-background-color);margin:9dip;position:relative}
     .search .input{color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:95dip;position:absolute;left:4dip;padding:0}
@@ -249,6 +255,14 @@
         <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
 
         <div class="statebar">
+
+<div class="filter">
+<select editable><option>类型</option></select>
+<select editable><option>平台</option></select>
+<select editable><option>发行商</option></select>
+<select editable><option>年份</option></select>
+</div>
+
 
             <div class="counnum">
                 <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>

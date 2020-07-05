@@ -1,16 +1,15 @@
 package modules
 
 import (
+	"errors"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
-	"errors"
-	"github.com/go-ini/ini"
 	"strings"
 )
 
 //rom重命名
-func RomRename(setType string, id uint64, name string) error {
+func RomRename(id uint64, name string) error {
 
 	//读取老信息
 	rom, _ := (&db.Rom{}).GetById(id)
@@ -22,44 +21,30 @@ func RomRename(setType string, id uint64, name string) error {
 	subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
 
 	err := errors.New("")
-	//修改别名文件
-	if setType == "1" {
-		if err = renameAlias(name, rom, subRom); err != nil {
-			return err
-		}
-	} else { //修改文件名
-		if err = renameFile(name, rom, subRom); err != nil {
-			return err
-		}
-	}
 
+	if err = renameFile(name, rom, subRom); err != nil {
+		return err
+	}
+	
 	//更新数据库
 	fname := rom.RomPath
-	if setType == "2" {
-		fpath := utils.GetFilePath(rom.RomPath)
-		fext := utils.GetFileExt(rom.RomPath)
-		fname = name + fext
-		if fpath != "." {
-			fname = fpath + "/" + name + fext
-		}
+	fpath := utils.GetFilePath(rom.RomPath)
+	fext := utils.GetFileExt(rom.RomPath)
+	fname = name + fext
+	if fpath != "." {
+		fname = fpath + "/" + name + fext
 	}
 
-	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName(uint8(utils.ToInt(setType)))
+	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName()
 	if err != nil {
 		return err
 	}
 
-	//更新配置
-	err = (&db.Config{}).UpdateField("rename_type", setType)
-	config.Cfg.Default.RenameType = setType
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
 //修改别名文件
-func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
+/*func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 	platform := rom.Platform
 	iniCfg := &ini.File{}
 	err := errors.New("")
@@ -100,7 +85,7 @@ func renameAlias(name string, rom *db.Rom, subRom []*db.Rom) error {
 		return err
 	}
 	return nil
-}
+}*/
 
 //修改文件名
 func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {

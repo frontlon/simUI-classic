@@ -180,11 +180,10 @@ func RomController() {
 
 	//重命名
 	utils.Window.DefineFunction("RomRename", func(args ...*sciter.Value) *sciter.Value {
-		setType := args[0].String() //1:alias,2:filename
-		id := uint64(utils.ToInt(args[1].String()))
-		name := args[2].String()
+		id := uint64(utils.ToInt(args[0].String()))
+		name := args[1].String()
 
-		err := modules.RomRename(setType, id, name)
+		err := modules.RomRename(id, name)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -201,9 +200,7 @@ func RomController() {
 		json.Unmarshal([]byte(data), &d)
 
 		rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
-
 		romName := utils.GetFileName(rom.RomPath)
-
 		romBase := &modules.RomBase{
 			RomName:   romName,
 			Name:      d["name"],

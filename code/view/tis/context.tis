@@ -59,10 +59,9 @@ function rename(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "rom_rename.html"),
         width:300,
-        height:200,
+        height:190,
         parameters: {
-            name:detailObj.Info.Name,
-            type:CONF.Default.RenameType,
+            name:detailObj.Info.Name
         };
     });
 

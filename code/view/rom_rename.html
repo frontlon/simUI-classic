@@ -9,18 +9,17 @@
         label{font-size:11dip;}
         table{width:100%;}
         tr:last-child td{text-align: left;padding-bottom:0}
+        .desc{font-size:11dip;color:#666}
+
         .submit{margin:0 8dip}
-        .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;display:block;width:*}
+        .submit_wrapper{border-top:1dip solid #ccc;padding:6dip 0;text-align:center;display:block;width:*}
     </style>
 </head>
 <body>
     <div id="wrapper">
         <table>
             <tr><td><input type="text" id="romname" value="" /></td></tr>
-            <tr><td>
-                <label><input type='radio' class="romtype" name="romtype" id="type1" value='1' /><span>改名到别名文件中(没有则自动创建)</span></label><br>
-                <label><input type='radio' class="romtype" name="romtype" id="type2" value='2' /><span>直接修改文件名(不可恢复)</span></label>
-            </td></tr>
+            <tr><td class="desc">该操作将直接修改rom文件名和资源文件名(不可恢复)</td></tr>
         </table>
     </div>
     <div class="submit_wrapper">
@@ -35,6 +34,10 @@
     //确定
     event click $(#confirm-dialog) {
         confirmDialog(this);
+    }
+
+    event click $(#close-dialog){
+        view.close();
     }
 
 </script>

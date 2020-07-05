@@ -198,7 +198,7 @@ func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 }
 
 //更新名称
-func (m *Rom) UpdateName(setType uint8) error {
+func (m *Rom) UpdateName() error {
 
 	create := map[string]interface{}{
 		"name":     m.Name,
@@ -225,17 +225,9 @@ func (m *Rom) UpdateName(setType uint8) error {
 	if len(roms) > 0 {
 		for _, v := range roms {
 			newName := strings.Replace(v.RomPath, vo.Name+"__", m.Name+"__", 1)
-
-			createSub := map[string]string{}
-			if setType == 1 { //别名文件
-				createSub = map[string]string{
-					"pname": m.Name,
-				}
-			} else { //文件名
-				createSub = map[string]string{
-					"pname":    m.Name,
-					"rom_path": newName,
-				}
+			createSub := map[string]string{
+				"pname":    m.Name,
+				"rom_path": newName,
 			}
 
 			result = getDb().Table(m.TableName()).Where("id=?", v.Id).Updates(createSub)
