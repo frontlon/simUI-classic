@@ -62,6 +62,49 @@ function initTheme(){
     setTheme(CONF.Default.Theme);
 }
 
+function initBaseFilter(){
+
+    //类型
+    var getjson = view.GetRomFilter("base_type");
+    var jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_type).options.$append(<option value={obj}>{obj}</option>);
+        }
+    }
+    $(#filter_type).value = "";
+    
+    //平台
+    getjson = view.GetRomFilter("base_platform");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_platform).options.$append(<option value={obj}>{obj}</option>);
+        }    
+    }
+    $(#filter_platform).value = "";
+
+    //发行商
+    getjson = view.GetRomFilter("base_publisher");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_publisher).options.$append(<option value={obj}>{obj}</option>);
+        }
+    }
+    $(#filter_publisher).value = "";
+    
+    //年份
+    getjson = view.GetRomFilter("base_year");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_year).options.$append(<option value={obj}>{obj}</option>);
+        }
+    }
+    $(#filter_year).value = "";
+
+}
 
 //开启关闭平台栏
 function togglePlatform(){
@@ -326,7 +369,13 @@ function CB_createCache(){
     resetScroll();
 
     //初始化rom
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0)
+    
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","")
+
+    $(#filter_type).value = "";
+    $(#filter_platform).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_year).value = "";
 
     createRomList(1); //生成rom列表
     //生成rom数量

@@ -58,10 +58,10 @@ func main() {
 	//err := errors.New("")
 	w, err := window.New(
 		sciter.SW_MAIN|
-		//sciter.SW_RESIZEABLE|
-		//sciter.SW_CONTROLS|
+			//sciter.SW_RESIZEABLE|
+			//sciter.SW_CONTROLS|
 			sciter.SW_ENABLE_DEBUG,
-		&sciter.Rect{Left: 0, Top: 0, Right: int32(utils.ToInt(width)), Bottom: int32(utils.ToInt(height))});
+		&sciter.Rect{Left: 0, Top: 0, Right: int32(utils.ToInt(width)), Bottom: int32(utils.ToInt(height))})
 	if err != nil {
 		utils.WriteLog(err.Error())
 	}
@@ -69,7 +69,7 @@ func main() {
 	utils.Window = w
 
 	//设置view权限
-	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO);
+	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO)
 
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))
@@ -78,7 +78,7 @@ func main() {
 	w.OpenArchive(res)
 
 	//加载文件
-	err = w.LoadFile(ROOTPATH);
+	err = w.LoadFile(ROOTPATH)
 	if err != nil {
 		utils.ErrorMsg(err.Error())
 		return
@@ -99,7 +99,7 @@ func main() {
 	}
 
 	//设置标题
-	w.SetTitle(config.Cfg.Lang["SoftName"]);
+	w.SetTitle(config.Cfg.Lang["SoftName"])
 
 	//定义view函数
 	defineViewFunction()
@@ -109,6 +109,37 @@ func main() {
 
 	//软件启动时检测升级
 	modules.BootCheckUpgrade()
+
+	/*go func() {
+
+		jsid := 0
+
+		js, jserr := joystick.Open(jsid)
+
+		if jserr != nil {
+			fmt.Println(jserr)
+			return
+		}
+		fmt.Println("Axis Count: %d", js.AxisCount())
+		fmt.Println("Button Count: %d", js.ButtonCount())
+		fmt.Println("Joystick Name: %s", js.Name())
+		for {
+			select {
+			case <-time.After(time.Millisecond * time.Duration(40)):
+				jinfo, _ := js.Read()
+				if jinfo.Buttons > 0 {
+					fmt.Println("Buttons:", jinfo.Buttons)
+				}
+
+				if !(jinfo.AxisData[0] == 0 && jinfo.AxisData[1] == -1 && jinfo.AxisData[2] == 0 && jinfo.AxisData[3] == -1 && jinfo.AxisData[4] == 0 && jinfo.AxisData[5] == 0 && jinfo.AxisData[6] == 0) {
+					dir := getDirection(jinfo.AxisData)
+					fmt.Println("AxisData:", dir, jinfo.AxisData)
+
+				}
+
+			}
+		}
+	}()*/
 
 	//运行窗口，进入消息循环
 	w.Run()
@@ -140,6 +171,37 @@ func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 		}
 		return sciter.LOAD_OK
 	}
+}
+
+func getDirection(axis []int) int {
+
+	if axis[0] == 32768 {
+		return 4
+	} else if axis[0] == -32767 {
+		return 3
+	} else if axis[1] == 32768 {
+		return 2
+	} else if axis[1] == -32767 {
+		return 1
+	} else if axis[2] == 32768 {
+		return 5
+	} else if axis[2] == -327678 {
+		return 6
+	} else if axis[3] == 32768 {
+		return 7
+	} else if axis[3] == -32767 {
+		return 8
+	} else if axis[4] == 32768 {
+		return 9
+	} else if axis[4] == -32767 {
+		return 10
+	} else if axis[5] == 32768 {
+		return 11
+	} else if axis[5] == -32767 {
+		return 12
+	}
+	return 0
+
 }
 
 func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {

@@ -79,8 +79,14 @@ function changeMenu(obj){
     //重置滚动翻页数据
     resetScroll();
     
+
     //生成游戏列表
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",SCROLL_PAGE);
+    var filter_type = $(#filter_type).value;
+    var filter_platform = $(#filter_platform).value;
+    var filter_publisher = $(#filter_publisher).value;
+    var filter_year = $(#filter_year).value;
+
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",SCROLL_PAGE,filter_type,filter_platform,filter_publisher,filter_year);
     createRomList(1);
     
     //统计游戏数量
@@ -109,6 +115,11 @@ function search(){
     $(#rom_count_num).html = romCount; //初始化在线人数
 
     //生成游戏列表
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE);
+    var filter_type = $(#filter_type).value;
+    var filter_platform = $(#filter_platform).value;
+    var filter_publisher = $(#filter_publisher).value;
+    var filter_year = $(#filter_year).value;
+
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_platform,filter_publisher,filter_year);
     createRomList(1)
 }

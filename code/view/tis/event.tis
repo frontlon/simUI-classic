@@ -119,7 +119,7 @@
     });
 
    /**
-    * 左侧目录边栏
+    * 状态栏
     **/
 
 
@@ -128,14 +128,23 @@
         search();
     });
 
-    //搜索功能 - 点击搜索按钮
-    self.on("click", "#search_submit", function(evt) {
-        search();
-    });
-
     //目录单击
     self.on("click", "#menulist > dd", function(evt) {
         changeMenu(this);
+    });
+
+    //基本信息搜索
+    self.on("change", "#filter_type", function(evt) {
+        search();
+    });
+    self.on("change", "#filter_platform", function(evt) {
+        search();
+    });
+    self.on("change", "#filter_publisher", function(evt) {
+        search();
+    });
+    self.on("change", "#filter_year", function(evt) {
+        search();
     });
     
 

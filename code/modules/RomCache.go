@@ -271,28 +271,28 @@ func UpdateFilterDB() {
 	filters := []*db.Filter{}
 	for _, v := range baseType {
 		data := &db.Filter{
-			Name: v.BaseType,
+			Name: v,
 		}
 		filters = append(filters, data)
 	}
 
 	for _, v := range baseYear {
 		data := &db.Filter{
-			Name: v.BaseYear,
+			Name: v,
 		}
 		filters = append(filters, data)
 	}
 
 	for _, v := range basePlatform {
 		data := &db.Filter{
-			Name: v.BasePlatform,
+			Name: v,
 		}
 		filters = append(filters, data)
 	}
 
 	for _, v := range basePublisher {
 		data := &db.Filter{
-			Name: v.BasePlatform,
+			Name: v,
 		}
 		filters = append(filters, data)
 	}

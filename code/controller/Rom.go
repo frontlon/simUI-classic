@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
@@ -67,9 +68,27 @@ func RomController() {
 		num := strings.Trim(args[3].String(), " ")               //字母索引
 		page := utils.ToInt(strings.Trim(args[4].String(), " ")) //分页数
 
+		baseType := args[5].String()
+		basePlatform := args[6].String()
+		basePublisher := args[7].String()
+		baseYear := args[8].String()
+
+		if baseType == config.Cfg.Lang["BaseType"]{
+			baseType = ""
+		}
+		if basePlatform == config.Cfg.Lang["BasePlatform"]{
+			basePlatform = ""
+		}
+		if basePublisher == config.Cfg.Lang["BasePublisher"]{
+			basePublisher = ""
+		}
+		if baseYear == config.Cfg.Lang["BaseYear"]{
+			baseYear = ""
+		}
+
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword)
+			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear)
 		} else {
 			//按拼音查询
 			newlist, _ = (&db.Rom{}).GetByPinyin(page, platform, catname, num)
@@ -258,4 +277,15 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//读取过滤器列表
+	utils.Window.DefineFunction("GetRomFilter", func(args ...*sciter.Value) *sciter.Value {
+		name := args[0].String()
+		lists, err := (&db.Rom{}).GetFilter(name)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		jsonstr, _ := json.Marshal(&lists)
+		return sciter.NewValue(string(jsonstr))
+	})
 }

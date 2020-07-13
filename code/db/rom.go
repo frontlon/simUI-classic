@@ -72,7 +72,7 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 //}
 
 //根据条件，查询多条数据
-func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
+func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePlatform string, basePublisher string, baseYear string) ([]*Rom, error) {
 
 	volist := []*Rom{}
 	where := map[string]interface{}{}
@@ -92,6 +92,19 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string) ([]*Rom
 
 	}
 	where["pname"] = ""
+
+	if baseType != "" {
+		where["base_type"] = baseType
+	}
+	if basePlatform != "" {
+		where["base_platform"] = basePlatform
+	}
+	if basePublisher != "" {
+		where["base_publisher"] = basePublisher
+	}
+	if baseYear != "" {
+		where["base_year"] = baseYear
+	}
 
 	likeWhere := ""
 	if keyword != "" {
@@ -328,13 +341,39 @@ func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 }
 
 //读取一个过滤器分类
-func (sim *Rom) GetFilter(t string) ([]*Rom, error) {
+func (sim *Rom) GetFilter(t string) ([]string, error) {
 	volist := []*Rom{}
-	result := getDb().Select(t).Group(t).Find(&volist)
+	result := getDb().Select(t).Where(t + " != ''").Group(t).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
-	return volist, result.Error
+
+	create := []string{}
+
+	switch t {
+	case "base_type":
+		for _, v := range volist {
+			create = append(create, v.BaseType)
+		}
+		break
+	case "base_year":
+		for _, v := range volist {
+			create = append(create, v.BaseYear)
+		}
+		break
+	case "base_platform":
+		for _, v := range volist {
+			create = append(create, v.BasePlatform)
+		}
+		break
+	case "base_publisher":
+		for _, v := range volist {
+			create = append(create, v.BasePublisher)
+		}
+		break
+	}
+
+	return create, result.Error
 }
 
 //更新喜爱状态

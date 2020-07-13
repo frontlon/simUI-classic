@@ -34,7 +34,7 @@ function Init(){
     //初始化rom
     var pf = CONF.Default.Platform;
     var menu =  $(#menulist).select("dd:current").attributes["opt"];
-    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE)
+    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE,"","","","")
 
     createRomList(0); //生成rom列表
     //生成rom数量
@@ -70,6 +70,7 @@ function initConfig(isfresh){
     initShortcutList(); //初始化快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
     initFontSize(); //初始化字体大小
+    initBaseFilter(); //初始化基本信息过滤器
 
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform);

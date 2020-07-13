@@ -81,7 +81,12 @@ function scrollLoadRom(evtPos){
         }
 
         //生成游戏列表
-        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE)
+         //生成游戏列表
+    var filter_type = $(#filter_type).value;
+    var filter_platform = $(#filter_platform).value;
+    var filter_publisher = $(#filter_publisher).value;
+    var filter_year = $(#filter_year).value;
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_platform,filter_publisher,filter_year);
 
         if(ROMJSON != "[]"){
             createRomList(0);
@@ -118,7 +123,12 @@ function numSearch(evt){
     //重置滚动翻页数据
     resetScroll();
 
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE);
+    $(#filter_type).value = "";
+    $(#filter_platform).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_year).value = "";
+
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE,"","","","");
     createRomList(1);
 
     //激活当前，改变样式
