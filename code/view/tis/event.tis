@@ -2,6 +2,9 @@
 
     //数据初始化
     Init();
+    
+    //使主窗体获取焦点
+    $(body).state.focus = true;
 
     /**
     * 窗口
@@ -134,6 +137,7 @@
     });
 
     //基本信息搜索
+    
     self.on("change", "#filter_type", function(evt) {
         search();
     });

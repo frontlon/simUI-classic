@@ -109,7 +109,7 @@ function keyRomRight(){
 function keyRomUp(){
     
     //如果没有rom，则直接返回
-    if($$(#romlist li).length == 0){
+    if($$(#romlist li).length < 2 ){
         return;
     }
 
@@ -125,8 +125,8 @@ function keyRomUp(){
     var rootDom = $(#romlist);
     var nextDom = rootDom.select("li:nth-child("+ next +")");
 
-    if(nextDom == undefined){
-        nextDom = rootDom.select("li:first-child"); //定位到第一个
+    if(nextDom.index <= 0){
+        nextDom = rootDom.select("li:nth-child(2)"); //定位到第一个
     }
     
     nextDom.state.current = true;
@@ -137,9 +137,10 @@ function keyRomUp(){
 function keyRomDown(){
 
     //如果没有rom，则直接返回
-    if($(#romlist li) == undefined){
+    if($$(#romlist li).length < 2 ){
         return;
     }
+
     var rootDom = $(#romlist);
     var current = $(#romlist li:current).index; //当前选中li的index值
     var lastDom = rootDom.select("li:last-child").index;
@@ -166,10 +167,12 @@ function keyRomDown(){
 //计算出每行li的数量
 function getRomlistRowNum(){
     var dom  = $(#romlist);
-    var domLi = $(#romlist li);
+
+    var domLi = $(#romlist).select("li:nth-child(2)");
     var out = px(dom.box(#width));
     var outwidth = (out).toFloat(#dip);
     var w = px(domLi.box(#width));
+
     var ml = domLi.style["margin-left"].toString();
     var mr = domLi.style["margin-right"].toString();
     w = (w).toFloat(#dip);

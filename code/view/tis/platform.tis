@@ -1,7 +1,7 @@
 ﻿var ACTIVE_PLATFORM = ""; //当前选定的平台
 
-view.root.on("ready", function(){
 
+view.root.on("ready", function(){
     //平台拖拽排序
     DragDrop{
         what      : "#platform_ul>li:not(.fixed)",
@@ -21,7 +21,6 @@ view.root.on("ready", function(){
             var result = view.UpdatePlatformSort(datastr);
         }
     }
-
 });
 
 

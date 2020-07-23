@@ -1,0 +1,60 @@
+﻿function checkWinActive(){
+   return view.windowIsActive;
+}
+
+function joystickDirection(dir){
+
+
+   var switch_romlist = $(#switch_romlist).attributes["value"];
+        
+   if(dir == 1){
+      scrollUp(switch_romlist); //div滚动
+      if(switch_romlist == "1"){ //模块
+            keyRomUp();
+      }else if(switch_romlist == "2"){ //列表
+            keyRomLeft();
+      }
+   }else if(dir == 2){
+      scrollDown(switch_romlist); //div滚动
+      if(switch_romlist == "1"){ //模块
+            keyRomDown();
+      }else if(switch_romlist == "2"){ //列表
+            keyRomRight();
+      }
+   }else if(dir == 3){ //左键移动rom
+      if(switch_romlist == "1"){ //模块
+            scrollUp(switch_romlist); //div滚动
+            keyRomLeft();
+      }
+   }else if(dir == 4){ //右键移动rom
+      if(switch_romlist == "1"){ //模块
+            scrollDown(switch_romlist); //div滚动
+            keyRomRight();
+      }
+   }
+}
+
+function joystickButton(btn){
+   var current;
+   switch(btn){
+
+   case 1:
+      current = $(#romlist li:current);
+      if (current != undefined){
+         romListRunGame(current);
+      }
+      break;
+   case 2:
+      //romListRunGame(this);
+      alert("b");
+      break;
+   case 3:
+      alert("c");
+      break;
+   case 4:
+      alert("d");
+      break;
+
+   }
+   
+}
