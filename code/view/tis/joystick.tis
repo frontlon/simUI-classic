@@ -45,11 +45,10 @@ function joystickButton(btn){
       }
       break;
    case 2:
-      //romListRunGame(this);
-      alert("b");
+      nextMenu();
       break;
    case 3:
-      alert("c");
+      nextPlatform();
       break;
    case 4:
       alert("d");

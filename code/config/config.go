@@ -178,15 +178,14 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 		simList, _ := DBSim.GetByPlatform(v.Id)
 		vomap := map[uint32]*db.Simulator{}
 		for _, v := range simList {
+			v.Path,_ = filepath.Abs(v.Path)
 			vomap[v.Id] = v
 		}
 		platform[v.Id].SimList = vomap
 		platformList[k].SimList = vomap
-
 		platform[v.Id].UseSim = &db.Simulator{}
 		//找到默认模拟器
-		for sk, sim := range simList {
-
+		for _, sim := range simList {
 			//当前正在使用的模拟器
 			if sim.Default == 1 { //如果有默认模拟器
 				platformList[k].UseSim = sim
@@ -194,13 +193,6 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			} else if platformList[k].UseSim.Id == 0 { //如果没有默认模拟器，读取第一个
 				platformList[k].UseSim = sim
 				platform[v.Id].UseSim = sim
-			}
-
-			//模拟器路径转换为绝对路径
-			if sim.Path != "" {
-				sim.Path, _ = filepath.Abs(sim.Path)
-				platformList[k].SimList[uint32(sk)].Path = sim.Path
-				platform[v.Id].SimList[uint32(sk)].Path = sim.Path
 			}
 		}
 	}

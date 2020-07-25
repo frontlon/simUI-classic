@@ -187,7 +187,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 }
 
 //根据满足条件的rom数量
-func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
+func (m *Rom) Count(platform uint32, menu string, keyword string, baseType string, basePlatform string, basePublisher string, baseYear string) (int, error) {
 	count := 0
 	where := map[string]interface{}{
 	}
@@ -199,10 +199,24 @@ func (m *Rom) Count(platform uint32, menu string, keyword string) (int, error) {
 	if menu != "" {
 		where["menu"] = menu
 	}
+
+	if baseType != "" {
+		where["base_type"] = baseType
+	}
+	if basePlatform != "" {
+		where["base_platform"] = basePlatform
+	}
+	if basePublisher != "" {
+		where["base_publisher"] = basePublisher
+	}
+	if baseYear != "" {
+		where["base_year"] = baseYear
+	}
 	likeWhere := ""
 	if keyword != "" {
 		likeWhere = `name LIKE "%` + keyword + `%"`
 	}
+
 	result := getDb().Table(m.TableName()).Where(where).Where(likeWhere).Count(&count)
 	if result.Error != nil {
 		fmt.Println(result.Error)

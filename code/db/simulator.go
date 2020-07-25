@@ -1,9 +1,9 @@
 package db
 
 import (
-	"simUI/code/utils"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"simUI/code/utils"
 )
 
 type Simulator struct {

@@ -102,8 +102,12 @@ func RomController() {
 	utils.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		catname := strings.Trim(args[1].String(), " ")
-		keyword := strings.Trim(args[2].String(), " ")
-		count, _ := (&db.Rom{}).Count(platform, catname, keyword)
+		keyword := strings.Trim(args[2].String(), " ") //关键字
+		baseType := args[3].String()
+		basePlatform := args[4].String()
+		basePublisher := args[5].String()
+		baseYear := args[6].String()
+		count, _ := (&db.Rom{}).Count(platform, catname, keyword,baseType,basePlatform,basePublisher,baseYear)
 		return sciter.NewValue(utils.ToString(count))
 	})
 

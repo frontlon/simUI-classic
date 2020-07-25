@@ -89,3 +89,21 @@ function initPlatform(){
     }
     
 }
+
+
+//平台向下索引
+function nextPlatform(){
+    
+    var next = $(#platform_ul).select("li:current").index + 2;
+    var count = $$(#platform_ul li).length;
+    var nextDom;
+
+    if (next-1 >= count){
+        nextDom = $(#platform_ul).select("li:nth-child(0)");
+    }else{
+        nextDom = $(#platform_ul).select("li:nth-child("+ next +")");
+    }
+    if(nextDom != undefined){
+        changePlatform(nextDom);
+    }
+}

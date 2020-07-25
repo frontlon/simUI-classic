@@ -47,7 +47,7 @@
     .statebar .filter select{background:#333;stroke:#fff;display:inline-block}
     .statebar .filter select > button{fill:#ccc;foreground-image:url(stock:chevron-down);background:#444}
     .statebar .filter select > popup{background:#333;color:#fff;}
-    .statebar .filter select > caption{text-selection: #fff transparent;}
+    .statebar .filter select > caption{color:#FFF}
     .statebar .filter input[type='text']{color:#FFF;height:24dip;background:#333;border:0;width:95dip;padding:0 5dip;display:inline-block;}
 
     /* 搜索栏 */
@@ -254,11 +254,12 @@
         <div class="statebar">
             <div class="filter">
             
-                <select editable id="filter_type"><option value="">{{BaseType}}</option></select>
-                <select editable id="filter_platform"><option value="">{{BasePlatform}}</option></select>
-                <select editable id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
-                <select editable id="filter_year"><option value="">{{BaseYear}}</option></select>
+                <select id="filter_type"><option value="">{{BaseType}}</option></select>
+                <select id="filter_platform"><option value="">{{BasePlatform}}</option></select>
+                <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
+                <select id="filter_year"><option value="">{{BaseYear}}</option></select>
                 <input type="text" id="search_input" novalue="{{Keyword}}" />
+                <button id="search_input">清空</button>
                 
 
 

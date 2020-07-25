@@ -111,8 +111,7 @@ function search(){
     //重置滚动翻页数据
     resetScroll();
 
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val); //必须在获取rom的方法下面
-    $(#rom_count_num).html = romCount; //初始化在线人数
+    
 
     //生成游戏列表
     var filter_type = $(#filter_type).value;
@@ -120,6 +119,24 @@ function search(){
     var filter_publisher = $(#filter_publisher).value;
     var filter_year = $(#filter_year).value;
 
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val,filter_type,filter_platform,filter_publisher,filter_year);
+    $(#rom_count_num).html = romCount; //初始化游戏数量
+
     ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_platform,filter_publisher,filter_year);
     createRomList(1)
+}
+
+//菜单向下索引
+function nextMenu(){
+    var next = $(#menulist).select("dd:current").index + 2;
+    var count = $$(#menulist dd).length;
+    var nextDom;
+    if (next-2 >= count){
+        nextDom = $(#menulist).select("dd:nth-child(0)");
+    }else{
+        nextDom = $(#menulist).select("dd:nth-child("+ next +")");
+    }
+    if(nextDom != undefined){
+        changeMenu(nextDom);
+    }
 }
