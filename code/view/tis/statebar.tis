@@ -379,9 +379,18 @@ function CB_createCache(){
 
     createRomList(1); //生成rom列表
     //生成rom数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","");
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","","","","","");
     $(#rom_count_num).html = romCount; //初始化在线人数
     endLoading(); //关闭loading框
 
     $(#create).attributes.removeClass("disabled");
+}
+
+//清理掉资料过滤条件
+function filterClear(){
+    $(#filter_type).value = "";
+    $(#filter_platform).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_year).value = "";
+    search();
 }
