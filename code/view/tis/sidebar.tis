@@ -60,6 +60,8 @@ function openSidebar(obj){
     //图片下载页面
     $(#right_thumb_down).attributes["rid"] = info.Id;
 
+    //打开文件夹
+    createOpenFolderMenu(info);
     //生成喜好按钮
     var favorite = $(#right_favorite);
     favorite.attributes["rid"] = info.Id.toHtmlString();
@@ -393,4 +395,72 @@ function videoControl(evt){
         }
         
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+//打开文件夹菜单
+function createOpenFolderMenu(info){
+
+    var romcontext = $(#foldercontext);
+    romcontext.clear();
+
+    var pfId = info.Platform.toString();
+    var simId = 0;
+    var simIco = "";
+    if (info.SimId != 0){
+        simId = info.SimId;
+    }else if (CONF.Platform[pfId].UseSim != undefined){
+        simId = CONF.Platform[pfId].UseSim["Id"];
+    }
+
+    var btndata = "";
+
+    btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
+
+    btndata += "<li class='folder' rid='"+ info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
+ 
+    if(CONF.Platform[pfId].ThumbPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='thumb'>"+ CONF.Lang.LocationThumbFile +"</li>";
+    }
+    
+    if(CONF.Platform[pfId].SnapPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='snap'>"+ CONF.Lang.LocationSnapFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].PosterPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='poster'>"+ CONF.Lang.OpenPosterFolder +"</li>";
+    }
+
+    if(CONF.Platform[pfId].PackingPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='packing'>"+ CONF.Lang.OpenPackingFolder +"</li>";
+    }
+
+    if(CONF.Platform[pfId].DocPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='doc'>"+ CONF.Lang.LocationDocFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].StrategyPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='strategy'>"+ CONF.Lang.LocationStrategyFile +"</li>";
+    }
+
+    btndata += "<caption>"+ CONF.Lang.LocationSim +"</caption>";
+
+    //定位模拟器目录
+   if(CONF.Platform[pfId].SimList.length > 0){
+        for(var simId in CONF.Platform[pfId].SimList) {
+            btndata += "<li class='file folder' filename='"+ CONF.Platform[pfId].SimList[simId].Path +"' rid='"+ info.Id +"' sid='"+ CONF.Platform[pfId].SimList[simId].Id +"' opt='sim'>"+ CONF.Lang.LocationSim + CONF.Platform[pfId].SimList[simId].Name.toHtmlString() + "</li>";;
+        }
+
+    }
+
+    romcontext.append(btndata);
 }

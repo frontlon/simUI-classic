@@ -130,23 +130,25 @@ function keyRomUp(){
     if ($(#romlist li:current) == undefined){
         nextDom = $(#romlist).select("li:nth-child(2)");
     }else{
+
         var current = $(#romlist li:current).index; //当前选中li的index值
         //如果当前是第一个，则不跳转了
         if(current == 0){
             return;
         }
+
         var idx = getRomlistRowNum(); //计算出每行li的数量
         var next = current - idx  + 1; //要跳转到的位置
         var rootDom = $(#romlist);
-        var nextDom = rootDom.select("li:nth-child("+ next +")");
+        nextDom = rootDom.select("li:nth-child("+ next +")");
 
         if(nextDom.index <= 0){
             nextDom = rootDom.select("li:nth-child(2)"); //定位到第一个
         }
     }
+ 
     nextDom.state.current = true;
     openSidebar(nextDom);
-
 }
 
 function keyRomDown(){

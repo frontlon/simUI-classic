@@ -13,10 +13,13 @@ function initRomListStyle(){
         $(#switch_romlist).html = "<i>&#xe659;</i>";
         $(#zoom).style["display"]="inline-block";
         $(#romlist).attributes.addClass("romblock");
+        $(.romth).style["display"]="none";
+
     }else{
         $(#switch_romlist).html = "<i>&#xe690;</i>";
         $(#romlist).attributes.addClass("romlist");
         $(#zoom).style["display"]="none";
+        $(.romth).style["display"]="block";
     }
 
     var zoom = $(#zoom);
@@ -159,12 +162,14 @@ function switchRomListStyle(obj){
         self.$(#romlist).attributes.removeClass("romblock");
         self.$(#romlist).attributes.addClass("romlist");
         self.$(#zoom).style["display"]="none";
+        self.$(.romth).style["display"]="block";
     }else{
         obj.attributes["value"] = "1";
         obj.html = "<i>&#xe659;</i>";
         self.$(#romlist).attributes.removeClass("romlist");
         self.$(#romlist).attributes.addClass("romblock");
         self.$(#zoom).style["display"]="inline-block";
+        self.$(.romth).style["display"]="none";
     }
     //更新配置文件
     view.UpdateConfig("romlist_style",obj.attributes["value"])
@@ -310,7 +315,7 @@ function openConfig(evt){
     view.dialog({
         url:self.url(ROOTPATH + "config.html"),
         width:655,
-        height:900
+        height:600
     });
     startLoading();
     initConfig("1");

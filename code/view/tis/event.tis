@@ -216,6 +216,12 @@
         openDesc(this);
     });
 
+
+    //打开文件夹
+    self.on("click", "#foldercontext .folder", function(evt) {
+        openFolder(this);
+    });
+
    //切换模拟器（侧边栏）
     self.on("click", "#sim_select > li", function(evt) {
        switchRomSim(this);
@@ -277,11 +283,6 @@
    //右键菜单设置隐藏
     self.on("click", "#romcontext .hide", function(evt) {
         contextSetHide(this);
-    });
-
-    //右键菜单定位目录
-    self.on("click", "#romcontext .folder", function(evt) {
-        openFolder(this);
     });
 
 });

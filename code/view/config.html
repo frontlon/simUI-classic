@@ -4,7 +4,7 @@
   <style>
     @import "this://app/images/public.css";
     html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
-    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:hidden;padding:8dip;}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:8dip;}
     .frame_left{width:120dip;height:*;display:inline-block;}
     .frame_right{width:320dip;height:*;display:inline-block;padding-left:8dip;}
     .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip}
@@ -45,7 +45,6 @@
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
       <label for="third">{{Shortcut}}</label>
-      <label for="fourth">{{BackupAndRestore}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -114,24 +113,6 @@
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
           <table><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
-        </div>
-      </section>
-
-      <section id="fourth">
-        <div class="wrapper">
-
-          <table id="table_backup">
-            <tr><td>{{Backup}}：</td><td><button id="backup_config" caption="{{SelectBackupFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*">{{StartBackup}}</button></td></tr>
-            <tr><td>{{Restore}}：</td><td>
-              <input type="text"  id="restore_input" value=""> <button id="get_restore_config" for="restore_input" caption="{{SelectBackupFile}}" filter="ini Files (*.ini)|*.ini|All Files (*.*)|*.*" >&#x2026;</button> <button id="restore_config">{{StartRestore}}</button></td></tr>
-            <tr><td></td><td class="backup_info">
-              {{BackupTime}}：<span id="backup_info_date"></span><br>
-              {{PlatformInfo}}<span id="backup_info_platform"></span></span><br>
-              {{SimInfo}}<span id="backup_info_simulator"></span></span><br>
-              {{Shortcut}}：<span id="backup_info_shortcut"></span></span><br>
-            </td></tr>
-          </table>
-
         </div>
       </section>
 
@@ -204,20 +185,6 @@
         shortcutDelete(this);
     }
 
-    //备份文件
-    event click $(#backup_config){
-        backupConfig(this);
-    }
-
-    //读取配置信息
-    event click $(#get_restore_config){
-        getRestoreConfig(this);
-    }
-
-    //还原配置
-    event click $(#restore_config){
-        restoreConfig(this);
-}
 </script>
 </body>
 </html>

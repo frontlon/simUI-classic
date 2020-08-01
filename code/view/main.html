@@ -96,7 +96,6 @@
     .romblock li div:nth-child(5){display:none}
     .romblock li div:nth-child(6){display:none}
     .romblock li div:nth-child(7){display:none}
-    .romblock .romth{display:none!important}
     #romlist.fontsize0 li div:nth-child(2){display:none}
     #romlist.fontsize1 li{display:inherit;font-size: 8dip}
     #romlist.fontsize2 li{display:inherit;font-size: 9dip}
@@ -118,16 +117,14 @@
     
     /* rom列表 */
     .romlist{width:*;margin-top:24dip;margin-left:30dip;list-style-type:none;padding:0;}
-    .romlist > li{position:relative;flow:horizontal-flow;overflow:hidden;height:36dip;padding:0 12dip;margin:0;context-menu:selector(menu#romcontext);}
+    .romlist > li{position:relative;flow:horizontal-flow;line-height:36dip;height:36dip;padding:0 12dip;margin:0;context-menu:selector(menu#romcontext);}
     .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
     .romlist > li:nth-child(even){background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
     .romlist > li:hover{cursor:pointer}
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
-    
-    
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
-    .romlist > li div{width:*;line-height:36dip;}
+    .romlist > li div{width:*;display:inline-block}
     .romlist > li div:nth-child(1){display:inline-block;width:25dip}
     .romlist > li div:nth-child(2){display:inline-block;}
     .romlist > li div:nth-child(3){display:inline-block;width:20%;color:#999}
@@ -153,7 +150,8 @@
     #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
     #right .right_desc_disable:hover{cursor: default;background: none}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-    
+
+
     /* 基础信息表格 */
     #right_rombase{width:100%;}
     #right_rombase tr{;color:color(right-doc-text-color);line-height:1.5em;}
@@ -233,7 +231,7 @@
                 <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
                 <li id="about"><i>&#xe7b9;</i><span>{{About}}</span></li>
                 <li id="help"><i>&#xf3c1;</i><span>{{Help}}</span></li>
-                <li id="upgrade"><i>&#xf3c1;</i><span>{{CheckUpgrade}}</span></li>
+                <li id="upgrade"><i>&#xe70b;</i><span>{{CheckUpgrade}}</span></li>
             </menu>
         </button><button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
     </div>
@@ -275,7 +273,7 @@
         </div>
         <div id="romwrapper">
             <ul id="romlist">
-                <li class="romth"><div></div><div>游戏名称</div><div>目录</div><div>游戏类型</div><div>年份</div><div>平台</div><div>发行商</div></li>
+                <li class="romth"><div></div><div>{{BaseName}}</div><div>{{FilterMenu}}</div><div>{{BaseType}}</div><div>{{BaseYear}}</div><div>{{BasePlatform}}</div><div>{{BasePublisher}}</div></li>
             </ul>
         </div>
     </section>
@@ -290,6 +288,9 @@
         <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"><i>&#xe61c;</i></button>
         <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
         <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
+        <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
+        <menu id="foldercontext" type="menu"></menu>
+        </button>
         
         <h2 id="video_h2">{{Video}}</h2>
         <div id="video_wrapper"><video id="right_video" src="" /></div>

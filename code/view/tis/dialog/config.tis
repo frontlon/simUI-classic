@@ -338,7 +338,6 @@ function platformDel(evt) {
 }
 
 //添加快捷工具
-
 function shortcutAdd(evt) {
     var insertId = mainView.AddShortcut();
 
@@ -380,8 +379,6 @@ function shortcutUpdate(evt) {
     var datastr = JSON.stringify(obj);
     var result = mainView.UpdateShortcut(datastr);
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
- 
-    
 }
 
 //删除快捷工具
@@ -407,66 +404,4 @@ function shortcutDelete(evt) {
     if(result == "1"){
         self.select("#shortcut_li_" + id).remove();
     }
-}
-
-
-//备份文件
-function backupConfig(evt) {
-    const defaultExt = "";
-    const initialPath = "";
-    const filter = evt.attributes["filter"];
-    const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
-    if(url){
-        url = URL.toPath(url);
-        mainView.BackupConfig(url);
-    }
-}
-
-//读取配置信息
-function getRestoreConfig(evt) {
-    const defaultExt = "";
-    const initialPath = "";
-    const filter = evt.attributes["filter"];
-    const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+evt.attributes["for"]);  
-    if(url){
-        url = URL.toPath(url);
-        out.value = url;
-        var obj = JSON.parse(mainView.GetRestoreInfo(url));
-
-        $(#backup_info_date).html = obj.date;
-        $(#backup_info_platform).html = obj.platform.toString();
-        $(#backup_info_shortcut).html = obj.shortcut.toString();
-        $(#backup_info_simulator).html = obj.simulator.toString();
-    }
-}
-
-//还原配置
-function restoreConfig(evt) {
-    var url = $(#restore_input).value;
-
-    if (url == ""){
-        alert(CONF.Lang.RestoreConfigFileNotExists);
-        return;
-    }
-
-    //确认窗口
-    var result = view.msgbox {
-        type:#question, 
-        content:CONF.Lang.RestoreConfigConfirm, 
-        caption:CONF.Lang.RestoreConfigTitlle,
-        buttons:[
-            {id:#yes,text:CONF.Lang.Restore},
-            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
-        ]
-    };
-
-    if (result != "yes"){
-        return true;
-    }
-
-    mainView.RestoreConfig(url);
-    alert(CONF.Lang.RestoreFinish);
 }
