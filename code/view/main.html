@@ -40,23 +40,17 @@
     #titlebar button.disabled{opacity:0.3;}
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
-    /* 状态栏 */
+    /* 状态栏筛选栏 */
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
     .statebar .filter{color:color(statebar-text-color);position:absolute;left:17dip;line-height:42dip}
-    .statebar .filter select{background:#333;stroke:#fff;display:inline-block}
-    .statebar .filter select > button{fill:#ccc;foreground-image:url(stock:chevron-down);background:#444}
-    .statebar .filter select > popup{background:#333;color:#fff;}
-    .statebar .filter select > caption{color:#FFF}
-    .statebar .filter input[type='text']{color:#FFF;height:24dip;background:#333;border:0;width:95dip;padding:0 5dip;display:inline-block;}
+    .statebar .filter select{background:color(filter-background-color);display:inline-block}
+    .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
+    .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
+    .statebar .filter select > caption{color:color(filter-text-color)}
+    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:95dip;padding:0 5dip;display:inline-block;}
+    .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);}
 
-    /* 搜索栏 */
-    /*
-    .search{height:26dip;background:color(search-background-color);display:inline-block;width:100dip;}
-    .search .input{color:color(search-input-text-color);height:26dip;line-height:26dip;background:none;border:0;display:block;width:95dip;position:absolute;left:4dip;padding:0}
-    .search .submit{color:color(search-ico-text-color);height:26dip;width:12dip;line-height:27dip;border:0;display:block;position:absolute;right:0;font-size:18dip;background:none;cursor: pointer;}
-    .search .submit:hover{opacity: 0.7;}
-    */
     /* 字母选择 */
     #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;width:30dip}
     #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
@@ -127,11 +121,11 @@
     .romlist > li div{width:*;display:inline-block}
     .romlist > li div:nth-child(1){display:inline-block;width:25dip}
     .romlist > li div:nth-child(2){display:inline-block;}
-    .romlist > li div:nth-child(3){display:inline-block;width:20%;color:#999}
-    .romlist > li div:nth-child(4){display:inline-block;width:10%;color:#999}
-    .romlist > li div:nth-child(5){display:inline-block;width:10%;color:#999}
-    .romlist > li div:nth-child(6){display:inline-block;width:10%;color:#999}
-    .romlist > li div:nth-child(7){display:inline-block;width:10%;color:#999}
+    .romlist > li div:nth-child(3){display:inline-block;width:20%;color:color(rom-block-text-slave-color)}
+    .romlist > li div:nth-child(4){display:inline-block;width:10%;color:color(rom-block-text-slave-color)}
+    .romlist > li div:nth-child(5){display:inline-block;width:10%;color:color(rom-block-text-slave-color)}
+    .romlist > li div:nth-child(6){display:inline-block;width:10%;color:color(rom-block-text-slave-color)}
+    .romlist > li div:nth-child(7){display:inline-block;width:10%;color:color(rom-block-text-slave-color)}
     .romth div{color:#fff!important;font-weight:bold;}
 
     /* 右侧边栏 */
@@ -229,6 +223,7 @@
             <menu>
                 <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
                 <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
+                <li id="check_joystick"><i>&#xeb78;</i><span>{{CheckJoystick}}</span></li>
                 <li id="about"><i>&#xe7b9;</i><span>{{About}}</span></li>
                 <li id="help"><i>&#xf3c1;</i><span>{{Help}}</span></li>
                 <li id="upgrade"><i>&#xe70b;</i><span>{{CheckUpgrade}}</span></li>
@@ -251,22 +246,12 @@
 
         <div class="statebar">
             <div class="filter">
-            
                 <select id="filter_type"><option value="">{{BaseType}}</option></select>
                 <select id="filter_platform"><option value="">{{BasePlatform}}</option></select>
                 <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
                 <select id="filter_year"><option value="">{{BaseYear}}</option></select>
                 <input type="text" id="search_input" novalue="{{Keyword}}" />
-                <button id="filter_clear">清空</button>
-                
-
-
-
-<!--
-                <div class="search">
-                    <button type="submit" class="submit" id="search_submit"><i>&#xe873;</i></button>
-                </div>
-                -->
+                <button id="filter_clear">{{FilterClear}}</button>
             </div>
             <div class="counnum">
                 <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>

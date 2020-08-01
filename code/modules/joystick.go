@@ -1,14 +1,23 @@
 package modules
 
 import (
-	"fmt"
 	"github.com/simulatedsimian/joystick"
 	"simUI/code/utils"
+	"sync"
 	"time"
 )
 
-func CheckJoystick() {
-	time.Sleep(2 * time.Second)
+var JOYSTICK int8
+
+func CheckJoystick() (status int8) {
+
+	if JOYSTICK == 1 {
+		//已存在
+		return -1
+	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 
 	go func() {
 
@@ -17,11 +26,14 @@ func CheckJoystick() {
 		js, jserr := joystick.Open(jsid)
 
 		if jserr != nil {
-			fmt.Println(jserr)
+			JOYSTICK = 0
+			wg.Done()
 			return
 		}
 		var btnLock [5]int64
 		var dirLock int64
+		JOYSTICK = 1
+		wg.Done()
 	EXIT:
 		for {
 			select {
@@ -70,9 +82,12 @@ func CheckJoystick() {
 				}
 			}
 		}
-	}()
-}
 
+	}()
+
+	wg.Wait()
+	return JOYSTICK
+}
 
 //读取方向
 func GetJoystickDirection(axis []int) int {

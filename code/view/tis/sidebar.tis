@@ -397,16 +397,6 @@ function videoControl(evt){
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 //打开文件夹菜单
 function createOpenFolderMenu(info){
 

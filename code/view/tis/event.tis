@@ -97,6 +97,13 @@
         changeTheme(this);
     });
 
+    //检测外设（手柄、摇杆）
+    self.on("click", "#check_joystick", function(evt) {
+        checkJoystick(this);
+    });
+
+
+
    //检查更新
     self.on("click", "#upgrade", function(evt) {
        checkUpgrade(this);

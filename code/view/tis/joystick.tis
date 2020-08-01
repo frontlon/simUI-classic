@@ -34,6 +34,7 @@ function joystickDirection(dir){
    }
 }
 
+//手柄按键
 function joystickButton(btn){
    var current;
    switch(btn){
@@ -50,10 +51,25 @@ function joystickButton(btn){
    case 3:
       nextPlatform();
       break;
-   case 4:
-      alert("d");
-      break;
-
    }
    
+}
+
+//检测外设
+function checkJoystick(){
+
+   var status = view.checkJoystick();
+   switch(status){
+      case 1:
+         alert("设备连接成功");
+         break;
+      case 0:
+         alert("没有找到设备或设备连接失败");
+         break;
+      case -1:
+         alert("设备已连接");
+         break;
+   }
+
+
 }

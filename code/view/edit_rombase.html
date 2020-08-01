@@ -21,20 +21,20 @@
             <tr><td>{{BaseYear}}：</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
             <tr><td>{{BaseType}}：</td><td>
                 <select id="type" editable>
-                    <option value="ACT(动作过关)">ACT(动作过关)</option>
-                    <option value="RPG(角色扮演)">RPG(角色扮演)</option>
-                    <option value="ARPG(动作角色知扮演)">ARPG(动作角色知扮演)</option>
-                    <option value="SRPG(战略角色扮演)">SRPG(战略角色扮演)</option>
-                    <option value="AVG(冒险)">AVG(冒险)</option>
-                    <option value="FTG(格斗)">FTG(格斗)</option>
-                    <option value="MUG(音乐)">MUG(音乐)</option>
-                    <option value="RAC(赛车)">RAC(赛车)</option>
-                    <option value="SLG(策略模拟)">SLG(策略模拟)</option>
-                    <option value="SPT(体育)">SPT(体育)</option>
-                    <option value="STG(射击)">STG(射击)</option>
-                    <option value="TAB(桌面)">TAB(桌面)</option>
-                    <option value="PUZ(方块)">PUZ(方块)</option>
-                    <option value="FREE(完全反射视点)">FREE(完全反射视点)</option>
+                    <option value="ACT{{TypeACT}}">ACT{{TypeACT}}</option>
+                    <option value="RPG{{TypeRPG}}">RPG{{TypeRPG}}</option>
+                    <option value="ARPG{{TypeARPG}}">ARPG{{TypeARPG}}</option>
+                    <option value="SRPG{{TypeSRPG}}">SRPG{{TypeSRPG}}</option>
+                    <option value="AVG{{TypeAVG}}">AVG{{TypeAVG}}</option>
+                    <option value="FTG{{TypeFTG}}">FTG{{TypeFTG}}</option>
+                    <option value="MUG{{TypeMUG}}">MUG{{TypeMUG}}</option>
+                    <option value="RAC{{TypeRAC}}">RAC{{TypeRAC}}</option>
+                    <option value="SLG{{TypeSLG}}">SLG{{TypeSLG}}</option>
+                    <option value="SPT{{TypeSPT}}">SPT{{TypeSPT}}</option>
+                    <option value="STG{{TypeSTG}}">STG{{TypeSTG}}</option>
+                    <option value="TAB{{TypeTAB}}">TAB{{TypeTAB}}</option>
+                    <option value="PUZ{{TypePUZ}}">PUZ{{TypePUZ}}</option>
+                    <option value="FREE{{TypeFREE}}">FREE{{TypeFREE}}</option>
                 </select>
             </td></tr>
 
@@ -84,7 +84,7 @@
             </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="submit">确定</button><button class="submit" id="close-dialog">取消</button></td></tr>
+            <tr><td colspan="2"><button class="submit" id="submit">{{Confirm}}</button><button class="submit" id="close-dialog">{{Cancel}}</button></td></tr>
         </table>
     </div>
 

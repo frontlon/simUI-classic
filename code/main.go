@@ -127,6 +127,7 @@ func defineViewFunction() {
 	controller.RomController()
 	controller.ShortcutController()
 	controller.SimulatorController()
+	controller.JoystickController()
 }
 
 //资源加载
