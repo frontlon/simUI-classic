@@ -95,7 +95,6 @@ func (m *Platform) UpdateById() error {
 		"strategy_path":   m.StrategyPath,
 		"video_path":      m.VideoPath,
 		"doc_path":        m.DocPath,
-		"romlist":         m.Romlist,
 		"rombase":         m.Rombase,
 		"pinyin":          m.Pinyin,
 	}

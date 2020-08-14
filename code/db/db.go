@@ -50,10 +50,9 @@ func UpgradeDB() {
 	filename := "upgrade.sql"
 	f, err := os.Open(filename)
 	if err != nil {
-		fmt.Println("read file fail", err)
 		return
 	}
-	//	defer os.Remove(filename)
+	defer os.Remove(filename)
 	defer f.Close()
 
 	br := bufio.NewReader(f)

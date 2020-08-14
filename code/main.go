@@ -27,6 +27,9 @@ func main() {
 		ROOTPATH = "this://app/main.html" //go用路径
 	}
 
+
+	db.UpgradeDB() //检测新版
+
 	runtime.LockOSThread()
 
 	config.Cfg = &config.ConfStruct{}
