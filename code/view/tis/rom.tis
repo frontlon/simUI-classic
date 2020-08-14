@@ -55,7 +55,7 @@ function createRomList(cls=0){
 
 }
 
-//分页
+//rom分页
 function scrollLoadRom(evtPos){
 
     var scrollPos = evtPos.toInteger() + $(#center).box(#height);

@@ -433,6 +433,16 @@ function createOpenFolderMenu(info){
     if(CONF.Platform[pfId].PackingPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='packing'>"+ CONF.Lang.OpenPackingFolder +"</li>";
     }
+   if(CONF.Platform[pfId].TitlePath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='title'>"+ CONF.Lang.LocationTitleFile +"</li>";
+    }
+    if(CONF.Platform[pfId].BackgroundPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='background'>"+ CONF.Lang.LocationBackgroundFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].VideoPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='video'>"+ CONF.Lang.LocationVideoFile +"</li>";
+    }
 
     if(CONF.Platform[pfId].DocPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='doc'>"+ CONF.Lang.LocationDocFile +"</li>";

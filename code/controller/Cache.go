@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"fmt"
 	"simUI/code/utils/go-sciter"
 )
 
@@ -40,6 +40,7 @@ func CacheController() {
 			getPlatform = uint32(utils.ToInt(args[0].String()))
 		}
 
+		//如果没有任何平台，则不用更新
 		if len(config.Cfg.Platform) == 0 {
 			if _, err := utils.Window.Call("CB_createCache", sciter.NewValue("")); err != nil {
 			}

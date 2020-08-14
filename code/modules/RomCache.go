@@ -263,10 +263,10 @@ func GetPathMd5(par ...string) string {
 func UpdateFilterDB() {
 	_ = (&db.Filter{}).Truncate()
 
-	baseType, _ := (&db.Rom{}).GetFilter("BaseType")
-	baseYear, _ := (&db.Rom{}).GetFilter("BaseYear")
-	basePlatform, _ := (&db.Rom{}).GetFilter("BasePlatform")
-	basePublisher, _ := (&db.Rom{}).GetFilter("BasePublisher")
+	baseType, _ := (&db.Rom{}).GetFilter("base_type")
+	baseYear, _ := (&db.Rom{}).GetFilter("base_year")
+	basePlatform, _ := (&db.Rom{}).GetFilter("base_platform")
+	basePublisher, _ := (&db.Rom{}).GetFilter("base_publisher")
 
 	filters := []*db.Filter{}
 	for _, v := range baseType {

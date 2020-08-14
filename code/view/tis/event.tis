@@ -128,6 +128,11 @@
         changePlatform(this);
     });
 
+    //rom分页
+    $(#left_menu).onScroll = function(evt) {
+        scrollLoadMenu(evt.scrollPos);
+    };
+
    /**
     * 状态栏
     **/
@@ -178,7 +183,7 @@
         openSidebar(this);
     });
 
-    //分页
+    //rom分页
     $(#center).onScroll = function(evt) {
         scrollLoadRom(evt.scrollPos);
     };

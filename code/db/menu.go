@@ -29,7 +29,7 @@ func (m *Menu) Add() error {
 }
 
 //根据条件，查询多条数据
-func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
+func (*Menu) GetByPlatform(platform uint32,pages uint32) ([]*Menu, error) {
 	where := map[string]interface{}{}
 
 	if platform > 0 {
@@ -37,7 +37,10 @@ func (*Menu) GetByPlatform(platform uint32) ([]*Menu, error) {
 	}
 
 	volist := []*Menu{}
-	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Find(&volist)
+
+	pageNum := 200
+	offset := int(pages) * pageNum
+	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Limit(pageNum).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

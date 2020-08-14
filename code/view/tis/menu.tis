@@ -1,5 +1,7 @@
 ﻿var ACTIVE_MENU = ""; //当前选定的菜单
-
+var MENU_SCROLL_POS = 0; //默认滚动条位置
+var MENU_SCROLL_LOCK = false;
+var MENU_SCROLL_PAGE = 1; //当前滚动条翻页页数
 view.root.on("ready", function(){
 
     //菜单拖拽排序
@@ -37,6 +39,7 @@ function createMenuList(menujson){
     dd += "<dt>"+ CONF.Lang.Cate +"</dt>";
     dd += "<dd opt='' class='menuitem fixed'>"+ CONF.Lang.AllGames +"</dd>";
     dd += "<dd opt='favorite' class='menuitem fixed'>"+ CONF.Lang.Favorite +"</dd>";
+    dd += "<dd opt='hide' class='menuitem fixed'>"+ CONF.Lang.Hide +"</dd>";
 
     //遍历数据，生成dom
     for(var obj in menuobj) {
@@ -49,7 +52,6 @@ function createMenuList(menujson){
         }
         dd += "<dd opt='"+  obj.Name +"' class='menuitem "+ fixed +"'>"+ name + "</dd>";
     }
-    dd += "<dd opt='hide' class='menuitem fixed'>"+ CONF.Lang.Hide +"</dd>";
 
     menulist.html = dd; //生成dom
 
@@ -69,6 +71,7 @@ function createMenuList(menujson){
     }
 
 }
+
 
 //目录单击
 function changeMenu(obj){
@@ -139,4 +142,68 @@ function nextMenu(){
     if(nextDom != undefined){
         changeMenu(nextDom);
     }
+}
+
+
+
+//menu分页
+function scrollLoadMenu(evtPos){
+
+
+    var scrollPos = evtPos.toInteger() + $(#left_menu).box(#height);
+    var boxHeight = $(#menulist).box(#height);
+
+
+    if(MENU_SCROLL_POS == 0){
+        MENU_SCROLL_POS = scrollPos;
+    }
+
+
+
+    if ((boxHeight - scrollPos <=50) && (scrollPos > MENU_SCROLL_POS)){
+
+
+
+        //如果加锁中，则不执行后续逻辑，防止重复触发
+        if (MENU_SCROLL_LOCK == true){
+            return;
+        }
+        MENU_SCROLL_LOCK = true; //加锁
+    
+        //生成菜单
+        var menujson = view.GetMenuList(CONF.Default.Platform,MENU_SCROLL_PAGE);
+
+            if(menujson != "[]"){
+                loadMenuList(menujson);
+                MENU_SCROLL_POS = scrollPos;
+                MENU_SCROLL_LOCK = false;
+                MENU_SCROLL_PAGE++;
+
+            }
+        }
+
+}
+
+
+//生成菜单列表
+function loadMenuList(menujson){
+    var menuobj = JSON.parse(menujson);
+    var menulist = self.$(#menulist);
+    var dd = "";
+    var name ="";
+    var fixed = "";
+
+    //遍历数据，生成dom
+    for(var obj in menuobj) {
+        if(obj.Name == "_7b9"){
+            continue;
+        }
+
+        name = obj.Name;
+        fixed = "";
+        dd += "<dd opt='"+  obj.Name +"' class='menuitem "+ fixed +"'>"+ name + "</dd>";
+    }
+
+    menulist.append(dd); //生成dom
+
 }

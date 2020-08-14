@@ -31,7 +31,7 @@ function changePlatform(obj){
     ACTIVE_PLATFORM = obj.attributes["platform"];
 
     //创建菜单
-    var menujson = view.GetMenuList(ACTIVE_PLATFORM); //读取分配列表
+    var menujson = view.GetMenuList(ACTIVE_PLATFORM,0); //读取分配列表
     createMenuList(menujson);
     //重置滚动翻页数据
     resetScroll();

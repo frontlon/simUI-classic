@@ -218,6 +218,36 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				fileName = platform.DocPath
 			}
 		}
+	case "title":
+		if platform.DocPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.TitlePath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					break
+				} else {
+					fileName = ""
+				}
+			}
+			if fileName == "" {
+				isDir = true
+				fileName = platform.TitlePath
+			}
+		}
+	case "background":
+		if platform.BackgroundPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.BackgroundPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					break
+				} else {
+					fileName = ""
+				}
+			}
+			if fileName == "" {
+				isDir = true
+				fileName = platform.BackgroundPath
+			}
+		}
 	case "strategy":
 		if platform.StrategyPath != "" {
 			for _, v := range config.DOC_EXTS {

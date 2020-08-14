@@ -84,16 +84,15 @@ func InitConf() error {
 	if err != nil {
 		return err
 	}
+	Cfg.Theme, err = getTheme()
+	if err != nil {
+		return err
+	}
 	Cfg.PlatformList, Cfg.Platform, err = getPlatform()
 	if err != nil {
 		return err
 	}
 
-
-	Cfg.Theme, err = getTheme()
-	if err != nil {
-		return err
-	}
 	Cfg.Shortcut, err = getShortcut()
 	if err != nil {
 		return err
@@ -104,7 +103,6 @@ func InitConf() error {
 
 //读取平台列表
 func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
-	DBSim := &db.Simulator{}
 	platformList, _ := (&db.Platform{}).GetAll()
 	platform := map[uint32]*db.Platform{}
 	for k, v := range platformList {
@@ -175,6 +173,7 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 		}
 
 		//填充模拟器列表
+		DBSim := &db.Simulator{}
 		simList, _ := DBSim.GetByPlatform(v.Id)
 		vomap := map[uint32]*db.Simulator{}
 		for _, v := range simList {

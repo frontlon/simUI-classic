@@ -19,9 +19,10 @@ func MenuController() {
 	//读取目录列表
 	utils.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
+		page := uint32(utils.ToInt(args[1].String()))
 		//读取数据库
 
-		menu,err := modules.GetMenuList(uint32(utils.ToInt(platform)))
+		menu,err := modules.GetMenuList(uint32(utils.ToInt(platform)),page)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
