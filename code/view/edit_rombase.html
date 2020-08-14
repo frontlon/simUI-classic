@@ -70,7 +70,7 @@
             </td></tr>
 
            
-             <tr><td>{{BasePublisher}}：</td><td>
+            <tr><td>{{BasePublisher}}：</td><td>
             <select id="publisher" editable>
                 <option value="Nintendo">Nintendo</option>
                 <option value="Ubisoft">Ubisoft</option>
@@ -81,6 +81,16 @@
                 <option value="Maxis">Maxis</option>
                 <option value="Bungie">Bungie</option>
                 <option value="Yuke's">Yuke's</option>
+            </select>
+            </td></tr>
+            <tr><td>{{BaseCountry}}：</td><td>
+            <select id="country" editable>
+                <option value="Nintendo">日本</option>
+                <option value="Ubisoft">美国</option>
+                <option value="Konami">英国</option>
+                <option value="Sega">中国</option>
+                <option value="Amaze">法国</option>
+                <option value="Capcom">韩国</option>
             </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>
@@ -104,6 +114,7 @@ view.root.on("ready", function(){
     if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
     if(info.Platform != undefined && info.Platform != ""){$(#platform).value = info.Platform;}
     if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
+    if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
 
 });
 
@@ -123,6 +134,7 @@ event click $(#submit){
         type:$(#type).value,
         platform:$(#platform).value,
         publisher:$(#publisher).value,
+        country:$(#country).value,
     }
     var result = mainView.SetRomBase(JSON.stringify(data));
     view.close(result);

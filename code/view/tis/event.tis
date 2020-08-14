@@ -162,6 +162,9 @@
     self.on("change", "#filter_year", function(evt) {
         search();
     });
+    self.on("change", "#filter_country", function(evt) {
+        search();
+    });
     self.on("click", "#filter_clear", function(evt) {
         filterClear();
     });

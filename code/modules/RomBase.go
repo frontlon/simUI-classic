@@ -12,6 +12,7 @@ type RomBase struct {
 	Year      string // 年份
 	Platform  string // 平台
 	Publisher string // 出品公司
+	Country   string // 国家
 }
 
 var Baseinfo map[uint32]map[string]*RomBase
@@ -44,7 +45,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 
 	for k, r := range records {
 
-		if k == 0 || r[0] == ""{
+		if k == 0 || r[0] == "" {
 			continue
 		}
 
@@ -55,6 +56,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			r[3] = utils.ToUTF8(r[3])
 			r[4] = utils.ToUTF8(r[4])
 			r[5] = utils.ToUTF8(r[5])
+			r[6] = utils.ToUTF8(r[6])
 		}
 
 		des[r[0]] = &RomBase{
@@ -64,6 +66,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			Year:      r[3],
 			Platform:  r[4],
 			Publisher: r[5],
+			Country:   r[6],
 		}
 	}
 	Baseinfo[platform] = des
@@ -76,23 +79,23 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 		return nil
 	}
 
-	info, _ := GetRomBase(platform)  //读取老数据
+	info, _ := GetRomBase(platform) //读取老数据
 
 	//如果全为空则删除当前记录
-	if newData.Name == "" && newData.Platform == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == ""{
-		delete(info,newData.RomName)
-	}else{
+	if newData.Name == "" && newData.Platform == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" {
+		delete(info, newData.RomName)
+	} else {
 		info[newData.RomName] = newData //并入新数据
 	}
 	//转换为切片
 	create := [][]string{}
 
 	//表头
-	head := []string{"rom名称", "游戏名称", "游戏类型", "游戏平台", "发行年份", "出品公司"}
+	head := []string{"rom名称", "游戏名称", "游戏类型", "游戏平台", "发行年份", "出品公司", "国家"}
 	create = append(create, head)
 
 	for _, v := range info {
-		d := []string{v.RomName, v.Name, v.Type, v.Platform, v.Year, v.Publisher}
+		d := []string{v.RomName, v.Name, v.Type, v.Platform, v.Year, v.Publisher, v.Country}
 		create = append(create, d)
 	}
 

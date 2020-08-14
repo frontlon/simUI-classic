@@ -113,6 +113,16 @@ function initBaseFilter(){
     }
     $(#filter_year).value = "";
 
+    //国家
+    getjson = view.GetRomFilter("base_country");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_country).options.$append(<option value={obj}>{obj}</option>);
+        }
+    }
+    $(#filter_country).value = "";
+
 }
 
 //开启关闭平台栏
@@ -381,16 +391,17 @@ function CB_createCache(){
 
     //初始化rom
     
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","")
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","")
     $(#filter_type).value = "";
     $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
+    $(#filter_country).value = "";
 
     createRomList(1); //生成rom列表
 
     //生成rom数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","","","","","");
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","","","","","","");
     $(#rom_count_num).html = romCount; //初始化在线人数
     endLoading(); //关闭loading框
 
@@ -403,5 +414,6 @@ function filterClear(){
     $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
+    $(#filter_country).value = "";
     search();
 }

@@ -5,15 +5,15 @@ import (
 )
 
 //读取菜单列表
-func GetMenuList(platform uint32,page uint32) ([]*db.Menu, error) {
+func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 	newMenu := []*db.Menu{}
 
-	menu, err := (&db.Menu{}).GetByPlatform(platform,page) //从数据库中读取当前平台的分类目录
+	menu, err := (&db.Menu{}).GetByPlatform(platform, page) //从数据库中读取当前平台的分类目录
 	if err != nil {
 		return newMenu, err
 	}
 	//读取根目录下是否有rom
-	count, err := (&db.Rom{}).Count(platform, ConstMenuRootKey, "","","","","")
+	count, err := (&db.Rom{}).Count(platform, ConstMenuRootKey, "", "", "", "", "", "")
 	if err != nil {
 		return newMenu, err
 	}

@@ -78,7 +78,7 @@ function baseinfo(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
         width:400,
-        height:340,
+        height:370,
         parameters: {
             id:evt.attributes["rid"],
         };

@@ -72,23 +72,26 @@ func RomController() {
 		basePlatform := args[6].String()
 		basePublisher := args[7].String()
 		baseYear := args[8].String()
+		baseCountry := args[9].String()
 
-		if baseType == config.Cfg.Lang["BaseType"]{
+		if baseType == config.Cfg.Lang["BaseType"] {
 			baseType = ""
 		}
-		if basePlatform == config.Cfg.Lang["BasePlatform"]{
+		if basePlatform == config.Cfg.Lang["BasePlatform"] {
 			basePlatform = ""
 		}
-		if basePublisher == config.Cfg.Lang["BasePublisher"]{
+		if basePublisher == config.Cfg.Lang["BasePublisher"] {
 			basePublisher = ""
 		}
-		if baseYear == config.Cfg.Lang["BaseYear"]{
+		if baseYear == config.Cfg.Lang["BaseYear"] {
 			baseYear = ""
 		}
-
+		if baseCountry == config.Cfg.Lang["BaseCountry"] {
+			baseCountry = ""
+		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear)
+			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear, baseCountry)
 		} else {
 			//按拼音查询
 			newlist, _ = (&db.Rom{}).GetByPinyin(page, platform, catname, num)
@@ -107,7 +110,8 @@ func RomController() {
 		basePlatform := args[4].String()
 		basePublisher := args[5].String()
 		baseYear := args[6].String()
-		count, _ := (&db.Rom{}).Count(platform, catname, keyword,baseType,basePlatform,basePublisher,baseYear)
+		baseCountry := args[7].String()
+		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear, baseCountry)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -231,6 +235,7 @@ func RomController() {
 			Year:      d["year"],
 			Platform:  d["platform"],
 			Publisher: d["publisher"],
+			Country:   d["country"],
 		}
 
 		//写入配置文件
@@ -253,6 +258,7 @@ func RomController() {
 			BaseYear:      d["year"],
 			BasePlatform:  d["platform"],
 			BasePublisher: d["publisher"],
+			BaseCountry:   d["country"],
 		}
 		if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
 			utils.WriteLog(err.Error())
