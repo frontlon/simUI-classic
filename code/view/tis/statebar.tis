@@ -83,16 +83,7 @@ function initBaseFilter(){
     }
     $(#filter_type).value = "";
     
-    //平台
-    getjson = view.GetRomFilter("base_platform");
-    jsonObj = JSON.parse(getjson);
-    if (jsonObj.length > 0){
-        for(var obj in jsonObj) {
-            $(#filter_platform).options.$append(<option value={obj}>{obj}</option>);
-        }    
-    }
-    $(#filter_platform).value = "";
-
+ 
     //发行商
     getjson = view.GetRomFilter("base_publisher");
     jsonObj = JSON.parse(getjson);
@@ -393,7 +384,6 @@ function CB_createCache(){
     
     ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","")
     $(#filter_type).value = "";
-    $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";
@@ -411,7 +401,6 @@ function CB_createCache(){
 //清理掉资料过滤条件
 function filterClear(){
     $(#filter_type).value = "";
-    $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";

@@ -44,7 +44,6 @@ function createRomList(cls=0){
         data += "<div>"+ obj.Menu.toHtmlString() +"</div>";
         data += "<div>"+ obj.BaseType +"</div>";
         data += "<div>"+ obj.BaseYear +"</div>";
-        data += "<div>"+ obj.BasePlatform +"</div>";
         data += "<div>"+ obj.BasePublisher +"</div>";
         data += "<div>"+ obj.BaseCountry +"</div>";
         data += "</li>"
@@ -84,11 +83,10 @@ function scrollLoadRom(evtPos){
         //生成游戏列表
          //生成游戏列表
     var filter_type = $(#filter_type).value;
-    var filter_platform = $(#filter_platform).value;
     var filter_publisher = $(#filter_publisher).value;
     var filter_year = $(#filter_year).value;
     var filter_country = $(#filter_country).value;
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_platform,filter_publisher,filter_year,filter_country);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
 
         if(ROMJSON != "[]"){
             createRomList(0);
@@ -126,7 +124,6 @@ function numSearch(evt){
     resetScroll();
 
     $(#filter_type).value = "";
-    $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";

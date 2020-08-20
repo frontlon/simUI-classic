@@ -153,9 +153,7 @@
     self.on("change", "#filter_type", function(evt) {
         search();
     });
-    self.on("change", "#filter_platform", function(evt) {
-        search();
-    });
+
     self.on("change", "#filter_publisher", function(evt) {
         search();
     });

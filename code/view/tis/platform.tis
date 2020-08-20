@@ -46,7 +46,6 @@ function changePlatform(obj){
     $(#menulist).select("dd[opt='']").state.current = true;
 
     $(#filter_type).value = "";
-    $(#filter_platform).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";

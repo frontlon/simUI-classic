@@ -291,6 +291,7 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	res := &RomDetail{}
 	//游戏游戏详细数据
 	info, err := (&db.Rom{}).GetById(id)
+
 	if err != nil {
 		return res, err
 	}
@@ -301,6 +302,12 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	res.StrategyFile = ""
 	res.Sublist = sub
 	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
+
+	for k,v := range res.Simlist{
+		if res.Simlist[k].Path != ""{
+			res.Simlist[k].Path,_ = filepath.Abs(v.Path)
+		}
+	}
 
 	//读取文档内容
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址

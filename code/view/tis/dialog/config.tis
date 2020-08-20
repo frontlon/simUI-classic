@@ -109,8 +109,8 @@ function GetPlatformLitem(evt){
     var sims = JSON.parse(mainView.GetSimulatorByPlatform(pfId));
 
     platform_sim.options.$append(<option value=0>{CONF.Lang.EditSimulator}</option>);
-    for(var simId in sims) {
-        platform_sim.options.$append(<option value={sims[simId].Id}>{sims[simId].Name}</option>);
+    for(var sim in sims) {
+        platform_sim.options.$append(<option value={sim.Id}>{sim.Name}</option>);
     }
     platform_sim.value = 0;
  

@@ -129,8 +129,8 @@
     .romth div{color:#fff!important;font-weight:bold;}
 
     /* 右侧边栏 */
-    #right_title_pic{text-align:center;margin-bottom:10dip}
-    #right_title_pic img{width:80%;}
+    #right_title_ pic{text-align:center;margin-bottom:10dip}
+    #right_title_pic img{width:100%;}
     #right h2{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color);font-weight:normal;font-size:11dip;line-height:19dip;margin:0}
     #right .video{width:100%;max-width:192dip;margin:0 auto;display:block;height:auto;size:auto}
     #right .run{padding:4dip;line-height:1.5em;height:auto;width:*;display:block;background:color(run-button-background-color);color:color(run-button-text-color);text-align:center;margin-bottom:9dip;overflow:hidden;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
@@ -143,8 +143,7 @@
     #right .funbtn_1{color:color(func-button-active-text-color)}
     #right .right_desc_disable{color:color(func-button-disable-text-color);background:none;opacity:0.5;}
     #right .right_desc_disable:hover{cursor: default;background: none}
-    #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-
+    #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
     /* 基础信息表格 */
     #right_rombase{width:100%;}
@@ -159,9 +158,9 @@
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
-    #rotate{top:-56dip;right:0dip;position:absolute;}
+    #rotate{top:-30dip;right:0dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
-    #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);}
+    #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(100%);}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -247,7 +246,6 @@
         <div class="statebar">
             <div class="filter">
                 <select id="filter_type"><option value="">{{BaseType}}</option></select>
-                <select id="filter_platform"><option value="">{{BasePlatform}}</option></select>
                 <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
                 <select id="filter_year"><option value="">{{BaseYear}}</option></select>
                 <select id="filter_country"><option value="">{{BaseCountry}}</option></select>
@@ -259,15 +257,17 @@
         </div>
         <div id="romwrapper">
             <ul id="romlist">
-                <li class="romth"><div></div><div>{{BaseName}}</div><div>{{FilterMenu}}</div><div>{{BaseType}}</div><div>{{BaseYear}}</div><div>{{BasePlatform}}</div><div>{{BasePublisher}}</div><div>{{BaseCountry}}</div></li>
+                <li class="romth"><div></div><div>{{BaseName}}</div><div>{{FilterMenu}}</div><div>{{BaseType}}</div><div>{{BaseYear}}</div><div>{{BasePublisher}}</div><div>{{BaseCountry}}</div></li>
             </ul>
         </div>
     </section>
     <splitter id="right_splitter" />
     <section id="right">
         <div id="mask"></div>
+
         <h2 id="right_title_h2">{{TitlePic}}</h2>
         <div id="right_title_pic"></div>
+
         <h2>{{FunButton}}</h2>
         <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
         <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
@@ -277,7 +277,7 @@
         <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
         <menu id="foldercontext" type="menu"></menu>
         </button>
-        
+
         <h2 id="video_h2">{{Video}}</h2>
         <div id="video_wrapper"><video id="right_video" src="" /></div>
         
@@ -286,16 +286,15 @@
         <button id="rotate" class="funbtn">&gt;</button>
         <div id="stack"></div>
         </div>
-
+        <h2>{{RunGame}}</h2>
+        <ul id="sim_select"></ul>
+        <div id="buttons"></div>
         <h2>{{BaseInfo}}</h2>
         <table id="right_rombase"></table>
 
         <h2 id="doc_title">{{Doc}}</h2>
         <div id="doc" class="doc"></div>
 
-        <h2>{{RunGame}}</h2>
-        <ul id="sim_select"></ul>
-        <div id="buttons"></div>
     </section>
     
 </frameset>

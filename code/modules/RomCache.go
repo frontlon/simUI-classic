@@ -105,7 +105,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
-						BasePlatform:  base.Platform,
 					}
 
 					romlist[pathMd5] = sinfo
@@ -124,7 +123,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
-						BasePlatform:  base.Platform,
 					}
 
 					romlist[pathMd5] = rinfo
@@ -265,7 +263,6 @@ func UpdateFilterDB() {
 
 	baseType, _ := (&db.Rom{}).GetFilter("base_type")
 	baseYear, _ := (&db.Rom{}).GetFilter("base_year")
-	basePlatform, _ := (&db.Rom{}).GetFilter("base_platform")
 	basePublisher, _ := (&db.Rom{}).GetFilter("base_publisher")
 
 	filters := []*db.Filter{}
@@ -277,13 +274,6 @@ func UpdateFilterDB() {
 	}
 
 	for _, v := range baseYear {
-		data := &db.Filter{
-			Name: v,
-		}
-		filters = append(filters, data)
-	}
-
-	for _, v := range basePlatform {
 		data := &db.Filter{
 			Name: v,
 		}

@@ -1,13 +1,10 @@
 package db
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"io"
-	"os"
 	"simUI/code/utils"
 )
 
@@ -44,28 +41,3 @@ func Vacuum() {
 	engine.Exec("VACUUM;")
 }
 
-//升级数据库
-func UpgradeDB() {
-
-	filename := "upgrade.sql"
-	f, err := os.Open(filename)
-	if err != nil {
-		return
-	}
-	defer os.Remove(filename)
-	defer f.Close()
-
-	br := bufio.NewReader(f)
-	for {
-		a, _, c := br.ReadLine()
-
-		if c == io.EOF {
-			break
-		}
-
-		if len(a) == 0 {
-			continue
-		}
-		getDb().Exec(string(a))
-	}
-}

@@ -69,17 +69,14 @@ func RomController() {
 		page := utils.ToInt(strings.Trim(args[4].String(), " ")) //分页数
 
 		baseType := args[5].String()
-		basePlatform := args[6].String()
-		basePublisher := args[7].String()
-		baseYear := args[8].String()
-		baseCountry := args[9].String()
+		basePublisher := args[6].String()
+		baseYear := args[7].String()
+		baseCountry := args[8].String()
 
 		if baseType == config.Cfg.Lang["BaseType"] {
 			baseType = ""
 		}
-		if basePlatform == config.Cfg.Lang["BasePlatform"] {
-			basePlatform = ""
-		}
+
 		if basePublisher == config.Cfg.Lang["BasePublisher"] {
 			basePublisher = ""
 		}
@@ -91,7 +88,7 @@ func RomController() {
 		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear, baseCountry)
+			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry)
 		} else {
 			//按拼音查询
 			newlist, _ = (&db.Rom{}).GetByPinyin(page, platform, catname, num)
@@ -107,11 +104,10 @@ func RomController() {
 		catname := strings.Trim(args[1].String(), " ")
 		keyword := strings.Trim(args[2].String(), " ") //关键字
 		baseType := args[3].String()
-		basePlatform := args[4].String()
-		basePublisher := args[5].String()
-		baseYear := args[6].String()
-		baseCountry := args[7].String()
-		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePlatform, basePublisher, baseYear, baseCountry)
+		basePublisher := args[4].String()
+		baseYear := args[5].String()
+		baseCountry := args[6].String()
+		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -256,7 +252,6 @@ func RomController() {
 			Name:          name,
 			BaseType:      d["type"],
 			BaseYear:      d["year"],
-			BasePlatform:  d["platform"],
 			BasePublisher: d["publisher"],
 			BaseCountry:   d["country"],
 		}

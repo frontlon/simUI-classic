@@ -126,7 +126,10 @@
 
     //平台列表点击
     event click $(#platform_list li) {
+    try{
       GetPlatformLitem(this);
+      }catch(e){
+      alert(e);}
     }
 
     //更新通用配置信息

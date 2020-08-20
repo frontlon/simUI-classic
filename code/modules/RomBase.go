@@ -56,7 +56,6 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			r[3] = utils.ToUTF8(r[3])
 			r[4] = utils.ToUTF8(r[4])
 			r[5] = utils.ToUTF8(r[5])
-			r[6] = utils.ToUTF8(r[6])
 		}
 
 		des[r[0]] = &RomBase{
@@ -64,9 +63,8 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			Name:      r[1],
 			Type:      r[2],
 			Year:      r[3],
-			Platform:  r[4],
-			Publisher: r[5],
-			Country:   r[6],
+			Publisher: r[4],
+			Country:   r[5],
 		}
 	}
 	Baseinfo[platform] = des

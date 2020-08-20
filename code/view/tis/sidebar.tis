@@ -123,7 +123,7 @@ function openSidebar(obj){
     if(simlist.length > 0 ){
         var simliststr = "";
         for(var obj in simlist) {
-            simliststr += "<li filename='"+ obj.Path +"' rom='"+ info.Id +"' sim='"+ obj.Id +"'><p>"+ obj.Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
+               simliststr += "<li filename='"+ obj.Path +"' rom='"+ info.Id +"' sim='"+ obj.Id +"'><p>"+ obj.Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
         }
         $(#sim_select).html = simliststr;
 
@@ -160,7 +160,6 @@ function openSidebar(obj){
     rombase += "<tr><td>" + CONF.Lang.BaseName + "：</td><td>" + info.Name  + "</td></tr>";
     if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "：</td><td>" + info.BaseType      + "</td></tr>";}
     if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "：</td><td>" + info.BaseYear      + "</td></tr>";}
-    if(info.BasePlatform != ""){rombase += "<tr><td>" + CONF.Lang.BasePlatform + "：</td><td>" + info.BasePlatform + "</td></tr>";}
     if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "：</td><td>" + info.BasePublisher + "</td></tr>";}
     if(info.BaseCountry != ""){rombase += "<tr><td>" + CONF.Lang.BaseCountry + "：</td><td>" + info.BaseCountry + "</td></tr>";}
     rombase += "<tr><td>" + CONF.Lang.BaseRomName + "：</td><td>" + info.RomPath + "</td></tr>";
