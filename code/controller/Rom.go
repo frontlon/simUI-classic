@@ -229,7 +229,6 @@ func RomController() {
 			Name:      d["name"],
 			Type:      d["type"],
 			Year:      d["year"],
-			Platform:  d["platform"],
 			Publisher: d["publisher"],
 			Country:   d["country"],
 		}
@@ -239,7 +238,6 @@ func RomController() {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-
 		name := ""
 		if d["name"] == "" {
 			name = romName

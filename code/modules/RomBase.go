@@ -10,7 +10,6 @@ type RomBase struct {
 	Name      string // 游戏名称
 	Type      string // 类型
 	Year      string // 年份
-	Platform  string // 平台
 	Publisher string // 出品公司
 	Country   string // 国家
 }
@@ -78,9 +77,8 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	}
 
 	info, _ := GetRomBase(platform) //读取老数据
-
 	//如果全为空则删除当前记录
-	if newData.Name == "" && newData.Platform == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" {
+	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" {
 		delete(info, newData.RomName)
 	} else {
 		info[newData.RomName] = newData //并入新数据
@@ -89,11 +87,12 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	create := [][]string{}
 
 	//表头
-	head := []string{"rom名称", "游戏名称", "游戏类型", "游戏平台", "发行年份", "出品公司", "国家"}
+	head := []string{config.Cfg.Lang["BaseRomName"], config.Cfg.Lang["BaseName"], config.Cfg.Lang["BaseType"], config.Cfg.Lang["BaseYear"], config.Cfg.Lang["BasePublisher"], config.Cfg.Lang["BaseCountry"]}
+
 	create = append(create, head)
 
 	for _, v := range info {
-		d := []string{v.RomName, v.Name, v.Type, v.Platform, v.Year, v.Publisher, v.Country}
+		d := []string{v.RomName, v.Name, v.Type, v.Year, v.Publisher, v.Country}
 		create = append(create, d)
 	}
 

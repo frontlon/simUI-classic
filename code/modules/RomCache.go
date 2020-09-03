@@ -26,6 +26,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
 	BaseInfo, err := GetRomBase(platform)
 
+	fmt.Println(BaseInfo);
+
 	if err != nil {
 		return nil, nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
 	}
@@ -77,7 +79,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					title = aliasName
 				}
 
-				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Platform, base.Publisher) //路径md5，可变
+				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Publisher) //路径md5，可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -105,8 +107,10 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
+						BaseCountry:   base.Country,
 					}
 
+					fmt.Println("baseCountry",base.Country)
 					romlist[pathMd5] = sinfo
 					md5list = append(md5list, sinfo.PathMd5)
 				} else { //不是子游戏
@@ -123,6 +127,7 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
+						BaseCountry:   base.Country,
 					}
 
 					romlist[pathMd5] = rinfo

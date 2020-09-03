@@ -42,18 +42,6 @@ function openSidebar(obj){
     var info = detailObj.Info;
     var romPath = URL.parse(info.RomPath);
 
-    //显示标题图
-    var titlePic = getRomPicPath("title",info.Platform,romPath.name); //包装盒图
-    if(titlePic != ""){
-        $(#right_title_h2).style["display"] = "block";
-        $(#right_title_pic).style["display"] = "block";
-        $(#right_title_pic).html = "<img src=\""+ titlePic +"\" />";
-    }else{
-        $(#right_title_h2).style["display"] = "none";
-        $(#right_title_pic).style["display"] = "none";
-    }
-    
-
     //重命名功能
     $(#right_rename).attributes["rid"] = info.Id;
 
@@ -170,7 +158,7 @@ function openSidebar(obj){
 
 //视频
 function _createVideo(info,romPath){
-    var movie = getRomPicPath("video",info.Platform,romPath.name); //包装盒图
+    var movie = getRomPicPath("video",info.Platform,romPath.name);
     var vdom = $(#right_video);
 
     if (movie != ""){
@@ -201,12 +189,14 @@ function _createVideo(info,romPath){
 function _createRotate(info){
     var pics = "";
     var romPath = URL.parse(info.RomPath);
+    var title = getRomPicPath("title",info.Platform,romPath.name); //标题图
     var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
     var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
     var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
     var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
     var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
 
+    if(title != ""){ pics += "<img src=\""+ title +"\" />"; }
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
@@ -215,7 +205,7 @@ function _createRotate(info){
     //游戏缩略图
     if(thumb != ""){
         pics += "<img src=\""+ thumb +"\" />";
-    }else if(snap == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+    }else if(pics == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
         pics += "<img src=\""+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"\" />";
     }
 

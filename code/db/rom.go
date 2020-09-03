@@ -43,7 +43,6 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	for k, md5 := range uniqs {
 		v := romlist[md5]
 		tx.Create(&v)
-		fmt.Println("v", v)
 		if k%500 == 0 {
 			utils.Loading("开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
@@ -51,25 +50,6 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	tx.Commit()
 }
 
-//根据fileid更新现有的rom
-//func (m *Rom) BatchUpdateByFileId(fileIds []string, romlist map[string]*Rom) error {
-//	if len(fileIds) == 0 || len(romlist) == 0 {
-//		return nil
-//	}
-//	tx := getDb().Begin()
-//
-//	for _, v := range romlist {
-//		if utils.InSliceString(v.FileId, fileIds) {
-//			result := getDb().Table(m.TableName()).Where("file_id=?", v.FileId).Updates(&v)
-//			if result.Error != nil {
-//				fmt.Println(result.Error)
-//			}
-//		}
-//	}
-//
-//	tx.Commit()
-//	return nil
-//}
 
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string) ([]*Rom, error) {

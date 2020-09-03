@@ -162,11 +162,6 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].VideoPath = platformList[k].VideoPath
 		}
 
-		if v.Romlist != "" {
-			platformList[k].Romlist, _ = filepath.Abs(v.Romlist)
-			platform[v.Id].Romlist = platformList[k].Romlist
-		}
-
 		if v.Rombase != "" {
 			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
 			platform[v.Id].Rombase = platformList[k].Rombase

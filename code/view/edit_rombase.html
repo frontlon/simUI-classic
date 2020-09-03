@@ -71,6 +71,7 @@ include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
 
+
     //渲染语言
     createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;
@@ -80,27 +81,23 @@ view.root.on("ready", function(){
     if(info.Name != undefined && info.Name != ""){$(#name).value = info.Name;}
     if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
     if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
-    if(info.Platform != undefined && info.Platform != ""){$(#platform).value = info.Platform;}
     if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
     if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
 
 });
 
 event click $(#submit){
-
     var year = "";
     if($(#year).value != "" && $(#year).value != undefined){
          year = $(#year).value.toString();
     }else{
          year = "";
     }
-
     var data = {
         id:view.parameters.id;
         name:$(#name).value,
         year:year,
         type:$(#type).value,
-        platform:$(#platform).value,
         publisher:$(#publisher).value,
         country:$(#country).value,
     }
@@ -108,9 +105,12 @@ event click $(#submit){
     view.close(result);
 }
 
+
 event click $(#close-dialog){
     view.close();
 }
+
+
 
 </script>
 

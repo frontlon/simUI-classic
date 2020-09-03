@@ -19,6 +19,7 @@ function createRomList(cls=0){
         romlist.clear();
     }
 
+    data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div></li>";
     for(var obj in romobj) {
         if(obj.Menu == "_7b9"){
             obj.Menu = "";
@@ -47,12 +48,9 @@ function createRomList(cls=0){
         data += "<div>"+ obj.BasePublisher +"</div>";
         data += "<div>"+ obj.BaseCountry +"</div>";
         data += "</li>"
-
     }
-
     romlist.append(data);
     SCROLL_PAGE++;
-
 }
 
 //rom分页
@@ -79,14 +77,12 @@ function scrollLoadRom(evtPos){
         if(num == "ALL"){
             num = "";
         }
-
-        //生成游戏列表
          //生成游戏列表
-    var filter_type = $(#filter_type).value;
-    var filter_publisher = $(#filter_publisher).value;
-    var filter_year = $(#filter_year).value;
-    var filter_country = $(#filter_country).value;
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
+        var filter_type = $(#filter_type).value;
+        var filter_publisher = $(#filter_publisher).value;
+        var filter_year = $(#filter_year).value;
+        var filter_country = $(#filter_country).value;
+        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
 
         if(ROMJSON != "[]"){
             createRomList(0);

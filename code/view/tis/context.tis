@@ -91,6 +91,7 @@ function baseinfo(evt){
         dom.select("div:nth-child(5)").html = info.BaseYear;
         dom.select("div:nth-child(6)").html = info.BasePublisher;
         dom.select("div:nth-child(2)").html = info.Name;
+        dom.select("div:nth-child(7)").html = info.BaseCountry;
     }
     
 
@@ -143,7 +144,8 @@ function romContextMenu(obj){
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
 
-    btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
-
+    if (CONF.Platform[pfId].Rombase != ""){
+        btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
+    }
     romcontext.append(btndata);
 }
