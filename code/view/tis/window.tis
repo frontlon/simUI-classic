@@ -36,7 +36,7 @@ function Init(){
     var menu =  $(#menulist).select("dd:current").attributes["opt"];
     ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE,"","","","","")
 
-    createRomList(0); //生成rom列表
+    createRomList(1); //生成rom列表
     //生成rom数量
     var romCount = view.GetGameCount(pf,"","","","","","","");
     $(#rom_count_num).html = romCount; //初始化在线人数

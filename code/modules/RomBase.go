@@ -3,6 +3,7 @@ package modules
 import (
 	"simUI/code/config"
 	"simUI/code/utils"
+	"strings"
 )
 
 type RomBase struct {
@@ -58,14 +59,15 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 		}
 
 		des[r[0]] = &RomBase{
-			RomName:   r[0],
-			Name:      r[1],
-			Type:      r[2],
-			Year:      r[3],
-			Publisher: r[4],
-			Country:   r[5],
+			RomName:   strings.Trim(r[0], " "),
+			Name:      strings.Trim(r[1], " "),
+			Type:      strings.Trim(r[2], " "),
+			Year:      strings.Trim(r[3], " "),
+			Publisher: strings.Trim(r[4], " "),
+			Country:   strings.Trim(r[5], " "),
 		}
 	}
+
 	Baseinfo[platform] = des
 	return des, nil
 }

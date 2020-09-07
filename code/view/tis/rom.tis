@@ -17,9 +17,10 @@ function createRomList(cls=0){
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
         romlist.clear();
+        data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div></li>";
+
     }
 
-    data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div></li>";
     for(var obj in romobj) {
         if(obj.Menu == "_7b9"){
             obj.Menu = "";

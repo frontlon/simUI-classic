@@ -109,8 +109,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
 					}
-
-					fmt.Println("baseCountry",base.Country)
 					romlist[pathMd5] = sinfo
 					md5list = append(md5list, sinfo.PathMd5)
 				} else { //不是子游戏

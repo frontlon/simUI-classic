@@ -68,9 +68,8 @@ function rename(evt){
     if(data == undefined){
         return;
     }
-
-    $(#romlist).select("li[rid="+detailObj.Info.Id+"] p").html = data.name;
-    view.RomRename(data.type,detailObj.Info.Id,data.name);
+    $(#romlist).select("li[rid="+detailObj.Info.Id+"] div:nth-child(2)").html = data.name;
+    view.RomRename(detailObj.Info.Id,data.name);
 }
 
 //基础信息

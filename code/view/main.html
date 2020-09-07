@@ -83,6 +83,7 @@
     .romblock > li img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);display:block;}
     .romblock > li img:hover{cursor:pointer}
 
+    .romblock li:first-child{display:none!important;}
     .romblock li div:nth-child(1){}
     .romblock li div:nth-child(2){padding:4dip;height:29dip;vertical-align:middle;display:block;overflow:hidden;}
     .romblock li div:nth-child(3){display:none}
@@ -119,7 +120,7 @@
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
     .romlist > li div{width:*;display:inline-block}
-    .romlist > li div:nth-child(1){display:inline-block;width:25dip}
+    .romlist > li div:nth-child(1){display:inline-block;width:30dip}
     .romlist > li div:nth-child(3){color:color(rom-block-text-slave-color)}
     .romlist > li div:nth-child(4){color:color(rom-block-text-slave-color)}
     .romlist > li div:nth-child(5){color:color(rom-block-text-slave-color)}
@@ -297,7 +298,7 @@
 <script type="text/tiscript">
     const mainView = view;
     var ROOTPATH = "this://app/";
-    var isDebug = false; //调试模式
+    var isDebug = true; //调试模式
     if (isDebug == true){
         ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }

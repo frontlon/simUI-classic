@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	isDebug := false //是否为调试模式
+	isDebug := true //是否为调试模式
 	ROOTPATH := ""
 	if isDebug { //debug模式
 		db.LogMode = true
@@ -26,7 +26,6 @@ func main() {
 		db.LogMode = false
 		ROOTPATH = "this://app/main.html" //go用路径
 	}
-
 
 	db.UpgradeDB() //检测新版
 
