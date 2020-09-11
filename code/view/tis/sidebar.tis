@@ -177,7 +177,8 @@ function _createVideo(info,romPath){
             vdom.videoStop();
             vdom.videoUnload();
             vdom.videoLoad(movie)
-            vdom.videoPlay(); 
+            vdom.videoPlay();
+            vdom.style["height"] = vdom.videoHeight();
         });
     }else{
         vdom.videoStop();
