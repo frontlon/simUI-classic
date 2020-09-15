@@ -145,12 +145,17 @@
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
     /* 基础信息表格 */
-    #right_rombase{width:100%;}
-    #right_rombase tr{;color:color(right-doc-text-color);line-height:1.5em;}
-    #right_rombase tr:hover td{opacity:0.8}
-    #right_rombase td{border:1dip solid color(right-doc-border-color);padding:1dip 3dip;}
-    #right_rombase td:nth-child(1){text-align:center;width:40%}
-    #right_rombase td:nth-child(2){color:color(right-doc-text-color);width:*;}
+    #right_rombase{width:100%;padding:0;margin:0}
+    #right_rombase li{margin:0 0 10dip 0;padding-left:20dip;color:color(right-doc-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;}
+    #right_rombase li:nth-child(1){background-image:url(this://app/images/baseinfo_name.png);}
+    #right_rombase li:nth-child(2){background-image:url(this://app/images/baseinfo_type.png);}
+    #right_rombase li:nth-child(3){background-image:url(this://app/images/baseinfo_year.png);}
+    #right_rombase li:nth-child(4){background-image:url(this://app/images/baseinfo_publisher.png);}
+    #right_rombase li:nth-child(5){background-image:url(this://app/images/baseinfo_country.png);}
+    #right_rombase li:nth-child(6){background-image:url(this://app/images/baseinfo_type.png);}
+
+
+
 
     /* 视频 */
     #video_wrapper video{width:100%;foreground-repeat:no-repeat;foreground-position:top center;}
@@ -285,7 +290,7 @@
         <ul id="sim_select"></ul>
         <div id="buttons"></div>
         <h2>{{BaseInfo}}</h2>
-        <table id="right_rombase"></table>
+        <ul id="right_rombase"></ul>
 
         <h2 id="doc_title">{{Doc}}</h2>
         <div id="doc" class="doc"></div>

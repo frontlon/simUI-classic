@@ -145,12 +145,13 @@ function openSidebar(obj){
 
     //显示游戏基础信息
     var rombase = "";
-    rombase += "<tr><td>" + CONF.Lang.BaseName + "：</td><td>" + info.Name  + "</td></tr>";
-    if(info.BaseType != "")     {rombase += "<tr><td>" + CONF.Lang.BaseType      + "：</td><td>" + info.BaseType      + "</td></tr>";}
-    if(info.BaseYear != "")     {rombase += "<tr><td>" + CONF.Lang.BaseYear      + "：</td><td>" + info.BaseYear      + "</td></tr>";}
-    if(info.BasePublisher != ""){rombase += "<tr><td>" + CONF.Lang.BasePublisher + "：</td><td>" + info.BasePublisher + "</td></tr>";}
-    if(info.BaseCountry != ""){rombase += "<tr><td>" + CONF.Lang.BaseCountry + "：</td><td>" + info.BaseCountry + "</td></tr>";}
-    rombase += "<tr><td>" + CONF.Lang.BaseRomName + "：</td><td>" + info.RomPath + "</td></tr>";
+
+    if(info.BaseType != "")     {rombase += "<li>" + info.BaseType      + "</li>";}
+    if(info.BaseYear != "")     {rombase += "<li>" + info.BaseYear      + "</li>";}
+    if(info.BasePublisher != ""){rombase += "<li>" + info.BasePublisher + "</li>";}
+    if(info.BaseCountry != "")  {rombase += "<li>" + + info.BaseCountry + "</li>";}
+    rombase += "<li>" + info.RomPath + "</li>";
+
     $(#right_rombase).html = rombase;
    
 

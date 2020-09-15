@@ -50,7 +50,6 @@ func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 	tx.Commit()
 }
 
-
 //根据条件，查询多条数据
 func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string) ([]*Rom, error) {
 
@@ -176,8 +175,15 @@ func (m *Rom) Count(platform uint32, menu string, keyword string, baseType strin
 		where["platform"] = platform
 		where["pname"] = ""
 	}
+
 	if menu != "" {
-		where["menu"] = menu
+		if menu == "hide" {
+			where["hide"] = 1
+		} else if menu == "favorite" {
+			where["star"] = 1
+		} else {
+			where["menu"] = menu
+		}
 	}
 
 	if baseType != "" {

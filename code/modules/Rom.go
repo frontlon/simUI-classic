@@ -248,6 +248,21 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				fileName = platform.BackgroundPath
 			}
 		}
+	case "video":
+		if platform.BackgroundPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.VideoPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					break
+				} else {
+					fileName = ""
+				}
+			}
+			if fileName == "" {
+				isDir = true
+				fileName = platform.VideoPath
+			}
+		}
 	case "strategy":
 		if platform.StrategyPath != "" {
 			for _, v := range config.DOC_EXTS {

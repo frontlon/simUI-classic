@@ -94,7 +94,14 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	create = append(create, head)
 
 	for _, v := range info {
-		d := []string{v.RomName, v.Name, v.Type, v.Year, v.Publisher, v.Country}
+		d := []string{
+			strings.Trim(v.RomName, " "),
+			strings.Trim(v.Name, " "),
+			strings.Trim(v.Type, " "),
+			strings.Trim(v.Year, " "),
+			strings.Trim(v.Publisher, " "),
+			strings.Trim(v.Country, " "),
+		}
 		create = append(create, d)
 	}
 

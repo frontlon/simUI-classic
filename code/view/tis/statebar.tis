@@ -404,5 +404,6 @@ function filterClear(){
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";
+    $(#search_input).value = "";
     search();
 }
