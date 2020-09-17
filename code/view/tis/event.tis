@@ -265,7 +265,10 @@
     
     //rom展开右键菜单
     self.on("contextmenusetup", "#romlist li", function(evt) {
-        romContextMenu(this);
+        //如果是th右键，则忽略
+        if (this.attributes.hasClass("romth") == false){
+            romContextMenu(this);
+        }
     });
     
     //右键菜单启动游戏

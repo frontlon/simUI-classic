@@ -119,14 +119,15 @@
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
-    .romlist > li div{width:*;display:inline-block}
+    .romlist > li div{width:*;display:inline-block;white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;}
     .romlist > li div:nth-child(1){display:inline-block;width:30dip}
-    .romlist > li div:nth-child(3){color:color(rom-block-text-slave-color)}
-    .romlist > li div:nth-child(4){color:color(rom-block-text-slave-color)}
-    .romlist > li div:nth-child(5){color:color(rom-block-text-slave-color)}
-    .romlist > li div:nth-child(6){color:color(rom-block-text-slave-color)}
-    .romlist > li div:nth-child(7){color:color(rom-block-text-slave-color)}
-    .romth div{color:#fff!important;font-weight:bold;}
+    .romlist > li div:nth-child(2){width:*}
+    .romlist > li div:nth-child(3){color:color(rom-block-text-slave-color);min-width:30dip;max-width:100dip;width:10%}
+    .romlist > li div:nth-child(4){color:color(rom-block-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
+    .romlist > li div:nth-child(5){color:color(rom-block-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
+    .romlist > li div:nth-child(6){color:color(rom-block-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
+    .romlist > li div:nth-child(7){color:color(rom-block-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
+    .romth div{color:#fff!important;font-weight:bold;cursor:default}
 
     /* 右侧边栏 */
     #right_title_ pic{text-align:center;margin-bottom:10dip}
