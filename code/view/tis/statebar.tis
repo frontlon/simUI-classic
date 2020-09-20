@@ -224,14 +224,14 @@ function changeFontSize(evt){
     var  val = evt.attributes['value'].toInteger();
     var dom = $(#romlist);
     val ++;
-    if (val >= 11){
+    if (val >= 14){
         if ($(#switch_romlist).attributes["value"] == 1){
             val = 0;
         }else{
             val = 1;
         }
     }
-    for (var i = 0; i <= 10; i++){
+    for (var i = 0; i <= 13; i++){
         dom.attributes.removeClass('fontsize'+i);
     }
 

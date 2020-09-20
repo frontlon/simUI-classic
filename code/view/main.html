@@ -92,7 +92,7 @@
     .romblock li div:nth-child(6){display:none}
     .romblock li div:nth-child(7){display:none}
     #romlist.fontsize0 li div:nth-child(2){display:none}
-    #romlist.fontsize1 li{display:inherit;font-size: 8dip}
+    #romlist.fontsize1 li{display:inherit;font-size: 8dip;}
     #romlist.fontsize2 li{display:inherit;font-size: 9dip}
     #romlist.fontsize3 li{display:inherit;font-size: 10dip}
     #romlist.fontsize4 li{display:inherit;font-size:11dip}
@@ -102,6 +102,13 @@
     #romlist.fontsize8 li{display:inherit;font-size: 15dip}
     #romlist.fontsize9 li{display:inherit;font-size: 16dip}
     #romlist.fontsize10 li{display:inherit;font-size: 17dip}
+    #romlist.fontsize11 li{display:inherit;font-size: 18dip}
+    #romlist.fontsize12 li{display:inherit;font-size: 36dip;line-height:52dip;height:52dip}
+    #romlist.fontsize13 li{display:inherit;font-size: 48dip;line-height:70dip;height:70dip}
+    #romlist.fontsize12 li div:nth-child(1){width:45dip;}
+    #romlist.fontsize12 li img{width:32dip;height:32dip;margin-top:1dip;}
+    #romlist.fontsize13 li div:nth-child(1){width:60dip}
+    #romlist.fontsize13 li img{width:40dip;height:40dip;margin-top:6dip;}
 
     .romblock.zoom1 > li{min-width:80dip;max-width:100dip;margin:3dip 6dip;}
     .romblock.zoom2 > li{min-width:100dip;max-width:130dip;margin:6dip 10dip}
@@ -112,7 +119,7 @@
     
     /* rom列表 */
     .romlist{width:*;margin-top:24dip;margin-left:30dip;list-style-type:none;padding:0;}
-    .romlist > li{position:relative;flow:horizontal-flow;line-height:36dip;height:36dip;padding:0 12dip;margin:0;context-menu:selector(menu#romcontext);}
+    .romlist > li{position:relative;flow:horizontal-flow;vertical-align:middle;line-height:36dip;height:36dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}
     .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
     .romlist > li:nth-child(even){background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
     .romlist > li:hover{cursor:pointer}
@@ -120,7 +127,7 @@
     .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
     .romlist > li div{width:*;display:inline-block;white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;}
-    .romlist > li div:nth-child(1){display:inline-block;width:30dip}
+    .romlist > li div:nth-child(1){display:inline-block;width:30dip;height:*;overflow:visable;padding-left:12dip}
     .romlist > li div:nth-child(2){width:*}
     .romlist > li div:nth-child(3){color:color(rom-block-text-slave-color);min-width:30dip;max-width:100dip;width:10%}
     .romlist > li div:nth-child(4){color:color(rom-block-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
@@ -154,9 +161,6 @@
     #right_rombase li:nth-child(4){background-image:url(this://app/images/baseinfo_publisher.png);}
     #right_rombase li:nth-child(5){background-image:url(this://app/images/baseinfo_country.png);}
     #right_rombase li:nth-child(6){background-image:url(this://app/images/baseinfo_type.png);}
-
-
-
 
     /* 视频 */
     #video_wrapper video{width:100%;foreground-repeat:no-repeat;foreground-position:top center;}
@@ -302,9 +306,9 @@
 </body>
 
 <script type="text/tiscript">
+    var isDebug = true; //调试模式
     const mainView = view;
     var ROOTPATH = "this://app/";
-    var isDebug = true; //调试模式
     if (isDebug == true){
         ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }
