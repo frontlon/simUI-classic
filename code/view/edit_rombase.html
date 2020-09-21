@@ -23,42 +23,45 @@
                 <select id="type" editable>
                     <option value="ACT{{TypeACT}}">ACT{{TypeACT}}</option>
                     <option value="RPG{{TypeRPG}}">RPG{{TypeRPG}}</option>
-                    <option value="ARPG{{TypeARPG}}">ARPG{{TypeARPG}}</option>
-                    <option value="SRPG{{TypeSRPG}}">SRPG{{TypeSRPG}}</option>
-                    <option value="AVG{{TypeAVG}}">AVG{{TypeAVG}}</option>
                     <option value="FTG{{TypeFTG}}">FTG{{TypeFTG}}</option>
-                    <option value="MUG{{TypeMUG}}">MUG{{TypeMUG}}</option>
                     <option value="RAC{{TypeRAC}}">RAC{{TypeRAC}}</option>
                     <option value="SLG{{TypeSLG}}">SLG{{TypeSLG}}</option>
                     <option value="SPT{{TypeSPT}}">SPT{{TypeSPT}}</option>
                     <option value="STG{{TypeSTG}}">STG{{TypeSTG}}</option>
                     <option value="TAB{{TypeTAB}}">TAB{{TypeTAB}}</option>
                     <option value="PUZ{{TypePUZ}}">PUZ{{TypePUZ}}</option>
-                    <option value="FREE{{TypeFREE}}">FREE{{TypeFREE}}</option>
+                    <option value="FPS{{TypeFPS}}">FPS{{TypeFPS}}</option>
+                    <option value="LGG{{TypeFREE}}">LGG{{TypeLGG}}</option>
+                    <option value="MSC{{TypeMSC}}">MSC{{TypeMSC}}</option>
                 </select>
             </td></tr>
 
             <tr><td>{{BasePublisher}}：</td><td>
             <select id="publisher" editable>
-                <option value="Nintendo">Nintendo</option>
-                <option value="Ubisoft">Ubisoft</option>
-                <option value="Konami">Konami</option>
-                <option value="Sega">Sega</option>
-                <option value="Amaze">Amaze</option>
-                <option value="Capcom">Capcom</option>
-                <option value="Maxis">Maxis</option>
-                <option value="Bungie">Bungie</option>
-                <option value="Yuke's">Yuke's</option>
+                <option value="NINTENDO">NINTENDO</option>
+                <option value="FALCOM">FALCOM</option>
+                <option value="CAPCOM">CAPCOM</option>
+                <option value="SQUARE">SQUARE</option>
+                <option value="SNK">SNK</option>
+                <option value="SEGA">SEGA</option>
+                <option value="KONAMI">KONAMI</option>
+                <option value="TECHNŌS">TECHNŌS</option>
+                <option value="TAITO">TAITO</option>
+                <option value="BANDAI">BANDAI</option>
+                <option value="IGS">IGS</option>
+                <option value="DATA EAST">DATA EAST</option>
+                <option value="DISNEY">DISNEY</option>
+                <option value="KOEI">KOEI</option>
             </select>
             </td></tr>
             <tr><td>{{BaseCountry}}：</td><td>
             <select id="country" editable>
-                <option value="Nintendo">日本</option>
-                <option value="Ubisoft">美国</option>
-                <option value="Konami">英国</option>
-                <option value="Sega">中国</option>
-                <option value="Amaze">法国</option>
-                <option value="Capcom">韩国</option>
+                <option value="{{CountryJP}}">{{CountryJP}}</option>
+                <option value="{{CountryUS}}">{{CountryUS}}</option>
+                <option value="{{CountryUK}}">{{CountryUK}}</option>
+                <option value="{{CountryCN}}">{{CountryCN}}</option>
+                <option value="{{CountryFR}}">{{CountryFR}}</option>
+                <option value="{{CountryKR}}">{{CountryKR}}</option>
             </select>
             </td></tr>
             <tr><th colspan="2"></th></tr>
@@ -71,18 +74,18 @@ include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
 
-
     //渲染语言
     createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;
-
     var getjson = mainView.GetRomBase(view.parameters.id);
-    var info = JSON.parse(getjson);
-    if(info.Name != undefined && info.Name != ""){$(#name).value = info.Name;}
-    if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
-    if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
-    if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
-    if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
+    if(getjson != undefined){
+        var info = JSON.parse(getjson);
+        if(info.Name != undefined && info.Name != ""){$(#name).value = info.Name;}
+        if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
+        if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
+        if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
+        if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
+    }
 
 });
 

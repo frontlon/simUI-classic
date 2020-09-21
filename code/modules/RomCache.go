@@ -26,8 +26,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
 	BaseInfo, err := GetRomBase(platform)
 
-	fmt.Println(BaseInfo);
-
 	if err != nil {
 		return nil, nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
 	}
