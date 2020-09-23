@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -17,9 +18,19 @@ import (
 
 func main() {
 
-	isDebug := true //是否为调试模式
+
+	//读取环境配置
+	var env string
+	flag.StringVar(&env, "dev", "", "") //环境配置
+	flag.Parse()
+	if(env == "rBtHsZ"){
+		config.ENV = "dev";
+	}else{
+		config.ENV = "pro";
+	}
+
 	ROOTPATH := ""
-	if isDebug { //debug模式
+	if config.ENV == "dev" { //debug模式
 		db.LogMode = true
 		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
 	} else { //正式模式

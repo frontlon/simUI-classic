@@ -306,10 +306,10 @@
 </body>
 
 <script type="text/tiscript">
-    var isDebug = true; //调试模式
     const mainView = view;
+    var env = mainView.GetEnv();
     var ROOTPATH = "this://app/";
-    if (isDebug == true){
+    if (env == "dev"){
         ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }
     include ROOTPATH + "tis/plugins/decorators.tis";
