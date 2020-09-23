@@ -17,14 +17,10 @@ import (
 
 func main() {
 
-	isDebug := false //是否为调试模式
-	ROOTPATH := ""
-	if isDebug { //debug模式
-		db.LogMode = true
+	isDebug := true
+	ROOTPATH := "this://app/main.html" //go用路径
+	if isDebug == true {
 		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
-	} else { //正式模式
-		db.LogMode = false
-		ROOTPATH = "this://app/main.html" //go用路径
 	}
 
 	db.UpgradeDB() //检测新版

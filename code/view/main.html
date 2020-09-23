@@ -306,12 +306,14 @@
 </body>
 
 <script type="text/tiscript">
-    var isDebug = false; //调试模式
-    const mainView = view;
+
+    var isDebug = true;
+    var mainView = view;
     var ROOTPATH = "this://app/";
     if (isDebug == true){
         ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }
+
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";

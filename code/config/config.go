@@ -17,14 +17,15 @@ import (
 //配置文件
 var (
 	Cfg      *ConfStruct                                                        //公共配置
+	ENV      string                                                             //环境配置
 	DOC_EXTS = []string{".txt", ".md"}                                          //doc文档支持的扩展名
 	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	} //可直接运行的doc文档支持的扩展名
-	Window *window.Window //窗体
+	}                                                                           //可直接运行的doc文档支持的扩展名
+	Window *window.Window                                                       //窗体
 )
 
 //配置文件
@@ -172,7 +173,7 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 		simList, _ := DBSim.GetByPlatform(v.Id)
 		vomap := map[uint32]*db.Simulator{}
 		for _, v := range simList {
-			v.Path,_ = filepath.Abs(v.Path)
+			v.Path, _ = filepath.Abs(v.Path)
 			vomap[v.Id] = v
 		}
 		platform[v.Id].SimList = vomap
@@ -238,7 +239,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" {           // 忽略目录
+		if !fi.IsDir() && ext == ".css" { // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件

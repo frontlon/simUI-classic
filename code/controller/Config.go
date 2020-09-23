@@ -56,4 +56,9 @@ func ConfigController() {
 		return sciter.NewValue(body)
 	})
 
+	//获取当前环境
+	utils.Window.DefineFunction("GetEnv", func(args ...*sciter.Value) *sciter.Value {
+		return sciter.NewValue(config.ENV)
+	})
+
 }
