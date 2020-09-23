@@ -34,24 +34,3 @@ func ReadCsv(filename string) ([][]string, error) {
 	}
 	return data, nil
 }
-
-//写入csv
-func WriteCsv(filename string, data [][]string) error {
-
-	if filename == "" {
-		return nil
-	}
-
-	file, err := os.OpenFile(filename, os.O_CREATE|os.O_RDWR, 0644)
-	if err != nil {
-		fmt.Println("open file is failed, err: ", err)
-		return err
-	}
-	defer file.Close()
-	w := csv.NewWriter(file)
-	for _, d := range data {
-		w.Write(d)
-	}
-	w.Flush()
-	return nil
-}

@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	isDebug := true //是否为调试模式
+	isDebug := false //是否为调试模式
 	ROOTPATH := ""
 	if isDebug { //debug模式
 		db.LogMode = true

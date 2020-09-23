@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"encoding/csv"
+	"os"
 	"simUI/code/config"
 	"simUI/code/utils"
 	"strings"
@@ -86,28 +88,32 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 		info[newData.RomName] = newData //并入新数据
 	}
 	//转换为切片
-	create := [][]string{}
+	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
+
+	writer := csv.NewWriter(f)
 
 	//表头
-	head := []string{config.Cfg.Lang["BaseRomName"], config.Cfg.Lang["BaseName"], config.Cfg.Lang["BaseType"], config.Cfg.Lang["BaseYear"], config.Cfg.Lang["BasePublisher"], config.Cfg.Lang["BaseCountry"]}
-
-	create = append(create, head)
+	writer.Write([]string{config.Cfg.Lang["BaseRomName"], config.Cfg.Lang["BaseName"], config.Cfg.Lang["BaseType"], config.Cfg.Lang["BaseYear"], config.Cfg.Lang["BasePublisher"], config.Cfg.Lang["BaseCountry"]})
 
 	for _, v := range info {
-		d := []string{
+
+		writer.Write([]string{
 			strings.Trim(v.RomName, " "),
 			strings.Trim(v.Name, " "),
 			strings.Trim(v.Type, " "),
 			strings.Trim(v.Year, " "),
 			strings.Trim(v.Publisher, " "),
 			strings.Trim(v.Country, " "),
-		}
-		create = append(create, d)
-	}
+		})
 
-	if err := utils.WriteCsv(config.Cfg.Platform[platform].Rombase, create); err != nil {
-		return err
 	}
+	writer.Flush() // 此时才会将缓冲区数据写入
 
 	return nil
 }

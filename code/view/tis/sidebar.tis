@@ -111,7 +111,7 @@ function openSidebar(obj){
     if(simlist.length > 0 ){
         var simliststr = "";
         for(var obj in simlist) {
-               simliststr += "<li filename='"+ obj.Path +"' rom='"+ info.Id +"' sim='"+ obj.Id +"'><p>"+ obj.Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
+               simliststr += "<li filename='"+ obj.Path.toHtmlString() +"' rom='"+ info.Id +"' sim='"+ obj.Id +"'><p>"+ obj.Name +"</p><button>"+ CONF.Lang.Edit +"</button></li>";
         }
         $(#sim_select).html = simliststr;
 

@@ -249,7 +249,7 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 		}
 	case "video":
-		if platform.BackgroundPath != "" {
+		if platform.VideoPath != "" {
 			for _, v := range config.PIC_EXTS {
 				fileName = platform.VideoPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
