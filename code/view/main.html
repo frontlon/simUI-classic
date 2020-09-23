@@ -306,12 +306,13 @@
 </body>
 
 <script type="text/tiscript">
-    const mainView = view;
-    var env = mainView.GetEnv();
+    var env = view.GetEnv();
     var ROOTPATH = "this://app/";
     if (env == "dev"){
         ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }
+
+    const mainView = view;
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";
