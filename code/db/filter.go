@@ -6,9 +6,10 @@ import (
 )
 
 type Filter struct {
-	Id   string
-	Type string
-	Name string
+	Id       string
+	Platform uint32
+	Type     string
+	Name     string
 }
 
 func (*Filter) TableName() string {
@@ -30,9 +31,16 @@ func (m *Filter) BatchAdd(data []*Filter) {
 }
 
 //根据条件，查询多条数据
-func (*Filter) GetByType(t string) ([]*Filter, error) {
+func (*Filter) GetByPlatform(platform uint32, t string) ([]*Filter, error) {
 	volist := []*Filter{}
-	result := getDb().Select("name").Where("type=?", t).Find(&volist)
+	where := map[string]interface{}{}
+
+	if platform > 0 {
+		where["platform"] = platform
+	}
+	where["type"] = t
+
+	result := getDb().Select("name").Where(where).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

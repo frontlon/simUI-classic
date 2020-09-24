@@ -153,8 +153,6 @@ function openSidebar(obj){
     rombase += "<li>" + info.RomPath + "</li>";
 
     $(#right_rombase).html = rombase;
-   
-
 }
 
 //视频

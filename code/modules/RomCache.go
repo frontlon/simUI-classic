@@ -259,31 +259,36 @@ func GetPathMd5(par ...string) string {
 /**
  * 更新filter cache
  **/
-func UpdateFilterDB() {
-	_ = (&db.Filter{}).Truncate()
+func UpdateFilterDB(platform uint32) {
 
-	baseType, _ := (&db.Rom{}).GetFilter("base_type")
-	baseYear, _ := (&db.Rom{}).GetFilter("base_year")
-	basePublisher, _ := (&db.Rom{}).GetFilter("base_publisher")
+	baseType, _ := (&db.Rom{}).GetFilter(platform, "base_type")
+	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
+	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")
 
 	filters := []*db.Filter{}
 	for _, v := range baseType {
 		data := &db.Filter{
-			Name: v,
+			Name:     v,
+			Type:     "base_type",
+			Platform: platform,
 		}
 		filters = append(filters, data)
 	}
 
 	for _, v := range baseYear {
 		data := &db.Filter{
-			Name: v,
+			Name:     v,
+			Type:     "base_year",
+			Platform: platform,
 		}
 		filters = append(filters, data)
 	}
 
 	for _, v := range basePublisher {
 		data := &db.Filter{
-			Name: v,
+			Name:     v,
+			Type:     "base_publisher",
+			Platform: platform,
 		}
 		filters = append(filters, data)
 	}

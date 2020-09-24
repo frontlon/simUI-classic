@@ -65,14 +65,12 @@ function initConfig(isfresh){
         createLang();
     }
 
-
     initTheme(); //创建主题
     initPlatform(); //生成平台列表
     initShortcutList(); //初始化快捷工具列表
-
     initRomListStyle(); //初始化游戏列表样式
     initFontSize(); //初始化字体大小
-    initBaseFilter(); //初始化基本信息过滤器
+    getBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
 
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform,0);

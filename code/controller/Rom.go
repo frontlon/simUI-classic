@@ -281,9 +281,10 @@ func RomController() {
 	})
 
 	//读取过滤器列表
-	utils.Window.DefineFunction("GetRomFilter", func(args ...*sciter.Value) *sciter.Value {
-		name := args[0].String()
-		lists, err := (&db.Rom{}).GetFilter(name)
+	utils.Window.DefineFunction("GetFilter", func(args ...*sciter.Value) *sciter.Value {
+		platform := uint32(utils.ToInt(args[0].String()))
+		t := args[1].String()
+		lists, err := (&db.Filter{}).GetByPlatform(platform,t)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())

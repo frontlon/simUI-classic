@@ -342,9 +342,10 @@ func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 }
 
 //读取一个过滤器分类
-func (sim *Rom) GetFilter(t string) ([]string, error) {
+func (sim *Rom) GetFilter(platform uint32,t string) ([]string, error) {
 	volist := []*Rom{}
-	result := getDb().Select(t).Where(t + " != ''").Group(t).Find(&volist)
+
+	result := getDb().Select(t).Where("platform = " + utils.ToString(platform) + " AND "+ t + " != ''").Group(t).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

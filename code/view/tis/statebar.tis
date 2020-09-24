@@ -71,48 +71,66 @@ function initTheme(){
     setTheme(CONF.Default.Theme);
 }
 
-function initBaseFilter(){
+function getBaseFilter(platform){
+
+    //先清理
+    $(#filter_type).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_year).value = "";
+    $(#filter_country).value = "";
+
+    $(#filter_type).options.clear();
+    $(#filter_publisher).options.clear();
+    $(#filter_year).options.clear();
+    $(#filter_country).options.clear();
+
+    $(#filter_type).options.$append(<option value=''>{CONF.Lang.BaseType}</option>);
+    $(#filter_publisher).options.$append(<option value=''>{CONF.Lang.BasePublisher}</option>);
+    $(#filter_year).options.$append(<option value=''>{CONF.Lang.BaseYear}</option>);
+    $(#filter_country).options.$append(<option value=''>{CONF.Lang.BaseCountry}</option>);
 
     //类型
-    var getjson = view.GetRomFilter("base_type");
+    var getjson = view.GetFilter(platform,"base_type");
     var jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_type).options.$append(<option value={obj}>{obj}</option>);
+            $(#filter_type).options.$append(<option value={obj.Name}>{obj.Name}</option>);
         }
     }
     $(#filter_type).value = "";
     
  
     //发行商
-    getjson = view.GetRomFilter("base_publisher");
+    getjson = view.GetFilter(platform,"base_publisher");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_publisher).options.$append(<option value={obj}>{obj}</option>);
+            $(#filter_publisher).options.$append(<option value={obj.Name}>{obj.Name}</option>);
         }
     }
     $(#filter_publisher).value = "";
     
     //年份
-    getjson = view.GetRomFilter("base_year");
+    getjson = view.GetFilter(platform,"base_year");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_year).options.$append(<option value={obj}>{obj}</option>);
+            $(#filter_year).options.$append(<option value={obj.Name}>{obj.Name}</option>);
         }
     }
     $(#filter_year).value = "";
 
     //国家
-    getjson = view.GetRomFilter("base_country");
+    getjson = view.GetFilter(platform,"base_country");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_country).options.$append(<option value={obj}>{obj}</option>);
+            $(#filter_country).options.$append(<option value={obj.Name}>{obj.Name}</option>);
         }
     }
     $(#filter_country).value = "";
+
+    $(#search_input).value = "";
 
 }
 

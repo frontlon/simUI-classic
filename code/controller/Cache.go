@@ -66,6 +66,10 @@ func CacheController() {
 					return utils.ErrorMsg(err.Error())
 				}
 			}
+
+			//清空过滤器
+			_ = (&db.Filter{}).Truncate()
+			
 			//开始重建缓存
 			for platform, _ := range PlatformList {
 
@@ -89,7 +93,7 @@ func CacheController() {
 				}
 
 				//更新filter数据
-				modules.UpdateFilterDB();
+				modules.UpdateFilterDB(platform);
 
 			}
 
