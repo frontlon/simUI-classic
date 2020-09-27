@@ -34,13 +34,15 @@ func (m *Filter) BatchAdd(data []*Filter) {
 func (*Filter) GetByPlatform(platform uint32, t string) ([]*Filter, error) {
 	volist := []*Filter{}
 	where := map[string]interface{}{}
-
+	group := ""
 	if platform > 0 {
 		where["platform"] = platform
+	}else{
+		group = "name";
 	}
 	where["type"] = t
 
-	result := getDb().Select("name").Where(where).Find(&volist)
+	result := getDb().Select("name").Where(where).Group(group).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

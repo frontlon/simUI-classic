@@ -21,7 +21,6 @@ type Platform struct {
 	DocPath        string
 	StrategyPath   string
 	VideoPath      string
-	Romlist        string
 	Rombase        string
 	Pinyin         string
 	Sort           uint32
@@ -40,20 +39,6 @@ func (m *Platform) Add() (uint32, error) {
 		fmt.Println(result.Error)
 	}
 	return uint32(m.Id), result.Error
-}
-
-//批量插入数据
-func (m *Platform) BatchAdd(platforms []*Platform) {
-
-	if len(platforms) == 0 {
-		return
-	}
-
-	tx := getDb().Begin()
-	for _, v := range platforms {
-		tx.Create(&v)
-	}
-	tx.Commit()
 }
 
 //根据条件，查询多条数据

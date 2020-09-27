@@ -23,7 +23,6 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 	menuList := map[string]*db.Menu{}                                   //分类目录
 	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
-	RomAlias, _ := config.GetRomAlias(platform)                         //别名配置
 	BaseInfo, err := GetRomBase(platform)
 
 	if err != nil {
@@ -66,18 +65,13 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					}
 				}
 
-				if _, ok := RomAlias[title]; ok {
-					if RomAlias[title] != "" {
-						aliasName = RomAlias[title]
-					}
-				}
 				if baseName != "" {
 					title = baseName
 				} else if aliasName != "" {
 					title = aliasName
 				}
 
-				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Publisher) //路径md5，可变
+				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Publisher, base.Country) //路径md5，可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -264,6 +258,7 @@ func UpdateFilterDB(platform uint32) {
 	baseType, _ := (&db.Rom{}).GetFilter(platform, "base_type")
 	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
 	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")
+	baseCountry, _ := (&db.Rom{}).GetFilter(platform, "base_country")
 
 	filters := []*db.Filter{}
 	for _, v := range baseType {
@@ -288,6 +283,15 @@ func UpdateFilterDB(platform uint32) {
 		data := &db.Filter{
 			Name:     v,
 			Type:     "base_publisher",
+			Platform: platform,
+		}
+		filters = append(filters, data)
+	}
+
+	for _, v := range baseCountry {
+		data := &db.Filter{
+			Name:     v,
+			Type:     "base_country",
 			Platform: platform,
 		}
 		filters = append(filters, data)

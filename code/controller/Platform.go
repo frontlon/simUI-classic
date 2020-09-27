@@ -136,7 +136,6 @@ func PlatformController() {
 			StrategyPath:   d["strategy"],
 			VideoPath:      d["video"],
 			DocPath:        d["doc"],
-			Romlist:        d["romlist"],
 			Rombase:        d["rombase"],
 			Pinyin:         utils.TextToPinyin(d["name"]),
 		}

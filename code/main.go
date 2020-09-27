@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	isDebug := true
+	isDebug := false
 	ROOTPATH := "this://app/main.html" //go用路径
 	if isDebug == true {
 		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径

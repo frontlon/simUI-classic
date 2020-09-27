@@ -319,16 +319,6 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	return themelist, nil
 }
 
-//读取ROM别名配置参数
-func GetRomAlias(platform uint32) (map[string]string, error) {
-	section := make(map[string]string)
-	file, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, Cfg.Platform[platform].Romlist)
-	if err != nil {
-		return section, err
-	}
-	section = file.Section("Alias").KeysHash()
-	return section, nil
-}
 
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
