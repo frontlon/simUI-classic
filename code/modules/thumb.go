@@ -117,7 +117,7 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 	RomFileName := utils.GetFileName(vo.RomPath)
 	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + utils.GetFileExt(picPath) //生成新文件的完整绝路路径地址
 	//复制文件
-	if err := utils.Copy(picPath, newFileName); err != nil {
+	if err := utils.FileCopy(picPath, newFileName); err != nil {
 		return "", err
 	}
 

@@ -292,4 +292,25 @@ func RomController() {
 		jsonstr, _ := json.Marshal(&lists)
 		return sciter.NewValue(string(jsonstr))
 	})
+
+	//删除rom
+	utils.Window.DefineFunction("DeleteRom", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+
+		//删除文件
+		err := modules.DeleteRomAndRes(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		//删除数据库缓存
+		err = (&db.Rom{}).DeleteById(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NewValue("1")
+	})
 }

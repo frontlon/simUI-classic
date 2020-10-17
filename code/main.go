@@ -90,8 +90,8 @@ func main() {
 	}
 
 	if len(config.Cfg.Lang) == 0 {
-		utils.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
-		utils.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		utils.WriteLog("没有找到语言文件或语言文件为空\nNo language files is not exists")
+		utils.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files is not exists")
 		os.Exit(1)
 		return
 	}

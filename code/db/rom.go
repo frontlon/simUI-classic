@@ -277,6 +277,15 @@ func (m *Rom) UpdateSimulator() error {
 	return result.Error
 }
 
+//删除一个rom
+func (m *Rom) DeleteById(id uint64) error {
+	result := getDb().Where("id=? ", id).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //删除一个平台下的所有rom数据
 func (m *Rom) DeleteByPlatform() error {
 	result := getDb().Where("platform=? ", m.Platform).Delete(&m)

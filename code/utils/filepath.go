@@ -53,24 +53,7 @@ func IsAbsPath(p string) bool {
 	return filepath.IsAbs(p)
 }
 
-/**
- * 检测文件是否存在（文件夹也返回false）
- **/
-func FileExists(path string) bool {
 
-	if path == "" {
-		return false
-	}
-
-	finfo, err := os.Stat(path)
-	isset := false
-	if err != nil || finfo.IsDir() == true {
-		isset = false
-	} else {
-		isset = true
-	}
-	return isset
-}
 
 /**
  * 检测路径是否存在
@@ -112,4 +95,33 @@ func CreateDir(p string) error {
 		return err
 	}
 	return nil
+}
+
+/**
+ * 根据关键字扫描目录和子目录，查询出符合条件的文件名
+ * 如果keyword不为空，则查询keyword关键字相关的程序
+ **/
+func ScanDirByKeyword(dir string, keyword string) ([]string, error) {
+
+	files := []string{}
+	keyword = strings.ToUpper(keyword) //忽略后缀匹配的大小写
+
+	err := filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error { //遍历目录
+		if err != nil { //忽略错误
+			return err
+		}
+
+		if fi.IsDir() { // 忽略目录
+			return nil
+		}
+
+		if strings.Contains(strings.ToUpper(fi.Name()), keyword) { //如果包含关键字
+			files = append(files, filename)
+		}
+
+		return nil
+	})
+
+	return files, err
+
 }

@@ -5,8 +5,9 @@ import (
 	"io"
 	"os"
 )
+
 //复制文件
-func Copy(src, dst string) (error) {
+func FileCopy(src, dst string) (error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -30,4 +31,32 @@ func Copy(src, dst string) (error) {
 	defer destination.Close()
 	_, err = io.Copy(destination, source)
 	return err
+}
+
+//remove
+func FileDelete(src string) (error) {
+	if FileExists(src) == true {
+		err := os.Remove(src)
+		return err
+	}
+	return nil
+}
+
+/**
+ * 检测文件是否存在（文件夹也返回false）
+ **/
+func FileExists(path string) bool {
+
+	if path == "" {
+		return false
+	}
+
+	finfo, err := os.Stat(path)
+	isset := false
+	if err != nil || finfo.IsDir() == true {
+		isset = false
+	} else {
+		isset = true
+	}
+	return isset
 }

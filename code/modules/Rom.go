@@ -88,9 +88,9 @@ func RunGame(romId uint64, simId uint32) error {
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
 		//如果lua脚本存在，则运行lua脚本
-		if config.Cfg.Platform[rom.Platform].Lua != ""{
-			callLua("",rom.RomPath)
-		}else{
+		if config.Cfg.Platform[rom.Platform].Lua != "" {
+			callLua("", rom.RomPath)
+		} else {
 			//运行游戏
 			cmd = append(cmd, rom.RomPath)
 			err = utils.RunGame("", cmd)
@@ -126,12 +126,11 @@ func RunGame(romId uint64, simId uint32) error {
 			}
 		}
 
-
 		//运行lua脚本
-		if config.Cfg.Platform[rom.Platform].Lua != ""{
-			cmdStr := utils.SlicetoString(" ",cmd)
-			callLua(sim.Path,cmdStr)
-		}else {
+		if config.Cfg.Platform[rom.Platform].Lua != "" {
+			cmdStr := utils.SlicetoString(" ", cmd)
+			callLua(sim.Path, cmdStr)
+		} else {
 			//运行游戏
 			err = utils.RunGame(sim.Path, cmd)
 		}
@@ -333,9 +332,9 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	res.Sublist = sub
 	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
 
-	for k,v := range res.Simlist{
-		if res.Simlist[k].Path != ""{
-			res.Simlist[k].Path,_ = filepath.Abs(v.Path)
+	for k, v := range res.Simlist {
+		if res.Simlist[k].Path != "" {
+			res.Simlist[k].Path, _ = filepath.Abs(v.Path)
 		}
 	}
 
@@ -412,5 +411,80 @@ func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
 			return err
 		}
 	}
+	return nil
+}
+
+//读取rom以及相关资源
+func DeleteRomAndRes(id uint64) error {
+
+	//游戏游戏详细数据
+	info, err := (&db.Rom{}).GetById(id)
+	if err != nil {
+		return err
+	}
+
+	fname := utils.GetFileName(info.RomPath)
+	platform := config.Cfg.Platform[info.Platform]
+
+	go func() {
+		romFiles, _ := utils.ScanDirByKeyword(platform.RomPath, fname)
+		for _, f := range romFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		thumbFiles, _ := utils.ScanDirByKeyword(platform.ThumbPath, fname)
+		for _, f := range thumbFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		backgroundFiles, _ := utils.ScanDirByKeyword(platform.BackgroundPath, fname)
+		for _, f := range backgroundFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		packingFiles, _ := utils.ScanDirByKeyword(platform.PackingPath, fname)
+		for _, f := range packingFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		posterFiles, _ := utils.ScanDirByKeyword(platform.PosterPath, fname)
+		for _, f := range posterFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		snapFiles, _ := utils.ScanDirByKeyword(platform.SnapPath, fname)
+		for _, f := range snapFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		titleFiles, _ := utils.ScanDirByKeyword(platform.TitlePath, fname)
+		for _, f := range titleFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		videoFiles, _ := utils.ScanDirByKeyword(platform.VideoPath, fname)
+		for _, f := range videoFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		docFiles, _ := utils.ScanDirByKeyword(platform.DocPath, fname)
+		for _, f := range docFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		strategyFiles, _ := utils.ScanDirByKeyword(platform.StrategyPath, fname)
+		for _, f := range strategyFiles {
+			utils.FileDelete(f)
+		}
+	}()
 	return nil
 }
