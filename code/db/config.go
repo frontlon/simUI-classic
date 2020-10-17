@@ -27,7 +27,7 @@ type Config struct {
 	PanelPlatformWidth string // 平台面板宽度
 	PanelMenuWidth     string // 菜单面板宽度
 	PanelSidebarWidth  string // 侧边栏宽度
-	SoftName string // 软件名称
+	SoftName           string // 软件名称
 }
 
 func (*Config) TableName() string {

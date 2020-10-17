@@ -13,6 +13,10 @@ var LAST_PROCESS int = 0
  **/
 func RunGame(exeFile string, cmd []string) error {
 
+	if exeFile == ""{
+		exeFile = "explorer"
+	}
+
 	//更改程序运行目录
 	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
 		return err

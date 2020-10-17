@@ -114,7 +114,7 @@ func ShortcutController() {
 			return utils.ErrorMsg( config.Cfg.Lang["ShortcutNotExists"])
 		}
 
-		err = utils.RunGame("explorer", []string{shortcut})
+		err = utils.RunGame("", []string{shortcut})
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())

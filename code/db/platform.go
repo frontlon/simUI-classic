@@ -24,6 +24,7 @@ type Platform struct {
 	Rombase        string
 	Pinyin         string
 	Sort           uint32
+	Lua            string                           //Lua脚本
 	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
 	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
 }

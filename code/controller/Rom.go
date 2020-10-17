@@ -36,7 +36,7 @@ func RomController() {
 		if f == "" {
 			return sciter.NullValue()
 		}
-		if err := utils.RunGame("explorer", []string{f}); err != nil {
+		if err := utils.RunGame("", []string{f}); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

@@ -48,12 +48,6 @@ func RunGame(romId uint64, simId uint32) error {
 		sim = config.Cfg.Platform[rom.Platform].SimList[simId]
 	}
 
-	//检测执行文件是否存在
-	_, err = os.Stat(sim.Path)
-	if err != nil {
-		return errors.New(config.Cfg.Lang["SimulatorNotFound"])
-	}
-
 	//如果是相对路径，转换成绝对路径
 	if !strings.Contains(rom.RomPath, ":") {
 		rom.RomPath = config.Cfg.Platform[rom.Platform].RomPath + config.Cfg.Separator + rom.RomPath
@@ -93,10 +87,22 @@ func RunGame(romId uint64, simId uint32) error {
 	}
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
-		cmd = append(cmd, rom.RomPath)
-		err = utils.RunGame("explorer", cmd)
+		//如果lua脚本存在，则运行lua脚本
+		if config.Cfg.Platform[rom.Platform].Lua != ""{
+			callLua("",rom.RomPath)
+		}else{
+			//运行游戏
+			cmd = append(cmd, rom.RomPath)
+			err = utils.RunGame("", cmd)
+		}
 	} else {
 		//如果依赖模拟器
+
+		//检测模拟器文件是否存在
+		_, err = os.Stat(sim.Path)
+		if err != nil {
+			return errors.New(config.Cfg.Lang["SimulatorNotFound"])
+		}
 
 		simCmd := ""
 
@@ -119,7 +125,16 @@ func RunGame(romId uint64, simId uint32) error {
 				cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
 			}
 		}
-		err = utils.RunGame(sim.Path, cmd)
+
+
+		//运行lua脚本
+		if config.Cfg.Platform[rom.Platform].Lua != ""{
+			cmdStr := utils.SlicetoString(" ",cmd)
+			callLua(sim.Path,cmdStr)
+		}else {
+			//运行游戏
+			err = utils.RunGame(sim.Path, cmd)
+		}
 
 	}
 	return nil

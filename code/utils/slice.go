@@ -1,10 +1,28 @@
 package utils
 
+import "bytes"
+
+
+
+/**
+切换合并为字符串
+ */
+func SlicetoString(glue string, pieces []string) string {
+	var buf bytes.Buffer
+	l := len(pieces)
+	for _, str := range pieces {
+		buf.WriteString(str)
+		if l--; l > 0 {
+			buf.WriteString(glue)
+		}
+	}
+	return buf.String()
+}
+
 /*
 查看slice中一个字段是否存在
 字符串
 */
-
 func InSliceString(str string, slice []string) bool {
 	isset := false
 	for _, v := range slice {
