@@ -61,7 +61,7 @@ function initTheme(){
     var menu = "";
 
     for(var themeId in CONF.Theme) {
-        cssfile += "<style src='"+  CONF.Theme[themeId].Path +"' />"; //引入文件
+        cssfile += "<style src='"+  URL.fromPath(CONF.Theme[themeId].Path) +"' />"; //引入文件
         menu += "<li id="+ themeId +">"+  CONF.Theme[themeId].Name +"</li>"; //填充菜单
     }
     $(#theme menu).html = menu;

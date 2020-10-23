@@ -59,7 +59,7 @@ function createMenuList(menujson){
     ACTIVE_MENU = CONF.Default.Menu;
 
    //设置默认激活按钮
-    var active =  $(#menulist).select("dd[opt="+ ACTIVE_MENU +"]");
+    var active =  $(#menulist).select("dd[opt='"+ ACTIVE_MENU +"']");
     if (active != undefined){
         active.state.current = true;
     }else{

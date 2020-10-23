@@ -20,7 +20,14 @@ func main() {
 	isDebug := false
 	ROOTPATH := "this://app/main.html" //go用路径
 	if isDebug == true {
-		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
+		switch runtime.GOOS {
+		case "darwin":
+			ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/main.html"
+		case "windows":
+			ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html"
+		case "linux":
+			ROOTPATH = ""
+		}
 	}
 
 	db.UpgradeDB() //检测新版

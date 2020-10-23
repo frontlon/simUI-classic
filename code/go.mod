@@ -3,6 +3,7 @@ module simUI/code
 go 1.14
 
 require (
+	github.com/Shopify/go-lua v0.0.0-20191113154418-05ce435a9edd
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/go-ini/ini v1.55.0
 	github.com/jinzhu/gorm v1.9.12
