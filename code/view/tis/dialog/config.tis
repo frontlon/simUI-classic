@@ -305,6 +305,11 @@ function platformAdd(evt) {
 
 //删除平台
 function platformDel(evt) {
+
+    if ($(#platform_list li:current) == undefined){
+        return;
+    }
+
     var pfId = $(#platform_list li:current).attributes["value"];
     if (pfId == undefined){
         view.msgbox(#alert,CONF.Lang.NotSelectPlatform);
