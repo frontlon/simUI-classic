@@ -37,7 +37,7 @@ function createRomList(cls=0){
 
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-            thumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+            thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
 
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
@@ -139,25 +139,25 @@ function getRomPicPath(type,platform,name){
 
     switch(type){
         case "thumb":
-            path = CONF.Platform[platform.toString()].ThumbPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].ThumbPath + "/" + name ;
             break;
         case "snap":
-            path = CONF.Platform[platform.toString()].SnapPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].SnapPath + "/" + name ;
             break;
         case "poster":
-            path = CONF.Platform[platform.toString()].PosterPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].PosterPath + "/" + name ;
             break;
         case "packing":
-            path = CONF.Platform[platform.toString()].PackingPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].PackingPath + "/" + name ;
             break;
         case "title":
-            path = CONF.Platform[platform.toString()].TitlePath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].TitlePath + "/" + name ;
             break;
         case "background":
-            path = CONF.Platform[platform.toString()].BackgroundPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].BackgroundPath + "/" + name ;
             break;
         case "video":
-            path = CONF.Platform[platform.toString()].VideoPath + "\\" + name ;
+            path = CONF.Platform[platform.toString()].VideoPath + "/" + name ;
             break;
         default:
             return "";

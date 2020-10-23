@@ -12,7 +12,7 @@ function thumbEdit(evt){
     if(thumb == ""){
         return true;
     }else if(thumb == "delete"){
-        var emptythumb = URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+        var emptythumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = emptythumb;
     }else{
         self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = thumb;

@@ -289,7 +289,7 @@ function setTheme(themeId){
         $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
     }
 
-    var themePath = CONF.RootPath + "theme\\";
+    var themePath = CONF.RootPath + "theme/";
 
     if(CONF.Theme[themeId].Params["window-opacity"] != undefined){
         $(body).style["opacity"] = CONF.Theme[themeId].Params["window-opacity"];

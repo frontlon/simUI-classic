@@ -206,7 +206,7 @@ function _createRotate(info){
     if(thumb != ""){
         pics += "<img src=\""+ thumb +"\" />";
     }else if(pics == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-        pics += "<img src=\""+ URL.fromPath(CONF.RootPath + "theme\\" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"\" />";
+        pics += "<img src=\""+ URL.fromPath(CONF.RootPath + "themem" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]) +"\" />";
     }
 
     //滚动图
