@@ -30,8 +30,8 @@
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
     #shortcut_list li .openfile{margin-left:0;}
 
-    .platform_control{height:16dip;flow:horizontal-flow;}
-    .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
+    .platform_control{}
+    .platform_control button{height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none;width:*}
     .platform_control button:hover{background:#eee;cursor: pointer}
     .platform_control button:active{background:#ddd}
     .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #ccc;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
@@ -73,11 +73,12 @@
       <section id="second">
         <div class="wrapper">
           <div class="frame_left">
-              <ul class="platform_list" id="platform_list" size="5"></ul>
               <div class="platform_control">
-                <button class="sub" id="platform_del" title="{{DeletePlatform}}">{{DeletePlatform}}</button>
                 <button class="add" id="platform_add" title="{{AddNewPlatform}}">{{AddNewPlatform}}</button>
+                <button class="sub" id="platform_del" title="{{DeletePlatform}}">{{DeletePlatform}}</button>
               </div>
+              <ul class="platform_list" id="platform_list" size="5"></ul>
+              
           </div>
           <div class="frame_right">
             <table>

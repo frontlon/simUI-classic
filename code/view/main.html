@@ -33,9 +33,9 @@
     #logo{color:color(logo-text-color);width:202dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
     #logo img{max-width:202dip;max-height:36dip;width:auto;height:auto;}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
-    #tb_right{text-align:right;width:222dip;display:inline;background-color:color(titlebar-background-color);}
+    #tb_right{text-align:right;width:223dip;display:inline;background-color:color(titlebar-background-color);}
     #titlebar i{font-size:18dip;line-height:36dip;display:block}
-    #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0}
+    #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0;border:0;border-radius:0}
     #titlebar button:hover{opacity:0.7;cursor:pointer}
     #titlebar button.disabled{opacity:0.3;}
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
@@ -44,12 +44,12 @@
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
     .statebar .filter{color:color(statebar-text-color);position:absolute;left:17dip;line-height:42dip}
-    .statebar .filter select{background:color(filter-background-color);display:inline-block}
+    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:20dip;border:0;vertical-align: middle}
     .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
     .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
     .statebar .filter select > caption{color:color(filter-text-color)}
-    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:95dip;padding:0 5dip;display:inline-block;}
-    .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);}
+    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:95dip;padding:0 5dip;display:inline-block;vertical-align: middle}
+    .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);height:24dip;border:0;vertical-align: middle}
 
     /* 字母选择 */
     #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;width:30dip}
@@ -306,7 +306,7 @@
 
 <script type="text/tiscript">
 
-    var isDebug = false;
+    var isDebug = true;
     var mainView = view;
     var ROOTPATH = "this://app/";
     if (isDebug == true){
