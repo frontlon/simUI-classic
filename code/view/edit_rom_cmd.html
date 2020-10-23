@@ -24,6 +24,10 @@
                 <td><div class="tip" title="{{RomSimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td>
                 <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
             </tr>
+                <tr><td><div class="tip" title="{{LuaDesc}}">&#xf3c1;</div>{{Lua}}：</td><td>
+                <input type="text" id="sim_lua" value="">
+                <button class="openfile" for="sim_lua" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*">&#x2026;</button>
+            </td></tr>
             <tr>
                 <td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td>
                 <td><select id="unzip"><option value="2">{{UnzipDefault}}</option><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>

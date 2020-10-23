@@ -48,6 +48,7 @@ function simSubmit(evt){
         path:$(#sim_path).value,
         cmd:$(#sim_cmd).value,
         unzip:$(#unzip).value,
+        lua:$(#sim_lua).value,
     };
 
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}

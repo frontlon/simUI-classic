@@ -85,10 +85,27 @@ func RunGame(romId uint64, simId uint32) error {
 	if err = utils.KillGame(); err != nil {
 		return err
 	}
+
+	simCmd := ""
+	simLua := ""
+
+	if romCmd.Cmd != "" {
+		simCmd = romCmd.Cmd
+	} else if sim.Cmd != "" {
+		simCmd = sim.Cmd
+	}
+
+	if romCmd.Lua != "" {
+		simLua = romCmd.Lua
+	} else if sim.Cmd != "" {
+		simLua = sim.Lua
+	}
+
+
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
 		//如果lua脚本存在，则运行lua脚本
-		if sim.Lua != "" {
+		if simLua != "" {
 			callLua("", rom.RomPath)
 		} else {
 			//运行游戏
@@ -104,13 +121,7 @@ func RunGame(romId uint64, simId uint32) error {
 			return errors.New(config.Cfg.Lang["SimulatorNotFound"])
 		}
 
-		simCmd := ""
 
-		if romCmd.Cmd != "" {
-			simCmd = romCmd.Cmd
-		} else if sim.Cmd != "" {
-			simCmd = sim.Cmd
-		}
 
 		if simCmd == "" {
 			cmd = append(cmd, rom.RomPath)
@@ -127,7 +138,7 @@ func RunGame(romId uint64, simId uint32) error {
 		}
 
 		//运行lua脚本
-		if sim.Lua != "" {
+		if simLua != "" {
 			cmdStr := utils.SlicetoString(" ", cmd)
 			callLua(sim.Path, cmdStr)
 		} else {

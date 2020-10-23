@@ -14,6 +14,7 @@ func AddSimulator(data map[string]interface{}) (*db.Simulator, error) {
 		Platform: pfId,
 		Path:     utils.ToString(data["path"]),
 		Cmd:      utils.ToString(data["cmd"]),
+		Lua:      utils.ToString(data["lua"]),
 		Unzip:    uint8(utils.ToInt(data["unzip"])),
 		Pinyin:   utils.TextToPinyin(utils.ToString(data["name"])),
 	}
@@ -41,6 +42,7 @@ func UpdateSimulator(data map[string]interface{}) (*db.Simulator, error) {
 		Platform: pfId,
 		Path:     utils.ToString(data["path"]),
 		Cmd:      utils.ToString(data["cmd"]),
+		Lua:      utils.ToString(data["lua"]),
 		Pinyin:   utils.TextToPinyin(utils.ToString(data["name"])),
 		Unzip:    uint8(utils.ToInt(data["unzip"])),
 	}

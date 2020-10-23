@@ -10,6 +10,7 @@ type SimConf struct {
 	Cmd   string
 	Unzip uint8
 	File  string
+	Lua   string
 }
 
 //设置一个Rom的模拟器配置

@@ -48,7 +48,7 @@ func (m *Simulator) BatchAdd(simulators []*Simulator) {
 //根据ID查询一个模拟器参数
 func (*Simulator) GetById(id uint32) (*Simulator, error) {
 	vo := &Simulator{}
-	result := getDb().Select("id, platform, name, path, cmd, unzip,`default`").Where("id=?", id).First(&vo)
+	result := getDb().Where("id=?", id).First(&vo)
 	return vo, result.Error
 }
 
@@ -62,7 +62,7 @@ func (*Simulator) GetByPlatform(platform uint32) ([]*Simulator, error) {
 		where += "platform = '" + utils.ToString(platform) + "'"
 	}
 
-	result := getDb().Select("id, platform, name, path, cmd, unzip,`default`").Where(where).Order("sort ASC,`default` DESC,pinyin ASC").Find(&volist)
+	result := getDb().Where(where).Order("sort ASC,`default` DESC,pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -90,6 +90,7 @@ func (m *Simulator) UpdateById() error {
 		"cmd":    m.Cmd,
 		"unzip":  m.Unzip,
 		"pinyin": m.Pinyin,
+		"lua": m.Lua,
 	}
 	result := getDb().Table(m.TableName()).Where("id=(?)", m.Id).Updates(create)
 
