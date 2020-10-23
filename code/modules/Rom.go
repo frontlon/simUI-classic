@@ -88,7 +88,7 @@ func RunGame(romId uint64, simId uint32) error {
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
 		//如果lua脚本存在，则运行lua脚本
-		if config.Cfg.Platform[rom.Platform].Lua != "" {
+		if sim.Lua != "" {
 			callLua("", rom.RomPath)
 		} else {
 			//运行游戏
@@ -127,7 +127,7 @@ func RunGame(romId uint64, simId uint32) error {
 		}
 
 		//运行lua脚本
-		if config.Cfg.Platform[rom.Platform].Lua != "" {
+		if sim.Lua != "" {
 			cmdStr := utils.SlicetoString(" ", cmd)
 			callLua(sim.Path, cmdStr)
 		} else {

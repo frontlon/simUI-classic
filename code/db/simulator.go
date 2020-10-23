@@ -16,6 +16,7 @@ type Simulator struct {
 	Default  uint8
 	Pinyin   string
 	Sort     uint32
+	Lua      string //Lua脚本
 }
 
 func (*Simulator) TableName() string {
