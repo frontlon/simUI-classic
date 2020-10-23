@@ -1,3 +1,5 @@
+github.com/Shopify/go-lua v0.0.0-20191113154418-05ce435a9edd h1:etO8lBj+8Fxlw61n4hxWfnqsx95h/jD9W8ltrHkQLls=
+github.com/Shopify/go-lua v0.0.0-20191113154418-05ce435a9edd/go.mod h1:lvS2IGWEGk+KQkRrCXuWlcsHO5BitT0HyhnP51rh3gA=
 github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394 h1:OYA+5W64v3OgClL+IrOD63t4i/RW7RqrAVl9LTZ9UqQ=
 github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394/go.mod h1:Q8n74mJTIgjX4RBBcHnJ05h//6/k6foqmgE45jTQtxg=
 github.com/denisenkom/go-mssqldb v0.0.0-20191124224453-732737034ffd/go.mod h1:xbL0rPBG9cCiLr28tMa8zpbdarY27NDyej4t/EjAShU=
