@@ -191,10 +191,6 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 	phdr := (*SciterCallbackNotification)(ph)
 	handler := globalCallbackHandlers[int(uintptr(callbackParam))]
 	switch phdr.Code {
-	case SC_ENGINE_DESTROYED:
-		if handler.OnEngineDestroyed != nil {
-			return handler.OnEngineDestroyed()
-		}
 	case SC_LOAD_DATA:
 		if handler.OnLoadData != nil {
 			return handler.OnLoadData((*ScnLoadData)(unsafe.Pointer(phdr)))
@@ -203,7 +199,6 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 		if handler.OnDataLoaded != nil {
 			return handler.OnDataLoaded((*ScnDataLoaded)(unsafe.Pointer(phdr)))
 		}
-	// attach behavior
 	case SC_ATTACH_BEHAVIOR:
 		params := (*ScnAttachBehavior)(unsafe.Pointer(phdr))
 		key := params.BehaviorName()
@@ -218,6 +213,26 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 			el.attachBehavior(behavior)
 		} else {
 			log.Printf("No such behavior <%s> found", key)
+		}
+	case SC_ENGINE_DESTROYED:
+		if handler.OnEngineDestroyed != nil {
+			return handler.OnEngineDestroyed()
+		}
+	case SC_POSTED_NOTIFICATION:
+		if handler.OnPostedNotification != nil {
+			return handler.OnPostedNotification((*ScnPostedNotification)(unsafe.Pointer(phdr)))
+		}
+	case SC_GRAPHICS_CRITICAL_FAILURE:
+		if handler.OnGraphicsCriticalFailure != nil {
+			return handler.OnGraphicsCriticalFailure()
+		}
+	case SC_KEYBOARD_REQUEST:
+		if handler.OnKeyboardRequest != nil {
+			return handler.OnKeyboardRequest((*ScnKeyboardRequest)(unsafe.Pointer(phdr)))
+		}
+	case SC_INVALIDATE_RECT:
+		if handler.OnInvalidateRect != nil {
+			return handler.OnInvalidateRect((*ScnInvalidateRect)(unsafe.Pointer(phdr)))
 		}
 	}
 	return 0
@@ -1219,16 +1234,18 @@ func (e *Element) ShowPopup(eAnchor *Element, placement PopupPlacement) error {
 // Shows block element (DIV) in popup window at given position.
 //  \param[in] hePopup \b HELEMENT, element to show as popup
 //  \param[in] pos \b POINT, popup element position, relative to origin of Sciter window.
-//  \param[in] animate \b BOOL, true if animation is needed.
-func (e *Element) ShowPopupAt(pos Point, animate bool) error {
+//  \param[in] placement \b UINT, values:
+//      2 - popup element below of anchor
+//      8 - popup element above of anchor
+//      4 - popup element on left side of anchor
+//      6 - popup element on right side of anchor
+//      ( see numpad on keyboard to get an idea of the numbers)
+func (e *Element) ShowPopupAt(pos Point, placement uint) error {
 	// args
 	var cpos C.POINT = *(*C.POINT)(unsafe.Pointer(&pos))
-	var canimate C.BOOL = C.FALSE
-	if animate {
-		canimate = C.TRUE
-	}
+	cplacement := C.UINT(placement)
 	// cgo call
-	r := C.SciterShowPopupAt(e.handle, cpos, canimate)
+	r := C.SciterShowPopupAt(e.handle, cpos, cplacement)
 	return wrapDomResult(r, "SciterShowPopupAt")
 }
 
@@ -1491,8 +1508,13 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 			p := (*GestureParams)(params)
 			handled = handler.OnGesture(el, p)
 		}
+	case HANDLE_SOM:
+		if handler.OnSom != nil {
+			p := (*SomParams)(params)
+			handled = handler.OnSom(el, p)
+		}
 	default:
-		log.Panic("Unhandled sciter event case: ", evtg)
+		log.Panicf("Unhandled sciter event case: 0x%04X.\nCheck `EVENT_GROUPS` in sciter-x-behavior.h in the latest Sciter SDK", evtg)
 	}
 	if handled {
 		return 1

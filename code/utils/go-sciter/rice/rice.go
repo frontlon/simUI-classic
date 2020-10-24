@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/GeertJohan/go.rice"
-	"simUI/code/utils/go-sciter"
+	"github.com/sciter-sdk/go-sciter"
 )
 
 var (
