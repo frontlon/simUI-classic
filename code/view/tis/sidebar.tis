@@ -180,8 +180,11 @@ function _createVideo(info,romPath){
             vdom.style["height"] = vdom.videoHeight();
         });
     }else{
-        vdom.videoStop();
-        vdom.videoUnload();
+        if(vdom.value != ""){
+            vdom.videoStop();
+            vdom.videoUnload();
+        }
+    
     }
 }
 
