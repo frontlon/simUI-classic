@@ -148,7 +148,9 @@ function romContextMenu(obj){
     }
 
 
-            btndata += "<li class='baseinfo' rid=''>文本<menu><li>111</li><li>222</li></menu></li>";
+        btndata += "<hr />";
+
+        btndata += "<li class='baseinfo' rid=''>文本<menu><li>111</li><li>222</li></menu></li>";
 
 
     romcontext.append(btndata);

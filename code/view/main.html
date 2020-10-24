@@ -20,13 +20,12 @@
     /* 菜单 */
     menu{display:none;border:1dip solid color(context-border-color);padding:0}
     menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
-    menu li:nth-child(odd){ background:color(context-odd-background-color)}
-    menu li:nth-child(even){ background:color(context-even-background-color)}
+    menu li{background:color(context-background-color)}
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);cursor:pointer}
     menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
     menu li > label{padding-left:15dip;}
-    menu hr{display:none}
+    menu hr{display:block;background:none;color:#f00;border:0;border-bottom:1px solid #f00;padding:0;margin:0}
 
     /* 标题栏 */
     #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
