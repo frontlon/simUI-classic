@@ -146,5 +146,10 @@ function romContextMenu(obj){
     if (CONF.Platform[pfId].Rombase != ""){
         btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
     }
+
+
+            btndata += "<li class='baseinfo' rid=''>文本<menu><li>111</li><li>222</li></menu></li>";
+
+
     romcontext.append(btndata);
 }
