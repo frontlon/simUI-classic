@@ -2,6 +2,7 @@ package modules
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -22,6 +23,7 @@ type RomDetail struct {
 	StrategyFile    string          //攻略文件
 	Sublist         []*db.Rom       //子游戏
 	Simlist         []*db.Simulator //模拟器
+	RomFileSize     string          //rom文件大小
 }
 
 //运行游戏
@@ -342,6 +344,23 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	res.StrategyFile = ""
 	res.Sublist = sub
 	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
+
+	//获取rom文件大小
+	if res.Info.RomPath != "" {
+		fi := config.Cfg.Platform[info.Platform].RomPath + config.Cfg.Separator + res.Info.RomPath
+		f, err := os.Stat(fi)
+		if err == nil {
+			if f.Size() < 1024 {
+				res.RomFileSize = fmt.Sprintf("%.2fB", float64(f.Size())/float64(1))
+			} else if f.Size() < (1024 * 1024) {
+				res.RomFileSize = fmt.Sprintf("%.2fKB", float64(f.Size())/float64(1024))
+			} else if f.Size() < (1024 * 1024 * 1024) {
+				res.RomFileSize = fmt.Sprintf("%.2fMB", float64(f.Size())/float64(1024*1024))
+			} else if f.Size() < (1024 * 1024 * 1024 * 1024) {
+				res.RomFileSize = fmt.Sprintf("%.2fGB", float64(f.Size())/float64(1024*1024*1024))
+			}
+		}
+	}
 
 	for k, v := range res.Simlist {
 		if res.Simlist[k].Path != "" {

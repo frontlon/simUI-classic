@@ -147,11 +147,10 @@ function romContextMenu(obj){
         btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
     }
 
-
-        btndata += "<hr />";
-
-        btndata += "<li class='baseinfo' rid=''>文本<menu><li>111</li><li>222</li></menu></li>";
-
-
+    btndata += "<hr />";
+    //打开文件夹
+    btndata += "<li rid=''>打开目录<menu>";
+    btndata += createOpenFolderMenu(detailObj.Info);
+    btndata += "</menu></li>";
     romcontext.append(btndata);
 }

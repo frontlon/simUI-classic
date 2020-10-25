@@ -301,6 +301,11 @@
         contextSetHide(this);
     });
 
+   //打开文件夹
+    self.on("click", "#romcontext .folder", function(evt) {
+        openFolder(this);
+    });
+
     $(#right_video).onControlEvent = function(evt) {
         if(evt.type == Event.VIDEO_STOPPED){
             if ( this.videoDuration() - this.videoPosition()  < 1){

@@ -20,7 +20,8 @@
     /* 菜单 */
     menu{display:none;border:1dip solid color(context-border-color);padding:0}
     menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
-    menu li{background:color(context-background-color)}
+    menu li:nth-child(odd){ background:color(context-odd-background-color)}
+    menu li:nth-child(even){ background:color(context-even-background-color)}
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);cursor:pointer}
     menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
@@ -166,8 +167,8 @@
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
     #rotate{top:-30dip;right:0dip;position:absolute;}
-    #stack{overflow:hidden;flow:stack;width:100%;height:auto;}
-    #stack>img{width:100%;height:auto;min-height:width(50%);max-height:width(100%);}
+    #stack{overflow:hidden;flow:stack;width:100%;height:auto;text-align:center;}
+    #stack>img{max-width:300px;width:100%;margin:0 auto}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -202,7 +203,7 @@
     #romcontext .hide1{background-image:url(this://app/images/fileico_hide_1.png);}
     #romcontext .rename{background-image:url(this://app/images/rename.png);}
     #romcontext .baseinfo{background-image:url(this://app/images/baseinfo.png);}
-    
+
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
     #ping{width:1;height:1;position: absolute;top:0;left:0;}
@@ -269,39 +270,108 @@
     </section>
     <splitter id="right_splitter" />
     <section id="right">
+
+        <tabs id="mytabs">
+        <strip>
+        <label for="first" selected>aaa</label>
+        <label for="second">bbb</label>
+        <label for="third">ccc</label>
+        </strip>
+        <panels>
+        <section id="first">
+        <!-- 选项卡1 -->
         <div id="mask"></div>
+                <h2>{{FunButton}}</h2>
+                <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
+                <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
+                <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"><i>&#xe61c;</i></button>
+                <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
+                <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
+                <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
+                <menu id="foldercontext" type="menu"></menu>
+                </button>
+                <h2 id="video_h2">{{Video}}</h2>
+                <div id="video_wrapper"><video id="right_video" src="" sizing="cover" /></div>
+                <h2>{{Thumb}}</h2>
+                <div class="rotate_wrapper">
+                    <button id="rotate" class="funbtn">&gt;</button>
+                    <div id="stack"></div>
+                </div>
+                <h2>{{RunGame}}</h2>
+                <ul id="sim_select"></ul>
+                <div id="buttons"></div>
+                <h2>{{BaseInfo}}</h2>
+                <ul id="right_rombase"></ul>
+                <h2 id="doc_title">{{Doc}}</h2>
+                <div id="doc" class="doc"></div>
+        </section>
+        <section id="second">
+        <!-- 选项卡2 -->
+        aaa
+        </section>
 
-        <h2>{{FunButton}}</h2>
-        <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
-        <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
-        <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"><i>&#xe61c;</i></button>
-        <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
-        <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
-        <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
-        <menu id="foldercontext" type="menu"></menu>
-        </button>
+        <section id="third">
+        <!-- 选项卡3 -->
+        bbb
+        </section>
 
-        <h2 id="video_h2">{{Video}}</h2>
-        <div id="video_wrapper"><video id="right_video" src="" sizing="cover" /></div>
-        
-        <h2>{{Thumb}}</h2>
-        <div class="rotate_wrapper">
-        <button id="rotate" class="funbtn">&gt;</button>
-        <div id="stack"></div>
-        </div>
-        <h2>{{RunGame}}</h2>
-        <ul id="sim_select"></ul>
-        <div id="buttons"></div>
-        <h2>{{BaseInfo}}</h2>
-        <ul id="right_rombase"></ul>
+        </panels>
+        </tabs>
 
-        <h2 id="doc_title">{{Doc}}</h2>
-        <div id="doc" class="doc"></div>
 
     </section>
     
 </frameset>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script type="text/tiscript">
 
@@ -313,6 +383,7 @@
     }
 
     include ROOTPATH + "tis/plugins/decorators.tis";
+    include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
     include ROOTPATH + "tis/plugins/markdown.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";

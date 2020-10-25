@@ -49,7 +49,11 @@ function openSidebar(obj){
     $(#right_thumb_down).attributes["rid"] = info.Id;
 
     //打开文件夹
-    createOpenFolderMenu(info);
+    var romcontext = $(#foldercontext);
+    romcontext.clear();
+    var folderData = createOpenFolderMenu(info);
+    romcontext.append(folderData);
+
     //生成喜好按钮
     var favorite = $(#right_favorite);
     favorite.attributes["rid"] = info.Id.toHtmlString();
@@ -149,8 +153,12 @@ function openSidebar(obj){
     if(info.BaseType != "")     {rombase += "<li>" + info.BaseType      + "</li>";}
     if(info.BaseYear != "")     {rombase += "<li>" + info.BaseYear      + "</li>";}
     if(info.BasePublisher != ""){rombase += "<li>" + info.BasePublisher + "</li>";}
-    if(info.BaseCountry != "")  {rombase += "<li>" + + info.BaseCountry + "</li>";}
+    if(info.BaseCountry != "")  {rombase += "<li>" + info.BaseCountry + "</li>";}
+
+
+
     rombase += "<li>" + info.RomPath + "</li>";
+    rombase += "<li>" + detailObj.RomFileSize + "</li>";
 
     $(#right_rombase).html = rombase;
 }
@@ -393,9 +401,6 @@ function videoControl(evt){
 //打开文件夹菜单
 function createOpenFolderMenu(info){
 
-    var romcontext = $(#foldercontext);
-    romcontext.clear();
-
     var pfId = info.Platform.toString();
     var simId = 0;
     var simIco = "";
@@ -454,6 +459,5 @@ function createOpenFolderMenu(info){
         }
 
     }
-
-    romcontext.append(btndata);
+    return btndata;
 }
