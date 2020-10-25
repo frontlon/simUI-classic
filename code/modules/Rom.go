@@ -2,7 +2,6 @@ package modules
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -350,15 +349,7 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 		fi := config.Cfg.Platform[info.Platform].RomPath + config.Cfg.Separator + res.Info.RomPath
 		f, err := os.Stat(fi)
 		if err == nil {
-			if f.Size() < 1024 {
-				res.RomFileSize = fmt.Sprintf("%.2fB", float64(f.Size())/float64(1))
-			} else if f.Size() < (1024 * 1024) {
-				res.RomFileSize = fmt.Sprintf("%.2fKB", float64(f.Size())/float64(1024))
-			} else if f.Size() < (1024 * 1024 * 1024) {
-				res.RomFileSize = fmt.Sprintf("%.2fMB", float64(f.Size())/float64(1024*1024))
-			} else if f.Size() < (1024 * 1024 * 1024 * 1024) {
-				res.RomFileSize = fmt.Sprintf("%.2fGB", float64(f.Size())/float64(1024*1024*1024))
-			}
+			res.RomFileSize = utils.GetFileSizeString(f.Size())
 		}
 	}
 

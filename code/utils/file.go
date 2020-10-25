@@ -60,3 +60,20 @@ func FileExists(path string) bool {
 	}
 	return isset
 }
+
+/**
+ * 返回文件大小 + 单位
+ */
+func GetFileSizeString(size int64) string{
+	if size < 1024 {
+		return fmt.Sprintf("%.2fB", float64(size)/float64(1))
+	} else if size < (1024 * 1024) {
+		return fmt.Sprintf("%.2fKB", float64(size)/float64(1024))
+	} else if size < (1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2fMB", float64(size)/float64(1024*1024))
+	} else if size < (1024 * 1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2fGB", float64(size)/float64(1024*1024*1024))
+	}else {
+		return fmt.Sprintf("%.2fEB", float64(size)/float64(1024*1024*1024*1024*1024))
+	}
+}
