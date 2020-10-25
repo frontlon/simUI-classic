@@ -123,6 +123,17 @@ func RomController() {
 		return sciter.NewValue(string(jsonMenu))
 	})
 
+	//读取游戏攻略内容
+	utils.Window.DefineFunction("GetGameStrategy", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		res, err := modules.GetGameStrategy(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NewValue(string(res))
+	})
+
 	//设为我的最爱
 	utils.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))

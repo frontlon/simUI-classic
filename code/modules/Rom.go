@@ -18,8 +18,6 @@ var ConstMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 type RomDetail struct {
 	Info            *db.Rom         //rom信息
 	DocContent      string          //简介内容
-	StrategyContent string          //攻略内容
-	StrategyFile    string          //攻略文件
 	Sublist         []*db.Rom       //子游戏
 	Simlist         []*db.Simulator //模拟器
 	RomFileSize     string          //rom文件大小
@@ -102,7 +100,6 @@ func RunGame(romId uint64, simId uint32) error {
 		simLua = sim.Lua
 	}
 
-
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
 		//如果lua脚本存在，则运行lua脚本
@@ -121,8 +118,6 @@ func RunGame(romId uint64, simId uint32) error {
 		if err != nil {
 			return errors.New(config.Cfg.Lang["SimulatorNotFound"])
 		}
-
-
 
 		if simCmd == "" {
 			cmd = append(cmd, rom.RomPath)
@@ -340,7 +335,6 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	sub, _ := (&db.Rom{}).GetSubRom(info.Platform, info.Name)
 
 	res.Info = info
-	res.StrategyFile = ""
 	res.Sublist = sub
 	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
 
@@ -371,31 +365,31 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 			}
 		}
 	}
-
-	if config.Cfg.Platform[info.Platform].StrategyPath != "" {
-		//检测攻略可执行文件是否存在
-		strategyFileName := ""
-		for _, v := range config.RUN_EXTS {
-			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
-			if utils.FileExists(strategyFileName) {
-				res.StrategyFile = strategyFileName
-				break
-			}
-		}
-
-		//如果没有执行运行的文件，则读取文档内容
-		if strategyFileName != "" {
-			for _, v := range config.DOC_EXTS {
-				strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
-				res.StrategyContent = GetDocContent(strategyFileName)
-				if res.StrategyContent != "" {
-					break
-				}
-			}
-		}
-
-	}
 	return res, nil
+}
+
+//读取游戏攻略内容
+func GetGameStrategy(id uint64) (string, error) {
+
+	//游戏游戏详细数据
+	info, err := (&db.Rom{}).GetById(id)
+
+	if err != nil {
+		return "", err
+	}
+
+	//如果没有执行运行的文件，则读取文档内容
+	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+	strategy := ""
+	for _, v := range config.DOC_EXTS {
+		strategyFileName := config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
+		strategy = GetDocContent(strategyFileName)
+		if strategy != "" {
+			break
+		}
+	}
+
+	return strategy, nil
 }
 
 /**
