@@ -95,7 +95,12 @@ function openSidebar(obj){
         $(#doc).style["display"] = "none";
     }
 
+
+
+
+
     //如果存在攻略文件
+    /*
     if(detailObj.StrategyFile != "" || detailObj.StrategyContent != ""){
         $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
         $(#right_desc).attributes.removeClass("right_desc_disable");
@@ -105,6 +110,7 @@ function openSidebar(obj){
 
     }
     $(#right_desc).attributes["rid"] = info.Id;
+    */
 
     //生成模拟器列表
     $(#sim_select).html = ""; //先清空所有模拟器
@@ -161,6 +167,14 @@ function openSidebar(obj){
     rombase += "<li>" + detailObj.RomFileSize + "</li>";
 
     $(#right_rombase).html = rombase;
+
+    //图集
+    _createSecondThumbs(info);
+
+    //攻略
+    var strategy = view.GetGameStrategy(obj.attributes["rid"]);
+    $(#third_strategy).html = strategy;
+
 }
 
 //视频
@@ -230,6 +244,27 @@ function _createRotate(info){
         $(#rotate).style["display"] = undefined;
     }
 
+    return pics
+}
+
+//图集
+function _createSecondThumbs(info){
+    var pics = "";
+    var romPath = URL.parse(info.RomPath);
+    var title = getRomPicPath("title",info.Platform,romPath.name); //标题图
+    var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
+    var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
+    var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
+    var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
+    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+
+    if(title != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.TitlePic +"</h2><img src=\""+ title +"\" />";}
+    if(thumb != ""){pics += "<h2 id='video_h2'>"+ CONF.Lang.Thumb +"</h2><img src=\""+ thumb +"\" />";}
+    if(snap != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.Snap +"</h2><img src=\""+ snap +"\" />"; }
+    if(poster != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.Poster +"</h2><img src=\""+ poster +"\" />"; }
+    if(packing != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.Packing +"</h2><img src=\""+ packing +"\" />"; }
+
+    $(#second_thumbs).html = pics;
     return pics
 }
 

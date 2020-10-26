@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	isDebug := false
+	isDebug := true
 	ROOTPATH := "this://app/main.html" //go用路径
 	if isDebug == true {
 		switch runtime.GOOS {

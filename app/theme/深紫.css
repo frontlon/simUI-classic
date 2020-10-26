@@ -1,0 +1,143 @@
+/* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
+html:theme(purple) {
+
+    /* 窗体背景图片 */
+    var(window-background-image) : dark_bg.jpg;
+    var(center-background-color) : #3a2743;
+    var(center-box-shadow-color) : #312239;
+
+    /* 攻略窗口背景图片 */
+    var(desc-background-image) : dark_bg.jpg;
+
+    /* 侧边栏初始化图片 */
+    var(sidebar-image) : sidebar.png;
+
+    /* 默认缩略图 */
+    var(default-thumb-image) : purple_thumbs.png;
+
+    /* 窗口透明度 */
+    var(window-opacity) :1;
+    var(body-opacity) : 1;
+
+    /* 窗体边框 */
+    var(window-outside-border-color) : #25192b;
+    var(window-inside-border-color) : #5b4269;
+
+    /* logo文字 */
+    var(logo-text-color) : #FFF;
+
+    /* 侧边栏 */
+    var(sidebar-background-color) : #3d274b;
+    var(sidebar-title-text-color):#d4bfe0;
+
+    /* 左边栏文件夹列表 */
+    var(menu-separator-color) : #342140;
+    var(menu-text-color) : #fff;
+    var(menu-active-text-color) : #fff;
+    var(menu-active-background-color) : #84238f;
+
+    /* 标题栏和按钮 */
+    var(titlebar-background-color) : #2e1e39;
+    var(titlebar-button-background-color) : #4e355d;
+    var(titlebar-button-text-color) : #fff;
+
+    /* 平台按钮 */
+    var(platform-background-color) : #4e355d;
+    var(platform-text-color) : #fff;
+    var(platform-arrow-border-light) : #624377;
+    var(platform-arrow-border-dark) : #2e1e39;
+    var(platform-active-background-color) : #84238f;
+
+    /* 状态栏 */
+    var(statebar-text-color) : #b49ec2;
+    var(statebar-background-color) : #432e4f;
+    var(statebar-button-text-color) : #b49ec2;
+    var(statebar-button-background-color) : #2e1e39;
+
+    /* 资料筛选栏 */
+    var(filter-background-color) : #3d274b;
+    var(filter-text-color) : #FFF;
+    var(filter-arrow-text-color) : #ccc;
+    var(filter-arrow-background-color) : #311b3f;
+    var(filter-popup-text-color) : #FFF;
+    var(filter-popup-background-color) : #3d274b;
+    var(filter-button-text-color) : #FFF;
+    var(filter-button-background-color) : #84238f;
+
+    /* 搜索栏 */
+    var(search-background-color) : #2e1e39;
+    var(search-input-text-color) : #d1bedc;
+    var(search-ico-text-color) : #d1bedc;
+
+    /* 下拉菜单 */
+    var(context-border-color) : #312139;
+    var(context-text-color) : #ccc;
+    var(context-odd-background-color) : #3a2743;
+    var(context-even-background-color) : #432e4f;
+    var(context-hover-text-color) : #fff;
+    var(context-hover-background-color) : #84238f;
+
+    /* 右侧边栏 功能按钮 */
+    var(func-button-text-color) : #d1bedc;
+    var(func-button-active-text-color) : yellow;
+    var(func-button-background-color) : #2e1e39;
+    var(func-button-hover-background-color) : #352242;
+    var(func-button-disable-text-color) : #adb5bd;
+
+    /* 右侧边栏 模拟器选择 */
+    var(sim-switch-text-color) : #dba3f6;
+    var(sim-switch-hover-text-color) : #FFF;
+    var(sim-switch-active-text-color) : #FFF;
+    var(sim-switch-active-background-color) : #523266;
+
+    var(sim-switch-button-background-color) : #2e1e39;
+    var(sim-switch-button-text-color) : #FFF;
+
+    /* 右侧边栏 游戏启动按钮 */
+    var(run-button-text-color) : #FFF;
+    var(run-button-background-color) : #84238f;
+    var(run-button-hover-text-color) : #FFF;
+    var(run-button-hover-background-color) : #9822a6;
+    var(run-button-active-text-color) : #FFF;
+    var(run-button-active-background-color) : #b937c8;
+
+    /* 右侧边栏 游戏信息 */
+    var(play-info-text-color) : #d4bfe0;
+
+    /* 右侧边栏 简介 */
+    var(right-doc-border-color) : #523266;
+    var(right-doc-text-color) : #dba3f6;
+    var(right-doc-background-color) : #3d274b;
+
+    /* 字母索引 */
+    var(num-index-text-color) : #dba3f6;
+    var(num-index-hover-text-color) : #FFF;
+    var(num-index-active-text-color) : #FFF;
+
+    /* rom列表（模块） */
+    var(rom-block-text-color) : #fff;
+    var(rom-block-background-color) : #432e4f;
+    var(rom-block-hover-box-shadow-color) : #160e1c;
+    var(rom-block-active-border-color) : #84238f;
+
+    /* rom列表（列表） */
+    var(rom-list-odd-text-color) : #d9d9dd;
+    var(rom-list-odd-background-color) : #3a2743;
+    var(rom-list-even-text-color) : #d9d9dd;
+    var(rom-list-even-background-color) : #432e4f;
+    var(rom-list-active-text-color) : #ccc;
+    var(rom-list-active-background-color) : #4b305b;
+    var(rom-list-cate-text-color) : #d1bedc;
+    var(rom-list-text-slave-color) : #999;
+
+    /* 攻略文档窗口 */
+    var(desc-background-color) : #3a2743;
+    var(desc-border-color) : #371a44;
+    var(desc-titlebar-text-color) : #FFF;
+    var(desc-titlebar-hover-background-color) : #2e1e39;
+    var(desc-menu-text-color) : #FFF;
+    var(desc-menu-active-background-color) : #4b305b;
+    var(desc-content-text-color) : #dba3f6;
+    var(desc-title-text-color) : #FFF;
+    
+}

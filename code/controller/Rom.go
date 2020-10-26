@@ -131,7 +131,7 @@ func RomController() {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-		return sciter.NewValue(string(res))
+		return sciter.NewValue(res)
 	})
 
 	//设为我的最爱

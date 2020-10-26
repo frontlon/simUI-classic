@@ -207,7 +207,42 @@
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
     #ping{width:1;height:1;position: absolute;top:0;left:0;}
+
+    .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical}
+    .sidetabs>strip{display:block;flow:horizontal;font-size:17dip;padding-top:5dip}
+    .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;}
+    .sidetabs>strip>label:current{background:none;color:#FFF;}
+    .sidetabs>strip>label:current:hover{background-image:none}
+    .sidetabs>strip>label:hover{background-image:none;}
+    .sidetabs>strip>label:current:first-child,tabs>strip>label:current:hover:first-child{background:none}
+    .sidetabs>panels{display:block;size:*;background:none}
+    .sidetabs>panels>*{visibility:none}
+    .sidetabs>panels>:expanded{visibility:visible;height:*;background:none;}
     
+    #second_thumbs img{display:block;max-width:300px;width:100%;}
+
+    #third_strategy{color:color(desc-content-text-color);margin-top:10dip}
+    #third_strategy p{line-height:2em;}
+    
+    .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .markdown p{margin-bottom:13dip}
+    .markdown a{color:color(desc-content-text-color)}
+    .markdown a:hover{opacity: 0.5;}
+    .markdown img{margin:0 auto;display:block;}
+    .markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{line-height:2em;display:block;margin-bottom:13dip}
+    .markdown h1,.markdown h2{border-bottom:1px solid;}
+    .markdown hr{border:0;border-bottom:1dip solid color(desc-content-text-color);margin:12dip 0}
+    .markdown pre,.markdown code{margin:10dip;border:1dip solid color(desc-content-text-color);opacity: 0.5; padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .markdown table{width:*}
+    .markdown blockquote{border-left:3dip solid color(desc-content-text-color);padding-left:10dip;margin:15dip 0 15dip 20dip;opacity: 0.5;}
+    .markdown table[border]{border-spacing:-1dip;border:none;margin:1em 0}
+    .markdown table[border] td{border:1dip solid #bbb;padding:2dip 4dip}
+    .markdown table[border] th{border:1dip solid #bbb;padding:2dip 4dip;background:#eee}
+    .markdown dl{flow:row(dt,dd);border-spacing:1em 4dip}
+    .markdown dl dt{text-align:right;font-weight:700}
+    .markdown dl dt::after{content:":"}
+    .markdown dl dd{margin:0;padding:0;width:*}
+
 </style>
 </head>
 <body>
@@ -270,8 +305,9 @@
     </section>
     <splitter id="right_splitter" />
     <section id="right">
+        <div id="mask"></div>
 
-        <tabs id="mytabs"  class="tabs">
+        <tabs id="mytabs"  class="sidetabs">
         <strip>
         <label for="right_first" selected>信息</label>
         <label for="right_second">图集</label>
@@ -279,40 +315,39 @@
         </strip>
         <panels>
         <section id="right_first">
-        <!-- 选项卡1 -->
-        <div id="mask"></div>
-                <h2>{{FunButton}}</h2>
-                <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
-                <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
-                <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"><i>&#xe61c;</i></button>
-                <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
-                <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
-                <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
-                <menu id="foldercontext" type="menu"></menu>
-                </button>
-                <h2 id="video_h2">{{Video}}</h2>
-                <div id="video_wrapper"><video id="right_video" src="" sizing="cover" /></div>
-                <h2>{{Thumb}}</h2>
-                <div class="rotate_wrapper">
-                    <button id="rotate" class="funbtn">&gt;</button>
-                    <div id="stack"></div>
-                </div>
-                <h2>{{RunGame}}</h2>
-                <ul id="sim_select"></ul>
-                <div id="buttons"></div>
-                <h2>{{BaseInfo}}</h2>
-                <ul id="right_rombase"></ul>
-                <h2 id="doc_title">{{Doc}}</h2>
-                <div id="doc" class="doc"></div>
+            <!-- 选项卡1 -->
+            <h2>{{FunButton}}</h2>
+            <button id="right_desc" class="funbtn" platform="" name="" value="" title="{{ViewStrategy}}"><i>&#xea07;</i></button>
+            <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"><i>&#xe61a;</i></button>
+            <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"><i>&#xe61c;</i></button>
+            <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><i>&#xe61b;</i></button>
+            <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe655;</i></button>
+            <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{ThumbsDown}}"><i>&#xe64c;</i>
+            <menu id="foldercontext" type="menu"></menu>
+            </button>
+            <h2 id="video_h2">{{Video}}</h2>
+            <div id="video_wrapper"><video id="right_video" src="" /></div>
+            <h2>{{Thumb}}</h2>
+            <div class="rotate_wrapper">
+                <button id="rotate" class="funbtn">&gt;</button>
+                <div id="stack"></div>
+            </div>
+            <h2>{{RunGame}}</h2>
+            <ul id="sim_select"></ul>
+            <div id="buttons"></div>
+            <h2>{{BaseInfo}}</h2>
+            <ul id="right_rombase"></ul>
+            <h2 id="doc_title">{{Doc}}</h2>
+            <div id="doc" class="doc"></div>
         </section>
         <section id="right_second">
         <!-- 选项卡2 -->
-        aaa
+        <div id="second_thumbs"></div>
         </section>
 
         <section id="right_third">
         <!-- 选项卡3 -->
-        bbb
+        <div id="third_strategy"></div>
         </section>
 
         </panels>
@@ -379,7 +414,7 @@
     var mainView = view;
     var ROOTPATH = "this://app/";
     if (isDebug == true){
-        ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/";
+        ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
     }
 
     include ROOTPATH + "tis/plugins/decorators.tis";

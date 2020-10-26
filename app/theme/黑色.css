@@ -1,0 +1,135 @@
+/* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
+html:theme(dark) {
+    /* 窗体背景图片 */
+    var(window-background-image) : dark_bg.jpg;
+    var(center-background-color) : #383838;
+    var(center-box-shadow-color) : #333;
+
+    /* 攻略窗口背景图片 */
+    var(desc-background-image) : dark_bg.jpg;
+
+    /* 侧边栏初始化图片 */
+    var(sidebar-image) : sidebar.png;
+
+    /* 默认缩略图 */
+    var(default-thumb-image) : dark_thumbs.png;
+
+    /* 窗口透明度 */
+    var(window-opacity) :1;
+    var(body-opacity) : 1;
+
+    /* 窗体边框 */
+    var(window-outside-border-color) : #0d0d0d;
+    var(window-inside-border-color) : #6e6e6e;
+
+    /* logo文字 */
+    var(logo-text-color) : #FFF;
+
+    /* 侧边栏 */
+    var(sidebar-background-color) : #575757;
+    var(sidebar-title-text-color):#999;
+
+    /* 左边栏文件夹列表 */
+    var(menu-separator-color) : #5f5f5f;
+    var(menu-text-color) : #fff;
+    var(menu-active-text-color) : #fff;
+    var(menu-active-background-color) : #1366cc;
+
+    /* 标题栏和按钮 */
+    var(titlebar-background-color) : #2d2d2d;
+    var(titlebar-button-background-color) : #373737;
+    var(titlebar-button-text-color) : #fff;
+
+    /* 平台按钮 */
+    var(platform-background-color) : #373737;
+    var(platform-text-color) : #fff;
+    var(platform-arrow-border-light) : #3f3f3f;
+    var(platform-arrow-border-dark) : #2f2f2f;
+    var(platform-active-background-color) : #1366cc;
+
+    /* 状态栏 */
+    var(statebar-text-color) : #999;
+    var(statebar-background-color) : #4a4949;
+    var(statebar-button-text-color) : #999;
+    var(statebar-button-background-color) : #444;
+
+    /* 资料筛选栏 */
+    var(filter-background-color) : #333;
+    var(filter-text-color) : #FFF;
+    var(filter-arrow-text-color) : #ccc;
+    var(filter-arrow-background-color) : #444;
+    var(filter-popup-text-color) : #FFF;
+    var(filter-popup-background-color) : #333;
+    var(filter-button-text-color) : #FFF;
+    var(filter-button-background-color) : #1366cc;
+    
+    /* 下拉菜单 */
+    var(context-border-color) : #666;
+    var(context-text-color) : #ccc;
+    var(context-odd-background-color) : #323232;
+    var(context-even-background-color) : #383838;
+    var(context-hover-text-color) : #fff;
+    var(context-hover-background-color) : #585757;
+
+    /* 右侧边栏 功能按钮 */
+    var(func-button-text-color) : #adb5bd;
+    var(func-button-active-text-color) : yellow;
+    var(func-button-background-color) : #444444;
+    var(func-button-hover-background-color) : #4a4a4a;
+    var(func-button-disable-text-color) : #adb5bd;
+
+    /* 右侧边栏 模拟器选择 */
+    var(sim-switch-text-color) : #333;
+    var(sim-switch-hover-text-color) : #444;
+    var(sim-switch-active-text-color) : #FFF;
+    var(sim-switch-active-background-color) : #666;
+    var(sim-switch-button-background-color) : #333;
+    var(sim-switch-button-text-color) : #FFF;
+
+    /* 右侧边栏 游戏启动按钮 */
+    var(run-button-text-color) : #FFF;
+    var(run-button-background-color) : #1366cc;
+    var(run-button-hover-text-color) : #FFF;
+    var(run-button-hover-background-color) : #5088c7;
+    var(run-button-active-text-color) : #FFF;
+    var(run-button-active-background-color) : #4276b2;
+
+    /* 右侧边栏 游戏信息 */
+    var(play-info-text-color) : #999;
+
+    /* 右侧边栏 简介 */
+    var(right-doc-border-color) : #666;
+    var(right-doc-text-color) : #ccc;
+    var(right-doc-background-color) : #575757;
+
+    /* 字母索引 */
+    var(num-index-text-color) : #666;
+    var(num-index-hover-text-color) : #FFF;
+    var(num-index-active-text-color) : #FFF;
+
+    /* rom列表（模块） */
+    var(rom-block-text-color) : #ccc;
+    var(rom-block-background-color) : #666;
+    var(rom-block-hover-box-shadow-color) : #222;
+    var(rom-block-active-border-color) : #1366cc;
+
+    /* rom列表（列表） */
+    var(rom-list-odd-text-color) : #FFF;
+    var(rom-list-odd-background-color) : #323232;
+    var(rom-list-even-text-color) : #FFF;
+    var(rom-list-even-background-color) : #383838;
+    var(rom-list-active-text-color) : #FFF;
+    var(rom-list-active-background-color) : #1366cc;
+    var(rom-list-cate-text-color) : #79828b;
+    var(rom-list-text-slave-color) : #999;
+
+
+    /* 攻略文档窗口 */
+    var(desc-background-color) : #444;
+    var(desc-border-color) : #333;
+    var(desc-titlebar-text-color) : #FFF;
+    var(desc-titlebar-hover-background-color) : #333;
+    var(desc-content-text-color) : #ccc;
+    var(desc-title-text-color) : #FFF;
+    
+}
