@@ -124,7 +124,7 @@ function romContextMenu(obj){
         btndata += "<li class='file menu_run_game' sim='' filename='"+ simIco +"' rid='"+ sub.Id +"'>"+ CONF.Lang.Run +" "+ sub.Name.toHtmlString() + "</li>";;
     }
 
-    btndata += "<caption>"+ CONF.Lang.Function +"</caption>";
+    btndata += "<hr />";
 
     var romPath = URL.parse(detailObj.Info.RomPath);
     btndata += "<li class='thumb edit_thumb' rname = \""+ romPath.name +"\" rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditThumbs +"</li>";

@@ -161,8 +161,6 @@ function openSidebar(obj){
     if(info.BasePublisher != ""){rombase += "<li>" + info.BasePublisher + "</li>";}
     if(info.BaseCountry != "")  {rombase += "<li>" + info.BaseCountry + "</li>";}
 
-
-
     rombase += "<li>" + info.RomPath + "</li>";
     rombase += "<li>" + detailObj.RomFileSize + "</li>";
 
@@ -447,7 +445,6 @@ function createOpenFolderMenu(info){
 
     var btndata = "";
 
-    btndata += "<caption>"+ CONF.Lang.LocationFile +"</caption>";
 
     btndata += "<li class='folder' rid='"+ info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
  
@@ -485,7 +482,7 @@ function createOpenFolderMenu(info){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='strategy'>"+ CONF.Lang.LocationStrategyFile +"</li>";
     }
 
-    btndata += "<caption>"+ CONF.Lang.LocationSim +"</caption>";
+    btndata += "<hr />";
 
     //定位模拟器目录
    if(CONF.Platform[pfId].SimList.length > 0){
