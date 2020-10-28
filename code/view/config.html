@@ -44,13 +44,14 @@
     <strip>
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
-      <label for="third">{{Shortcut}}</label>
+      <label for="third">{{Interface}}</label>
+      <label for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
         <div class="wrapper">
           <table id="table_default">
-            <tr><td><div class="tip" title="{{SoftNameTip}}">&#xf3c1;</div>{{SoftName}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
+            <tr><td><div class="tip" title="{{SoftTitleTip}}">&#xf3c1;</div>{{SoftTitle}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
             <tr><td><div class="tip" title="{{LangTip}}">&#xf3c1;</div>{{Lang}}：</td><td><select id="config_lang"></select></td></tr>
             <tr><td><div class="tip" title="{{ThumbTip}}">&#xf3c1;</div>{{IndexThumb}}：</td><td><select id="config_thumb">
               <option value="thumb">{{Thumb}}</option>
@@ -108,8 +109,21 @@
           </div>
         </div>
       </section>
-
-      <section id="third">
+ <section id="third">
+        <div class="wrapper">
+          <table id="table_default">
+          <!--
+            event change $(input#slidersrc) { $(#sliderval).value = this.value; }
+            event change $(input#sliderval) { $(#slidersrc).value = this.value; }
+          -->
+            <tr><td>{{BackgroundPic}}：</td><td><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
+            <tr><td>{{ContentDiaphaneity}}：</td><td><input type="hslider" name="p1" max="100" value="0" /></td></tr>
+            <tr><td>{{SoftDiaphaneity}}：</td><td><input type="hslider" name="p1" max="100" value="0" /></td></tr>
+            <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
+          </table>
+        </div>
+      </section>
+      <section id="fourth">
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
           <table><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
