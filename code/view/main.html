@@ -414,8 +414,14 @@
     var mainView = view;
     var ROOTPATH = "this://app/";
     if (isDebug == true){
-        ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
+       // ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
+        ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/";        
     }
+
+    //var mediaVars = view.mediaVars();
+    //view.msgbox(#alert,mediaVars["os"]); //MacOS 10.15.7
+    //view.msgbox(#alert,mediaVars["platform"]); //OSX
+    //view.msgbox(#alert,mediaVars["os-vendor"]); //Apple
 
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";

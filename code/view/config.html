@@ -44,11 +44,12 @@
     <strip>
       <label for="first" selected>{{GeneralConfig}}</label>
       <label for="second">{{PlatformConfig}}</label>
-      <label for="third">{{Interface}}</label>
+      <label for="third">{{InterfaceConfig}}</label>
       <label for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
+        <!-- 通用配置 -->
         <div class="wrapper">
           <table id="table_default">
             <tr><td><div class="tip" title="{{SoftTitleTip}}">&#xf3c1;</div>{{SoftTitle}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
@@ -72,6 +73,7 @@
         </div>
       </section>
       <section id="second">
+        <!-- 平台设置 -->
         <div class="wrapper">
           <div class="frame_left">
               <div class="platform_control">
@@ -110,20 +112,24 @@
         </div>
       </section>
  <section id="third">
+        <!-- 界面设置 -->
         <div class="wrapper">
           <table id="table_default">
-          <!--
-            event change $(input#slidersrc) { $(#sliderval).value = this.value; }
-            event change $(input#sliderval) { $(#slidersrc).value = this.value; }
-          -->
-            <tr><td>{{BackgroundPic}}：</td><td><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
-            <tr><td>{{ContentDiaphaneity}}：</td><td><input type="hslider" name="p1" max="100" value="0" /></td></tr>
-            <tr><td>{{SoftDiaphaneity}}：</td><td><input type="hslider" name="p1" max="100" value="0" /></td></tr>
-            <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
+            <tr><td>{{BackgroundPic}}：</td><td><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button>
+              <select id="config_background_repeat">
+                  <option value="repeat">{{BackgroundRepeat}}</option>
+                  <option value="cover">{{BackgroundCover}}</option>
+                  <option value="no-repeat">{{BackgroundNoRepeat}}</option>
+              </select>
+            </td></tr>
+            <tr><td>{{OpacityWindow}}：</td><td><input type="hslider" id="config_opacity_window" min="50" max="100" step="5" /> <span id="info_opacity_window"></span></td></tr>
+            <tr><td>{{OpacityContent}}：</td><td><input type="hslider" id="config_opacity_content" min="50" max="100" step="5" /> <span id="info_opacity_content"></span></td></tr>
+            <tr><td colspan="2"></td></tr>
           </table>
         </div>
       </section>
       <section id="fourth">
+        <!-- 快捷工具 -->
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
           <table><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
@@ -202,6 +208,25 @@
         shortcutDelete(this);
     }
 
+    //背景图片
+    event blur $(#config_background) {
+        setBackgroundImage(this);
+    }
+
+    //背景显示方式
+    event change $(#config_background_repeat) {
+        setBackgroundRepeat(this);
+    }
+
+    //窗体透明度
+    event change $(#config_opacity_window) {
+        setOpacityWindow(this);
+    }
+
+    //内容透明度
+    event change $(#config_opacity_content) {
+        setOpacityContent(this);
+    }
 </script>
 </body>
 </html>

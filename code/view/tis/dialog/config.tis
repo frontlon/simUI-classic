@@ -277,6 +277,8 @@ function openFile(evt) {
         url = url.split("\/").join(CONF.Separator.toString());
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
+        out.focus = true;
+        out.focus = false;
     }
 }
 
@@ -406,4 +408,38 @@ function shortcutDelete(evt) {
     if(result == "1"){
         self.select("#shortcut_li_" + id).remove();
     }
+}
+
+function setBackgroundImage(obj){
+    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
+}
+
+function setBackgroundRepeat(obj){
+
+    if(obj.value == "cover"){
+        mainView.root.$(body).style["background-size"] = obj.value;
+        mainView.root.$(body).style["background-repeat"] = "no-repeat";
+    }else{
+        mainView.root.$(body).style["background-repeat"] = obj.value;
+        mainView.root.$(body).style["background-size"] = "contain";
+    }
+}
+
+function setOpacityWindow(obj){
+    var val = obj.value.toFloat() / 100;
+    mainView.root.$(body).style["opacity"] = val.toString();
+    $(#info_opacity_window).html = obj.value + "%";
+}
+
+function setOpacityContent(obj){
+    var val = obj.value.toFloat() / 100;
+    mainView.root.$(#titlebar).style["opacity"] = val.toString();
+    mainView.root.$(#left_platform).style["opacity"] = val.toString();
+    mainView.root.$(#left_menu).style["opacity"] = val.toString();
+    mainView.root.$(#center).style["opacity"] = val.toString();
+    mainView.root.$(#right).style["opacity"] = val.toString();
+    mainView.root.$(#menu_splitter).style["opacity"] = val.toString();
+    mainView.root.$(#platform_splitter).style["opacity"] = val.toString();
+    mainView.root.$(#right_splitter).style["opacity"] = val.toString();
+    $(#info_opacity_content).html = obj.value + "%";
 }
