@@ -59,7 +59,6 @@ function Init(){
     }
     platform_list.html = pfdata;
 
-
     //生成界面选项
     $(#config_background).value = CONF.Default.BackgroundImage;
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
@@ -286,6 +285,30 @@ function openFile(evt) {
         out.focus = true;
         out.focus = false;
     }
+}
+
+//选择平台文件夹
+function openPlatformFolder(evt) {
+
+
+        var (x,y,w,h) = view.box(#rectw,#border,#screen);
+        view.move(x,y,100,200);
+      
+
+
+/*    
+    var url = view.selectFolder(evt.attributes["caption"]);
+    if(!url){
+        return true;
+    }
+    url = URL.toPath(url);
+    url = url.split("\/").join(CONF.Separator.toString());
+    url = url.split(CONF.RootPath.toString()).join("");
+
+    var lis = $$(.conf_menu);
+    for(var li in lis) {li.style["display"] = "none";}
+*/
+    
 }
 
 //添加平台

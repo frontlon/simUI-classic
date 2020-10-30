@@ -30,9 +30,11 @@ func main() {
 		}
 	}
 
-	db.UpgradeDB() //检测新版
+	if runtime.GOOS == "windows"{
+		runtime.LockOSThread()
+	}
 
-	runtime.LockOSThread()
+	db.UpgradeDB() //检测新版
 
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))

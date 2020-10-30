@@ -228,7 +228,7 @@ function scrollDown(listType){
         return;
     }
     var centerScroll = $(#center).scroll(#top); //滚动条高度
-    var centerHeight = $(#center).box(#height) + centerScroll; //滚动层高度 + 滚动条高度
+    var centerHeight = $(#center)(#height) + centerScroll; //滚动层高度 + 滚动条高度
     var(x,liY,w,liH) = $(#romlist li:current).box(#rectw,#margin,#parent);
     var titlebarHeight = $(#titlebar).box(#height); //标题栏高度
     var scrHeight = 0;

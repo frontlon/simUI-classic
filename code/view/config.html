@@ -6,22 +6,26 @@
     html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
     .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:8dip;}
     .frame_left{width:120dip;height:*;display:inline-block;}
-    .frame_right{width:320dip;height:*;display:inline-block;padding-left:8dip;}
-    .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip}
+    .frame_right{width:650dip;height:*;display:inline-block;padding-left:8dip;}
+    .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip;width:*}
     
-    table{width:*;display:block}
+
+    
+    table{width:*;display:block;}
     th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
     td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
     tr:last-child td{text-align:center;padding-bottom:0}
-    .platform_list{width:*;height:740px;display:block;border:1dip solid #ccc;padding:0;margin:0}
+    .platform_list{width:*;height:*;display:block;border:1dip solid #ccc;padding:0;margin:0}
     .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip}
     .platform_list li:current{background:#3399ff;color:#FFF}
     .platform_list li:drag-source { background-color:#eee;}
 
     #table_default td:first-child{width:120dip;}
-    #table_backup td{text-align:left;}
-    #table_backup td:first-child{width:40dip}
-    #table_backup .backup_info{font-size:10dip;line-height:1.5em}
+
+
+
+    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;}
+    .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px;}
 
     #shortcut_list{padding:0;}
     #shortcut_list li{flow:row(input,input,button,button,button,label);}
@@ -42,10 +46,11 @@
 
   <tabs class="tabs" id="mytabs">
     <strip>
-      <label for="first" selected>{{GeneralConfig}}</label>
-      <label for="second">{{PlatformConfig}}</label>
-      <label for="third">{{InterfaceConfig}}</label>
-      <label for="fourth">{{Shortcut}}</label>
+    
+      <label ww="490" wh="300" for="first" selected>{{GeneralConfig}}</label>
+      <label ww="840" wh="570" for="second">{{PlatformConfig}}</label>
+      <label ww="490" wh="170" for="third">{{InterfaceConfig}}</label>
+      <label ww="490" wh="400" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -84,6 +89,101 @@
               
           </div>
           <div class="frame_right">
+
+            <table class="table_platform">
+                <tr>
+                  <th colspan="4" style="padding-top:0">{{BaseInfo}}</th>
+                </tr>
+                <tr>
+                  <td>{{Title}}：</td>
+                  <td><input type="text" value="" id="platform_name" disabled></td>
+                  <td><div class="tip" title="{{PlatformIconTip}}">&#xf3c1;</div>{{Icon}}：</td>
+                  <td><input type="text"  id="platform_icon" value="" disabled> <button class="openfile" for="platform_icon" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                  <td>{{RomType}}：</td>
+                  <td colspan="3"><input type="text" value=""  id="platform_exts" disabled></td>
+                </tr>
+                <tr><td>{{Simulator}}：</td><td colspan="3">
+                  <select id="platform_sim" disabled></select>
+                  <button id="add_sim" disabled>{{AddSimulator}}</button>
+                </td></tr>
+                <tr>
+                  <th>{{MenuConfig}}</th>
+                  <th colspan="3" style="text-align:right">
+                  <div class="tip" title="{{RootMenuTip}}">&#xf3c1;</div>
+                  <button id="openPlatformFolder" caption="{{SelectFolder}}">&#x2026;</button>
+                  </th>
+                </tr>
+                
+                <tr>
+                    <td>{{RomMenu}}：</td>
+                    <td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                    <td>{{ThumbMenu}}：</td>
+                    <td><input type="text" id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                    <td>{{SanpMenu}}：</td>
+                    <td><input type="text" id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                    <td>{{PosterMenu}}：</td>
+                    <td><input type="text" id="platform_poster" value="" disabled> <button class="openfolder" for="platform_poster" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                    <td>{{PackingMenu}}：</td>
+                    <td><input type="text" id="platform_packing" value="" disabled> <button class="openfolder" for="platform_packing" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                    <td>{{TitleMenu}}：</td>
+                    <td><input type="text" id="platform_title" value="" disabled> <button class="openfolder" for="platform_title" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                    <td>{{BackgroundMenu}}：</td>
+                    <td><input type="text" id="platform_background" value="" disabled> <button class="openfolder" for="platform_background" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                    <td>{{VideoMenu}}：</td>
+                    <td><input type="text" id="platform_video" value="" disabled> <button class="openfolder" for="platform_video" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                    <td>{{DescMenu}}：</td>
+                    <td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                    <td>{{StrategyMenu}}：</td>
+                    <td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>&#x2026;</button></td>
+                </tr>
+                <tr>
+                    <td><div class="tip" title="{{RombaseTip}}">&#xf3c1;</div>{{Rombase}}：</td>
+                    <td><input type="text"  id="platform_rombase" value="" disabled> <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>&#x2026;</button></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr><th colspan="4">更新配置</th></tr>
+                <tr><td colspan="4" style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!--
             <table>
                 <tr><th colspan="2" style="padding-top:0">{{BaseInfo}}</th></tr>
                 <tr><td>{{Title}}：</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
@@ -94,6 +194,8 @@
                   <button id="add_sim" disabled>{{AddSimulator}}</button>
                 </td></tr>
                 <tr><th colspan="2">{{MenuConfig}}</th></tr>
+
+                <tr><td><div class="tip" title="{{RootMenuTip}}">&#xf3c1;</div>{{RootMenu}}：</td><td><button id="openPlatformFolder" caption="{{SelectFolder}}">&#x2026;</button></td></tr>
                 <tr><td>{{RomMenu}}：</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
                 <tr><td>{{ThumbMenu}}：</td><td><input type="text" id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
                 <tr><td>{{SanpMenu}}：</td><td><input type="text" id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
@@ -105,9 +207,10 @@
                 <tr><td>{{DescMenu}}：</td><td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
                 <tr><td>{{StrategyMenu}}：</td><td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
                 <tr><td><div class="tip" title="{{RombaseTip}}">&#xf3c1;</div>{{Rombase}}：</td><td><input type="text"  id="platform_rombase" value="" disabled> <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
-                <tr><th colspan="2"></th></tr>
+                <tr><th colspan="2">更新配置</th></tr>
                 <tr><td colspan="2"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
             </table>
+            -->
           </div>
         </div>
       </section>
@@ -221,6 +324,33 @@
     event change $(#config_opacity_content) {
         setOpacityContent(this);
     }
+
+      //选择平台目录
+    event click $(#openPlatformFolder) {
+        openPlatformFolder(this);
+    }
+
+
+   
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
