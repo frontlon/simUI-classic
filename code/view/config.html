@@ -122,8 +122,7 @@
                   <option value="no-repeat">{{BackgroundNoRepeat}}</option>
               </select>
             </td></tr>
-            <tr><td>{{OpacityWindow}}：</td><td><input type="hslider" id="config_opacity_window" min="50" max="100" step="5" /> <span id="info_opacity_window"></span></td></tr>
-            <tr><td>{{OpacityContent}}：</td><td><input type="hslider" id="config_opacity_content" min="50" max="100" step="5" /> <span id="info_opacity_content"></span></td></tr>
+            <tr><td>{{OpacityContent}}：</td><td><input type="hslider" id="config_opacity_content" min="70" max="100" step="5" /> <span id="info_opacity_content"></span></td></tr>
             <tr><td colspan="2"></td></tr>
           </table>
         </div>
@@ -216,11 +215,6 @@
     //背景显示方式
     event change $(#config_background_repeat) {
         setBackgroundRepeat(this);
-    }
-
-    //窗体透明度
-    event change $(#config_opacity_window) {
-        setOpacityWindow(this);
     }
 
     //内容透明度

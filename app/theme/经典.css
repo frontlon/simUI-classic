@@ -1,23 +1,15 @@
 /* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
 html:theme(light) {
 
-    /* 窗体背景图片 */
-    var(window-background-image) : none;
+    /* 窗体背景 */
     var(center-background-color) : #d8dce3;
     var(center-box-shadow-color) : #999;
-    
-    /* 攻略窗口背景图片 */
-    var(desc-background-image) : none;
 
     /* 侧边栏初始化图片 */
     var(sidebar-image) : sidebar.png;
 
     /* 默认缩略图 */
     var(default-thumb-image) : light_thumbs.png;
-
-    /* 窗口透明度 */
-    var(window-opacity) :1;
-    var(body-opacity) : 1;
 
     /* 窗体边框 */
     var(window-outside-border-color) : #1c2129;

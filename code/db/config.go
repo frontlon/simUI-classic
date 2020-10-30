@@ -28,6 +28,9 @@ type Config struct {
 	PanelMenuWidth     string // 菜单面板宽度
 	PanelSidebarWidth  string // 侧边栏宽度
 	SoftName           string // 软件名称
+	BackgroundImage    string // 背景图片
+	BackgroundRepeat   string // 背景循环方式
+	OpacityContent     string // 内容透明度
 }
 
 func (*Config) TableName() string {

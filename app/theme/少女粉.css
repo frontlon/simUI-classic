@@ -1,23 +1,15 @@
 /* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
 html:theme(girl) {
 
-    /* 窗体背景图片 */
-    var(window-background-image) : pink_bg.jpg;
+    /* 窗体背景 */
     var(center-background-color) : #f7f5f8;
     var(center-box-shadow-color) : #980d21;
     
-    /* 攻略窗口背景图片 */
-    var(desc-background-image) : pink_bg.jpg;
-
     /* 侧边栏初始化图片 */
     var(sidebar-image) : sidebar.png;
 
     /* 默认缩略图 */
     var(default-thumb-image) : pink_thumbs.png;
-
-    /* 窗口透明度 */
-    var(window-opacity) :1;
-    var(body-opacity) : 0.9;
 
     /* 窗体边框 */
     var(window-outside-border-color) : #b4384d;

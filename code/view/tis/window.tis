@@ -66,6 +66,7 @@ function initConfig(isfresh){
     }
 
     initTheme(); //创建主题
+    initInterface(); //创建界面设置（背景、透明度）
     initPlatform(); //生成平台列表
     initShortcutList(); //初始化快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
@@ -101,4 +102,33 @@ function heartbeat(str){
     }else{
         $(#ping).style["display"] = "none";
     }
+}
+
+//创建界面设置
+function initInterface(){
+    
+
+    //更新背景图
+    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
+
+    //更新背景循环方式
+    var repeat = CONF.Default.BackgroundRepeat;
+    if(repeat == "cover"){
+        mainView.root.$(body).style["background-size"] = repeat;
+        mainView.root.$(body).style["background-repeat"] = "no-repeat";
+    }else{
+        mainView.root.$(body).style["background-repeat"] = repeat;
+        mainView.root.$(body).style["background-size"] = "contain";
+    }
+
+    //更新透明度
+    var opacity = CONF.Default.OpacityContent.toFloat() / 100;
+    mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
+    mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
+    mainView.root.$(#left_menu).style["opacity"] = opacity.toString();
+    mainView.root.$(#center).style["opacity"] = opacity.toString();
+    mainView.root.$(#right).style["opacity"] = opacity.toString();
+    mainView.root.$(#menu_splitter).style["opacity"] = opacity.toString();
+    mainView.root.$(#platform_splitter).style["opacity"] = opacity.toString();
+    mainView.root.$(#right_splitter).style["opacity"] = opacity.toString();
 }

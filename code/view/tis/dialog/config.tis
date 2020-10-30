@@ -59,8 +59,14 @@ function Init(){
     }
     platform_list.html = pfdata;
 
+
+    //生成界面选项
+    $(#config_background).value = CONF.Default.BackgroundImage;
+    $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
+    $(#config_opacity_content).value = CONF.Default.OpacityContent;
+    $(#info_opacity_content).html = CONF.Default.OpacityContent + "%";
+
     //生成快捷工具列表
-    
     var shortcut = "";
     var shortcut_list = JSON.parse(mainView.GetShortcut());
 
@@ -410,10 +416,16 @@ function shortcutDelete(evt) {
     }
 }
 
+//更新背景图片
 function setBackgroundImage(obj){
     mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
+    var saveVal = URL.toPath(obj.value);
+    saveVal = saveVal.split("\/").join(CONF.Separator.toString());
+    saveVal = saveVal.split(CONF.RootPath.toString()).join("");
+    mainView.UpdateConfig("background_image",saveVal);
 }
 
+//更新背景循环方式
 function setBackgroundRepeat(obj){
 
     if(obj.value == "cover"){
@@ -423,14 +435,10 @@ function setBackgroundRepeat(obj){
         mainView.root.$(body).style["background-repeat"] = obj.value;
         mainView.root.$(body).style["background-size"] = "contain";
     }
+    mainView.UpdateConfig("background_repeat",obj.value);
 }
 
-function setOpacityWindow(obj){
-    var val = obj.value.toFloat() / 100;
-    mainView.root.$(body).style["opacity"] = val.toString();
-    $(#info_opacity_window).html = obj.value + "%";
-}
-
+//更新透明度
 function setOpacityContent(obj){
     var val = obj.value.toFloat() / 100;
     mainView.root.$(#titlebar).style["opacity"] = val.toString();
@@ -442,4 +450,5 @@ function setOpacityContent(obj){
     mainView.root.$(#platform_splitter).style["opacity"] = val.toString();
     mainView.root.$(#right_splitter).style["opacity"] = val.toString();
     $(#info_opacity_content).html = obj.value + "%";
+    mainView.UpdateConfig("opacity_content",obj.value);
 }
