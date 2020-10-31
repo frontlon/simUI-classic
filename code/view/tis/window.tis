@@ -107,18 +107,20 @@ function heartbeat(str){
 //创建界面设置
 function initInterface(){
     
+    //更换鼠标指针
+    $(body).style["cursor"] = [url:URL.fromPath(CONF.Default.Cursor)];
 
     //更新背景图
-    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
+    $(body).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
 
     //更新背景循环方式
     var repeat = CONF.Default.BackgroundRepeat;
     if(repeat == "cover"){
-        mainView.root.$(body).style["background-size"] = repeat;
-        mainView.root.$(body).style["background-repeat"] = "no-repeat";
+        $(body).style["background-size"] = repeat;
+        $(body).style["background-repeat"] = "no-repeat";
     }else{
-        mainView.root.$(body).style["background-repeat"] = repeat;
-        mainView.root.$(body).style["background-size"] = "contain";
+        $(body).style["background-repeat"] = repeat;
+        $(body).style["background-size"] = "contain";
     }
 
     //更新透明度

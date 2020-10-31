@@ -208,6 +208,11 @@ func getDefault() (*db.Config, error) {
 		vo.OpacityContent, _ = filepath.Abs(vo.OpacityContent)
 	}
 
+	//如果鼠标指针文件存在，则转换为绝对路径
+	if utils.FileExists(vo.Cursor) == true {
+		vo.Cursor, _ = filepath.Abs(vo.Cursor)
+	}
+
 	if err != nil {
 		return vo, err
 	}

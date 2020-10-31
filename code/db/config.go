@@ -31,6 +31,7 @@ type Config struct {
 	BackgroundImage    string // 背景图片
 	BackgroundRepeat   string // 背景循环方式
 	OpacityContent     string // 内容透明度
+	Cursor             string // 鼠标指针
 }
 
 func (*Config) TableName() string {

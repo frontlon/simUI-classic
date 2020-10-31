@@ -130,7 +130,8 @@ class Tabs : Element
       
       if (ww != undefined && wh != undefined && ww != "" && wh != ""){
         var (x,y,w,h) = view.box(#rectw,#border,#screen);
-        view.move(x,y,ww.toInteger(),wh.toInteger());
+        view.move(x,y,self.toPixels(ww),self.toPixels(wh));
+        //view.move(x,y,ww.toInteger(),wh.toInteger());
       }
 
       if(notify)

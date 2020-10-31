@@ -439,13 +439,21 @@ function shortcutDelete(evt) {
     }
 }
 
+//更新鼠标指针
+function setCursor(obj){
+    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
+    var saveVal = URL.toPath(obj.value);
+    saveVal = saveVal.split("\/").join(CONF.Separator.toString());
+    saveVal = saveVal.split(CONF.RootPath.toString()).join("");
+    $(body).style["cursor"] = [url:URL.fromPath(obj.value)];
+}
+
 //更新背景图片
 function setBackgroundImage(obj){
     mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
     var saveVal = URL.toPath(obj.value);
     saveVal = saveVal.split("\/").join(CONF.Separator.toString());
     saveVal = saveVal.split(CONF.RootPath.toString()).join("");
-    mainView.UpdateConfig("background_image",saveVal);
 }
 
 //更新背景循环方式
@@ -458,7 +466,6 @@ function setBackgroundRepeat(obj){
         mainView.root.$(body).style["background-repeat"] = obj.value;
         mainView.root.$(body).style["background-size"] = "contain";
     }
-    mainView.UpdateConfig("background_repeat",obj.value);
 }
 
 //更新透明度
@@ -473,5 +480,20 @@ function setOpacityContent(obj){
     mainView.root.$(#platform_splitter).style["opacity"] = val.toString();
     mainView.root.$(#right_splitter).style["opacity"] = val.toString();
     $(#info_opacity_content).html = obj.value + "%";
-    mainView.UpdateConfig("opacity_content",obj.value);
+}
+
+function interfaceSubmit(obj){
+    var cursor = $(#config_cursor).value;
+    var opacity = $(#config_opacity_content).value;
+    var background_image = $(#config_background).value;
+    var background_repeat = $(#config_background_repeat).value;
+
+    mainView.UpdateConfig("cursor",cursor);
+    mainView.UpdateConfig("opacity_content",opacity);
+    mainView.UpdateConfig("background_image",background_image);
+    mainView.UpdateConfig("background_repeat",background_repeat);
+
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+
+
 }
