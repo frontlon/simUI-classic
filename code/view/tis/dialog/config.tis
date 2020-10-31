@@ -106,6 +106,13 @@ function GetPlatformLitem(evt){
     $(#platform_background).value = info.BackgroundPath;
     $(#platform_video).value = info.VideoPath;
     $(#platform_rombase).value = info.Rombase;
+
+    //如果没有扩展名，则自动填充大量扩展名
+    if($(#platform_exts).value.trim() == ""){
+        var exts = ".zip,.NES,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups";
+        $(#platform_exts).value = exts;
+    }
+
     //模拟器数据
     var platform_sim = $(#platform_sim);
     platform_sim.options.clear();
@@ -126,28 +133,46 @@ function GetPlatformLitem(evt){
     $(#platform_name).state.disabled = false;
     $(#platform_icon).state.disabled = false;
     $(#platform_exts).state.disabled = false;
-    $(#platform_doc).state.disabled = false;
-    $(#platform_strategy).state.disabled = false;
-    $(#platform_rom).state.disabled = false;
-    $(#platform_thumb).state.disabled = false;
-    $(#platform_snap).state.disabled = false;
-    $(#platform_poster).state.disabled = false;
-    $(#platform_packing).state.disabled = false;
-    $(#platform_title).state.disabled = false;
-    $(#platform_background).state.disabled = false;
-    $(#platform_video).state.disabled = false;
-    $(#platform_rombase).state.disabled = false;
 
-    var openfile = $$(.openfile);
-    for(var of in openfile) {
-        of.state.disabled = false;
+    var checkEmpty = info.DocPath + info.StrategyPath  + info.RomPath + info.ThumbPath + info.SnapPath + info.PosterPath  + info.PackingPath  + info.TitlePath  + info.BackgroundPath  + info.VideoPath  + info.Rombase;
+            
+    //如果所有目录都为空，说明是新增的，则全部禁用，强制用户指定根目录
+    if(checkEmpty.trim() != ""){
+        $(#platform_doc).state.disabled = false;
+        $(#platform_strategy).state.disabled = false;
+        $(#platform_rom).state.disabled = false;
+        $(#platform_thumb).state.disabled = false;
+        $(#platform_snap).state.disabled = false;
+        $(#platform_poster).state.disabled = false;
+        $(#platform_packing).state.disabled = false;
+        $(#platform_title).state.disabled = false;
+        $(#platform_background).state.disabled = false;
+        $(#platform_video).state.disabled = false;
+        $(#platform_rombase).state.disabled = false;
+        var folders = $$(.openfolder);
+        var files = $$(.openfile);
+        for(var f in folders) {f.state.disabled = false;}
+        for(var f in files) {f.state.disabled = false;}
+        
+    }else{
+        $(#platform_doc).state.disabled = true;
+        $(#platform_strategy).state.disabled = true;
+        $(#platform_rom).state.disabled = true;
+        $(#platform_thumb).state.disabled = true;
+        $(#platform_snap).state.disabled = true;
+        $(#platform_poster).state.disabled = true;
+        $(#platform_packing).state.disabled = true;
+        $(#platform_title).state.disabled = true;
+        $(#platform_background).state.disabled = true;
+        $(#platform_video).state.disabled = true;
+        $(#platform_rombase).state.disabled = true;
+        var folders = $$(.openfolder);
+        var files = $$(.openfile);
+        for(var f in folders) {f.state.disabled = true;}
+        for(var f in files) {f.state.disabled = true;}
     }
 
-    var openfolders = $$(.openfolder);
-    for(var of in openfolders) {
-        of.state.disabled = false;
-    }
-
+ 
 }
 
 //更新通用配置信息
@@ -200,6 +225,9 @@ function platformSubmit(evt){
     $(#platform_list).select("li:current").html = data.name;
     //更新平台信息
     var result = mainView.UpdatePlatform(JSON.stringify(data));
+
+    mainView.CreatePlatform(data.id); //创建资源目录及资料文件
+
     if( result.toString() == "1"){
         view.msgbox(#alert,CONF.Lang.UpdateSuccess);
     }
@@ -289,25 +317,44 @@ function openFile(evt) {
 
 //选择平台文件夹
 function openPlatformFolder(evt) {
-
-
-        var (x,y,w,h) = view.box(#rectw,#border,#screen);
-        view.move(x,y,100,200);
-      
-
-
-/*    
     var url = view.selectFolder(evt.attributes["caption"]);
-    if(!url){
-        return true;
-    }
-    url = URL.toPath(url);
-    url = url.split("\/").join(CONF.Separator.toString());
-    url = url.split(CONF.RootPath.toString()).join("");
+    if(url){
+        url = URL.toPath(url);
+        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split(CONF.RootPath.toString()).join("");
 
-    var lis = $$(.conf_menu);
-    for(var li in lis) {li.style["display"] = "none";}
-*/
+        //资料文件名
+        var rombase = $(#platform_name).value == "" ? "rombase" : $(#platform_name).value;
+
+        $(#platform_doc).value = url + SEPARATOR + "doc";
+        $(#platform_strategy).value = url + SEPARATOR + "strategy";
+        $(#platform_rom).value = url + SEPARATOR + "roms";
+        $(#platform_thumb).value = url + SEPARATOR + "thumb";
+        $(#platform_snap).value = url + SEPARATOR + "snap";
+        $(#platform_poster).value = url + SEPARATOR + "poster";
+        $(#platform_packing).value = url + SEPARATOR + "packing";
+        $(#platform_title).value = url + SEPARATOR + "title";
+        $(#platform_background).value = url + SEPARATOR + "background";
+        $(#platform_video).value = url + SEPARATOR + "video";
+        $(#platform_rombase).value = url + SEPARATOR + rombase + ".csv";
+
+        $(#platform_doc).state.disabled = false;
+        $(#platform_strategy).state.disabled = false;
+        $(#platform_rom).state.disabled = false;
+        $(#platform_thumb).state.disabled = false;
+        $(#platform_snap).state.disabled = false;
+        $(#platform_poster).state.disabled = false;
+        $(#platform_packing).state.disabled = false;
+        $(#platform_title).state.disabled = false;
+        $(#platform_background).state.disabled = false;
+        $(#platform_video).state.disabled = false;
+        $(#platform_rombase).state.disabled = false;
+        var folders = $$(.openfolder);
+        var files = $$(.openfile);
+        for(var f in folders) {f.state.disabled = false;}
+        for(var f in files) {f.state.disabled = false;}
+
+    }
     
 }
 
@@ -373,7 +420,6 @@ function platformDel(evt) {
 //添加快捷工具
 function shortcutAdd(evt) {
     var insertId = mainView.AddShortcut();
-
     if(insertId != "0"){
         var shortcut = "";
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
@@ -458,7 +504,6 @@ function setBackgroundImage(obj){
 
 //更新背景循环方式
 function setBackgroundRepeat(obj){
-
     if(obj.value == "cover"){
         mainView.root.$(body).style["background-size"] = obj.value;
         mainView.root.$(body).style["background-repeat"] = "no-repeat";
@@ -482,18 +527,15 @@ function setOpacityContent(obj){
     $(#info_opacity_content).html = obj.value + "%";
 }
 
+//提交界面样式
 function interfaceSubmit(obj){
     var cursor = $(#config_cursor).value;
     var opacity = $(#config_opacity_content).value;
     var background_image = $(#config_background).value;
     var background_repeat = $(#config_background_repeat).value;
-
     mainView.UpdateConfig("cursor",cursor);
     mainView.UpdateConfig("opacity_content",opacity);
     mainView.UpdateConfig("background_image",background_image);
     mainView.UpdateConfig("background_repeat",background_repeat);
-
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
-
-
 }

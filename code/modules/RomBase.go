@@ -74,6 +74,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 	return des, nil
 }
 
+//写csv文件
 func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 
 	if config.Cfg.Platform[platform].Rombase == "" {
@@ -99,7 +100,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	writer := csv.NewWriter(f)
 
 	//表头
-	writer.Write([]string{config.Cfg.Lang["BaseRomName"], config.Cfg.Lang["BaseName"], config.Cfg.Lang["BaseType"], config.Cfg.Lang["BaseYear"], config.Cfg.Lang["BasePublisher"], config.Cfg.Lang["BaseCountry"]})
+	writer.Write(getCsvTitle())
 
 	for _, v := range info {
 
@@ -116,4 +117,37 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	writer.Flush() // 此时才会将缓冲区数据写入
 
 	return nil
+}
+
+//创建一个新的csv文件
+func CreateNewRomBaseFile(p string) error {
+
+	//转换为切片
+	f, err := os.Create(p)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
+
+	writer := csv.NewWriter(f)
+
+	//表头
+	writer.Write(getCsvTitle())
+	writer.Flush() // 此时才会将缓冲区数据写入
+	return nil
+}
+
+
+//表头
+func getCsvTitle() []string {
+	return []string{
+		config.Cfg.Lang["BaseRomName"],
+		config.Cfg.Lang["BaseName"],
+		config.Cfg.Lang["BaseType"],
+		config.Cfg.Lang["BaseYear"],
+		config.Cfg.Lang["BasePublisher"],
+		config.Cfg.Lang["BaseCountry"],
+	}
 }

@@ -53,7 +53,24 @@ func IsAbsPath(p string) bool {
 	return filepath.IsAbs(p)
 }
 
+/**
+ * 检测文件是否存在（文件夹也返回false）
+ **/
+func FileExists(path string) bool {
 
+	if path == "" {
+		return false
+	}
+
+	finfo, err := os.Stat(path)
+	isset := false
+	if err != nil || finfo.IsDir() == true {
+		isset = false
+	} else {
+		isset = true
+	}
+	return isset
+}
 
 /**
  * 检测路径是否存在

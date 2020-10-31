@@ -1,9 +1,11 @@
 package controller
 
 import (
-	"simUI/code/db"
-	"simUI/code/utils"
 	"encoding/json"
+	"simUI/code/config"
+	"simUI/code/db"
+	"simUI/code/modules"
+	"simUI/code/utils"
 	"simUI/code/utils/go-sciter"
 	"strings"
 )
@@ -170,5 +172,17 @@ func PlatformController() {
 			}
 		}
 		return sciter.NewValue("1")
+	})
+
+	//快速创建平台
+	utils.Window.DefineFunction("CreatePlatform", func(args ...*sciter.Value) *sciter.Value {
+		id := uint32(utils.ToInt(args[0].String()))
+		err := modules.CreatePlatform(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NewValue(config.ENV)
 	})
 }

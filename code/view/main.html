@@ -362,12 +362,20 @@
     var isDebug = true;
     var mainView = view;
     var ROOTPATH = "this://app/";
+    var SEPARATOR = ""; //路径分隔符
+    
+    var mediaVars = view.mediaVars();
+    if(mediaVars["platform"] == "Windows"){
+        SEPARATOR = "\\";
+    }else{
+        SEPARATOR = "/";
+    }
+
     if (isDebug == true){
-        var mediaVars = view.mediaVars();
         if(mediaVars["platform"] == "Windows"){
             ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
         }else if(mediaVars["platform"] == "OSX"){
-            ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/"; 
+            ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/";
         }
     }
 
