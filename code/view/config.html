@@ -44,7 +44,7 @@
     <strip>
       <label ww="600dip" wh="300dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="940dip" wh="540dip" for="second">{{PlatformConfig}}</label>
-      <label ww="600dip" wh="250dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="600dip" wh="550dip" for="third">{{InterfaceConfig}}</label>
       <label ww="600dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
@@ -58,7 +58,9 @@
               <option value="thumb">{{Thumb}}</option>
               <option value="snap">{{Snap}}</option>
               <option value="poster">{{Poster}}</option>
-              <option value="packing">{{Packing}}</option>
+              <option value="packing">{{PackingMenu}}</option>
+              <option value="background">{{BackgroundPic}}</option>
+              <option value="title">{{TitlePic}}</option>
             </select></td></tr>
 
               <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">&#xf3c1;</div>{{PicSearchEngines}}：</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>
@@ -158,6 +160,21 @@
         <!-- 界面设置 -->
         <div class="wrapper">
           <table id="table_default">
+
+
+            <tr><td>字体大小：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
+            <tr><td>模块大小：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
+            <tr><td>模块间距：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
+            <tr><td>标题背景：</td>
+            <select id="config_background_repeat">
+                  <option value="repeat">显示</option>
+                  <option value="cover">隐藏</option>
+              </select>
+            <td></tr>
+
+
+
+
             <tr><td>{{Cursor}}：</td><td><input type="text"  id="config_cursor" value=""> <button class="openfile" for="config_cursor" caption="{{SelectPicFile}}" filter="cursor Files (*.cur,*.ani,*.png,*.gif)|*.cur;*.ani;*.png;*.gif|All Files (*.*)|*.*">&#x2026;</button></tr>
             <tr><td>{{BackgroundPic}}：</td><td><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button>
               <select id="config_background_repeat">

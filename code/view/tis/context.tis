@@ -149,8 +149,41 @@ function romContextMenu(obj){
 
     btndata += "<hr />";
     //打开文件夹
-    btndata += "<li rid=''>打开目录<menu>";
+    btndata += "<li class='context_folder' rid=''>打开目录<menu>";
     btndata += createOpenFolderMenu(detailObj.Info);
     btndata += "</menu></li>";
+
+    btndata += "<hr />";
+
+    btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
+
+
     romcontext.append(btndata);
+}
+
+//删除rom及相关资源文件
+function deleteRom(obj){
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeleteRomConfirm, 
+        caption:CONF.Lang.DeleteRom,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+    var id = obj.attributes["rid"];
+    var dom = $(#romlist).select("li[rid="+id+"]");
+    alert(id);
+    if (dom != undefined){
+        dom.remove(); //删除页面dom
+    }
+    view.DeleteRom(id); //删除实体文件
 }

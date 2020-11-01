@@ -307,6 +307,11 @@
         openFolder(this);
     });
 
+    //删除rom及相关资源文件
+    self.on("click", "#romcontext .delete", function(evt) {
+        deleteRom(this);
+    });
+
     $(#right_video).onControlEvent = function(evt) {
         if(evt.type == Event.VIDEO_STOPPED){
             if ( this.videoDuration() - this.videoPosition()  < 1){

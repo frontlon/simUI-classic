@@ -312,14 +312,12 @@ func RomController() {
 		err := modules.DeleteRomAndRes(id)
 		if err != nil {
 			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
 		}
 
 		//删除数据库缓存
 		err = (&db.Rom{}).DeleteById(id)
 		if err != nil {
 			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
 		}
 
 		return sciter.NewValue("1")
