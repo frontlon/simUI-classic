@@ -23,6 +23,10 @@
     .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;}
     .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px;}
 
+    
+    .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;min-width:80dip}
+    .table_interface tr td:nth-child(even){text-align:left;padding-bottom:0;}
+
     #shortcut_list{padding:0;}
     #shortcut_list li{flow:row(input,input,button,button,button,label);}
     #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
@@ -44,7 +48,7 @@
     <strip>
       <label ww="600dip" wh="300dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="940dip" wh="540dip" for="second">{{PlatformConfig}}</label>
-      <label ww="600dip" wh="550dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="420dip" wh="330dip" for="third">{{InterfaceConfig}}</label>
       <label ww="600dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
@@ -159,33 +163,47 @@
  <section id="third">
         <!-- 界面设置 -->
         <div class="wrapper">
-          <table id="table_default">
+          <table class="table_interface">
 
 
-            <tr><td>字体大小：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
-            <tr><td>模块大小：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
-            <tr><td>模块间距：</td><td><input type="number" readonly id="123123" value="" min=0 max=1000 step=100> </tr>
-            <tr><td>标题背景：</td>
-            <select id="config_background_repeat">
-                  <option value="repeat">显示</option>
-                  <option value="cover">隐藏</option>
-              </select>
-            <td></tr>
+            <tr>
+              <td>标题字体：</td>
+              <td>
 
+              <!--<input type="hslider" id="config_title_fontsize" min="0" max="13" step="1" />-->
 
+              <input type="number" id="config_title_fontsize" value="0" min=0 max=13 step=1>
 
-
-            <tr><td>{{Cursor}}：</td><td><input type="text"  id="config_cursor" value=""> <button class="openfile" for="config_cursor" caption="{{SelectPicFile}}" filter="cursor Files (*.cur,*.ani,*.png,*.gif)|*.cur;*.ani;*.png;*.gif|All Files (*.*)|*.*">&#x2026;</button></tr>
-            <tr><td>{{BackgroundPic}}：</td><td><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button>
-              <select id="config_background_repeat">
-                  <option value="repeat">{{BackgroundRepeat}}</option>
-                  <option value="cover">{{BackgroundCover}}</option>
-                  <option value="no-repeat">{{BackgroundNoRepeat}}</option>
-              </select>
-            </td></tr>
-            <tr><td>{{OpacityContent}}：</td><td><input type="hslider" id="config_opacity_content" min="70" max="100" step="5" /> <span id="info_opacity_content"></span></td></tr>
-            <tr><td colspan="2"></td></tr>
-            <tr><td colspan="2"><button id="interface_submit">{{UpdateConfig}}</button></td></tr>
+              </td>
+              <td>标题背景：</td>
+              <td><select id="config_title_bg"><option value="1">显示</option><option value="0">隐藏</option></select></td>
+            </tr>
+            <tr>
+              <td>模块大小：</td>
+              <td><input type="number" readonly id="config_romlist_size" value="" min=1 max=6 step=1></td>
+              <td>模块间距：</td>
+              <td><input type="number" readonly id="config_romlist_margin" value="" min=2 max=20 step=2></td>
+            </tr>
+            <tr>
+              <td>{{Cursor}}：</td>
+              <td colspan="3"><input type="text"  id="config_cursor" value=""> <button class="openfile" for="config_cursor" caption="{{SelectPicFile}}" filter="cursor Files (*.cur,*.ani,*.png,*.gif)|*.cur;*.ani;*.png;*.gif|All Files (*.*)|*.*">&#x2026;</button></td>
+            </tr>
+            <tr>
+              <td>{{BackgroundPic}}：</td>
+              <td colspan="3"><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button>
+                <select id="config_background_repeat">
+                    <option value="repeat">{{BackgroundRepeat}}</option>
+                    <option value="cover">{{BackgroundCover}}</option>
+                    <option value="no-repeat">{{BackgroundNoRepeat}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>{{OpacityContent}}：</td>
+              <td colspan="3"><input type="hslider" id="config_opacity_content" min="70" max="100" step="5" /> <span id="info_opacity_content"></span></td>
+            </tr>
+            <tr><td colspan="4"></td></tr>
+            <tr><td colspan="4" style="text-align:center"><button id="interface_submit">{{UpdateConfig}}</button></td></tr>
           </table>
         </div>
       </section>
@@ -254,6 +272,11 @@
       platformDel(this);
     }
 
+    //选择平台目录
+    event click $(#openPlatformFolder) {
+        openPlatformFolder(this);
+    }
+
     //添加快捷工具
     event click $(#shortcut_add){
         shortcutAdd(this);
@@ -294,10 +317,19 @@
         interfaceSubmit(this);
     }
 
-    //选择平台目录
-    event click $(#openPlatformFolder) {
-        openPlatformFolder(this);
+    //提交界面变更
+    event change $(#config_title_fontsize) {
+        setFontsize(this);
+
+
     }
+
+    //提交界面变更
+    event change $(#config_romlist_size) {
+        setRomlistSize(this);
+    }
+
+
 
 
 </script>

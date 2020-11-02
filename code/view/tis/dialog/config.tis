@@ -539,3 +539,58 @@ function interfaceSubmit(obj){
     mainView.UpdateConfig("background_repeat",background_repeat);
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
+
+
+    var dom = mainView.root.$(#romlist);
+
+//更新rom列表字体
+function setFontsize(obj){
+
+
+    try{
+
+
+
+
+
+    for (var i = 0; i <= 13; i++){
+        var s = 'fontsize'+i.toString();
+        if(dom.attributes.hasClass(s)){
+            dom.attributes.removeClass(s);
+        }
+    }
+    var v = 'fontsize'+obj.value.toString();
+    dom.attributes.addClass(v);
+    mainView.UpdateConfig("font_size",val);
+
+    obj.select;
+  
+
+
+    }catch(e){
+        alert(e);
+    }
+
+
+     
+
+}
+
+
+
+//列表图标缩放
+function setRomlistSize(obj){
+    var romlist = mainView.root.$(#romlist);
+
+
+    //先清除所有缩放样式
+    for(var i=1;i<=6;i++){
+        romlist.attributes.removeClass("zoom" + i);
+    }
+
+    //更新列表样式
+    romlist.attributes.addClass("zoom" + obj.value);
+
+    //更新配置文件
+    //view.UpdateConfig("romlist_size",next);
+}

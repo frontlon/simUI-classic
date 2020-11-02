@@ -28,15 +28,15 @@ function initRomListStyle(){
     }
 
     var zoom = $(#zoom);
-    zoom.attributes["value"] = CONF.Default.RomlistZoom;
+    zoom.attributes["value"] = CONF.Default.RomlistSize;
 
-    if(CONF.Default.RomlistZoom.toInteger() >= MAXZOOM){
+    if(CONF.Default.RomlistSize.toInteger() >= MAXZOOM){
         zoom.html = "<i>&#xe615;</i>";
     }else{
         zoom.html = "<i>&#xe60f;</i>";
     }
 
-    $(#romlist).attributes.addClass("zoom"+CONF.Default.RomlistZoom); //更新列表大小
+    $(#romlist).attributes.addClass("zoom"+CONF.Default.RomlistSize); //更新列表大小
     $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
     
 }
@@ -234,7 +234,7 @@ function romBlockZoom(obj){
     romlist.attributes.addClass("zoom"+next);
 
     //更新配置文件
-    view.UpdateConfig("romlist_zoom",next)
+    view.UpdateConfig("romlist_size",next)
 }
 
 //文字大小

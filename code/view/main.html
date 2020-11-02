@@ -91,24 +91,25 @@
     .romblock li div:nth-child(6){display:none}
     .romblock li div:nth-child(7){display:none}
     #romlist.fontsize0 li div:nth-child(2){display:none}
-    #romlist.fontsize1 li{display:inherit;font-size: 8dip;}
-    #romlist.fontsize2 li{display:inherit;font-size: 9dip}
-    #romlist.fontsize3 li{display:inherit;font-size: 10dip}
+
+    #romlist.fontsize1 li{display:inherit;font-size:8dip;}
+    #romlist.fontsize2 li{display:inherit;font-size:9dip}
+    #romlist.fontsize3 li{display:inherit;font-size:10dip}
     #romlist.fontsize4 li{display:inherit;font-size:11dip}
-    #romlist.fontsize5 li{display:inherit;font-size: 12dip}
-    #romlist.fontsize6 li{display:inherit;font-size: 13dip}
-    #romlist.fontsize7 li{display:inherit;font-size: 14dip}
-    #romlist.fontsize8 li{display:inherit;font-size: 15dip}
-    #romlist.fontsize9 li{display:inherit;font-size: 16dip}
-    #romlist.fontsize10 li{display:inherit;font-size: 17dip}
-    #romlist.fontsize11 li{display:inherit;font-size: 18dip}
-    #romlist.fontsize12 li{display:inherit;font-size: 36dip;line-height:52dip;height:52dip}
-    #romlist.fontsize13 li{display:inherit;font-size: 48dip;line-height:70dip;height:70dip}
+    #romlist.fontsize5 li{display:inherit;font-size:12dip}
+    #romlist.fontsize6 li{display:inherit;font-size:13dip}
+    #romlist.fontsize7 li{display:inherit;font-size:14dip}
+    #romlist.fontsize8 li{display:inherit;font-size:15dip}
+    #romlist.fontsize9 li{display:inherit;font-size:16dip}
+    #romlist.fontsize10 li{display:inherit;font-size:17dip}
+    #romlist.fontsize11 li{display:inherit;font-size:18dip}
+    #romlist.fontsize12 li{display:inherit;font-size:36dip;line-height:52dip;height:52dip}
+    #romlist.fontsize13 li{display:inherit;font-size:48dip;line-height:70dip;height:70dip}
     #romlist.fontsize12 li div:nth-child(1){width:45dip;}
     #romlist.fontsize12 li img{width:32dip;height:32dip;margin-top:1dip;}
     #romlist.fontsize13 li div:nth-child(1){width:60dip}
     #romlist.fontsize13 li img{width:40dip;height:40dip;margin-top:6dip;}
-
+    
     .romblock.zoom1 > li{min-width:80dip;max-width:100dip;margin:3dip 6dip;}
     .romblock.zoom2 > li{min-width:100dip;max-width:130dip;margin:6dip 10dip}
     .romblock.zoom3 > li{min-width:120dip;max-width:150dip;margin:6dip 10dip;}
@@ -160,7 +161,9 @@
     #right_rombase li:nth-child(5){background-image:url(this://app/images/baseinfo_country.png);}
 
     /* 视频 */
+    #video_wrapper{position:relative}
     #video_wrapper video{width:100%;foreground-repeat:no-repeat;foreground-position:top center;}
+    #video_sound{top:-30dip;right:0dip;position:absolute;}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
@@ -328,7 +331,10 @@
             <menu id="foldercontext" type="menu"></menu>
             </button>
             <h2 id="video_h2">{{Video}}</h2>
-            <div id="video_wrapper"><video id="right_video" src="" /></div>
+            <div id="video_wrapper">
+            <button id="video_sound" class="funbtn"><i>&#xe657;</i></button>
+
+            <video id="right_video" src="" /></div>
             <h2>{{Thumb}}</h2>
             <div class="rotate_wrapper">
                 <button id="rotate" class="funbtn">&gt;</button>
@@ -383,6 +389,7 @@
         }
     }
 
+
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
@@ -400,5 +407,6 @@
     include ROOTPATH + "tis/context.tis";
     include ROOTPATH + "tis/keycode.tis";
     include ROOTPATH + "tis/event.tis";
+  
 </script>
 </html>

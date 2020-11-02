@@ -12,13 +12,14 @@ type Config struct {
 	Menu               string // 当前菜单
 	Thumb              string // 当前缩略图显示哪个模块
 	RomlistStyle       string // 当前列表样式
-	RomlistZoom        string // 当前缩放等级
+	RomlistSize        string // 当前缩放等级
+	FontSize           string // 当前rom列表字体大小
+	FontBackground     string // 是否显示字体背景
 	SearchEngines      string // 搜索引擎地址
 	RootPath           string // 当前根目录
 	WindowWidth        string // 当前窗口宽度
 	WindowHeight       string // 当前窗口高度
 	WindowState        string // 当前窗口显示状态
-	FontSize           string // 当前rom列表字体大小
 	UpgradeId          string // 当前版本id
 	EnableUpgrade      string // 启用更新
 	PanelPlatform      string // 当前是否显示平台面板
