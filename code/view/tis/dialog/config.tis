@@ -64,6 +64,7 @@ function Init(){
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
     $(#config_opacity_content).value = CONF.Default.OpacityContent;
     $(#info_opacity_content).html = CONF.Default.OpacityContent + "%";
+    $(#config_cursor).html = CONF.Default.Cursor;
 
     //生成快捷工具列表
     var shortcut = "";
