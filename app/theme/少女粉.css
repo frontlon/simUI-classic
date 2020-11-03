@@ -72,8 +72,6 @@ html:theme(girl) {
     var(context-hover-background-color) : #e85d71;
 
     /* 右侧边栏 功能按钮 */
-    var(func-button-text-color) : #FFF;
-    var(func-button-active-text-color) : yellow;
     var(func-button-background-color) : #e85d71;
     var(func-button-hover-background-color) : #df4c61;
     var(func-button-disable-text-color) : #fbd5da;

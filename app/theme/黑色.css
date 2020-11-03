@@ -65,8 +65,6 @@ html:theme(dark) {
     var(context-hover-background-color) : #585757;
 
     /* 右侧边栏 功能按钮 */
-    var(func-button-text-color) : #adb5bd;
-    var(func-button-active-text-color) : yellow;
     var(func-button-background-color) : #444444;
     var(func-button-hover-background-color) : #4a4a4a;
     var(func-button-disable-text-color) : #adb5bd;

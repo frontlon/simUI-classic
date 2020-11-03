@@ -70,8 +70,6 @@ html:theme(red) {
     var(context-hover-background-color) : #ff5e66;
 
     /* 右侧边栏 功能按钮 */
-    var(func-button-text-color) : #FFF;
-    var(func-button-active-text-color) : #fb9b9f;
     var(func-button-background-color) : #31111a;
     var(func-button-hover-background-color) : #471b27;
     var(func-button-disable-text-color) : #adb5bd;

@@ -225,12 +225,6 @@
         thumbEdit(this);
     });
 
-    //攻略弹窗按钮（侧边栏）
-    self.on("click", "#right_desc", function(evt) {
-        openDesc(this);
-    });
-
-
     //打开文件夹
     self.on("click", "#foldercontext .folder", function(evt) {
         openFolder(this);
@@ -255,6 +249,37 @@
     self.on("click", "#right_video", function(evt) {
         videoControl(this);
     });
+
+
+
+
+   //编辑资料
+    self.on("click", "#right_base_info", function(evt) {
+        baseinfo(this);
+    });
+
+   
+    //删除rom及相关资源文件
+    self.on("click", "#right_delete", function(evt) {
+        deleteRom(this);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
    

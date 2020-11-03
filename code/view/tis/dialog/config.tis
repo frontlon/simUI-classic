@@ -546,13 +546,6 @@ function interfaceSubmit(obj){
 //更新rom列表字体
 function setFontsize(obj){
 
-
-    try{
-
-
-
-
-
     for (var i = 0; i <= 13; i++){
         var s = 'fontsize'+i.toString();
         if(dom.attributes.hasClass(s)){
@@ -561,18 +554,7 @@ function setFontsize(obj){
     }
     var v = 'fontsize'+obj.value.toString();
     dom.attributes.addClass(v);
-    mainView.UpdateConfig("font_size",val);
-
-    obj.select;
-  
-
-
-    }catch(e){
-        alert(e);
-    }
-
-
-     
+    mainView.UpdateConfig("font_size",val); 
 
 }
 

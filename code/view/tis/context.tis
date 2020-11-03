@@ -149,7 +149,7 @@ function romContextMenu(obj){
 
     btndata += "<hr />";
     //打开文件夹
-    btndata += "<li class='context_folder' rid=''>打开目录<menu>";
+    btndata += "<li class='context_folder' rid=''>"+ CONF.Lang.OpenFolder +"<menu>";
     btndata += createOpenFolderMenu(detailObj.Info);
     btndata += "</menu></li>";
 

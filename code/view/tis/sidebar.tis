@@ -99,18 +99,6 @@ function openSidebar(obj){
 
 
 
-    //如果存在攻略文件
-    /*
-    if(detailObj.StrategyFile != "" || detailObj.StrategyContent != ""){
-        $(#right_desc).attributes["title"] = CONF.Lang.ViewStrategy;
-        $(#right_desc).attributes.removeClass("right_desc_disable");
-    }else{
-        $(#right_desc).attributes["title"] = CONF.Lang.NotStrategy;
-        $(#right_desc).attributes.addClass("right_desc_disable");
-
-    }
-    $(#right_desc).attributes["rid"] = info.Id;
-    */
 
     //生成模拟器列表
     $(#sim_select).html = ""; //先清空所有模拟器
@@ -276,39 +264,6 @@ function sidebarRunGame(evt){
     view.RunGame(evt.attributes["rid"],sim);
 }
 
-//攻略弹窗按钮
-function openDesc(evt){
-    //如果是禁用状态
-    if(evt.attributes.hasClass("right_desc_disable") == true){
-        return;
-    }
-
-    //检查运行攻略文件
-    var getjson = view.GetGameDetail(evt.attributes["rid"]);
-    var detailObj = JSON.parse(getjson);
-
-    if(detailObj.StrategyFile != ""){
-        view.RunStrategy(detailObj.StrategyFile);
-        return;
-    }
-
-    //如果攻略文件不是可运行程序，则窗口运行        
-    other = view.window{
-        type:View.FRAME_WINDOW,
-        url: self.url("docs.html"),
-        alignment: 5,
-        screen:1,
-        width : 800,
-        height : 800,
-        parameters: {
-            content:detailObj.StrategyContent,
-            title:detailObj.Info.Name,
-            id:evt.attributes["rid"],
-            conf:CONF,
-        };
-    };
-}
-
 //侧边栏切换模拟器
 function switchRomSim(evt){
      evt.state.current = true;
@@ -360,12 +315,12 @@ function setFavorite(evt){
 
     if(star == "1"){
         star = "0";
-        evt.attributes.removeClass("funbtn_1");
-        evt.attributes.addClass("funbtn_0");
+        evt.html = "<img src='this://app/images/fileico_fav_0.png' />";
+
     }else{
         star = "1";
-        evt.attributes.removeClass("funbtn_0");
-        evt.attributes.addClass("funbtn_1");        
+        evt.html = "<img src='this://app/images/fileico_fav_1.png' />";
+
     }
 
     evt.attributes["value"] = star;
@@ -391,12 +346,11 @@ function setHide(evt){
 
     if(hide == "1"){
         hide = "0";
-        evt.attributes.removeClass("funbtn_1");
-        evt.attributes.addClass("funbtn_0");
+        evt.html = "<img src='this://app/images/fileico_hide_0.png' />";
+
     }else{
         hide = "1";
-        evt.attributes.removeClass("funbtn_0");
-        evt.attributes.addClass("funbtn_1");        
+        evt.html = "<img src='this://app/images/fileico_hide_1.png' />";     
     }
 
     evt.attributes["value"] = hide;

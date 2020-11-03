@@ -71,8 +71,6 @@ html:theme(light) {
     var(context-hover-background-color) : #5b93d3;
 
     /* 右侧边栏 功能按钮 */
-    var(func-button-text-color) : #FFF;
-    var(func-button-active-text-color) : yellow;
     var(func-button-background-color) : #5b93d3;
     var(func-button-hover-background-color) : #267dd5;
     var(func-button-disable-text-color) : #666;
