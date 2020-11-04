@@ -204,8 +204,8 @@ func getDefault() (*db.Config, error) {
 	}
 
 	//如果背景图片文件存在，则转换为绝对路径
-	if utils.FileExists(vo.OpacityContent) == true {
-		vo.OpacityContent, _ = filepath.Abs(vo.OpacityContent)
+	if utils.FileExists(vo.BackgroundOpacity) == true {
+		vo.BackgroundOpacity, _ = filepath.Abs(vo.BackgroundOpacity)
 	}
 
 	//如果鼠标指针文件存在，则转换为绝对路径

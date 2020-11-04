@@ -171,18 +171,18 @@
               </td>
             </tr>
             <tr>
-              <td>{{OpacityContent}}：</td>
-              <td colspan="3"><input type="hslider" id="config_opacity_content" min="70" max="100" step="5" /> <span id="info_opacity_content"></span></td>
+              <td>{{BackgroundOpacity}}：</td>
+              <td colspan="3"><input type="hslider" id="config_background_opacity" min="70" max="100" step="5" /> <span id="info_background_opacity"></span></td>
             </tr>
 
             <tr><th colspan="4">rom样式</th></tr>
             <tr>
-              <td>展示图比例：</td>
+              <td>展示图方向：</td>
             <td>
-               <select id="config_romlist_fixed">
-                    <option value="repeat">自动</option>
-                    <option value="cover">横向</option>
-                    <option value="no-repeat">竖向</option>
+               <select id="config_romlist_direction">
+                    <option value="0">自动</option>
+                    <option value="1">横向</option>
+                    <option value="2">竖向</option>
                 </select>
               </td>
               <td><div class="tip" title="{{ThumbTip}}">&#xf3c1;</div>{{IndexThumb}}：</td>
@@ -206,7 +206,7 @@
               <input type="number" id="config_title_fontsize" value="0" min=0 max=13 step=1>
               </td>
               <td>标题背景：</td>
-              <td><select id="config_title_bg"><option value="1">显示</option><option value="0">隐藏</option></select></td>
+              <td><select id="config_font_background"><option value="1">显示</option><option value="0">隐藏</option></select></td>
             </tr>
             <tr>
               <td>模块大小：</td>
@@ -316,8 +316,8 @@
     }
 
     //内容透明度
-    event change $(#config_opacity_content) {
-        setOpacityContent(this);
+    event change $(#config_background_opacity) {
+        setBackgroundOpacity(this);
     }
 
    //更换鼠标指针

@@ -124,7 +124,7 @@ function initInterface(){
     }
 
     //更新透明度
-    var opacity = CONF.Default.OpacityContent.toFloat() / 100;
+    var opacity = CONF.Default.BackgroundOpacity.toFloat() / 100;
     mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
     mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
     mainView.root.$(#left_menu).style["opacity"] = opacity.toString();

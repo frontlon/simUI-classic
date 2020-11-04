@@ -41,7 +41,6 @@ function Init(){
 
     $(#config_lang).value = CONF.Default.Lang;
     $(#config_soft_name).value = CONF.Default.SoftName;
-    $(#config_thumb).value = CONF.Default.Thumb;
     $(#config_enable_upgrade).value = CONF.Default.EnableUpgrade;
 
     //图片搜索引擎
@@ -62,9 +61,16 @@ function Init(){
     //生成界面选项
     $(#config_background).value = CONF.Default.BackgroundImage;
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
-    $(#config_opacity_content).value = CONF.Default.OpacityContent;
-    $(#info_opacity_content).html = CONF.Default.OpacityContent + "%";
+    $(#config_background_opacity).value = CONF.Default.BackgroundOpacity;
+    $(#info_background_opacity).html = CONF.Default.BackgroundOpacity + "%";
     $(#config_cursor).html = CONF.Default.Cursor;
+
+    $(#config_romlist_direction).value = CONF.Default.RomlistDirection;
+    $(#config_thumb).value = CONF.Default.Thumb;
+    $(#config_title_fontsize).value = CONF.Default.FontSize;
+    $(#config_font_background).value = CONF.Default.RomlistFontBackground;
+    $(#config_romlist_size).value = CONF.Default.RomlistSize;
+    $(#config_romlist_margin).value = CONF.Default.RomlistMargin;
 
     //生成快捷工具列表
     var shortcut = "";
@@ -183,7 +189,6 @@ function configSubmit(evt){
         lang : $(#config_lang).value.toString(),
         soft_name : $(#config_soft_name).value.toString(),
         search_engines : $(#config_search_engines).value.toString(),
-        thumb : $(#config_thumb).value.toString(),
         enable_upgrade :$(#config_enable_upgrade).value,
     };
 
@@ -515,7 +520,7 @@ function setBackgroundRepeat(obj){
 }
 
 //更新透明度
-function setOpacityContent(obj){
+function setBackgroundOpacity(obj){
     var val = obj.value.toFloat() / 100;
     mainView.root.$(#titlebar).style["opacity"] = val.toString();
     mainView.root.$(#left_platform).style["opacity"] = val.toString();
@@ -525,28 +530,41 @@ function setOpacityContent(obj){
     mainView.root.$(#menu_splitter).style["opacity"] = val.toString();
     mainView.root.$(#platform_splitter).style["opacity"] = val.toString();
     mainView.root.$(#right_splitter).style["opacity"] = val.toString();
-    $(#info_opacity_content).html = obj.value + "%";
+    $(#info_background_opacity).html = obj.value + "%";
 }
 
 //提交界面样式
 function interfaceSubmit(obj){
     var cursor = $(#config_cursor).value;
-    var opacity = $(#config_opacity_content).value;
+    var opacity = $(#config_background_opacity).value;
     var background_image = $(#config_background).value;
     var background_repeat = $(#config_background_repeat).value;
+    var romlist_direction = $(#config_romlist_direction).value;
+    var thumb = $(#config_thumb).value;
+    var title_fontsize = $(#config_title_fontsize).value;
+    var font_background = $(#config_font_background).value;
+    var romlist_size = $(#config_romlist_size).value;
+    var romlist_margin = $(#config_romlist_margin).value;
+
     mainView.UpdateConfig("cursor",cursor);
-    mainView.UpdateConfig("opacity_content",opacity);
+    mainView.UpdateConfig("background_opacity",opacity);
     mainView.UpdateConfig("background_image",background_image);
     mainView.UpdateConfig("background_repeat",background_repeat);
+    mainView.UpdateConfig("romlist_direction",romlist_direction);
+    mainView.UpdateConfig("thumb",thumb);
+    mainView.UpdateConfig("font_size",title_fontsize);
+    mainView.UpdateConfig("romlist_font_background",font_background);
+    mainView.UpdateConfig("romlist_size",romlist_size);
+    mainView.UpdateConfig("romlist_margin",romlist_margin);
+
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
 
 
-    var dom = mainView.root.$(#romlist);
 
 //更新rom列表字体
 function setFontsize(obj){
-
+    var dom = mainView.root.$(#romlist);
     for (var i = 0; i <= 13; i++){
         var s = 'fontsize'+i.toString();
         if(dom.attributes.hasClass(s)){
