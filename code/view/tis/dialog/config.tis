@@ -58,12 +58,17 @@ function Init(){
     }
     platform_list.html = pfdata;
 
+        var cursor_url = CONF.Default.Cursor;
+        cursor_url = cursor_url.split("\/").join(CONF.Separator.toString());
+        cursor_url = cursor_url.split(CONF.RootPath.toString()).join("");
+
+
     //生成界面选项
     $(#config_background).value = CONF.Default.BackgroundImage;
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
     $(#config_background_opacity).value = CONF.Default.BackgroundOpacity;
     $(#info_background_opacity).html = CONF.Default.BackgroundOpacity + "%";
-    $(#config_cursor).html = CONF.Default.Cursor;
+    $(#config_cursor).html = cursor_url;
 
     $(#config_romlist_direction).value = CONF.Default.RomlistDirection;
     $(#config_thumb).value = CONF.Default.Thumb;
@@ -493,7 +498,6 @@ function shortcutDelete(evt) {
 
 //更新鼠标指针
 function setCursor(obj){
-    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
     var saveVal = URL.toPath(obj.value);
     saveVal = saveVal.split("\/").join(CONF.Separator.toString());
     saveVal = saveVal.split(CONF.RootPath.toString()).join("");
@@ -560,8 +564,6 @@ function interfaceSubmit(obj){
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
 
-
-
 //更新rom列表字体
 function setFontsize(obj){
     var dom = mainView.root.$(#romlist);
@@ -576,7 +578,6 @@ function setFontsize(obj){
     mainView.UpdateConfig("font_size",val); 
 
 }
-
 
 //列表图标缩放
 function setRomlistSize(obj){
