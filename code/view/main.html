@@ -76,7 +76,7 @@
     /* rom模块 */
     #romlist{display:block;}
     .romblock{flow:horizontal-flow;clear:both;padding:0;margin-left:20dip;}
-    .romblock > li{text-align:center;background:color(rom-block-background-color);color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom}
+    .romblock > li{text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom}
     .romblock > li:hover{box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color)}
     .romblock > li:current{border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);transform: scale(1.2);z-index:2;}
     .romblock > li img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);display:block;}
@@ -90,7 +90,6 @@
     .romblock li div:nth-child(5){display:none}
     .romblock li div:nth-child(6){display:none}
     .romblock li div:nth-child(7){display:none}
-    #romlist.fontsize0 li div:nth-child(2){display:none}
 
     #romlist.fontsize1 li{display:inherit;font-size:8dip;}
     #romlist.fontsize2 li{display:inherit;font-size:9dip}
@@ -110,13 +109,33 @@
     #romlist.fontsize13 li div:nth-child(1){width:60dip}
     #romlist.fontsize13 li img{width:40dip;height:40dip;margin-top:6dip;}
     
-    .romblock.zoom1 > li{min-width:80dip;max-width:100dip;margin:3dip 6dip;}
-    .romblock.zoom2 > li{min-width:100dip;max-width:130dip;margin:6dip 10dip}
-    .romblock.zoom3 > li{min-width:120dip;max-width:150dip;margin:6dip 10dip;}
-    .romblock.zoom4 > li{min-width:140dip;max-width:180dip;margin:6dip 10dip}
-    .romblock.zoom5 > li{min-width:170dip;max-width:200dip;margin:6dip 10dip}
-    .romblock.zoom6 > li{min-width:200dip;max-width:300dip;margin:6dip 10dip}
-    
+    .romblock.zoom1 > li{min-width:80dip;max-width:100dip;}
+    .romblock.zoom2 > li{min-width:100dip;max-width:130dip;}
+    .romblock.zoom3 > li{min-width:120dip;max-width:150dip;}
+    .romblock.zoom4 > li{min-width:140dip;max-width:180dip;}
+    .romblock.zoom5 > li{min-width:170dip;max-width:200dip;}
+    .romblock.zoom6 > li{min-width:200dip;max-width:300dip;}
+
+    .romblock.margin1 > li{margin:3dip 6dip;}
+    .romblock.margin2 > li{margin:6dip 12dip}
+    .romblock.margin3 > li{margin:9dip 18dip;}
+    .romblock.margin4 > li{margin:12dip 24dip}
+    .romblock.margin5 > li{margin:15dip 30dip}
+    .romblock.margin6 > li{margin:18dip 36dip}
+    .romblock.margin7 > li{margin:21dip 42dip}
+    .romblock.margin8 > li{margin:24dip 48dip}
+    .romblock.margin9 > li{margin:27dip 54dip}
+    .romblock.margin10 > li{margin:30dip 60dip}
+
+    .romblock.bg0 > li{background:none}
+    .romblock.bg0 > li div:nth-child(2){display:block}
+    .romblock.bg1 > li div:nth-child(2){display:none}
+    .romblock.bg2 > li{background:color(rom-block-background-color);}
+    .romblock.bg2 > li div:nth-child(2){display:block}
+
+    .romblock.horizontal >li img{height:width(75%)}
+    .romblock.vertical >li img{height:width(125%);}
+
     /* rom列表 */
     .romlist{width:*;margin-top:24dip;margin-left:30dip;list-style-type:none;padding:0;}
     .romlist > li{position:relative;flow:horizontal-flow;vertical-align:middle;line-height:36dip;height:36dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}

@@ -48,7 +48,7 @@
     <strip>
       <label ww="600dip" wh="300dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="940dip" wh="540dip" for="second">{{PlatformConfig}}</label>
-      <label ww="420dip" wh="330dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="420dip" wh="390dip" for="third">{{InterfaceConfig}}</label>
       <label ww="600dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
@@ -64,6 +64,7 @@
                 <option value="0">{{No}}</option>
               </select>
               </td></tr>
+              <tr><th colspan="2"></th></tr>
               <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
           </table>
         </div>
@@ -143,7 +144,7 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr><th colspan="4">{{UpdateConfig}}</th></tr>
+                <tr><th colspan="4"></th></tr>
                 <tr><td colspan="4" style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
             </table>
 
@@ -203,19 +204,19 @@
               <td>标题字体：</td>
               <td>
               <!--<input type="hslider" id="config_title_fontsize" min="0" max="13" step="1" />-->
-              <input type="number" id="config_title_fontsize" value="0" min=0 max=13 step=1>
+              <input type="number" id="config_title_fontsize" min=0 max=13 step=1>
               </td>
               <td>标题背景：</td>
-              <td><select id="config_font_background"><option value="1">显示</option><option value="0">隐藏</option></select></td>
+              <td><select id="config_font_background"><option value="2">全部显示</option><option value="0">隐藏背景</option><option value="1">隐藏标题</option></select></td>
             </tr>
             <tr>
               <td>模块大小：</td>
               <td><input type="number" readonly id="config_romlist_size" value="" min=1 max=6 step=1></td>
               <td>模块间距：</td>
-              <td><input type="number" readonly id="config_romlist_margin" value="" min=2 max=20 step=2></td>
+              <td><input type="number" readonly id="config_romlist_margin" value="" min=1 max=10 step=1></td>
             </tr>
 
-            <tr><td colspan="4"></td></tr>
+            <tr><th colspan="4"></th></tr>
             <tr><td colspan="4" style="text-align:center"><button id="interface_submit">{{UpdateConfig}}</button></td></tr>
           </table>
         </div>
@@ -330,20 +331,30 @@
         interfaceSubmit(this);
     }
 
-    //提交界面变更
+    //更改字体大小
     event change $(#config_title_fontsize) {
         setFontsize(this);
-
-
     }
 
-    //提交界面变更
+    //更改rom模块大小
     event change $(#config_romlist_size) {
         setRomlistSize(this);
     }
 
+    //更改rom列表展示图显示方向
+    event change $(#config_romlist_direction) {
+        setThumbDirection(this);
+    }
 
+    //更改rom列表展示图显示方向
+    event change $(#config_romlist_margin) {
+        setRomMargin(this);
+    }
 
+    //是否显示rom的标题背景
+    event change $(#config_font_background) {
+        setFontBackgrond(this);
+    }
 
 </script>
 </body>

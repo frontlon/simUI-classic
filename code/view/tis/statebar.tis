@@ -1,26 +1,23 @@
 ﻿var MAXZOOM = 6; //最大缩放等级
 
-//初始化字体大小
-function initFontSize(){
-    $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
-    $(#romlist).attributes.addClass('fontsize'+CONF.Default.FontSize);
-}
 
 //初始化游戏列表样式
 function initRomListStyle(){
+
+    var romlist = $(#romlist);
 
     //初始化游戏列表样式
     if(CONF.Default.RomlistStyle == "1"){
         $(#switch_romlist).html = "<i>&#xe659;</i>";
         $(#zoom).style["display"]="inline-block";
-        $(#romlist).attributes.addClass("romblock");
+        romlist.attributes.addClass("romblock");
         if($(.romth) != undefined){
             $(.romth).style["display"]="none";
         }
         
     }else{
         $(#switch_romlist).html = "<i>&#xe690;</i>";
-        $(#romlist).attributes.addClass("romlist");
+        romlist.attributes.addClass("romlist");
         $(#zoom).style["display"]="none";
         if($(.romth) != undefined){
             $(.romth).style["display"]="block";
@@ -36,8 +33,25 @@ function initRomListStyle(){
         zoom.html = "<i>&#xe60f;</i>";
     }
 
-    $(#romlist).attributes.addClass("zoom"+CONF.Default.RomlistSize); //更新列表大小
+    //初始化rom列表模块大小
+    romlist.attributes.addClass("zoom"+CONF.Default.RomlistSize);
     $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
+
+     //初始化rom列表字体大小
+    $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
+    romlist.attributes.addClass('fontsize'+CONF.Default.FontSize);
+
+    //初始化列表模块间距
+    romlist.attributes.addClass("margin" + CONF.Default.RomlistMargin);
+
+    //是否显示rom列表的标题背景颜色
+    romlist.attributes.addClass("bg" + CONF.Default.RomlistFontBackground);
+
+    //初始化rom列表图片显示方向
+    if(romlist.attributes.hasClass("horizontal")){romlist.attributes.removeClass("horizontal");}
+    if(romlist.attributes.hasClass("vertical")){romlist.attributes.removeClass("vertical");}
+    if(CONF.Default.RomlistDirection == 1){romlist.attributes.addClass("horizontal");}
+    else if(CONF.Default.RomlistDirection == 2){romlist.attributes.addClass("vertical");}
     
 }
 

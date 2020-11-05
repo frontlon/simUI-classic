@@ -70,7 +70,6 @@ function initConfig(isfresh){
     initPlatform(); //生成平台列表
     initShortcutList(); //初始化快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
-    initFontSize(); //初始化字体大小
     getBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
 
     //生成菜单
