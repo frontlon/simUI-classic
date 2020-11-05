@@ -25,7 +25,8 @@ type Rom struct {
 	BasePublisher string // 游戏出品公司
 	BaseCountry   string // 游戏国家
 	Pinyin        string // 拼音索引
-	PathMd5       string // 文件Md5
+	InfoMd5       string // 信息md5，包含资料信息
+	FileMd5       string // 文件md5，仅包含平台和文件名
 }
 
 func (*Rom) TableName() string {
@@ -345,16 +346,16 @@ func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
 
 	md5List := []string{}
 	for _, v := range volist {
-		md5List = append(md5List, v.PathMd5)
+		md5List = append(md5List, v.InfoMd5)
 	}
 	return md5List, result.Error
 }
 
 //读取一个过滤器分类
-func (sim *Rom) GetFilter(platform uint32,t string) ([]string, error) {
+func (sim *Rom) GetFilter(platform uint32, t string) ([]string, error) {
 	volist := []*Rom{}
 
-	result := getDb().Select(t).Where("platform = " + utils.ToString(platform) + " AND "+ t + " != ''").Group(t).Find(&volist)
+	result := getDb().Select(t).Where("platform = " + utils.ToString(platform) + " AND " + t + " != ''").Group(t).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

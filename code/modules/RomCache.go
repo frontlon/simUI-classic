@@ -71,7 +71,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 					title = aliasName
 				}
 
-				pathMd5 := GetPathMd5(title, p, base.Type, base.Year, base.Publisher, base.Country) //路径md5，可变
+				fileMd5 := GetRomMd5(utils.ToString(platform), title)                              //路径md5，可变
+				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Publisher, base.Country) //路径md5，可变
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -94,15 +95,16 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						Platform:      platform,
 						Star:          0,
 						Pinyin:        utils.TextToPinyin(sub[1]),
-						PathMd5:       pathMd5,
+						InfoMd5:       infoMd5,
+						FileMd5:       fileMd5,
 						SimConf:       "{}",
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
 					}
-					romlist[pathMd5] = sinfo
-					md5list = append(md5list, sinfo.PathMd5)
+					romlist[infoMd5] = sinfo
+					md5list = append(md5list, sinfo.InfoMd5)
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
@@ -112,7 +114,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						RomPath:       p,
 						Star:          0,
 						Pinyin:        utils.TextToPinyin(title),
-						PathMd5:       pathMd5,
+						InfoMd5:       infoMd5,
+						FileMd5:       fileMd5,
 						SimConf:       "{}",
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
@@ -120,8 +123,8 @@ func CreateRomData(platform uint32) (map[string]*db.Rom, map[string]*db.Menu, er
 						BaseCountry:   base.Country,
 					}
 
-					romlist[pathMd5] = rinfo
-					md5list = append(md5list, rinfo.PathMd5)
+					romlist[infoMd5] = rinfo
+					md5list = append(md5list, rinfo.InfoMd5)
 
 					//分类列表
 					if menu != ConstMenuRootKey {
@@ -245,7 +248,7 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 }
 
 //读取路径Md5
-func GetPathMd5(par ...string) string {
+func GetRomMd5(par ...string) string {
 	str := strings.Join(par, ",")
 	return utils.Md5(str)
 }
