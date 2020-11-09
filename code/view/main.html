@@ -154,6 +154,8 @@
     .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romth div{color:#fff!important;font-weight:bold;}
 
+    .romlist_alpha li{opacity:0.95;}
+
     /* 右侧边栏 */
     #right_title_ pic{text-align:center;margin-bottom:10dip}
     #right h2{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color);font-weight:normal;font-size:11dip;line-height:19dip;margin:0}
@@ -179,7 +181,7 @@
     /* 视频 */
     #video_wrapper{position:relative}
     #video_wrapper video{width:100%;foreground-repeat:no-repeat;foreground-position:top center;}
-    #video_sound{top:-30dip;right:0dip;position:absolute;}
+    #right_volume{top:8dip;right:0dip;position:absolute;}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
@@ -349,11 +351,11 @@
             <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/delete.png" /></button>
             
             
-            <h2 id="video_h2">{{Video}}</h2>
             <div id="video_wrapper">
-            <button id="video_sound" class="funbtn"><i>&#xe657;</i></button>
-
-            <video id="right_video" src="" /></div>
+                <h2 id="video_h2">{{Video}}</h2>
+                <button id="right_volume" class="funbtn"><i></i></button>
+                <video id="right_video" src="" />
+            </div>
             <h2>{{Thumb}}</h2>
             <div class="rotate_wrapper">
                 <button id="rotate" class="funbtn">&gt;</button>
@@ -407,7 +409,6 @@
             ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/";
         }
     }
-
 
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";

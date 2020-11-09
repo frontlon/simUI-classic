@@ -247,10 +247,13 @@
 
     //控制视频播放
     self.on("click", "#right_video", function(evt) {
-        videoControl(this);
+        videoPlay(this);
     });
 
-
+    //控制视频音量
+    self.on("click", "#right_volume", function(evt) {
+        videoVolume(this);
+    });
 
 
    //编辑资料

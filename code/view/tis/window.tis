@@ -40,6 +40,12 @@ function Init(){
     //生成rom数量
     var romCount = view.GetGameCount(pf,CONF.Default.Menu,"","","","","","");
     $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //初始化音量控制
+    VIDEO_VALUME = CONF.Default.VideoVolume;
+    if(VIDEO_VALUME == 0)$(#right_volume).html = "<i>&#xe686;</i>";
+    else $(#right_volume).html = "<i>&#xe657;</i>";
+
 }
 
 //初始化配置

@@ -85,6 +85,19 @@ function openSidebar(obj){
     //创建滑动图
     _createRotate(info);
     
+    //背景图片
+    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+    if(background != ""){
+        $(#romlist).attributes.addClass('romlist_alpha');
+        var centerDom = $(#center);
+        centerDom.style["background-image"] = [url:URL.fromPath(background)];
+        centerDom.style["background-size"] = "cover";
+        centerDom.style["background-repeat"] = "no-repeat";
+    }else{
+        $(#center).style["background-image"] = "none";
+        $(#romlist).attributes.removeClass('romlist_alpha');
+    }
+
     //显示简介
     if(detailObj.DocContent != ""){
         $(#doc_title).style["display"] = "block";
@@ -94,11 +107,6 @@ function openSidebar(obj){
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";
     }
-
-
-
-
-
 
     //生成模拟器列表
     $(#sim_select).html = ""; //先清空所有模拟器
@@ -164,35 +172,35 @@ function openSidebar(obj){
 }
 
 //视频
+var VIDEO_PLAY_STATE = 0;
 function _createVideo(info,romPath){
     var movie = getRomPicPath("video",info.Platform,romPath.name);
     var vdom = $(#right_video);
 
     if (movie != ""){
-        $(#video_h2).style["display"] = "block";
+        $(#video_wrapper).style["display"] = "block";
         vdom.attributes["src"] = movie;
-        vdom.style["display"] = "block";
     }else{
-        $(#video_h2).style["display"] = "none";
+        $(#video_wrapper).style["display"] = "none";
         vdom.attributes["src"] = "";
-        vdom.style["display"] = "none";
     }
 
    //如果有视频，自动播放视频
     if (movie != ""){
-        self.timer(200, function() {
-            vdom.videoStop();
-            vdom.videoUnload();
-            vdom.videoLoad(movie)
-            vdom.videoPlay();
-            vdom.style["height"] = vdom.videoHeight();
-        });
+        vdom.videoStop();
+        vdom.videoUnload();
+        vdom.videoLoad(movie)
+        vdom.videoPlay();
+        vdom.style["height"] = vdom.videoHeight();
+        vdom.audioVolume(VIDEO_VALUME);
+        VIDEO_PLAY_STATE = 1;
     }else{
-        if(vdom.value != ""){
+        if(VIDEO_PLAY_STATE == 1){
             vdom.videoStop();
             vdom.videoUnload();
+            VIDEO_PLAY_STATE = 0;
         }
-    
+        
     }
 }
 
@@ -370,7 +378,8 @@ function setHide(evt){
 }
 
 //控制视频播放
-function videoControl(evt){
+var VIDEO_VALUME;
+function videoPlay(evt){
     var position = evt.videoPosition();
     var duration = evt.videoDuration();
     if (evt.videoIsPlaying()){
@@ -381,8 +390,21 @@ function videoControl(evt){
         }else{
             evt.videoPlay(position);
         }
-        
     }
+}
+
+//控制视频音量
+function videoVolume(evt){
+    var video = $(#right_video);
+    if(VIDEO_VALUME == 0 ){
+        VIDEO_VALUME = 1;
+        evt.html = "<i>&#xe657;</i>";
+    }else{
+        VIDEO_VALUME = 0;    
+        evt.html = "<i>&#xe686;</i>";
+    }
+    video.audioVolume(VIDEO_VALUME);
+    view.UpdateConfig("video_volume",VIDEO_VALUME);
 }
 
 //打开文件夹菜单
