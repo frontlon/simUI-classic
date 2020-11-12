@@ -13,6 +13,7 @@ import (
 	"simUI/code/utils/go-sciter"
 	"simUI/code/utils/go-sciter/window"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -51,6 +52,12 @@ func main() {
 
 	//连接数据库
 	db.Conn()
+
+
+	testDbAdd();
+
+
+	return;
 
 	//初始化配置
 	errConf := config.InitConf()
@@ -155,4 +162,53 @@ func newHandler(s *sciter.Sciter) *sciter.CallbackHandler {
 	return &sciter.CallbackHandler{
 		OnLoadData: OnLoadData(s),
 	}
+}
+
+func testDbAdd(){
+
+	startTime := time.Now().UnixNano()
+
+	create := []*db.Rom{}
+	for i:=1;i<=10000;i++ {
+		aa := &db.Rom{
+			Id:uint64(i),
+			Pname:"",
+			Menu:"",
+			Name:"Gamef" + utils.ToString(i),
+			Platform:12,
+			RomPath:"/Users/frontlon/game/fc/roms/" + utils.ToString(i) + "game.zip",
+			Star:1,
+			SimId:1,
+			SimConf:"{}",
+			Hide:0,
+			BaseCountry:"",
+			BasePublisher:"",
+			BaseType:"",
+			BaseYear:"",
+			Pinyin:"game" + utils.ToString(i),
+			InfoMd5:"8asd78fadsf89asd90fsda" + utils.ToString(i),
+			FileMd5:"78c98zcxv89zc98890zcvv" + utils.ToString(i),
+		}
+		create = append(create,aa)
+
+	}
+
+	//(&db.Rom{}).BatchTestAdd(create)
+	(&db.Rom{}).BatchTestUpdate(create)
+
+
+
+	/* 程序主体 */
+
+	endTime := time.Now().UnixNano()
+
+	seconds:= float64((endTime - startTime) / 1e9)
+	Milliseconds:= float64((endTime - startTime) / 1e6)
+
+	fmt.Println("update完成，程序执行时间",seconds,Milliseconds)
+
+	//1377
+
+
+
 }

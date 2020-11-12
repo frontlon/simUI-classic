@@ -34,6 +34,32 @@ func (*Rom) TableName() string {
 }
 
 //插入rom数据
+
+func (m *Rom) BatchTestAdd(romlist []*Rom) {
+
+	tx := getDb().Begin()
+	for _, v := range romlist {
+		tx.Create(&v)
+	}
+	tx.Commit()
+}
+
+func (m *Rom) BatchTestUpdate(romlist []*Rom) {
+
+	tx := getDb().Begin()
+	for _, v := range romlist {
+
+		 getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(v)
+
+
+
+
+
+
+	}
+	tx.Commit()
+}
+
 func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
 
 	if len(uniqs) == 0 {
