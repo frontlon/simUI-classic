@@ -631,8 +631,7 @@ function setFontBackgrond(obj){
     romlist.attributes.removeClass("bgshow");
     romlist.attributes.removeClass("bghide");
 
-
-//先清除所有缩放样式
+    //先清除所有缩放样式
     for(var i=0;i<=2;i++){
         if (romlist.attributes.hasClass("bg" + i)){
             romlist.attributes.removeClass("bg" + i);

@@ -30,9 +30,7 @@ func main() {
 		}
 	}
 
-	if runtime.GOOS == "windows"{
-		runtime.LockOSThread()
-	}
+	runtime.LockOSThread()
 
 	db.UpgradeDB() //检测新版
 

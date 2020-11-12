@@ -44,7 +44,6 @@ html:theme(red) {
     var(statebar-text-color) : #e7b7c5;
     var(statebar-background-color) : #4d1d2b;
     var(statebar-button-text-color) : #e7b7c5;
-    var(statebar-button-background-color) : #3f1722;
 
     /* 资料筛选栏 */
     var(filter-background-color) : #69283b;
@@ -68,11 +67,11 @@ html:theme(red) {
     var(context-even-background-color) : #31111a;
     var(context-hover-text-color) : #fff;
     var(context-hover-background-color) : #ff5e66;
+    var(context-hr-light-color) : #622334;
+    var(context-hr-dark-color) : #210C11;
 
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #31111a;
-    var(func-button-hover-background-color) : #471b27;
-    var(func-button-disable-text-color) : #adb5bd;
 
     /* 右侧边栏 模拟器选择 */
     var(sim-switch-text-color) : #f9c1d2;
@@ -117,16 +116,8 @@ html:theme(red) {
     var(rom-list-even-background-color) : #31111a;
     var(rom-list-active-text-color) : #FFF;
     var(rom-list-active-background-color) : #7f374b;
-    var(rom-list-cate-text-color) : #fdd2de;
     var(rom-list-text-slave-color) : #ccc;
 
     /* 攻略文档窗口 */
-    var(desc-background-color) : #3f1722;
-    var(desc-border-color) : #290912;
-    var(desc-titlebar-text-color) : #FFF;
-    var(desc-titlebar-hover-background-color) : #34141c;
-    var(desc-menu-text-color) : #FFF;
-    var(desc-menu-active-background-color) : #ff5e66;
     var(desc-content-text-color) : #f8dae3;
-    var(desc-title-text-color) : #FFF;
 }

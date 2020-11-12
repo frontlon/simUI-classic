@@ -26,7 +26,7 @@
     menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
     menu li > label{padding-left:15dip;}
-    menu hr{display:block;background:none;color:#f00;border:0;border-bottom:1px solid #f00;padding:0;margin:0}
+    menu hr{display:block;background:none;border:0;border-top:1px solid color(context-hr-dark-color);border-bottom:1px solid color(context-hr-light-color);padding:0;margin:0}
 
     /* 标题栏 */
     #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
@@ -165,13 +165,13 @@
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
     #right .funbtn img{width:19dip;vertical-align:middle;margin:auto}
-    #right .funbtn:hover{background:color(func-button-hover-background-color);}
+    #right .funbtn:hover{background:color(func-button-hover-background-color);opacity:0.5}
     #right .funbtn i{display:block}
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
     /* 基础信息表格 */
     #right_rombase{width:100%;padding:0;margin:0}
-    #right_rombase li{margin:0 0 10dip 0;padding-left:20dip;color:color(right-doc-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;background-size:contain}
+    #right_rombase li{margin:0 0 10dip 0;padding-left:20dip;color:color(play-info-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;background-size:contain}
     #right_rombase li:nth-child(1){background-image:url(this://app/images/baseinfo_name.png);}
     #right_rombase li:nth-child(2){background-image:url(this://app/images/baseinfo_type.png);}
     #right_rombase li:nth-child(3){background-image:url(this://app/images/baseinfo_year.png);}
@@ -198,7 +198,7 @@
     #sim_select{margin:0 0 9dip 0;display:block;padding:0}
     #sim_select li{behavior:shell-icon;display:block;height:19dip;line-height:19dip;padding:0 4dip 0 26dip;color:color(sim-switch-text-color);foreground-repeat:no-repeat;foreground-position:4dip 50%;flow:horizontal-flow;}
     #sim_select li p{display:block;width:*;vertical-align:middle;margin:0}
-    #sim_select li button{background:color(sim-switch-button-background-color);color:color(sim-switch-button-text-color);display:block;height:14dip;width:25dip;vertical-align:middle;text-align:center;padding:0;font-size: 9dip}
+    #sim_select li button{border:0;background:color(sim-switch-button-background-color);color:color(sim-switch-button-text-color);display:block;height:14dip;width:25dip;vertical-align:middle;text-align:center;padding:0;font-size: 9dip}
     #sim_select li:hover{color:color(sim-switch-hover-text-color)}
     #sim_select li:current{color:color(sim-switch-active-text-color);background:color(sim-switch-active-background-color);}
 
