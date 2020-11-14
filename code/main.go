@@ -32,7 +32,7 @@ func main() {
 
 	runtime.LockOSThread()
 
-	db.UpgradeDB() //检测新版
+	db.UpgradeDB() //数据库升级
 
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))

@@ -1,16 +1,15 @@
 ﻿view.root.on("ready", function(){
 
-    //数据初始化
+
+     //数据初始化
     Init();
-    
-    //使主窗体获取焦点
-    $(body).state.focus = true;
 
     /**
     * 窗口
     **/
 
     //调整窗口大小
+    
     view.on("size", function() {
        windowSize();
     });
@@ -255,12 +254,10 @@
         videoVolume(this);
     });
 
-
    //编辑资料
     self.on("click", "#right_base_info", function(evt) {
         baseinfo(this);
     });
-
    
     //删除rom及相关资源文件
     self.on("click", "#right_delete", function(evt) {
@@ -268,30 +265,10 @@
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
     /**
     * 右键菜单
     **/
-    
-    
+        
     //rom展开右键菜单
     self.on("contextmenusetup", "#romlist li", function(evt) {
         //如果是th右键，则忽略
