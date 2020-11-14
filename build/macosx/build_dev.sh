@@ -1,4 +1,4 @@
 cd ../../code
-go build -o ../app/simUI-64
+go build -o ../app/simUI
 cd ../app/
-simUI-64
+simUI
