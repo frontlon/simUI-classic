@@ -27,8 +27,12 @@ func Conn() error {
 	//调试模式下 打印日志
 	engine.LogMode(LogMode)
 
-	//禁用同步模式
+	//配置参数
 	engine.Exec("PRAGMA synchronous = OFF;")
+	engine.Exec("PRAGMA journal_mode = OFF;")
+	engine.Exec("PRAGMA auto_vacuum = 0;")
+	engine.Exec("PRAGMA cache_size = 8000;")
+	engine.Exec("PRAGMA temp_store = 2;")
 	return nil
 }
 

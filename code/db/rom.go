@@ -16,9 +16,9 @@ type Rom struct {
 	Name          string // 游戏名称
 	Platform      uint32 // 平台
 	RomPath       string // rom路径
-	Star          uint8  // 喜好，星级
 	SimId         uint32 // 正在使用的模拟器id
 	SimConf       string // 模拟器参数独立配置
+	Star          uint8  // 喜好，星级
 	Hide          uint8  // 是否隐藏
 	BaseType      string // 游戏类型，如RPG
 	BaseYear      string // 游戏年份
@@ -35,40 +35,35 @@ func (*Rom) TableName() string {
 
 //插入rom数据
 
-func (m *Rom) BatchTestAdd(romlist []*Rom) {
-
+func (m *Rom) BatchUpdate(romlist []*Rom) {
 	tx := getDb().Begin()
+	create := map[string]string{}
 	for _, v := range romlist {
-		tx.Create(&v)
+		create = map[string]string{
+			"menu":           v.Menu,
+			"name":           v.Name,
+			"pname":          v.Pname,
+			"rom_path":       v.RomPath,
+			"base_type":      v.BaseType,
+			"base_year":      v.BaseYear,
+			"base_publisher": v.BasePublisher,
+			"base_country":   v.BaseCountry,
+			"pinyin":         v.Pinyin,
+			"info_md5":       v.InfoMd5,
+		}
+		getDb().Table(m.TableName()).Where("file_md5 = ?", v.FileMd5).Update(create)
 	}
 	tx.Commit()
 }
 
-func (m *Rom) BatchTestUpdate(romlist []*Rom) {
+func (m *Rom) BatchAdd(romlist []*Rom) {
 
-	tx := getDb().Begin()
-	for _, v := range romlist {
-
-		 getDb().Table(m.TableName()).Where("id=?", m.Id).Updates(v)
-
-
-
-
-
-
-	}
-	tx.Commit()
-}
-
-func (m *Rom) BatchAdd(uniqs []string, romlist map[string]*Rom) {
-
-	if len(uniqs) == 0 {
+	if len(romlist) == 0 {
 		return
 	}
 	tx := getDb().Begin()
-	count := len(uniqs)
-	for k, md5 := range uniqs {
-		v := romlist[md5]
+	count := len(romlist)
+	for k, v := range romlist {
 		tx.Create(&v)
 		if k%500 == 0 {
 			utils.Loading("开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
@@ -334,7 +329,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 	for k, uniq := range uniqs {
 		subsql += uniq + "','"
 		if k%990 == 0 {
-			sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')"
+			sql = "DELETE FROM rom where file_md5 in ('" + subsql + "')"
 			tx := getDb().Begin()
 			tx.Exec(sql)
 			result := tx.Commit()
@@ -350,7 +345,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 	//删除剩余数据
 	if subsql != "" {
-		sql = "DELETE FROM rom where path_md5 in ('" + subsql + "')"
+		sql = "DELETE FROM rom where file_md5 in ('" + subsql + "')"
 		tx := getDb().Begin()
 		tx.Exec(sql)
 		result := tx.Commit()
@@ -363,18 +358,20 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 }
 
 //读取一个平台下的所有md5
-func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, error) {
+func (sim *Rom) GetMd5ByPlatform(platform uint32) ([]string, []string, error) {
 	volist := []*Rom{}
-	result := getDb().Select("path_md5").Where("platform=?", platform).Find(&volist)
+	result := getDb().Select("file_md5,info_md5").Where("platform=?", platform).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
-	md5List := []string{}
+	infoMd5List := []string{}
+	fileMd5List := []string{}
 	for _, v := range volist {
-		md5List = append(md5List, v.InfoMd5)
+		infoMd5List = append(infoMd5List, v.InfoMd5)
+		fileMd5List = append(fileMd5List, v.FileMd5)
 	}
-	return md5List, result.Error
+	return fileMd5List, infoMd5List, result.Error
 }
 
 //读取一个过滤器分类

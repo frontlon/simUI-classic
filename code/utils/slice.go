@@ -2,10 +2,8 @@ package utils
 
 import "bytes"
 
-
-
 /**
-切换合并为字符串
+切片合并为字符串
  */
 func SlicetoString(glue string, pieces []string) string {
 	var buf bytes.Buffer
@@ -53,4 +51,19 @@ func SliceDiff(slice1 []string, slice2 []string) []string {
 		}
 	}
 	return newSlice
+}
+
+/*
+取交集
+*/
+func SliceIntersect(list1 []string, list2 []string) []string {
+	b2 := []string{}
+	for _, v1 := range list1 {
+		for _, v2 := range list2 {
+			if v1 == v2 {
+				b2 = append(b2, v1)
+			}
+		}
+	}
+	return b2
 }
