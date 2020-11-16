@@ -45,7 +45,7 @@
     <strip>
       <label ww="600dip" wh="300dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="940dip" wh="540dip" for="second">{{PlatformConfig}}</label>
-      <label ww="420dip" wh="400dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="420dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
       <label ww="600dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
@@ -172,47 +172,6 @@
               <td>{{BackgroundOpacity}}：</td>
               <td colspan="3"><input type="hslider" id="config_background_opacity" min="70" max="100" step="5" /> <span id="info_background_opacity"></span></td>
             </tr>
-
-            <tr><th colspan="4">rom样式</th></tr>
-            <tr>
-              <td>展示图方向：</td>
-            <td>
-               <select id="config_romlist_direction">
-                    <option value="0">自动</option>
-                    <option value="1">横向</option>
-                    <option value="2">竖向</option>
-                </select>
-              </td>
-              <td><div class="tip" title="{{ThumbTip}}">&#xf3c1;</div>{{IndexThumb}}：</td>
-              <td>
-                <select id="config_thumb">
-                  <option value="thumb">{{Thumb}}</option>
-                  <option value="snap">{{Snap}}</option>
-                  <option value="poster">{{Poster}}</option>
-                  <option value="packing">{{PackingMenu}}</option>
-                  <option value="background">{{BackgroundPic}}</option>
-                  <option value="title">{{TitlePic}}</option>
-                </select>
-              </td>
-              
-              </tr>
-          
-            <tr>
-              <td>标题字体：</td>
-              <td>
-              <!--<input type="hslider" id="config_title_fontsize" min="0" max="13" step="1" />-->
-              <input type="number" id="config_title_fontsize" min=0 max=13 step=1>
-              </td>
-              <td>标题背景：</td>
-              <td><select id="config_font_background"><option value="2">全部显示</option><option value="0">隐藏背景</option><option value="1">隐藏标题</option></select></td>
-            </tr>
-            <tr>
-              <td>模块大小：</td>
-              <td><input type="number" readonly id="config_romlist_size" value="" min=1 max=6 step=1></td>
-              <td>模块间距：</td>
-              <td><input type="number" readonly id="config_romlist_margin" value="" min=1 max=10 step=1></td>
-            </tr>
-
             <tr><th colspan="4"></th></tr>
             <tr><td colspan="4" style="text-align:center"><button id="interface_submit">{{UpdateConfig}}</button></td></tr>
           </table>
@@ -318,7 +277,7 @@
         setBackgroundOpacity(this);
     }
 
-   //更换鼠标指针
+    //更换鼠标指针
     event blur $(#config_cursor) {
         setCursor(this);
     }
@@ -328,30 +287,6 @@
         interfaceSubmit(this);
     }
 
-    //更改字体大小
-    event change $(#config_title_fontsize) {
-        setFontsize(this);
-    }
-
-    //更改rom模块大小
-    event change $(#config_romlist_size) {
-        setRomlistSize(this);
-    }
-
-    //更改rom列表展示图显示方向
-    event change $(#config_romlist_direction) {
-        setThumbDirection(this);
-    }
-
-    //更改rom列表展示图显示方向
-    event change $(#config_romlist_margin) {
-        setRomMargin(this);
-    }
-
-    //是否显示rom的标题背景
-    event change $(#config_font_background) {
-        setFontBackgrond(this);
-    }
 
 </script>
 </body>

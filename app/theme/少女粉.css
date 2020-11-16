@@ -33,14 +33,12 @@ html:theme(girl) {
     var(titlebar-button-background-color) : #e85d71;
     var(titlebar-button-text-color) : #fff;
 
-
     /* 平台按钮 */
     var(platform-background-color) : #e85d71;
     var(platform-text-color) : #fff;
     var(platform-arrow-border-light) : #f46d81;
     var(platform-arrow-border-dark) : #d65467;
     var(platform-active-background-color) : #c94357;
-
 
     /* 状态栏 */
     var(statebar-text-color) : #FFF;
@@ -71,6 +69,10 @@ html:theme(girl) {
     var(context-hover-background-color) : #e85d71;
     var(context-hr-light-color) : #F29EA9;
     var(context-hr-dark-color) : #E6495E;
+
+    /* 右侧边栏 TAB选项卡 */
+    var(tab-text-color) : #c14053;
+    var(tab-text-hover-color) : #FFF;
 
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #e85d71;

@@ -1,0 +1,85 @@
+﻿//设置展示图显示方向
+function setThumbDirection(obj){
+    var romlist = $(#romlist);
+    romlist.attributes.removeClass("horizontal");
+    romlist.attributes.removeClass("vertical");
+    switch(obj.attributes["opt"]){
+        case 1:
+            romlist.attributes.addClass("horizontal");
+            view.UpdateConfig("romlist_direction",1);
+            break;
+        case 2:
+            romlist.attributes.addClass("vertical");
+            view.UpdateConfig("romlist_direction",2);
+            break;
+    }
+}
+
+//更改rom列表展示图类型
+function setThumbType(obj){
+    view.UpdateConfig("thumb",obj.attributes["opt"]);
+    alert(CONF.Lang.ConfigThumbType);
+}
+
+//是否显示rom的标题背景
+function setFontBackgrond(obj){
+    var romlist = $(#romlist);
+    romlist.attributes.removeClass("bgshow");
+    romlist.attributes.removeClass("bghide");
+
+    //先清除所有缩放样式
+    for(var i=0;i<=2;i++){
+        if (romlist.attributes.hasClass("bg" + i)){
+            romlist.attributes.removeClass("bg" + i);
+        }
+    }
+    romlist.attributes.addClass("bg" + obj.attributes["opt"]);
+    view.UpdateConfig("romlist_font_background",obj.attributes["opt"]);
+}
+
+//更新rom列表字体
+function setFontsize(obj){
+    var dom = $(#romlist);
+    for (var i = 0; i <= 13; i++){
+        var s = 'fontsize'+i.toString();
+        if(dom.attributes.hasClass(s)){
+            dom.attributes.removeClass(s);
+        }
+    }
+    var v = 'fontsize'+obj.html;
+    dom.attributes.addClass(v);
+    view.UpdateConfig("font_size",obj.html); 
+}
+
+//列表图标缩放
+function setRomlistSize(obj){
+    var romlist = $(#romlist);
+
+    //先清除所有缩放样式
+    for(var i=1;i<=6;i++){
+        if(romlist.attributes.hasClass("zoom" + i)){
+            romlist.attributes.removeClass("zoom" + i);
+        }
+    }
+
+    //更新列表样式
+    romlist.attributes.addClass("zoom" + obj.html);
+    view.UpdateConfig("romlist_size",obj.html);
+}
+
+//列表模块间距
+function setRomMargin(obj){
+    var romlist = $(#romlist);
+
+    //先清除所有缩放样式
+    for(var i=1;i<=10;i++){
+        if (romlist.attributes.hasClass("margin" + i)){
+            romlist.attributes.removeClass("margin" + i);
+        }
+    }
+
+    //更新列表样式
+    romlist.attributes.addClass("margin" + obj.html);
+    view.UpdateConfig("romlist_margin",obj.html);
+}
+

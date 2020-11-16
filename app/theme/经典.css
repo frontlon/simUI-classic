@@ -71,6 +71,10 @@ html:theme(light) {
     var(context-hr-light-color) : #425062;
     var(context-hr-dark-color) : #222;
 
+    /* 右侧边栏 TAB选项卡 */
+    var(tab-text-color) : #999;
+    var(tab-text-hover-color) : #333;
+
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #5b93d3;
    

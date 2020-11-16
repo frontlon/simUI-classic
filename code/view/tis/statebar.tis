@@ -9,7 +9,6 @@ function initRomListStyle(){
     //初始化游戏列表样式
     if(CONF.Default.RomlistStyle == "1"){
         $(#switch_romlist).html = "<i>&#xe659;</i>";
-        $(#zoom).style["display"]="inline-block";
         romlist.attributes.addClass("romblock");
         if($(.romth) != undefined){
             $(.romth).style["display"]="none";
@@ -18,19 +17,9 @@ function initRomListStyle(){
     }else{
         $(#switch_romlist).html = "<i>&#xe690;</i>";
         romlist.attributes.addClass("romlist");
-        $(#zoom).style["display"]="none";
         if($(.romth) != undefined){
             $(.romth).style["display"]="block";
         }
-    }
-
-    var zoom = $(#zoom);
-    zoom.attributes["value"] = CONF.Default.RomlistSize;
-
-    if(CONF.Default.RomlistSize.toInteger() >= MAXZOOM){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
     }
 
     //初始化rom列表模块大小
@@ -38,7 +27,6 @@ function initRomListStyle(){
     $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
 
      //初始化rom列表字体大小
-    $(#font_size).attributes["value"] = CONF.Default.FontSize; //按钮值
     romlist.attributes.addClass('fontsize'+CONF.Default.FontSize);
 
     //初始化列表模块间距
@@ -215,62 +203,6 @@ function switchRomListStyle(obj){
 }
 
 
-//列表图标缩放
-function romBlockZoom(obj){
-
-    var romlist = self.$(#romlist);
-
-    //先清除所有缩放样式
-    for(var i=1;i<=MAXZOOM;i++){
-        romlist.attributes.removeClass("zoom"+i);
-    }
-
-    var zoom = $(#zoom);
-    var current = zoom.attributes["value"].toInteger();
-    var next = 0;
-    if(current >= MAXZOOM){
-        next = 1;
-    }else{
-        next = current+1;
-    }
-
-    //更改按钮图标
-    if(current == MAXZOOM-1){
-        zoom.html = "<i>&#xe615;</i>";
-    }else{
-        zoom.html = "<i>&#xe60f;</i>";
-    }
-
-    //更新缩放值
-    zoom.attributes["value"] = next;
-
-    //更新列表样式
-    romlist.attributes.addClass("zoom"+next);
-
-    //更新配置文件
-    view.UpdateConfig("romlist_size",next)
-}
-
-//文字大小
-function changeFontSize(evt){
-    var  val = evt.attributes['value'].toInteger();
-    var dom = $(#romlist);
-    val ++;
-    if (val >= 14){
-        if ($(#switch_romlist).attributes["value"] == 1){
-            val = 0;
-        }else{
-            val = 1;
-        }
-    }
-    for (var i = 0; i <= 13; i++){
-        dom.attributes.removeClass('fontsize'+i);
-    }
-
-    dom.attributes.addClass('fontsize'+val);
-    evt.attributes['value'] = val;
-    view.UpdateConfig("font_size",val)
-}
 
 //运行快捷工具
 function runShortcut(obj){

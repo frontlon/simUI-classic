@@ -70,6 +70,10 @@ html:theme(purple) {
     var(context-hr-light-color) : #523C62;
     var(context-hr-dark-color) : #241A2B;
 
+    /* 右侧边栏 TAB选项卡 */
+    var(tab-text-color) : #8d5dac;
+    var(tab-text-hover-color) : #FFF;
+
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #2e1e39;
 

@@ -62,15 +62,6 @@
         switchRomListStyle(this);
     });
     
-    //列表图标缩放
-    self.on("click", "#zoom", function(evt) {
-        romBlockZoom(this);
-    });
-
-    //文字大小
-    self.on("click", "#font_size", function(evt) {
-        changeFontSize(this);
-    });
 
    //回到顶端
     self.on("click", "#istop", function(evt) {
@@ -323,6 +314,46 @@
                 this.videoPlay(0.0);
             }
         }
+    }
+
+
+
+   /**
+    * 界面设置
+    **/
+    
+    //更改rom列表展示图显示方向
+    try{
+    self.on("click", "#config_romlist_direction menu li", function(evt) {
+        setThumbDirection(this);
+    });
+
+   //更改rom列表展示图类型
+    self.on("click", "#config_thumb menu li", function(evt) {
+        setThumbType(this);
+    });
+
+    //是否显示rom的标题背景
+    self.on("click", "#config_font_background menu li", function(evt) {
+        setFontBackgrond(this);
+    });
+
+    //更改字体大小
+    self.on("click", "#config_title_fontsize menu li", function(evt) {
+        setFontsize(this);
+    });
+
+    //更改rom模块大小
+    self.on("click", "#config_romlist_size menu li", function(evt) {
+        setRomlistSize(this);
+    });
+
+    //更改rom列表展示模块间距
+    self.on("click", "#config_romlist_margin menu li", function(evt) {
+        setRomMargin(this);
+    });
+    }catch(e){
+        alert(e);
     }
 
 });

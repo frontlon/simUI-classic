@@ -231,8 +231,8 @@
 
     .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical}
     .sidetabs>strip{display:block;flow:horizontal;font-size:17dip;padding-top:5dip}
-    .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;}
-    .sidetabs>strip>label:current{background:none;color:#FFF;}
+    .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;color:color(tab-text-color);}
+    .sidetabs>strip>label:current{background:none;color:color(tab-text-hover-color);background:none}
     .sidetabs>strip>label:current:hover{background-image:none}
     .sidetabs>strip>label:hover{background-image:none;}
     .sidetabs>strip>label:current:first-child,tabs>strip>label:current:hover:first-child{background:none}
@@ -274,10 +274,19 @@
     <div id="logo"></div>
     <div id="tb_left">
         <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i>&#xe7e2;</i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i>&#xe7ac;</i></button>
-        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="zoom" value="" title="{{ZoomIcon}}"><i>&#xe60f;</i></button><button id="font_size" value="1" title="{{FontSize}}"><i>&#xe695;</i></button><button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
-    <button id="123" value="1" title="{{SwitchRomlist}}"><i>&#xed5b;</i></button>
-    <button id="123" value="1" title="{{SwitchRomlist}}"><i>&#xe654;</i></button>
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="interface_config" value="1" type="menu" title="{{SwitchRomlist}}"><i>&#xe67c;</i><menu>
+            <li id="config_romlist_direction">{{ThumbDirection}}<menu><li opt="0">{{ThumbAuto}}</li><li opt="1">{{ThumbHorizontal}}</li><li opt="2">{{ThumbVertical}}</li></menu></li>
+            <li id="config_thumb">{{IndexThumb}}<menu><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="title">{{TitlePic}}</li></menu></li>
+            <li id="config_font_background">{{TitleBackground}}<menu><li opt="2">{{TitleShow}}</li><li opt="0">{{TitleHideBackground}}</li><li opt="1">{{TitleHide}}</li></menu></li>
+            <li id="config_title_fontsize">{{TitleFontSize}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>13</li></menu></li>
+            <li id="config_romlist_size">{{BlockSize}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></menu></li>
+            <li id="config_romlist_margin">{{BlockMargin}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></menu></li>
+        </menu></button>
+
+        <button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
     </div>
+        
+
     <div id="tb_right">
         <button id="shortcut" type="menu" title="{{Shortcut}}"><i>&#xe6b8;</i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i>&#xe637;</i>
             <menu>
@@ -422,6 +431,7 @@
     include ROOTPATH + "tis/sidebar.tis";
     include ROOTPATH + "tis/statebar.tis";
     include ROOTPATH + "tis/thumb.tis";
+    include ROOTPATH + "tis/interface_config.tis";
     include ROOTPATH + "tis/window.tis";
     include ROOTPATH + "tis/context.tis";
     include ROOTPATH + "tis/keycode.tis";

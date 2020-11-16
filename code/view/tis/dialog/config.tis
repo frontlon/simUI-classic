@@ -70,13 +70,6 @@ function Init(){
     $(#info_background_opacity).html = CONF.Default.BackgroundOpacity + "%";
     $(#config_cursor).html = cursor_url;
 
-    $(#config_romlist_direction).value = CONF.Default.RomlistDirection;
-    $(#config_thumb).value = CONF.Default.Thumb;
-    $(#config_title_fontsize).value = CONF.Default.FontSize;
-    $(#config_font_background).value = CONF.Default.RomlistFontBackground;
-    $(#config_romlist_size).value = CONF.Default.RomlistSize;
-    $(#config_romlist_margin).value = CONF.Default.RomlistMargin;
-
     //生成快捷工具列表
     var shortcut = "";
     var shortcut_list = JSON.parse(mainView.GetShortcut());
@@ -543,99 +536,11 @@ function interfaceSubmit(obj){
     var opacity = $(#config_background_opacity).value;
     var background_image = $(#config_background).value;
     var background_repeat = $(#config_background_repeat).value;
-    var romlist_direction = $(#config_romlist_direction).value;
-    var thumb = $(#config_thumb).value;
-    var title_fontsize = $(#config_title_fontsize).value;
-    var font_background = $(#config_font_background).value;
-    var romlist_size = $(#config_romlist_size).value;
-    var romlist_margin = $(#config_romlist_margin).value;
 
     mainView.UpdateConfig("cursor",cursor);
     mainView.UpdateConfig("background_opacity",opacity);
     mainView.UpdateConfig("background_image",background_image);
     mainView.UpdateConfig("background_repeat",background_repeat);
-    mainView.UpdateConfig("romlist_direction",romlist_direction);
-    mainView.UpdateConfig("thumb",thumb);
-    mainView.UpdateConfig("font_size",title_fontsize);
-    mainView.UpdateConfig("romlist_font_background",font_background);
-    mainView.UpdateConfig("romlist_size",romlist_size);
-    mainView.UpdateConfig("romlist_margin",romlist_margin);
 
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
-}
-
-//更新rom列表字体
-function setFontsize(obj){
-    var dom = mainView.root.$(#romlist);
-    for (var i = 0; i <= 13; i++){
-        var s = 'fontsize'+i.toString();
-        if(dom.attributes.hasClass(s)){
-            dom.attributes.removeClass(s);
-        }
-    }
-    var v = 'fontsize'+obj.value.toString();
-    dom.attributes.addClass(v);
-    mainView.UpdateConfig("font_size",val); 
-
-}
-
-//列表图标缩放
-function setRomlistSize(obj){
-    var romlist = mainView.root.$(#romlist);
-
-    //先清除所有缩放样式
-    for(var i=1;i<=6;i++){
-        if(romlist.attributes.hasClass("zoom" + i)){
-            romlist.attributes.removeClass("zoom" + i);
-        }
-    }
-
-    //更新列表样式
-    romlist.attributes.addClass("zoom" + obj.value);
-}
-
-//设置展示图显示方向
-function setThumbDirection(obj){
-    var romlist = mainView.root.$(#romlist);
-    romlist.attributes.removeClass("horizontal");
-    romlist.attributes.removeClass("vertical");
-
-    switch(obj.value){
-        case 1:
-            romlist.attributes.addClass("horizontal");
-            break;
-        case 2:
-            romlist.attributes.addClass("vertical");
-            break
-    }
-}
-
-//列表模块间距
-function setRomMargin(obj){
-    var romlist = mainView.root.$(#romlist);
-
-    //先清除所有缩放样式
-    for(var i=1;i<=10;i++){
-        if (romlist.attributes.hasClass("margin" + i)){
-            romlist.attributes.removeClass("margin" + i);
-        }
-    }
-
-    //更新列表样式
-    romlist.attributes.addClass("margin" + obj.value);
-}
-
-//是否显示rom的标题背景
-function setFontBackgrond(obj){
-    var romlist = mainView.root.$(#romlist);
-    romlist.attributes.removeClass("bgshow");
-    romlist.attributes.removeClass("bghide");
-
-    //先清除所有缩放样式
-    for(var i=0;i<=2;i++){
-        if (romlist.attributes.hasClass("bg" + i)){
-            romlist.attributes.removeClass("bg" + i);
-        }
-    }
-    romlist.attributes.addClass("bg" + obj.value);
 }

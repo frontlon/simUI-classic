@@ -9,11 +9,11 @@ html:theme(steam) {
     var(sidebar-image) : sidebar.png;
 
     /* 默认缩略图 */
-    var(default-thumb-image) : dark_thumbs.png;
+    var(default-thumb-image) : steam_thumbs.png;
 
     /* 窗体边框 */
-    var(window-outside-border-color) : #080717;
-    var(window-inside-border-color) : #312d4e;
+    var(window-outside-border-color) : #101720;
+    var(window-inside-border-color) : #374f6b;
 
     /* logo文字 */
     var(logo-text-color) : #FFF;
@@ -51,7 +51,7 @@ html:theme(steam) {
     var(platform-active-background-color) : #417997;
 
     /* 状态栏 */
-    var(statebar-text-color) : #5d5f8d;
+    var(statebar-text-color) : #FFF;
     var(statebar-background-color) : #1E3245;
     var(statebar-button-text-color) : #7072a5;
 
@@ -70,6 +70,9 @@ html:theme(steam) {
     var(context-hr-light-color) : #345771;
     var(context-hr-dark-color) : #1A2D39;
 
+    /* 右侧边栏 TAB选项卡 */
+    var(tab-text-color) : #6290c6;
+    var(tab-text-hover-color) : #FFF;
 
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #1C2837;
