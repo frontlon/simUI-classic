@@ -90,7 +90,9 @@ func CheckJoystick() (status int8) {
 }
 
 //读取方向
+//1上2下3左4右
 func GetJoystickDirection(axis []int) int {
+
 	if axis[1] == -32767 {
 		return 1
 	} else if axis[1] == 32768 {
@@ -98,6 +100,14 @@ func GetJoystickDirection(axis []int) int {
 	} else if axis[0] == -32767 {
 		return 3
 	} else if axis[0] == 32768 {
+		return 4
+	} else if axis[6] == -32767 {
+		return 1
+	} else if axis[6] == 32768 {
+		return 2
+	} else if axis[5] == -32767 {
+		return 3
+	} else if axis[5] == 32768 {
 		return 4
 	}
 	return 0
