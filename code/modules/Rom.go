@@ -96,23 +96,14 @@ func RunGame(romId uint64, simId uint32) error {
 
 	if romCmd.Lua != "" {
 		simLua = romCmd.Lua
-	} else if sim.Cmd != "" {
+	} else if sim.Lua != "" {
 		simLua = sim.Lua
 	}
 
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
-		//如果lua脚本存在，则运行lua脚本
-		if simLua != "" {
-			callLua("", rom.RomPath)
-		} else {
-			//运行游戏
 			cmd = append(cmd, rom.RomPath)
-			err = utils.RunGame("", cmd)
-		}
-	} else {
-		//如果依赖模拟器
-
+	} else {//如果依赖模拟器
 		//检测模拟器文件是否存在
 		_, err = os.Stat(sim.Path)
 		if err != nil {
@@ -132,17 +123,17 @@ func RunGame(romId uint64, simId uint32) error {
 				cmd[k] = strings.ReplaceAll(cmd[k], `{RomFullPath}`, rom.RomPath)
 			}
 		}
-
-		//运行lua脚本
-		if simLua != "" {
-			cmdStr := utils.SlicetoString(" ", cmd)
-			callLua(sim.Path, cmdStr)
-		} else {
-			//运行游戏
-			err = utils.RunGame(sim.Path, cmd)
-		}
-
 	}
+
+	//运行lua脚本
+	if simLua != "" {
+		cmdStr := utils.SlicetoString(" ", cmd)
+		callLua(sim.Lua, sim.Path,cmdStr)
+	}
+
+	//运行游戏
+	err = utils.RunGame(sim.Path, cmd)
+
 	return nil
 }
 

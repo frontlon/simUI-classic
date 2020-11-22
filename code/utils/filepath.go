@@ -47,6 +47,16 @@ func GetFileNameAndExt(p string) string {
 }
 
 /*
+ 路径转换为绝对路径
+*/
+func AbsPath(p string) string {
+	if(!filepath.IsAbs(p)){
+		p,_ = filepath.Abs(p)
+	}
+	return p
+}
+
+/*
  检查路径是否为绝对路径
 */
 func IsAbsPath(p string) bool {

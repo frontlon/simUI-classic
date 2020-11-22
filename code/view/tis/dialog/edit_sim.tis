@@ -30,6 +30,7 @@ function Init(){
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
         $(#sim_cmd).value = sim.Cmd;
+        $(#lua).value = sim.Lua;
         $(#unzip).value = sim.Unzip;
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
@@ -48,7 +49,7 @@ function simSubmit(evt){
         path:$(#sim_path).value,
         cmd:$(#sim_cmd).value,
         unzip:$(#unzip).value,
-        lua:$(#sim_lua).value,
+        lua:$(#lua).value,
     };
 
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
