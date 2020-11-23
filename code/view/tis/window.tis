@@ -34,7 +34,7 @@ function Init(){
     //初始化rom
     var pf = CONF.Default.Platform;
     var menu =  $(#menulist).select("dd:current").attributes["opt"];
-    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE,"","","","","")
+    ROMJSON = view.GetGameList(pf,menu,"","",SCROLL_PAGE,"","","","","");
 
     createRomList(1); //生成rom列表
     //生成rom数量
@@ -50,6 +50,7 @@ function Init(){
 
 //初始化配置
 function initConfig(isfresh){
+
 
     var confstr = view.InitData("config",isfresh);
     CONF = JSON.parse(confstr);
@@ -70,7 +71,6 @@ function initConfig(isfresh){
     if (isfresh == "0"){
         createLang();
     }
-
     initTheme(); //创建主题
     initInterface(); //创建界面设置（背景、透明度）
     initPlatform(); //生成平台列表

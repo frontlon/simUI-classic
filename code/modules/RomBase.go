@@ -15,6 +15,7 @@ type RomBase struct {
 	Year      string // 年份
 	Publisher string // 出品公司
 	Country   string // 国家
+	Translate string // 汉化组
 }
 
 var Baseinfo map[uint32]map[string]*RomBase
@@ -58,6 +59,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			r[3] = utils.ToUTF8(r[3])
 			r[4] = utils.ToUTF8(r[4])
 			r[5] = utils.ToUTF8(r[5])
+			r[6] = utils.ToUTF8(r[6])
 		}
 
 		des[r[0]] = &RomBase{
@@ -67,6 +69,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			Year:      strings.Trim(r[3], " "),
 			Publisher: strings.Trim(r[4], " "),
 			Country:   strings.Trim(r[5], " "),
+			Translate: strings.Trim(r[6], " "),
 		}
 	}
 
@@ -139,7 +142,6 @@ func CreateNewRomBaseFile(p string) error {
 	return nil
 }
 
-
 //表头
 func getCsvTitle() []string {
 	return []string{
@@ -149,5 +151,6 @@ func getCsvTitle() []string {
 		config.Cfg.Lang["BaseYear"],
 		config.Cfg.Lang["BasePublisher"],
 		config.Cfg.Lang["BaseCountry"],
+		config.Cfg.Lang["BaseTranslate"],
 	}
 }

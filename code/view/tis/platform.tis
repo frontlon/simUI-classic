@@ -37,7 +37,6 @@ function changePlatform(obj){
     //读取基本信息过滤器
     getBaseFilter(ACTIVE_PLATFORM);
 
-
     //重置滚动翻页数据
     resetScroll();
     //生成游戏列表

@@ -103,6 +103,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
+						BaseTranslate: base.Translate,
 					}
 					romlist = append(romlist,sinfo)
 				} else { //不是子游戏
@@ -122,6 +123,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
+						BaseTranslate:   base.Translate,
 					}
 
 					romlist = append(romlist,rinfo)
@@ -287,6 +289,7 @@ func UpdateFilterDB(platform uint32) {
 	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
 	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")
 	baseCountry, _ := (&db.Rom{}).GetFilter(platform, "base_country")
+	baseTranslate, _ := (&db.Rom{}).GetFilter(platform, "base_translate")
 
 	filters := []*db.Filter{}
 	for _, v := range baseType {
@@ -320,6 +323,15 @@ func UpdateFilterDB(platform uint32) {
 		data := &db.Filter{
 			Name:     v,
 			Type:     "base_country",
+			Platform: platform,
+		}
+		filters = append(filters, data)
+	}
+
+	for _, v := range baseTranslate {
+		data := &db.Filter{
+			Name:     v,
+			Type:     "base_translate",
 			Platform: platform,
 		}
 		filters = append(filters, data)

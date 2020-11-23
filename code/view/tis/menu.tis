@@ -87,12 +87,13 @@ function changeMenu(obj){
     var filter_publisher = $(#filter_publisher).value;
     var filter_year = $(#filter_year).value;
     var filter_country = $(#filter_country).value;
+    var filter_translate = $(#filter_translate).value;
 
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate);
     createRomList(1);
     
     //统计游戏数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,ACTIVE_MENU,"",filter_type,filter_publisher,filter_year,filter_country); //必须在获取rom的方法下面
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,ACTIVE_MENU,"",filter_type,filter_publisher,filter_year,filter_country,filter_translate); //必须在获取rom的方法下面
     $(#rom_count_num).html = romCount; //初始化在线人数
 
     //改变样式
@@ -118,11 +119,12 @@ function search(){
     var filter_publisher = $(#filter_publisher).value;
     var filter_year = $(#filter_year).value;
     var filter_country = $(#filter_country).value;
+    var filter_translate = $(#filter_translate).value;
 
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val,filter_type,filter_publisher,filter_year,filter_country);
+    var romCount = view.GetGameCount(ACTIVE_PLATFORM,menu,val,filter_type,filter_publisher,filter_year,filter_country,filter_translate);
     $(#rom_count_num).html = romCount; //初始化游戏数量
 
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate);
     createRomList(1)
 }
 

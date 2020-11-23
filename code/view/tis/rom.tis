@@ -17,7 +17,7 @@ function createRomList(cls=0){
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
         romlist.clear();
-        data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div></li>";
+        data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div><div>"+CONF.Lang["BaseTranslate"]+"</div></li>";
 
     }
 
@@ -48,6 +48,7 @@ function createRomList(cls=0){
         data += "<div>"+ obj.BaseYear +"</div>";
         data += "<div>"+ obj.BasePublisher +"</div>";
         data += "<div>"+ obj.BaseCountry +"</div>";
+        data += "<div>"+ obj.BaseTranslate +"</div>";
         data += "</li>"
     }
     romlist.append(data);
@@ -83,7 +84,8 @@ function scrollLoadRom(evtPos){
         var filter_publisher = $(#filter_publisher).value;
         var filter_year = $(#filter_year).value;
         var filter_country = $(#filter_country).value;
-        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country);
+        var filter_translate = $(#filter_translate).value;
+        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate);
 
         if(ROMJSON != "[]"){
             createRomList(0);

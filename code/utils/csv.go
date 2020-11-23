@@ -24,13 +24,13 @@ func ReadCsv(filename string) ([][]string, error) {
 	data := [][]string{}
 	for {
 		record, err := reader.Read()
+		create := []string{"","","","","","",""}
 		if err == io.EOF {
 			break
-		} else if err != nil {
-			fmt.Println("Error:", err)
-			return nil, err
+		}else{
+			create = record;
 		}
-		data = append(data, record)
+		data = append(data, create)
 	}
 	return data, nil
 }

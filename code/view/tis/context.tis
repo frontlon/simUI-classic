@@ -91,6 +91,7 @@ function baseinfo(evt){
         dom.select("div:nth-child(6)").html = info.BasePublisher;
         dom.select("div:nth-child(2)").html = info.Name;
         dom.select("div:nth-child(7)").html = info.BaseCountry;
+        dom.select("div:nth-child(8)").html = info.BaseTranslate;
     }
     
 

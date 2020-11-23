@@ -154,6 +154,9 @@
     self.on("change", "#filter_country", function(evt) {
         search();
     });
+    self.on("change", "#filter_translate", function(evt) {
+        search();
+    });
     self.on("click", "#filter_clear", function(evt) {
         filterClear();
     });
@@ -323,7 +326,6 @@
     **/
     
     //更改rom列表展示图显示方向
-    try{
     self.on("click", "#config_romlist_direction menu li", function(evt) {
         setThumbDirection(this);
     });
@@ -352,8 +354,5 @@
     self.on("click", "#config_romlist_margin menu li", function(evt) {
         setRomMargin(this);
     });
-    }catch(e){
-        alert(e);
-    }
 
 });

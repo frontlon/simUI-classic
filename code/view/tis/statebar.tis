@@ -80,16 +80,19 @@ function getBaseFilter(platform){
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";
+    $(#filter_translate).value = "";
 
     $(#filter_type).options.clear();
     $(#filter_publisher).options.clear();
     $(#filter_year).options.clear();
     $(#filter_country).options.clear();
+    $(#filter_translate).options.clear();
 
     $(#filter_type).options.$append(<option value=''>{CONF.Lang.BaseType}</option>);
     $(#filter_publisher).options.$append(<option value=''>{CONF.Lang.BasePublisher}</option>);
     $(#filter_year).options.$append(<option value=''>{CONF.Lang.BaseYear}</option>);
     $(#filter_country).options.$append(<option value=''>{CONF.Lang.BaseCountry}</option>);
+    $(#filter_translate).options.$append(<option value=''>{CONF.Lang.BaseTranslate}</option>);
 
     //类型
     var getjson = view.GetFilter(platform,"base_type");
@@ -131,6 +134,16 @@ function getBaseFilter(platform){
         }
     }
     $(#filter_country).value = "";
+
+    //汉化组
+    getjson = view.GetFilter(platform,"base_translate");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_translate).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+        }
+    }
+    $(#filter_translate).value = "";
 
     $(#search_input).value = "";
 
