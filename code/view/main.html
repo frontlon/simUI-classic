@@ -25,7 +25,6 @@
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);}
     menu li.active{background:color(left-menu-list-active-background-color);color:color(left-menu-list-active-text-color)}
     menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
-    menu li > label{padding-left:15dip;}
     menu hr{display:block;background:none;border:0;border-top:1px solid color(context-hr-dark-color);border-bottom:1px solid color(context-hr-light-color);padding:0;margin:0}
 
     /* 标题栏 */
@@ -283,11 +282,19 @@
             <li id="config_title_fontsize">{{TitleFontSize}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>13</li></menu></li>
             <li id="config_romlist_size">{{BlockSize}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></menu></li>
             <li id="config_romlist_margin">{{BlockMargin}}<menu><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></menu></li>
+            
+            <li>{{RomlistColumn}}<menu>
+                <li><label><input id="column_0" type="checkbox">{{FilterMenu}}</label></li>
+                <li><label><input id="column_1" type="checkbox">{{BaseType}}</label></li>
+                <li><label><input id="column_2" type="checkbox">{{BaseYear}}</label></li>
+                <li><label><input id="column_3" type="checkbox">{{BasePublisher}}</label></li>
+                <li><label><input id="column_4" type="checkbox">{{BaseCountry}}</label></li>
+                <li><label><input id="column_5" type="checkbox">{{BaseTranslate}}</label></li>
+            </menu></li>
         </menu></button>
 
         <button id="istop" value="" title="{{IsTop}}"><i>&#xe60e;</i></button>
     </div>
-        
 
     <div id="tb_right">
         <button id="shortcut" type="menu" title="{{Shortcut}}"><i>&#xe6b8;</i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i>&#xe637;</i>

@@ -16,6 +16,7 @@ type Config struct {
 	RomlistFontBackground string // 是否显示字体背景
 	RomlistMargin         string // 是否显示模块间距
 	RomlistDirection      string // 模块显示方向（自动、横向、竖向）
+	RomlistColumn         string // 列表列
 	FontSize              string // 字体大小
 	SearchEngines         string // 搜索引擎地址
 	RootPath              string // 当前根目录
