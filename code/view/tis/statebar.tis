@@ -40,7 +40,16 @@ function initRomListStyle(){
     if(romlist.attributes.hasClass("vertical")){romlist.attributes.removeClass("vertical");}
     if(CONF.Default.RomlistDirection == 1){romlist.attributes.addClass("horizontal");}
     else if(CONF.Default.RomlistDirection == 2){romlist.attributes.addClass("vertical");}
-    
+
+    //初始化列表列显示项
+    var column = CONF.Default.RomlistColumn.split(",");
+    var dom = $$(.romlist_column);
+    var i = 0;
+      for(var obj in dom){
+          obj.checked = column[i] == 1 ? true : false;
+          i++;
+      }
+   
 }
 
 //生成快捷工具列表
@@ -73,7 +82,7 @@ function initTheme(){
     setTheme(CONF.Default.Theme);
 }
 
-function getBaseFilter(platform){
+function initBaseFilter(platform){
 
     //先清理
     $(#filter_type).value = "";

@@ -35,7 +35,7 @@ function changePlatform(obj){
     createMenuList(menujson);
 
     //读取基本信息过滤器
-    getBaseFilter(ACTIVE_PLATFORM);
+    initBaseFilter(ACTIVE_PLATFORM);
 
     //重置滚动翻页数据
     resetScroll();

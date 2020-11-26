@@ -83,3 +83,12 @@ function setRomMargin(obj){
     view.UpdateConfig("romlist_margin",obj.html);
 }
 
+//列表列设置
+function setRomlistColumn(obj){
+    var column = CONF.Default.RomlistColumn.split(",");
+    column[obj.attributes["opt"].toInteger()] = obj.checked == true ? 1 : 0;
+    var str = column.join(",");
+    view.UpdateConfig("romlist_column",str);
+    //更新配置
+    CB_createCache();
+}

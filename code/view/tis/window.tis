@@ -46,6 +46,8 @@ function Init(){
     if(VIDEO_VALUME == 0)$(#right_volume).html = "<i>&#xe686;</i>";
     else $(#right_volume).html = "<i>&#xe657;</i>";
 
+    $(body).state.focus = true;
+
 }
 
 //初始化配置
@@ -76,7 +78,7 @@ function initConfig(isfresh){
     initPlatform(); //生成平台列表
     initShortcutList(); //初始化快捷工具列表
     initRomListStyle(); //初始化游戏列表样式
-    getBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
+    initBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
 
     //生成菜单
     var menujson = view.GetMenuList(CONF.Default.Platform,0);

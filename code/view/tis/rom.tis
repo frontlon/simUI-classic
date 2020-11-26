@@ -14,11 +14,21 @@ function createRomList(cls=0){
     var title = "";
     var thumb = "";
     var romPath = "";
-    //如果清理参数=1，则清理掉所有数据
+    
+    //标题列
+    var column = CONF.Default.RomlistColumn.split(",");
     if(cls == 1){
-        romlist.clear();
-        data += "<li class='romth'><div></div><div>"+CONF.Lang["BaseName"]+"</div><div>"+CONF.Lang["FilterMenu"]+"</div><div>"+CONF.Lang["BaseType"]+"</div><div>"+CONF.Lang["BaseYear"]+"</div><div>"+CONF.Lang["BasePublisher"]+"</div><div>"+CONF.Lang["BaseCountry"]+"</div><div>"+CONF.Lang["BaseTranslate"]+"</div></li>";
-
+        romlist.clear(); //如果清理参数=1，则清理掉所有数据
+        data += "<li class='romth'>";
+        data += "<div></div>";
+        data += "<div>"+CONF.Lang["BaseName"]+"</div>";
+        if(column[0] == 1){data += "<div>"+CONF.Lang["FilterMenu"]+"</div>";}
+        if(column[1] == 1){data += "<div>"+CONF.Lang["BaseType"]+"</div>";}
+        if(column[2] == 1){data += "<div>"+CONF.Lang["BaseYear"]+"</div>";}
+        if(column[3] == 1){data += "<div>"+CONF.Lang["BasePublisher"]+"</div>";}
+        if(column[4] == 1){data += "<div>"+CONF.Lang["BaseCountry"]+"</div>";}
+        if(column[5] == 1){data += "<div>"+CONF.Lang["BaseTranslate"]+"</div>";}
+        data += "</li>";
     }
 
     for(var obj in romobj) {
@@ -43,12 +53,12 @@ function createRomList(cls=0){
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
         data += "<div><img src='"+ thumb +"' /></div>";
         data += "<div>"+ obj.Name.toHtmlString() +"</div>";
-        data += "<div>"+ obj.Menu.toHtmlString() +"</div>";
-        data += "<div>"+ obj.BaseType +"</div>";
-        data += "<div>"+ obj.BaseYear +"</div>";
-        data += "<div>"+ obj.BasePublisher +"</div>";
-        data += "<div>"+ obj.BaseCountry +"</div>";
-        data += "<div>"+ obj.BaseTranslate +"</div>";
+        if(column[0] == 1){data += "<div>"+ obj.Menu.toHtmlString() +"</div>";}
+        if(column[1] == 1){data += "<div>"+ obj.BaseType +"</div>";}
+        if(column[2] == 1){data += "<div>"+ obj.BaseYear +"</div>";}
+        if(column[3] == 1){data += "<div>"+ obj.BasePublisher +"</div>";}
+        if(column[4] == 1){data += "<div>"+ obj.BaseCountry +"</div>";}
+        if(column[5] == 1){data += "<div>"+ obj.BaseTranslate +"</div>";}
         data += "</li>"
     }
     romlist.append(data);

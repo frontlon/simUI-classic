@@ -355,4 +355,9 @@
         setRomMargin(this);
     });
 
+    //列表列显示
+    self.on("click", ".romlist_column", function(evt) {
+        setRomlistColumn(this);
+    });
+
 });
