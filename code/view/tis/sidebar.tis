@@ -59,11 +59,9 @@ function openSidebar(obj){
     favorite.attributes["rid"] = info.Id.toHtmlString();
     favorite.attributes["value"] = info.Star.toHtmlString();
     if(info.Star == "1"){
-        favorite.attributes.removeClass("funbtn_0");
-        favorite.attributes.addClass("funbtn_1");
+        favorite.html = "<img src='this://app/images/fileico_fav_0.png' />";
     }else{
-        favorite.attributes.removeClass("funbtn_1");
-        favorite.attributes.addClass("funbtn_0");
+        favorite.html = "<img src='this://app/images/fileico_fav_1.png' />";
     }
 
     //生成隐藏按钮
@@ -71,13 +69,10 @@ function openSidebar(obj){
     hide.attributes["rid"] = info.Id.toHtmlString();
     hide.attributes["value"] = info.Hide.toHtmlString();
     if(info.Hide == "1"){
-        hide.attributes.removeClass("funbtn_0");
-        hide.attributes.addClass("funbtn_1");
+        hide.html = "<img src='this://app/images/fileico_hide_0.png' />";
     }else{
-        hide.attributes.removeClass("funbtn_1");
-        hide.attributes.addClass("funbtn_0");
+        hide.html = "<img src='this://app/images/fileico_hide_1.png' />";
     }
-
 
     //创建视频
     _createVideo(info,romPath);
