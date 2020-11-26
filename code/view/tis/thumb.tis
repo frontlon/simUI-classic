@@ -3,8 +3,8 @@ function thumbEdit(evt){
     var thumb = view.dialog({
         url:self.url(ROOTPATH + "edit_thumbs.html"),
         caption:CONF.Lang.ThumbsDown,
-        width:870,
-        height:730,
+        width:self.toPixels(700dip),
+        height:self.toPixels(610dip),
         parameters: {
             id:evt.attributes["rid"],
         };

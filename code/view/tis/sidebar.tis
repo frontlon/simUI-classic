@@ -291,8 +291,8 @@ function SetRomCmd(evt){
         var cmdObj = JSON.parse(cmdstr);
         var simJson =  view.dialog({
             url:self.url(ROOTPATH + "edit_rom_cmd.html"),
-            width:360,
-            height:255,
+            width:self.toPixels(300dip),
+            height:self.toPixels(240dip),
             parameters: {
                 name:name,
                 simId:simId,

@@ -58,8 +58,8 @@ function rename(evt){
 
     var data = view.dialog({
         url:self.url(ROOTPATH + "rom_rename.html"),
-        width:300,
-        height:190,
+        width:self.toPixels(300dip),,
+        height:self.toPixels(130dip),,
         parameters: {
             name:detailObj.Info.Name
         };
@@ -76,8 +76,8 @@ function rename(evt){
 function baseinfo(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
-        width:400,
-        height:370,
+        width:self.toPixels(350dip),
+        height:self.toPixels(300dip),
         parameters: {
             id:evt.attributes["rid"],
         };
