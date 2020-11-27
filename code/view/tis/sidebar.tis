@@ -163,7 +163,11 @@ function openSidebar(obj){
 
     //攻略
     var strategy = view.GetGameStrategy(obj.attributes["rid"]);
-    $(#third_strategy).html = strategy;
+    if(strategy != ""){
+        $(#third_strategy).html = strategy;
+    }else{
+        $(#third_strategy).html = "<div class='strategy_empty'>"+ CONF.Lang.StrategyEmpty +"</div>";
+    }
 
 }
 

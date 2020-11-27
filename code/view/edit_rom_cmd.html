@@ -6,7 +6,7 @@
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
         input{width:*;}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-        .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;}
+        .submit_wrapper{padding:6dip 0;text-align:center;border-top:1dip solid #ccc}
         h4{margin:7dip 0}
 
         table td{vertical-align: middle;padding-bottom:5dip}
@@ -38,11 +38,11 @@
             </tr>
 
         </table>
-
+        <div class="submit_wrapper">
+            <button id="close-dialog" role="default-button">{{Confirm}}</button>
+        </div>
     </div>
-    <div class="submit_wrapper">
-        <button id="close-dialog" role="default-button">{{Confirm}}</button>
-    </div>
+    
     <script type="text/tiscript">
 
         include ROOTPATH + "tis/utils.tis";
