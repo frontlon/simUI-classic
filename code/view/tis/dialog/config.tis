@@ -276,8 +276,9 @@ function editSim(evt) {
     //将选择还原回【选择模拟器】项目，防止项目被选定
     evt.value = 0;
 
+
     //更新option选项
-    if(res != ""){
+    if(res != undefined && res != ""){
         var sim = JSON.parse(res);
         if(sim.Opt == undefined){
             //修改

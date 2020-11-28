@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"simUI/code/config"
 	"simUI/code/db"
@@ -147,7 +146,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	}
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //读取文件名 }
 	fileName := ""
-	isDir := false
 	switch opt {
 	case "rom":
 		fileName = platform.RomPath + config.Cfg.Separator + info.RomPath
@@ -164,7 +162,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 			}
 
 			if fileName == "" {
-				isDir = true
 				fileName = platform.ThumbPath
 			}
 
@@ -180,7 +177,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.SnapPath + config.Cfg.Separator
 			}
 		}
@@ -196,7 +192,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.PosterPath + config.Cfg.Separator
 			}
 		}
@@ -211,7 +206,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.PackingPath + config.Cfg.Separator
 			}
 		}
@@ -226,7 +220,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.DocPath
 			}
 		}
@@ -241,7 +234,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.TitlePath
 			}
 		}
@@ -256,7 +248,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.BackgroundPath
 			}
 		}
@@ -271,7 +262,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.VideoPath
 			}
 		}
@@ -286,7 +276,6 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				}
 			}
 			if fileName == "" {
-				isDir = true
 				fileName = platform.StrategyPath
 			}
 		}
@@ -297,14 +286,8 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	}
 
 	if fileName != "" {
-		if isDir == true {
-			if err := exec.Command(`explorer`, fileName).Start(); err != nil {
-				return err
-			}
-		} else {
-			if err := exec.Command(`explorer`, `/select,`, `/n,`, fileName).Start(); err != nil {
-				return err
-			}
+		if err := utils.OpenFolderByWindow(fileName); err != nil {
+			return err
 		}
 	} else {
 		return errors.New(config.Cfg.Lang["PathNotFound"])

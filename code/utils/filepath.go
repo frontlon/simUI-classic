@@ -63,6 +63,15 @@ func IsAbsPath(p string) bool {
 	return filepath.IsAbs(p)
 }
 
+// 判断所给路径是否为文件夹
+func IsDir(path string) bool {
+	s, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return s.IsDir()
+}
+
 /**
  * 检测文件是否存在（文件夹也返回false）
  **/
