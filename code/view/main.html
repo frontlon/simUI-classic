@@ -178,6 +178,7 @@
     #right_rombase li:nth-child(3){background-image:url(this://app/images/baseinfo_year.png);}
     #right_rombase li:nth-child(4){background-image:url(this://app/images/baseinfo_publisher.png);}
     #right_rombase li:nth-child(5){background-image:url(this://app/images/baseinfo_country.png);}
+    #right_rombase li:nth-child(6){background-image:url(this://app/images/baseinfo_translate.png);}
 
     /* 视频 */
     #video_wrapper{position:relative}
@@ -248,7 +249,7 @@
     #third_strategy .strategy_empty{padding-top:50dip;text-align:center;opacity:0.7}
 
     .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-    .markdown p{margin-bottom:13dip}
+    .markdown p{margin-bottom:13dip;display:block}
     .markdown a{color:color(desc-content-text-color)}
     .markdown a:hover{opacity: 0.5;}
     .markdown img{margin:0 auto;display:block;}
@@ -408,7 +409,7 @@
 
 <script type="text/tiscript">
 
-    var isDebug = true;
+    var isDebug = false;
     var mainView = view;
     var ROOTPATH = "this://app/";
     var SEPARATOR = ""; //路径分隔符

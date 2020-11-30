@@ -52,24 +52,30 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			continue
 		}
 
-		if isUtf8 == false {
-			r[0] = utils.ToUTF8(r[0])
-			r[1] = utils.ToUTF8(r[1])
-			r[2] = utils.ToUTF8(r[2])
-			r[3] = utils.ToUTF8(r[3])
-			r[4] = utils.ToUTF8(r[4])
-			r[5] = utils.ToUTF8(r[5])
-			r[6] = utils.ToUTF8(r[6])
+		create := []string{"","","","","","",""}
+
+		for a,b := range r{
+			create[a] = b
 		}
 
-		des[r[0]] = &RomBase{
-			RomName:   strings.Trim(r[0], " "),
-			Name:      strings.Trim(r[1], " "),
-			Type:      strings.Trim(r[2], " "),
-			Year:      strings.Trim(r[3], " "),
-			Publisher: strings.Trim(r[4], " "),
-			Country:   strings.Trim(r[5], " "),
-			Translate: strings.Trim(r[6], " "),
+		if isUtf8 == false {
+			create[0] = utils.ToUTF8(create[0])
+			create[1] = utils.ToUTF8(create[1])
+			create[2] = utils.ToUTF8(create[2])
+			create[3] = utils.ToUTF8(create[3])
+			create[4] = utils.ToUTF8(create[4])
+			create[5] = utils.ToUTF8(create[5])
+			create[6] = utils.ToUTF8(create[6])
+		}
+
+		des[create[0]] = &RomBase{
+			RomName:   strings.Trim(create[0], " "),
+			Name:      strings.Trim(create[1], " "),
+			Type:      strings.Trim(create[2], " "),
+			Year:      strings.Trim(create[3], " "),
+			Publisher: strings.Trim(create[4], " "),
+			Country:   strings.Trim(create[5], " "),
+			Translate: strings.Trim(create[6], " "),
 		}
 	}
 

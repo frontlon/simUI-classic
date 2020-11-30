@@ -114,7 +114,7 @@ function GetPlatformLitem(evt){
 
     //如果没有扩展名，则自动填充大量扩展名
     if($(#platform_exts).value.trim() == ""){
-        var exts = ".zip,.NES,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups";
+        var exts = ".zip,.NES,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups,.exe,.lnk";
         $(#platform_exts).value = exts;
     }
 
@@ -331,17 +331,17 @@ function openPlatformFolder(evt) {
         //资料文件名
         var rombase = $(#platform_name).value == "" ? "rombase" : $(#platform_name).value;
 
-        $(#platform_doc).value = url + SEPARATOR + "doc";
-        $(#platform_strategy).value = url + SEPARATOR + "strategy";
+        $(#platform_doc).value = url + SEPARATOR + "docs";
+        $(#platform_strategy).value = url + SEPARATOR + "strategies";
         $(#platform_rom).value = url + SEPARATOR + "roms";
-        $(#platform_thumb).value = url + SEPARATOR + "thumb";
-        $(#platform_snap).value = url + SEPARATOR + "snap";
+        $(#platform_thumb).value = url + SEPARATOR + "thumbs";
+        $(#platform_snap).value = url + SEPARATOR + "snaps";
         $(#platform_poster).value = url + SEPARATOR + "poster";
         $(#platform_packing).value = url + SEPARATOR + "packing";
         $(#platform_title).value = url + SEPARATOR + "title";
         $(#platform_background).value = url + SEPARATOR + "background";
         $(#platform_video).value = url + SEPARATOR + "video";
-        $(#platform_rombase).value = url + SEPARATOR + rombase + ".csv";
+        $(#platform_rombase).value = url + SEPARATOR + rombase.toLowerCase() + ".csv";
 
         $(#platform_doc).state.disabled = false;
         $(#platform_strategy).state.disabled = false;
@@ -368,7 +368,7 @@ function platformAdd(evt) {
     var name =  view.dialog({
         url:self.url(ROOTPATH + "add_platform.html"),
         width:self.toPixels(300dip),
-        height:self.toPixels(130dip),
+        height:self.toPixels(140dip),
         parameters: {};
     });
 

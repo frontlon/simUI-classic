@@ -72,7 +72,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 				}
 
 				fileMd5 := GetRomMd5(utils.ToString(platform), title)
-				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Publisher, base.Country)
+				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Publisher, base.Country, base.Translate)
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -105,7 +105,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						BaseCountry:   base.Country,
 						BaseTranslate: base.Translate,
 					}
-					romlist = append(romlist,sinfo)
+					romlist = append(romlist, sinfo)
 				} else { //不是子游戏
 					//去掉扩展名，生成标题
 					rinfo := &db.Rom{
@@ -123,10 +123,10 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 						BaseYear:      base.Year,
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
-						BaseTranslate:   base.Translate,
+						BaseTranslate: base.Translate,
 					}
 
-					romlist = append(romlist,rinfo)
+					romlist = append(romlist, rinfo)
 
 					//分类列表
 					if menu != ConstMenuRootKey {
@@ -175,34 +175,34 @@ func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 
 	romlistInfoMd5 := []string{} //磁盘文件
 	romlistFileMd5 := []string{} //磁盘文件
-	for _, v := range romlist { //从romlist列表中抽出两个md5
-		romlistInfoMd5 = append(romlistInfoMd5,v.InfoMd5)
-		romlistFileMd5 = append(romlistFileMd5,v.FileMd5)
+	for _, v := range romlist {  //从romlist列表中抽出两个md5
+		romlistInfoMd5 = append(romlistInfoMd5, v.InfoMd5)
+		romlistFileMd5 = append(romlistFileMd5, v.FileMd5)
 	}
 
 	//数据库中抽出两个md5
-	DbFileMd5,DbInfoMd5, _ := (&db.Rom{}).GetMd5ByPlatform(platform)
+	DbFileMd5, DbInfoMd5, _ := (&db.Rom{}).GetMd5ByPlatform(platform)
 	addFileUniq := utils.SliceDiff(romlistFileMd5, DbFileMd5) //新增的
 	subFileUniq := utils.SliceDiff(DbFileMd5, romlistFileMd5) //删除的
-	addAndSubFileUniq := append(addFileUniq,subFileUniq...) //增加的和删除的
+	addAndSubFileUniq := append(addFileUniq, subFileUniq...)  //增加的和删除的
 
 	//整理出要添加的数据体
 	addData := []*db.Rom{}
 	updateData := []*db.Rom{}
-	for _,v := range romlist{
-		if utils.InSliceString(v.FileMd5,addFileUniq){
-			addData = append(addData,v) //添加的数据
+	for _, v := range romlist {
+		if utils.InSliceString(v.FileMd5, addFileUniq) {
+			addData = append(addData, v) //添加的数据
 		}
-		if !utils.InSliceString(v.FileMd5,addAndSubFileUniq){
-			updateData = append(updateData,v) //添加的数据
+		if !utils.InSliceString(v.FileMd5, addAndSubFileUniq) {
+			updateData = append(updateData, v) //添加的数据
 		}
 	}
 
 	//在已有数据中查找info_md5不一致的数据，就是修改的数据
 	updateIssetData := []*db.Rom{}
-	for _,v := range updateData{
-		if !utils.InSliceString(v.InfoMd5,DbInfoMd5){
-			updateIssetData = append(updateIssetData,v) //添加的数据
+	for _, v := range updateData {
+		if !utils.InSliceString(v.InfoMd5, DbInfoMd5) {
+			updateIssetData = append(updateIssetData, v) //添加的数据
 		}
 	}
 

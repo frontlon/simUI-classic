@@ -5,6 +5,9 @@ import "github.com/axgle/mahonia"
 
 //转换为utf8
 func ToUTF8(str string) string {
+	if str == ""{
+		return str
+	}
 	srcCoder := mahonia.NewDecoder("gbk")
 	srcResult := srcCoder.ConvertString(str)
 	tagCoder := mahonia.NewDecoder("utf-8")

@@ -384,6 +384,8 @@ func GetDocContent(f string) string {
 		content = utils.ToUTF8(content)
 	}
 
+	content = strings.ReplaceAll(content,"\n","<br>")
+
 	return content
 }
 

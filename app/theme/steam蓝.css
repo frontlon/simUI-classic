@@ -97,9 +97,9 @@ html:theme(steam) {
     var(play-info-text-color) : #acdbf5;
 
     /* 右侧边栏 简介 */
-    var(right-doc-border-color) : #7072a5;
-    var(right-doc-text-color) : #8f92dd;
-    var(right-doc-background-color) : #0e0c28;
+    var(right-doc-border-color) : #395371;
+    var(right-doc-text-color) : #acdbf5;
+    var(right-doc-background-color) : #2E4259;
 
     /* 字母索引 */
     var(num-index-text-color) : #c7d5e0;
@@ -122,5 +122,5 @@ html:theme(steam) {
     var(rom-list-text-slave-color) : #acdbf5;
 
     /* 攻略文档窗口 */
-    var(desc-content-text-color) : #8f92dd;    
+    var(desc-content-text-color) : #acdbf5;    
 }
