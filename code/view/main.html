@@ -75,7 +75,7 @@
     /* rom模块 */
     #romlist{display:block;}
     .romblock{flow:horizontal-flow;clear:both;padding:0;margin-left:20dip;}
-    .romblock > li{text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom}
+    .romblock > li{text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom;overflow:hidden}
     .romblock > li:hover{box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color)}
     .romblock > li:current{border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);transform: scale(1.2);z-index:2;}
     .romblock > li img{width:100%;height:auto;min-height:width(50%);max-height:width(130%);display:block;}
@@ -156,6 +156,7 @@
     .romth div{color:#fff!important;font-weight:bold;}
 
     .romlist_alpha li{opacity:0.95;}
+    .rom_star {background: yellow;position:absolute;bottom:-20px; right:-30px;width:50px; height:10px; transform:rotate(-45deg);transform-origin:top left;-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform-origin:top left;-webkit-transform-origin:top left;}
 
     /* 右侧边栏 */
     #right_title_ pic{text-align:center;margin-bottom:10dip}
@@ -331,8 +332,8 @@
         <div class="statebar">
             <div class="filter">
                 <select id="filter_type"><option value="">{{BaseType}}</option></select>
-                <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
                 <select id="filter_year"><option value="">{{BaseYear}}</option></select>
+                <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
                 <select id="filter_country"><option value="">{{BaseCountry}}</option></select>
                 <select id="filter_translate"><option value="">{{BaseTranslate}}</option></select>
                 <input type="text" id="search_input" novalue="{{Keyword}}" />
@@ -352,9 +353,9 @@
 
         <tabs id="mytabs"  class="sidetabs">
         <strip>
-        <label for="right_first" selected>信息</label>
-        <label for="right_second">图集</label>
-        <label for="right_third">攻略</label>
+        <label for="right_first" selected>{{SideTabInfo}}</label>
+        <label for="right_second">{{SideTabThumb}}</label>
+        <label for="right_third">{{SideTabStrategy}}</label>
         </strip>
         <panels>
         <section id="right_first">
@@ -364,7 +365,7 @@
             <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"></button>
             <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
             <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/rename.png" /></button>
-            <button id="right_base_info" class="funbtn" platform="" name="" value="" title="{{EditBaseInfo}}"><img src="this://app/images/baseinfo.png" /></button>
+            <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/baseinfo.png" /></button>
             <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" />
                 <menu id="foldercontext" type="menu"></menu>
             </button>
@@ -409,7 +410,7 @@
 
 <script type="text/tiscript">
 
-    var isDebug = false;
+    var isDebug = true;
     var mainView = view;
     var ROOTPATH = "this://app/";
     var SEPARATOR = ""; //路径分隔符

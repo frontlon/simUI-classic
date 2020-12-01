@@ -74,6 +74,7 @@ function rename(evt){
 
 //基础信息
 function baseinfo(evt){
+
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
         width:self.toPixels(350dip),
@@ -182,9 +183,10 @@ function deleteRom(obj){
 
     var id = obj.attributes["rid"];
     var dom = $(#romlist).select("li[rid="+id+"]");
-    alert(id);
     if (dom != undefined){
         dom.remove(); //删除页面dom
     }
     view.DeleteRom(id); //删除实体文件
+    alert(CONF.Lang.DeleteSuccess); //删除成功
+
 }

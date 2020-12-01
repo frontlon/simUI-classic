@@ -59,6 +59,7 @@ function createRomList(cls=0){
         if(column[3] == 1){data += "<div>"+ obj.BasePublisher +"</div>";}
         if(column[4] == 1){data += "<div>"+ obj.BaseCountry +"</div>";}
         if(column[5] == 1){data += "<div>"+ obj.BaseTranslate +"</div>";}
+        if(obj.Star == 1){data += "<span class='rom_star'></span>";}
         data += "</li>"
     }
     romlist.append(data);

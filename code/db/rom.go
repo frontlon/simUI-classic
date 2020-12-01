@@ -118,7 +118,7 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseTyp
 	}
 
 	offset := pages * ROM_PAGE_NUM
-	field := "id,name,menu,platform,rom_path,base_type,base_year,base_publisher,base_country,base_translate"
+	field := "id,name,menu,platform,star,rom_path,base_type,base_year,base_publisher,base_country,base_translate"
 	result := getDb().Select(field).Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -136,7 +136,7 @@ func (*Rom) GetSubRom(platform uint32, pname string) ([]*Rom, error) {
 		return volist, nil
 	}
 
-	result := getDb().Select("id,name,pname,rom_path").Where("platform=? AND pname=?", platform, pname).Order("pinyin ASC").Find(&volist)
+	result := getDb().Select("id,name,pname,star,rom_path").Where("platform=? AND pname=?", platform, pname).Order("pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -171,7 +171,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	where["pname"] = ""
 	offset := pages * ROM_PAGE_NUM
 	volist := []*Rom{}
-	field := "id,name,menu,platform,rom_path,base_type,base_year,base_publisher,base_country,base_translate"
+	field := "id,name,menu,platform,rom_path,star,base_type,base_year,base_publisher,base_country,base_translate"
 	result := getDb().Select(field).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset)
 	if keyword == "#" {
 

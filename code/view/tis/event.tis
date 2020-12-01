@@ -296,7 +296,7 @@
         contextSetFavorite(this);
     });
 
-   //右键菜单设置隐藏
+    //右键菜单设置隐藏
     self.on("click", "#romcontext .hide", function(evt) {
         contextSetHide(this);
     });

@@ -84,26 +84,12 @@ function initTheme(){
 
 function initBaseFilter(platform){
 
-    //先清理
+    $(#search_input).value = "";
+
     $(#filter_type).value = "";
-    $(#filter_publisher).value = "";
-    $(#filter_year).value = "";
-    $(#filter_country).value = "";
-    $(#filter_translate).value = "";
-
     $(#filter_type).options.clear();
-    $(#filter_publisher).options.clear();
-    $(#filter_year).options.clear();
-    $(#filter_country).options.clear();
-    $(#filter_translate).options.clear();
-
     $(#filter_type).options.$append(<option value=''>{CONF.Lang.BaseType}</option>);
-    $(#filter_publisher).options.$append(<option value=''>{CONF.Lang.BasePublisher}</option>);
-    $(#filter_year).options.$append(<option value=''>{CONF.Lang.BaseYear}</option>);
-    $(#filter_country).options.$append(<option value=''>{CONF.Lang.BaseCountry}</option>);
-    $(#filter_translate).options.$append(<option value=''>{CONF.Lang.BaseTranslate}</option>);
 
-    //类型
     var getjson = view.GetFilter(platform,"base_type");
     var jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
@@ -113,18 +99,10 @@ function initBaseFilter(platform){
     }
     $(#filter_type).value = "";
     
- 
-    //发行商
-    getjson = view.GetFilter(platform,"base_publisher");
-    jsonObj = JSON.parse(getjson);
-    if (jsonObj.length > 0){
-        for(var obj in jsonObj) {
-            $(#filter_publisher).options.$append(<option value={obj.Name}>{obj.Name}</option>);
-        }
-    }
-    $(#filter_publisher).value = "";
-    
     //年份
+    $(#filter_year).value = "";
+    $(#filter_year).options.clear();
+    $(#filter_year).options.$append(<option value=''>{CONF.Lang.BaseYear}</option>);
     getjson = view.GetFilter(platform,"base_year");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
@@ -134,7 +112,24 @@ function initBaseFilter(platform){
     }
     $(#filter_year).value = "";
 
-    //国家
+    //发行商
+    $(#filter_publisher).value = "";
+    $(#filter_publisher).options.clear();
+    $(#filter_publisher).options.$append(<option value=''>{CONF.Lang.BasePublisher}</option>);
+
+    getjson = view.GetFilter(platform,"base_publisher");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_publisher).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+        }
+    }
+    $(#filter_publisher).value = "";
+    
+    //地区
+    $(#filter_country).value = "";
+    $(#filter_country).options.clear();
+    $(#filter_country).options.$append(<option value=''>{CONF.Lang.BaseCountry}</option>);
     getjson = view.GetFilter(platform,"base_country");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
@@ -145,6 +140,9 @@ function initBaseFilter(platform){
     $(#filter_country).value = "";
 
     //汉化组
+    $(#filter_translate).value = "";
+    $(#filter_translate).options.clear();
+    $(#filter_translate).options.$append(<option value=''>{CONF.Lang.BaseTranslate}</option>);
     getjson = view.GetFilter(platform,"base_translate");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
@@ -154,7 +152,13 @@ function initBaseFilter(platform){
     }
     $(#filter_translate).value = "";
 
-    $(#search_input).value = "";
+    //是否显示和隐藏
+    var column = CONF.Default.RomlistColumn.split(",");
+    $(#filter_type).style["display"] = column[1] == 1 ? "inline-block" : "none";
+    $(#filter_year).style["display"] = column[2] == 1 ? "inline-block" : "none";
+    $(#filter_publisher).style["display"] = column[3] == 1 ? "inline-block" : "none";
+    $(#filter_country).style["display"] = column[4] == 1 ? "inline-block" : "none";
+    $(#filter_translate).style["display"] = column[5] == 1 ? "inline-block" : "none";
 
 }
 
@@ -370,6 +374,7 @@ function CB_createCache(){
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";
+    $(#filter_translate).value = "";
 
     createRomList(1); //生成rom列表
 
@@ -387,6 +392,7 @@ function filterClear(){
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
     $(#filter_country).value = "";
+    $(#filter_translate).value = "";
     $(#search_input).value = "";
     search();
 }
