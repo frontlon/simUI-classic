@@ -172,8 +172,8 @@
     #right .doc{height:*;min-height:64dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
     /* 基础信息表格 */
-    #right_rombase{width:100%;padding:0;margin:0}
-    #right_rombase li{margin:0 0 10dip 0;padding-left:20dip;color:color(play-info-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;background-size:contain}
+    #right_rombase{width:*;padding:10dip;margin:0;border:1dip solid color(right-doc-border-color);background:color(right-doc-background-color);}
+    #right_rombase li{margin:0 0 10dip 0;padding-left:20dip;color:color(right-play-info-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;background-size:contain}
     #right_rombase li:nth-child(1){background-image:url(this://app/images/baseinfo_name.png);}
     #right_rombase li:nth-child(2){background-image:url(this://app/images/baseinfo_type.png);}
     #right_rombase li:nth-child(3){background-image:url(this://app/images/baseinfo_year.png);}
@@ -232,10 +232,11 @@
     #loading img{display:block;margin:0 auto 9dip auto;}
     #ping{width:1;height:1;position: absolute;top:0;left:0;}
 
+    /* 侧边栏tab选项卡 */
     .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical}
     .sidetabs>strip{display:block;flow:horizontal;font-size:17dip;padding-top:5dip}
-    .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;color:color(tab-text-color);}
-    .sidetabs>strip>label:current{background:none;color:color(tab-text-hover-color);background:none}
+    .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;color:color(tab-text-color);background:color(tab-background-color);margin:0 1px;padding:3dip 0 }
+    .sidetabs>strip>label:current{background:none;color:color(tab-text-active-color);background:none}
     .sidetabs>strip>label:current:hover{background-image:none}
     .sidetabs>strip>label:hover{background-image:none;}
     .sidetabs>strip>label:current:first-child,tabs>strip>label:current:hover:first-child{background:none}

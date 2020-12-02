@@ -71,8 +71,9 @@ html:theme(purple) {
     var(context-hr-dark-color) : #241A2B;
 
     /* 右侧边栏 TAB选项卡 */
-    var(tab-text-color) : #8d5dac;
-    var(tab-text-hover-color) : #FFF;
+    var(tab-text-color) : #FFF;
+    var(tab-text-active-color) : #FFF;
+    var(tab-background-color) : #523266;
 
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #2e1e39;
@@ -94,10 +95,8 @@ html:theme(purple) {
     var(run-button-active-text-color) : #FFF;
     var(run-button-active-background-color) : #b937c8;
 
-    /* 右侧边栏 游戏信息 */
-    var(play-info-text-color) : #d4bfe0;
-
-    /* 右侧边栏 简介 */
+    /* 右侧边栏 游戏信息和简介 */
+    var(right-play-info-text-color) : #d4bfe0;
     var(right-doc-border-color) : #523266;
     var(right-doc-text-color) : #dba3f6;
     var(right-doc-background-color) : #3d274b;

@@ -71,8 +71,9 @@ html:theme(steam) {
     var(context-hr-dark-color) : #1A2D39;
 
     /* 右侧边栏 TAB选项卡 */
-    var(tab-text-color) : #6290c6;
-    var(tab-text-hover-color) : #FFF;
+    var(tab-text-color) : #FFF;
+    var(tab-text-active-color) : #FFF;
+    var(tab-background-color) : #417997;
 
     /* 右侧边栏 功能按钮 */
     var(func-button-background-color) : #1C2837;
@@ -93,10 +94,8 @@ html:theme(steam) {
     var(run-button-active-text-color) : #FFF;
     var(run-button-active-background-color) : #417997;
 
-    /* 右侧边栏 游戏信息 */
-    var(play-info-text-color) : #acdbf5;
-
-    /* 右侧边栏 简介 */
+    /* 右侧边栏 游戏信息和简介 */
+    var(right-play-info-text-color) : #acdbf5;
     var(right-doc-border-color) : #395371;
     var(right-doc-text-color) : #acdbf5;
     var(right-doc-background-color) : #2E4259;
