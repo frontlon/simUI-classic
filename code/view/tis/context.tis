@@ -19,18 +19,20 @@ function openFolder(evt){
 //右键菜单设置喜爱
 function contextSetFavorite(evt){
     var result = view.SetFavorite(evt.attributes["rid"],evt.attributes["value"]);
+    var rdom = $(#romlist).select("li[rid="+evt.attributes["rid"]+"]");
 
     if( evt.attributes["value"] == 1){
         evt.attributes.removeClass('fav1');
         evt.attributes.addClass('fav0');
         evt.attributes["value"] = 0;
         evt.html = CONF.Lang.CancelFavorite;
-        
+        rdom.select(".rom_star").style["display"] = "block";
     }else{
         evt.attributes.removeClass('fav0');
         evt.attributes.addClass('fav1');
         evt.attributes["value"] = 1;
         evt.html = CONF.Lang.SetFavorite;
+        rdom.select(".rom_star").style["display"] = "none";
     }
 }
 

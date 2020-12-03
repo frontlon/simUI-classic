@@ -323,15 +323,20 @@ function thumbSlider(evt){
 function setFavorite(evt){
     var id = evt.attributes["rid"];
     var star = evt.attributes["value"];
+    var rdom = $(#romlist).select("li[rid="+id+"]");
 
     if(star == "1"){
         star = "0";
         evt.html = "<img src='this://app/images/fileico_fav_0.png' />";
-
+        if(rdom != undefined){
+            rdom.select(".rom_star").style["display"] = "block";
+        }
     }else{
         star = "1";
         evt.html = "<img src='this://app/images/fileico_fav_1.png' />";
-
+        if(rdom != undefined){
+          rdom.select(".rom_star").style["display"] = "none";
+        }
     }
 
     evt.attributes["value"] = star;
@@ -344,7 +349,6 @@ function setFavorite(evt){
 
     //如果当前是喜好目录，则从rom列表中删除
     var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var rdom = $(#romlist).select("li[rid="+id+"]");
     if(menu == "favorite" && rdom != undefined){
         rdom.remove();
     }
@@ -368,6 +372,7 @@ function setHide(evt){
 
     var result = view.SetHide(id,hide);
    
+
     if(result != "1"){
         view.msgbox(#alert,result);
     }
