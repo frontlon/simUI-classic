@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 )
 
@@ -57,4 +58,46 @@ func GetFileSizeString(size int64) string {
 	} else {
 		return fmt.Sprintf("%.2fEB", float64(size)/float64(1024*1024*1024*1024*1024))
 	}
+}
+
+/**
+ * 创建多层文件夹
+ **/
+func CreateDir(p string) error {
+	err := os.MkdirAll(p, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	if err := os.Chmod(p, os.ModePerm); err != nil {
+		return err
+	}
+	return nil
+}
+
+/**
+ * 创建一个文件
+ **/
+func CreateFile(p string) error {
+	if p == "" {
+		return nil
+	}
+	f, err := os.Create(p)
+	defer f.Close()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/**
+ * 写文件（覆盖写）
+ **/
+func OverlayWriteFile(p string, t string) error {
+	if p == "" {
+		return nil
+	}
+	if err := ioutil.WriteFile(p, []byte(t), 777); err != nil {
+		return err
+	}
+	return nil
 }

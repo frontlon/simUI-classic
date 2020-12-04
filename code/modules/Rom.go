@@ -15,11 +15,11 @@ var ConstSeparator = "__"     //rom子分隔符
 var ConstMenuRootKey = "_7b9" //根子目录游戏的Menu参数
 
 type RomDetail struct {
-	Info            *db.Rom         //rom信息
-	DocContent      string          //简介内容
-	Sublist         []*db.Rom       //子游戏
-	Simlist         []*db.Simulator //模拟器
-	RomFileSize     string          //rom文件大小
+	Info        *db.Rom         //rom信息
+	DocContent  string          //简介内容
+	Sublist     []*db.Rom       //子游戏
+	Simlist     []*db.Simulator //模拟器
+	RomFileSize string          //rom文件大小
 }
 
 //运行游戏
@@ -101,8 +101,8 @@ func RunGame(romId uint64, simId uint32) error {
 
 	//如果是可执行程序，则不依赖模拟器直接运行
 	if utils.InSliceString(ext, config.RUN_EXTS) {
-			cmd = append(cmd, rom.RomPath)
-	} else {//如果依赖模拟器
+		cmd = append(cmd, rom.RomPath)
+	} else { //如果依赖模拟器
 		//检测模拟器文件是否存在
 		_, err = os.Stat(sim.Path)
 		if err != nil {
@@ -127,7 +127,7 @@ func RunGame(romId uint64, simId uint32) error {
 	//运行lua脚本
 	if simLua != "" {
 		cmdStr := utils.SlicetoString(" ", cmd)
-		callLua(sim.Lua, sim.Path,cmdStr)
+		callLua(sim.Lua, sim.Path, cmdStr)
 	}
 
 	//运行游戏
@@ -343,7 +343,7 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 }
 
 //读取游戏攻略内容
-func GetGameStrategy(id uint64) (string, error) {
+func GetGameDoc(t string, id uint64) (string, error) {
 
 	//游戏游戏详细数据
 	info, err := (&db.Rom{}).GetById(id)
@@ -356,7 +356,12 @@ func GetGameStrategy(id uint64) (string, error) {
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
 	strategy := ""
 	for _, v := range config.DOC_EXTS {
-		strategyFileName := config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
+		strategyFileName := ""
+		if t == "strategy" {
+			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
+		} else if t == "doc" {
+			strategyFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
+		}
 		strategy = GetDocContent(strategyFileName)
 		if strategy != "" {
 			break
@@ -364,6 +369,56 @@ func GetGameStrategy(id uint64) (string, error) {
 	}
 
 	return strategy, nil
+}
+
+//读取游戏攻略内容
+func SetGameDoc(t string, id uint64, content string) (error) {
+
+	//游戏游戏详细数据
+	info, err := (&db.Rom{}).GetById(id)
+
+	if err != nil {
+		return err
+	}
+
+	//如果没有执行运行的文件，则读取文档内容
+	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+	newExt := "";
+	Filename := ""
+	for _, v := range config.DOC_EXTS {
+		strategyFileName := ""
+		if t == "strategy" {
+			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
+			newExt = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + ".md";
+		} else if t == "doc" {
+			strategyFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
+			newExt = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + ".txt";
+		}
+
+		if (utils.FileExists(strategyFileName)) {
+			Filename = strategyFileName;
+			break;
+		}
+	}
+
+	if Filename == "" {
+		Filename = newExt
+	}
+
+	if !utils.FileExists(Filename) {
+		if err := utils.CreateFile(Filename); err != nil {
+			return err
+		}
+	}
+
+	if !utils.IsUTF8(content) {
+		content = utils.ToUTF8(content)
+	}
+	if err := utils.OverlayWriteFile(Filename, content); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 /**
@@ -384,7 +439,7 @@ func GetDocContent(f string) string {
 		content = utils.ToUTF8(content)
 	}
 
-	content = strings.ReplaceAll(content,"\n","<br>")
+	content = strings.ReplaceAll(content, "\n", "<br>")
 
 	return content
 }

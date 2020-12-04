@@ -119,19 +119,6 @@ func IsExist(f string) bool {
 	return err == nil || os.IsExist(err)
 }
 
-/**
- * 创建多层文件夹
- **/
-func CreateDir(p string) error {
-	err := os.MkdirAll(p, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	if err := os.Chmod(p, os.ModePerm); err != nil {
-		return err
-	}
-	return nil
-}
 
 /**
  * 根据关键字扫描目录和子目录，查询出符合条件的文件名

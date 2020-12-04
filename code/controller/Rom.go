@@ -130,14 +130,28 @@ func RomController() {
 	})
 
 	//读取游戏攻略内容
-	utils.Window.DefineFunction("GetGameStrategy", func(args ...*sciter.Value) *sciter.Value {
-		id := uint64(utils.ToInt(args[0].String()))
-		res, err := modules.GetGameStrategy(id)
+	utils.Window.DefineFunction("GetGameDoc", func(args ...*sciter.Value) *sciter.Value {
+		t := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		res, err := modules.GetGameDoc(t,id)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
 		return sciter.NewValue(res)
+	})
+
+	//更新游戏攻略内容
+	utils.Window.DefineFunction("SetGameDoc", func(args ...*sciter.Value) *sciter.Value {
+		t := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		content := args[2].String()
+		err := modules.SetGameDoc(t,id,content)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
 	})
 
 	//设为我的最爱

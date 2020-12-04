@@ -100,6 +100,37 @@ function baseinfo(evt){
 
 }
 
+//编辑游戏简介
+function editDoc(evt){
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "edit_rom_doc.html"),
+        width:self.toPixels(550dip),
+        height:self.toPixels(600dip),
+        parameters: {
+            id:evt.attributes["rid"],
+        };
+    });
+    
+    if(data == undefined){
+        return;
+    }
+    //更新到文件中
+    mainView.SetGameDoc("doc",evt.attributes["rid"],data);
+
+}
+
+//编辑游戏攻略
+function editStrategy(evt){
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "edit_rom_strategy.html"),
+        width:self.toPixels(350dip),
+        height:self.toPixels(310dip),
+        parameters: {
+            id:evt.attributes["rid"],
+        };
+    });
+}
+
 //rom模块右键菜单
 function romContextMenu(obj){
     var romcontext = $(#romcontext);
@@ -147,9 +178,9 @@ function romContextMenu(obj){
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
 
-    if (CONF.Platform[pfId].Rombase != ""){
-        btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
-    }
+    btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
+    btndata += "<li class='doc' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditDoc +"</li>";
+    btndata += "<li class='strategy' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditStrategy +"</li>";
 
     btndata += "<hr />";
     //打开文件夹
@@ -160,7 +191,6 @@ function romContextMenu(obj){
     btndata += "<hr />";
 
     btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
-
 
     romcontext.append(btndata);
 }

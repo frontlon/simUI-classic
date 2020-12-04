@@ -165,7 +165,7 @@ function openSidebar(obj){
     _createSecondThumbs(info);
 
     //攻略
-    var strategy = view.GetGameStrategy(obj.attributes["rid"]);
+    var strategy = view.GetGameDoc("strategy",obj.attributes["rid"]);
     if(strategy != ""){
         $(#third_strategy).html = strategy;
     }else{

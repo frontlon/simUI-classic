@@ -291,6 +291,16 @@
         baseinfo(this);
     });
 
+   //编辑游戏简介
+    self.on("click", "#romcontext .doc", function(evt) {
+        editDoc(this);
+    });
+
+ //编辑游戏攻略
+    self.on("click", "#romcontext .strategy", function(evt) {
+        editStrategy(this);
+    });
+
     //右键菜单设置喜爱
     self.on("click", "#romcontext .fav", function(evt) {
         contextSetFavorite(this);
