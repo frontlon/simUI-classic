@@ -249,7 +249,7 @@
     #third_strategy{color:color(desc-content-text-color);margin-top:10dip}
     #third_strategy p{line-height:2em;}
     #third_strategy .strategy_empty{padding-top:50dip;text-align:center;opacity:0.7}
-
+/*
     .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     .markdown p{margin-bottom:13dip;display:block}
     .markdown a{color:color(desc-content-text-color)}
@@ -268,13 +268,13 @@
     .markdown dl dt{text-align:right;font-weight:700}
     .markdown dl dt::after{content:":"}
     .markdown dl dd{margin:0;padding:0;width:*}
-
+*/
 </style>
 </head>
 <body>
 <div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
-<menu.context id="romcontext"></menu>
+<menu id="romcontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo"></div>
     <div id="tb_left">
@@ -439,7 +439,7 @@
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
-    include ROOTPATH + "tis/plugins/markdown.tis";
+    //include ROOTPATH + "tis/plugins/markdown.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/joystick.tis";

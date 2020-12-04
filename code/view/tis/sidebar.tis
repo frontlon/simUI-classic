@@ -100,7 +100,8 @@ function openSidebar(obj){
     if(detailObj.DocContent != ""){
         $(#doc_title).style["display"] = "block";
         $(#doc).style["display"] = "block";
-        $(#doc).html = markdown.parse(detailObj.DocContent);
+        //$(#doc).html = markdown.parse(detailObj.DocContent);
+        $(#doc).html = detailObj.DocContent;
     }else{
         $(#doc_title).style["display"] = "none";
         $(#doc).style["display"] = "none";

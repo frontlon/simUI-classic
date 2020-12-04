@@ -1,0 +1,46 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
+        .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
+        h4{margin:7dip 0}
+
+        textarea{width:*;min-height:500dip;height:*;border-radius:3dip;border:1dip solid #ccc;padding:5dip;}
+
+    </style>
+
+</head>
+<body>
+    <div class="input_wrapper">
+        <h4 id="desc"></h4>
+        <textarea id="doc"></textarea>
+        <div class="submit_wrapper">
+            <button id="close-dialog" role="default-button">{{Confirm}}</button>
+        </div>
+    </div>
+    
+    <script type="text/tiscript">
+        include ROOTPATH + "tis/utils.tis";
+
+        //创建语言
+        createLang();
+ 
+        view.root.on("ready", function(){
+            view.windowCaption =  CONF.Lang.EditDoc;
+            var docContent = mainView.GetGameDoc("doc",view.parameters.id);
+            docContent = docContent.replace("<br>","\n");
+            docContent = docContent.trim();
+            $(#doc).value = docContent;
+        });
+
+        event click $(#close-dialog){
+            var docContent = $(#doc).value;
+            docContent = docContent.trim();
+            view.close(docContent);            
+        }
+    </script>
+</body>
+</html>
