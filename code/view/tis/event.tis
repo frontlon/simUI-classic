@@ -264,6 +264,7 @@
     **/
         
     //rom展开右键菜单
+    
     self.on("contextmenusetup", "#romlist li", function(evt) {
         //如果是th右键，则忽略
         if (this.attributes.hasClass("romth") == false){

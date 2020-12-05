@@ -123,8 +123,8 @@ function editDoc(evt){
 function editStrategy(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rom_strategy.html"),
-        width:self.toPixels(350dip),
-        height:self.toPixels(310dip),
+        width:self.toPixels(800dip),
+        height:self.toPixels(700dip),
         parameters: {
             id:evt.attributes["rid"],
         };
@@ -177,20 +177,15 @@ function romContextMenu(obj){
     }
 
     btndata += "<li class='rename' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Rename +"</li>";
-
     btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
     btndata += "<li class='doc' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditDoc +"</li>";
     btndata += "<li class='strategy' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditStrategy +"</li>";
-
+    btndata += "<hr />";
+    btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
     btndata += "<hr />";
     //打开文件夹
-    btndata += "<li class='context_folder' rid=''>"+ CONF.Lang.OpenFolder +"<menu>";
     btndata += createOpenFolderMenu(detailObj.Info);
-    btndata += "</menu></li>";
 
-    btndata += "<hr />";
-
-    btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
 
     romcontext.append(btndata);
 }

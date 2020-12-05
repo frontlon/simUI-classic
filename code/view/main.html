@@ -213,12 +213,11 @@
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
     /* rom右键菜单 */
-    #romcontext{font-size: 10dip;width:auto;}
+    #romcontext{font-size: 10dip;width:auto;max-height:max-content;overflow:auto}
     #romcontext caption{background: #1b2128;color:#FFF;padding:5dip 16dip 5dip 9dip;font-weight: bold}
     #romcontext  li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
     #romcontext .file{behavior: shell-icon;foreground-repeat:no-repeat;foreground-position:4dip 50%;}
     #romcontext .folder{background-image:url(this://app/images/fileico_folder.png);}
-    #romcontext .context_folder{background-image:url(this://app/images/fileico_folder.png);}
     #romcontext .thumb{background-image:url(this://app/images/fileico_thumbs.png);}
     #romcontext .fav0{background-image:url(this://app/images/fileico_fav_0.png);}
     #romcontext .fav1{background-image:url(this://app/images/fileico_fav_1.png);}
@@ -236,6 +235,7 @@
     .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical}
     .sidetabs>strip{display:block;flow:horizontal;font-size:17dip;padding-top:5dip}
     .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;color:color(tab-text-color);background:color(tab-background-color);margin:0 1px;padding:3dip 0 }
+    .sidetabs>strip>label.disable{color:color(tab-text-disable-color)}
     .sidetabs>strip>label:current{background:none;color:color(tab-text-active-color);background:none}
     .sidetabs>strip>label:current:hover{background-image:none}
     .sidetabs>strip>label:hover{background-image:none;}
@@ -245,10 +245,9 @@
     .sidetabs>panels>:expanded{visibility:visible;height:*;background:none;}
     
     #second_thumbs img{display:block;max-width:300px;width:100%;margin:0 auto}
-
-    #third_strategy{color:color(desc-content-text-color);margin-top:10dip}
+    #third_strategy{color:color(desc-content-text-color);}
     #third_strategy p{line-height:2em;}
-    #third_strategy .strategy_empty{padding-top:50dip;text-align:center;opacity:0.7}
+    .sidebar_empty{padding-top:50dip;text-align:center;opacity:0.7;color:#FFF;opacity:0.5}
 /*
     .markdown{display:block;overflow:scroll-indicator;height:*;line-height:1.5em;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     .markdown p{margin-bottom:13dip;display:block}
@@ -354,9 +353,9 @@
 
         <tabs id="mytabs"  class="sidetabs">
         <strip>
-        <label for="right_first" selected>{{SideTabInfo}}</label>
-        <label for="right_second">{{SideTabThumb}}</label>
-        <label for="right_third">{{SideTabStrategy}}</label>
+        <label id="label_first" for="right_first" selected>{{SideTabInfo}}</label>
+        <label id="label_second" for="right_second">{{SideTabThumb}}</label>
+        <label id="label_third" for="right_third">{{SideTabStrategy}}</label>
         </strip>
         <panels>
         <section id="right_first">
@@ -370,7 +369,6 @@
                 <menu id="foldercontext" type="menu"></menu>
             </button>
             <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/delete.png" /></button>
-            
             
             <div id="video_wrapper">
                 <h2 id="video_h2">{{Video}}</h2>
@@ -401,7 +399,7 @@
         <section id="right_third">
         <!-- 选项卡3 -->
         <h2>{{FunButton}}</h2>
-            <button id="1111" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_thumbs.png" /></button>
+            <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_thumbs.png" /></button>
             
         <div id="third_strategy"></div>
         </section>

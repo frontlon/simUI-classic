@@ -69,6 +69,7 @@ html:theme(dark) {
     /* 右侧边栏 TAB选项卡 */
     var(tab-text-color) : #ccc;
     var(tab-text-active-color) : #ccc;
+    var(tab-text-disable-color) : #888;
     var(tab-background-color) : #666;
 
     /* 右侧边栏 功能按钮 */

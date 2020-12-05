@@ -169,8 +169,11 @@ function openSidebar(obj){
     var strategy = view.GetGameDoc("strategy",obj.attributes["rid"]);
     if(strategy != ""){
         $(#third_strategy).html = strategy;
+        $(#label_third).attributes.removeClass("disable");
     }else{
-        $(#third_strategy).html = "<div class='strategy_empty'>"+ CONF.Lang.StrategyEmpty +"</div>";
+        $(#third_strategy).html = "<div class='sidebar_empty'>"+ CONF.Lang.StrategyEmpty +"</div>";
+        $(#label_third).attributes.addClass("disable");
+
     }
 
 }
@@ -262,7 +265,14 @@ function _createSecondThumbs(info){
     if(poster != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.Poster +"</h2><img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<h2 id='video_h2'>"+ CONF.Lang.Packing +"</h2><img src=\""+ packing +"\" />"; }
 
-    $(#second_thumbs).html = pics;
+    if(pics != ""){
+        $(#second_thumbs).html = pics;
+        $(#label_second).attributes.removeClass("disable");
+    }else{
+        $(#second_thumbs).html = "<div class='sidebar_empty'>"+ CONF.Lang.ThumbEmpty +"</div>";
+        $(#label_second).attributes.addClass("disable");
+    }
+
     return pics
 }
 

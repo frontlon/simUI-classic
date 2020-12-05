@@ -1,0 +1,112 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        body{margin:0;padding:0}
+        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
+        .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
+        @image-map tb-icons 
+        {
+        src:url(this://app/images/richtext-icons.png);
+        cells:15 2;
+        items:  ulist, olist, 
+                unindent, indent,
+                picture, table, link,
+                align-left, align-center, align-right, align-justify, align,
+                fullscreen, unfullscreen,
+                props,
+                bold, italic, underline, strikethrough,
+                font-family, font-size, source,
+                dlist;
+        }
+        popup[role="tooltip"] { padding:5dip; font:system; /*background:infobackground; border:1dip solid threedlight;*/ }
+        kbd {display:inline-block;font-size:8.5pt;font-weight:bold;vertical-align:middle;padding:3dip 6dip;background-image:url(this://app/images/kbd-back.png);background-repeat:expand stretch-top stretch-bottom stretch-left stretch-right stretch-middle;background-position:4dip 4dip 4dip 4dip;}
+        richtext {display:block;display-model:blocks-inside;style-set: std-richtext;prototype: Richtext url(this://app/tis/plugins/richtext.tis);}
+        @set std-richtext 
+        {
+            :root { size:*; border: 1dip solid #BBB; flow:vertical;}
+            :root > toolbar {display:block;display-model:block-inside; flow:horizontal-wrap; border-spacing:2dip; padding:0;border-left: 1dip solid #F4F4F4;border-bottom: 1dip solid #BBB;background:linear-gradient(top, #F1F1F1, #DADADA);}
+            :root > toolbar > button {size:21dip; padding:0;behavior:clickable;foreground:no-repeat 50% 50%;foreground-size:25dip; hit-margin: 2dip;margin: 2dip;padding:3dip; transition:none;}
+            :root > toolbar > button[type=menu] {behavior:clickable popup-menu; }
+            :root > toolbar > splitter {width:0;height:*;border-left: 1dip solid #BBB;border-right: 1dip solid #F4F4F4;}
+            :root > toolbar > button.bold { foreground-image:image-map(tb-icons,bold); } 
+            :root > toolbar > button.italic { foreground-image:image-map(tb-icons,italic); } 
+            :root > toolbar > button.underline { foreground-image:image-map(tb-icons,underline); } 
+            :root > toolbar > button.strikethrough { foreground-image:image-map(tb-icons,strikethrough); } 
+            :root > toolbar > button.font-family { foreground-image:image-map(tb-icons,font-family); } 
+            :root > toolbar > button.font-size { foreground-image:image-map(tb-icons,font-size); } 
+            :root > toolbar > button.text-color { foreground-image:image-map(tb-icons,text-color); }       
+            :root > toolbar > button.text-back-color { foreground-image:image-map(tb-icons,text-back-color); } 
+            :root > toolbar > button.ulist { foreground-image:image-map(tb-icons,ulist); } 
+            :root > toolbar > button.olist { foreground-image:image-map(tb-icons,olist); } 
+            :root > toolbar > button.dlist { foreground-image:image-map(tb-icons,dlist); } 
+            :root > toolbar > button.unindent { foreground-image:image-map(tb-icons,unindent); } 
+            :root > toolbar > button.indent { foreground-image:image-map(tb-icons,indent); } 
+            :root > toolbar > button.align { foreground-image:image-map(tb-icons,align); } 
+            :root > toolbar > button.pre { foreground-image:image-map(tb-icons,props); } 
+            :root > toolbar > button.picture { foreground-image:image-map(tb-icons,picture); } 
+            :root > toolbar > button.table { foreground-image:image-map(tb-icons,table); } 
+            :root > toolbar > button.link { foreground-image:image-map(tb-icons,link); } 
+            :root > toolbar > button.fullscreen { foreground-image:image-map(tb-icons,fullscreen); margin-left:*; } 
+            :root > toolbar > button.fullscreen:checked { foreground-image:image-map(tb-icons,unfullscreen); } 
+            :root > toolbar > button > menu { padding:4dip; }
+            :root > toolbar > button > menu > li { padding-left:32dip; }
+            :root > toolbar > button > menu > li:checked { foreground:url(stock:checkmark) 6dip 50% no-repeat; }
+            :root > toolbar > button.font-size > menu.popup { min-width:max-content; max-width:200dip;}
+            :root > toolbar > button.table > menu > table { size:*; border-spacing:-1dip; }
+            :root > toolbar > button.table > menu > table > tbody > tr { height:*; }
+            :root > toolbar > button.table > menu > table > tbody > tr > td { behavior:clickable; size:1.6em; background:stretch; background-clip:padding-box; border:1dip solid activecaption; }
+            :root > toolbar > button.table > menu > table > tbody > tr > td[selected] { background-color:activecaption; border:1dip solid threedface; }
+            :root > toolbar > button.table > menu > table > tbody > tr > td:hover { background-image:url(theme:toolbar-button-hover); }
+            :root > toolbar > button.table > menu > table > tbody > tr > td:active { background-image:url(theme:toolbar-button-pressed); }
+            :root > toolbar > button.table > menu > header { behavior:form; text-align:center;  }
+            li.align-left { foreground-size:25dip; foreground-image:image-map(tb-icons,align-left);}
+            li.align-right { foreground-size:25dip; foreground-image:image-map(tb-icons,align-right);}
+            li.align-center { foreground-size:25dip; foreground-image:image-map(tb-icons,align-center);}
+            li.align-justify { foreground-size:25dip; foreground-image:image-map(tb-icons,align-justify);}
+            :root > textarea { size:*; background:window; padding:0; visibility:collapse;}
+            :root > htmlarea { size:*; background:window; padding:0; overflow: scroll-indicator; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;}
+            :root > htmlarea > body { size:*; margin: 0 2em; }
+            :root > htmlarea dt:content-editable { font-weight:bold; }
+            :root > htmlarea br:content-editable { width:8dip;content:"\21B2";color:red;}
+            :root > htmlarea img:selected { prototype:EditableImage url(this://app/tis/plugins/richtext-utils.tis); }          
+            :root > htmlarea img:selected.mouse-on-corner { cursor:se-resize; } 
+            :root > htmlarea img:selected{ background:rgba(255,255,255,0.65); outline: 5dip nesw-hatch highlight -5dip; }
+            :root > htmlarea input:selected, 
+            :root > htmlarea textarea:selected, 
+            :root > htmlarea button:selected, 
+            :root > htmlarea select:selected, 
+            :root > htmlarea th:selected, 
+            :root > htmlarea td:selected { background:rgba(highlight,0.25); outline: 3dip nesw-hatch highlight -3dip; }
+            :root > htmlarea input, 
+            :root > htmlarea textarea, 
+            :root > htmlarea button, 
+            :root > htmlarea select { -disabled:true; }
+            :root > htmlarea table td,
+            :root > htmlarea table th { padding:2dip 4dip; }
+            :root > htmlarea table:not([border]) td, 
+            :root > htmlarea table:not([border]) th { outline:1dip dotted #ccc -1dip; }
+            :root[mode=source] > textarea { visibility:visible; }
+            :root[mode=source] > htmlarea { visibility:collapse; }
+        }
+    </style>
+
+</head>
+<body>
+    <richtext>
+    </richtext>
+    <div class="submit_wrapper">
+        <button id="close-dialog" role="default-button">{{Confirm}}</button>
+    </div>
+    <script type="text/tiscript">
+        include ROOTPATH + "tis/utils.tis";
+        createLang(); //创建语言
+        event click $(#close-dialog){
+            var richtext = $(richtext).source;
+            richtext = richtext.trim();
+            view.close(richtext);            
+        }
+    </script>
+</body>
+</html>
