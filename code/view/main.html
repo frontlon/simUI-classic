@@ -223,9 +223,14 @@
     #romcontext .fav1{background-image:url(this://app/images/fileico_fav_1.png);}
     #romcontext .hide0{background-image:url(this://app/images/fileico_hide_0.png);}
     #romcontext .hide1{background-image:url(this://app/images/fileico_hide_1.png);}
-    #romcontext .rename{background-image:url(this://app/images/rename.png);}
-    #romcontext .baseinfo{background-image:url(this://app/images/baseinfo.png);}
-    #romcontext .delete{background-image:url(this://app/images/delete.png);}
+    #romcontext .rename{background-image:url(this://app/images/fileico_rename.png);}
+    #romcontext .baseinfo{background-image:url(this://app/images/fileico_baseinfo.png);}
+
+    #romcontext .doc{background-image:url(this://app/images/fileico_doc.png);}
+    #romcontext .strategy{background-image:url(this://app/images/fileico_strategy.png);}
+
+
+    #romcontext .delete{background-image:url(this://app/images/fileico_delete.png);}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
@@ -248,8 +253,8 @@
     #third_strategy{color:color(desc-content-text-color);line-height:1.5em}
     #third_strategy p{line-height:2em;}
     #third_strategy img.ctl{width:16px;height:16px;margin:0 1dip;vertical-align:middle}
-    #third_strategy pre{margin-left:20dip;padding-left:10dip;border-left:2px solid #ccc;}
-    #third_strategy font{margin:10dip 0;display:inline-block;color:#FFF}
+    #third_strategy pre{color:color(desc-quote-text-color);margin-left:20dip;padding-left:10dip;border-left:2px solid color(desc-quote-border-color);}
+    #third_strategy font{margin:10dip 0;display:inline-block;color:color(desc-title-text-color)}
 
     .sidebar_empty{padding-top:50dip;text-align:center;opacity:0.7;color:#FFF;opacity:0.5}
 /*
@@ -367,12 +372,12 @@
             <h2>{{FunButton}}</h2>
             <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"></button>
             <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
-            <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/rename.png" /></button>
-            <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/baseinfo.png" /></button>
+            <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
+            <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
             <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" />
                 <menu id="foldercontext" type="menu"></menu>
             </button>
-            <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/delete.png" /></button>
+            <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>
             
             <div id="video_wrapper">
                 <h2 id="video_h2">{{Video}}</h2>
@@ -395,7 +400,7 @@
         <section id="right_second">
         <!-- 选项卡2 -->
         <h2>{{FunButton}}</h2>
-            <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_thumbs.png" /></button>
+            <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_doc.png" /></button>
             
         <div id="second_thumbs"></div>
         </section>
@@ -403,8 +408,8 @@
         <section id="right_third">
         <!-- 选项卡3 -->
         <h2>{{FunButton}}</h2>
-            <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_thumbs.png" /></button>
-            
+            <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_strategy.png" /></button>
+        <h2>{{StrategyContent}}</h2>
         <div id="third_strategy"></div>
         </section>
 

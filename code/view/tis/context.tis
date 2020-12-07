@@ -97,7 +97,6 @@ function baseinfo(evt){
         dom.select("div:nth-child(8)").html = info.BaseTranslate;
     }
     
-
 }
 
 //编辑游戏简介
@@ -178,7 +177,6 @@ function romContextMenu(obj){
     btndata += "<hr />";
     //打开文件夹
     btndata += createOpenFolderMenu(detailObj.Info);
-
 
     romcontext.append(btndata);
 }

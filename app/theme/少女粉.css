@@ -122,5 +122,8 @@ html:theme(girl) {
     var(rom-list-text-slave-color) : #666;
 
     /* 攻略文档窗口 */
-    var(desc-content-text-color) : #403739;    
+    var(desc-content-text-color) : #403739;
+    var(desc-title-text-color) : #000;
+    var(desc-quote-text-color) : #403739;
+    var(desc-quote-border-color) : #da7684;
 }

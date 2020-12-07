@@ -124,4 +124,7 @@ html:theme(light) {
 
     /* 攻略文档窗口 */
     var(desc-content-text-color) : #444;
+    var(desc-title-text-color) : #000;
+    var(desc-quote-text-color) : #444;
+    var(desc-quote-border-color) : #ccc;
 }

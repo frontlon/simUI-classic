@@ -123,4 +123,7 @@ html:theme(red) {
 
     /* 攻略文档窗口 */
     var(desc-content-text-color) : #f8dae3;
+    var(desc-title-text-color) : #FFF;
+    var(desc-quote-text-color) : #f8dae3;
+    var(desc-quote-border-color) : #451826;
 }

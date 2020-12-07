@@ -119,5 +119,8 @@ html:theme(dark) {
     var(rom-list-text-slave-color) : #999;
 
     /* 攻略文档窗口 */
-    var(desc-content-text-color) : #ccc;    
+    var(desc-content-text-color) : #ccc;
+    var(desc-title-text-color) : #FFF;
+    var(desc-quote-text-color) : #ccc;
+    var(desc-quote-border-color) : #666;
 }

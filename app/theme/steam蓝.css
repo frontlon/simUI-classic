@@ -122,5 +122,8 @@ html:theme(steam) {
     var(rom-list-text-slave-color) : #acdbf5;
 
     /* 攻略文档窗口 */
-    var(desc-content-text-color) : #acdbf5;    
+    var(desc-content-text-color) : #acdbf5;
+    var(desc-title-text-color) : #FFF;
+    var(desc-quote-text-color) : #acdbf5;
+    var(desc-quote-border-color) : #27384c;
 }
