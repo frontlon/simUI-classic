@@ -6,6 +6,8 @@
         body{margin:0;padding:0}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
         .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
+        htmlarea pre{margin-left:20dip;padding-left:10dip;border-left:2px solid #ccc}
+        htmlarea font{margin:10dip 0;display:inline-block}
         @image-map tb-icons 
         {
         src:url(this://app/images/richtext-icons.png);
@@ -20,9 +22,11 @@
                 font-family, font-size, source,
                 dlist;
         }
-        popup[role="tooltip"] { padding:5dip; font:system; /*background:infobackground; border:1dip solid threedlight;*/ }
+        popup[role="tooltip"] { padding:5dip; font:system;}
         kbd {display:inline-block;font-size:8.5pt;font-weight:bold;vertical-align:middle;padding:3dip 6dip;background-image:url(this://app/images/kbd-back.png);background-repeat:expand stretch-top stretch-bottom stretch-left stretch-right stretch-middle;background-position:4dip 4dip 4dip 4dip;}
-        richtext {display:block;display-model:blocks-inside;style-set: std-richtext;prototype: Richtext url(this://app/tis/plugins/richtext.tis);}
+        richtext {display:block;display-model:blocks-inside;style-set: std-richtext;prototype: Richtext url(D:\\work\\go\\src\\simUI\\code\\view\\tis\\plugins\\richtext.tis);}
+        richtext text,richtext p,richtext pre {padding:0 5dip;}
+        richtext text{margin-top:5dip}
         @set std-richtext 
         {
             :root { size:*; border: 1dip solid #BBB; flow:vertical;}
@@ -66,11 +70,10 @@
             li.align-center { foreground-size:25dip; foreground-image:image-map(tb-icons,align-center);}
             li.align-justify { foreground-size:25dip; foreground-image:image-map(tb-icons,align-justify);}
             :root > textarea { size:*; background:window; padding:0; visibility:collapse;}
-            :root > htmlarea { size:*; background:window; padding:0; overflow: scroll-indicator; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;}
+            :root > htmlarea { size:*; background:window; padding:0; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;}
             :root > htmlarea > body { size:*; margin: 0 2em; }
             :root > htmlarea dt:content-editable { font-weight:bold; }
             :root > htmlarea br:content-editable { width:8dip;content:"\21B2";color:red;}
-            :root > htmlarea img:selected { prototype:EditableImage url(this://app/tis/plugins/richtext-utils.tis); }          
             :root > htmlarea img:selected.mouse-on-corner { cursor:se-resize; } 
             :root > htmlarea img:selected{ background:rgba(255,255,255,0.65); outline: 5dip nesw-hatch highlight -5dip; }
             :root > htmlarea input:selected, 
@@ -94,18 +97,33 @@
 
 </head>
 <body>
-    <richtext>
-    </richtext>
+    <richtext></richtext>
     <div class="submit_wrapper">
-        <button id="close-dialog" role="default-button">{{Confirm}}</button>
+        <button id="close-dialog">{{Confirm}}</button>
     </div>
     <script type="text/tiscript">
         include ROOTPATH + "tis/utils.tis";
         createLang(); //创建语言
+
+        view.root.on("ready", function(){
+            view.windowCaption =  CONF.Lang.EditDoc;
+            var docContent = mainView.GetGameDoc("strategy",view.parameters.id);
+            docContent = docContent.trim();
+
+            if(docContent != ""){
+                $(htmlarea).value = docContent;
+            }
+        });
+
         event click $(#close-dialog){
             var richtext = $(richtext).source;
             richtext = richtext.trim();
-            view.close(richtext);            
+            richtext = richtext.replace("<section></section>","");
+
+            alert(richtext.toHtmlString());
+
+            var docContent = mainView.SetGameDoc("strategy",view.parameters.id,richtext);
+            alert(CONF.Lang.UpdateSuccess);
         }
     </script>
 </body>

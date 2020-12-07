@@ -73,7 +73,7 @@ html:theme(purple) {
     /* 右侧边栏 TAB选项卡 */
     var(tab-text-color) : #FFF;
     var(tab-text-active-color) : #FFF;
-    var(tab-text-disable-color) : #FFF;
+    var(tab-text-disable-color) : #774994;
     var(tab-background-color) : #523266;
 
     /* 右侧边栏 功能按钮 */

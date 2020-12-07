@@ -4,21 +4,20 @@
     <style>
         @import "this://app/images/public.css";
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
-        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
+        .input_wrapper{padding:0;flow:row(label,input);}
         .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
         h4{margin:7dip 0}
 
-        textarea{width:*;min-height:480dip;height:*;border-radius:3dip;border:1dip solid #ccc;padding:5dip;}
+        textarea{width:*;min-height:480dip;height:*;padding:5dip;border:0;overflow:scroll-indicator;}
 
     </style>
 
 </head>
 <body>
     <div class="input_wrapper">
-        <h4 id="desc"></h4>
         <textarea id="doc"></textarea>
         <div class="submit_wrapper">
-            <button id="close-dialog" role="default-button">{{Confirm}}</button>
+            <button id="close-dialog">{{Confirm}}</button>
         </div>
     </div>
     
@@ -39,7 +38,8 @@
         event click $(#close-dialog){
             var docContent = $(#doc).value;
             docContent = docContent.trim();
-            view.close(docContent);            
+            mainView.SetGameDoc("doc",evt.attributes["rid"],docContent);
+            alert(CONF.Lang.UpdateSuccess);
         }
     </script>
 </body>

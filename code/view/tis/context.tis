@@ -110,13 +110,6 @@ function editDoc(evt){
             id:evt.attributes["rid"],
         };
     });
-    
-    if(data == undefined){
-        return;
-    }
-    //更新到文件中
-    mainView.SetGameDoc("doc",evt.attributes["rid"],data);
-
 }
 
 //编辑游戏攻略

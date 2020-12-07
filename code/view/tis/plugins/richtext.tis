@@ -10,7 +10,7 @@ class Richtext: Behavior {
     this.append(this.toolbar = new Element("toolbar"));
     this.append(this.htmlarea = new Element("htmlarea"));
     var body;
-    this.htmlarea.append(body = new Element("body"));
+    this.htmlarea.append(body = new Element("section"));
     for( var node in nodes ) // assign content to htmlarea > body
       body.appendNode(node);
     this.observers = [];
@@ -66,14 +66,13 @@ class Richtext: Behavior {
             <li>7 - xx-large</li>
           </menu>
         </button>
+
         <splitter/>
         <button .ulist title="unordered list" />
         <button .olist title="ordered list" />
+        <button .dlist title="definitions list" />
         <splitter/>
         <button .pre title="pre block" />
-        <splitter/>
-        <button .unindent tooltip='unindent selection: <kbd>CTRL</kbd>+<kbd>-</kbd>' />
-        <button .indent tooltip='indent selection: <kbd>CTRL</kbd>+<kbd>+</kbd>' />
         <splitter/>
         <button .align type="menu">
               <menu>
@@ -84,24 +83,18 @@ class Richtext: Behavior {
               </menu>
             </button>
         <splitter/>
-        <button .picture />
-        <button .table type="menu"><menu /></button>
-        <button .link />
-        <button .fullscreen />);
+        <button .table type="menu"><menu /></button>);
         
     this.bind("button.bold",          "format:toggle-span:b|strong");    
     this.bind("button.italic",        "format:toggle-span:i|em");
     this.bind("button.underline",     "format:toggle-span:u");
     this.bind("button.strikethrough", "format:toggle-span:s|strike");
-                                      
+
     this.bind("button.ulist",         "format:toggle-list:ul");
     this.bind("button.olist",         "format:toggle-list:ol");
     this.bind("button.dlist",         "format:toggle-list:dl");
     this.bind("button.pre",           "format:toggle-pre");
-                                      
-    this.bind("button.unindent",      "format:unindent");
-    this.bind("button.indent",        "format:indent");
-    
+
     this.bind("button.font-size li:nth-child(1)", "format:apply-span:font", {size:1});
     this.bind("button.font-size li:nth-child(2)", "format:apply-span:font", {size:2});
     this.bind("button.font-size li:nth-child(3)", "format:apply-span:font", {size:3});
@@ -110,8 +103,6 @@ class Richtext: Behavior {
     this.bind("button.font-size li:nth-child(6)", "format:apply-span:font", {size:6});
     this.bind("button.font-size li:nth-child(7)", "format:apply-span:font", {size:7});
     
-    this.bind("button.picture", this.onInsertPicture); 
-
     this.bind("button.align li.align-left", this.onAlign, "left");
     this.bind("button.align li.align-right", this.onAlign, "right");
     this.bind("button.align li.align-center", this.onAlign, "center");

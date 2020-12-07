@@ -96,7 +96,7 @@ func OverlayWriteFile(p string, t string) error {
 	if p == "" {
 		return nil
 	}
-	if err := ioutil.WriteFile(p, []byte(t), 777); err != nil {
+	if err := ioutil.WriteFile(p, []byte(t), 0664); err != nil {
 		return err
 	}
 	return nil

@@ -73,7 +73,7 @@ html:theme(steam) {
     /* 右侧边栏 TAB选项卡 */
     var(tab-text-color) : #FFF;
     var(tab-text-active-color) : #FFF;
-    var(tab-text-disable-color) : #FFF;
+    var(tab-text-disable-color) : #5397bc;
     var(tab-background-color) : #417997;
 
     /* 右侧边栏 功能按钮 */

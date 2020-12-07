@@ -73,7 +73,7 @@ html:theme(girl) {
     /* 右侧边栏 TAB选项卡 */
     var(tab-text-color) : #FFF;
     var(tab-text-active-color) : #FFF;
-    var(tab-text-disable-color) : #FFF;
+    var(tab-text-disable-color) : #f9d4da;
     var(tab-background-color) : #f5a6b2;
 
     /* 右侧边栏 功能按钮 */
