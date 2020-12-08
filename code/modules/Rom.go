@@ -421,6 +421,41 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 	return nil
 }
 
+//读取游戏攻略内容
+func DelGameDoc(t string, id uint64) (error) {
+
+	//游戏游戏详细数据
+	info, err := (&db.Rom{}).GetById(id)
+
+	if err != nil {
+		return err
+	}
+
+	//如果没有执行运行的文件，则读取文档内容
+	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+	Filename := ""
+	for _, v := range config.DOC_EXTS {
+		strategyFileName := ""
+		if t == "strategy" {
+			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
+		} else if t == "doc" {
+			strategyFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
+		}
+
+		if (utils.FileExists(strategyFileName)) {
+			Filename = strategyFileName;
+			break;
+		}
+	}
+
+	if Filename != "" && utils.FileExists(Filename) {
+		if err := utils.FileDelete(Filename); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 /**
  * 读取游戏介绍文本
  **/

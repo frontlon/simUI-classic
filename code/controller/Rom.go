@@ -154,6 +154,18 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//删除游戏攻略内容
+	utils.Window.DefineFunction("DelGameDoc", func(args ...*sciter.Value) *sciter.Value {
+		t := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		err := modules.DelGameDoc(t,id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
 	//设为我的最爱
 	utils.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))

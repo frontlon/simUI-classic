@@ -4,12 +4,10 @@
     <style>
         @import "this://app/images/public.css";
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
-        .input_wrapper{padding:0;flow:row(label,input);}
-        .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
+        .input_wrapper{flow:row(label,input);}
+        .submit_wrapper{padding:6dip;text-align:center;margin-top:10dip;}
         h4{margin:7dip 0}
-
-        textarea{size:*;min-height:480dip;padding:5dip;border:0;overflow:scroll-indicator;}
-
+        textarea{size:*;height:520dip;padding:5dip;border:0;overflow:scroll-indicator;}
     </style>
 
 </head>
@@ -17,7 +15,8 @@
     <div class="input_wrapper">
         <textarea id="doc"></textarea>
         <div class="submit_wrapper">
-            <button id="close-dialog">{{Confirm}}</button>
+            <div style="float:left;" id="delete"><button>{{Delete}}</button></div>
+            <button style="float:right" id="update">{{Update}}</button>
         </div>
     </div>
     
@@ -35,15 +34,35 @@
             $(#doc).value = docContent;
         });
 
-        event click $(#close-dialog){
+        //更新文档
+        event click $(#update){
             var docContent = $(#doc).value;
             if (docContent != ""){
                 docContent = docContent.trim();
-                mainView.SetGameDoc("doc",evt.attributes["rid"],docContent);
+                mainView.SetGameDoc("doc",view.parameters.id,docContent);
                 alert(CONF.Lang.UpdateSuccess);
             }else{
                 alert(CONF.Lang.ContentIsNotEmpty);
             }
+        }
+
+        //删除文档
+        event click $(#delete){
+            var result = view.msgbox {
+                type:#warning, 
+                content:CONF.Lang.DeleteDocConfirm, 
+                caption:CONF.Lang.DeleteDoc,
+                buttons:[
+                    {id:#yes,text:CONF.Lang.Delete},
+                    {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+                ]
+            };
+            if (result != "yes"){
+                return true;
+            }
+            mainView.DelGameDoc("doc",view.parameters.id);
+            alert(CONF.Lang.DeleteSuccess);
+            view.close();
         }
     </script>
 </body>

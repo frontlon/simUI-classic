@@ -5,9 +5,10 @@
         @import "this://app/images/public.css";
         body{margin:0;padding:0}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-        .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
+        .submit_wrapper{padding:6dip;text-align:center;margin-top:10dip;}
         htmlarea pre{margin-left:20dip;padding-left:10dip;border-left:2px solid #ccc}
         htmlarea font{margin:10dip 0;display:inline-block}
+        htmlarea{height:590dip;}
         @image-map tb-icons 
         {
         src:url(this://app/images/richtext-icons.png);
@@ -69,8 +70,8 @@
             li.align-right { foreground-size:25dip; foreground-image:image-map(tb-icons,align-right);}
             li.align-center { foreground-size:25dip; foreground-image:image-map(tb-icons,align-center);}
             li.align-justify { foreground-size:25dip; foreground-image:image-map(tb-icons,align-justify);}
-            :root > textarea { size:*; background:window; padding:0; visibility:collapse;}
-            :root > htmlarea { size:*; background:window; padding:0; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;border:0}
+            :root > textarea { size:*; padding:0; visibility:collapse;}
+            :root > htmlarea { width:*; padding:0; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;border:0}
             :root > htmlarea > body { size:*; margin: 0 2em; }
             :root > htmlarea dt:content-editable { font-weight:bold; }
             :root > htmlarea br:content-editable { width:8dip;content:"\21B2";color:red;}
@@ -99,7 +100,8 @@
 <body>
     <richtext></richtext>
     <div class="submit_wrapper">
-        <button id="close-dialog">{{Confirm}}</button>
+        <button id="delete" style="float:left">{{Delete}}</button>
+        <button id="update" style="float:right">{{Update}}</button>
     </div>
     <script type="text/tiscript">
         include ROOTPATH + "tis/utils.tis";
@@ -115,7 +117,7 @@
             }
         });
 
-        event click $(#close-dialog){
+        event click $(#update){
             var richtext = $(richtext).source;
             if (richtext != ""){
                 richtext = richtext.trim();
@@ -125,6 +127,25 @@
             }else{
                 alert(CONF.Lang.ContentIsNotEmpty);
             }
+        }
+
+        //删除文档
+        event click $(#delete){
+            var result = view.msgbox {
+                type:#warning, 
+                content:CONF.Lang.DeleteStrategyConfirm, 
+                caption:CONF.Lang.DeleteStrategy,
+                buttons:[
+                    {id:#yes,text:CONF.Lang.Delete},
+                    {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+                ]
+            };
+            if (result != "yes"){
+                return true;
+            }
+            mainView.DelGameDoc("strategy",view.parameters.id);
+            alert(CONF.Lang.DeleteSuccess);
+            view.close();
         }
     </script>
 </body>
