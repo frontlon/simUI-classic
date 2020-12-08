@@ -86,14 +86,16 @@ function openSidebar(obj){
     //背景图片
     var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
     if(background != ""){
-        $(#romlist).attributes.addClass('romlist_alpha');
         var centerDom = $(#center);
         centerDom.style["background-image"] = [url:URL.fromPath(background)];
         centerDom.style["background-size"] = "cover";
         centerDom.style["background-repeat"] = "no-repeat";
+        centerDom.attributes.addClass('romlist_alpha');
+
+
     }else{
         $(#center).style["background-image"] = "none";
-        $(#romlist).attributes.removeClass('romlist_alpha');
+        $(#center).attributes.removeClass('romlist_alpha');
     }
 
     //显示简介
