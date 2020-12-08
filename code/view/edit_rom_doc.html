@@ -8,7 +8,7 @@
         .submit_wrapper{padding:6dip 0;text-align:center;margin-top:10dip;}
         h4{margin:7dip 0}
 
-        textarea{width:*;min-height:480dip;height:*;padding:5dip;border:0;overflow:scroll-indicator;}
+        textarea{size:*;min-height:480dip;padding:5dip;border:0;overflow:scroll-indicator;}
 
     </style>
 
@@ -37,9 +37,13 @@
 
         event click $(#close-dialog){
             var docContent = $(#doc).value;
-            docContent = docContent.trim();
-            mainView.SetGameDoc("doc",evt.attributes["rid"],docContent);
-            alert(CONF.Lang.UpdateSuccess);
+            if (docContent != ""){
+                docContent = docContent.trim();
+                mainView.SetGameDoc("doc",evt.attributes["rid"],docContent);
+                alert(CONF.Lang.UpdateSuccess);
+            }else{
+                alert(CONF.Lang.ContentIsNotEmpty);
+            }
         }
     </script>
 </body>

@@ -8,7 +8,6 @@
     .frame_left{width:120dip;height:*;display:inline-block;}
     .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip;}
     .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip;width:*}
-    
     table{width:*;display:block;}
     th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
     td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
@@ -23,6 +22,8 @@
     .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px;}
     .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;min-width:80dip}
     .table_interface tr td:nth-child(even){text-align:left;padding-bottom:0;}
+    #platform_exts{width:662dip;}
+    #platform_icon{max-width:320dip;}
 
     #shortcut_list{padding:0;}
     #shortcut_list li{flow:row(input,input,button,button,button,label);}
@@ -91,7 +92,7 @@
                 </tr>
                 <tr>
                   <td>{{RomType}}：</td>
-                  <td colspan="3"><input type="text" value=""  id="platform_exts" disabled></td>
+                  <td colspan="3"><input type="text" value="" id="platform_exts" disabled></td>
                 </tr>
                 <tr><td>{{Simulator}}：</td><td colspan="3">
                   <select id="platform_sim" disabled></select>

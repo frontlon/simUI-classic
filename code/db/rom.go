@@ -39,7 +39,8 @@ func (*Rom) TableName() string {
 func (m *Rom) BatchUpdate(romlist []*Rom) {
 	tx := getDb().Begin()
 	create := map[string]string{}
-	for _, v := range romlist {
+	count := len(romlist)
+	for k, v := range romlist {
 		create = map[string]string{
 			"menu":           v.Menu,
 			"name":           v.Name,
@@ -54,6 +55,9 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 			"info_md5":       v.InfoMd5,
 		}
 		getDb().Table(m.TableName()).Where("file_md5 = ?", v.FileMd5).Update(create)
+		if k%500 == 0 {
+			utils.Loading("3/3开始更新缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
+		}
 	}
 	tx.Commit()
 }
@@ -68,7 +72,7 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 	for k, v := range romlist {
 		tx.Create(&v)
 		if k%500 == 0 {
-			utils.Loading("开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
+			utils.Loading("[2/3]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
 	tx.Commit()
@@ -347,7 +351,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 			subsql = ""
 		}
 		if k%500 == 0 {
-			utils.Loading("开始清理缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
+			utils.Loading("[1/3]开始清理缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
 

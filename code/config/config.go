@@ -199,7 +199,10 @@ func getDefault() (*db.Config, error) {
 	vo, err := (&db.Config{}).Get()
 
 	//如果软件名称是图片，则转换为绝对路径
-	if utils.FileExists(vo.SoftName) == true {
+
+
+
+	if strings.ToLower(vo.SoftName) != "simui" && utils.FileExists(vo.SoftName) == true {
 		vo.SoftName, _ = filepath.Abs(vo.SoftName)
 	}
 

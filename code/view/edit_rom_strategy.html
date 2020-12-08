@@ -24,7 +24,7 @@
         }
         popup[role="tooltip"] { padding:5dip; font:system;}
         kbd {display:inline-block;font-size:8.5pt;font-weight:bold;vertical-align:middle;padding:3dip 6dip;background-image:url(this://app/images/kbd-back.png);background-repeat:expand stretch-top stretch-bottom stretch-left stretch-right stretch-middle;background-position:4dip 4dip 4dip 4dip;}
-        richtext {display:block;display-model:blocks-inside;style-set: std-richtext;prototype: Richtext url(D:\\work\\go\\src\\simUI\\code\\view\\tis\\plugins\\richtext.tis);}
+        richtext {display:block;display-model:blocks-inside;style-set: std-richtext;prototype: Richtext url(this://app/tis/plugins/richtext.tis);}
         richtext text,richtext p,richtext pre {padding:0 5dip;}
         richtext text{margin-top:5dip}
         @set std-richtext 
@@ -70,7 +70,7 @@
             li.align-center { foreground-size:25dip; foreground-image:image-map(tb-icons,align-center);}
             li.align-justify { foreground-size:25dip; foreground-image:image-map(tb-icons,align-justify);}
             :root > textarea { size:*; background:window; padding:0; visibility:collapse;}
-            :root > htmlarea { size:*; background:window; padding:0; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;}
+            :root > htmlarea { size:*; background:window; padding:0; font-rendering-mode:snap-pixel; text-selection-background-color: rgba(highlight,0.25);text-selection-color: transparent;border:0}
             :root > htmlarea > body { size:*; margin: 0 2em; }
             :root > htmlarea dt:content-editable { font-weight:bold; }
             :root > htmlarea br:content-editable { width:8dip;content:"\21B2";color:red;}
@@ -108,22 +108,23 @@
         view.root.on("ready", function(){
             view.windowCaption =  CONF.Lang.EditDoc;
             var docContent = mainView.GetGameDoc("strategy",view.parameters.id);
-            docContent = docContent.trim();
 
             if(docContent != ""){
+                docContent = docContent.trim();
                 $(htmlarea).value = docContent;
             }
         });
 
         event click $(#close-dialog){
             var richtext = $(richtext).source;
-            richtext = richtext.trim();
-            richtext = richtext.replace("<section></section>","");
-
-            alert(richtext.toHtmlString());
-
-            var docContent = mainView.SetGameDoc("strategy",view.parameters.id,richtext);
-            alert(CONF.Lang.UpdateSuccess);
+            if (richtext != ""){
+                richtext = richtext.trim();
+                richtext = richtext.replace("<section></section>","");
+                var docContent = mainView.SetGameDoc("strategy",view.parameters.id,richtext);
+                alert(CONF.Lang.UpdateSuccess);
+            }else{
+                alert(CONF.Lang.ContentIsNotEmpty);
+            }
         }
     </script>
 </body>

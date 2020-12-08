@@ -99,10 +99,18 @@ func OpenFolderByWindow(fileName string) error {
 		}
 
 	case "linux":
+		if isDir == true {
+			if err := exec.Command(`open`, fileName).Start(); err != nil {
+				return err
+			}
+		} else {
+			if err := exec.Command(`open`, `-R`, fileName).Start(); err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil
-
 
 }
 
@@ -116,13 +124,15 @@ func KillGame() error {
 	}
 
 	switch runtime.GOOS {
-
 	case "darwin":
-		//
+		c := exec.Command("kill", ToString(LAST_PROCESS))
+		c.Start()
 	case "windows":
 		c := exec.Command("taskkill.exe", "/T", "/PID", ToString(LAST_PROCESS))
 		c.Start()
 	case "linux":
+		c := exec.Command("kill", ToString(LAST_PROCESS))
+		c.Start()
 	}
 
 	LAST_PROCESS = 0
