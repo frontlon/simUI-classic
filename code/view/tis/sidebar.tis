@@ -90,12 +90,8 @@ function openSidebar(obj){
         centerDom.style["background-image"] = [url:URL.fromPath(background)];
         centerDom.style["background-size"] = "cover";
         centerDom.style["background-repeat"] = "no-repeat";
-        centerDom.attributes.addClass('romlist_alpha');
-
-
     }else{
         $(#center).style["background-image"] = "none";
-        $(#center).attributes.removeClass('romlist_alpha');
     }
 
     //显示简介
