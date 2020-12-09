@@ -253,6 +253,11 @@
         deleteRom(this);
     });
 
+       //编辑游戏攻略
+    self.on("click", "#right_edit_strategy", function(evt) {
+        editStrategy(this);
+    });
+
 
     /**
     * 右键菜单
@@ -333,19 +338,6 @@
      self.on("click", ".filedropzone_widget .thumb_delete", function(evt) {
          DeleteThumb(this);
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
    /**

@@ -126,7 +126,7 @@ function editStrategy(evt){
         width:self.toPixels(800dip),
         height:self.toPixels(700dip),
         parameters: {
-            id:evt.attributes["rid"],
+            id:ACTIVE_ROM_ID,
         };
     });
 }
