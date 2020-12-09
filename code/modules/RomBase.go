@@ -36,7 +36,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 	des := map[string]*RomBase{}
 	records, err := utils.ReadCsv(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
-		return nil, err
+		return nil, nil //直接返回空，不返回错误
 	}
 
 	isUtf8 := false
