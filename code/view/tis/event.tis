@@ -213,11 +213,6 @@
         rename(this);
     });
 
-    //图片编辑（侧边栏）
-    self.on("click", "#right_thumb_down", function(evt) {
-        thumbEdit(this);
-    });
-
     //打开文件夹
     self.on("click", "#foldercontext .folder", function(evt) {
         openFolder(this);
@@ -275,11 +270,6 @@
     //右键菜单启动游戏
     self.on("click", "#romcontext .menu_run_game", function(evt) {
         contextRunGame(this);
-    });
-
-    //右键编辑图片封面
-    self.on("click", "#romcontext .edit_thumb", function(evt) {
-        thumbEdit(this);
     });
 
     //重命名

@@ -38,7 +38,9 @@ function contextSetFavorite(evt){
 
 //右键菜单设为隐藏
 function contextSetHide(evt){
-    var result = view.SetHide(evt.attributes["rid"],evt.attributes["value"]);
+    
+    var id = evt.attributes["rid"];
+    var result = view.SetHide(id,evt.attributes["value"]);
 
     if( evt.attributes["value"] == 1){
         evt.attributes.removeClass('hide1');
@@ -51,6 +53,12 @@ function contextSetHide(evt){
         evt.attributes.addClass('hide1');
         evt.attributes["value"] = 1;
         evt.html = CONF.Lang.SetHide;
+    }
+
+    //从rom列表中删除dom
+    var rdom = $(#romlist).select("li[rid="+id+"]");
+    if(rdom != undefined){
+        rdom.remove();
     }
 }
 //重命名
@@ -152,9 +160,6 @@ function romContextMenu(obj){
     }
 
     btndata += "<hr />";
-
-    var romPath = URL.parse(detailObj.Info.RomPath);
-    btndata += "<li class='thumb edit_thumb' rname = \""+ romPath.name +"\" rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditThumbs +"</li>";
 
     if( detailObj.Info.Star == 1){
         btndata += "<li class='fav fav0' value='0' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.CancelFavorite +"</li>";

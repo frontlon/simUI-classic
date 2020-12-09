@@ -49,9 +49,6 @@ function openSidebar(obj){
     //重命名功能
     $(#right_rename).attributes["rid"] = info.Id;
 
-    //图片下载页面
-    $(#right_thumb_down).attributes["rid"] = info.Id;
-
     //编辑资料
     $(#right_base_info).attributes["rid"] = info.Id;
 
@@ -408,10 +405,9 @@ function setHide(evt){
         view.msgbox(#alert,result);
     }
 
-    //如果当前是隐藏目录，则从rom列表中删除
-    var menu = $(#menulist).select("dd:current").attributes["opt"];
+    //从rom列表中删除dom
     var rdom = $(#romlist).select("li[rid="+id+"]");
-    if(menu == "hide" && rdom != undefined){
+    if(rdom != undefined){
         rdom.remove();
     }
 }
@@ -507,74 +503,4 @@ function createOpenFolderMenu(info){
 
     }
     return btndata;
-}
-
-//选择文件
-function openThumbFile(evt) {
-    const defaultExt = "";
-    const initialPath = "";
-    const filter = evt.attributes["filter"];
-    const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
-    
-     if(url){
-        url = URL.toPath(url);
-        var out = self.select(".file-drop-zone[opt="+ evt.attributes["for"] +"]");
-        out.html = "<img src='"+ url +"'>";
-     }
-}
-
-//启动图片下载
-function thumbDown(evt){
-
-    var getjson = view.GetGameDetail(ACTIVE_ROM_ID);
-    var detailObj = JSON.parse(getjson);
-    var info = detailObj.Info;
-
-    var id = info.Id;
-    var name = info.Name;
-    var keyword = info.Name;
-    var type = evt.attributes["value"];
-    var result = view.dialog({
-        url:self.url(ROOTPATH + "down_thumbs.html"),
-        caption:CONF.Lang.ThumbsDown,
-        width:1024,
-        height:750,
-        parameters: {
-            id:id,
-            name:name,
-            keyword:keyword,
-            type:type,
-        };
-    });
-
-    if(result != undefined){
-        if (type == "thumb"){
-            THUMB = result;
-        }
-        self.select(".file-drop-zone[opt="+ type +"]").html = "<img src='"+ result +"'>";
-    }
-
-}
-
-function DeleteThumb(evt){
-
-    //确认窗口
-    var result = view.msgbox {
-        type:#question, 
-        caption:CONF.Lang.DeleteThumb,
-        content:CONF.Lang.DeleteThumbConfirm, 
-        buttons:[
-            {id:#yes,text:CONF.Lang.Delete},
-            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
-        ]
-    };
-
-    if (result != "yes"){
-        return true;
-    }
-
-    var type = evt.attributes["value"];
-    mainView.DeleteThumbs(type,ACTIVE_ROM_ID);
-    self.select(".file-drop-zone[opt="+ type +"]").html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";
 }

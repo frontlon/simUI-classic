@@ -1,20 +1,70 @@
-﻿//打开图像编辑框
-function thumbEdit(evt){
-    var thumb = view.dialog({
-        url:self.url(ROOTPATH + "edit_thumbs.html"),
+﻿
+//选择文件
+function openThumbFile(evt) {
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = evt.attributes["filter"];
+    const caption = evt.attributes["caption"];
+    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    
+     if(url){
+        url = URL.toPath(url);
+        var out = self.select(".file-drop-zone[opt="+ evt.attributes["for"] +"]");
+        out.html = "<img src='"+ url +"'>";
+     }
+}
+
+//启动图片下载
+function thumbDown(evt){
+
+    var getjson = view.GetGameDetail(ACTIVE_ROM_ID);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+
+    var id = info.Id;
+    var name = info.Name;
+    var keyword = info.Name;
+    var type = evt.attributes["value"];
+    var result = view.dialog({
+        url:self.url(ROOTPATH + "down_thumbs.html"),
         caption:CONF.Lang.ThumbsDown,
-        width:self.toPixels(720dip),
-        height:self.toPixels(610dip),
+        width:1024,
+        height:750,
         parameters: {
-            id:evt.attributes["rid"],
+            id:id,
+            name:name,
+            keyword:keyword,
+            type:type,
         };
     });
-    if(thumb == ""){
-        return true;
-    }else if(thumb == "delete"){
-        var emptythumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
-        self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = emptythumb;
-    }else{
-        self.$(#romlist).select("li[rid='"+ evt.attributes["rid"] +"'] img").attributes['src'] = thumb;
+
+    if(result != undefined){
+        if (type == "thumb"){
+            THUMB = result;
+        }
+        self.select(".file-drop-zone[opt="+ type +"]").html = "<img src='"+ result +"'>";
     }
+
+}
+
+function DeleteThumb(evt){
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        caption:CONF.Lang.DeleteThumb,
+        content:CONF.Lang.DeleteThumbConfirm, 
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+    var type = evt.attributes["value"];
+    mainView.DeleteThumbs(type,ACTIVE_ROM_ID);
+    self.select(".file-drop-zone[opt="+ type +"]").html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";
 }
