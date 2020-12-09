@@ -8,6 +8,7 @@ import (
 )
 
 var ROM_PAGE_NUM = 100 //每页加载rom数量
+var TIP_NUM = 200 //每tip个更新提示一次
 
 type Rom struct {
 	Id            uint64
@@ -40,6 +41,7 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 	tx := getDb().Begin()
 	create := map[string]string{}
 	count := len(romlist)
+	utils.Loading("3/3开始更新缓存(1/"+utils.ToString(count)+")", "")
 	for k, v := range romlist {
 		create = map[string]string{
 			"menu":           v.Menu,
@@ -55,7 +57,7 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 			"info_md5":       v.InfoMd5,
 		}
 		getDb().Table(m.TableName()).Where("file_md5 = ?", v.FileMd5).Update(create)
-		if k%500 == 0 {
+		if k%TIP_NUM == 0 {
 			utils.Loading("3/3开始更新缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
@@ -67,11 +69,13 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 	if len(romlist) == 0 {
 		return
 	}
-	tx := getDb().Begin()
+
 	count := len(romlist)
+	utils.Loading("[2/3]开始写入缓存(1/"+utils.ToString(count)+")", "")
+	tx := getDb().Begin()
 	for k, v := range romlist {
 		tx.Create(&v)
-		if k%500 == 0 {
+		if k%TIP_NUM == 0 {
 			utils.Loading("[2/3]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
@@ -338,6 +342,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 	sql := ""
 	subsql := ""
 	count := len(uniqs)
+	utils.Loading("[1/3]开始清理缓存(1/"+utils.ToString(count)+")", "")
 	for k, uniq := range uniqs {
 		subsql += uniq + "','"
 		if k%990 == 0 {
@@ -350,7 +355,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 			}
 			subsql = ""
 		}
-		if k%500 == 0 {
+		if k%TIP_NUM == 0 {
 			utils.Loading("[1/3]开始清理缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
