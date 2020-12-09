@@ -1,0 +1,68 @@
+class FileDropZone : Element 
+{
+    this var filter;  
+    this var files = []; // filtered files
+
+    function checkFiles(list) {
+    if(typeof list != #array )
+        list = [list];
+    const patterns = this.filter;
+    function flt(fn) {
+        for(var x in patterns)
+        if( fn like x ) return true;
+        return false;
+    }
+    this.files = list.filter(flt);
+    return this.files.length > 0;
+    }
+
+    function attached() {
+    this.filter = (this.attributes["accept-drop"] || "*").split(";");
+    debug filter: this.filter;
+    }
+
+    event dragaccept (evt) {
+    if(evt.draggingDataType == #file && this.checkFiles(evt.dragging))
+        return true; // accept only files
+    return false;
+    }
+
+    event dragenter (evt) 
+    {
+    this.attributes.addClass("active-target");
+    return true;
+    }  
+
+    event dragleave (evt) 
+    {
+    this.attributes.removeClass("active-target");
+    return true;
+    }
+
+    event drag (evt) 
+    {
+    stdout.println(evt.x,evt.y);
+    return true;
+    }  
+
+    event drop (evt) 
+    {
+        this.attributes.removeClass("active-target");
+        var opt = this.attributes["opt"];
+        var id = ACTIVE_ROM_ID;
+        var uri = URL.toPath(this.files.toString());
+        var img = "";
+        if (opt == "thumb"){
+            THUMB = uri;
+        }
+        mainView.EditRomThumbs(opt,id,uri);
+
+        if(opt == "video"){
+            img = "<video src='"+ this.files +"'/>";
+        }else{
+            img = "<img src='"+ this.files +"'>";
+        }
+        this.html = img;
+        return true;
+    }       
+}

@@ -297,7 +297,7 @@
         editDoc(this);
     });
 
- //编辑游戏攻略
+    //编辑游戏攻略
     self.on("click", "#romcontext .strategy", function(evt) {
         editStrategy(this);
     });
@@ -329,6 +329,32 @@
             }
         }
     }
+
+
+    //侧边栏缩略图编辑功能 - 选择缩略图文件
+    self.on("click", ".filedropzone_widget .openfile", function(evt) {
+        openThumbFile(this);
+    });
+
+    self.on("click", ".filedropzone_widget .thumb_down", function(evt) {
+         thumbDown(this);
+    });
+
+     self.on("click", ".filedropzone_widget .thumb_delete", function(evt) {
+         DeleteThumb(this);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -167,6 +167,8 @@
     #right .funbtn img{width:19dip;vertical-align:middle;margin:auto}
     #right .funbtn:hover{background:color(func-button-hover-background-color);opacity:0.5}
     #right .funbtn i{display:block}
+    #right .filedrop_ctl_btn{top:-28dip;right:0dip;position:absolute;}
+    #right_volume{position:absolute;top:5dip;right:0;}
     #right .doc{height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
     /* 基础信息表格 */
@@ -182,13 +184,12 @@
     /* 视频 */
     #video_wrapper{position:relative}
     #video_wrapper video{width:100%;foreground-repeat:no-repeat;foreground-position:top center;}
-    #right_volume{top:8dip;right:0dip;position:absolute;}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative}
     #rotate{top:-30dip;right:0dip;position:absolute;}
     #stack{overflow:hidden;flow:stack;width:100%;height:auto;text-align:center;}
-    #stack>img{max-width:300px;width:100%;margin:0 auto}
+    #stack>img{max-width:300dip;width:100%;margin:0 auto}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -275,6 +276,19 @@
     .markdown dl dt::after{content:":"}
     .markdown dl dd{margin:0;padding:0;width:*}
 */
+
+    .filedropzone_widget{position:relative;}
+    .file-drop-zone {margin:0 auto;prototype: FileDropZone;max-width:300dip;width:100%}
+    .file-drop-zone.disabled{border:1px dashed #eee}
+    .file-drop-zone.active-target {background:gold;}
+    .file-drop-zone img{width:auto;height:auto;max-width:100%;max-height:100%;}
+    .file-drop-zone video{size:*;foreground-repeat:no-repeat;foreground-position:top center}
+    .file-drop-zone-empty{width:*;min-height:width(75%);border: 1px dashed;text-align:center;font-size:12dip;vertical-align:middle;color: gray;}
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -399,14 +413,77 @@
         <!-- 选项卡2 -->
         <h2>{{FunButton}}</h2>
             <button id="right_thumb_down" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_doc.png" /></button>
-            
-        <div id="second_thumbs"></div>
+
+            <div id="second_thumbs">
+                <h2>{{Thumb}}</h2>
+                <div class="filedropzone_widget" id="widget_thumb">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="thumb" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="thumb">{{NetPic}}</li>
+                        <li class="thumb_delete" value="thumb">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone opt="thumb" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                </div>
+                <h2>{{Snap}}</h2>
+                <div class="filedropzone_widget" id="widget_snap">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="snap" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="snap">{{NetPic}}</li>
+                        <li class="thumb_delete" value="snap">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone  opt="snap" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                </div>
+                <h2>{{TitlePic}}</h2>
+                <div class="filedropzone_widget" id="widget_title">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="title" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="title">{{NetPic}}</li>
+                        <li class="thumb_delete" value="title">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone  opt="title" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                </div>
+                <h2>{{Poster}}</h2>
+                <div class="filedropzone_widget" id="widget_poster">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="poster" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="poster">{{NetPic}}</li>
+                        <li class="thumb_delete" value="poster">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone disabled  opt="poster" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                    </div>
+                <h2>{{Packing}}</h2>
+                <div class="filedropzone_widget" id="widget_packing">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="packing" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="packing">{{NetPic}}</li>
+                        <li class="thumb_delete" value="packing">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone  opt="packing" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                </div>
+                <h2>{{BackgroundPic}}</h2>
+                <div class="filedropzone_widget" id="widget_background">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="background" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
+                        <li class="thumb_down" value="background">{{NetPic}}</li>
+                        <li class="thumb_delete" value="background">{{DeletePic}}</li>
+                    </menu></button>
+                    <div.file-drop-zone  opt="background" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
+                </div>
+                <h2>{{Video}}</h2>
+                <div class="filedropzone_widget" id="widget_video">
+                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
+                        <li class="openfile" for="video" caption="{{SelectVideoFile}}" filter="video Files (*.wmv;*.mp4)|.wmv;.mp4|All Files (*.*)|*.*"><div class="file-drop-zone-empty">{{SelectVideo}}</div></li>
+                        <li class="thumb_delete" value="video">{{DeleteVideo}}</li>
+                    </menu></button>
+                    <div.file-drop-zone  opt="video" accept-drop="*.wmv;*.mp4">{{DropVideoToHere}}<br>({{VideoExts}})</div>
+                </div>
+            </div>
         </section>
 
         <section id="right_third">
         <!-- 选项卡3 -->
         <h2>{{FunButton}}</h2>
-            <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_strategy.png" /></button>
+        <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditThumbs}}"><img src="this://app/images/fileico_strategy.png" /></button>
         <h2>{{StrategyContent}}</h2>
         <div id="third_strategy"></div>
         </section>
@@ -446,6 +523,7 @@
     include ROOTPATH + "tis/plugins/rotator.tis";
     //include ROOTPATH + "tis/plugins/markdown.tis";
     include ROOTPATH + "tis/plugins/dragdrop.tis";
+    include ROOTPATH + "tis/plugins/filedropzone.tis";
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/joystick.tis";
     include ROOTPATH + "tis/rom.tis";
