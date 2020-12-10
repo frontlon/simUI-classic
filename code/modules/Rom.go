@@ -368,6 +368,8 @@ func GetGameDoc(t string, id uint64) (string, error) {
 		}
 	}
 
+	strategy = strings.ReplaceAll(strategy,`<img src="`,`<img src="` + config.Cfg.RootPath)
+
 	return strategy, nil
 }
 
@@ -414,6 +416,11 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 	if !utils.IsUTF8(content) {
 		content = utils.ToUTF8(content)
 	}
+
+
+	//替换图片路径为相对路径
+	content = strings.ReplaceAll(content,config.Cfg.RootPath,"");
+
 	if err := utils.OverlayWriteFile(Filename, content); err != nil {
 		return err
 	}
@@ -456,6 +463,7 @@ func DelGameDoc(t string, id uint64) (error) {
 
 	return nil
 }
+
 /**
  * 读取游戏介绍文本
  **/
@@ -568,4 +576,34 @@ func DeleteRomAndRes(id uint64) error {
 		}
 	}()
 	return nil
+}
+
+func UploadStrategyImages(id uint64, p string) (string, error) {
+
+	//游戏游戏详细数据
+	info, err := (&db.Rom{}).GetById(id)
+	if err != nil {
+		return "", err
+	}
+
+	strategyPath := config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + "images/"
+	if strategyPath == "" {
+		return "", nil
+	}
+
+	//先检查目录是否存在，不存在创建目录
+	if (!utils.FolderExists(strategyPath)) {
+		if err := utils.CreateDir(strategyPath); err != nil {
+			return "", err
+		}
+	}
+
+	//复制文件
+	newFilename := utils.GetFileNameAndExt(p)
+	newFile := strategyPath + newFilename
+	if err := utils.FileCopy(p, newFile); err != nil {
+		return "", err
+	}
+	return newFile, nil
+
 }

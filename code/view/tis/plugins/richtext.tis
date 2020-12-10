@@ -74,6 +74,8 @@ class Richtext: Behavior {
         <splitter/>
         <button .pre title="pre block" />
         <splitter/>
+        <button .picture />
+        <splitter/>
         <button .align type="menu">
               <menu>
                 <li .align-left>Align left</li>
@@ -103,6 +105,8 @@ class Richtext: Behavior {
     this.bind("button.font-size li:nth-child(6)", "format:apply-span:font", {size:6});
     this.bind("button.font-size li:nth-child(7)", "format:apply-span:font", {size:7});
     
+    this.bind("button.picture", this.onInsertPicture); 
+
     this.bind("button.align li.align-left", this.onAlign, "left");
     this.bind("button.align li.align-right", this.onAlign, "right");
     this.bind("button.align li.align-center", this.onAlign, "center");
@@ -233,12 +237,19 @@ class Richtext: Behavior {
   }
   
   function onInsertPicture(cmd,param) {
-    
     if(cmd == #exec) {
-      // choose and insert picture here
-      view.msgbox(#information,"for the demo purposes this will insert images/test.jpg");
-      this.insertPicture("images/test.jpg");
-    }
+      const defaultExt = "";
+      const initialPath = "";
+      const filter = "Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*";
+      const caption = CONF.Lang.SelectPicFile;
+      var url = view.selectFile("", filter, defaultExt, initialPath, caption );
+      if(url){
+          url = URL.toPath(url);
+          url = url.split("\/").join(CONF.Separator.toString());
+          url = mainView.UploadStrategyImages(view.parameters.id,url);
+          this.insertPicture(url);
+      }
+    }    
   }
 
   function onAlign(cmd,param) {

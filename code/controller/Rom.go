@@ -166,6 +166,18 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//上传攻略图片
+	utils.Window.DefineFunction("UploadStrategyImages", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		p := args[1].String()
+		relative, err := modules.UploadStrategyImages(id,p)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NewValue(relative)
+	})
+
 	//设为我的最爱
 	utils.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))

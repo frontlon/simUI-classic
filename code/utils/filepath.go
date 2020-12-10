@@ -53,6 +53,7 @@ func AbsPath(p string) string {
 	if(!filepath.IsAbs(p)){
 		p,_ = filepath.Abs(p)
 	}
+
 	return p
 }
 

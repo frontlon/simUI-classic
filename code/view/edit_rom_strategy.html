@@ -122,7 +122,7 @@
             if (richtext != ""){
                 richtext = richtext.trim();
                 richtext = richtext.replace("<section></section>","");
-                var docContent = mainView.SetGameDoc("strategy",view.parameters.id,richtext);
+                mainView.SetGameDoc("strategy",view.parameters.id,richtext);
                 alert(CONF.Lang.UpdateSuccess);
             }else{
                 alert(CONF.Lang.ContentIsNotEmpty);

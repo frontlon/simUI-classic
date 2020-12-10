@@ -43,6 +43,9 @@ function openSidebar(obj){
     var info = detailObj.Info;
     var romPath = URL.parse(info.RomPath);
 
+
+    right_edit_strategy
+
     //侧边栏指定rom id
     ACTIVE_ROM_ID = info.Id;
 
@@ -51,6 +54,10 @@ function openSidebar(obj){
 
     //编辑资料
     $(#right_base_info).attributes["rid"] = info.Id;
+
+    //编辑资料
+    $(#right_edit_strategy).attributes["rid"] = info.Id;
+
 
     //打开文件夹
     var romcontext = $(#foldercontext);
