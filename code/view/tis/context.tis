@@ -16,6 +16,20 @@ function openFolder(evt){
         }
 }
 
+//移动rom
+function romMove(evt){
+
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "move_rom.html"),
+        width:self.toPixels(300dip),
+        height:self.toPixels(540dip),
+        parameters: {
+            id:evt.attributes["rid"];
+        };
+    });
+
+}
+
 //右键菜单设置喜爱
 function contextSetFavorite(evt){
     var result = view.SetFavorite(evt.attributes["rid"],evt.attributes["value"]);
@@ -68,8 +82,8 @@ function rename(evt){
 
     var data = view.dialog({
         url:self.url(ROOTPATH + "rom_rename.html"),
-        width:self.toPixels(300dip),,
-        height:self.toPixels(140dip),,
+        width:self.toPixels(300dip),
+        height:self.toPixels(140dip),
         parameters: {
             name:detailObj.Info.Name
         };
@@ -124,7 +138,7 @@ function editStrategy(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rom_strategy.html"),
         width:self.toPixels(800dip),
-        height:self.toPixels(700dip),
+        height:self.toPixels(710dip),
         parameters: {
             id:evt.attributes["rid"],
         };
@@ -178,6 +192,7 @@ function romContextMenu(obj){
     btndata += "<li class='doc' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditDoc +"</li>";
     btndata += "<li class='strategy' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditStrategy +"</li>";
     btndata += "<hr />";
+    btndata += "<li class='move' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.RomMove +"</li>";
     btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
     btndata += "<hr />";
     //打开文件夹

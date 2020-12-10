@@ -26,7 +26,7 @@
     #platform_icon{max-width:320dip;}
 
     #shortcut_list{padding:0;}
-    #shortcut_list li{flow:row(input,input,button,button,button,label);}
+    #shortcut_list li{flow:row(input,input,button,button,button,label);list-style:none}
     #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
     #shortcut_list li input[type="text"]:nth-child(1){width:130px;}
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
@@ -44,10 +44,10 @@
 
   <tabs class="tabs" id="mytabs">
     <strip>
-      <label ww="600dip" wh="300dip" for="first" selected>{{GeneralConfig}}</label>
-      <label ww="940dip" wh="540dip" for="second">{{PlatformConfig}}</label>
-      <label ww="420dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
-      <label ww="600dip" wh="300dip" for="fourth">{{Shortcut}}</label>
+      <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
+      <label ww="980dip" wh="540dip" for="second">{{PlatformConfig}}</label>
+      <label ww="450dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="630dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">

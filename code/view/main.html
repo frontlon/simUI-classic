@@ -224,12 +224,10 @@
     #romcontext .hide1{background-image:url(this://app/images/fileico_hide_1.png);}
     #romcontext .rename{background-image:url(this://app/images/fileico_rename.png);}
     #romcontext .baseinfo{background-image:url(this://app/images/fileico_baseinfo.png);}
-
     #romcontext .doc{background-image:url(this://app/images/fileico_doc.png);}
     #romcontext .strategy{background-image:url(this://app/images/fileico_strategy.png);}
-
-
     #romcontext .delete{background-image:url(this://app/images/fileico_delete.png);}
+    #romcontext .move{background-image:url(this://app/images/fileico_move.png);}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
@@ -295,7 +293,7 @@
     <div id="logo"></div>
     <div id="tb_left">
         <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i>&#xe7e2;</i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i>&#xe7ac;</i></button>
-        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="interface_config" value="1" type="menu" title="{{SwitchRomlist}}"><i>&#xe67c;</i><menu>
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="interface_config" value="1" type="menu" title="{{UIConfig}}"><i>&#xe67c;</i><menu>
             <li id="config_romlist_direction">{{ThumbDirection}}<menu><li opt="0">{{ThumbAuto}}</li><li opt="1">{{ThumbHorizontal}}</li><li opt="2">{{ThumbVertical}}</li></menu></li>
             <li id="config_thumb">{{IndexThumb}}<menu><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="title">{{TitlePic}}</li></menu></li>
             <li id="config_font_background">{{TitleBackground}}<menu><li opt="2">{{TitleShow}}</li><li opt="0">{{TitleHideBackground}}</li><li opt="1">{{TitleHide}}</li></menu></li>
@@ -382,6 +380,7 @@
             <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
             <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
             <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
+            <button id="right_edit_doc" class="funbtn" platform="" name="" value="" rid="" title="{{EditDoc}}"><img src="this://app/images/fileico_doc.png" /></button>
             <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" />
                 <menu id="foldercontext" type="menu"></menu>
             </button>

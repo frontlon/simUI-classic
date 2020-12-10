@@ -1,0 +1,41 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        .wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
+  
+    </style>
+
+</head>
+<body>
+    <div class="wrapper">
+        <select type="tree" size=30>
+            <option expanded value="Alkaline Metals">
+                <caption>Alkaline Metals</caption>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+            </option>
+            <option expanded value="Transition Metals">
+                <caption>Transition Metals</caption>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+                <option value="Li">Lithium</option>
+            </option>
+        </select> 
+    </div>
+    
+    <script type="text/tiscript">
+            view.windowCaption =  CONF.Lang.RomMove;
+
+
+var ss = view.parameters.id;
+
+    alert(ss);
+    </script>
+</body>
+</html>

@@ -248,6 +248,11 @@
         baseinfo(this);
     });
    
+   //编辑游戏简介
+    self.on("click", "#right_edit_doc", function(evt) {
+        editDoc(this);
+    });
+
     //删除rom及相关资源文件
     self.on("click", "#right_delete", function(evt) {
         deleteRom(this);
@@ -310,6 +315,11 @@
    //打开文件夹
     self.on("click", "#romcontext .folder", function(evt) {
         openFolder(this);
+    });
+
+    //移动rom
+    self.on("click", "#romcontext .move", function(evt) {
+        romMove(this);
     });
 
     //删除rom及相关资源文件
