@@ -18,7 +18,7 @@ function openFolder(evt){
 
 //移动rom
 function romMove(evt){
-    var data = view.dialog({
+    var platform = view.dialog({
         url:self.url(ROOTPATH + "move_rom.html"),
         width:self.toPixels(300dip),
         height:self.toPixels(540dip),
@@ -26,10 +26,8 @@ function romMove(evt){
             id:evt.attributes["rid"];
         };
     });
-    if(data == "1"){
-        startLoading();
-        initConfig("1");
-        endLoading();
+    if(platform == "1"){
+        view.CreateRomCache(platform);
     }
 }
 

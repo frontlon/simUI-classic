@@ -59,19 +59,19 @@
         var obj = $(#menu).select("option:current")
         
         if(obj == undefined){
-            alert("你没有选择新目录");
+            alert(CONF.Lang.NotSelectDirectory);
             return;
         }
         
         var newMenu = obj.attributes["value"];
         var newPlatform = obj.attributes["pf"];
         if(newMenu == undefined || newMenu == ""){
-            alert("你没有选择新目录");
+            alert(CONF.Lang.NotSelectDirectory);
             return;
         }
 
         mainView.MoveRom(view.parameters.id,newPlatform,newMenu);
-        view.close("1");
+        view.close(newPlatform);
     }
 
 
