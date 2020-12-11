@@ -59,4 +59,17 @@ func MenuController() {
 		return sciter.NewValue("1")
 	})
 
+
+	//读取所有平台的菜单列表
+	utils.Window.DefineFunction("GetAllPlatformMenuList", func(args ...*sciter.Value) *sciter.Value {
+
+		lists , err := modules.GetAllPlatformMenuList()
+		if err != nil {
+			utils.WriteLog(err.Error())
+		}
+
+		jsonStr, _ := json.Marshal(lists)
+		return sciter.NewValue(string(jsonStr))
+	})
+
 }

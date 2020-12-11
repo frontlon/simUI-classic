@@ -133,7 +133,7 @@ func RomController() {
 	utils.Window.DefineFunction("GetGameDoc", func(args ...*sciter.Value) *sciter.Value {
 		t := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
-		res, err := modules.GetGameDoc(t,id)
+		res, err := modules.GetGameDoc(t, id)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -146,7 +146,7 @@ func RomController() {
 		t := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
 		content := args[2].String()
-		err := modules.SetGameDoc(t,id,content)
+		err := modules.SetGameDoc(t, id, content)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -158,7 +158,7 @@ func RomController() {
 	utils.Window.DefineFunction("DelGameDoc", func(args ...*sciter.Value) *sciter.Value {
 		t := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
-		err := modules.DelGameDoc(t,id)
+		err := modules.DelGameDoc(t, id)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -170,7 +170,7 @@ func RomController() {
 	utils.Window.DefineFunction("UploadStrategyImages", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		p := args[1].String()
-		relative, err := modules.UploadStrategyImages(id,p)
+		relative, err := modules.UploadStrategyImages(id, p)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -367,4 +367,21 @@ func RomController() {
 
 		return sciter.NewValue("1")
 	})
+
+	//移动rom及相关资源文件
+	utils.Window.DefineFunction("MoveRom", func(args ...*sciter.Value) *sciter.Value {
+
+		id := uint64(utils.ToInt(args[0].String()))
+		newPlatform := uint32(utils.ToInt(args[1].String()))
+		newFolder := args[2].String()
+
+		if err := modules.MoveRom(id,newPlatform,newFolder); err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+
+		return sciter.NullValue()
+	})
+
 }

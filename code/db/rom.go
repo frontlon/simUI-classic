@@ -315,6 +315,15 @@ func (m *Rom) UpdateSimulator() error {
 	return result.Error
 }
 
+//更新rom地址
+func (m *Rom) UpdateRomPath() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("rom_path", m.RomPath)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //删除一个rom
 func (m *Rom) DeleteById(id uint64) error {
 	result := getDb().Where("id=? ", id).Delete(&m)

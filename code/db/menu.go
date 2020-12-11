@@ -47,6 +47,16 @@ func (*Menu) GetByPlatform(platform uint32,pages uint32) ([]*Menu, error) {
 	return volist, nil
 }
 
+//读取所有菜单数据
+func (*Menu) GetAll() ([]*Menu, error) {
+	volist := []*Menu{}
+	result := getDb().Select("name,platform").Order("sort ASC,pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return volist, nil
+}
+
 //删除一个平台下不存在的目录
 func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 

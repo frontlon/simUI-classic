@@ -24,14 +24,6 @@ func GetFileExt(p string) string {
 }
 
 /*
- 重命名
-*/
-func Rename(oldpath string, filename string) error {
-	newpath := filepath.Dir(oldpath) + "/" + filename + path.Ext(oldpath)
-	return os.Rename(oldpath, newpath)
-}
-
-/*
  从完整路径中获取文件路径，不包含结尾  /
 */
 func GetFilePath(p string) string {

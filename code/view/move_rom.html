@@ -4,38 +4,77 @@
     <style>
         @import "this://app/images/public.css";
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
-        .wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-  
+        .wrapper{padding:10dip;}
+        .submit_wrapper{padding:10dip 0;text-align:center;}
+        h1{font-size:16dip;color:#333}
+        #menu{height:400dip;width:*}
+        #menu img{width:16dip;vertical-align:middle}
+        #menu option{line-height:16dip;vertical-align:middle}
     </style>
 
 </head>
 <body>
     <div class="wrapper">
-        <select type="tree" size=30>
-            <option expanded value="Alkaline Metals">
-                <caption>Alkaline Metals</caption>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-            </option>
-            <option expanded value="Transition Metals">
-                <caption>Transition Metals</caption>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-                <option value="Li">Lithium</option>
-            </option>
-        </select> 
+    <h1></h1>
+        <select id="menu" type="tree">
+            
+        </select>
+        <div class="submit_wrapper">
+        <button id="submit">{{Confirm}}</button>
+        </div>
     </div>
     
     <script type="text/tiscript">
-            view.windowCaption =  CONF.Lang.RomMove;
+    include ROOTPATH + "tis/utils.tis";
+    //创建语言
+    createLang();
+    view.root.on("ready", function(){
+
+        view.windowCaption =  CONF.Lang.RomMove;
+
+        //标题
+        var getjson = mainView.GetGameDetail(view.parameters.id);
+        var detailObj = JSON.parse(getjson);
+        $(h1).html = detailObj.Info.Name;
+
+        //生成列表
+        var lists = mainView.GetAllPlatformMenuList();
+        var listObj = JSON.parse(lists);
+        var create = "";
+        for(var name in listObj) {
+                create += "<option class='title' expanded value=''>";
+                create += "<caption class='title'>"+name+"</caption>";
+                for(var obj in listObj[name]) {
+                    create += "<option pf='"+ obj.platform +"' value='"+obj.name+"'><img src='this://app/images/folder.png'> "+obj.name+"</option>";
+                }
+                create += "</option>";
+        }
+        $(#menu).html = create;
+    });
 
 
-var ss = view.parameters.id;
+    //确定功能
+    event click $(#submit){
+        
+        var obj = $(#menu).select("option:current")
+        
+        if(obj == undefined){
+            alert("你没有选择新目录");
+            return;
+        }
+        
+        var newMenu = obj.attributes["value"];
+        var newPlatform = obj.attributes["pf"];
+        if(newMenu == undefined || newMenu == ""){
+            alert("你没有选择新目录");
+            return;
+        }
 
-    alert(ss);
+        mainView.MoveRom(view.parameters.id,newPlatform,newMenu);
+        view.close("1");
+    }
+
+
     </script>
 </body>
 </html>

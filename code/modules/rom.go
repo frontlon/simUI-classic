@@ -144,38 +144,21 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	if err != nil {
 		return err
 	}
-	romName := utils.GetFileName(filepath.Base(info.RomPath)) //读取文件名 }
+	romName := utils.GetFileName(filepath.Base(info.RomPath)) //读取文件名
 	fileName := ""
 	switch opt {
 	case "rom":
 		fileName = platform.RomPath + config.Cfg.Separator + info.RomPath
 	case "thumb":
 		if platform.ThumbPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.ThumbPath + config.Cfg.Separator + romName + v
-
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
-
+			fileName = GetRomRes("thumb", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.ThumbPath
 			}
-
 		}
 	case "snap":
 		if platform.SnapPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.SnapPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("snap", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.SnapPath + config.Cfg.Separator
 			}
@@ -183,98 +166,49 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 
 	case "poster":
 		if platform.PosterPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.PosterPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("poster", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.PosterPath + config.Cfg.Separator
 			}
 		}
 	case "packing":
 		if platform.PackingPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.PackingPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("packing", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.PackingPath + config.Cfg.Separator
 			}
 		}
-	case "doc":
-		if platform.DocPath != "" {
-			for _, v := range config.DOC_EXTS {
-				fileName = platform.DocPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
-			if fileName == "" {
-				fileName = platform.DocPath
-			}
-		}
 	case "title":
 		if platform.DocPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.TitlePath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("title", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.TitlePath
 			}
 		}
 	case "background":
 		if platform.BackgroundPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.BackgroundPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("background", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.BackgroundPath
 			}
 		}
 	case "video":
 		if platform.VideoPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.VideoPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("video", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.VideoPath
 			}
 		}
+	case "doc":
+		if platform.DocPath != "" {
+			fileName = GetRomRes("doc", info.Platform, romName)
+			if fileName == "" {
+				fileName = platform.DocPath
+			}
+		}
 	case "strategy":
 		if platform.StrategyPath != "" {
-			for _, v := range config.DOC_EXTS {
-				fileName = platform.StrategyPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					break
-				} else {
-					fileName = ""
-				}
-			}
+			fileName = GetRomRes("strategy", info.Platform, romName)
 			if fileName == "" {
 				fileName = platform.StrategyPath
 			}
@@ -285,12 +219,8 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 		}
 	}
 
-	if fileName != "" {
-		if err := utils.OpenFolderByWindow(fileName); err != nil {
-			return err
-		}
-	} else {
-		return errors.New(config.Cfg.Lang["PathNotFound"])
+	if err := utils.OpenFolderByWindow(fileName); err != nil {
+		return err
 	}
 	return nil
 }
@@ -368,7 +298,7 @@ func GetGameDoc(t string, id uint64) (string, error) {
 		}
 	}
 
-	strategy = strings.ReplaceAll(strategy,`<img src="`,`<img src="` + config.Cfg.RootPath)
+	strategy = strings.ReplaceAll(strategy, `<img src="`, `<img src="`+config.Cfg.RootPath)
 
 	return strategy, nil
 }
@@ -417,10 +347,8 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 		content = utils.ToUTF8(content)
 	}
 
-
 	//替换图片路径为相对路径
-	content = strings.ReplaceAll(content,config.Cfg.RootPath,"");
-
+	content = strings.ReplaceAll(content, config.Cfg.RootPath, "");
 	if err := utils.OverlayWriteFile(Filename, content); err != nil {
 		return err
 	}
@@ -606,4 +534,192 @@ func UploadStrategyImages(id uint64, p string) (string, error) {
 	}
 	return newFile, nil
 
+}
+
+//读取rom资源
+func GetRomRes(typ string, pf uint32, romName string) string {
+
+	platform := config.Cfg.Platform[pf] //读取当前平台信息
+	fileName := ""
+	resName := ""
+	switch typ {
+	case "thumb":
+		if platform.ThumbPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.ThumbPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "snap":
+		if platform.SnapPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.SnapPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "poster":
+		if platform.PosterPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.PosterPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "packing":
+		if platform.PackingPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.PackingPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "title":
+		if platform.DocPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.TitlePath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "background":
+		if platform.BackgroundPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.BackgroundPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "video":
+		if platform.VideoPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.VideoPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "doc":
+		if platform.DocPath != "" {
+			for _, v := range config.DOC_EXTS {
+				fileName = platform.DocPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "strategy":
+		if platform.StrategyPath != "" {
+			for _, v := range config.DOC_EXTS {
+				fileName = platform.StrategyPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	}
+
+	return resName
+}
+
+//移动rom及资源文件
+func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
+
+	//读取rom详情
+	rom, err := (&db.Rom{}).GetById(id)
+	if err != nil {
+		utils.WriteLog(err.Error())
+	}
+
+	//生成目录地址
+	romName := utils.GetFileNameAndExt(rom.RomPath);
+	oldFile := config.Cfg.Platform[rom.Platform].RomPath + config.Cfg.Separator + rom.RomPath
+	newFile := ""
+
+	if newFolder == "/" {
+		newFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + romName
+	} else {
+		newFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + newFolder + config.Cfg.Separator + romName
+	}
+
+	//如果位置一样则不用移动
+	if (oldFile == newFile) {
+		return nil
+	}
+
+	//移动文件
+	if err := utils.FileMove(oldFile, newFile); err != nil {
+		return err
+	}
+
+	//同平台下不用移动资源文件
+	if rom.Platform == newPlatform {
+		return nil
+	}
+
+	//开始移动资源文件
+	newPlatformDom := config.Cfg.Platform[newPlatform]
+	romName = utils.GetFileName(filepath.Base(rom.RomPath))
+
+	thumb := GetRomRes("thumb", rom.Platform, romName)
+	if thumb != "" {
+		_ = utils.FileMove(thumb, newPlatformDom.ThumbPath+config.Cfg.Separator+utils.GetFileNameAndExt(thumb));
+	}
+
+	snap := GetRomRes("snap", rom.Platform, romName)
+	if snap != "" {
+		_ = utils.FileMove(snap, newPlatformDom.SnapPath+config.Cfg.Separator+utils.GetFileNameAndExt(snap));
+	}
+
+	poster := GetRomRes("poster", rom.Platform, romName)
+	if poster != "" {
+		_ = utils.FileMove(poster, newPlatformDom.PosterPath+config.Cfg.Separator+utils.GetFileNameAndExt(poster));
+	}
+
+	packing := GetRomRes("packing", rom.Platform, romName)
+	if packing != "" {
+		_ = utils.FileMove(packing, newPlatformDom.PackingPath+config.Cfg.Separator+utils.GetFileNameAndExt(packing));
+	}
+
+	title := GetRomRes("title", rom.Platform, romName)
+	if title != "" {
+		_ = utils.FileMove(title, newPlatformDom.TitlePath+config.Cfg.Separator+utils.GetFileNameAndExt(title));
+	}
+
+	background := GetRomRes("background", rom.Platform, romName)
+	if background != "" {
+		_ = utils.FileMove(background, newPlatformDom.BackgroundPath+config.Cfg.Separator+utils.GetFileNameAndExt(background));
+	}
+
+	video := GetRomRes("video", rom.Platform, romName)
+	if video != "" {
+		_ = utils.FileMove(video, newPlatformDom.VideoPath+config.Cfg.Separator+utils.GetFileNameAndExt(video));
+	}
+
+	doc := GetRomRes("doc", rom.Platform, romName)
+	if doc != "" {
+		_ = utils.FileMove(doc, newPlatformDom.DocPath+config.Cfg.Separator+utils.GetFileNameAndExt(doc));
+	}
+
+	strategy := GetRomRes("strategy", rom.Platform, romName)
+	if strategy != "" {
+		_ = utils.FileMove(strategy, newPlatformDom.StrategyPath+config.Cfg.Separator+utils.GetFileNameAndExt(strategy));
+	}
+	return nil
 }

@@ -5,6 +5,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
 )
 
 //复制文件
@@ -34,7 +36,24 @@ func FileCopy(src, dst string) (error) {
 	return err
 }
 
-//remove
+//移动文件
+func FileMove(oldFile string,newFile string) (error) {
+	if FileExists(oldFile) == true {
+		err := os.Rename(oldFile,newFile)
+		return err
+	}
+	return nil
+}
+
+/*
+ 重命名
+*/
+func Rename(oldpath string, filename string) error {
+	newpath := filepath.Dir(oldpath) + "/" + filename + path.Ext(oldpath)
+	return os.Rename(oldpath, newpath)
+}
+
+//删除文件
 func FileDelete(src string) (error) {
 	if FileExists(src) == true {
 		err := os.Remove(src)

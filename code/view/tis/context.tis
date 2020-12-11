@@ -18,7 +18,6 @@ function openFolder(evt){
 
 //移动rom
 function romMove(evt){
-
     var data = view.dialog({
         url:self.url(ROOTPATH + "move_rom.html"),
         width:self.toPixels(300dip),
@@ -27,7 +26,11 @@ function romMove(evt){
             id:evt.attributes["rid"];
         };
     });
-
+    if(data == "1"){
+        startLoading();
+        initConfig("1");
+        endLoading();
+    }
 }
 
 //右键菜单设置喜爱
