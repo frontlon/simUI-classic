@@ -8,7 +8,7 @@ import (
 )
 
 var ROM_PAGE_NUM = 100 //每页加载rom数量
-var TIP_NUM = 200 //每tip个更新提示一次
+var TIP_NUM = 100 //每tip个更新提示一次
 
 type Rom struct {
 	Id            uint64
