@@ -3,6 +3,7 @@ package modules
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -15,17 +16,16 @@ import (
 /**
  * 创建缓存
  **/
-func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
+func CreateRomData(platform uint32) ([]*db.Rom,error) {
 
 	romlist := []*db.Rom{}
 
-	menuList := map[string]*db.Menu{}                                   //分类目录
 	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
 	BaseInfo, err := GetRomBase(platform)
 
 	if err != nil {
-		return nil, nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
+		return nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
 	}
 
 	//进入循环，遍历文件
@@ -127,15 +127,6 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 					}
 
 					romlist = append(romlist, rinfo)
-
-					//分类列表
-					if menu != ConstMenuRootKey {
-						menuList[menu] = &db.Menu{
-							Platform: platform,
-							Name:     menu,
-							Pinyin:   utils.TextToPinyin(menu),
-						}
-					}
 				}
 
 			}
@@ -144,7 +135,29 @@ func CreateRomData(platform uint32) ([]*db.Rom, map[string]*db.Menu, error) {
 		fmt.Println(err)
 	}
 
-	return romlist, menuList, nil
+	return romlist, nil
+}
+
+//创建菜单列表
+func CreateMenuList(platform uint32) (map[string]*db.Menu, error) {
+
+	menuList := map[string]*db.Menu{}
+
+	FileInfo, err := ioutil.ReadDir(config.Cfg.Platform[platform].RomPath);
+	if err != nil {
+		return menuList, err
+	}
+	for _, v := range FileInfo {
+		if (v.IsDir() == true) {
+			menuList[v.Name()] = &db.Menu{
+				Platform: platform,
+				Name:     v.Name(),
+				Pinyin:   utils.TextToPinyin(v.Name()),
+			}
+		}
+	}
+	return menuList, nil
+
 }
 
 /**
@@ -175,7 +188,7 @@ func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 
 	romlistInfoMd5 := []string{} //磁盘文件
 	romlistFileMd5 := []string{} //磁盘文件
-	for _, v := range romlist {  //从romlist列表中抽出两个md5
+	for _, v := range romlist { //从romlist列表中抽出两个md5
 		romlistInfoMd5 = append(romlistInfoMd5, v.InfoMd5)
 		romlistFileMd5 = append(romlistFileMd5, v.FileMd5)
 	}

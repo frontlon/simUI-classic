@@ -73,8 +73,15 @@ func CacheController() {
 			//开始重建缓存
 			for platform, _ := range PlatformList {
 
-				romlist, menu, err := modules.CreateRomData(platform)
+				//创建rom缓存
+				romlist, err := modules.CreateRomData(platform)
+				if err != nil {
+					utils.WriteLog(err.Error())
+					return utils.ErrorMsg(err.Error())
+				}
 
+				//读取rom目录
+				menu ,err := modules.CreateMenuList(platform)
 				if err != nil {
 					utils.WriteLog(err.Error())
 					return utils.ErrorMsg(err.Error())
