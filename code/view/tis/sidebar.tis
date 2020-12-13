@@ -50,6 +50,8 @@ function openSidebar(obj){
     $(#right_base_info).attributes["rid"] = info.Id; //编辑资料
     $(#right_edit_doc).attributes["rid"] = info.Id; //编辑文档
     $(#right_edit_strategy).attributes["rid"] = info.Id; //编辑攻略
+    $(#right_move).attributes["rid"] = info.Id; //移动rom
+
 
     //打开文件夹
     var romcontext = $(#foldercontext);

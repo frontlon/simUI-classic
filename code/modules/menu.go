@@ -39,8 +39,6 @@ func GetAllPlatformMenuList() (map[string][]map[string]string, error) {
 	platformList, _ := (&db.Platform{}).GetAll()
 	menuList, _ := (&db.Menu{}).GetAll()
 
-
-
 	create := map[string][]map[string]string{}
 	for _, platform := range platformList {
 
@@ -63,5 +61,17 @@ func GetAllPlatformMenuList() (map[string][]map[string]string, error) {
 	}
 
 	return create, nil
+
+}
+
+func AddMenu(platform uint32,name string){
+
+}
+
+func MenuRename(platform uint32,oldName string,newName string){
+
+}
+
+func DeleteMenu(platform uint32,name string){
 
 }

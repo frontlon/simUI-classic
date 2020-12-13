@@ -72,4 +72,39 @@ func MenuController() {
 		return sciter.NewValue(string(jsonStr))
 	})
 
+	//添加菜单
+	utils.Window.DefineFunction("AddMenu", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String())) //平台
+		name := args[1].String()
+
+		modules.AddMenu(platform,name)
+
+		return sciter.NullValue()
+	})
+
+	//菜单重命名
+	utils.Window.DefineFunction("MenuRename", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String())) //平台
+		oldName := args[1].String()
+		newName := args[2].String()
+
+		modules.MenuRename(platform,oldName,newName)
+
+		return sciter.NullValue()
+	})
+
+	//删除菜单
+	utils.Window.DefineFunction("DeleteMenu", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String())) //平台
+		name := args[1].String()
+
+		modules.DeleteMenu(platform,name)
+
+		return sciter.NullValue()
+	})
+
+
 }

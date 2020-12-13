@@ -68,9 +68,12 @@
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;}
     #menulist dt{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color)}
-    #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);}
+    #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);context-menu:selector(menu#menucontext);}
     #menulist dd:current{background-color:color(menu-active-background-color);color:color(menu-active-text-color);}
-    #platform_list dd:drag-source { background-color:#eee;}
+
+    #menucontext li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
+    #menucontext .rename{background-image:url(this://app/images/fileico_rename.png);}
+    #menucontext .delete{background-image:url(this://app/images/fileico_delete.png);}
 
     /* rom模块 */
     #romlist{display:block;}
@@ -289,6 +292,7 @@
 <div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
 <menu id="romcontext"></menu>
+<menu id="menucontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo"></div>
     <div id="tb_left">
@@ -381,6 +385,7 @@
             <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
             <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
             <button id="right_edit_doc" class="funbtn" platform="" name="" value="" rid="" title="{{EditDoc}}"><img src="this://app/images/fileico_doc.png" /></button>
+            <button id="right_move" class="funbtn" platform="" name="" value="" rid="" title="{{RomMove}}"><img src="this://app/images/fileico_move.png" /></button>
             <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" />
                 <menu id="foldercontext" type="menu"></menu>
             </button>
@@ -526,7 +531,8 @@
     include ROOTPATH + "tis/thumb.tis";
     include ROOTPATH + "tis/interface_config.tis";
     include ROOTPATH + "tis/window.tis";
-    include ROOTPATH + "tis/context.tis";
+    include ROOTPATH + "tis/romcontext.tis";
+    include ROOTPATH + "tis/menucontext.tis";
     include ROOTPATH + "tis/keycode.tis";
     include ROOTPATH + "tis/event.tis";
 

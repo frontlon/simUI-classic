@@ -1,0 +1,44 @@
+﻿<html>
+<head>
+    <title></title>
+    <style>
+        @import "this://app/images/public.css";
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
+        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
+        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;width:200dip;margin-bottom:5dip}
+        label{font-size:11dip;}
+        table{width:100%;}
+        tr:last-child td{text-align: left;padding-bottom:0}
+        .desc{font-size:11dip;color:#666}
+
+        .submit{margin:0 8dip}
+        .submit_wrapper{border-top:1dip solid #ccc;padding:6dip 0;text-align:center;display:block;width:*}
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <table>
+            <tr><td><input type="text" id="romname" value="" /></td></tr>
+        </table>
+    </div>
+    <div class="submit_wrapper">
+        <button id="confirm-dialog">{{Confirm}}</button>&#12288;
+        <button id="close-dialog" role="default-button">{{Cancel}}</button>
+
+    </div>
+<script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/menu_rename.tis";
+
+    //确定
+    event click $(#confirm-dialog) {
+        confirmDialog(this);
+    }
+
+    event click $(#close-dialog){
+        view.close();
+    }
+
+</script>
+</body>
+</html>

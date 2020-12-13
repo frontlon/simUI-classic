@@ -253,6 +253,11 @@
         editDoc(this);
     });
 
+   //编辑游戏简介
+    self.on("click", "#right_move", function(evt) {
+        romMove(this);
+    });
+
     //删除rom及相关资源文件
     self.on("click", "#right_delete", function(evt) {
         deleteRom(this);
@@ -264,19 +269,40 @@
     });
 
 
+
     /**
-    * 右键菜单
+    * 菜单右键菜单
+    **/
+        
+    //menu展开右键菜单
+      self.on("contextmenusetup", "#menulist dd", function(evt) {
+        menuContextMenu(this);
+    });
+
+    //menu右键菜单 重命名菜单
+    self.on("click", "#menucontext .rename", function(evt) {
+        renameMenu(this);
+    });
+
+    //menu 右键菜单 删除菜单
+    self.on("click", "#menucontext .delete", function(evt) {
+        deleteMenu(this);
+    });
+
+
+
+    /**
+    * rom右键菜单
     **/
         
     //rom展开右键菜单
-    
-    self.on("contextmenusetup", "#romlist li", function(evt) {
+      self.on("contextmenusetup", "#romlist li", function(evt) {
         //如果是th右键，则忽略
         if (this.attributes.hasClass("romth") == false){
             romContextMenu(this);
         }
     });
-    
+
     //右键菜单启动游戏
     self.on("click", "#romcontext .menu_run_game", function(evt) {
         contextRunGame(this);

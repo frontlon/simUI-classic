@@ -29,7 +29,7 @@ func (m *Menu) Add() error {
 }
 
 //根据条件，查询多条数据
-func (*Menu) GetByPlatform(platform uint32,pages uint32) ([]*Menu, error) {
+func (*Menu) GetByPlatform(platform uint32, pages uint32) ([]*Menu, error) {
 	where := map[string]interface{}{}
 
 	if platform > 0 {
@@ -68,8 +68,8 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 
 	//数据量不会很大，慢慢删。
 	tx := getDb().Begin()
-	for _,v:= range menus{
-		tx.Where("platform=(?) AND name=(?)", platform,v).Delete(&m)
+	for _, v := range menus {
+		tx.Where("platform=(?) AND name=(?)", platform, v).Delete(&m)
 	}
 	result = tx.Commit()
 
