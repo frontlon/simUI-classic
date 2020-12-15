@@ -78,7 +78,10 @@ func MenuController() {
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		name := args[1].String()
 
-		modules.AddMenu(platform,name)
+		if err := modules.AddMenu(platform,name);err != nil{
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
 
 		return sciter.NullValue()
 	})
@@ -90,7 +93,10 @@ func MenuController() {
 		oldName := args[1].String()
 		newName := args[2].String()
 
-		modules.MenuRename(platform,oldName,newName)
+		if err := modules.MenuRename(platform,oldName,newName);err != nil{
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
 
 		return sciter.NullValue()
 	})
@@ -101,7 +107,10 @@ func MenuController() {
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		name := args[1].String()
 
-		modules.DeleteMenu(platform,name)
+		if err := modules.DeleteMenu(platform,name);err != nil{
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
 
 		return sciter.NullValue()
 	})

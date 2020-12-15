@@ -152,17 +152,11 @@ function scrollLoadMenu(evtPos){
     var scrollPos = evtPos.toInteger() + $(#left_menu).box(#height);
     var boxHeight = $(#menulist).box(#height);
 
-
     if(MENU_SCROLL_POS == 0){
         MENU_SCROLL_POS = scrollPos;
     }
 
-
-
     if ((boxHeight - scrollPos <=50) && (scrollPos > MENU_SCROLL_POS)){
-
-
-
         //如果加锁中，则不执行后续逻辑，防止重复触发
         if (MENU_SCROLL_LOCK == true){
             return;
@@ -205,4 +199,23 @@ function loadMenuList(menujson){
 
     menulist.append(dd); //生成dom
 
+}
+
+//添加菜单
+function addMenu(evt){
+    
+    var data = view.dialog({
+        url:self.url(ROOTPATH + "menu_add.html"),
+        width:self.toPixels(250dip),
+        height:self.toPixels(140dip),
+        parameters: {
+            platform:$(#platform_ul).select("li:current").attributes["platform"].toString();
+        };
+    });
+
+
+    if(data == undefined){
+        return;
+    }
+    view.CreateRomCache(0);    
 }

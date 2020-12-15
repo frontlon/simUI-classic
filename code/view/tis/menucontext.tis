@@ -13,32 +13,22 @@ function menuContextMenu(obj){
 //重命名
 function renameMenu(evt){
     
-    alert("aa");
-
-
-    try{
-    alert($(#platform_ul).select("li:current").attributes["platform"]);
-    }catch(e){
-        alert(e);
-    }
-alert("bb");
-    var data = view.dialog({
+    var newName = view.dialog({
         url:self.url(ROOTPATH + "menu_rename.html"),
-        width:self.toPixels(300dip),
+        width:self.toPixels(250dip),
         height:self.toPixels(140dip),
         parameters: {
             name:evt.attributes["opt"],
-            platform:$(#platform_list).select("li:current").attributes["value"].toString();
+            platform:$(#platform_ul).select("li:current").attributes["platform"].toString();
         };
     });
 
-
-    if(data == undefined){
+    if(newName == undefined){
         return;
     }
+
+    view.CreateRomCache(0);
     
-    //$(#romlist).select("li[rid="+detailObj.Info.Id+"] div:nth-child(2)").html = data.name;
-    view.MenuRename(evt.attributes["opt"],data.name);
 }
 
 
@@ -48,8 +38,8 @@ function deleteMenu(obj){
     //确认窗口
     var result = view.msgbox {
         type:#question, 
-        content:CONF.Lang.DeleteRomConfirm, 
-        caption:CONF.Lang.DeleteRom,
+        content:CONF.Lang.DeleteMenuConfirm, 
+        caption:CONF.Lang.DeleteMenu,
         buttons:[
             {id:#yes,text:CONF.Lang.Delete},
             {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
@@ -60,12 +50,7 @@ function deleteMenu(obj){
         return true;
     }
 
-    var id = obj.attributes["rid"];
-    var dom = $(#romlist).select("li[rid="+id+"]");
-    if (dom != undefined){
-        dom.remove(); //删除页面dom
-    }
-    view.DeleteRom(id); //删除实体文件
-    alert(CONF.Lang.DeleteSuccess); //删除成功
+    view.DeleteMenu($(#platform_ul).select("li:current").attributes["platform"],obj.attributes["opt"]); //删除实体文件
+    view.CreateRomCache(0);
 
 }

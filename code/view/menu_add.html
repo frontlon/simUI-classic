@@ -18,6 +18,9 @@
 <body>
     <div id="wrapper">
         <table>
+            <tr><td><select id="platform">
+            <option>请选择平台</option>
+            </select></td></tr>
             <tr><td><input type="text" id="menuname" value="" /></td></tr>
         </table>
     </div>
@@ -28,7 +31,7 @@
     </div>
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog/menu_rename.tis";
+    include ROOTPATH + "tis/dialog/menu_add.tis";
 
     //确定
     event click $(#confirm-dialog) {

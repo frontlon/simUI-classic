@@ -13,7 +13,7 @@
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
     #left_platform{background-color:color(sidebar-background-color);height:*;}
-    #left_menu{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;}
+    #left_menu{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
     #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;min-width:217dip;max-width:500dip}
     
@@ -166,14 +166,16 @@
     #right .run{padding:4dip;line-height:1.5em;height:auto;width:*;display:block;background:color(run-button-background-color);color:color(run-button-text-color);text-align:center;margin-bottom:9dip;overflow:hidden;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     #right .run:hover{color:color(run-button-hover-text-color);background:color(run-button-hover-background-color);}
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
-    #right .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
-    #right .funbtn img{width:19dip;vertical-align:middle;margin:auto}
-    #right .funbtn:hover{background:color(func-button-hover-background-color);opacity:0.5}
-    #right .funbtn i{display:block}
     #right .filedrop_ctl_btn{top:-28dip;right:0dip;position:absolute;}
     #right_volume{position:absolute;top:5dip;right:0;}
     #right .doc{height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
+    .funbtn img{width:19dip;vertical-align:middle;margin:auto}
+    .funbtn:hover{background:color(func-button-background-color);opacity:0.5}
+    .funbtn i{display:block}
 
+    #add_menu{position:absolute;top:18dip;right:8dip}
+    
     /* 基础信息表格 */
     #right_rombase{width:*;padding:0 10dip;margin:0;border:1dip solid color(right-doc-border-color);background:color(right-doc-background-color);}
     #right_rombase li{margin:10dip 0;padding-left:20dip;color:color(right-play-info-text-color);list-style:none;background-position:left center;background-repeat:no-repeat;background-size:contain}
@@ -342,6 +344,7 @@
     <splitter id="platform_splitter" />
     <section id="left_menu">
         <dl id="menulist"></dl>
+        <button id="add_menu" class="funbtn" title="{{AddMenu}}"><i>+</i></button>
     </section>
     <splitter id="menu_splitter" />
     <section id="center" class="scrollbar">
