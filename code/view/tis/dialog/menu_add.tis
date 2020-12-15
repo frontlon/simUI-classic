@@ -20,7 +20,6 @@ function Init(){
     var platformList = JSON.parse(platformJson);
     var options = "<option value=''>"+ CONF.Lang.SelectPlatform +"</option>";
     for(var pf in platformList) {
-        alert(pf.Name);
         options += "<option value='"+ pf.Id +"'>"+pf.Name+"</option>";
     }
 
