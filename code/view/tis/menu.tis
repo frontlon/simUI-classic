@@ -207,7 +207,7 @@ function addMenu(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "menu_add.html"),
         width:self.toPixels(250dip),
-        height:self.toPixels(140dip),
+        height:self.toPixels(150dip),
         parameters: {
             platform:$(#platform_ul).select("li:current").attributes["platform"].toString();
         };

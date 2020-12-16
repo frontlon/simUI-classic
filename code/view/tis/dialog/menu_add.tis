@@ -22,9 +22,7 @@ function Init(){
     for(var pf in platformList) {
         options += "<option value='"+ pf.Id +"'>"+pf.Name+"</option>";
     }
-
     $(#platform).html = options;
-
 }
 //确定
 function confirmDialog(evt){
