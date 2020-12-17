@@ -279,7 +279,7 @@
     **/
     
     //menu展开右键菜单
-      self.on("contextmenusetup", "#menulist dd", function(evt) {
+    self.on("contextmenusetup", "#menulist dd", function(evt) {
         menuContextMenu(this);
     });
 
