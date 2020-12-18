@@ -177,6 +177,13 @@ function openSidebar(obj){
         strategy = strategy.replace("_7","<img class='ctl' src='this://app/images/ctl_7.png' />");
         strategy = strategy.replace("_8","<img class='ctl' src='this://app/images/ctl_8.png' />");
         strategy = strategy.replace("_9","<img class='ctl' src='this://app/images/ctl_9.png' />");
+        strategy = strategy.replace("_N","<img class='ctl' src='this://app/images/ctl_N.png' />");
+        strategy = strategy.replace("_A","<img class='ctl' src='this://app/images/ctl_A.png' />");
+        strategy = strategy.replace("_B","<img class='ctl' src='this://app/images/ctl_B.png' />");
+        strategy = strategy.replace("_C","<img class='ctl' src='this://app/images/ctl_C.png' />");
+        strategy = strategy.replace("_D","<img class='ctl' src='this://app/images/ctl_D.png' />");
+        strategy = strategy.replace("_E","<img class='ctl' src='this://app/images/ctl_E.png' />");
+        strategy = strategy.replace("_F","<img class='ctl' src='this://app/images/ctl_F.png' />");
         var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
         $(#third_strategy).html = strategy;
         $(#label_third).attributes.removeClass("disable");

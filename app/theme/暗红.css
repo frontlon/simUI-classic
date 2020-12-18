@@ -77,6 +77,7 @@ html:theme(red) {
     var(tab-background-color) : #6f2b3f;
 
     /* 右侧边栏 功能按钮 */
+    var(func-button-text-color) : #999;
     var(func-button-background-color) : #31111a;
 
     /* 右侧边栏 模拟器选择 */

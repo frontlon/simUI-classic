@@ -78,6 +78,7 @@ html:theme(light) {
     var(tab-background-color) : #eee;
 
     /* 右侧边栏 功能按钮 */
+    var(func-button-text-color) : #FFF;
     var(func-button-background-color) : #5b93d3;
    
     /* 右侧边栏 模拟器选择 */
