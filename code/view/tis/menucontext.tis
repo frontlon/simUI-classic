@@ -1,18 +1,23 @@
 ﻿//rom模块右键菜单
 function menuContextMenu(obj){
+
     var menucontext = $(#menucontext);
     menucontext.clear();
 
+    var opt = obj.attributes["opt"];
+    if(opt == "" || opt == "favorite" || opt == "hide"){
+        return true;
+    }
+
     var btndata = "";
-    btndata += "<li class='rename' opt='"+ obj.attributes["opt"] +"'>"+ CONF.Lang.Rename +"</li>";
+    btndata += "<li class='rename' opt='"+ opt +"'>"+ CONF.Lang.Rename +"</li>";
     btndata += "<hr />";
-    btndata += "<li class='delete' opt='"+ obj.attributes["opt"] +"'>"+ CONF.Lang.Delete +"</li>";
+    btndata += "<li class='delete' opt='"+ opt +"'>"+ CONF.Lang.Delete +"</li>";
     menucontext.append(btndata);
 }
 
 //重命名
 function renameMenu(evt){
-    
     var newName = view.dialog({
         url:self.url(ROOTPATH + "menu_rename.html"),
         width:self.toPixels(250dip),
@@ -22,13 +27,10 @@ function renameMenu(evt){
             platform:$(#platform_ul).select("li:current").attributes["platform"].toString();
         };
     });
-
     if(newName == undefined){
         return;
     }
-
     view.CreateRomCache(0);
-    
 }
 
 
