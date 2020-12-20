@@ -172,6 +172,7 @@ function openSidebar(obj){
     //攻略
     var strategy = view.GetGameDoc("strategy",obj.attributes["rid"]);
     if(strategy != ""){
+        strategy = strategy.replace("_+","<img class='ctl' src='this://app/images/ctl_+.png' />");
         strategy = strategy.replace("_1","<img class='ctl' src='this://app/images/ctl_1.png' />");
         strategy = strategy.replace("_2","<img class='ctl' src='this://app/images/ctl_2.png' />");
         strategy = strategy.replace("_3","<img class='ctl' src='this://app/images/ctl_3.png' />");
@@ -181,13 +182,26 @@ function openSidebar(obj){
         strategy = strategy.replace("_7","<img class='ctl' src='this://app/images/ctl_7.png' />");
         strategy = strategy.replace("_8","<img class='ctl' src='this://app/images/ctl_8.png' />");
         strategy = strategy.replace("_9","<img class='ctl' src='this://app/images/ctl_9.png' />");
-        strategy = strategy.replace("_N","<img class='ctl' src='this://app/images/ctl_N.png' />");
         strategy = strategy.replace("_A","<img class='ctl' src='this://app/images/ctl_A.png' />");
         strategy = strategy.replace("_B","<img class='ctl' src='this://app/images/ctl_B.png' />");
         strategy = strategy.replace("_C","<img class='ctl' src='this://app/images/ctl_C.png' />");
         strategy = strategy.replace("_D","<img class='ctl' src='this://app/images/ctl_D.png' />");
         strategy = strategy.replace("_E","<img class='ctl' src='this://app/images/ctl_E.png' />");
         strategy = strategy.replace("_F","<img class='ctl' src='this://app/images/ctl_F.png' />");
+        strategy = strategy.replace("_N","<img class='ctl' src='this://app/images/ctl_N.png' />");
+        strategy = strategy.replace("_S","<img class='ctl' src='this://app/images/ctl_S.png' />");
+        strategy = strategy.replace("_P","<img class='ctl' src='this://app/images/ctl_P.png' />");
+        strategy = strategy.replace("_K","<img class='ctl' src='this://app/images/ctl_K.png' />");
+        strategy = strategy.replace("_a","<img class='ctl' src='this://app/images/ctl_A.png' />");
+        strategy = strategy.replace("_b","<img class='ctl' src='this://app/images/ctl_B.png' />");
+        strategy = strategy.replace("_c","<img class='ctl' src='this://app/images/ctl_C.png' />");
+        strategy = strategy.replace("_d","<img class='ctl' src='this://app/images/ctl_D.png' />");
+        strategy = strategy.replace("_e","<img class='ctl' src='this://app/images/ctl_E.png' />");
+        strategy = strategy.replace("_f","<img class='ctl' src='this://app/images/ctl_F.png' />");
+        strategy = strategy.replace("_n","<img class='ctl' src='this://app/images/ctl_N.png' />");
+        strategy = strategy.replace("_s","<img class='ctl' src='this://app/images/ctl_S.png' />");
+        strategy = strategy.replace("_p","<img class='ctl' src='this://app/images/ctl_P.png' />");
+        strategy = strategy.replace("_k","<img class='ctl' src='this://app/images/ctl_K.png' />");
         var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
         $(#third_strategy).html = strategy;
         $(#label_third).attributes.removeClass("disable");
@@ -264,7 +278,6 @@ function _createRotate(info){
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
-    if(background != ""){ pics += "<img src=\""+ background +"\" />"; }
 
     //游戏缩略图
     if(thumb != ""){
@@ -309,6 +322,9 @@ function _createSecondThumbs(info){
     var html = "";
     var topHtml = ""
     var bottomHtml = ""
+    
+    if(title != "") topHtml += _getSideSecondDom("title",title);
+        else bottomHtml += _getSideSecondDom("title",title);  
     if(thumb != "") topHtml += _getSideSecondDom("thumb",thumb);
         else bottomHtml += _getSideSecondDom("thumb",thumb);
     if(snap != "") topHtml += _getSideSecondDom("snap",snap);
@@ -317,8 +333,7 @@ function _createSecondThumbs(info){
         else bottomHtml += _getSideSecondDom("poster",poster);
     if(packing != "") topHtml += _getSideSecondDom("packing",packing);
         else bottomHtml += _getSideSecondDom("packing",packing);  
-    if(title != "") topHtml += _getSideSecondDom("title",title);
-        else bottomHtml += _getSideSecondDom("title",title);  
+    
     if(background != "") topHtml += _getSideSecondDom("background",background);
         else bottomHtml += _getSideSecondDom("background",background);
     //视频在最下方且不自动播放
