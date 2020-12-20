@@ -80,10 +80,14 @@ function openSidebar(obj){
     }
 
     //创建视频
-    _createVideo(info,romPath);
+    var videoExists = _createVideo(info,romPath);
 
-    //创建滑动图
-    _createRotate(info);
+    //如果视频不存在，创建滑动图
+    if(videoExists == false){
+        _createRotate(info);
+    }else{
+        _createRotate(false);
+    }
     
     //背景图片
     var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
@@ -218,26 +222,43 @@ function _createVideo(info,romPath){
         vdom.style["height"] = vdom.videoHeight();
         vdom.audioVolume(VIDEO_VALUME);
         VIDEO_PLAY_STATE = 1;
+        return true; //有视频
     }else{
         if(VIDEO_PLAY_STATE == 1){
             vdom.videoStop();
             vdom.videoUnload();
             VIDEO_PLAY_STATE = 0;
         }
-        
+        return false; //没有视频
     }
 }
 
 //滑动图
 function _createRotate(info){
     var pics = "";
-    var romPath = URL.parse(info.RomPath);
-    var title = getRomPicPath("title",info.Platform,romPath.name); //标题图
-    var thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
-    var snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
-    var poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
-    var packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
-    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+    var romPath = "";
+    var title = ""; //标题图
+    var thumb = ""; //展示图
+    var snap = ""; //插画
+    var poster = ""; //海报
+    var packing = ""; //包装盒图
+    var background = ""; //背景图
+
+    if(info != false){
+        romPath = URL.parse(info.RomPath);
+        title = getRomPicPath("title",info.Platform,romPath.name); //标题图
+        thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
+        snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
+        poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
+        packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
+        background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+        $(#thumb_h2).style["display"] = undefined;
+    }else{
+        $(#thumb_h2).style["display"] = "none";
+        $(#rotate).style["display"] = "none";
+        $(#stack).html = "";
+        return;
+    }
 
     if(title != ""){ pics += "<img src=\""+ title +"\" />"; }
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
@@ -284,21 +305,87 @@ function _createSecondThumbs(info){
     var background = getRomPicPath("background",pfid,name);
     var video = getRomPicPath("video",pfid,name);
 
-    if(thumb != ""){$(.file-drop-zone[opt=thumb]).html = "<img src='"+ thumb +"'>";}
-        else{$(.file-drop-zone[opt=thumb]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(snap != ""){$(.file-drop-zone[opt=snap]).html = "<img src='"+ snap +"'>";}
-        else{$(.file-drop-zone[opt=snap]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(poster != ""){$(.file-drop-zone[opt=poster]).html = "<img src='"+ poster +"'>";}
-        else{$(.file-drop-zone[opt=poster]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(packing != ""){$(.file-drop-zone[opt=packing]).html = "<img src='"+ packing +"'>";}
-        else{$(.file-drop-zone[opt=packing]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(title != ""){$(.file-drop-zone[opt=title]).html = "<img src='"+ title +"'>";}
-        else{$(.file-drop-zone[opt=title]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(background != ""){$(.file-drop-zone[opt=background]).html = "<img src='"+ background +"'>";}
-        else{$(.file-drop-zone[opt=background]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
-    if(video != ""){$(.file-drop-zone[opt=video]).html = "<video src='"+ video +"' />";}
-        else{$(.file-drop-zone[opt=video]).html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";}
 
+    var html = "";
+    var topHtml = ""
+    var bottomHtml = ""
+    if(thumb != "") topHtml += _getSideSecondDom("thumb",thumb);
+        else bottomHtml += _getSideSecondDom("thumb",thumb);
+    if(snap != "") topHtml += _getSideSecondDom("snap",snap);
+        else bottomHtml += _getSideSecondDom("snap",snap);
+    if(poster != "") topHtml += _getSideSecondDom("poster",poster);
+        else bottomHtml += _getSideSecondDom("poster",poster);
+    if(packing != "") topHtml += _getSideSecondDom("packing",packing);
+        else bottomHtml += _getSideSecondDom("packing",packing);  
+    if(title != "") topHtml += _getSideSecondDom("title",title);
+        else bottomHtml += _getSideSecondDom("title",title);  
+    if(background != "") topHtml += _getSideSecondDom("background",background);
+        else bottomHtml += _getSideSecondDom("background",background);
+    //视频在最下方且不自动播放
+    bottomHtml += _getSideSecondDom("video",video);
+
+    html = topHtml+bottomHtml;
+    $(#second_thumbs).html = html;
+}
+
+
+//获取侧边栏图集
+function _getSideSecondDom(type,url){
+    var html = "";
+    var title = ""; //标题
+    var imgContent = "";
+    switch(type){
+        case "thumb":
+            title = CONF.Lang.Thumb;
+            break;
+        case "snap":
+            title = CONF.Lang.Snap;
+            break;
+        case "title":
+            title = CONF.Lang.TitlePic;
+            break;
+        case "poster":
+            title = CONF.Lang.Poster;
+            break;
+        case "packing":
+            title = CONF.Lang.Packing;
+            break;
+        case "background":
+            title = CONF.Lang.BackgroundPic;
+            break;
+        case "video":
+            title = CONF.Lang.Video;
+            break;
+    }
+
+    if(type  == "video"){
+        html += "<h2>"+title+"</h2>";
+        html += "<div class='filedropzone_widget'>";
+        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i>&#xe9d3;</i><menu>";
+        html += "<li class='openfile' for='video' caption='"+CONF.Lang.SelectVideoFile +"' filter='video Files (*.wmv;*.mp4)|.wmv;.mp4|All Files (*.*)|*.*'><div class='file-drop-zone-empty'>" + CONF.Lang.SelectVideo + "</li>";
+        html += "<li class='thumb_delete' value='video'>"+CONF.Lang.DeleteVideo+"</li>";
+        html += "</menu></button>";
+        html += "<div.file-drop-zone  opt='video' accept-drop='*.wmv;*.mp4'>";
+        html += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropVideoToHere+"<br>("+CONF.Lang.VideoExts+")</div>";
+        html += "</div></div>";
+    }else{
+        html += "<h2>"+title+"</h2>";
+        html += "<div class='filedropzone_widget'>";
+        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i>&#xe9d3;</i><menu>";
+        html += "<li class='openfile' for='"+type+"' caption='"+CONF.Lang.SelectPicFile+"' filter='Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*'>"+CONF.Lang.SelectPic+"</li>";
+        html += "<li class='thumb_down' value='"+type+"'>"+CONF.Lang.NetPic+"</li>";
+        html += "<li class='thumb_delete' value='"+type+"'>"+CONF.Lang.DeletePic+"</li>";
+        html += "</menu></button>";
+
+        if(url == ""){
+           imgContent += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropPicToHere+"<br>("+CONF.Lang.PicExts"+)</div>";
+        }else{
+            imgContent += "<img src='"+url+"'>";
+        }
+        html += "<div.file-drop-zone  opt='"+type+"' accept-drop='*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp'>"+imgContent+"</div>";
+        html += "</div>";
+    }
+    return html;
 }
 
 //游戏启动（侧边栏）

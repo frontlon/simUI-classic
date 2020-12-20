@@ -399,7 +399,7 @@
                 <button id="right_volume" class="funbtn"><i></i></button>
                 <video id="right_video" src="" />
             </div>
-            <h2>{{Thumb}}</h2>
+            <h2 id="thumb_h2">{{Thumb}}</h2>
             <div class="rotate_wrapper">
                 <button id="rotate" class="funbtn">&gt;</button>
                 <div id="stack"></div>
@@ -414,70 +414,7 @@
         </section>
         <section id="right_second">
         <!-- 选项卡2 -->
-            <div id="second_thumbs">
-                <h2>{{Thumb}}</h2>
-                <div class="filedropzone_widget" id="widget_thumb">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="thumb" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="thumb">{{NetPic}}</li>
-                        <li class="thumb_delete" value="thumb">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone opt="thumb" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                </div>
-                <h2>{{Snap}}</h2>
-                <div class="filedropzone_widget" id="widget_snap">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="snap" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="snap">{{NetPic}}</li>
-                        <li class="thumb_delete" value="snap">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone  opt="snap" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                </div>
-                <h2>{{TitlePic}}</h2>
-                <div class="filedropzone_widget" id="widget_title">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="title" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="title">{{NetPic}}</li>
-                        <li class="thumb_delete" value="title">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone  opt="title" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                </div>
-                <h2>{{Poster}}</h2>
-                <div class="filedropzone_widget" id="widget_poster">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="poster" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="poster">{{NetPic}}</li>
-                        <li class="thumb_delete" value="poster">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone disabled  opt="poster" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                    </div>
-                <h2>{{Packing}}</h2>
-                <div class="filedropzone_widget" id="widget_packing">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="packing" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="packing">{{NetPic}}</li>
-                        <li class="thumb_delete" value="packing">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone  opt="packing" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                </div>
-                <h2>{{BackgroundPic}}</h2>
-                <div class="filedropzone_widget" id="widget_background">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="background" caption="{{SelectPicFile}}" filter="Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*">{{SelectPic}}</li>
-                        <li class="thumb_down" value="background">{{NetPic}}</li>
-                        <li class="thumb_delete" value="background">{{DeletePic}}</li>
-                    </menu></button>
-                    <div.file-drop-zone  opt="background" accept-drop="*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp"><div class="file-drop-zone-empty">{{DropPicToHere}}<br>({{PicExts}})</div></div>
-                </div>
-                <h2>{{Video}}</h2>
-                <div class="filedropzone_widget" id="widget_video">
-                    <button id="" class="funbtn filedrop_ctl_btn" type="menu"><i>&#xe9d3;</i><menu>
-                        <li class="openfile" for="video" caption="{{SelectVideoFile}}" filter="video Files (*.wmv;*.mp4)|.wmv;.mp4|All Files (*.*)|*.*"><div class="file-drop-zone-empty">{{SelectVideo}}</div></li>
-                        <li class="thumb_delete" value="video">{{DeleteVideo}}</li>
-                    </menu></button>
-                    <div.file-drop-zone  opt="video" accept-drop="*.wmv;*.mp4">{{DropVideoToHere}}<br>({{VideoExts}})</div>
-                </div>
-            </div>
+            <div id="second_thumbs"></div>
         </section>
 
         <section id="right_third">
@@ -498,7 +435,7 @@
 
 <script type="text/tiscript">
 
-    var isDebug = false;
+    var isDebug = true;
     var mainView = view;
     var ROOTPATH = "this://app/";
     var SEPARATOR = ""; //路径分隔符
