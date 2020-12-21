@@ -142,7 +142,7 @@ function keyRomUp(){
         var rootDom = $(#romlist);
         nextDom = rootDom.select("li:nth-child("+ next +")");
 
-        if(nextDom.index <= 0){
+        if(nextDom != undefined && nextDom.index <= 0){
             nextDom = rootDom.select("li:nth-child(2)"); //定位到第一个
         }
     }
