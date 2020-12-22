@@ -147,8 +147,10 @@ function keyRomUp(){
         }
     }
  
-    nextDom.state.current = true;
-    openSidebar(nextDom);
+    if (nextDom != undefined){
+        nextDom.state.current = true;
+        openSidebar(nextDom);
+    }
 }
 
 function keyRomDown(){
