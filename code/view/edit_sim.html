@@ -21,9 +21,9 @@
             <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
             <tr><td>{{Path}}：</td><td>
                 <input type="text" id="sim_path" value="">
-                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="application Files (*.exe)|*.exe;*.app|All Files (*.*)|*.*">&#x2026;</button>
+                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="application Files (*.exe)|*.exe;*.app|All Files (*.*)|*.*">...</button>
             </td></tr>
-            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            <tr><td><div class="tip" title="{{SimParamsDesc}}">?</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
                 <option value="">Default</option>
                 <option value="{RomName}">MAME</option>
@@ -34,11 +34,11 @@
                 <option value="-rom={RomName}">Demul</option>
             </select>
             </td></tr>
-            <tr><td><div class="tip" title="{{LuaDesc}}">&#xf3c1;</div>{{Lua}}：</td><td>
+            <tr><td><div class="tip" title="{{LuaDesc}}">?</div>{{Lua}}：</td><td>
                 <input type="text" id="lua" value="">
-                <button class="openfile" for="lua" caption="{{SelectBootFile}}" filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*">&#x2026;</button>
+                <button class="openfile" for="lua" caption="{{SelectBootFile}}" filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*">...</button>
             </td></tr>
-            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}：</td><td>
+            <tr><td><div class="tip" title="{{UnzipRunDesc}}">?</div>{{UnzipRun}}：</td><td>
                 <select id="unzip">
                     <option value="0">{{No}}</option>
                     <option value="1">{{Yes}}</option>

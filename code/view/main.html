@@ -33,10 +33,12 @@
     #logo img{max-width:202dip;max-height:36dip;width:auto;height:auto;}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
     #tb_right{text-align:right;width:223dip;display:inline;background-color:color(titlebar-background-color);}
-    #titlebar i{font-size:18dip;line-height:36dip;display:block}
+    #titlebar i{display:block;}
+    #titlebar .minsize{background-size:60%;}
     #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0;border:0;border-radius:0}
     #titlebar button:hover{opacity:0.7;}
     #titlebar button.disabled{opacity:0.3;}
+
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
     /* 状态栏筛选栏 */
@@ -298,8 +300,8 @@
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo"></div>
     <div id="tb_left">
-        <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i>&#xe7ab;</i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i>&#xe7e2;</i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i>&#xe7ac;</i></button>
-        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i>&#xe659;</i></button><button id="interface_config" value="1" type="menu" title="{{UIConfig}}"><i>&#xe67c;</i><menu>
+        <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i.frame_left.minsize></i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i.frame_center.minsize></i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i.frame_right.minsize></i></button>
+        <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i></i></button><button id="interface_config" value="1" type="menu" title="{{UIConfig}}"><i.interface.minsize></i><menu>
             <li id="config_romlist_direction">{{ThumbDirection}}<menu><li opt="0">{{ThumbAuto}}</li><li opt="1">{{ThumbHorizontal}}</li><li opt="2">{{ThumbVertical}}</li></menu></li>
             <li id="config_thumb">{{IndexThumb}}<menu><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="title">{{TitlePic}}</li></menu></li>
             <li id="config_font_background">{{TitleBackground}}<menu><li opt="2">{{TitleShow}}</li><li opt="0">{{TitleHideBackground}}</li><li opt="1">{{TitleHide}}</li></menu></li>
@@ -316,25 +318,25 @@
             </menu></li>
         </menu></button>
 
-        <button id="istop" value="" title="{{GoTop}}"><i>&#xe60e;</i></button>
+        <button id="istop" value="" title="{{GoTop}}"><i.top.minsize></i></button>
     </div>
 
     <div id="tb_right">
-        <button id="shortcut" type="menu" title="{{Shortcut}}"><i>&#xe6b8;</i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i>&#xe637;</i>
+        <button id="shortcut" type="menu" title="{{Shortcut}}"><i.shortcut.minsize></i><menu></menu></button><button title="{{CreateCache}}" id="create" type="menu"><i.cache.minsize></i>
             <menu>
-                <li id="create_cache" opt="platform"><i>&#xe637;</i><span>{{CreateCachePlatform}}</span></li>
-                <li id="create_cache" opt="all"><i>&#xe637;</i><span>{{CreateCacheAll}}</span></li>
+                <li id="create_cache" opt="platform"><i.cache></i><span>{{CreateCachePlatform}}</span></li>
+                <li id="create_cache" opt="all"><i.cache></i><span>{{CreateCacheAll}}</span></li>
             </menu>
-        </button><button type="menu" title="{{Config}}"><i>&#xe602;</i>
+        </button><button type="menu" title="{{Config}}"><i.config.minsize></i>
             <menu>
-                <li id="config"><i>&#xe602;</i><span>{{Config}}</span></li>
-                <li id="theme"><i>&#xe72b;</i><span>{{Theme}}</span><menu></menu></li>
-                <li id="check_joystick"><i>&#xeb78;</i><span>{{CheckJoystick}}</span></li>
-                <li id="about"><i>&#xe7b9;</i><span>{{About}}</span></li>
-                <li id="help"><i>&#xf3c1;</i><span>{{Help}}</span></li>
-                <li id="upgrade"><i>&#xe70b;</i><span>{{CheckUpgrade}}</span></li>
+                <li id="config"><i.config></i><span>{{Config}}</span></li>
+                <li id="theme"><i.skin></i><span>{{Theme}}</span><menu></menu></li>
+                <li id="check_joystick"><i.joystick></i><span>{{CheckJoystick}}</span></li>
+                <li id="about"><i.info></i><span>{{About}}</span></li>
+                <li id="help"><i.help></i><span>{{Help}}</span></li>
+                <li id="upgrade"><i.update></i><span>{{CheckUpgrade}}</span></li>
             </menu>
-        </button><button role="window-minimize"><i>&#xe661;</i></button><button role="window-maximize"><i>&#xe66b;</i></button><button role="window-close"><i>&#xe605;</i></button>
+        </button><button role="window-minimize"><i.minimize.minsize></i></button><button role="window-maximize"><i.maximize.minsize></i></button><button role="window-close"><i.close.minsize></i></button>
     </div>
 </div>
 <frameset cols="62dip,140dip,*,217dip" noresize="noresize">

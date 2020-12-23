@@ -376,7 +376,7 @@ function _getSideSecondDom(type,url){
     if(type  == "video"){
         html += "<h2>"+title+"</h2>";
         html += "<div class='filedropzone_widget'>";
-        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i>&#xe9d3;</i><menu>";
+        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i.setting></i><menu>";
         html += "<li class='openfile' for='video' caption='"+CONF.Lang.SelectVideoFile +"' filter='video Files (*.wmv;*.mp4)|.wmv;.mp4|All Files (*.*)|*.*'><div class='file-drop-zone-empty'>" + CONF.Lang.SelectVideo + "</li>";
         html += "<li class='thumb_delete' value='video'>"+CONF.Lang.DeleteVideo+"</li>";
         html += "</menu></button>";
@@ -386,7 +386,7 @@ function _getSideSecondDom(type,url){
     }else{
         html += "<h2>"+title+"</h2>";
         html += "<div class='filedropzone_widget'>";
-        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i>&#xe9d3;</i><menu>";
+        html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i.setting></i><menu>";
         html += "<li class='openfile' for='"+type+"' caption='"+CONF.Lang.SelectPicFile+"' filter='Images Files (*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp)|*.gif;*.png;*.jpg;*.jpeg;*.ico;*.bmp|All Files (*.*)|*.*'>"+CONF.Lang.SelectPic+"</li>";
         html += "<li class='thumb_down' value='"+type+"'>"+CONF.Lang.NetPic+"</li>";
         html += "<li class='thumb_delete' value='"+type+"'>"+CONF.Lang.DeletePic+"</li>";
@@ -543,10 +543,10 @@ function videoVolume(evt){
     var video = $(#right_video);
     if(VIDEO_VALUME == 0 ){
         VIDEO_VALUME = 1;
-        evt.html = "<i>&#xe657;</i>";
+        evt.html = "<i.sound_on></i>";
     }else{
         VIDEO_VALUME = 0;    
-        evt.html = "<i>&#xe686;</i>";
+        evt.html = "<i.sound_off></i>";
     }
     video.audioVolume(VIDEO_VALUME);
     view.UpdateConfig("video_volume",VIDEO_VALUME);

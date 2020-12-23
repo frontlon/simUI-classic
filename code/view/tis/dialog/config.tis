@@ -78,10 +78,10 @@ function Init(){
         shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
         shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>...</button>";
         shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
-        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i.sort></i></label>";
         shortcut += "</li>";
     }
     $(#shortcut_list).html = shortcut;
@@ -430,10 +430,10 @@ function shortcutAdd(evt) {
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
         shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>...</button>";
         shortcut += "<button class='shortcut_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";
-        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i.sort></i></label>";
         shortcut += "</li>";
         $(#shortcut_list).append(shortcut);
     }

@@ -8,14 +8,14 @@ function initRomListStyle(){
 
     //初始化游戏列表样式
     if(CONF.Default.RomlistStyle == "1"){
-        $(#switch_romlist).html = "<i>&#xe659;</i>";
+        $(#switch_romlist).html = "<i.block.minsize></i>";
         romlist.attributes.addClass("romblock");
         if($(.romth) != undefined){
             $(.romth).style["display"]="none";
         }
         
     }else{
-        $(#switch_romlist).html = "<i>&#xe690;</i>";
+        $(#switch_romlist).html = "<i.list.minsize></i>";
         romlist.attributes.addClass("romlist");
         if($(.romth) != undefined){
             $(.romth).style["display"]="block";
@@ -211,13 +211,13 @@ function toggleSidebar(){
 function switchRomListStyle(obj){
     if(obj.attributes["value"] == "1"){
         obj.attributes["value"] = "2";
-        obj.html = "<i>&#xe690;</i>";
+        obj.html = "<i.list.minsize></i>";
         self.$(#romlist).attributes.removeClass("romblock");
         self.$(#romlist).attributes.addClass("romlist");
         self.$(.romth).style["display"]="block";
     }else{
         obj.attributes["value"] = "1";
-        obj.html = "<i>&#xe659;</i>";
+        obj.html = "<i.block.minsize></i>";
         self.$(#romlist).attributes.removeClass("romlist");
         self.$(#romlist).attributes.addClass("romblock");
         self.$(.romth).style["display"]="none";

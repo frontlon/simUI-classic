@@ -43,8 +43,8 @@ function Init(){
 
     //初始化音量控制
     VIDEO_VALUME = CONF.Default.VideoVolume;
-    if(VIDEO_VALUME == 0)$(#right_volume).html = "<i>&#xe686;</i>";
-    else $(#right_volume).html = "<i>&#xe657;</i>";
+    if(VIDEO_VALUME == 0)$(#right_volume).html = "<i.sound_off></i>";
+    else $(#right_volume).html = "<i.sound_on></i>";
 
     $(body).state.focus = true;
 
