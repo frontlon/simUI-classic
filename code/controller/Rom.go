@@ -286,6 +286,7 @@ func RomController() {
 			Year:      d["year"],
 			Publisher: d["publisher"],
 			Country:   d["country"],
+			Translate: d["translate"],
 		}
 
 		//写入配置文件
@@ -375,11 +376,10 @@ func RomController() {
 		newPlatform := uint32(utils.ToInt(args[1].String()))
 		newFolder := args[2].String()
 
-		if err := modules.MoveRom(id,newPlatform,newFolder); err != nil {
+		if err := modules.MoveRom(id, newPlatform, newFolder); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-
 
 		return sciter.NullValue()
 	})

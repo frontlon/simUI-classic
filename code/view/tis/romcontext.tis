@@ -112,12 +112,12 @@ function baseinfo(evt){
     if(data != undefined){
         var info = JSON.parse(data);
         var dom = self.select(".romitem[rid="+ evt.attributes['rid'] +"]");
-        dom.select("div:nth-child(4)").html = info.BaseType;
-        dom.select("div:nth-child(5)").html = info.BaseYear;
-        dom.select("div:nth-child(6)").html = info.BasePublisher;
-        dom.select("div:nth-child(2)").html = info.Name;
-        dom.select("div:nth-child(7)").html = info.BaseCountry;
-        dom.select("div:nth-child(8)").html = info.BaseTranslate;
+        if(dom.select("div:nth-child(4)") != undefined) dom.select("div:nth-child(4)").html = info.BaseType;
+        if(dom.select("div:nth-child(5)") != undefined) dom.select("div:nth-child(5)").html = info.BaseYear;
+        if(dom.select("div:nth-child(6)") != undefined) dom.select("div:nth-child(6)").html = info.BasePublisher;
+        if(dom.select("div:nth-child(2)") != undefined) dom.select("div:nth-child(2)").html = info.Name;
+        if(dom.select("div:nth-child(7)") != undefined) dom.select("div:nth-child(7)").html = info.BaseCountry;
+        if(dom.select("div:nth-child(8)") != undefined) dom.select("div:nth-child(8)").html = info.BaseTranslate;
     }
     
 }

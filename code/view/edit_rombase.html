@@ -86,6 +86,7 @@ view.root.on("ready", function(){
         if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
         if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
         if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
+        if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
     }
 
 });
@@ -104,6 +105,7 @@ event click $(#submit){
         type:$(#type).value,
         publisher:$(#publisher).value,
         country:$(#country).value,
+        translate:$(#translate).value,
     }
     var result = mainView.SetRomBase(JSON.stringify(data));
     view.close(result);

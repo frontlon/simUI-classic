@@ -92,7 +92,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 
 	info, _ := GetRomBase(platform) //读取老数据
 	//如果全为空则删除当前记录
-	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" {
+	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" && newData.Translate == "" {
 		delete(info, newData.RomName)
 	} else {
 		info[newData.RomName] = newData //并入新数据
@@ -120,6 +120,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 			strings.Trim(v.Year, " "),
 			strings.Trim(v.Publisher, " "),
 			strings.Trim(v.Country, " "),
+			strings.Trim(v.Translate, " "),
 		})
 
 	}
