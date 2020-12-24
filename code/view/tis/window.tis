@@ -113,7 +113,14 @@ function heartbeat(str){
 
 //创建界面设置
 function initInterface(){
-    
+    //初始化选项
+    $(#config_romlist_direction).select("li[opt="+ CONF.Default.RomlistDirection +"]").attributes.addClass("active");
+    $(#config_thumb).select("li[opt="+ CONF.Default.Thumb +"]").attributes.addClass("active");
+    $(#config_font_background).select("li[opt="+ CONF.Default.RomlistFontBackground +"]").attributes.addClass("active");
+    $(#config_title_fontsize).select("li[opt="+ CONF.Default.FontSize +"]").attributes.addClass("active");
+    $(#config_romlist_size).select("li[opt="+ CONF.Default.RomlistSize +"]").attributes.addClass("active");
+    $(#config_romlist_margin).select("li[opt="+ CONF.Default.RomlistMargin +"]").attributes.addClass("active");
+
     //更换鼠标指针
     $(body).style["cursor"] = [url:URL.fromPath(CONF.Default.Cursor)];
 
