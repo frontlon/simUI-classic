@@ -52,11 +52,7 @@ class FileDropZone : Element
         var id = ACTIVE_ROM_ID;
         var uri = URL.toPath(this.files.toString());
         var img = "";
-        if (opt == "thumb"){
-            THUMB = uri;
-        }
         mainView.EditRomThumbs(opt,id,uri);
-
         if(opt == "video"){
             img = "<video src='"+ this.files +"'/>";
         }else{
