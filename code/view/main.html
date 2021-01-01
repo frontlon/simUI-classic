@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-CN" window-icon="this://app/images/ico.png" window-resizable window-frame="transparent">
+<html lang="zh-CN" window-icon="this://app/images/ico.png" window-frame="extended">
 <head>
 <meta charset="utf-8" />
 <title></title>
@@ -7,7 +7,7 @@
 <style type="text/css">
     @import "this://app/images/public.css";
     
-    html{min-width:1210dip;min-height:300dip;width:*;background:transparent;border:1dip solid color(window-outside-border-color);}
+    html{min-width:1210dip;min-height:300dip;width:*;background:none;border:1dip solid color(window-outside-border-color);}
     a{text-decoration:none}
     body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover;margin:0}
     splitter{background:color(sidebar-background-color);}
@@ -436,7 +436,6 @@
 </body>
 
 <script type="text/tiscript">
-
     var isDebug = false;
     var mainView = view;
     var ROOTPATH = "this://app/";
@@ -477,6 +476,5 @@
     include ROOTPATH + "tis/menucontext.tis";
     include ROOTPATH + "tis/keycode.tis";
     include ROOTPATH + "tis/event.tis";
-
 </script>
 </html>

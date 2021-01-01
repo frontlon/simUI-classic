@@ -61,9 +61,7 @@ func main() {
 
 	//创建window窗口
 	w, err := window.New(
-		sciter.SW_MAIN|
-			sciter.SW_RESIZEABLE|
-			sciter.SW_ENABLE_DEBUG,
+		sciter.SW_MAIN|sciter.SW_RESIZEABLE|sciter.SW_ENABLE_DEBUG,
 		&sciter.Rect{Left: 0, Top: 0, Right: int32(utils.ToInt(width)), Bottom: int32(utils.ToInt(height))})
 	if err != nil {
 		utils.WriteLog(err.Error())
