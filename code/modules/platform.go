@@ -1,7 +1,7 @@
 package modules
 
 import (
-	"path/filepath"
+	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
 )
@@ -30,13 +30,13 @@ func CreatePlatform(id uint32) error {
 	}
 
 	for _, v := range dirList {
-		path, _ := filepath.Abs(v)
+		path := config.Cfg.RootPath + v
 		if (!utils.FolderExists(path)) {
 			utils.CreateDir(path);
 		}
 	}
 
-	info.Rombase, _ = filepath.Abs(info.Rombase)
+	info.Rombase = config.Cfg.RootPath + info.Rombase
 	if (!utils.FileExists(info.Rombase)) {
 		CreateNewRomBaseFile(info.Rombase);
 	}
