@@ -43,6 +43,7 @@ function createMenuList(menujson){
 
     //遍历数据，生成dom
     for(var obj in menuobj) {
+
         if(obj.Name == "_7b9"){
             name = CONF.Lang.Uncate;
             fixed = "fixed";
@@ -50,7 +51,8 @@ function createMenuList(menujson){
             name = obj.Name;
             fixed = "";
         }
-        dd += "<dd opt='"+  obj.Name +"' class='menuitem "+ fixed +"'>"+ name + "</dd>";
+
+        dd += "<dd opt=\""+  obj.Name +"\" class='menuitem "+ fixed +"'>"+ name + "</dd>";
     }
 
     menulist.html = dd; //生成dom

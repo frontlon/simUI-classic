@@ -67,7 +67,6 @@ function keyRomLeft(){
         return;
     }
 
-
     //如果当前没有选定，则选定第一个
     var current = $(#romlist li:current);
     if (current == undefined){
@@ -78,7 +77,7 @@ function keyRomLeft(){
         //读取上一个节点
         var pri = $(#romlist li:current).priorNode;
         //如果没有上一个节点，直接返回
-        if(pri == undefined){
+        if(pri == undefined || pri.style["display"] == "none"){
             return;
         }else{
             pri.state.current = true;
@@ -120,27 +119,29 @@ function keyRomRight(){
 }
 
 function keyRomUp(){
-    
     //如果没有rom，则直接返回
     if($$(#romlist li).length < 2 ){
         return;
     }
-    
     var nextDom;
     if ($(#romlist li:current) == undefined){
         nextDom = $(#romlist).select("li:nth-child(2)");
     }else{
-
         var current = $(#romlist li:current).index; //当前选中li的index值
         //如果当前是第一个，则不跳转了
         if(current == 0){
             return;
         }
-
         var idx = getRomlistRowNum(); //计算出每行li的数量
         var next = current - idx  + 1; //要跳转到的位置
+
+        if(next<=1){
+            next = 2;
+        }
+
         var rootDom = $(#romlist);
         nextDom = rootDom.select("li:nth-child("+ next +")");
+
 
         if(nextDom != undefined && nextDom.index <= 0){
             nextDom = rootDom.select("li:nth-child(2)"); //定位到第一个
@@ -173,7 +174,6 @@ function keyRomDown(){
         var idx = getRomlistRowNum(); //计算出每行li的数量
         var next = current + idx + 1;
         nextDom = rootDom.select("li:nth-child("+ next +")"); //要跳转到的位置
-
         if(nextDom == undefined){
             nextDom = rootDom.select("li:last-child").state.current = true; //定位到最后一个
         }
@@ -181,9 +181,6 @@ function keyRomDown(){
     nextDom.state.current = true;
     openSidebar(nextDom);
 }
-
-
-
 
 //计算出每行li的数量
 function getRomlistRowNum(){

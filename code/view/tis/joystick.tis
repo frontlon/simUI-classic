@@ -4,8 +4,6 @@
 
 function joystickDirection(dir){
 
-try{
-
    var switch_romlist = $(#switch_romlist).attributes["value"];
         
    if(dir == 1){ //上
@@ -32,10 +30,6 @@ try{
             scrollDown(switch_romlist); //div滚动
             keyRomRight();
       }
-   }
-
-   }catch(e){
-      alert(e);
    }
 }
 

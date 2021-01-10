@@ -66,7 +66,7 @@ func CheckJoystick() (status int8) {
 				if btn > 0 {
 
 					if btn == 1 || btn == 2 {
-						if current-btnLock[btn] < 1000 {
+						if current-btnLock[btn] < 500 {
 							break
 						}
 
@@ -118,16 +118,22 @@ func GetJoystickButtons(button uint32) int {
 	btn := 0
 	switch button {
 	case 1:
-		btn = 1
+		btn = 1 //A
 		break
 	case 2:
-		btn = 2
+		btn = 2 //B
 		break
 	case 4:
-		btn = 3
+		btn = 3 //X
 		break
 	case 8:
-		btn = 4
+		btn = 4 //Y
+		break
+	case 16:
+		btn = 5 //LB
+		break
+	case 32:
+		btn = 6 //RB
 		break
 	default:
 		btn = 0

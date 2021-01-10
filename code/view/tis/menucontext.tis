@@ -10,9 +10,9 @@ function menuContextMenu(obj){
     }
 
     var btndata = "";
-    btndata += "<li class='rename' opt='"+ opt +"'>"+ CONF.Lang.Rename +"</li>";
+    btndata += "<li class='rename' opt=\""+ opt +"\">"+ CONF.Lang.Rename +"</li>";
     btndata += "<hr />";
-    btndata += "<li class='delete' opt='"+ opt +"'>"+ CONF.Lang.Delete +"</li>";
+    btndata += "<li class='delete' opt=\""+ opt +"\">"+ CONF.Lang.Delete +"</li>";
     menucontext.append(btndata);
 }
 
