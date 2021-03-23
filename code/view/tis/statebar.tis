@@ -27,7 +27,7 @@ function initRomListStyle(){
     $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
 
      //初始化rom列表字体大小
-    romlist.attributes.addClass('fontsize'+CONF.Default.FontSize);
+    romlist.attributes.addClass('fontsize'+CONF.Default.RomlistFontSize);
 
     //初始化列表模块间距
     romlist.attributes.addClass("margin" + CONF.Default.RomlistMargin);

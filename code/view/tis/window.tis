@@ -117,7 +117,7 @@ function initInterface(){
     $(#config_romlist_direction).select("li[opt="+ CONF.Default.RomlistDirection +"]").attributes.addClass("active");
     $(#config_thumb).select("li[opt="+ CONF.Default.Thumb +"]").attributes.addClass("active");
     $(#config_font_background).select("li[opt="+ CONF.Default.RomlistFontBackground +"]").attributes.addClass("active");
-    $(#config_title_fontsize).select("li[opt="+ CONF.Default.FontSize +"]").attributes.addClass("active");
+    $(#config_title_fontsize).select("li[opt="+ CONF.Default.RomlistFontSize +"]").attributes.addClass("active");
     $(#config_romlist_size).select("li[opt="+ CONF.Default.RomlistSize +"]").attributes.addClass("active");
     $(#config_romlist_margin).select("li[opt="+ CONF.Default.RomlistMargin +"]").attributes.addClass("active");
 
