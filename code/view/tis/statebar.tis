@@ -67,18 +67,18 @@ function initTheme(){
     //默认主题
     self.attributes["theme"] = CONF.Default.Theme;
 
-    //生成主题列表
-    var cssfile = "";
-    var menu = "";
 
+    //渲染页面主题
+    initUiTheme();
+
+    //生成主题列表
+    var menu = "";
     for(var themeId in CONF.Theme) {
-        cssfile += "<style src='"+  URL.fromPath(CONF.Theme[themeId].Path) +"' />"; //引入文件
         menu += "<li id="+ themeId +">"+  CONF.Theme[themeId].Name +"</li>"; //填充菜单
     }
     $(#theme menu).html = menu;
-    $(#themefile).html = cssfile;
 
-    //设置主题样式
+    //设置首页主题样式
     setTheme(CONF.Default.Theme);
 }
 

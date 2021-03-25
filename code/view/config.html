@@ -1,26 +1,38 @@
 ﻿<html>
   <head>
   <title></title>
+  <div id="themefile"></div>
   <style>
-    @import "this://app/images/public.css";
-    html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
-    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:8dip;}
+    @import "images/public.css";
+    @import "images/form.css";
+    html,body{width:*;height:*;overflow:hidden;margin:0;background:#383838;padding:0;}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;}
+
+    table{width:*;display:block;}
+    th{text-align:left;padding:16dip 0 0 0;color:#ccc;}
+    tr:last-child td{text-align:center;padding-bottom:0}
+    td{color:#ccc;padding:3dip 0;line-height:28dip}
+    td:first-child{font-size:11dip;text-align:right;}
+
     .frame_left{width:120dip;height:*;display:inline-block;}
     .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip;}
-    .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip;width:*}
-    table{width:*;display:block;}
-    th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-    td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
-    tr:last-child td{text-align:center;padding-bottom:0}
-    .platform_list{width:*;height:*;display:block;border:1dip solid #ccc;padding:0;margin:0}
-    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip}
+    .frame_right input[type="text"]{width:*}
+   
+    .platform_control{margin:0 0 0 10dip;}
+    .platform_control button{height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #666;background:none;width:*;margin:0}
+    .platform_control button:hover{background:#eee;cursor: pointer}
+    .platform_control button:active{background:#ddd}
+    .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #666;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
+
+    .platform_list{width:*;height:*;display:block;border:1dip solid #666;padding:0;margin:0 0 0 10dip}
+    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip;color:#999}
     .platform_list li:current{background:#3399ff;color:#FFF}
     .platform_list li:drag-source { background-color:#eee;}
 
     #table_default td:first-child{width:120dip;}
-    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;}
+    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;}
     .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px;}
-    .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:8dip 0;min-width:80dip}
+    .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;min-width:80dip}
     .table_interface tr td:nth-child(even){text-align:left;padding-bottom:0;}
     #platform_exts{width:662dip;}
     #platform_icon{max-width:320dip;}
@@ -31,12 +43,6 @@
     #shortcut_list li input[type="text"]:nth-child(1){width:130px;}
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
     #shortcut_list li .openfile{margin-left:0;}
-
-    .platform_control{}
-    .platform_control button{height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none;width:*}
-    .platform_control button:hover{background:#eee;cursor: pointer}
-    .platform_control button:active{background:#ddd}
-    .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #ccc;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
 
   </style>
   </head>
@@ -62,8 +68,11 @@
                 <option value="0">{{No}}</option>
               </select>
               </td></tr>
-              <tr><th colspan="2"></th></tr>
-              <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
+              <tr><td colspan="2"><hr/></td></tr>
+              <tr><td colspan="2" class="form_bottom">
+              <button class="cancel">{{Cancel}}</button>
+              <button class="ok" id="config_submit">{{UpdateConfig}}</button>
+              </td></tr>
           </table>
         </div>
       </section>
@@ -142,8 +151,11 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr><th colspan="4"></th></tr>
-                <tr><td colspan="4" style="text-align:center"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
+                <tr><td colspan="4"><hr/></td></tr>
+                <tr><td colspan="4" class="form_bottom">
+                    <button class="cancel">{{Cancel}}</button>
+                    <button class="ok" id="platform_submit">{{UpdateConfig}}</button>
+                </td></tr>
             </table>
 
           </div>
@@ -173,8 +185,11 @@
               <td>{{BackgroundOpacity}}：</td>
               <td colspan="3"><input type="hslider" id="config_background_opacity" min="70" max="100" step="5" /> <span id="info_background_opacity"></span></td>
             </tr>
-            <tr><th colspan="4"></th></tr>
-            <tr><td colspan="4" style="text-align:center"><button id="interface_submit">{{UpdateConfig}}</button></td></tr>
+              <tr><td colspan="4"><hr/></td></tr>
+                <tr><td colspan="4" class="form_bottom">
+                    <button class="cancel">{{Cancel}}</button>
+                    <button class="ok" id="interface_submit">{{UpdateConfig}}</button>
+                </td></tr>
           </table>
         </div>
       </section>
@@ -195,11 +210,14 @@
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog/config.tis";
 
+    //初始化主题
+    initUiTheme();
+
     //平台列表点击
     event click $(#platform_list li) {
     try{
-      GetPlatformLitem(this);
-      }catch(e){
+      GetPlatformItem(this);
+    }catch(e){
       alert(e);}
     }
 
