@@ -1,12 +1,14 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        @import "images/form.css";
+        html{background:color(center-background-color)}
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip;color:color(general-text-color);}
         input{width:*;}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-        .submit_wrapper{padding:6dip 0;text-align:center;border-top:1dip solid #ccc}
         h4{margin:7dip 0}
 
         table td{vertical-align: middle;padding-bottom:5dip}
@@ -36,17 +38,18 @@
                 <td><div class="tip" title="{{RomCmdFileTip}}">?</div>{{RomCmdFile}}</td>
                 <td><input id="file" value="" /></td>
             </tr>
-
         </table>
-        <div class="submit_wrapper">
-            <button id="close-dialog" role="default-button">{{Confirm}}</button>
-        </div>
     </div>
-    
+    <div class="form_bottom">
+        <button class="ok" id="close-dialog" role="default-button">{{Confirm}}</button>
+    </div>
     <script type="text/tiscript">
 
         include ROOTPATH + "tis/utils.tis";
 
+        //初始化主题
+        initUiTheme();
+        
         //创建语言
         createLang();
  

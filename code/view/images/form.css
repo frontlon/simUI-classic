@@ -1,5 +1,9 @@
-﻿td.form_bottom{text-align:right!important}
-td hr{border:0;border-top:1dip solid color(form-bottom-hr-color);}
+﻿table{width:*;display:block;}
+th{text-align:left;padding:16dip 0 0 0;color:#ccc;}
+tr:last-child td{text-align:center;padding-bottom:0}
+td{color:#ccc;padding:3dip 0;line-height:28dip;text-align:left;}
+td:first-child{font-size:11dip;text-align:right;}
+.form_bottom{border-top:1dip solid color(form-bottom-hr-color);text-align:right;display:block;margin-top:10dip;padding-top:10dip}
 
 button{border:1px solid color(button-border-color);background:color(button-background-color);color:color(button-text-color);height:28dip;line-height:28dip;margin:0 5dip;border-radius:4dip;display:inline-block}
 button:disabled{background:color(button-disabled-background-color);color:color(button-disabled-text-color);border:1px solid color(button-disabled-border-color);}
@@ -14,8 +18,10 @@ input:focus,textarea:focus{background:color(input-focus-background-color)}
 input,textarea{font-rendering-mode:snap-pixel;font-family:monospace;}
 input:disabled,textarea:disabled{border:1px solid color(input-disabled-border-color);background:none;color:color(input-disabled-text-color)}
 
-select{border:1px solid color(select-border-color);height:28dip;line-height:28dip;vertical-align:middle;}
-select > button{fill:color(select-button-fill-color);foreground-image:url(stock:chevron-down);background:color(select-button-background-color);margin:0;border-radius:0}
+input[type=checkbox]{background:none;border:0}
+
+select{border:1px solid color(select-border-color);height:28dip;line-height:28dip;vertical-align:middle;margin:0}
+select > button{fill:color(select-button-fill-color);foreground-image:url(stock:chevron-down);background:color(select-button-background-color);margin:0;border-radius:0;border-right:0}
 select > button:hover{background:color(select-button-hover-background-color)}
 select > popup{color:color(select-popup-text-color);border:1px solid color(select-popup-border-color);}
 select > popup option{height:28dip;line-height:28dip;background:color(select-popup-option-background-color);color:color(select-popup-option-text-color)}

@@ -1,12 +1,15 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        @import "images/form.css";
+        html{background:color(center-background-color)}
+        body{color:color(general-text-color);width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
         .wrapper{padding:10dip;}
-        .submit_wrapper{padding:10dip 0;text-align:center;}
-        h1{font-size:16dip;color:#333}
+        select{background:color(center-box-shadow-color);color:color(general-text-color);}
+        h1{font-size:16dip;}
         #menu{height:400dip;width:*}
         #menu img{width:16dip;vertical-align:middle}
         #menu option{line-height:16dip;vertical-align:middle}
@@ -17,11 +20,11 @@
     <div class="wrapper">
     <h1></h1>
         <select id="menu" type="tree">
-            
         </select>
-        <div class="submit_wrapper">
-        <button id="submit">{{Confirm}}</button>
-        </div>
+        <div class="form_bottom">
+        <button class="ok" id="submit">{{Confirm}}</button>
+    </div>
+
     </div>
     
     <script type="text/tiscript">
@@ -30,6 +33,9 @@
     createLang();
     view.root.on("ready", function(){
 
+        //初始化主题
+        initUiTheme();
+        
         view.windowCaption =  CONF.Lang.RomMove;
 
         //标题

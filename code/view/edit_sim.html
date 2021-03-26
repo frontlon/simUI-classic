@@ -1,17 +1,14 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
-        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
-        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
-        label{font-size:11dip;}
-        table{width:100%;}
-        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
-        tr:last-child td{text-align: center;padding-bottom:0}
-        .submit{margin:0 8dip}
+        @import "images/form.css";
+    
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);height:100%;background:color(center-background-color);}
+        #wrapper{width:*;padding:8dip;}
+
     </style>
 </head>
 <body>
@@ -44,15 +41,21 @@
                     <option value="1">{{Yes}}</option>
                 </select>
             </td></tr>
-            <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>
+    
         </table>
+        <div class="form_bottom">
+              <button class="cancel" id="sim_delete">{{DeleteSimulator}}</button>
+              <button class="ok" id="sim_submit">{{Cancel}}</button>
+          </div>
     </div>
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog/edit_sim.tis";
  
+    //初始化主题
+    initUiTheme();
+
     //更新模拟器信息
     event click $(#sim_submit) {
         simSubmit(this);

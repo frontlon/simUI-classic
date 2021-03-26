@@ -1,28 +1,33 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
+        @import "images/form.css";
+        html{background:color(center-background-color)}
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
         .input_wrapper{flow:row(label,input);}
-        .submit_wrapper{padding:6dip;text-align:center;margin-top:10dip;}
         h4{margin:7dip 0}
-        textarea{size:*;height:520dip;padding:5dip;border:0;overflow:scroll-indicator;}
+        textarea{size:*;height:500dip;padding:5dip;border:0;overflow:scroll-indicator;}
     </style>
 
 </head>
 <body>
     <div class="input_wrapper">
         <textarea id="doc"></textarea>
-        <div class="submit_wrapper">
-            <div style="float:left;" id="delete"><button>{{Delete}}</button></div>
-            <button style="float:right" id="update">{{Update}}</button>
+        <div class="form_bottom">
+        <button class="cancel" id="delete">{{Delete}}</button>
+        <button class="ok" id="update">{{Update}}</button>
         </div>
-    </div>
+        </div>
     
     <script type="text/tiscript">
         include ROOTPATH + "tis/utils.tis";
 
+        //初始化主题
+        initUiTheme();
+        
         //创建语言
         createLang();
  

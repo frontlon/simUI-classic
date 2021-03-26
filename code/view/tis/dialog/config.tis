@@ -253,7 +253,7 @@ function addSim(evt) {
     })
 
     //更新option选项
-    if(res != ""){
+    if(res != undefined && res != ""){
         var sim = JSON.parse(res);
         $(#platform_sim).options.$append(<option value={sim.Id}>{sim.Name}</option>);
     }

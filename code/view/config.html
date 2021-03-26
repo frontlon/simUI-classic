@@ -5,14 +5,10 @@
   <style>
     @import "images/public.css";
     @import "images/form.css";
-    html,body{width:*;height:*;overflow:hidden;margin:0;background:#383838;padding:0;}
+    html,body{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0;}
     .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;}
 
-    table{width:*;display:block;}
-    th{text-align:left;padding:16dip 0 0 0;color:#ccc;}
-    tr:last-child td{text-align:center;padding-bottom:0}
-    td{color:#ccc;padding:3dip 0;line-height:28dip}
-    td:first-child{font-size:11dip;text-align:right;}
+
 
     .frame_left{width:120dip;height:*;display:inline-block;}
     .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip;}
@@ -58,7 +54,6 @@
     <panels>
       <section id="first">
         <!-- 通用配置 -->
-        <div class="wrapper">
           <table id="table_default">
             <tr><td><div class="tip" title="{{SoftTitleTip}}">?</div>{{SoftTitle}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button></td></tr>
             <tr><td><div class="tip" title="{{LangTip}}">?</div>{{Lang}}：</td><td><select id="config_lang"></select></td></tr>
@@ -68,13 +63,11 @@
                 <option value="0">{{No}}</option>
               </select>
               </td></tr>
-              <tr><td colspan="2"><hr/></td></tr>
-              <tr><td colspan="2" class="form_bottom">
+          </table>
+          <div class="form_bottom">
               <button class="cancel">{{Cancel}}</button>
               <button class="ok" id="config_submit">{{UpdateConfig}}</button>
-              </td></tr>
-          </table>
-        </div>
+          </div>
       </section>
       <section id="second">
         <!-- 平台设置 -->
@@ -151,19 +144,16 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr><td colspan="4"><hr/></td></tr>
-                <tr><td colspan="4" class="form_bottom">
-                    <button class="cancel">{{Cancel}}</button>
-                    <button class="ok" id="platform_submit">{{UpdateConfig}}</button>
-                </td></tr>
             </table>
-
+            <div class="form_bottom">
+                <button class="cancel">{{Cancel}}</button>
+                <button class="ok" id="platform_submit">{{UpdateConfig}}</button>
+            </div>
           </div>
         </div>
       </section>
  <section id="third">
         <!-- 界面设置 -->
-        <div class="wrapper">
 
           <table class="table_interface">
 
@@ -185,13 +175,11 @@
               <td>{{BackgroundOpacity}}：</td>
               <td colspan="3"><input type="hslider" id="config_background_opacity" min="70" max="100" step="5" /> <span id="info_background_opacity"></span></td>
             </tr>
-              <tr><td colspan="4"><hr/></td></tr>
-                <tr><td colspan="4" class="form_bottom">
-                    <button class="cancel">{{Cancel}}</button>
-                    <button class="ok" id="interface_submit">{{UpdateConfig}}</button>
-                </td></tr>
           </table>
-        </div>
+          <div class="form_bottom">
+                <button class="cancel">{{Cancel}}</button>
+                <button class="ok" id="interface_submit">{{UpdateConfig}}</button>
+          </div>
       </section>
       <section id="fourth">
         <!-- 快捷工具 -->

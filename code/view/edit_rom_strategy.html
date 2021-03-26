@@ -1,11 +1,13 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
+        @import "images/form.css";
+        html{background:color(center-background-color)}
         body{margin:0;padding:0}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-        .submit_wrapper{padding:6dip;text-align:center;margin-top:10dip;}
         htmlarea pre{margin-left:20dip;padding-left:10dip;border-left:2px solid #ccc}
         htmlarea font{margin:10dip 0;display:inline-block}
         htmlarea{height:590dip;}
@@ -99,13 +101,17 @@
 </head>
 <body>
     <richtext></richtext>
-    <div class="submit_wrapper">
-        <button id="delete" style="float:left">{{Delete}}</button>
-        <button id="update" style="float:right">{{Update}}</button>
+    <div class="form_bottom">
+        <button class="cancel" id="delete">{{Delete}}</button>
+        <button class="ok" id="update">{{Update}}</button>
     </div>
+
     <script type="text/tiscript">
         include ROOTPATH + "tis/utils.tis";
         createLang(); //创建语言
+
+        //初始化主题
+        initUiTheme();
 
         view.root.on("ready", function(){
             view.windowCaption =  CONF.Lang.EditStrategy;

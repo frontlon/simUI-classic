@@ -301,7 +301,7 @@ function openAbout(){
     view.dialog({
         url:self.url(ROOTPATH + "about.html"),
         width:480,
-        height:self.toPixels(330dip),
+        height:self.toPixels(360dip),
     })
 }
 //弹出设置窗口

@@ -1,36 +1,38 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
-        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
-        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;width:210dip;margin-bottom:5dip}
-        select{width:210dip;}
-        label{font-size:11dip;}
-        table{width:100%;}
-        tr:last-child td{text-align: left;padding-bottom:0}
+        @import "images/form.css";
+        html{background:color(center-background-color)}
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);}
         .desc{font-size:11dip;color:#666}
-
-        .submit{margin:0 8dip}
-        .submit_wrapper{border-top:1dip solid #ccc;padding:6dip 0;text-align:center;display:block;width:*}
+        .input_wrapper{padding:0 10dip 10dip 10dip;}
+        input{width:*;}
     </style>
 </head>
 <body>
-    <div id="wrapper">
-        <table>
-            <tr><td><input type="text" id="menuname" value="" /></td></tr>
-        </table>
-    </div>
-    <div class="submit_wrapper">
-        <button id="confirm-dialog">{{Confirm}}</button>&#12288;
-        <button id="close-dialog" role="default-button">{{Cancel}}</button>
 
+    <div class="input_wrapper">
+        <h4 id="desc">{{InputMenuName}}</h4>
+        <input type="text" id="menuname" value="" />
     </div>
+
+    <div class="form_bottom">
+        <button class="cancel" id="close-dialog" role="default-button">{{Cancel}}</button>&#12288;
+        <button class="ok" id="confirm-dialog">{{Confirm}}</button>
+    </div>
+
+
+
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog/menu_rename.tis";
 
+    //初始化主题
+    initUiTheme();
+    
     //确定
     event click $(#confirm-dialog) {
         confirmDialog(this);

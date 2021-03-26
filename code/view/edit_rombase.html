@@ -1,21 +1,19 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
-        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
-        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
-        label{font-size:11dip;}
+        @import "images/form.css";
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;background:color(center-background-color);color:color(general-text-color)}
+        .wrapper{width:*;padding:8dip;}
         table{width:100%;}
-        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
         td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
         tr:last-child td{text-align: center;padding-bottom:0}
-        .submit{margin:0 8dip}
     </style>
 </head>
 <body>
-    <div id="wrapper">
+<div class="wrapper">
         <table>
             <tr><td>{{BaseName}}：</td><td><input type="text" id="name" value=""></td></tr>
             <tr><td>{{BaseYear}}：</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
@@ -73,16 +71,21 @@
             </select>
             </td></tr>
             <tr><td>{{BaseTranslate}}：</td><td><input type="text" id="translate" value=""></td></tr>
-            <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="submit">{{Confirm}}</button><button class="submit" id="close-dialog">{{Cancel}}</button></td></tr>
         </table>
-    </div>
+        </div>
+        <div class="form_bottom">
+            <button class="cancel" id="close-dialog">{{Cancel}}</button>
+            <button class="ok" id="submit">{{Confirm}}</button>
+        </div>
 
 <script type="text/tiscript">
 include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
 
+    //初始化主题
+    initUiTheme();
+    
     //渲染语言
     createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;

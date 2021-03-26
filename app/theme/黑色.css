@@ -166,4 +166,11 @@ html:theme(dark) {
     var(tabs-strip-label-current-text-color) : #fff;
     var(tabs-strip-label-hover-text-color) : #ccc;
 
+    var(about-background-color) : #383838;
+    var(about-thumb-line-color) : #1366cc;
+    var(about-text-color) : #999;
+    var(about-link-color) : #1366cc;
+
+    var(general-text-color) : #999;
+
 }
