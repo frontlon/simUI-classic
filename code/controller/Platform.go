@@ -116,6 +116,12 @@ func PlatformController() {
 		d["title"] = strings.TrimRight(d["title"], `/`)
 		d["background"] = strings.TrimRight(d["background"], `\`)
 		d["background"] = strings.TrimRight(d["background"], `/`)
+		d["cassette"] = strings.TrimRight(d["cassette"], `\`)
+		d["cassette"] = strings.TrimRight(d["cassette"], `/`)
+		d["icon"] = strings.TrimRight(d["icon"], `\`)
+		d["icon"] = strings.TrimRight(d["icon"], `/`)
+		d["gif"] = strings.TrimRight(d["gif"], `\`)
+		d["gif"] = strings.TrimRight(d["gif"], `/`)
 		d["video"] = strings.TrimRight(d["video"], `\`)
 		d["video"] = strings.TrimRight(d["video"], `/`)
 		d["strategy"] = strings.TrimRight(d["strategy"], `\`)
@@ -135,6 +141,9 @@ func PlatformController() {
 			PackingPath:    d["packing"],
 			TitlePath:      d["title"],
 			BackgroundPath: d["background"],
+			CassettePath:   d["cassette"],
+			IconPath:       d["icon"],
+			GifPath:        d["gif"],
 			StrategyPath:   d["strategy"],
 			VideoPath:      d["video"],
 			DocPath:        d["doc"],

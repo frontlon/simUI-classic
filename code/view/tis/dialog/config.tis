@@ -108,6 +108,9 @@ function GetPlatformItem(evt){
     $(#platform_poster).value = info.PosterPath;
     $(#platform_packing).value = info.PackingPath;
     $(#platform_title).value = info.TitlePath;
+    $(#platform_cassette).value = info.CassettePath;
+    $(#platform_icon).value = info.IconPath;
+    $(#platform_gif).value = info.GifPath;
     $(#platform_background).value = info.BackgroundPath;
     $(#platform_video).value = info.VideoPath;
     $(#platform_rombase).value = info.Rombase;
@@ -151,6 +154,9 @@ function GetPlatformItem(evt){
         $(#platform_poster).state.disabled = false;
         $(#platform_packing).state.disabled = false;
         $(#platform_title).state.disabled = false;
+        $(#platform_cassette).state.disabled = false;
+        $(#platform_icon).state.disabled = false;
+        $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
@@ -168,6 +174,9 @@ function GetPlatformItem(evt){
         $(#platform_poster).state.disabled = true;
         $(#platform_packing).state.disabled = true;
         $(#platform_title).state.disabled = true;
+        $(#platform_cassette).state.disabled = true;
+        $(#platform_icon).state.disabled = true;
+        $(#platform_gif).state.disabled = true;
         $(#platform_background).state.disabled = true;
         $(#platform_video).state.disabled = true;
         $(#platform_rombase).state.disabled = true;
@@ -211,6 +220,9 @@ function platformSubmit(evt){
         poster     : $(#platform_poster).value,
         packing    : $(#platform_packing).value,
         title      : $(#platform_title).value,
+        cassette   : $(#platform_cassette).value,
+        icon       : $(#platform_icon).value,
+        gif        : $(#platform_gif).value,
         background : $(#platform_background).value,
         video      : $(#platform_video).value,
         strategy   : $(#platform_strategy).value,
@@ -337,6 +349,9 @@ function openPlatformFolder(evt) {
         $(#platform_thumb).value = url + SEPARATOR + "thumbs";
         $(#platform_snap).value = url + SEPARATOR + "snaps";
         $(#platform_poster).value = url + SEPARATOR + "poster";
+        $(#platform_cassette).value = url + SEPARATOR + "cassette";
+        $(#platform_icon).value = url + SEPARATOR + "icon";
+        $(#platform_gif).value = url + SEPARATOR + "gif";
         $(#platform_packing).value = url + SEPARATOR + "packing";
         $(#platform_title).value = url + SEPARATOR + "title";
         $(#platform_background).value = url + SEPARATOR + "background";
@@ -351,6 +366,9 @@ function openPlatformFolder(evt) {
         $(#platform_poster).state.disabled = false;
         $(#platform_packing).state.disabled = false;
         $(#platform_title).state.disabled = false;
+        $(#platform_cassette).state.disabled = false;
+        $(#platform_icon).state.disabled = false;
+        $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_rombase).state.disabled = false;

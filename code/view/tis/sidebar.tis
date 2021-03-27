@@ -256,16 +256,22 @@ function _createRotate(info){
     var snap = ""; //插画
     var poster = ""; //海报
     var packing = ""; //包装盒图
+    var cassette = ""; //卡带图
+    var icon = ""; //图标图
+    var gif = ""; //gif图
     var background = ""; //背景图
 
     if(info != false){
         romPath = URL.parse(info.RomPath);
-        title = getRomPicPath("title",info.Platform,romPath.name); //标题图
-        thumb = getRomPicPath("thumb",info.Platform,romPath.name); //展示图
-        snap = getRomPicPath("snap",info.Platform,romPath.name); //插画
-        poster = getRomPicPath("poster",info.Platform,romPath.name); //海报
-        packing = getRomPicPath("packing",info.Platform,romPath.name); //包装盒图
-        background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+        title = getRomPicPath("title",info.Platform,romPath.name);
+        thumb = getRomPicPath("thumb",info.Platform,romPath.name);
+        snap = getRomPicPath("snap",info.Platform,romPath.name);
+        poster = getRomPicPath("poster",info.Platform,romPath.name);
+        packing = getRomPicPath("packing",info.Platform,romPath.name);
+        cassette = getRomPicPath("cassette",info.Platform,romPath.name);
+        icon = getRomPicPath("icon",info.Platform,romPath.name);
+        gif = getRomPicPath("gif",info.Platform,romPath.name);
+        background = getRomPicPath("background",info.Platform,romPath.name);
         $(#thumb_h2).style["display"] = undefined;
     }else{
         $(#thumb_h2).style["display"] = "none";
@@ -278,6 +284,9 @@ function _createRotate(info){
     if(snap != ""){ pics += "<img src=\""+ snap +"\" />"; }
     if(poster != ""){ pics += "<img src=\""+ poster +"\" />"; }
     if(packing != ""){ pics += "<img src=\""+ packing +"\" />"; }
+    if(cassette != ""){ pics += "<img src=\""+ cassette +"\" />"; }
+    if(icon != ""){ pics += "<img src=\""+ icon +"\" />"; }
+    if(gif != ""){ pics += "<img src=\""+ gif +"\" />"; }
 
     //游戏缩略图
     if(thumb != ""){
@@ -315,6 +324,9 @@ function _createSecondThumbs(info){
     var poster = getRomPicPath("poster",pfid,name);
     var packing = getRomPicPath("packing",pfid,name);
     var title = getRomPicPath("title",pfid,name);
+    var cassette = getRomPicPath("cassette",pfid,name);
+    var icon = getRomPicPath("icon",pfid,name);
+    var gif = getRomPicPath("gif",pfid,name);
     var background = getRomPicPath("background",pfid,name);
     var video = getRomPicPath("video",pfid,name);
 
@@ -333,7 +345,12 @@ function _createSecondThumbs(info){
         else bottomHtml += _getSideSecondDom("poster",poster);
     if(packing != "") topHtml += _getSideSecondDom("packing",packing);
         else bottomHtml += _getSideSecondDom("packing",packing);  
-    
+    if(cassette != "") topHtml += _getSideSecondDom("cassette",cassette);
+        else bottomHtml += _getSideSecondDom("cassette",cassette);  
+    if(icon != "") topHtml += _getSideSecondDom("icon",icon);
+        else bottomHtml += _getSideSecondDom("icon",icon);  
+    if(gif != "") topHtml += _getSideSecondDom("gif",gif);
+        else bottomHtml += _getSideSecondDom("gif",gif);      
     if(background != "") topHtml += _getSideSecondDom("background",background);
         else bottomHtml += _getSideSecondDom("background",background);
     //视频在最下方且不自动播放
@@ -364,6 +381,15 @@ function _getSideSecondDom(type,url){
             break;
         case "packing":
             title = CONF.Lang.Packing;
+            break;
+        case "cassette":
+            title = CONF.Lang.Cassette;
+            break;
+        case "icon":
+            title = CONF.Lang.Icon;
+            break;
+        case "gif":
+            title = CONF.Lang.Gif;
             break;
         case "background":
             title = CONF.Lang.BackgroundPic;
@@ -586,6 +612,18 @@ function createOpenFolderMenu(info){
     }
    if(CONF.Platform[pfId].TitlePath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='title'>"+ CONF.Lang.LocationTitleFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].CassettePath != ""){
+            btndata += "<li class='folder' rid='"+ info.Id +"' opt='cassette'>"+ CONF.Lang.LocationCassetteFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].IconPath != ""){
+            btndata += "<li class='folder' rid='"+ info.Id +"' opt='icon'>"+ CONF.Lang.LocationIconFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].GifPath != ""){
+            btndata += "<li class='folder' rid='"+ info.Id +"' opt='gif'>"+ CONF.Lang.LocationGifFile +"</li>";
     }
     if(CONF.Platform[pfId].BackgroundPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='background'>"+ CONF.Lang.LocationBackgroundFile +"</li>";

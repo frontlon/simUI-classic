@@ -32,6 +32,9 @@ function setThumbType(obj){
     $(#config_thumb).select("li[opt=poster]").attributes.removeClass("active");
     $(#config_thumb).select("li[opt=packing]").attributes.removeClass("active");
     $(#config_thumb).select("li[opt=title]").attributes.removeClass("active");
+    $(#config_thumb).select("li[opt=cassette]").attributes.removeClass("active");
+    $(#config_thumb).select("li[opt=icon]").attributes.removeClass("active");
+    $(#config_thumb).select("li[opt=gif]").attributes.removeClass("active");
 
     $(#config_thumb).select("li[opt="+ obj.attributes["opt"] +"]").attributes.addClass("active");
     view.UpdateConfig("thumb",obj.attributes["opt"]);

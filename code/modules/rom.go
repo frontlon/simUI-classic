@@ -185,6 +185,28 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 				fileName = platform.TitlePath
 			}
 		}
+
+	case "cassette":
+		if platform.CassettePath != "" {
+			fileName = GetRomRes("cassette", info.Platform, romName)
+			if fileName == "" {
+				fileName = platform.CassettePath
+			}
+		}
+	case "icon":
+		if platform.IconPath != "" {
+			fileName = GetRomRes("icon", info.Platform, romName)
+			if fileName == "" {
+				fileName = platform.IconPath
+			}
+		}
+	case "gif":
+		if platform.GifPath != "" {
+			fileName = GetRomRes("gif", info.Platform, romName)
+			if fileName == "" {
+				fileName = platform.GifPath
+			}
+		}
 	case "background":
 		if platform.BackgroundPath != "" {
 			fileName = GetRomRes("background", info.Platform, romName)
@@ -485,6 +507,25 @@ func DeleteRomAndRes(id uint64) error {
 			utils.FileDelete(f)
 		}
 	}()
+
+	go func() {
+		cassetteFiles, _ := utils.ScanDirByKeyword(platform.CassettePath, fname)
+		for _, f := range cassetteFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		iconFiles, _ := utils.ScanDirByKeyword(platform.IconPath, fname)
+		for _, f := range iconFiles {
+			utils.FileDelete(f)
+		}
+	}()
+	go func() {
+		gifFiles, _ := utils.ScanDirByKeyword(platform.GifPath, fname)
+		for _, f := range gifFiles {
+			utils.FileDelete(f)
+		}
+	}()
 	go func() {
 		videoFiles, _ := utils.ScanDirByKeyword(platform.VideoPath, fname)
 		for _, f := range videoFiles {
@@ -587,6 +628,36 @@ func GetRomRes(typ string, pf uint32, romName string) string {
 		if platform.DocPath != "" {
 			for _, v := range config.PIC_EXTS {
 				fileName = platform.TitlePath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "cassette":
+		if platform.CassettePath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.CassettePath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "icon":
+		if platform.IconPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.IconPath + config.Cfg.Separator + romName + v
+				if utils.FileExists(fileName) {
+					resName = fileName;
+					break
+				}
+			}
+		}
+	case "gif":
+		if platform.GifPath != "" {
+			for _, v := range config.PIC_EXTS {
+				fileName = platform.GifPath + config.Cfg.Separator + romName + v
 				if utils.FileExists(fileName) {
 					resName = fileName;
 					break
@@ -702,6 +773,21 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 		_ = utils.FileMove(title, newPlatformDom.TitlePath+config.Cfg.Separator+utils.GetFileNameAndExt(title));
 	}
 
+	cassette := GetRomRes("cassette", rom.Platform, romName)
+	if cassette != "" {
+		_ = utils.FileMove(cassette, newPlatformDom.CassettePath+config.Cfg.Separator+utils.GetFileNameAndExt(cassette));
+	}
+
+	icon := GetRomRes("icon", rom.Platform, romName)
+	if icon != "" {
+		_ = utils.FileMove(icon, newPlatformDom.IconPath+config.Cfg.Separator+utils.GetFileNameAndExt(icon));
+	}
+
+	gif := GetRomRes("gif", rom.Platform, romName)
+	if gif != "" {
+		_ = utils.FileMove(gif, newPlatformDom.GifPath+config.Cfg.Separator+utils.GetFileNameAndExt(gif));
+	}
+	
 	background := GetRomRes("background", rom.Platform, romName)
 	if background != "" {
 		_ = utils.FileMove(background, newPlatformDom.BackgroundPath+config.Cfg.Separator+utils.GetFileNameAndExt(background));

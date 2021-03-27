@@ -167,6 +167,15 @@ function getRomPicPath(type,platform,name){
         case "title":
             path = CONF.Platform[platform.toString()].TitlePath + "/" + name ;
             break;
+        case "cassette":
+            path = CONF.Platform[platform.toString()].CassettePath + "/" + name ;
+            break;
+        case "icon":
+            path = CONF.Platform[platform.toString()].IconPath + "/" + name ;
+            break;
+        case "gif":
+            path = CONF.Platform[platform.toString()].GifPath + "/" + name ;
+            break;
         case "background":
             path = CONF.Platform[platform.toString()].BackgroundPath + "/" + name ;
             break;

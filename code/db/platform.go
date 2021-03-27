@@ -17,6 +17,9 @@ type Platform struct {
 	PosterPath     string
 	PackingPath    string
 	TitlePath      string
+	CassettePath   string
+	IconPath       string
+	GifPath        string
 	BackgroundPath string
 	DocPath        string
 	StrategyPath   string
@@ -72,6 +75,9 @@ func (m *Platform) UpdateById() error {
 		"rom_exts":        m.RomExts,
 		"rom_path":        m.RomPath,
 		"thumb_path":      m.ThumbPath,
+		"cassette_path":   m.CassettePath,
+		"icon_path":       m.IconPath,
+		"gif_path":        m.GifPath,
 		"snap_path":       m.SnapPath,
 		"poster_path":     m.PosterPath,
 		"packing_path":    m.PackingPath,

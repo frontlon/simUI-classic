@@ -165,6 +165,50 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		}
 	}
 
+	if config.Cfg.Platform[platform].CassettePath != "" {
+		for _, ext := range config.PIC_EXTS {
+			picpath := config.Cfg.Platform[platform].CassettePath + "/" + oldfileName + ext
+			if (utils.FileExists(picpath)) {
+				if err := utils.Rename(picpath, name); err != nil {
+					return err
+				}
+				break
+			}
+		}
+	}
+	if config.Cfg.Platform[platform].IconPath != "" {
+		for _, ext := range config.PIC_EXTS {
+			picpath := config.Cfg.Platform[platform].IconPath + "/" + oldfileName + ext
+			if (utils.FileExists(picpath)) {
+				if err := utils.Rename(picpath, name); err != nil {
+					return err
+				}
+				break
+			}
+		}
+	}
+	if config.Cfg.Platform[platform].GifPath != "" {
+		for _, ext := range config.PIC_EXTS {
+			picpath := config.Cfg.Platform[platform].GifPath + "/" + oldfileName + ext
+			if (utils.FileExists(picpath)) {
+				if err := utils.Rename(picpath, name); err != nil {
+					return err
+				}
+				break
+			}
+		}
+	}
+	if config.Cfg.Platform[platform].BackgroundPath != "" {
+		for _, ext := range config.PIC_EXTS {
+			picpath := config.Cfg.Platform[platform].BackgroundPath + "/" + oldfileName + ext
+			if (utils.FileExists(picpath)) {
+				if err := utils.Rename(picpath, name); err != nil {
+					return err
+				}
+				break
+			}
+		}
+	}
 	if config.Cfg.Platform[platform].DocPath != "" {
 		for _, ext := range config.DOC_EXTS {
 			picpath := config.Cfg.Platform[platform].DocPath + "/" + oldfileName + ext

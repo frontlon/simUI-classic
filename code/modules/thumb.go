@@ -44,6 +44,12 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
 	case "title":
 		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "cassette":
+		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
+	case "icon":
+		platformPath = config.Cfg.Platform[vo.Platform].IconPath
+	case "gif":
+		platformPath = config.Cfg.Platform[vo.Platform].GifPath
 	case "background":
 		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
@@ -97,6 +103,12 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
 	case "title":
 		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "cassette":
+		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
+	case "icon":
+		platformPath = config.Cfg.Platform[vo.Platform].IconPath
+	case "gif":
+		platformPath = config.Cfg.Platform[vo.Platform].GifPath
 	case "background":
 		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
@@ -151,6 +163,12 @@ func DeleteThumbs(typeName string, id uint64) error {
 		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
 	case "title":
 		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
+	case "cassette":
+		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
+	case "icon":
+		platformPath = config.Cfg.Platform[vo.Platform].IconPath
+	case "gif":
+		platformPath = config.Cfg.Platform[vo.Platform].GifPath
 	case "background":
 		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":

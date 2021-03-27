@@ -155,6 +155,18 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].TitlePath = platformList[k].TitlePath
 		}
 
+		if v.CassettePath != "" {
+			platformList[k].CassettePath, _ = filepath.Abs(v.CassettePath)
+			platform[v.Id].CassettePath = platformList[k].CassettePath
+		}
+		if v.IconPath != "" {
+			platformList[k].IconPath, _ = filepath.Abs(v.IconPath)
+			platform[v.Id].IconPath = platformList[k].IconPath
+		}
+		if v.GifPath != "" {
+			platformList[k].GifPath, _ = filepath.Abs(v.GifPath)
+			platform[v.Id].GifPath = platformList[k].GifPath
+		}
 		if v.BackgroundPath != "" {
 			platformList[k].BackgroundPath, _ = filepath.Abs(v.BackgroundPath)
 			platform[v.Id].BackgroundPath = platformList[k].BackgroundPath
