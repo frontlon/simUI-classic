@@ -1,0 +1,16 @@
+﻿
+view.root.on("ready", function(){
+    Init(); //初始化
+});
+
+//初始化
+function Init(){
+    view.windowCaption = CONF.Lang.ThumbsDown;
+
+    //初始化主题
+    initUiTheme();
+    
+    //创建语言
+    createLang();
+
+}

@@ -147,6 +147,8 @@ html:theme(dark) {
     var(input-disabled-text-color) : #666;
 
     var(select-border-color) : #666;
+    var(select-background-color) : #333;
+    var(select-text-color) : #999;
     var(select-button-fill-color) : #999;
     var(select-button-background-color) : #444;
     var(select-button-hover-background-color) : #444;
