@@ -5,17 +5,38 @@
     <style>
         @import "this://app/images/public.css";
         @import "images/form.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;background:color(center-background-color);color:color(general-text-color)}
-        .wrapper{width:*;padding:8dip;}
+
+        html, body {
+            width: *;
+            height: *;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: color(center-background-color);
+            color: color(general-text-color)
+        }
+
+        .wrapper {
+            width: *;
+            padding: 8 dip;
+        }
 
     </style>
 </head>
 <body>
 <div class="wrapper">
-        <table>
-            <tr><td>{{BaseName}}：</td><td><input type="text" id="name" value=""></td></tr>
-            <tr><td>{{BaseYear}}：</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
-            <tr><td>{{BaseType}}：</td><td>
+    <table>
+        <tr>
+            <td>{{BaseName}}：</td>
+            <td><input type="text" id="name" value=""></td>
+        </tr>
+        <tr>
+            <td>{{BaseYear}}：</td>
+            <td><input type="number" id="year" value="" maxlength="4"></td>
+        </tr>
+        <tr>
+            <td>{{BaseType}}：</td>
+            <td>
                 <select id="type" editable>
                     <option value="ACT{{TypeACT}}">ACT{{TypeACT}}</option>
                     <option value="RPG{{TypeRPG}}">RPG{{TypeRPG}}</option>
@@ -30,51 +51,65 @@
                     <option value="LGG{{TypeFREE}}">LGG{{TypeLGG}}</option>
                     <option value="MSC{{TypeMSC}}">MSC{{TypeMSC}}</option>
                 </select>
-            </td></tr>
+            </td>
+        </tr>
 
-            <tr><td>{{BasePublisher}}：</td><td>
-            <select id="publisher" editable>
-                <option value="NINTENDO">NINTENDO</option>
-                <option value="FALCOM">FALCOM</option>
-                <option value="CAPCOM">CAPCOM</option>
-                <option value="SQUARE">SQUARE</option>
-                <option value="SNK">SNK</option>
-                <option value="SEGA">SEGA</option>
-                <option value="KONAMI">KONAMI</option>
-                <option value="TECHNŌS">TECHNŌS</option>
-                <option value="TAITO">TAITO</option>
-                <option value="BANDAI">BANDAI</option>
-                <option value="IGS">IGS</option>
-                <option value="DATA EAST">DATA EAST</option>
-                <option value="DISNEY">DISNEY</option>
-                <option value="KOEI">KOEI</option>
-            </select>
-            </td></tr>
-            <tr><td>{{BaseCountry}}：</td><td>
-            <select id="country" editable>
-                <option value="{{CountryJapanese}}">{{CountryJapanese}}</option>
-                <option value="{{CountryEnglish}}">{{CountryEnglish}}</option>
-                <option value="{{CountryChinese}}">{{CountryChinese}}</option>
-                <option value="{{CountryDanish}}">{{CountryDanish}}</option>
-                <option value="{{CountryDutch}}">{{CountryDutch}}</option>
-                <option value="{{CountryFinnish}}">{{CountryFinnish}}</option>
-                <option value="{{CountryFrench}}">{{CountryFrench}}</option>
-                <option value="{{CountryGerman}}">{{CountryGerman}}</option>
-                <option value="{{CountryItalian}}">{{CountryItalian}}</option>
-                <option value="{{CountryKorean}}">{{CountryKorean}}</option>
-                <option value="{{CountryNorwegian}}">{{CountryNorwegian}}</option>
-                <option value="{{CountryPolish}}">{{CountryPolish}}</option>
-                <option value="{{CountryPortuguese}}">{{CountryPortuguese}}</option>
-                <option value="{{CountrySpanish}}">{{CountrySpanish}}</option>
-            </select>
-            </td></tr>
-            <tr><td>{{BaseTranslate}}：</td><td><input type="text" id="translate" value=""></td></tr>
-        </table>
-        </div>
-        <div class="form_bottom">
-            <button class="cancel" id="close-dialog">{{Cancel}}</button>
-            <button class="ok" id="submit">{{Confirm}}</button>
-        </div>
+        <tr>
+            <td>{{BasePublisher}}：</td>
+            <td>
+                <select id="publisher" editable>
+                    <option value="NINTENDO">NINTENDO</option>
+                    <option value="FALCOM">FALCOM</option>
+                    <option value="CAPCOM">CAPCOM</option>
+                    <option value="SQUARE">SQUARE</option>
+                    <option value="SNK">SNK</option>
+                    <option value="SEGA">SEGA</option>
+                    <option value="KONAMI">KONAMI</option>
+                    <option value="TECHNŌS">TECHNŌS</option>
+                    <option value="TAITO">TAITO</option>
+                    <option value="BANDAI">BANDAI</option>
+                    <option value="IGS">IGS</option>
+                    <option value="DATA EAST">DATA EAST</option>
+                    <option value="DISNEY">DISNEY</option>
+                    <option value="KOEI">KOEI</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>{{BaseCountry}}：</td>
+            <td>
+                <select id="country" editable>
+                    <option value="{{CountryJapanese}}">{{CountryJapanese}}</option>
+                    <option value="{{CountryEnglish}}">{{CountryEnglish}}</option>
+                    <option value="{{CountryChinese}}">{{CountryChinese}}</option>
+                    <option value="{{CountryDanish}}">{{CountryDanish}}</option>
+                    <option value="{{CountryDutch}}">{{CountryDutch}}</option>
+                    <option value="{{CountryFinnish}}">{{CountryFinnish}}</option>
+                    <option value="{{CountryFrench}}">{{CountryFrench}}</option>
+                    <option value="{{CountryGerman}}">{{CountryGerman}}</option>
+                    <option value="{{CountryItalian}}">{{CountryItalian}}</option>
+                    <option value="{{CountryKorean}}">{{CountryKorean}}</option>
+                    <option value="{{CountryNorwegian}}">{{CountryNorwegian}}</option>
+                    <option value="{{CountryPolish}}">{{CountryPolish}}</option>
+                    <option value="{{CountryPortuguese}}">{{CountryPortuguese}}</option>
+                    <option value="{{CountrySpanish}}">{{CountrySpanish}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>{{BaseTranslate}}：</td>
+            <td><input type="text" id="translate" value=""></td>
+        </tr>
+        <tr>
+            <td>{{BaseVersion}}：</td>
+            <td><input type="text" id="version" value=""></td>
+        </tr>
+    </table>
+</div>
+<div class="form_bottom">
+    <button class="cancel" id="close-dialog">{{Cancel}}</button>
+    <button class="ok" id="submit">{{Confirm}}</button>
+</div>
 
 <script type="text/tiscript">
 include ROOTPATH + "tis/utils.tis";
@@ -96,6 +131,7 @@ view.root.on("ready", function(){
         if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
         if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
         if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
+        if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
     }
 
 });
@@ -115,6 +151,7 @@ event click $(#submit){
         publisher:$(#publisher).value,
         country:$(#country).value,
         translate:$(#translate).value,
+        version:$(#version).value,
     }
     var result = mainView.SetRomBase(JSON.stringify(data));
     view.close(result);
@@ -123,6 +160,8 @@ event click $(#submit){
 event click $(#close-dialog){
     view.close();
 }
+
+
 
 </script>
 

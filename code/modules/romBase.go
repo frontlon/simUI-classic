@@ -16,6 +16,7 @@ type RomBase struct {
 	Publisher string // 出品公司
 	Country   string // 国家
 	Translate string // 汉化组
+	Version   string // 版本
 }
 
 var Baseinfo map[uint32]map[string]*RomBase
@@ -52,9 +53,9 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			continue
 		}
 
-		create := []string{"","","","","","",""}
+		create := []string{"", "", "", "", "", "", ""}
 
-		for a,b := range r{
+		for a, b := range r {
 			create[a] = b
 		}
 
@@ -159,5 +160,6 @@ func getCsvTitle() []string {
 		config.Cfg.Lang["BasePublisher"],
 		config.Cfg.Lang["BaseCountry"],
 		config.Cfg.Lang["BaseTranslate"],
+		config.Cfg.Lang["BaseVersion"],
 	}
 }

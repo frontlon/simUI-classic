@@ -73,6 +73,7 @@ func RomController() {
 		baseYear := args[7].String()
 		baseCountry := args[8].String()
 		baseTranslate := args[9].String()
+		baseVersion := args[10].String()
 
 		if baseType == config.Cfg.Lang["BaseType"] {
 			baseType = ""
@@ -90,10 +91,12 @@ func RomController() {
 		if baseTranslate == config.Cfg.Lang["BaseTranslate"] {
 			baseTranslate = ""
 		}
-
+		if baseVersion == config.Cfg.Lang["BaseVersion"] {
+			baseVersion = ""
+		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate)
+			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		} else {
 			//按拼音查询
 			newlist, _ = (&db.Rom{}).GetByPinyin(page, platform, catname, num)
@@ -113,7 +116,8 @@ func RomController() {
 		baseYear := args[5].String()
 		baseCountry := args[6].String()
 		baseTranslate := args[7].String()
-		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate)
+		baseVersion := args[8].String()
+		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -309,6 +313,7 @@ func RomController() {
 			BasePublisher: d["publisher"],
 			BaseCountry:   d["country"],
 			BaseTranslate: d["translate"],
+			BaseVersion:   d["version"],
 		}
 		if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
 			utils.WriteLog(err.Error())

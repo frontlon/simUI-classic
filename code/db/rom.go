@@ -8,7 +8,7 @@ import (
 )
 
 var ROM_PAGE_NUM = 100 //每页加载rom数量
-var TIP_NUM = 100 //每tip个更新提示一次
+var TIP_NUM = 100      //每tip个更新提示一次
 
 type Rom struct {
 	Id            uint64
@@ -26,6 +26,7 @@ type Rom struct {
 	BasePublisher string // 游戏出品公司
 	BaseCountry   string // 游戏国家
 	BaseTranslate string // 汉化组
+	BaseVersion   string // 版本
 	Pinyin        string // 拼音索引
 	InfoMd5       string // 信息md5，包含资料信息
 	FileMd5       string // 文件md5，仅包含平台和文件名
@@ -53,6 +54,7 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 			"base_publisher": v.BasePublisher,
 			"base_country":   v.BaseCountry,
 			"base_translate": v.BaseTranslate,
+			"base_version":   v.BaseVersion,
 			"pinyin":         v.Pinyin,
 			"info_md5":       v.InfoMd5,
 		}
@@ -83,7 +85,7 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 }
 
 //根据条件，查询多条数据
-func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string) ([]*Rom, error) {
+func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) ([]*Rom, error) {
 
 	volist := []*Rom{}
 	where := map[string]interface{}{}
@@ -120,13 +122,16 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseTyp
 	if baseTranslate != "" {
 		where["base_translate"] = baseTranslate
 	}
+	if baseTranslate != "" {
+		where["base_version"] = baseVersion
+	}
 	likeWhere := ""
 	if keyword != "" {
 		likeWhere = `name LIKE "%` + keyword + `%"`
 	}
 
 	offset := pages * ROM_PAGE_NUM
-	field := "id,name,menu,platform,star,rom_path,base_type,base_year,base_publisher,base_country,base_translate"
+	field := "id,name,menu,platform,star,rom_path,base_type,base_year,base_publisher,base_country,base_translate,base_version"
 	result := getDb().Select(field).Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -201,7 +206,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 }
 
 //根据满足条件的rom数量
-func (m *Rom) Count(platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string) (int, error) {
+func (m *Rom) Count(platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) (int, error) {
 	count := 0
 	where := map[string]interface{}{
 	}
@@ -236,6 +241,9 @@ func (m *Rom) Count(platform uint32, menu string, keyword string, baseType strin
 	}
 	if baseTranslate != "" {
 		where["base_translate"] = baseTranslate
+	}
+	if baseTranslate != "" {
+		where["base_version"] = baseVersion
 	}
 	likeWhere := ""
 	if keyword != "" {
@@ -437,6 +445,11 @@ func (sim *Rom) GetFilter(platform uint32, t string) ([]string, error) {
 			create = append(create, v.BaseTranslate)
 		}
 		break
+	case "base_version":
+		for _, v := range volist {
+			create = append(create, v.BaseVersion)
+		}
+		break
 	}
 
 	return create, result.Error
@@ -451,6 +464,7 @@ func (m *Rom) UpdateRomBase(id uint64) error {
 		"base_publisher": m.BasePublisher,
 		"base_country":   m.BaseCountry,
 		"base_translate": m.BaseTranslate,
+		"base_version":   m.BaseVersion,
 		"name":           m.Name,
 		"pinyin":         utils.TextToPinyin(m.Name),
 	}

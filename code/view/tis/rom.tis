@@ -28,6 +28,7 @@ function createRomList(cls=0){
         if(column[3] == 1){data += "<div>"+CONF.Lang["BasePublisher"]+"</div>";}
         if(column[4] == 1){data += "<div>"+CONF.Lang["BaseCountry"]+"</div>";}
         if(column[5] == 1){data += "<div>"+CONF.Lang["BaseTranslate"]+"</div>";}
+        if(column[6] == 1){data += "<div>"+CONF.Lang["BaseVersion"]+"</div>";}
         data += "</li>";
     }
 
@@ -59,6 +60,7 @@ function createRomList(cls=0){
         if(column[3] == 1){data += "<div>"+ obj.BasePublisher +"</div>";}
         if(column[4] == 1){data += "<div>"+ obj.BaseCountry +"</div>";}
         if(column[5] == 1){data += "<div>"+ obj.BaseTranslate +"</div>";}
+        if(column[6] == 1){data += "<div>"+ obj.BaseVersion +"</div>";}
         if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
         else{data += "<span class='rom_star' style='display:none'></span>";}
         data += "</li>"
@@ -97,7 +99,8 @@ function scrollLoadRom(evtPos){
         var filter_year = $(#filter_year).value;
         var filter_country = $(#filter_country).value;
         var filter_translate = $(#filter_translate).value;
-        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate);
+        var filter_version = $(#filter_version).value;
+        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate,filter_version);
 
         if(ROMJSON != "[]"){
             createRomList(0);

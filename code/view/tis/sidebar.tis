@@ -160,6 +160,7 @@ function openSidebar(obj){
     if(info.BasePublisher != ""){rombase += "<li>" + info.BasePublisher + "</li>";}
     if(info.BaseCountry != "")  {rombase += "<li>" + info.BaseCountry + "</li>";}
     if(info.BaseTranslate != "")  {rombase += "<li>" + info.BaseTranslate + "</li>";}
+    if(info.BaseVersion != "")  {rombase += "<li>" + info.BaseVersion + "</li>";}
 
     rombase += "<li>" + info.RomPath + "</li>";
     rombase += "<li>" + detailObj.RomFileSize + "</li>";

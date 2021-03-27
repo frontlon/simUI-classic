@@ -152,13 +152,27 @@ function initBaseFilter(platform){
     }
     $(#filter_translate).value = "";
 
+    //版本
+    $(#filter_version).value = "";
+    $(#filter_version).options.clear();
+    $(#filter_version).options.$append(<option value=''>{CONF.Lang.BaseVersion}</option>);
+    getjson = view.GetFilter(platform,"base_version");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_version).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+        }
+    }
+    $(#filter_version).value = "";
+
     //是否显示和隐藏
     var column = CONF.Default.RomlistColumn.split(",");
-    $(#filter_type).style["display"] = column[1] == 1 ? "inline-block" : "none";
-    $(#filter_year).style["display"] = column[2] == 1 ? "inline-block" : "none";
+    $(#filter_type).style["display"]      = column[1] == 1 ? "inline-block" : "none";
+    $(#filter_year).style["display"]      = column[2] == 1 ? "inline-block" : "none";
     $(#filter_publisher).style["display"] = column[3] == 1 ? "inline-block" : "none";
-    $(#filter_country).style["display"] = column[4] == 1 ? "inline-block" : "none";
+    $(#filter_country).style["display"]   = column[4] == 1 ? "inline-block" : "none";
     $(#filter_translate).style["display"] = column[5] == 1 ? "inline-block" : "none";
+    $(#filter_version).style["display"]   = column[6] == 1 ? "inline-block" : "none";
 
 }
 

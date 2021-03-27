@@ -152,6 +152,9 @@
     self.on("change", "#filter_translate", function(evt) {
         search();
     });
+    self.on("change", "#filter_version", function(evt) {
+        search();
+    });
     self.on("click", "#filter_clear", function(evt) {
         filterClear();
     });

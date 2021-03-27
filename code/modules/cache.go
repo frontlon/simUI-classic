@@ -16,7 +16,7 @@ import (
 /**
  * 创建缓存
  **/
-func CreateRomData(platform uint32) ([]*db.Rom,error) {
+func CreateRomData(platform uint32) ([]*db.Rom, error) {
 
 	romlist := []*db.Rom{}
 
@@ -104,6 +104,7 @@ func CreateRomData(platform uint32) ([]*db.Rom,error) {
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
 						BaseTranslate: base.Translate,
+						BaseVersion:   base.Version,
 					}
 					romlist = append(romlist, sinfo)
 				} else { //不是子游戏
@@ -124,6 +125,7 @@ func CreateRomData(platform uint32) ([]*db.Rom,error) {
 						BasePublisher: base.Publisher,
 						BaseCountry:   base.Country,
 						BaseTranslate: base.Translate,
+						BaseVersion:   base.Version,
 					}
 
 					romlist = append(romlist, rinfo)
@@ -303,6 +305,7 @@ func UpdateFilterDB(platform uint32) {
 	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")
 	baseCountry, _ := (&db.Rom{}).GetFilter(platform, "base_country")
 	baseTranslate, _ := (&db.Rom{}).GetFilter(platform, "base_translate")
+	baseVersion, _ := (&db.Rom{}).GetFilter(platform, "base_version")
 
 	filters := []*db.Filter{}
 	for _, v := range baseType {
@@ -349,7 +352,14 @@ func UpdateFilterDB(platform uint32) {
 		}
 		filters = append(filters, data)
 	}
-
+	for _, v := range baseVersion {
+		data := &db.Filter{
+			Name:     v,
+			Type:     "base_version",
+			Platform: platform,
+		}
+		filters = append(filters, data)
+	}
 	(&db.Filter{}).BatchAdd(filters)
 
 }

@@ -103,7 +103,7 @@ function baseinfo(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
         width:self.toPixels(350dip),
-        height:self.toPixels(350dip),
+        height:self.toPixels(380dip),
         parameters: {
             id:evt.attributes["rid"],
         };
@@ -118,6 +118,7 @@ function baseinfo(evt){
         if(dom.select("div:nth-child(2)") != undefined) dom.select("div:nth-child(2)").html = info.Name;
         if(dom.select("div:nth-child(7)") != undefined) dom.select("div:nth-child(7)").html = info.BaseCountry;
         if(dom.select("div:nth-child(8)") != undefined) dom.select("div:nth-child(8)").html = info.BaseTranslate;
+        if(dom.select("div:nth-child(9)") != undefined) dom.select("div:nth-child(9)").html = info.BaseVersion;
     }
     
 }
