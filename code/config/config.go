@@ -30,8 +30,9 @@ var (
 
 //配置文件
 type ConfStruct struct {
+	ViewPath     string                  //代码路径
 	RootPath     string                  //exe文件的当前路径
-	Separator    string                  //exe文件的当前路径
+	Separator    string                  //分隔符
 	CachePath    string                  //缓存路径
 	UnzipPath    string                  //rom解压路径
 	Default      *db.Config              //默认配置

@@ -17,26 +17,20 @@ import (
 
 func main() {
 
-	isDebug := true
-	ROOTPATH := "this://app/main.html" //go用路径
-	if isDebug == true {
-		switch runtime.GOOS {
-		case "darwin":
-			ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/main.html"
-		case "windows":
-			ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html"
-		case "linux":
-			ROOTPATH = ""
-		}
-	}
-
 	runtime.LockOSThread()
 
 	db.UpgradeDB() //数据库升级
-
+	env, _ := utils.ReadFile("env")
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	separator := string(os.PathSeparator)                             //系统路径分隔符
+	separator := string(os.PathSeparator) //系统路径分隔符
+
+	if (env == "") {
+		config.Cfg.ViewPath = "this://app/" //生产环境
+	} else {
+		config.Cfg.ViewPath = env //测试环境
+	}
+
 	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
 	config.Cfg.Separator = separator                                  //系统的目录分隔符
 	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
@@ -72,6 +66,9 @@ func main() {
 	//设置view权限
 	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO)
 
+	//定义view函数
+	defineViewFunction()
+
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))
 
@@ -79,7 +76,7 @@ func main() {
 	w.OpenArchive(res)
 
 	//加载文件
-	err = w.LoadFile(ROOTPATH)
+	err = w.LoadFile(config.Cfg.ViewPath + "main.html")
 	if err != nil {
 		utils.ErrorMsg(err.Error())
 		return
@@ -101,9 +98,6 @@ func main() {
 
 	//设置标题
 	w.SetTitle(config.Cfg.Lang["SoftName"])
-
-	//定义view函数
-	defineViewFunction()
 
 	//显示窗口
 	w.Show()

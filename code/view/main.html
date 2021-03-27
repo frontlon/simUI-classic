@@ -434,26 +434,10 @@
 </body>
 
 <script type="text/tiscript">
-    var isDebug = true;
-    var mainView = view;
-    var ROOTPATH = "this://app/";
-    var SEPARATOR = ""; //路径分隔符
-    
+    var ROOTPATH  = view.GetViewPath();
+    var SEPARATOR = view.GetSeparator(); //路径分隔符
     var mediaVars = view.mediaVars();
-    if(mediaVars["platform"] == "Windows"){
-        SEPARATOR = "\\";
-    }else{
-        SEPARATOR = "/";
-    }
-
-    if (isDebug == true){
-        if(mediaVars["platform"] == "Windows"){
-            ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\";
-        }else if(mediaVars["platform"] == "OSX"){
-            ROOTPATH = "/Users/frontlon/go/src/simUI/code/view/";
-        }
-    }
-
+    var mainView  = view;
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
@@ -474,5 +458,6 @@
     include ROOTPATH + "tis/menucontext.tis";
     include ROOTPATH + "tis/keycode.tis";
     include ROOTPATH + "tis/event.tis";
+
 </script>
 </html>

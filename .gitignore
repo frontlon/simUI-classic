@@ -2,6 +2,7 @@ bak/
 .idea/
 code/res.go
 app/cache
+app/env
 app/games
 app/simUI-32.exe
 app/simUI-64.exe

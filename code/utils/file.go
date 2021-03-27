@@ -37,18 +37,18 @@ func FileCopy(src, dst string) (error) {
 }
 
 //移动文件
-func FileMove(oldFile string,newFile string) (error) {
+func FileMove(oldFile string, newFile string) (error) {
 	if FileExists(oldFile) {
-		err := os.Rename(oldFile,newFile)
+		err := os.Rename(oldFile, newFile)
 		return err
 	}
 	return nil
 }
 
 //移动文件夹
-func FolderMove(oldFolder string,newFolder string) (error) {
+func FolderMove(oldFolder string, newFolder string) (error) {
 	if FolderExists(oldFolder) {
-		err := os.Rename(oldFolder,newFolder)
+		err := os.Rename(oldFolder, newFolder)
 		return err
 	}
 	return nil
@@ -137,4 +137,21 @@ func OverlayWriteFile(p string, t string) error {
 		return err
 	}
 	return nil
+}
+
+//一次性读取文件内容
+func ReadFile(p string) (string, error) {
+	if p == "" {
+		return "", nil
+	}
+
+	if !FileExists(p) {
+		return "", nil
+	}
+
+	bytes, err := ioutil.ReadFile(p)
+	if err != nil {
+		return "", nil
+	}
+	return string(bytes), nil
 }

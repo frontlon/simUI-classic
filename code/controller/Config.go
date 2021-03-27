@@ -14,7 +14,19 @@ import (
  **/
 
 func ConfigController() {
-	
+
+
+	//读取视图路径
+	utils.Window.DefineFunction("GetViewPath", func(args ...*sciter.Value) *sciter.Value {
+		return sciter.NewValue(config.Cfg.ViewPath);
+	})
+
+	//读取路径分隔符
+	utils.Window.DefineFunction("GetSeparator", func(args ...*sciter.Value) *sciter.Value {
+		return sciter.NewValue(config.Cfg.Separator);
+	})
+
+	//初始化数据
 	utils.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 
 		ctype := args[0].String()
