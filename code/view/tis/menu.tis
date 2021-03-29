@@ -110,9 +110,15 @@ function changeMenu(obj){
 }
 
 //rom搜索功能
-function search(){
+function search(type=1){
+
     var menu = $(#menulist).select("dd:current").attributes["opt"];
-    var val = self.$(#search_input).value;
+    var val = "";
+    if(type == 1){
+        val = self.$(#search_input).value;
+    }else{
+        val = self.$(#search_box_input).value;
+    }
 
     //重置滚动翻页数据
     resetScroll();

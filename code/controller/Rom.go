@@ -291,6 +291,7 @@ func RomController() {
 			Publisher: d["publisher"],
 			Country:   d["country"],
 			Translate: d["translate"],
+			Version:   d["version"],
 		}
 
 		//写入配置文件

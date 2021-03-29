@@ -25,7 +25,7 @@ func main() {
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	separator := string(os.PathSeparator) //系统路径分隔符
 
-	if (env == "") {
+	if env == "" {
 		config.Cfg.ViewPath = "this://app/" //生产环境
 	} else {
 		config.Cfg.ViewPath = env //测试环境
@@ -38,8 +38,14 @@ func main() {
 
 	defer func() {
 		if r := recover(); r != nil {
+			var trace [1024]byte
+			n := runtime.Stack(trace[:], true)
+			utils.WriteLog("==================")
 			utils.WriteLog("recover:" + fmt.Sprintf("%s", r))
+			utils.WriteLog("trace:" + string(trace[:n]))
+			utils.WriteLog("==================")
 			fmt.Println("recover:", fmt.Sprintf("%s", r))
+			fmt.Println("trace:" + string(trace[:n]))
 		}
 	}()
 

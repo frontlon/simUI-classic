@@ -290,9 +290,14 @@
     .file-drop-zone video{size:*;foreground-repeat:no-repeat;foreground-position:top center}
     .file-drop-zone-empty{width:*;min-height:width(75%);line-height:1em;border: 1px dashed;text-align:center;font-size:12dip;vertical-align:middle;color: gray;}
 
+    #search_box{background:#666;border-radius:5px;box-shadow:0 0 20dip #222;position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:none}
+    #search_box input{color:#FFF;display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 </style>
 </head>
 <body>
+<div id="search_box">
+<input type="text" id="search_box_input" value="" novalue="请输入搜索关键字" />
+</div>
 <div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
 <menu id="romcontext"></menu>

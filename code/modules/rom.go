@@ -2,6 +2,7 @@ package modules
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -129,6 +130,8 @@ func RunGame(romId uint64, simId uint32) error {
 		cmdStr := utils.SlicetoString(" ", cmd)
 		callLua(sim.Lua, sim.Path, cmdStr)
 	}
+
+	fmt.Println(sim.Path, cmd)
 
 	//运行游戏
 	err = utils.RunGame(sim.Path, cmd)

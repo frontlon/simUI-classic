@@ -124,15 +124,30 @@
         scrollLoadMenu(evt.scrollPos);
     };
 
-   /**
-    * 状态栏
-    **/
 
+   /**
+    * 搜索
+    **/
 
     //搜索功能 - 实时改变文本
     self.on("change", "#search_input", function(evt) {
         search();
     });
+
+    //搜索框功能 - 实时改变文本
+    self.on("change", "#search_box_input", function(evt) {
+        search(2);
+    });
+
+    //搜索框失去焦点
+    self.on("blur", "#search_box_input", function(evt) {
+        $(#search_box).style["display"] = "none";
+    });
+
+
+   /**
+    * 状态栏
+    **/
 
     //基本信息搜索
     
@@ -210,12 +225,12 @@
         setFavorite(this);
     });
 
-   //设置喜爱（侧边栏）
+    //设置喜爱（侧边栏）
     self.on("click", "#right_hide", function(evt) {
         setHide(this);
     });
 
-   //重命名（侧边栏）
+    //重命名（侧边栏）
     self.on("click", "#right_rename", function(evt) {
         rename(this);
     });
@@ -225,7 +240,7 @@
         openFolder(this);
     });
 
-   //切换模拟器（侧边栏）
+    //切换模拟器（侧边栏）
     self.on("click", "#sim_select > li", function(evt) {
        switchRomSim(this);
     });
@@ -250,17 +265,17 @@
         videoVolume(this);
     });
 
-   //编辑资料
+    //编辑资料
     self.on("click", "#right_base_info", function(evt) {
         baseinfo(this);
     });
    
-   //编辑游戏简介
+    //编辑游戏简介
     self.on("click", "#right_edit_doc", function(evt) {
         editDoc(this);
     });
 
-   //编辑游戏简介
+    //编辑游戏简介
     self.on("click", "#right_move", function(evt) {
         romMove(this);
     });
@@ -270,7 +285,7 @@
         deleteRom(this);
     });
 
-       //编辑游戏攻略
+    //编辑游戏攻略
     self.on("click", "#right_edit_strategy", function(evt) {
         editStrategy(this);
     });
@@ -393,7 +408,7 @@
         setThumbDirection(this);
     });
 
-   //更改rom列表展示图类型
+    //更改rom列表展示图类型
     self.on("click", "#config_thumb menu li", function(evt) {
         setThumbType(this);
     });
@@ -421,6 +436,59 @@
     //列表列显示
     self.on("click", ".romlist_column", function(evt) {
         setRomlistColumn(this);
+    });
+
+
+    //键盘按下
+    self.on("keyup", function(evt) {
+        
+        var switch_romlist = $(#switch_romlist).attributes["value"];
+        
+        if(evt.keyCode == Event.VK_UP){
+            scrollUp(switch_romlist); //div滚动
+            if(switch_romlist == "1"){ //模块
+                keyRomUp();
+            }else if(switch_romlist == "2"){ //列表
+                keyRomLeft();
+            }
+        }else if(evt.keyCode == Event.VK_DOWN){
+            scrollDown(switch_romlist); //div滚动
+            if(switch_romlist == "1"){ //模块
+                keyRomDown();
+            }else if(switch_romlist == "2"){ //列表
+                keyRomRight();
+            }
+        }else if(evt.keyCode == Event.VK_LEFT){ //左键移动rom
+            if(switch_romlist == "1"){ //模块
+                scrollUp(switch_romlist); //div滚动
+                keyRomLeft();
+            }
+        }else if(evt.keyCode == Event.VK_RIGHT){ //右键移动rom
+            if(switch_romlist == "1"){ //模块
+                scrollDown(switch_romlist); //div滚动
+                keyRomRight();
+            }
+        }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
+            var rom = $(#romlist).select("li:current");
+            if (rom != undefined){
+                view.RunGame(rom.attributes["rid"],"");
+            }
+        }else if(evt.keyCode == Event.VK_F5){ //F5刷新缓存
+            startLoading(); 
+            view.CreateRomCache();
+        }else if(evt.keyCode == Event.VK_F1){ //F1启动帮助
+            runHelp();
+        }else if (evt.keyCode == Event.VK_SHIFT){ //shift
+            var search_box = $(#search_box);
+            if(search_box.style["display"] == "block"){
+                search_box.style["display"] = "none";
+                $(#search_box_input).value = "";
+            }else{
+                search_box.style["display"] = "block";
+                $(#search_box_input).value = "";
+                $(#search_box_input).state.focus = true;
+         }
+        }
     });
 
 });

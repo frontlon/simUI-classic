@@ -98,7 +98,7 @@ function GetPlatformItem(evt){
     //读取平台信息
     var info = JSON.parse(mainView.GetPlatformById(pfId));
     $(#platform_name).value = info.Name;
-    $(#platform_icon).value = info.Icon;
+    $(#platform_ico).value = info.Icon;
     $(#platform_exts).value = info.RomExts;
     $(#platform_doc).value = info.DocPath;
     $(#platform_strategy).value = info.StrategyPath;
@@ -139,7 +139,7 @@ function GetPlatformItem(evt){
     $(#add_sim).state.disabled = false;
     $(#platform_sim).state.disabled = false;
     $(#platform_name).state.disabled = false;
-    $(#platform_icon).state.disabled = false;
+    $(#platform_ico).state.disabled = false;
     $(#platform_exts).state.disabled = false;
 
     var checkEmpty = info.DocPath + info.StrategyPath  + info.RomPath + info.ThumbPath + info.SnapPath + info.PosterPath  + info.PackingPath  + info.TitlePath  + info.BackgroundPath  + info.VideoPath  + info.Rombase;
@@ -212,7 +212,7 @@ function platformSubmit(evt){
     var data = {
         id         : $(#platform_list).select("li:current").attributes["value"].toString();
         name       : $(#platform_name).value,
-        icon       : $(#platform_icon).value,
+        ico       : $(#platform_ico).value,
         exts       : $(#platform_exts).value,
         rom        : $(#platform_rom).value,
         thumb      : $(#platform_thumb).value,

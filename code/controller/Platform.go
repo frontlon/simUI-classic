@@ -132,7 +132,7 @@ func PlatformController() {
 		platform := &db.Platform{
 			Id:             id,
 			Name:           d["name"],
-			Icon:           d["icon"],
+			Icon:           d["ico"],
 			RomExts:        d["exts"],
 			RomPath:        d["rom"],
 			ThumbPath:      d["thumb"],

@@ -31,7 +31,6 @@ function createRomList(cls=0){
         if(column[6] == 1){data += "<div>"+CONF.Lang["BaseVersion"]+"</div>";}
         data += "</li>";
     }
-
     for(var obj in romobj) {
         if(obj.Menu == "_7b9"){
             obj.Menu = "";
@@ -50,7 +49,6 @@ function createRomList(cls=0){
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
             thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
         }
-
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
         data += "<div><img src='"+ thumb +"' /></div>";
         data += "<div>"+ obj.Name.toHtmlString() +"</div>";
@@ -142,7 +140,7 @@ function numSearch(evt){
     $(#filter_year).value = "";
     $(#filter_country).value = "";
 
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE,"","","","","");
+    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE,"","","","","","");
     createRomList(1);
 
     //激活当前，改变样式
@@ -191,7 +189,7 @@ function getRomPicPath(type,platform,name){
 
     var exts = [];
     if (type == "video"){
-         exts = ["wmv","mp4"]; //支持的视频类型
+         exts = ["wmv","mp4","avi"]; //支持的视频类型
     }else{
          exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
     }

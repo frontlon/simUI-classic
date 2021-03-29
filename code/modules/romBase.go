@@ -53,7 +53,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			continue
 		}
 
-		create := []string{"", "", "", "", "", "", ""}
+		create := []string{"", "", "", "", "", "", "",""}
 
 		for a, b := range r {
 			create[a] = b
@@ -67,6 +67,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			create[4] = utils.ToUTF8(create[4])
 			create[5] = utils.ToUTF8(create[5])
 			create[6] = utils.ToUTF8(create[6])
+			create[7] = utils.ToUTF8(create[7])
 		}
 
 		des[create[0]] = &RomBase{
@@ -77,6 +78,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			Publisher: strings.Trim(create[4], " "),
 			Country:   strings.Trim(create[5], " "),
 			Translate: strings.Trim(create[6], " "),
+			Version:   strings.Trim(create[7], " "),
 		}
 	}
 
@@ -122,6 +124,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 			strings.Trim(v.Publisher, " "),
 			strings.Trim(v.Country, " "),
 			strings.Trim(v.Translate, " "),
+			strings.Trim(v.Version, " "),
 		})
 
 	}

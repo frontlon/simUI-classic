@@ -39,7 +39,7 @@ func runGameWindows(exeFile string, cmd []string) error {
 	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
 		return err
 	}
-	result := exec.Command(exeFile, cmd...)
+	result := exec.Command(exeFile,cmd...)
 	if err := result.Start(); err != nil {
 		return err
 	}

@@ -8,47 +8,6 @@
 
     //方向键选择rom
     
-    self.on("keyup", function(evt) {
-        
-        var switch_romlist = $(#switch_romlist).attributes["value"];
-        
-        if(evt.keyCode == Event.VK_UP){
-            scrollUp(switch_romlist); //div滚动
-            if(switch_romlist == "1"){ //模块
-                keyRomUp();
-            }else if(switch_romlist == "2"){ //列表
-                keyRomLeft();
-            }
-        }else if(evt.keyCode == Event.VK_DOWN){
-            scrollDown(switch_romlist); //div滚动
-            if(switch_romlist == "1"){ //模块
-                keyRomDown();
-            }else if(switch_romlist == "2"){ //列表
-                keyRomRight();
-            }
-        }else if(evt.keyCode == Event.VK_LEFT){ //左键移动rom
-            if(switch_romlist == "1"){ //模块
-                scrollUp(switch_romlist); //div滚动
-                keyRomLeft();
-            }
-        }else if(evt.keyCode == Event.VK_RIGHT){ //右键移动rom
-            if(switch_romlist == "1"){ //模块
-                scrollDown(switch_romlist); //div滚动
-                keyRomRight();
-            }
-        }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
-            var rom = $(#romlist).select("li:current");
-            if (rom != undefined){
-                view.RunGame(rom.attributes["rid"],"");
-            }
-        }else if(evt.keyCode == Event.VK_F5){ //F5刷新缓存
-            startLoading(); 
-            view.CreateRomCache();
-        }else if(evt.keyCode == Event.VK_F1){ //F1启动帮助
-            runHelp();
-        }
-    });
-
 })
 
 /**
