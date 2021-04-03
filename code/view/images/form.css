@@ -18,7 +18,7 @@ input,textarea{font-rendering-mode:snap-pixel;font-family:monospace;}
 input:disabled,textarea:disabled{border:1px solid color(input-disabled-border-color);background:none;color:color(input-disabled-text-color)}
 
 input[type=checkbox]{background:none;border:0}
-
+input[type=hslider]{width:*}
 select{border:1px solid color(select-border-color);background:color(select-background-color);color:color(select-text-color);height:28dip;line-height:28dip;vertical-align:middle;margin:0}
 select > button{fill:color(select-button-fill-color);foreground-image:url(stock:chevron-down);background:color(select-button-background-color);margin:0;border-radius:0;border-right:0}
 select > button:hover{background:color(select-button-hover-background-color)}

@@ -29,7 +29,7 @@
     .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;min-width:80dip}
     .table_interface tr td:nth-child(even){text-align:left;padding-bottom:0;}
     #platform_exts{width:662dip;}
-    #platform_icon{max-width:320dip;}
+    #platform_ico{max-width:220dip;}
 
     #shortcut_list{padding:0;}
     #shortcut_list li{flow:row(input,input,button,button,button,label);list-style:none}
@@ -38,6 +38,9 @@
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
     #shortcut_list li .openfile{margin-left:0;}
 
+    input[type=hslider]{width:50%}
+
+
   </style>
   </head>
 <body>
@@ -45,7 +48,7 @@
   <tabs class="tabs" id="mytabs">
     <strip>
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
-      <label ww="980dip" wh="540dip" for="second">{{PlatformConfig}}</label>
+      <label ww="980dip" wh="570dip" for="second">{{PlatformConfig}}</label>
       <label ww="450dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
       <label ww="630dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>

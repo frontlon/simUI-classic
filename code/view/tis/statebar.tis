@@ -330,6 +330,21 @@ function openConfig(evt){
     endLoading();
 }
 
+//弹出rom管理窗口
+function openRomManager(evt){
+    View.window({
+        type: View.FRAME_WINDOW,
+        state: View.WINDOW_SHOWN,
+        client: true,
+        alignment:1,
+        url:self.url(ROOTPATH + "rom_manager.html"),
+        width:655,
+        height:600
+    });
+}
+
+
+
 //启动帮助
 function runHelp(){
     Sciter.launch("http://www.simui.net/");

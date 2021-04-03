@@ -83,6 +83,11 @@
         openConfig(this);
     });
 
+   //弹出rom管理窗口
+    self.on("click", "#rom_manager", function(evt) {
+        openRomManager(this);
+    });
+
     //切换主题
     self.on("click", "#theme menu li", function(evt) {
         changeTheme(this);

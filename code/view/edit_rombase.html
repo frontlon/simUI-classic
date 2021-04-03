@@ -32,7 +32,7 @@
         </tr>
         <tr>
             <td>{{BaseYear}}：</td>
-            <td><input type="number" id="year" value="" maxlength="4"></td>
+            <td><input type="text" id="year" value="" maxlength="4"></td>
         </tr>
         <tr>
             <td>{{BaseType}}：</td>
@@ -115,7 +115,6 @@
 include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
-
     //初始化主题
     initUiTheme();
     
