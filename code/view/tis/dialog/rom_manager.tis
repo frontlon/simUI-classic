@@ -1,16 +1,16 @@
 ﻿
-view.root.on("ready", function(){
-    Init(); //初始化
-});
-
-//初始化
-function Init(){
-    view.windowCaption = CONF.Lang.ThumbsDown;
-
-    //初始化主题
-    initUiTheme();
+//生成平台列表
+function initManagerPlatform(){
+    //显示“请选择平台”按钮
+    var dd = "<option value='0'>"+CONF.Lang.SelectPlatform +"</option>";
     
-    //创建语言
-    createLang();
-
+    //遍历数据，生成dom
+    for(var pf in CONF.PlatformList) {
+        dd += "<option value='"+ pf.Id +"'>" + pf.Name + "</option>";
+    }
+    self.$(#platform_rombase).html = dd; //生成dom
+    self.$(#platform_media).html = dd; //生成dom
+    self.$(#platform_sim).html = dd; //生成dom
+    self.$(#platform_file).html = dd; //生成dom
+    self.$(#platform_repeat).html = dd; //生成dom
 }

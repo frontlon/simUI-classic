@@ -384,13 +384,13 @@ function _getSideSecondDom(type,url){
             title = CONF.Lang.Packing;
             break;
         case "cassette":
-            title = CONF.Lang.Cassette;
+            title = CONF.Lang.CassettePic;
             break;
         case "icon":
             title = CONF.Lang.Icon;
             break;
         case "gif":
-            title = CONF.Lang.Gif;
+            title = CONF.Lang.GifPic;
             break;
         case "background":
             title = CONF.Lang.BackgroundPic;
@@ -458,8 +458,8 @@ function SetRomCmd(evt){
         var cmdObj = JSON.parse(cmdstr);
         var simJson =  view.dialog({
             url:self.url(ROOTPATH + "edit_rom_cmd.html"),
-            width:self.toPixels(300dip),
-            height:self.toPixels(290dip),
+            width:self.toPixels(360dip),
+            height:self.toPixels(310dip),
             parameters: {
                 name:name,
                 simId:simId,

@@ -21,7 +21,7 @@ function renameMenu(evt){
     var newName = view.dialog({
         url:self.url(ROOTPATH + "menu_rename.html"),
         width:self.toPixels(400dip),
-        height:self.toPixels(190dip),
+        height:self.toPixels(200dip),
         parameters: {
             name:evt.attributes["opt"],
             platform:$(#platform_ul).select("li:current").attributes["platform"].toString();

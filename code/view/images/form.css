@@ -1,39 +1,192 @@
-﻿table{width:*;display:block;}
-th{text-align:left;padding:16dip 0 0 0;color:#ccc;}
-td{color:#ccc;padding:3dip 0;line-height:28dip;text-align:left;}
-td:first-child{font-size:11dip;text-align:right;}
-.form_bottom{border-top:1dip solid color(form-bottom-hr-color);text-align:right;display:block;margin-top:10dip;padding-top:10dip}
+﻿table {
+  width: *;
+  display: block;
+}
+th {
+  text-align: left;
+  padding: 16dip 0 0 0;
+  color: #ccc;
+}
+td {
+  color: #ccc;
+  padding: 3dip 0;
+  line-height: 28dip;
+  text-align: left;
+}
+td:first-child {
+  font-size: 11dip;
+  text-align: right;
+}
+.form_bottom {
+  border-top: 1dip solid color(form-bottom-hr-color);
+  text-align: right;
+  display: block;
+  margin-top: 10dip;
+  padding-top: 10dip;
+}
 
-button{border:1px solid color(button-border-color);background:color(button-background-color);color:color(button-text-color);height:28dip;line-height:28dip;margin:0 5dip;border-radius:4dip;display:inline-block}
-button:disabled{background:color(button-disabled-background-color);color:color(button-disabled-text-color);border:1px solid color(button-disabled-border-color);}
-button:hover{border-color:color(button-hover-border-color)}
-button:active{background:color(button-active-background-color);}
-button.ok{background:color(button-ok-background-color);color:color(button-ok-text-color);border:0;width:80dip;height:40dip;line-height:40dip;font-size:14dip}
-button.cancel{background:color(button-cancel-background-color);color:color(button-cancel-text-color);border:0;height:40dip;line-height:40dip;width:80dip;font-size:14dip}
+button {
+  border: 1px solid color(button-border-color);
+  background: color(button-background-color);
+  color: color(button-text-color);
+  height: 28dip;
+  line-height: 28dip;
+  margin: 0 5dip;
+  border-radius: 4dip;
+  display: inline-block;
+}
+button:disabled {
+  background: color(button-disabled-background-color);
+  color: color(button-disabled-text-color);
+  border: 1px solid color(button-disabled-border-color);
+}
+button:hover {
+  border-color: color(button-hover-border-color);
+  opacity: 0.8;
+}
+button:active {
+  background: color(button-active-background-color);
+}
+button.ok {
+  background: color(button-ok-background-color);
+  color: color(button-ok-text-color);
+  border: 0;
+  width: 80dip;
+  height: 40dip;
+  line-height: 40dip;
+  font-size: 14dip;
+}
+button.cancel {
+  background: color(button-cancel-background-color);
+  color: color(button-cancel-text-color);
+  border: 0;
+  height: 40dip;
+  line-height: 40dip;
+  width: 80dip;
+  font-size: 14dip;
+}
 
-input{border:1px solid color(input-border-color);background:color(input-background-color);color:color(input-text-color);height:28dip;line-height:28dip;padding:0 2dip;border-radius:4dip;}
-input:hover,textarea:hover{border-color:color(input-hover-border-color)}
-input:focus,textarea:focus{background:color(input-focus-background-color)}
-input,textarea{font-rendering-mode:snap-pixel;font-family:monospace;}
-input:disabled,textarea:disabled{border:1px solid color(input-disabled-border-color);background:none;color:color(input-disabled-text-color)}
+input[type='text'] {
+  border: 1px solid color(input-border-color);
+  background: color(input-background-color);
+  color: color(input-text-color);
+  height: 28dip;
+  line-height: 28dip;
+  padding: 0 2dip;
+  border-radius: 4dip;
+}
+input[type='text']:hover,
+textarea:hover {
+  border-color: color(input-hover-border-color);
+}
+input[type='text']:focus,
+textarea:focus {
+  background: color(input-focus-background-color);
+}
+input[type='text'],
+textarea {
+  font-rendering-mode: snap-pixel;
+  font-family: monospace;
+}
+input[type='text']:disabled,
+textarea:disabled {
+  border: 1px solid color(input-disabled-border-color);
+  background: none;
+  color: color(input-disabled-text-color);
+}
 
-input[type=checkbox]{background:none;border:0}
-input[type=hslider]{width:*}
-select{border:1px solid color(select-border-color);background:color(select-background-color);color:color(select-text-color);height:28dip;line-height:28dip;vertical-align:middle;margin:0}
-select > button{fill:color(select-button-fill-color);foreground-image:url(stock:chevron-down);background:color(select-button-background-color);margin:0;border-radius:0;border-right:0}
-select > button:hover{background:color(select-button-hover-background-color)}
-select > popup{color:color(select-popup-text-color);border:1px solid color(select-popup-border-color);}
-select > popup option{height:28dip;line-height:28dip;background:color(select-popup-option-background-color);color:color(select-popup-option-text-color)}
-select > popup option:hover{background:color(select-popup-option-hover-background-color);}
-select > caption{color:color(select-caption-option-text-color);background:color(select-caption-option-background-color);border:0;vertical-align:middle}
-select:disabled {border:1px solid color(select-disabled-border-color);}
-select:disabled > caption{color:color(select-disabled-caption-text-color);background:color(select-disabled-caption-background-color);border:0;vertical-align:middle}
+input[type='hslider'] {
+  width: *;
+}
+select {
+  border: 1px solid color(select-border-color);
+  background: color(select-background-color);
+  color: color(select-text-color);
+  height: 28dip;
+  line-height: 28dip;
+  vertical-align: middle;
+  margin: 0;
+  text-align: left;
+}
+select > button {
+  fill: color(select-button-fill-color);
+  foreground-image: url(stock:chevron-down);
+  background: color(select-button-background-color);
+  margin: 0;
+  border-radius: 0;
+  border-right: 0;
+}
+select > button:hover {
+  background: color(select-button-hover-background-color);
+}
+select > popup {
+  color: color(select-popup-text-color);
+  border: 1px solid color(select-popup-border-color);
+  background: color(select-popup-option-background-color);
+}
+select > popup option {
+  height: 28dip;
+  line-height: 28dip;
+  background: color(select-popup-option-background-color);
+  color: color(select-popup-option-text-color);
+}
+select > popup option:hover {
+  background: color(select-popup-option-hover-background-color);
+}
+select > caption {
+  color: color(select-caption-option-text-color);
+  background: none;
+  border: 0;
+  vertical-align: middle;
+}
+select:disabled {
+  border: 1px solid color(select-disabled-border-color);
+}
+select:disabled > caption {
+  color: color(select-disabled-caption-text-color);
+  background: color(select-disabled-caption-background-color);
+  border: 0;
+  vertical-align: middle;
+}
 
-.tabs{prototype:Tabs;size:*;display:block;flow:vertical}
-.tabs>strip{display:block;flow:horizontal;font-size:14dip;padding:7dip 0 ;margin-bottom:7dip;border-bottom:1px solid color(tabs-strip-border-color)}
-.tabs>strip>label{display:block;height:*;width:100dip;background:none;text-align:center;color:color(tabs-strip-label-text-color);padding:3dip 0 }
-.tabs>strip>label:current{background:none;color:color(tabs-strip-label-current-text-color);background:none;}
-.tabs>strip>label:hover{color:color(tabs-strip-label-hover-text-color)}
-.tabs>panels{display:block;size:*;background:none}
-.tabs>panels>*{visibility:none}
-.tabs>panels>:expanded{visibility:visible;height:*;background:none;}
+.tabs {
+  prototype: Tabs;
+  size: *;
+  display: block;
+  flow: vertical;
+}
+.tabs > strip {
+  display: block;
+  flow: horizontal;
+  font-size: 14dip;
+  padding: 7dip 0;
+  margin-bottom: 7dip;
+  border-bottom: 1px solid color(tabs-strip-border-color);
+}
+.tabs > strip > label {
+  display: block;
+  height: *;
+  width: 100dip;
+  background: none;
+  text-align: center;
+  color: color(tabs-strip-label-text-color);
+  padding: 3dip 0;
+}
+.tabs > strip > label:current {
+  background: none;
+  color: color(tabs-strip-label-current-text-color);
+  background: none;
+}
+.tabs > panels {
+  display: block;
+  size: *;
+  background: none;
+}
+.tabs > panels > * {
+  visibility: none;
+}
+.tabs > panels > :expanded {
+  visibility: visible;
+  height: *;
+  background: none;
+}

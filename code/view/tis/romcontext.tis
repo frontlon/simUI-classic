@@ -21,7 +21,7 @@ function romMove(evt){
     var platform = view.dialog({
         url:self.url(ROOTPATH + "move_rom.html"),
         width:self.toPixels(300dip),
-        height:self.toPixels(550dip),
+        height:self.toPixels(565dip),
         parameters: {
             id:evt.attributes["rid"];
         };
@@ -84,7 +84,7 @@ function rename(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "rom_rename.html"),
         width:self.toPixels(300dip),
-        height:self.toPixels(210dip),
+        height:self.toPixels(225dip),
         parameters: {
             name:detailObj.Info.Name
         };
@@ -103,7 +103,7 @@ function baseinfo(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rombase.html"),
         width:self.toPixels(350dip),
-        height:self.toPixels(380dip),
+        height:self.toPixels(400dip),
         parameters: {
             id:evt.attributes["rid"],
         };
@@ -128,7 +128,7 @@ function editDoc(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rom_doc.html"),
         width:self.toPixels(550dip),
-        height:self.toPixels(600dip),
+        height:self.toPixels(610dip),
         parameters: {
             id:evt.attributes["rid"],
         };

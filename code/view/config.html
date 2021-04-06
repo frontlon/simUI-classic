@@ -48,7 +48,7 @@
   <tabs class="tabs" id="mytabs">
     <strip>
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
-      <label ww="980dip" wh="570dip" for="second">{{PlatformConfig}}</label>
+      <label ww="980dip" wh="590dip" for="second">{{PlatformConfig}}</label>
       <label ww="450dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
       <label ww="630dip" wh="300dip" for="fourth">{{Shortcut}}</label>
     </strip>
@@ -210,10 +210,10 @@
 
     //平台列表点击
     event click $(#platform_list li) {
-    try{
-      GetPlatformItem(this);
-    }catch(e){
-      alert(e);}
+      try{
+        GetPlatformItem(this);
+      }catch(e){
+        alert(e);}
     }
 
     //更新通用配置信息
@@ -299,6 +299,10 @@
     //提交界面变更
     event click $(#interface_submit) {
         interfaceSubmit(this);
+    }
+
+    event click $(.cancel){
+        view.close();
     }
 
 

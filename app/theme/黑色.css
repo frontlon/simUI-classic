@@ -147,18 +147,19 @@ html:theme(dark) {
     var(input-disabled-text-color) : #666;
 
     var(select-border-color) : #666;
-    var(select-background-color) : #333;
+    var(select-background-color) : #444;
     var(select-text-color) : #999;
     var(select-button-fill-color) : #999;
     var(select-button-background-color) : #444;
     var(select-button-hover-background-color) : #444;
     var(select-popup-text-color) : #999;
-    var(select-popup-border-color) : #444;
+    var(select-popup-background-color) : #999;
+    var(select-popup-border-color) : #666;
     var(select-popup-option-background-color) : #444;
     var(select-popup-option-text-color) : #999;
-    var(select-popup-option-hover-background-color) : #f0f0f0;
+    var(select-popup-option-hover-background-color) : #666;
     var(select-caption-option-text-color) : #999;
-    var(select-caption-option-background-color) : #444;
+
     var(select-disabled-border-color) : #444;
     var(select-disabled-caption-text-color) : #666;
     var(select-disabled-caption-background-color) : #383838;
@@ -166,7 +167,6 @@ html:theme(dark) {
     var(tabs-strip-border-color) : #444;
     var(tabs-strip-label-text-color) : #999;
     var(tabs-strip-label-current-text-color) : #fff;
-    var(tabs-strip-label-hover-text-color) : #ccc;
 
     var(about-background-color) : #383838;
     var(about-thumb-line-color) : #1366cc;

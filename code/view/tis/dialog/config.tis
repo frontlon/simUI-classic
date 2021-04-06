@@ -257,7 +257,7 @@ function addSim(evt) {
     var res = view.dialog({
         url:self.url(ROOTPATH + "edit_sim.html"),
         width:self.toPixels(460dip),
-        height:self.toPixels(300dip),
+        height:self.toPixels(320dip),
         parameters: {
             id:0,
             platform:pfId,
@@ -278,7 +278,7 @@ function editSim(evt) {
    var res = view.dialog({
         url:self.url(ROOTPATH + "edit_sim.html"),
         width:self.toPixels(460dip),
-        height:self.toPixels(300dip),
+        height:self.toPixels(320dip),
         parameters: {
             id:evt.value,
             platform:pfId,
@@ -386,7 +386,7 @@ function platformAdd(evt) {
     var name =  view.dialog({
         url:self.url(ROOTPATH + "add_platform.html"),
         width:self.toPixels(300dip),
-        height:self.toPixels(140dip),
+        height:self.toPixels(180dip),
         parameters: {};
     });
 

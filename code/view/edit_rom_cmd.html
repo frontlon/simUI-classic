@@ -10,20 +10,17 @@
         input{width:*;}
         .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
         h4{margin:7dip 0}
-
         table td{vertical-align: middle;padding-bottom:5dip}
         table td:first-child{width:50dip}
-
     </style>
 
 </head>
 <body>
     <div class="input_wrapper">
         <h4 id="desc"></h4>
-
         <table>
             <tr>
-                <td><div class="tip" title="{{RomSimParamsDesc}}">?</div>{{SimParams}}</td>
+                <td><div class="tip" title="{{RomSimParamsDesc}}">?</div>{{SimParams}}：</td>
                 <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
             </tr>
                 <tr><td><div class="tip" title="{{LuaDesc}}">?</div>{{Lua}}：</td><td>
@@ -31,18 +28,18 @@
                 <button class="openfile" for="sim_lua" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*">...</button>
             </td></tr>
             <tr>
-                <td><div class="tip" title="{{UnzipRunDesc}}">?</div>{{UnzipRun}}</td>
+                <td><div class="tip" title="{{UnzipRunDesc}}">?</div>{{UnzipRun}}：</td>
                 <td><select id="unzip"><option value="2">{{UnzipDefault}}</option><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>
             </tr>
              <tr id="file_tr">
-                <td><div class="tip" title="{{RomCmdFileTip}}">?</div>{{RomCmdFile}}</td>
+                <td><div class="tip" title="{{RomCmdFileTip}}">?</div>{{RomCmdFile}}：</td>
                 <td><input id="file" value="" /></td>
             </tr>
         </table>
     </div>
-            <div class="form_bottom">
-              <button class="ok" id="close-dialog" role="default-button">{{Confirm}}</button>
-          </div>
+    <div class="form_bottom">
+        <button class="ok" id="close-dialog" role="default-button">{{Confirm}}</button>
+    </div>
     <script type="text/tiscript">
 
         include ROOTPATH + "tis/utils.tis";
