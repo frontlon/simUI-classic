@@ -7,7 +7,7 @@
       @import 'this://app/images/form.css';
       html,
       body {
-        overflow: hidden;
+        overflow: scroll-indicator;
         margin: 0;
         background: color(center-background-color);
         padding: 0;
@@ -69,6 +69,9 @@
       table tr.checked {
         background: #444;
       }
+      table tr:hover {
+        background: #444;
+      }
       table th:nth-child(1) {
         width: 30dip;
       }
@@ -82,16 +85,28 @@
         width: 70dip;
         margin: 0;
       }
+      table input[type='text']:hover{
+        background:none
+      }
       table .nosave {
         color: #fff;
       }
+
+      .openfile{cursor:pointer;overflow:auto;}
+
+      .pages{width:*;text-align:right}
+      .pages li{display:inline-block;size:20dip;line-height:20dip;border:1px solid #555;background:#444;text-align:center;
+      color:#999;margin:0 2dip;
+      }
+      .pages li:hover{background:#555;}
+      .pages li:current{background:none;border:0;}
     </style>
   </head>
   <body>
     <tabs class="tabs" id="mytabs">
       <strip>
         <label ww="1000dip" wh="500dip" for="first" selected>资料管理</label>
-        <label ww="1000dip" wh="500dip" for="second">媒体管理</label>
+        <label ww="1200dip" wh="500dip" for="second">媒体管理</label>
         <label ww="1000dip" wh="500dip" for="third">模拟器管理</label>
         <label ww="800dip" wh="700dip" for="fourth">文件管理</label>
         <label ww="600dip" wh="500dip" for="fifth">rom去重</label>
@@ -104,16 +119,12 @@
               <div class="titlebar_left">
                 <select id="platform_rombase"></select>
                 &nbsp;
-                <select>
-                  <option>请选择目录</option>
-                  <option>SFC</option>
-                  <option>MD</option>
-                </select>
+                <select id="menu_rombase"><option id=''>请选择目录</option></select>
               </div>
               <div class="titlebar_right"></div>
             </div>
             <div class="content">
-              <table>
+              <table id="romlist_rombase">
                 <thead>
                   <tr>
                     <th>文件名</th>
@@ -126,39 +137,9 @@
                     <th>版本</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td><input type="text" value="dino.zip" /></td>
-                    <td><input type="text" value="恐龙新世纪" /></td>
-                    <td><input type="text" value="1997" /></td>
-                    <td><input type="text" value="横版过关" /></td>
-                    <td><input type="text" value="CAPCOM" /></td>
-                    <td><input type="text" value="日本" /></td>
-                    <td><input type="text" value="菜菜汉化组" /></td>
-                    <td><input type="text" value="盗版" /></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" value="dino.zip" /></td>
-                    <td><input type="text" value="恐龙新世纪" /></td>
-                    <td><input type="text" value="1997" /></td>
-                    <td><input type="text" value="横版过关" /></td>
-                    <td><input type="text" value="CAPCOM" /></td>
-                    <td><input type="text" value="日本" /></td>
-                    <td><input type="text" value="菜菜汉化组" /></td>
-                    <td><input type="text" value="盗版" /></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" value="dino.zip" /></td>
-                    <td><input type="text" value="恐龙新世纪" /></td>
-                    <td><input type="text" value="1997" /></td>
-                    <td><input type="text" value="横版过关" /></td>
-                    <td><input type="text" value="CAPCOM" /></td>
-                    <td><input type="text" value="日本" /></td>
-                    <td><input type="text" value="菜菜汉化组" /></td>
-                    <td><input type="text" value="盗版" /></td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
+              <ul class="pages" id="pages_rombase"></ul>
             </div>
           </div>
         </section>
@@ -169,16 +150,14 @@
               <div class="titlebar_left">
                 <select id="platform_media"></select>
                 &nbsp;
-                <select>
+                <select id="menu_media">
                   <option>请选择目录</option>
-                  <option>SFC</option>
-                  <option>MD</option>
                 </select>
               </div>
               <div class="titlebar_right"></div>
             </div>
             <div class="content">
-              <table>
+              <table id="romlist_media">
                 <thead>
                   <tr>
                     <th>文件名</th>
@@ -189,57 +168,18 @@
                     <th>海报</th>
                     <th>包装盒</th>
                     <th>卡带图</th>
-                    <th>动画</th>
                     <th>图标</th>
+                    <th>动画</th>
                     <th>背景图</th>
                     <th>游戏视频</th>
-                  </tr>
+                    <th>文档</th>
+                    <th>攻略</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>dino.zip</td>
-                    <td>恐龙新世纪</td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>dino.zip</td>
-                    <td>恐龙新世纪</td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>dino.zip</td>
-                    <td>恐龙新世纪</td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                    <td><input type="text" value="" /></td>
-                  </tr>
                 </tbody>
               </table>
+              <ul class="pages" id="pages_media"></ul>
             </div>
           </div>
         </section>
@@ -504,35 +444,84 @@
     <script type="text/tiscript">
       include ROOTPATH + "tis/plugins/tabs.tis";
       include ROOTPATH + "tis/utils.tis";
-      include ROOTPATH + "tis/dialog/config_manager.tis";
+      include ROOTPATH + "tis/dialog/rom_manager.tis";
 
       //标题
       view.windowCaption = "rom管理";
 
-      //初始化主题
-      initUiTheme();
-
-      //创建语言
-      createLang();
-
       //初始化平台列表
-      initManagerPlatform();
+      managerInit();
+
+
+      /**
+       * 资料编辑
+      **/
 
       //文本框修改
       event change $(table input[type=text]) {
         this.attributes.addClass("nosave");
       }
 
+      //切换平台 - 游戏资料
+      event change $(#platform_rombase){
+        managerChangeRombasePlatform(this.value);
+      }
+      //切换目录 - 游戏资料
+      event change $(#menu_rombase){
+        managerChangeRombaseMenu(this.value);
+      }
+
       //文本框保存修改
-      event keydown $(table input[type=text]) (evt,input) {
+      /*
+      event keydown $(#romlist_rombase input[type=text]) (evt,input) {
         if(evt.keyCode != Event.VK_RETURN){
           return ;
         }
-        this.attributes.removeClass("nosave");
+        managerRombaseSave(this);
+      }
+      */
+
+      //分页 - 游戏资料
+      event click $(#pages_rombase li){
+        managerCreateRombaseByPages(this);
+      }
+
+      /**
+       * 资源编辑
+      **/
+
+
+      //分页 - 游戏资料
+      event click $(#romlist_media .openfile){
+       openFile(this);
       }
 
 
-      //修改模拟器模拟器
+      //切换平台 - 游戏资源
+      event change $(#platform_media){
+        managerChangeMediaPlatform(this.value);
+      }
+
+      //切换目录 - 游戏资料
+      event change $(#menu_media){
+        managerChangeMediaMenu(this.value);
+      }
+
+      //分页 - 游戏资料
+      event click $(#pages_media li){
+        managerCreateMediaByPages(this);
+      }
+
+      
+
+      
+
+      /**
+       * 通用
+      **/
+
+
+      //checkbox选中
       event click $(.check_table input[type=checkbox]) {
         if(this.checked == true){
           this.checked = false;
@@ -543,8 +532,7 @@
         }
       }
 
-
-      //选择文件夹
+      //选择checkbox
       event click $(.check_table tbody tr){
         if (this.select("input[type=checkbox]").checked == true){
           this.select("input[type=checkbox]").checked = false;

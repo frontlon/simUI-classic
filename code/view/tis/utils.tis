@@ -38,6 +38,11 @@ function alert(str){
     view.msgbox(#alert,str);
 }
 
+//alert框
+function warning(str){
+    view.msgbox(#warning,str);
+}
+
 //开启loading框
 function startLoading(str = "",platform=""){
     $(#loading).style['display'] = 'block';

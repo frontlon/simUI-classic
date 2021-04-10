@@ -1,6 +1,15 @@
-﻿
-//生成平台列表
-function initManagerPlatform(){
+﻿//生成平台列表
+function managerInit(){
+
+    //标题
+    view.windowCaption = "rom管理";
+
+    //初始化主题
+    initUiTheme();
+
+    //创建语言
+    createLang();
+
     //显示“请选择平台”按钮
     var dd = "<option value='0'>"+CONF.Lang.SelectPlatform +"</option>";
     
@@ -13,4 +22,268 @@ function initManagerPlatform(){
     self.$(#platform_sim).html = dd; //生成dom
     self.$(#platform_file).html = dd; //生成dom
     self.$(#platform_repeat).html = dd; //生成dom
+}
+
+//切换平台 - 游戏资料
+function managerChangeRombasePlatform(platformId){
+    //创建菜单
+    var dd = createMenuOption(platformId);
+    var menulist = self.$(#menu_rombase);
+    menulist.clear();
+    menulist.html = dd; //生成dom
+
+    //生成默认游戏列表
+    var romjson = mainView.GetGameList(platformId,"","","",0,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateRombase(romjson);
+
+    //生成分页数据
+    var romCount = mainView.GetGameCount(platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var pages = managerCreatePages(romCount);
+    $(#pages_rombase).html = pages;
+    $(#pages_rombase).select("li:nth-child(1)").state.current = true;
+}
+
+//创建菜单选项
+function createMenuOption(platformId){
+    var menujson = mainView.GetMenuList(platformId,0); //读取分配列表
+    var menuobj = JSON.parse(menujson);
+    var dd = "<option value=''>全部游戏</option>";
+    var name ="";
+    var fixed = "";
+    //遍历数据，生成dom
+    for(var obj in menuobj) {
+        if(obj.Name == "_7b9"){
+            name = CONF.Lang.Uncate;
+        }else{
+            name = obj.Name;
+        }
+
+        dd += "<option value=\""+ obj.Name +"\">"+ name + "</option>";
+    }
+    return dd;
+}
+
+//选择文件
+function openFile(evt) {
+
+    var filter = "";
+    if(evt.attributes.hasClass("video")){
+        filter = "Video Files (*.mp4,*.wmv,*.avi)|*.mp4;*.wmv;*.avi|All Files (*.*)|*.*";
+    }else if (evt.attributes.hasClass("doc") || evt.attributes.hasClass("strategy")){
+        filter = "";
+        filter = "Doc Files (*.txt,*.md,*.html)|*.txt;*.md;*.html|All Files (*.*)|*.*";
+    }else{
+        filter = "Image Files (*.png,*.jpg,*.jpeg,*.gif)|*.png;*.jpg;*.jpeg;*.gif|All Files (*.*)|*.*";
+    }
+
+    const defaultExt = "";
+    const initialPath = "";
+    const caption = "请选择文件";
+    var url = view.selectFile("", filter, defaultExt, initialPath, caption );
+    if(url){
+        url = URL.toPath(url);
+        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split(CONF.RootPath.toString()).join("");
+        evt.html = url;
+    }
+}
+
+//创建分页数据
+function managerCreatePages(romCount){
+    var num = Math.ceil(romCount.toFloat() / 100);
+    var pages = "";
+    for(var i=1;i<=num;i++) {
+        pages += "<li>"+i+"</li>";
+    }
+    return pages;
+}
+
+//切换目录 - 游戏资料
+function managerChangeRombaseMenu(menuName){
+
+    var platformId = $(#platform_rombase).value;
+
+    //生成默认游戏列表
+    var romjson = mainView.GetGameList(platformId,menuName,"","",0,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateRombase(romjson);
+
+    var romCount = mainView.GetGameCount(platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var pages = managerCreatePages(romCount);
+    $(#pages_rombase).html = pages;
+    if(pages != ""){
+        $(#pages_rombase).select("li:nth-child(1)").state.current = true;
+    }
+}
+
+//创建资料rom列表
+function managerCreateRombase(romjson){
+    var romobj = JSON.parse(romjson);
+    var romData = "";
+    for(var obj in romobj) {
+        if(obj.Menu == "_7b9"){
+            obj.Menu = "";
+        }
+
+        romData += "<tr rid='"+ obj.Id +"'>";
+        var romName = obj.RomPath.replace("\\","/");
+        var romPath = romName.split("/");
+        var filename = romPath[romPath.length - 1].split(".");
+        romData += "<td><input|text.filename value='"+ filename[0] +"'/></td>";
+        romData += "<td><input|text.name value='"+ obj.Name.toHtmlString() +"'/></td>";
+        romData += "<td><input|text.year value='"+ obj.BaseYear +"'/></td>";
+        romData += "<td><input|text.type value='"+ obj.BaseType +"'/></td>";
+        romData += "<td><input|text.publisher value='"+ obj.BasePublisher +"'/></td>";
+        romData += "<td><input|text.country value='"+ obj.BaseCountry +"'/></td>";
+        romData += "<td><input|text.translate value='"+ obj.BaseTranslate +"'/></td>";
+        romData += "<td><input|text.version value='"+ obj.BaseVersion +"'/></td>";
+        romData += "</tr>"
+    }
+    $(#romlist_rombase tbody).html = romData;
+}
+
+
+
+//点击分页按钮
+function managerCreateRombaseByPages(obj){
+    if(obj.state.current == true){
+        return;
+    }
+    var platformId = $(#platform_rombase).value;
+    var id = obj.parent.id;
+    var num = obj.html.toInteger() - 1;
+    var romjson = mainView.GetGameList(platformId,"","","",num,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateRombase(romjson);
+    obj.state.current = true;
+    $(body).scrollTo(0,0, false);
+}
+
+//保存rom资料
+function managerRombaseSave(obj){
+    var tr = obj.parent.parent;
+    var filename = tr.select(".filename").value;
+
+    if(filename.trim() == ""){
+        warning("文件名不能为空");
+        return;
+    }
+    //更新资料
+    var data = {
+        id:tr.attributes["rid"];
+        name:tr.select(".name").value,
+        year:tr.select(".year").value,
+        type:tr.select(".type").value,
+        publisher:tr.select(".publisher").value,
+        country:tr.select(".country").value,
+        translate:tr.select(".translate").value,
+        version:tr.select(".version").value,
+    }
+    mainView.SetRomBase(JSON.stringify(data));
+
+    //更改游戏名称
+    mainView.RomRename(tr.attributes["rid"],filename);
+    obj.attributes.removeClass("nosave");
+}
+
+//切换平台 - 游戏资源
+function managerChangeMediaPlatform(platformId){
+
+    //创建菜单
+    var dd = createMenuOption(platformId);
+    var menulist = self.$(#menu_media);
+    menulist.clear();
+    menulist.html = dd; //生成dom
+
+    //生成默认游戏列表
+    var romjson = mainView.GetGameList(platformId,"","","",0,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateMedia(romjson);
+
+    //生成分页数据
+    var romCount = mainView.GetGameCount(platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var pages = managerCreatePages(romCount);
+    $(#pages_media).html = pages;
+    $(#pages_media).select("li:nth-child(1)").state.current = true;
+}
+
+//创建资料rom列表
+function managerCreateMedia(romjson){
+    var romobj = JSON.parse(romjson);
+    var romData = "";
+    for(var obj in romobj) {
+        if(obj.Menu == "_7b9"){
+            obj.Menu = "";
+        }
+
+        romData += "<tr rid='"+ obj.Id +"'>";
+        var romName = obj.RomPath.replace("\\","/");
+        var romPath = romName.split("/");
+        var filename = romPath[romPath.length - 1].split(".");
+
+        var thumb = getRomPicPath("thumb",obj.Platform,filename[0]);
+        var snap = getRomPicPath("snap",obj.Platform,filename[0]);
+        var title = getRomPicPath("title",obj.Platform,filename[0]);
+        var poster = getRomPicPath("poster",obj.Platform,filename[0]);
+        var packing = getRomPicPath("packing",obj.Platform,filename[0]);
+        var cassette = getRomPicPath("cassette",obj.Platform,filename[0]);
+        var icon = getRomPicPath("icon",obj.Platform,filename[0]);
+        var gif = getRomPicPath("gif",obj.Platform,filename[0]);
+        var background = getRomPicPath("background",obj.Platform,filename[0]);
+        var video = getRomPicPath("video",obj.Platform,filename[0]);
+        var doc = mainView.GetGameDoc("doc",obj.Id);
+        var strategy = mainView.GetGameDoc("strategy",obj.Id);
+
+        romData += "<td>"+ filename[0] +"</td>";
+        romData += "<td>"+ obj.Name.toHtmlString() +"</td>";
+        romData += "<td.openfile.thumb>"+ thumb +"</td>";
+        romData += "<td.openfile.snap>"+ snap +"</td>";
+        romData += "<td.openfile.title>"+ title +"</td>";
+        romData += "<td.openfile.poster>"+ poster +"</td>";
+        romData += "<td.openfile.packing>"+ packing +"</td>";
+        romData += "<td.openfile.cassette>"+ cassette +"</td>";
+        romData += "<td.openfile.icon>"+ icon +"</td>";
+        romData += "<td.openfile.gif>"+ gif +"</td>";
+        romData += "<td.openfile.background>"+ background +"</td>";
+        romData += "<td.openfile.video>"+ video +"</td>";
+        romData += "<td.openfile.doc>"+ doc +"</td>";
+        romData += "<td.openfile.strategy>"+ strategy +"</td>";
+        romData += "</tr>"
+    }
+    $(#romlist_media tbody).html = romData;
+}
+
+//切换目录 - 游戏资源
+function managerChangeMediaMenu(menuName){
+
+    var platformId = $(#platform_rombase).value;
+
+    //生成默认游戏列表
+    var romjson = mainView.GetGameList(platformId,menuName,"","",0,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateMedia(romjson);
+
+    var romCount = mainView.GetGameCount(platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var pages = managerCreatePages(romCount);
+    $(#pages_media).html = pages;
+    if(pages != ""){
+        $(#pages_media).select("li:nth-child(1)").state.current = true;
+    }
+}
+
+
+//点击分页按钮
+function managerCreateMediaByPages(obj){
+    if(obj.state.current == true){
+        return;
+    }
+    var platformId = $(#platform_rombase).value;
+    var id = obj.parent.id;
+    var num = obj.html.toInteger() - 1;
+    var romjson = mainView.GetGameList(platformId,"","","",num,"","","","","","");
+    $(#romlist_rombase tbody).html = "";
+    managerCreateMedia(romjson);
+    obj.state.current = true;
+    $(body).scrollTo(0,0, false);
 }
