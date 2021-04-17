@@ -106,6 +106,21 @@ func RomController() {
 		return sciter.NewValue(string(jsonRom))
 	})
 
+	//根据id列表读取rom
+	utils.Window.DefineFunction("GetGameListByIds", func(args ...*sciter.Value) *sciter.Value {
+
+		romIdsStr := strings.Split(args[0].String(), ",");
+		ids := []uint64{};
+		for _, v := range romIdsStr {
+			ids = append(ids, uint64(utils.ToInt(v)));
+		}
+		newlist, _ := (&db.Rom{}).GetByIds(ids)
+
+		jsonRom, _ := json.Marshal(newlist)
+		return sciter.NewValue(string(jsonRom))
+
+	})
+
 	//读取游戏数量
 	utils.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))

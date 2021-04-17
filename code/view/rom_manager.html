@@ -188,49 +188,39 @@
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
-                <select id="platform_sim"></select>
+                <select id="platform_sim"></select>&nbsp;
+                <select id="menu_sim"><option id=''>请选择目录</option></select>
               </div>
               <div class="titlebar_right">
-                <select>
+                <select id="select_sim">
                   <option>选择模拟器</option>
                 </select>
-                <select>
+                <select id="select_unzip">
                   <option>解压后运行</option>
                   <option>否</option>
                   <option>是</option>
                 </select>
-                <button>选择Lua脚本</button>
+                <button id="select_lua">选择Lua脚本</button>
               </div>
             </div>
             <div class="content">
-              <table class="check_table">
+              <table id="romlist_sim" class="check_table">
                 <thead>
                   <tr>
                     <th>选择</th>
                     <th>文件名</th>
                     <th>游戏名称</th>
-                    <th>模拟器</th>
+                    <th>模拟器名称</th>
                     <th>启动参数</th>
                     <th>解压后运行</th>
                     <th>运行文件名</th>
                     <th>Lua脚本</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>dino.zip</td>
-                    <td>恐龙新世纪</td>
-                    <td>VirtualNes</td>
-                    <td><input type="text" value="" /></td>
-                    <td>否</td>
-                    <td><input type="text" value="" /></td>
-                    <td>fbs.lua</td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
+              <ul class="pages" id="pages_sim"></ul>
+
             </div>
           </div>
         </section>
@@ -472,14 +462,12 @@
       }
 
       //文本框保存修改
-      /*
       event keydown $(#romlist_rombase input[type=text]) (evt,input) {
         if(evt.keyCode != Event.VK_RETURN){
           return ;
         }
         managerRombaseSave(this);
       }
-      */
 
       //分页 - 游戏资料
       event click $(#pages_rombase li){
@@ -512,9 +500,43 @@
         managerCreateMediaByPages(this);
       }
 
+      /**
+       * 资源模拟器
+      **/
+
+      //切换平台 - 模拟器管理
+      event change $(#platform_sim){
+        managerChangeSimulatorPlatform(this.value);
+      }
+
+      //切换目录 - 模拟器管理
+      event change $(#menu_sim){
+        managerChangeSimulatorMenu(this.value);
+      }
+
+      //分页 - 模拟器管理
+      event click $(#pages_sim li){
+        managerCreateSimulatorByPages(this);
+      }
+
+      //编辑文本框资料 - 模拟器管理
+      event keydown $(#romlist_sim input[type=text]) (evt,input) {
+        if(evt.keyCode != Event.VK_RETURN){
+          return ;
+        }
+        managerSimulatorSave(this);
+      }
       
 
-      
+      /**
+       * 操作
+       **/
+
+       //更改rom的模拟器
+       event change $(#select_sim){
+          managerChangeRomSimulator(this);
+       }
+
 
       /**
        * 通用

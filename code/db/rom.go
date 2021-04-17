@@ -131,8 +131,7 @@ func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseTyp
 	}
 
 	offset := pages * ROM_PAGE_NUM
-	field := "id,name,menu,platform,star,rom_path,base_type,base_year,base_publisher,base_country,base_translate,base_version"
-	result := getDb().Select(field).Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
+	result := getDb().Select("*").Where(where).Where(likeWhere).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -169,6 +168,19 @@ func (*Rom) GetById(id uint64) (*Rom, error) {
 	return vo, result.Error
 }
 
+//根据id查询一条数据
+func (*Rom) GetByIds(ids []uint64) ([]*Rom, error) {
+
+	vo := []*Rom{}
+
+	result := getDb().Where("id in(?)", ids).Find(&vo)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return vo, result.Error
+}
+
 //根据拼音筛选
 func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
 	where := map[string]interface{}{}
@@ -184,8 +196,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 	where["pname"] = ""
 	offset := pages * ROM_PAGE_NUM
 	volist := []*Rom{}
-	field := "id,name,menu,platform,rom_path,star,base_type,base_year,base_publisher,base_country,base_translate"
-	result := getDb().Select(field).Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset)
+	result := getDb().Select("*").Order("pinyin ASC").Limit(ROM_PAGE_NUM).Offset(offset)
 	if keyword == "#" {
 
 		//查询0-9数字rom
@@ -315,8 +326,8 @@ func (m *Rom) UpdateHide() error {
 }
 
 //更新模拟器
-func (m *Rom) UpdateSimulator() error {
-	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sim_id", m.SimId)
+func (m *Rom) UpdateSimulatorBatch(romIds []string,simId uint32) error {
+	result := getDb().Table(m.TableName()).Where("id in (?)", romIds).Update("sim_id", simId)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

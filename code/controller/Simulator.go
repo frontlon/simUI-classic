@@ -6,6 +6,7 @@ import (
 	"simUI/code/utils"
 	"encoding/json"
 	"simUI/code/utils/go-sciter"
+	"strings"
 )
 
 /**
@@ -92,16 +93,10 @@ func SimulatorController() {
 
 	//设置rom的模拟器
 	utils.Window.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {
-		romId := uint64(utils.ToInt(args[0].String()))
+		romIds := strings.Split(args[0].String(),",")
 		simId := uint32(utils.ToInt(args[1].String()))
-		//更新rom表
-		rom := &db.Rom{
-			Id:    romId,
-			SimId: simId,
-		}
-
 		//更新数据
-		if err := rom.UpdateSimulator(); err != nil {
+		if err := (&db.Rom{}).UpdateSimulatorBatch(romIds,simId); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
