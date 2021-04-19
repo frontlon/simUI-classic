@@ -18,7 +18,7 @@ func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 		return newMenu, err
 	}
 	//读取根目录下是否有rom
-	count, err := (&db.Rom{}).Count(platform, ConstMenuRootKey, "", "", "", "", "", "","")
+	count, err := (&db.Rom{}).Count(0,platform, ConstMenuRootKey, "", "", "", "", "", "","")
 	if err != nil {
 		return newMenu, err
 	}

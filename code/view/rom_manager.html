@@ -85,21 +85,38 @@
         width: 70dip;
         margin: 0;
       }
-      table input[type='text']:hover{
-        background:none
+      table input[type='text']:hover {
+        background: none;
       }
       table .nosave {
         color: #fff;
       }
 
-      .openfile{cursor:pointer;overflow:auto;}
-
-      .pages{width:*;text-align:right}
-      .pages li{display:inline-block;size:20dip;line-height:20dip;border:1px solid #555;background:#444;text-align:center;
-      color:#999;margin:0 2dip;
+      .openfile {
+        cursor: pointer;
       }
-      .pages li:hover{background:#555;}
-      .pages li:current{background:none;border:0;}
+
+      .pages {
+        width: *;
+        text-align: right;
+      }
+      .pages li {
+        display: inline-block;
+        size: 20dip;
+        line-height: 20dip;
+        border: 1px solid #555;
+        background: #444;
+        text-align: center;
+        color: #999;
+        margin: 0 2dip;
+      }
+      .pages li:hover {
+        background: #555;
+      }
+      .pages li:current {
+        background: none;
+        border: 0;
+      }
     </style>
   </head>
   <body>
@@ -119,7 +136,9 @@
               <div class="titlebar_left">
                 <select id="platform_rombase"></select>
                 &nbsp;
-                <select id="menu_rombase"><option id=''>请选择目录</option></select>
+                <select id="menu_rombase">
+                  <option id="">请选择目录</option>
+                </select>
               </div>
               <div class="titlebar_right"></div>
             </div>
@@ -174,10 +193,9 @@
                     <th>游戏视频</th>
                     <th>文档</th>
                     <th>攻略</th>
-                </tr>
+                  </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
               </table>
               <ul class="pages" id="pages_media"></ul>
             </div>
@@ -188,17 +206,20 @@
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
-                <select id="platform_sim"></select>&nbsp;
-                <select id="menu_sim"><option id=''>请选择目录</option></select>
+                <select id="platform_sim"></select>
+                &nbsp;
+                <select id="menu_sim">
+                  <option id="">请选择目录</option>
+                </select>
               </div>
               <div class="titlebar_right">
                 <select id="select_sim">
                   <option>选择模拟器</option>
                 </select>
                 <select id="select_unzip">
-                  <option>解压后运行</option>
-                  <option>否</option>
-                  <option>是</option>
+                  <option value="">解压后运行</option>
+                  <option value="0">否</option>
+                  <option value="1">是</option>
                 </select>
                 <button id="select_lua">选择Lua脚本</button>
               </div>
@@ -220,7 +241,6 @@
                 <tbody></tbody>
               </table>
               <ul class="pages" id="pages_sim"></ul>
-
             </div>
           </div>
         </section>
@@ -231,24 +251,22 @@
               <div class="titlebar_left">
                 <select id="platform_file"></select>
                 &nbsp;
-                <select>
+                <select id="menu_file">
                   <option>请选择目录</option>
-                  <option>SFC</option>
-                  <option>MD</option>
                 </select>
               </div>
               <div class="titlebar_right">
-                <select>
-                  <option>隐藏显示</option>
-                  <option>隐藏</option>
-                  <option>显示</option>
+                <select id="select_hide">
+                  <option value="">隐藏显示</option>
+                  <option value="1">隐藏</option>
+                  <option value="0">显示</option>
                 </select>
-                <button>移动</button>
-                <button>删除</button>
+                <button id="select_move">移动</button>
+                <button id="select_delete">删除</button>
               </div>
             </div>
             <div class="content">
-              <table class="check_table">
+              <table class="check_table" id="romlist_file">
                 <thead>
                   <tr>
                     <th>选择</th>
@@ -258,72 +276,9 @@
                     <th>隐藏</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
+              <ul class="pages" id="pages_file"></ul>
             </div>
           </div>
         </section>
@@ -353,66 +308,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
-                  </tr>
                   <tr>
                     <td>
                       <label><input type="checkbox" /></label>
@@ -479,29 +374,37 @@
       **/
 
 
-      //分页 - 游戏资料
+      //分页 - 资源编辑
       event click $(#romlist_media .openfile){
        openFile(this);
       }
 
 
-      //切换平台 - 游戏资源
+      //切换平台 - 资源编辑
       event change $(#platform_media){
         managerChangeMediaPlatform(this.value);
       }
 
-      //切换目录 - 游戏资料
+      //切换目录 - 资源编辑
       event change $(#menu_media){
         managerChangeMediaMenu(this.value);
       }
 
-      //分页 - 游戏资料
+      //分页 - 资源编辑
       event click $(#pages_media li){
         managerCreateMediaByPages(this);
       }
 
+      //编辑文本框 - 资源编辑
+      event keydown $(#romlist_media input[type=text]) (evt,input) {
+        if(evt.keyCode != Event.VK_RETURN){
+          return ;
+        }
+        managerSetMedia(this);
+      }
+
       /**
-       * 资源模拟器
+       * 模拟器编辑
       **/
 
       //切换平台 - 模拟器管理
@@ -526,16 +429,47 @@
         }
         managerSimulatorSave(this);
       }
-      
-
-      /**
-       * 操作
-       **/
 
        //更改rom的模拟器
        event change $(#select_sim){
           managerChangeRomSimulator(this);
        }
+
+       //解压后运行
+       event change $(#select_unzip){
+          managerChangeRomUnzipRunGame(this);
+       }
+
+       //选定lua脚本
+       event click $(#select_lua){
+          openFileLua(this);
+       }
+
+      /**
+       * 文件管理
+      **/
+
+      //切换平台 - 文件管理
+      event change $(#platform_file){
+        managerChangeRomFilePlatform(this.value);
+      }
+      //切换目录 - 文件管理
+      event change $(#menu_file){
+        managerChangeRomFileMenu(this.value);
+      }
+
+      //分页 - 模拟器管理
+      event click $(#pages_file li){
+        managerCreateRomFileByPages(this);
+      }
+
+       event change $(#select_hide){
+        managerChangeRomHide(this.value);
+      }
+
+
+
+
 
 
       /**

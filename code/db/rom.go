@@ -85,11 +85,13 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 }
 
 //根据条件，查询多条数据
-func (*Rom) Get(pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) ([]*Rom, error) {
+func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) ([]*Rom, error) {
 
 	volist := []*Rom{}
 	where := map[string]interface{}{}
-	where["hide"] = 0
+	if showHide == 0 {
+		where["hide"] = 0
+	}
 	if platform != 0 {
 		where["platform"] = platform
 	}
@@ -182,7 +184,7 @@ func (*Rom) GetByIds(ids []uint64) ([]*Rom, error) {
 }
 
 //根据拼音筛选
-func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
+func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string, keyword string) ([]*Rom, error) {
 	where := map[string]interface{}{}
 
 	if platform != 0 {
@@ -191,6 +193,9 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 
 	if menu != "" {
 		where["menu"] = menu
+	}
+	if showHide == 0 {
+		where["hide"] = 0
 	}
 
 	where["pname"] = ""
@@ -217,7 +222,7 @@ func (*Rom) GetByPinyin(pages int, platform uint32, menu string, keyword string)
 }
 
 //根据满足条件的rom数量
-func (m *Rom) Count(platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) (int, error) {
+func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) (int, error) {
 	count := 0
 	where := map[string]interface{}{
 	}
@@ -225,6 +230,10 @@ func (m *Rom) Count(platform uint32, menu string, keyword string, baseType strin
 	if platform != 0 {
 		where["platform"] = platform
 		where["pname"] = ""
+	}
+
+	if showHide == 0 {
+		where["hide"] = 0
 	}
 
 	if menu != "" {
@@ -317,8 +326,8 @@ func (m *Rom) UpdateStar() error {
 }
 
 //更新隐藏状态
-func (m *Rom) UpdateHide() error {
-	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("hide", m.Hide)
+func (m *Rom) UpdateHide(ids []string, hide uint8) error {
+	result := getDb().Table(m.TableName()).Where("id in (?)", ids).Update("hide", hide)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -326,7 +335,7 @@ func (m *Rom) UpdateHide() error {
 }
 
 //更新模拟器
-func (m *Rom) UpdateSimulatorBatch(romIds []string,simId uint32) error {
+func (m *Rom) UpdateSimulatorBatch(romIds []string, simId uint32) error {
 	result := getDb().Table(m.TableName()).Where("id in (?)", romIds).Update("sim_id", simId)
 	if result.Error != nil {
 		fmt.Println(result.Error)

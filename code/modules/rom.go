@@ -442,6 +442,7 @@ func GetDocContent(f string) string {
 
 //更新模拟器独立参数
 func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
+
 	if data["cmd"] == "" && data["unzip"] == "2" {
 		//如果当前配置和模拟器默认配置一样，则删除该记录
 		if err := (&db.Rom{}).DelSimConf(id, simId); err != nil {
@@ -449,7 +450,7 @@ func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
 		}
 	} else {
 		//开始更新
-		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])), data["file"]); err != nil {
+		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])), data["file"],data["lua"]); err != nil {
 			return err
 		}
 	}

@@ -123,6 +123,7 @@ select > popup {
   color: color(select-popup-text-color);
   border: 1px solid color(select-popup-border-color);
   background: color(select-popup-option-background-color);
+  overflow: scroll-indicator;
 }
 select > popup option {
   height: 28dip;

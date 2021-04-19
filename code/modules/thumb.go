@@ -113,6 +113,8 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
 	case "video":
 		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
+	default:
+		return "", nil
 	}
 
 	if platformPath == "" {

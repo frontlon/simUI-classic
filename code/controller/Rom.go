@@ -62,18 +62,19 @@ func RomController() {
 
 	//读取游戏列表
 	utils.Window.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
-		platform := uint32(utils.ToInt(args[0].String()))        //平台
-		catname := strings.Trim(args[1].String(), " ")           //分类
-		keyword := strings.Trim(args[2].String(), " ")           //关键字
-		num := strings.Trim(args[3].String(), " ")               //字母索引
-		page := utils.ToInt(strings.Trim(args[4].String(), " ")) //分页数
+		showHide := uint8(utils.ToInt(args[0].String()))        //平台
+		platform := uint32(utils.ToInt(args[1].String()))        //平台
+		catname := strings.Trim(args[2].String(), " ")           //分类
+		keyword := strings.Trim(args[3].String(), " ")           //关键字
+		num := strings.Trim(args[4].String(), " ")               //字母索引
+		page := utils.ToInt(strings.Trim(args[5].String(), " ")) //分页数
 
-		baseType := args[5].String()
-		basePublisher := args[6].String()
-		baseYear := args[7].String()
-		baseCountry := args[8].String()
-		baseTranslate := args[9].String()
-		baseVersion := args[10].String()
+		baseType := args[6].String()
+		basePublisher := args[7].String()
+		baseYear := args[8].String()
+		baseCountry := args[9].String()
+		baseTranslate := args[10].String()
+		baseVersion := args[11].String()
 
 		if baseType == config.Cfg.Lang["BaseType"] {
 			baseType = ""
@@ -96,10 +97,10 @@ func RomController() {
 		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+			newlist, _ = (&db.Rom{}).Get(showHide,page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		} else {
 			//按拼音查询
-			newlist, _ = (&db.Rom{}).GetByPinyin(page, platform, catname, num)
+			newlist, _ = (&db.Rom{}).GetByPinyin(showHide,page, platform, catname, num)
 		}
 
 		jsonRom, _ := json.Marshal(newlist)
@@ -123,16 +124,17 @@ func RomController() {
 
 	//读取游戏数量
 	utils.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
-		platform := uint32(utils.ToInt(args[0].String()))
-		catname := strings.Trim(args[1].String(), " ")
-		keyword := strings.Trim(args[2].String(), " ") //关键字
-		baseType := args[3].String()
-		basePublisher := args[4].String()
-		baseYear := args[5].String()
-		baseCountry := args[6].String()
-		baseTranslate := args[7].String()
-		baseVersion := args[8].String()
-		count, _ := (&db.Rom{}).Count(platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+		showHide := uint8(utils.ToInt(args[0].String()))
+		platform := uint32(utils.ToInt(args[1].String()))
+		catname := strings.Trim(args[2].String(), " ")
+		keyword := strings.Trim(args[3].String(), " ") //关键字
+		baseType := args[4].String()
+		basePublisher := args[5].String()
+		baseYear := args[6].String()
+		baseCountry := args[7].String()
+		baseTranslate := args[8].String()
+		baseVersion := args[9].String()
+		count, _ := (&db.Rom{}).Count(showHide,platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -219,17 +221,12 @@ func RomController() {
 
 	//设为隐藏
 	utils.Window.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
-		id := uint64(utils.ToInt(args[0].String()))
+
+		romIdsStr := strings.Split(args[0].String(), ",");
 		ishide := uint8(utils.ToInt(args[1].String()))
 
-		//更新rom表
-		rom := &db.Rom{
-			Id:   id,
-			Hide: ishide,
-		}
-
 		//更新数据
-		if err := rom.UpdateHide(); err != nil {
+		if err := (&db.Rom{}).UpdateHide(romIdsStr,ishide); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

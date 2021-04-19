@@ -467,6 +467,7 @@ function SetRomCmd(evt){
                 cmd:cmdObj.Cmd,
                 unzip:cmdObj.Unzip,
                 file:cmdObj.File,
+                lua:cmdObj.Lua,
             }
         });
 

@@ -40,7 +40,7 @@ func (*Rom) GetSimConf(romId uint64, simId uint32) (*SimConf, error) {
 }
 
 //设置rom模拟器参数
-func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8, file string) error {
+func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8, file string,lua string) error {
 
 	vo := &Rom{}
 	result := getDb().Select("sim_conf,name,platform").Where("id=?", romId).First(&vo)
@@ -57,8 +57,10 @@ func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8,
 		Cmd:   cmd,
 		Unzip: unzip,
 		File:  file,
+		Lua : lua,
 	}
 	jsonInfo, _ := json.Marshal(&sim)
+
 	//更新到数据库
 	result = getDb().Table(m.TableName()).Where("id=?", romId).Update("sim_conf", jsonInfo)
 	if result.Error != nil {

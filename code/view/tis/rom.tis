@@ -98,7 +98,7 @@ function scrollLoadRom(evtPos){
         var filter_country = $(#filter_country).value;
         var filter_translate = $(#filter_translate).value;
         var filter_version = $(#filter_version).value;
-        ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate,filter_version);
+        ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate,filter_version);
 
         if(ROMJSON != "[]"){
             createRomList(0);
@@ -140,7 +140,7 @@ function numSearch(evt){
     $(#filter_year).value = "";
     $(#filter_country).value = "";
 
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE,"","","","","","");
+    ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,menu,"",num,SCROLL_PAGE,"","","","","","");
     createRomList(1);
 
     //激活当前，改变样式

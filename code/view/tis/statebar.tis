@@ -394,7 +394,7 @@ function CB_createCache(){
 
     //初始化rom
     
-    ROMJSON = view.GetGameList(ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","","")
+    ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","","")
     $(#filter_type).value = "";
     $(#filter_publisher).value = "";
     $(#filter_year).value = "";
@@ -404,7 +404,7 @@ function CB_createCache(){
     createRomList(1); //生成rom列表
 
     //生成rom数量
-    var romCount = view.GetGameCount(ACTIVE_PLATFORM,"","","","","","","","");
+    var romCount = view.GetGameCount(0,ACTIVE_PLATFORM,"","","","","","","","");
     $(#rom_count_num).html = romCount; //初始化在线人数
     endLoading(); //关闭loading框
 
