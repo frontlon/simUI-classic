@@ -117,20 +117,22 @@
         background: none;
         border: 0;
       }
+      .tab_tip{background:#333;color:#fff;line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:-7dip 0 7dip 0 ;}
     </style>
   </head>
   <body>
     <tabs class="tabs" id="mytabs">
       <strip>
-        <label ww="1000dip" wh="500dip" for="first" selected>资料管理</label>
-        <label ww="1200dip" wh="500dip" for="second">媒体管理</label>
-        <label ww="1000dip" wh="500dip" for="third">模拟器管理</label>
+        <label ww="1200dip" wh="700dip" for="first" selected>资料管理</label>
+        <label ww="1200dip" wh="700dip" for="second">媒体管理</label>
+        <label ww="1200dip" wh="700dip" for="third">模拟器管理</label>
         <label ww="800dip" wh="700dip" for="fourth">文件管理</label>
-        <label ww="600dip" wh="500dip" for="fifth">rom去重</label>
+        <label ww="600dip" wh="700dip" for="fifth">rom去重</label>
       </strip>
       <panels>
         <!-- 资料管理 -->
         <section id="first">
+          <div class="tab_tip">这里是文字介绍1</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -164,6 +166,7 @@
         </section>
         <!-- 媒体管理 -->
         <section id="second">
+        <div class="tab_tip">这里是文字介绍2</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -203,6 +206,7 @@
         </section>
         <!-- 模拟器管理 -->
         <section id="third">
+        <div class="tab_tip">这里是文字介绍3</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -246,6 +250,7 @@
         </section>
         <!-- 文件管理 -->
         <section id="fourth">
+        <div class="tab_tip">这里是文字介绍4</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -284,6 +289,7 @@
         </section>
         <!-- rom去重 -->
         <section id="fifth">
+        <div class="tab_tip">这里是文字介绍5</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -468,9 +474,13 @@
       }
 
 
+      event click $(#select_move){
+        managerFileMoveRom();
+      }
 
-
-
+      event click $(#select_delete){
+        managerFileDelete();
+      }
 
       /**
        * 通用

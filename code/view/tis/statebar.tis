@@ -333,8 +333,8 @@ function openConfig(evt){
 //弹出rom管理窗口
 function openRomManager(evt){
     view.dialog({
-        width:600,
-        height:700,
+        width:self.toPixels(1200dip),
+        height:self.toPixels(700dip),
         url:self.url(ROOTPATH + "rom_manager.html")
     });
 }

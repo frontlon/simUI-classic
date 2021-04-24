@@ -38,10 +38,16 @@
         view.windowCaption =  CONF.Lang.RomMove;
 
         //标题
-        var getjson = mainView.GetGameDetail(view.parameters.id);
-        var detailObj = JSON.parse(getjson);
-        $(h1).html = detailObj.Info.Name;
 
+
+        var ids = view.parameters.id.split(",");
+        if(ids.length == 1){
+            var getjson = mainView.GetGameDetail(view.parameters.id);
+            var detailObj = JSON.parse(getjson);
+            $(h1).html = detailObj.Info.Name;
+        }else{
+            $(h1).html = CONF.Lang.RomMove;
+        }
         //生成列表
         var lists = mainView.GetAllPlatformMenuList();
         var listObj = JSON.parse(lists);
@@ -75,7 +81,10 @@
             return;
         }
 
-        mainView.MoveRom(view.parameters.id,newPlatform,newMenu);
+        var ids = view.parameters.id.split(",");
+        for(var id in ids) {
+            mainView.MoveRom(id,newPlatform,newMenu);
+        }
         view.close(newPlatform);
     }
 

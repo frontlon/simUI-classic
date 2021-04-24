@@ -728,7 +728,6 @@ function managerCreateRomFileByPages(obj){
 
 //解压后运行
 function managerChangeRomHide(hide){
-try{
     var checks = $$(#romlist_file .check_file:checked);
     if(hide.toString() == ""){
         return;
@@ -750,9 +749,75 @@ try{
         c.parent.parent.select(".file_hide").text = text;
     }
     $(#select_hide).value = "";
-}catch(e){
-    alert(e);
+
 }
-    
+
+
+//移动文件
+function managerFileMoveRom(){
+
+    var checks = $$(#romlist_file .check_file:checked);
+    if(checks.length == 0){
+    alert("您没有选择游戏");
+        return;
+    }
+
+    var arr = [];
+    for(var c in checks){
+        arr.push(c.value);
+    }
+    var ids = arr.join(",");
+
+    var platform = view.dialog({
+        url:self.url(ROOTPATH + "move_rom.html"),
+        width:self.toPixels(300dip),
+        height:self.toPixels(565dip),
+        parameters: {
+            id:ids;
+        };
+    });
+    if(platform == "1"){
+        //view.CreateRomCache(0);
+        alert("移动成功");
+    }
+}
+
+//删除文件
+function managerFileDelete(){
+
+    var checks = $$(#romlist_file .check_file:checked);
+    if(checks.length == 0){
+    alert("您没有选择游戏");
+        return;
+    }
+
+    var arr = [];
+    for(var c in checks){
+        arr.push(c.value);
+    }
+
+
+  //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeleteRomConfirm, 
+        caption:CONF.Lang.DeleteRom,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+
+    for(var id in arr) {
+        mainView.DeleteRom(id); //删除实体文件
+        //删除页面上的dom
+    }
+
+    alert(CONF.Lang.DeleteSuccess); //删除成功
 
 }
