@@ -102,7 +102,7 @@ function openSidebar(obj){
 
     //显示简介
     if(detailObj.DocContent != ""){
-        $(#doc_title).style["display"] = "block";
+        $(#doc_title).style["display"] = "inhert";
         $(#doc).style["display"] = "block";
         //$(#doc).html = markdown.parse(detailObj.DocContent);
         $(#doc).html = detailObj.DocContent;
@@ -654,3 +654,23 @@ function createOpenFolderMenu(info){
     }
     return btndata;
 }
+
+//调整侧边栏宽度
+function sidebarSize(){
+    var width = $(#right).box(#width);
+    view.UpdateConfig("panel_sidebar_width",width);
+
+    //界面宽窄模式
+    var right = $(#right);
+    var has = right.attributes.hasClass("widthMode")
+    if(width >= 500){
+        if(has == false){
+            $(#right).attributes.addClass("widthMode");
+        }
+    }else{
+        if(has == true){
+            $(#right).attributes.removeClass("widthMode");
+        }
+    }
+}
+    

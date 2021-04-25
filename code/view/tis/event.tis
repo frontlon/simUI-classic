@@ -6,7 +6,7 @@
     Init();
 
 
-    openRomManager(this);
+    //openRomManager(this);
 
 
 
@@ -15,7 +15,6 @@
     **/
 
     //调整窗口大小
-    
     view.on("size", function() {
        windowSize();
     });
@@ -38,8 +37,7 @@
     });
     //调整侧边栏宽度
     self.on("mouseup", "#right_splitter", function(evt) {
-        var width = $(#right).box(#width);
-        view.UpdateConfig("panel_sidebar_width",width);
+        sidebarSize();
     });
 
  
@@ -394,7 +392,6 @@
             }
         }
     }
-
 
     //侧边栏缩略图编辑功能 - 选择缩略图文件
     self.on("click", ".filedropzone_widget .openfile", function(evt) {
