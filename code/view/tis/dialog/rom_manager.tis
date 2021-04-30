@@ -17,15 +17,20 @@ function managerInit(){
     for(var pf in CONF.PlatformList) {
         dd += "<option value='"+ pf.Id +"'>" + pf.Name + "</option>";
     }
-    self.$(#platform_rombase).html = dd; //生成dom
-    self.$(#platform_media).html = dd; //生成dom
-    self.$(#platform_sim).html = dd; //生成dom
-    self.$(#platform_file).html = dd; //生成dom
-    self.$(#platform_repeat).html = dd; //生成dom
+    self.$(#platform_rombase).html = dd; //资料管理
+    self.$(#platform_media).html = dd; //资源管理
+    self.$(#platform_sim).html = dd; //模拟器管理
+    self.$(#platform_file).html = dd; //文件管理
+    self.$(#platform_repeat).html = dd; //rom去重
+    self.$(#platform_zombie).html = dd; //无效资源清理
 
 }
 
-//切换平台 - 游戏资料
+/**
+ * 游戏资料管理
+ */
+
+//切换平台 - 游戏资料管理
 function managerChangeRombasePlatform(platformId){
     
     if (platformId == 0){
@@ -35,7 +40,7 @@ function managerChangeRombasePlatform(platformId){
     //创建菜单
     var dd = createMenuOption(platformId);
     var menulist = self.$(#menu_rombase);
-    menulist.html = "";
+    menulist.clear();
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
@@ -56,7 +61,7 @@ function managerChangeRombasePlatform(platformId){
     }
 }
 
-//创建菜单选项
+//创建菜单选项 - 游戏资料管理
 function createMenuOption(platformId){
     var menujson = mainView.GetMenuList(platformId,0); //读取分配列表
     var menuobj = JSON.parse(menujson);
@@ -76,7 +81,7 @@ function createMenuOption(platformId){
     return dd;
 }
 
-//选择文件
+//选择文件 - 游戏资料管理
 function openFile(evt) {
 
     var filter = "";
@@ -101,7 +106,7 @@ function openFile(evt) {
     }
 }
 
-//创建分页数据
+//创建分页数据 - 游戏资料管理
 function managerCreatePages(romCount){
     var num = Math.ceil(romCount.toFloat() / 100);
     var pages = "";
@@ -111,7 +116,7 @@ function managerCreatePages(romCount){
     return pages;
 }
 
-//切换目录 - 游戏资料
+//切换目录 - 游戏资料管理
 function managerChangeRombaseMenu(menuName){
 
     var platformId = $(#platform_rombase).value;
@@ -129,7 +134,7 @@ function managerChangeRombaseMenu(menuName){
     }
 }
 
-//创建资料rom列表
+//创建资料rom列表 - 游戏资料管理
 function managerCreateRombase(romjson){
     var romobj = JSON.parse(romjson);
     var romData = "";
@@ -155,9 +160,7 @@ function managerCreateRombase(romjson){
     $(#romlist_rombase tbody).html = romData;
 }
 
-
-
-//点击分页按钮
+//点击分页按钮 - 游戏资料管理
 function managerCreateRombaseByPages(obj){
     if(obj.state.current == true){
         return;
@@ -172,7 +175,7 @@ function managerCreateRombaseByPages(obj){
     $(body).scrollTo(0,0, false);
 }
 
-//保存rom资料
+//保存rom资料 - 游戏资料管理
 function managerRombaseSave(obj){
     var tr = obj.parent.parent;
     var filename = tr.select(".filename").value;
@@ -199,7 +202,11 @@ function managerRombaseSave(obj){
     obj.attributes.removeClass("nosave");
 }
 
-//切换平台 - 游戏资源
+/**
+ * 资源管理
+ */
+
+//切换平台 - 资源管理
 function managerChangeMediaPlatform(platformId){
 
     if (platformId == 0){
@@ -230,7 +237,7 @@ function managerChangeMediaPlatform(platformId){
     }
 }
 
-//创建资料rom列表
+//创建资料rom列表 - 资源管理
 function managerCreateMedia(romjson){
     var romobj = JSON.parse(romjson);
     var romData = "";
@@ -276,7 +283,7 @@ function managerCreateMedia(romjson){
     $(#romlist_media tbody).html = romData;
 }
 
-//切换目录 - 游戏资源
+//切换目录 - 资源管理
 function managerChangeMediaMenu(menuName){
 
     var platformId = $(#platform_media).value;
@@ -295,7 +302,7 @@ function managerChangeMediaMenu(menuName){
 }
 
 
-//点击分页按钮
+//点击分页按钮 - 资源管理
 function managerCreateMediaByPages(obj){
     if(obj.state.current == true){
         return;
@@ -310,7 +317,7 @@ function managerCreateMediaByPages(obj){
     $(body).scrollTo(0,0, false);
 }
 
-//选择文件
+//选择文件 - 资源管理
 function managerSetMedia(obj) {
     var classes = obj.attributes["class"].split(" ");
     var id = obj.parent.parent.attributes["rid"];
@@ -327,8 +334,11 @@ function managerSetMedia(obj) {
 
 }
 
+/**
+ * 模拟器管理
+ */
 
-//切换平台 - 游戏资源
+//切换平台 - 模拟器管理
 function managerChangeSimulatorPlatform(platformId){
 
     if (platformId == 0){
@@ -366,7 +376,7 @@ function managerChangeSimulatorPlatform(platformId){
     }
 }
 
-//创建rom模拟器列表
+//创建rom模拟器列表 - 模拟器管理
 function managerCreateSimulator(romjson){
 
     var romobj = JSON.parse(romjson);
@@ -457,7 +467,7 @@ function managerChangeSimulatorMenu(menuName){
     }
 }
 
-//点击分页按钮
+//点击分页按钮 - 模拟器管理
 function managerCreateSimulatorByPages(obj){
     if(obj.state.current == true){
         return;
@@ -472,7 +482,7 @@ function managerCreateSimulatorByPages(obj){
     $(body).scrollTo(0,0, false);
 }
 
-//保存模拟器参数
+//保存模拟器参数 - 模拟器管理
 function managerSimulatorSave(obj){
     var tr = obj.parent.parent;
     var romId = tr.attributes["rid"];
@@ -494,7 +504,7 @@ function managerSimulatorSave(obj){
 
 }
 
-//改变rom模拟器
+//改变rom模拟器 - 模拟器管理
 function managerChangeRomSimulator(obj){
  
     var checks = $$(#romlist_sim .check_simulator:checked);
@@ -551,7 +561,7 @@ function managerChangeRomSimulator(obj){
     $(#select_sim).value = 0;
 }
 
-//解压后运行
+//解压后运行 - 模拟器管理
 function managerChangeRomUnzipRunGame(obj){
 
     var checks = $$(#romlist_sim .check_simulator:checked);
@@ -590,8 +600,7 @@ function managerChangeRomUnzipRunGame(obj){
 
 }
 
-
-//选择文件
+//选择文件 - 模拟器管理
 function openFileLua(evt) {
 
     var checks = $$(#romlist_sim .check_simulator:checked);
@@ -646,7 +655,7 @@ function managerChangeRomFilePlatform(platformId){
     //创建菜单
     var dd = createMenuOption(platformId);
     var menulist = self.$(#menu_file);
-    menulist.html = "";
+    menulist.clear();
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
@@ -667,8 +676,7 @@ function managerChangeRomFilePlatform(platformId){
     }
 }
 
-
-//创建资料rom列表
+//创建资料rom列表 - 文件管理
 function managerCreateRomFile(romjson){
     var romobj = JSON.parse(romjson);
     var romData = "";
@@ -693,7 +701,7 @@ function managerCreateRomFile(romjson){
     $(#romlist_file tbody).html = romData;
 }
 
-//切换目录 - 文件管理管理
+//切换目录 - 文件管理
 function managerChangeRomFileMenu(menuName){
 
     var platformId = $(#platform_file).value;
@@ -711,7 +719,7 @@ function managerChangeRomFileMenu(menuName){
     }
 }
 
-//点击分页按钮
+//点击分页按钮 - 文件管理
 function managerCreateRomFileByPages(obj){
     if(obj.state.current == true){
         return;
@@ -726,7 +734,7 @@ function managerCreateRomFileByPages(obj){
     $(body).scrollTo(0,0, false);
 }
 
-//解压后运行
+//解压后运行 - 文件管理
 function managerChangeRomHide(hide){
     var checks = $$(#romlist_file .check_file:checked);
     if(hide.toString() == ""){
@@ -753,7 +761,7 @@ function managerChangeRomHide(hide){
 }
 
 
-//移动文件
+//移动文件 - 文件管理
 function managerFileMoveRom(){
 
     var checks = $$(#romlist_file .check_file:checked);
@@ -782,10 +790,117 @@ function managerFileMoveRom(){
     }
 }
 
-//删除文件
+//删除文件 - 文件管理
 function managerFileDelete(){
 
     var checks = $$(#romlist_file .check_file:checked);
+    if(checks.length == 0){
+    alert("您没有选择游戏");
+        return;
+    }
+
+    var arr = [];
+    for(var c in checks){
+        arr.push(c.value);
+    }
+
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeleteRomConfirm, 
+        caption:CONF.Lang.DeleteRom,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+
+    for(var id in arr) {
+        mainView.DeleteRom(id); //删除实体文件
+        //删除页面上的dom
+    }
+
+    alert(CONF.Lang.DeleteSuccess); //删除成功
+
+}
+
+/**
+ * 文件去重
+ **/
+
+//检测重复 - 文件去重
+function managerCheckRepeat(){
+    var platformId = $(#platform_repeat).value;
+
+    if (platformId == "0"){
+        alert("请选择平台");
+        return;
+    }
+
+    var romjson = mainView.CheckRomRepeat(platformId);
+    var romobj = JSON.parse(romjson);
+
+    if(romobj.length == 0 ){
+        alert("没有发现重复文件");
+        return;
+    }
+
+    if(romobj.length > 500 ){
+        alert("发现的重复文件大于500个，此次结果将只显示500个，请处理重复rom后再次执行本操作");
+        return;
+    }
+
+    var romData = "";
+    for(var obj in romobj) {
+        romData += "<tr opt='" + obj.path + "' rid='"+obj.id+"'>";
+        romData += "<td><input class='check_repeat' type='checkbox' value='"+ obj.id +"' /></td>";
+        romData += "<td>"+ obj.name +"</td>";
+        romData += "<td>"+ obj.path +"</td>";
+        romData += "<td>"+ obj.size +"</td>";
+        romData += "<td><button class='rungame'>启动</button></td>";
+        romData += "</tr>"
+    }
+    $(#romlist_repeat tbody).html = romData;
+
+
+
+}
+
+//移动文件 - 文件去重
+function managerFileRepeatMoveRom(){
+
+    var checks = $$(#romlist_repeat .check_repeat:checked);
+    if(checks.length == 0){
+        alert("您没有选择游戏");
+        return;
+    }
+
+    var paths = [];
+    for(var c in checks){
+        paths.push(c.parent.parent.attributes["opt"]);
+    }
+
+    var url = view.selectFolder(CONF.Lang.SelectFolder);
+    if(url){
+        url = URL.toPath(url);
+        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split(CONF.RootPath.toString()).join("");
+
+        mainView.MoveRomByFileManager(JSON.stringify(paths),url);
+        managerCheckRepeat();
+    }
+}
+
+//删除文件 - 文件去重
+function managerFileRepeatDelete(){
+
+    var checks = $$(#romlist_repeat .check_repeat:checked);
     if(checks.length == 0){
     alert("您没有选择游戏");
         return;
@@ -818,6 +933,125 @@ function managerFileDelete(){
         //删除页面上的dom
     }
 
-    alert(CONF.Lang.DeleteSuccess); //删除成功
+    managerCheckRepeat();
+}
 
+//运行游戏 - 文件去重
+function managerRunGame(obj){
+    mainView.RunGame(obj.parent.parent.attributes["rid"],"");
+}
+
+/**
+ * 无效资源清理
+ **/
+
+ //检测无效资源 - 无效资源清理
+function managerCheckZombie(){
+
+    var platformId = $(#platform_zombie).value;
+
+    if (platformId == "0"){
+        alert("请选择平台");
+        return;
+    }
+
+    var romjson = mainView.CheckRomZombie(platformId);
+    var romobj = JSON.parse(romjson);
+
+    if(romobj.length == 0 ){
+        alert("没有发现重复文件");
+        return;
+    }
+
+    if(romobj.length > 500 ){
+        alert("发现的重复文件大于500个，此次结果将只显示500个，请处理重复rom后再次执行本操作");
+        return;
+    }
+
+    var romData = "";
+    var type = "";
+    var desc = "";
+    for(var obj in romobj) {
+
+        if(obj.type == 1){
+            type = "无效资源";
+            desc = "无效资源是指找不到rom的资源文件，是和现有rom无关联的资源文件"
+        }else if(obj.type == 2){
+            type = "重复资源";
+            desc = "重复资源是指一个rom下存在多张同类型的资源"
+        }else{
+            type = "子游戏资源";
+            desc = "子游戏不需要设置资源文件"
+        }
+
+        romData += "<tr>";
+        romData += "<td><input class='check_zombie' type='checkbox' value='"+ obj.path +"' /></td>";
+        romData += "<td title='"+ desc +"'>"+ type +"</td>";
+        romData += "<td>"+ obj.path +"</td>";
+        romData += "</tr>"
+    }
+    $(#romlist_zombie tbody).html = romData;
+}
+
+//移动文件 - 无效资源清理
+function managerFileZombieMoveRom(){
+
+    var checks = $$(#romlist_zombie .check_zombie:checked);
+    if(checks.length == 0){
+        alert("您没有选择游戏");
+        return;
+    }
+
+    var paths = [];
+    for(var c in checks){
+        paths.push(c.value);
+    }
+
+    var url = view.selectFolder(CONF.Lang.SelectFolder);
+    if(url){
+        url = URL.toPath(url);
+        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split(CONF.RootPath.toString()).join("");
+
+        mainView.MoveZombieByFileManager(JSON.stringify(paths),url);
+        managerCheckZombie();
+    }
+}
+
+//删除文件 - 无效资源清理
+function managerFileZombieDelete(){
+
+    var checks = $$(#romlist_zombie .check_zombie:checked);
+    if(checks.length == 0){
+    alert("您没有选择游戏");
+        return;
+    }
+
+    var arr = [];
+    for(var c in checks){
+        arr.push(c.value);
+    }
+
+
+    //确认窗口
+    var result = view.msgbox {
+        type:#question, 
+        content:CONF.Lang.DeleteFile, 
+        caption:CONF.Lang.DeleteFileConfirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.Delete},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if (result != "yes"){
+        return true;
+    }
+
+    for(var p in arr) {
+        mainView.DeleteZombieByFileManager(p); //删除实体文件
+        //删除页面上的dom
+    }
+
+    managerCheckZombie();
 }

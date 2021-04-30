@@ -152,98 +152,20 @@ func OpenFolder(id uint64, opt string, simId uint32) error {
 	switch opt {
 	case "rom":
 		fileName = platform.RomPath + config.Cfg.Separator + info.RomPath
-	case "thumb":
-		if platform.ThumbPath != "" {
-			fileName = GetRomRes("thumb", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.ThumbPath
-			}
-		}
-	case "snap":
-		if platform.SnapPath != "" {
-			fileName = GetRomRes("snap", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.SnapPath + config.Cfg.Separator
-			}
-		}
-
-	case "poster":
-		if platform.PosterPath != "" {
-			fileName = GetRomRes("poster", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.PosterPath + config.Cfg.Separator
-			}
-		}
-	case "packing":
-		if platform.PackingPath != "" {
-			fileName = GetRomRes("packing", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.PackingPath + config.Cfg.Separator
-			}
-		}
-	case "title":
-		if platform.DocPath != "" {
-			fileName = GetRomRes("title", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.TitlePath
-			}
-		}
-
-	case "cassette":
-		if platform.CassettePath != "" {
-			fileName = GetRomRes("cassette", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.CassettePath
-			}
-		}
-	case "icon":
-		if platform.IconPath != "" {
-			fileName = GetRomRes("icon", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.IconPath
-			}
-		}
-	case "gif":
-		if platform.GifPath != "" {
-			fileName = GetRomRes("gif", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.GifPath
-			}
-		}
-	case "background":
-		if platform.BackgroundPath != "" {
-			fileName = GetRomRes("background", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.BackgroundPath
-			}
-		}
-	case "video":
-		if platform.VideoPath != "" {
-			fileName = GetRomRes("video", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.VideoPath
-			}
-		}
-	case "doc":
-		if platform.DocPath != "" {
-			fileName = GetRomRes("doc", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.DocPath
-			}
-		}
-	case "strategy":
-		if platform.StrategyPath != "" {
-			fileName = GetRomRes("strategy", info.Platform, romName)
-			if fileName == "" {
-				fileName = platform.StrategyPath
-			}
-		}
 	case "sim":
 		if _, ok := platform.SimList[simId]; ok {
 			fileName = platform.SimList[simId].Path
 		}
-	}
+	default:
+		res := config.GetResPath(platform.Id)
 
+		if res[opt] != "" {
+			fileName = GetRomRes(opt, info.Platform, romName)
+			if fileName == "" {
+				fileName = res[opt]
+			}
+		}
+	}
 	if err := utils.OpenFolderByWindow(fileName); err != nil {
 		return err
 	}
@@ -393,14 +315,10 @@ func DelGameDoc(t string, id uint64) (error) {
 
 	//如果没有执行运行的文件，则读取文档内容
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
+	res := config.GetResPath(info.Platform)
 	Filename := ""
 	for _, v := range config.DOC_EXTS {
-		strategyFileName := ""
-		if t == "strategy" {
-			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
-		} else if t == "doc" {
-			strategyFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
-		}
+		strategyFileName := res[t] + config.Cfg.Separator + romName + v
 
 		if (utils.FileExists(strategyFileName)) {
 			Filename = strategyFileName;
@@ -450,7 +368,7 @@ func UpdateRomCmd(id uint64, simId uint32, data map[string]string) error {
 		}
 	} else {
 		//开始更新
-		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])), data["file"],data["lua"]); err != nil {
+		if err := (&db.Rom{}).UpdateSimConf(id, simId, data["cmd"], uint8(utils.ToInt(data["unzip"])), data["file"], data["lua"]); err != nil {
 			return err
 		}
 	}
@@ -469,85 +387,24 @@ func DeleteRomAndRes(id uint64) error {
 	fname := utils.GetFileName(info.RomPath)
 	platform := config.Cfg.Platform[info.Platform]
 
+	//删除rom文件
 	go func() {
 		romFiles, _ := utils.ScanDirByKeyword(platform.RomPath, fname)
 		for _, f := range romFiles {
 			utils.FileDelete(f)
 		}
 	}()
-	go func() {
-		thumbFiles, _ := utils.ScanDirByKeyword(platform.ThumbPath, fname)
-		for _, f := range thumbFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		backgroundFiles, _ := utils.ScanDirByKeyword(platform.BackgroundPath, fname)
-		for _, f := range backgroundFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		packingFiles, _ := utils.ScanDirByKeyword(platform.PackingPath, fname)
-		for _, f := range packingFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		posterFiles, _ := utils.ScanDirByKeyword(platform.PosterPath, fname)
-		for _, f := range posterFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		snapFiles, _ := utils.ScanDirByKeyword(platform.SnapPath, fname)
-		for _, f := range snapFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		titleFiles, _ := utils.ScanDirByKeyword(platform.TitlePath, fname)
-		for _, f := range titleFiles {
-			utils.FileDelete(f)
-		}
-	}()
 
-	go func() {
-		cassetteFiles, _ := utils.ScanDirByKeyword(platform.CassettePath, fname)
-		for _, f := range cassetteFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		iconFiles, _ := utils.ScanDirByKeyword(platform.IconPath, fname)
-		for _, f := range iconFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		gifFiles, _ := utils.ScanDirByKeyword(platform.GifPath, fname)
-		for _, f := range gifFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		videoFiles, _ := utils.ScanDirByKeyword(platform.VideoPath, fname)
-		for _, f := range videoFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		docFiles, _ := utils.ScanDirByKeyword(platform.DocPath, fname)
-		for _, f := range docFiles {
-			utils.FileDelete(f)
-		}
-	}()
-	go func() {
-		strategyFiles, _ := utils.ScanDirByKeyword(platform.StrategyPath, fname)
-		for _, f := range strategyFiles {
-			utils.FileDelete(f)
-		}
-	}()
+	//删除资源文件
+	for _, path := range config.GetResPath(platform.Id) {
+		go func() {
+			resFiles, _ := utils.ScanDirByKeyword(path, fname)
+			for _, f := range resFiles {
+				utils.FileDelete(f)
+			}
+		}()
+	}
+
 	return nil
 }
 
@@ -584,128 +441,17 @@ func UploadStrategyImages(id uint64, p string) (string, error) {
 //读取rom资源
 func GetRomRes(typ string, pf uint32, romName string) string {
 
-	platform := config.Cfg.Platform[pf] //读取当前平台信息
 	fileName := ""
 	resName := ""
-	switch typ {
-	case "thumb":
-		if platform.ThumbPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.ThumbPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "snap":
-		if platform.SnapPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.SnapPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "poster":
-		if platform.PosterPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.PosterPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "packing":
-		if platform.PackingPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.PackingPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "title":
-		if platform.DocPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.TitlePath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "cassette":
-		if platform.CassettePath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.CassettePath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "icon":
-		if platform.IconPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.IconPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "gif":
-		if platform.GifPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.GifPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "background":
-		if platform.BackgroundPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.BackgroundPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "video":
-		if platform.VideoPath != "" {
-			for _, v := range config.PIC_EXTS {
-				fileName = platform.VideoPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "doc":
-		if platform.DocPath != "" {
-			for _, v := range config.DOC_EXTS {
-				fileName = platform.DocPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
-			}
-		}
-	case "strategy":
-		if platform.StrategyPath != "" {
-			for _, v := range config.DOC_EXTS {
-				fileName = platform.StrategyPath + config.Cfg.Separator + romName + v
-				if utils.FileExists(fileName) {
-					resName = fileName;
-					break
-				}
+	res := config.GetResPath(pf)
+	types := config.GetResExts()
+
+	if res[typ] != "" {
+		for _, v := range types[typ] {
+			fileName = res[typ] + config.Cfg.Separator + romName + v
+			if utils.FileExists(fileName) {
+				resName = fileName;
+				break
 			}
 		}
 	}
@@ -749,67 +495,13 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//开始移动资源文件
-	newPlatformDom := config.Cfg.Platform[newPlatform]
 	romName = utils.GetFileName(filepath.Base(rom.RomPath))
-
-	thumb := GetRomRes("thumb", rom.Platform, romName)
-	if thumb != "" {
-		_ = utils.FileMove(thumb, newPlatformDom.ThumbPath+config.Cfg.Separator+utils.GetFileNameAndExt(thumb));
+	for resName, path := range config.GetResPath(newPlatform) {
+		name := GetRomRes(resName, rom.Platform, romName)
+		if name != "" {
+			_ = utils.FileMove(name, path+config.Cfg.Separator+utils.GetFileNameAndExt(name));
+		}
 	}
 
-	snap := GetRomRes("snap", rom.Platform, romName)
-	if snap != "" {
-		_ = utils.FileMove(snap, newPlatformDom.SnapPath+config.Cfg.Separator+utils.GetFileNameAndExt(snap));
-	}
-
-	poster := GetRomRes("poster", rom.Platform, romName)
-	if poster != "" {
-		_ = utils.FileMove(poster, newPlatformDom.PosterPath+config.Cfg.Separator+utils.GetFileNameAndExt(poster));
-	}
-
-	packing := GetRomRes("packing", rom.Platform, romName)
-	if packing != "" {
-		_ = utils.FileMove(packing, newPlatformDom.PackingPath+config.Cfg.Separator+utils.GetFileNameAndExt(packing));
-	}
-
-	title := GetRomRes("title", rom.Platform, romName)
-	if title != "" {
-		_ = utils.FileMove(title, newPlatformDom.TitlePath+config.Cfg.Separator+utils.GetFileNameAndExt(title));
-	}
-
-	cassette := GetRomRes("cassette", rom.Platform, romName)
-	if cassette != "" {
-		_ = utils.FileMove(cassette, newPlatformDom.CassettePath+config.Cfg.Separator+utils.GetFileNameAndExt(cassette));
-	}
-
-	icon := GetRomRes("icon", rom.Platform, romName)
-	if icon != "" {
-		_ = utils.FileMove(icon, newPlatformDom.IconPath+config.Cfg.Separator+utils.GetFileNameAndExt(icon));
-	}
-
-	gif := GetRomRes("gif", rom.Platform, romName)
-	if gif != "" {
-		_ = utils.FileMove(gif, newPlatformDom.GifPath+config.Cfg.Separator+utils.GetFileNameAndExt(gif));
-	}
-	
-	background := GetRomRes("background", rom.Platform, romName)
-	if background != "" {
-		_ = utils.FileMove(background, newPlatformDom.BackgroundPath+config.Cfg.Separator+utils.GetFileNameAndExt(background));
-	}
-
-	video := GetRomRes("video", rom.Platform, romName)
-	if video != "" {
-		_ = utils.FileMove(video, newPlatformDom.VideoPath+config.Cfg.Separator+utils.GetFileNameAndExt(video));
-	}
-
-	doc := GetRomRes("doc", rom.Platform, romName)
-	if doc != "" {
-		_ = utils.FileMove(doc, newPlatformDom.DocPath+config.Cfg.Separator+utils.GetFileNameAndExt(doc));
-	}
-
-	strategy := GetRomRes("strategy", rom.Platform, romName)
-	if strategy != "" {
-		_ = utils.FileMove(strategy, newPlatformDom.StrategyPath+config.Cfg.Separator+utils.GetFileNameAndExt(strategy));
-	}
 	return nil
 }

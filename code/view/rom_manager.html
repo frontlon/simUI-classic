@@ -117,7 +117,10 @@
         background: none;
         border: 0;
       }
-      .tab_tip{background:#333;color:#fff;line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:-7dip 0 7dip 0 ;}
+
+      select{width:100dip;}
+select option{display:block}
+      .tab_tip{background:#333;color:#999;line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:-7dip 0 7dip 0 ;}
     </style>
   </head>
   <body>
@@ -127,12 +130,13 @@
         <label ww="1200dip" wh="700dip" for="second">媒体管理</label>
         <label ww="1200dip" wh="700dip" for="third">模拟器管理</label>
         <label ww="800dip" wh="700dip" for="fourth">文件管理</label>
-        <label ww="600dip" wh="700dip" for="fifth">rom去重</label>
+        <label ww="800dip" wh="700dip" for="fifth">rom去重</label>
+        <label ww="800dip" wh="700dip" for="sixth">无效资源清理</label>
       </strip>
       <panels>
         <!-- 资料管理 -->
         <section id="first">
-          <div class="tab_tip">这里是文字介绍1</div>
+          <div class="tab_tip">输入完成后按回车键保存</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -166,7 +170,7 @@
         </section>
         <!-- 媒体管理 -->
         <section id="second">
-        <div class="tab_tip">这里是文字介绍2</div>
+          <div class="tab_tip">单击手动输入路径，三击选择文件</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -206,7 +210,6 @@
         </section>
         <!-- 模拟器管理 -->
         <section id="third">
-        <div class="tab_tip">这里是文字介绍3</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -250,7 +253,7 @@
         </section>
         <!-- 文件管理 -->
         <section id="fourth">
-        <div class="tab_tip">这里是文字介绍4</div>
+          <div class="tab_tip">这里是文字介绍4</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -288,43 +291,59 @@
           </div>
         </section>
         <!-- rom去重 -->
-        <section id="fifth">
-        <div class="tab_tip">这里是文字介绍5</div>
+      <section id="fifth">
+        <div class="tab_tip">rom去重是根据文件大小进行对比，如果发现两个文件大小一致，则认为是重复。会将两个文件同时列出。</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
                 <select id="platform_repeat"></select>
               </div>
               <div class="titlebar_right">
-                <button>检测重复</button>
-                <button>移动</button>
-                <button>删除</button>
+                <button id="select_check_repeat">检测重复</button>
+                <button id="select_move_repeat">移动</button>
+                <button id="select_delete_repeat">删除</button>
               </div>
             </div>
             <div class="content">
-              <table class="check_table">
+              <table class="check_table" id="romlist_repeat">
                 <thead>
                   <tr>
                     <th>选择</th>
-                    <th>文件名</th>
                     <th>游戏名称</th>
+                    <th>文件路径</th>
                     <th>文件大小</th>
-                    <th>目录</th>
-                    <th>隐藏</th>
+                    <th>功能</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+      </section>
+      <!-- 无效资源清理 -->
+      <section id="sixth">
+        <div class="tab_tip">无效资源是没有和游戏相关联的无效资源文件。</div>
+          <div class="wrapper">
+            <div class="titlebar">
+              <div class="titlebar_left">
+                <select id="platform_zombie"></select>
+              </div>
+              <div class="titlebar_right">
+                <button id="select_check_zombie">检测无效资源</button>
+                <button id="select_move_zombie">移动</button>
+                <button id="select_delete_zombie">删除</button>
+              </div>
+            </div>
+            <div class="content">
+              <table class="check_table" id="romlist_zombie">
+                <thead>
                   <tr>
-                    <td>
-                      <label><input type="checkbox" /></label>
-                    </td>
-                    <td>chakji.zip</td>
-                    <td>超级快打</td>
-                    <td>1245K</td>
-                    <td>未分类</td>
-                    <td>否</td>
+                    <th>选择</th>
+                    <th>类型</th>
+                    <th>文件路径</th>
                   </tr>
-                </tbody>
+                </thead>
+                <tbody></tbody>
               </table>
             </div>
           </div>
@@ -337,32 +356,54 @@
       include ROOTPATH + "tis/utils.tis";
       include ROOTPATH + "tis/dialog/rom_manager.tis";
 
-      //标题
-      view.windowCaption = "rom管理";
-
       //初始化平台列表
       managerInit();
 
-
       /**
-       * 资料编辑
+       * 通用
       **/
 
-      //文本框修改
+      //checkbox选中
+      event click $(.check_table input[type=checkbox]) {
+        if(this.checked == true){
+          this.checked = false;
+          this.parent.parent.parent.attributes.removeClass("checked");
+        }else{
+          this.checked = true;
+          this.parent.parent.parent.attributes.addClass("checked");
+        }
+      }
+
+      //选择checkbox
+      event click $(.check_table tbody tr){
+        if (this.select("input[type=checkbox]").checked == true){
+          this.select("input[type=checkbox]").checked = false;
+          this.attributes.removeClass("checked");
+        }else{
+          this.select("input[type=checkbox]").checked = true;
+          this.attributes.addClass("checked");
+        }
+      }
+
+      /**
+       * 游戏资料管理
+      **/
+
+      //文本框修改 - 游戏资料管理
       event change $(table input[type=text]) {
         this.attributes.addClass("nosave");
       }
 
-      //切换平台 - 游戏资料
+      //切换平台 - 游戏资料管理
       event change $(#platform_rombase){
         managerChangeRombasePlatform(this.value);
       }
-      //切换目录 - 游戏资料
+      //切换目录 - 游戏资料管理
       event change $(#menu_rombase){
         managerChangeRombaseMenu(this.value);
       }
 
-      //文本框保存修改
+      //文本框保存修改 - 游戏资料管理
       event keydown $(#romlist_rombase input[type=text]) (evt,input) {
         if(evt.keyCode != Event.VK_RETURN){
           return ;
@@ -370,7 +411,7 @@
         managerRombaseSave(this);
       }
 
-      //分页 - 游戏资料
+      //分页 - 游戏资料管理
       event click $(#pages_rombase li){
         managerCreateRombaseByPages(this);
       }
@@ -410,7 +451,7 @@
       }
 
       /**
-       * 模拟器编辑
+       * 模拟器管理
       **/
 
       //切换平台 - 模拟器管理
@@ -436,17 +477,17 @@
         managerSimulatorSave(this);
       }
 
-       //更改rom的模拟器
+       //更改rom的模拟器 - 模拟器管理
        event change $(#select_sim){
           managerChangeRomSimulator(this);
        }
 
-       //解压后运行
+       //解压后运行 - 模拟器管理
        event change $(#select_unzip){
           managerChangeRomUnzipRunGame(this);
        }
 
-       //选定lua脚本
+       //选定lua脚本 - 模拟器管理
        event click $(#select_lua){
           openFileLua(this);
        }
@@ -464,50 +505,69 @@
         managerChangeRomFileMenu(this.value);
       }
 
-      //分页 - 模拟器管理
+      //分页 - 文件管理
       event click $(#pages_file li){
         managerCreateRomFileByPages(this);
       }
 
+      //隐藏 - 文件管理
        event change $(#select_hide){
         managerChangeRomHide(this.value);
       }
 
-
+      //移动rom - 文件管理
       event click $(#select_move){
         managerFileMoveRom();
       }
 
+      //删除rom - 文件管理
       event click $(#select_delete){
         managerFileDelete();
       }
 
       /**
-       * 通用
+       * rom去重
       **/
 
-
-      //checkbox选中
-      event click $(.check_table input[type=checkbox]) {
-        if(this.checked == true){
-          this.checked = false;
-          this.parent.parent.parent.attributes.removeClass("checked");
-        }else{
-          this.checked = true;
-          this.parent.parent.parent.attributes.addClass("checked");
-        }
+   
+      //检测重复rom - rom去重
+      event click $(#select_check_repeat){
+        managerCheckRepeat();
+      }
+      //移动rom - rom去重
+      event click $(#select_move_repeat){
+        managerFileRepeatMoveRom();
       }
 
-      //选择checkbox
-      event click $(.check_table tbody tr){
-        if (this.select("input[type=checkbox]").checked == true){
-          this.select("input[type=checkbox]").checked = false;
-          this.attributes.removeClass("checked");
-        }else{
-          this.select("input[type=checkbox]").checked = true;
-          this.attributes.addClass("checked");
-        }
+      //删除rom - rom去重
+      event click $(#select_delete_repeat){
+        managerFileRepeatDelete();
       }
+
+      //运行游戏 - rom去重
+      event click $(.rungame){
+        managerRunGame(this);
+      }
+
+      /**
+       * 无效资源清理
+      **/
+
+   
+      //检测重复rom - 无效资源清理
+      event click $(#select_check_zombie){
+        managerCheckZombie();
+      }
+      //移动rom - 无效资源清理
+      event click $(#select_move_zombie){
+        managerFileZombieMoveRom();
+      }
+
+      //删除rom - 无效资源清理
+      event click $(#select_delete_zombie){
+        managerFileZombieDelete();
+      }
+
     </script>
   </body>
 </html>

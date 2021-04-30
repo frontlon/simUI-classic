@@ -73,7 +73,7 @@ func main() {
 	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO)
 
 	//定义view函数
-	defineViewFunction()
+	regViewFunction()
 
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))
@@ -118,8 +118,8 @@ func main() {
 	w.Run()
 }
 
-//定义控制器方法
-func defineViewFunction() {
+//注册控制器
+func regViewFunction() {
 	controller.CacheController()
 	controller.ConfigController()
 	controller.MenuController()
@@ -129,6 +129,7 @@ func defineViewFunction() {
 	controller.ShortcutController()
 	controller.SimulatorController()
 	controller.JoystickController()
+	controller.RomManagerController()
 }
 
 //资源加载

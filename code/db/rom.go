@@ -277,6 +277,30 @@ func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string
 	return count, result.Error
 }
 
+//根据平台id，查询数据
+func (*Rom) GetByPlatform(platform uint32) ([]*Rom, error) {
+
+	volist := []*Rom{}
+	result := getDb().Select("*").Where("platform = ?",platform).Order("pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return volist, result.Error
+}
+
+//根据平台id，查询主游戏
+func (*Rom) GetMasterRomByPlatform(platform uint32) ([]*Rom, error) {
+
+	volist := []*Rom{}
+	result := getDb().Select("*").Where("platform = ? AND pname = ''",platform).Order("pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return volist, result.Error
+}
+
 //更新名称
 func (m *Rom) UpdateName() error {
 

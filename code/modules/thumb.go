@@ -26,35 +26,14 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 	}
 
 	//下载文件
-	res, err := http.Get(newPath)
+	response, err := http.Get(newPath)
 	if err != nil {
 		return "", err
 	}
 
 	//下载成功后，备份原文件
-	platformPath := ""
-	switch typeName {
-	case "thumb":
-		platformPath = config.Cfg.Platform[vo.Platform].ThumbPath
-	case "snap":
-		platformPath = config.Cfg.Platform[vo.Platform].SnapPath
-	case "poster":
-		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
-	case "packing":
-		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "title":
-		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
-	case "cassette":
-		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
-	case "icon":
-		platformPath = config.Cfg.Platform[vo.Platform].IconPath
-	case "gif":
-		platformPath = config.Cfg.Platform[vo.Platform].GifPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
-	case "video":
-		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
-	}
+	res := config.GetResPath(vo.Platform)
+	platformPath := res[typeName]
 
 	if platformPath == "" {
 		return "", errors.New(config.Cfg.Lang["NoSetThumbDir"])
@@ -72,7 +51,7 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 	if err != nil {
 		return "", err
 	}
-	io.Copy(f, res.Body)
+	io.Copy(f, response.Body)
 	return newFileName, nil
 }
 
@@ -90,32 +69,8 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 	}
 
 	//下载成功后，备份原文件
-	platformPath := ""
-
-	switch typeName {
-	case "thumb":
-		platformPath = config.Cfg.Platform[vo.Platform].ThumbPath
-	case "snap":
-		platformPath = config.Cfg.Platform[vo.Platform].SnapPath
-	case "poster":
-		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
-	case "packing":
-		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "title":
-		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
-	case "cassette":
-		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
-	case "icon":
-		platformPath = config.Cfg.Platform[vo.Platform].IconPath
-	case "gif":
-		platformPath = config.Cfg.Platform[vo.Platform].GifPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
-	case "video":
-		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
-	default:
-		return "", nil
-	}
+	res := config.GetResPath(vo.Platform)
+	platformPath := res[typeName]
 
 	if platformPath == "" {
 		return "", errors.New(config.Cfg.Lang["NoSetThumbDir"])
@@ -138,7 +93,7 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 	return newFileName, nil
 }
 
-//编辑展示图片
+//删除缩略图
 func DeleteThumbs(typeName string, id uint64) error {
 
 	rom := &db.Rom{
@@ -152,31 +107,8 @@ func DeleteThumbs(typeName string, id uint64) error {
 	}
 
 	//下载成功后，备份原文件
-	platformPath := ""
-
-	switch typeName {
-	case "thumb":
-		platformPath = config.Cfg.Platform[vo.Platform].ThumbPath
-	case "snap":
-		platformPath = config.Cfg.Platform[vo.Platform].SnapPath
-	case "poster":
-		platformPath = config.Cfg.Platform[vo.Platform].PosterPath
-	case "packing":
-		platformPath = config.Cfg.Platform[vo.Platform].PackingPath
-	case "title":
-		platformPath = config.Cfg.Platform[vo.Platform].TitlePath
-	case "cassette":
-		platformPath = config.Cfg.Platform[vo.Platform].CassettePath
-	case "icon":
-		platformPath = config.Cfg.Platform[vo.Platform].IconPath
-	case "gif":
-		platformPath = config.Cfg.Platform[vo.Platform].GifPath
-	case "background":
-		platformPath = config.Cfg.Platform[vo.Platform].BackgroundPath
-	case "video":
-		platformPath = config.Cfg.Platform[vo.Platform].VideoPath
-	}
-
+	res := config.GetResPath(vo.Platform)
+	platformPath := res[typeName]
 	if platformPath == "" {
 		return errors.New(config.Cfg.Lang["NoSetThumbDir"])
 	}

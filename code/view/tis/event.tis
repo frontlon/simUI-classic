@@ -6,7 +6,7 @@
     Init();
 
 
-    //openRomManager(this);
+    openRomManager(this);
 
 
 
@@ -39,7 +39,6 @@
     self.on("mouseup", "#right_splitter", function(evt) {
         sidebarSize();
     });
-
  
     /**
      * 导航栏

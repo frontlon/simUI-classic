@@ -16,21 +16,7 @@ func CreatePlatform(id uint32) error {
 		return err
 	}
 
-	dirList := []string{
-		info.RomPath,
-		info.ThumbPath,
-		info.SnapPath,
-		info.PosterPath,
-		info.PackingPath,
-		info.TitlePath,
-		info.CassettePath,
-		info.IconPath,
-		info.GifPath,
-		info.BackgroundPath,
-		info.DocPath,
-		info.StrategyPath,
-		info.VideoPath,
-	}
+	dirList := config.GetResPath(id)
 
 	for _, v := range dirList {
 		path := config.Cfg.RootPath + v

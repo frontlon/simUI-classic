@@ -16,16 +16,16 @@ import (
 
 //配置文件
 var (
-	Cfg      *ConfStruct                                                        //公共配置
-	ENV      string                                                             //环境配置
-	DOC_EXTS = []string{".txt", ".md"}                                          //doc文档支持的扩展名
-	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv","mp4","avi"} //支持的图片类型
+	Cfg      *ConfStruct                                                                      //公共配置
+	ENV      string                                                                           //环境配置
+	DOC_EXTS = []string{".txt", ".md"}                                                        //doc文档支持的扩展名
+	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv", "mp4", "avi"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                           //可直接运行的doc文档支持的扩展名
-	Window *window.Window                                                       //窗体
+	}                                                                                         //可直接运行的doc文档支持的扩展名
+	Window *window.Window                                                                     //窗体
 )
 
 //配置文件
@@ -213,8 +213,6 @@ func getDefault() (*db.Config, error) {
 
 	//如果软件名称是图片，则转换为绝对路径
 
-
-
 	if strings.ToLower(vo.SoftName) != "simui" && utils.FileExists(vo.SoftName) == true {
 		vo.SoftName, _ = filepath.Abs(vo.SoftName)
 	}
@@ -345,7 +343,6 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	return themelist, nil
 }
 
-
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
 	langpath := Cfg.RootPath + "lang" + Cfg.Separator
@@ -397,4 +394,41 @@ func getShortcut() ([]*db.Shortcut, error) {
 		shortcutList[k].Path, _ = filepath.Abs(v.Path)
 	}
 	return shortcutList, nil
+}
+
+//读取全部资源目录
+func GetResPath(platformId uint32) map[string]string {
+	platform := Cfg.Platform[platformId]
+	res := map[string]string{}
+	res["thumb"] = platform.ThumbPath
+	res["snap"] = platform.SnapPath
+	res["poster"] = platform.PosterPath
+	res["packing"] = platform.PackingPath
+	res["title"] = platform.TitlePath
+	res["cassette"] = platform.CassettePath
+	res["icon"] = platform.IconPath
+	res["gif"] = platform.GifPath
+	res["background"] = platform.BackgroundPath
+	res["video"] = platform.VideoPath
+	res["doc"] = platform.DocPath
+	res["strategy"] = platform.StrategyPath
+	return res
+}
+
+//读取资源类型名
+func GetResExts() map[string][]string {
+	res := map[string][]string{}
+	res["thumb"] = PIC_EXTS
+	res["snap"] = PIC_EXTS
+	res["poster"] = PIC_EXTS
+	res["packing"] = PIC_EXTS
+	res["title"] = PIC_EXTS
+	res["cassette"] = PIC_EXTS
+	res["icon"] = PIC_EXTS
+	res["gif"] = PIC_EXTS
+	res["background"] = PIC_EXTS
+	res["video"] = PIC_EXTS
+	res["doc"] = DOC_EXTS
+	res["strategy"] = RUN_EXTS
+	return res
 }

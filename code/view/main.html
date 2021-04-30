@@ -294,10 +294,16 @@
     #search_box{background:#666;border-radius:5px;box-shadow:0 0 20dip #222;position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:none}
     #search_box input{color:#FFF;display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 
+
+
+
+
+
     .widthMode{height:*}
     .widthMode h2{display:none;}
-    .bg{background:url("C:\\Users\\Administrator\\Desktop\\smoke\\1.jpg") no-repeat center center;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip #575757;}
-        
+    .sbg{background:url("C:\\Users\\Administrator\\Desktop\\smoke\\1.jpg") no-repeat center center;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip #575757;}
+    .bg{background:url("/Users/frontlon/go/src/simUI/app/theme/sidebar_bg.png") no-repeat center center;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip #575757;}
+
     #right h1{font-size:20dip;color:#FFF;display:block;text-shadow: 1px 1px 2px #000;}
     .widthMode .margin_wrapper{margin-top:-50dip;}
 
@@ -310,10 +316,10 @@
     .widthMode .buttons{display:block;width:*;margin-left:10dip}
     .widthMode .flow_wrapper{flow:horizontal-flow;width:*}
 
-.widthMode #sim_select li{padding-top:3dip;padding-bottom:3dip;}
-.widthMode #right_rombase{width:*;margin-right:10dip;}
+    .widthMode #sim_select li{padding-top:3dip;padding-bottom:3dip;}
+    .widthMode #right_rombase{width:*;margin-right:10dip;}
 
-.widthMode #doc{width:*;}
+    .widthMode #doc{width:*;}
 
 </style>
 </head>
@@ -355,6 +361,8 @@
             <menu>
                 <li id="create_cache" opt="platform"><i.cache></i><span>{{CreateCachePlatform}}</span></li>
                 <li id="create_cache" opt="all"><i.cache></i><span>{{CreateCacheAll}}</span></li>
+                <li id="create_cache" opt="res"><i.cache></i><span>{{ClearResCache}}</span></li>
+                <li id="create_cache" opt="zip"><i.cache></i><span>{{ZipResImages}}</span></li>
             </menu>
         </button><button type="menu" title="{{Config}}"><i.config.minsize></i>
             <menu>
