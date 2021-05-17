@@ -66,7 +66,7 @@ func MoveZombieByFile(f string, p string) error {
 
 	fileName := utils.GetFileName(f)
 	ext := utils.GetFileExt(f)
-	oldPathArr := strings.Split(utils.GetFilePath(f),config.Cfg.Separator)
+	oldPathArr := strings.Split(utils.GetFilePath(f), config.Cfg.Separator)
 	newPath := p + config.Cfg.Separator + fileName + "_" + oldPathArr[len(oldPathArr)-1] + ext
 	if err := utils.FileMove(f, newPath); err != nil {
 		return err
@@ -95,6 +95,9 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 		}
 		if err := filepath.Walk(path,
 			func(p string, f os.FileInfo, err error) error {
+				if f == nil {
+					return nil
+				}
 				if f.IsDir() == true {
 					return nil
 				}
@@ -117,7 +120,7 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 				} else {
 					//检查重复文件
 					existsList[name] = append(existsList[name], p)
-					if (len(existsList[name]) > 1) {
+					if len(existsList[name]) > 1 {
 						repeat := map[string]string{}
 						repeat["path"] = p
 						repeat["type"] = "2"
@@ -144,4 +147,3 @@ func MoveZombieFile(f string, p string) error {
 
 	return nil
 }
-

@@ -29,6 +29,9 @@ function Init(){
 
     if (CONF.Default.PanelSidebarWidth != ""){
         $(#right).style["width"] = CONF.Default.PanelSidebarWidth;
+        if (CONF.Default.PanelSidebarWidth >= 600){
+            $(#right).attributes.addClass("widthMode");
+        }
     }
 
     //初始化rom
@@ -43,8 +46,6 @@ function Init(){
 
     //初始化音量控制
     VIDEO_VALUME = CONF.Default.VideoVolume;
-    if(VIDEO_VALUME == 0)$(#right_volume).html = "<i.sound_off></i>";
-    else $(#right_volume).html = "<i.sound_on></i>";
 
     $(body).state.focus = true;
 

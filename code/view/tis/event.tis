@@ -1,4 +1,5 @@
-﻿view.root.on("ready", function(){
+﻿
+view.root.on("ready", function(){
 
 
 
@@ -6,7 +7,7 @@
     Init();
 
 
-    openRomManager(this);
+    //openRomManager(this);
 
 
 
@@ -264,7 +265,7 @@
     });
 
     //控制视频播放
-    self.on("click", "#right_video", function(evt) {
+    self.on("click", "#video_play", function(evt) {
         videoPlay(this);
     });
 
@@ -384,14 +385,6 @@
         deleteRom(this);
     });
 
-    $(#right_video).onControlEvent = function(evt) {
-        if(evt.type == Event.VIDEO_STOPPED){
-            if ( this.videoDuration() - this.videoPosition()  < 1){
-                this.videoPlay(0.0);
-            }
-        }
-    }
-
     //侧边栏缩略图编辑功能 - 选择缩略图文件
     self.on("click", ".filedropzone_widget .openfile", function(evt) {
         openThumbFile(this);
@@ -496,6 +489,9 @@
                 $(#search_box_input).state.focus = true;
          }
         }
-    });
+    });  
 
 });
+
+
+

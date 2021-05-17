@@ -118,9 +118,22 @@
         border: 0;
       }
 
-      select{width:100dip;}
-select option{display:block}
-      .tab_tip{background:#333;color:#999;line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:-7dip 0 7dip 0 ;}
+      select {
+        width: 100dip;
+      }
+      select option {
+        display: block;
+      }
+      .tab_tip {
+        background: #333;
+        color: #999;
+        line-height: 20dip;
+        height: 20dip;
+        font-size: 12dip;
+        display: block;
+        padding: 5dip;
+        margin: -7dip 0 7dip 0;
+      }
     </style>
   </head>
   <body>
@@ -291,8 +304,10 @@ select option{display:block}
           </div>
         </section>
         <!-- rom去重 -->
-      <section id="fifth">
-        <div class="tab_tip">rom去重是根据文件大小进行对比，如果发现两个文件大小一致，则认为是重复。会将两个文件同时列出。</div>
+        <section id="fifth">
+          <div class="tab_tip">
+            rom去重是根据文件大小进行对比，如果发现两个文件大小一致，则认为是重复。会将两个文件同时列出。
+          </div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -319,10 +334,10 @@ select option{display:block}
               </table>
             </div>
           </div>
-      </section>
-      <!-- 无效资源清理 -->
-      <section id="sixth">
-        <div class="tab_tip">无效资源是没有和游戏相关联的无效资源文件。</div>
+        </section>
+        <!-- 无效资源清理 -->
+        <section id="sixth">
+          <div class="tab_tip">无效资源是没有和游戏相关联的无效资源文件。</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
@@ -529,7 +544,7 @@ select option{display:block}
        * rom去重
       **/
 
-   
+
       //检测重复rom - rom去重
       event click $(#select_check_repeat){
         managerCheckRepeat();
@@ -553,7 +568,7 @@ select option{display:block}
        * 无效资源清理
       **/
 
-   
+
       //检测重复rom - 无效资源清理
       event click $(#select_check_zombie){
         managerCheckZombie();
@@ -567,7 +582,6 @@ select option{display:block}
       event click $(#select_delete_zombie){
         managerFileZombieDelete();
       }
-
     </script>
   </body>
 </html>
