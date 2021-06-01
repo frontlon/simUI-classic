@@ -191,7 +191,7 @@
     .rotate_wrapper{position:relative;}
     #rotate{top:-30dip;right:0dip;position:absolute;}
     .stack{overflow:hidden;flow:stack;width:100%;height:auto;text-align:center;}
-    .stack>img{max-width:320dip;max-height:320dip;width:100%;margin:0 auto}
+    .stack>img{max-width:320dip;width:100%;margin:0 auto}
 
     /* 右侧边栏遮罩 */
     #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
@@ -306,9 +306,8 @@
     .widthMode .margin_wrapper{margin-top:-50dip;}
 
     .widthMode .rotate_wrapper{height:80dip;}
-    .widthMode .stack{position:absolute;top:-120dip;width:200dip;right:40dip}
-    .widthMode .stack>img{width:200dip;}
-
+    .widthMode .stack{position:absolute;top:-120dip;width:200dip;right:40dip;}
+    .widthMode .stack>img{width:auto;height:180dip;}
 
     .widthMode .sim_select{display:block;width:*;}
     .widthMode .buttons{display:block;width:*;margin-left:10dip}
@@ -318,6 +317,7 @@
     .widthMode #right_rombase{width:*;margin-right:10dip;}
 
     .widthMode #doc{width:*;}
+
 
 </style>
 </head>

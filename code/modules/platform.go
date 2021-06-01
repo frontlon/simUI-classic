@@ -20,14 +20,16 @@ func CreatePlatform(id uint32) error {
 
 	for _, v := range dirList {
 		path := config.Cfg.RootPath + v
-		if (!utils.FolderExists(path)) {
-			utils.CreateDir(path);
+		if !utils.FolderExists(path) {
+			utils.CreateDir(path)
 		}
 	}
 
-	info.Rombase = config.Cfg.RootPath + info.Rombase
-	if (!utils.FileExists(info.Rombase)) {
-		CreateNewRomBaseFile(info.Rombase);
+	if info.Rombase != "" {
+		info.Rombase = config.Cfg.RootPath + info.Rombase
+		if !utils.FileExists(info.Rombase) {
+			CreateNewRomBaseFile(info.Rombase);
+		}
 	}
 
 	return nil
