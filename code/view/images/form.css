@@ -139,6 +139,7 @@ select > caption {
   background: none;
   border: 0;
   vertical-align: middle;
+  text-align:left;
 }
 select:disabled {
   border: 1px solid color(select-disabled-border-color);

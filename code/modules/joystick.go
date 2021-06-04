@@ -2,6 +2,9 @@ package modules
 
 import (
 	"github.com/simulatedsimian/joystick"
+	"os"
+	"os/exec"
+	"runtime"
 	"simUI/code/utils"
 	"sync"
 	"time"
@@ -139,4 +142,23 @@ func GetJoystickButtons(button uint32) int {
 		btn = 0
 	}
 	return btn
+}
+
+/**
+ * 关闭simui
+ **/
+func killSoft() error {
+
+	switch runtime.GOOS {
+	case "darwin":
+		c := exec.Command("kill", utils.ToString(os.Getpid()))
+		c.Start()
+	case "windows":
+		c := exec.Command("taskkill.exe", "/T", "/PID", utils.ToString(os.Getpid()))
+		c.Start()
+	case "linux":
+		c := exec.Command("kill", utils.ToString(os.Getpid()))
+		c.Start()
+	}
+	return nil
 }

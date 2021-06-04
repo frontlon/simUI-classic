@@ -43,6 +43,15 @@ function createRomList(cls=0){
 
         //读取缩略图地址
         romPath = URL.parse(obj.RomPath);
+        //如果文件名中存在#号
+        if(romPath.anchor != ""){
+            var pathArr = obj.RomPath.split("/");
+            pathArr = pathArr[pathArr.length-1].split("\\");
+            pathArr = pathArr[pathArr.length-1].split(".");
+            pathArr.remove(pathArr.length-1);
+            romPath.name = pathArr.join(".");
+        }
+
         thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romPath.name);
 
         //没有找到图片，读取默认缩略图
@@ -194,6 +203,7 @@ function getRomPicPath(type,platform,name){
          exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
     }
     
+
     var isset = false; //图片是否存在
     var pic = ""; //图片地址
     for(var ext in exts) {

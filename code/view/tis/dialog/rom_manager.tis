@@ -2,7 +2,7 @@
 function managerInit(){
 
     //标题
-    view.windowCaption = "rom管理";
+    view.windowCaption = CONF.Lang.RomManager;
 
     //初始化主题
     initUiTheme();
@@ -44,7 +44,7 @@ function managerChangeRombasePlatform(platformId){
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
-        menulist.html = "<option value=''>全部游戏</option>"; //生成dom
+        menulist.html = "<option value=''>"+CONF.Lang.AllGames+"</option>"; //生成dom
     }
 
     //生成默认游戏列表
@@ -65,7 +65,7 @@ function managerChangeRombasePlatform(platformId){
 function createMenuOption(platformId){
     var menujson = mainView.GetMenuList(platformId,0); //读取分配列表
     var menuobj = JSON.parse(menujson);
-    var dd = "<option value=''>全部游戏</option>";
+    var dd = "<option value=''>"+CONF.Lang.AllGames+"</option>";
     var name ="";
     var fixed = "";
     //遍历数据，生成dom
@@ -96,7 +96,7 @@ function openFile(evt) {
 
     const defaultExt = "";
     const initialPath = "";
-    const caption = "请选择文件";
+    const caption = CONF.Lang.SelectFile;
     var url = view.selectFile("", filter, defaultExt, initialPath, caption );
     if(url){
         url = URL.toPath(url);
@@ -181,7 +181,7 @@ function managerRombaseSave(obj){
     var filename = tr.select(".filename").value;
 
     if(filename.trim() == ""){
-        warning("文件名不能为空");
+        warning(CONF.Lang.FilenameNotEmpty);
         return;
     }
     //更新资料
@@ -220,7 +220,7 @@ function managerChangeMediaPlatform(platformId){
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
-        menulist.html = "<option value=''>全部游戏</option>"; //生成dom
+        menulist.html = "<option value=''>"+CONF.Lang.AllGames+"</option>"; //生成dom
     }
 
     //生成默认游戏列表
@@ -276,8 +276,8 @@ function managerCreateMedia(romjson){
         romData += "<td.openfile><input|text.gif value='"+ gif +"' /></td>";
         romData += "<td.openfile><input|text.background value='"+ background +"' /></td>";
         romData += "<td.openfile><input|text.video value='"+ video +"' /></td>";
-        romData += "<td.openfile><input|text.doc value='点击编辑' readonly='readonly' /></td>";
-        romData += "<td.openfile><input|text.strategy value='点击编辑' readonly='readonly' /></td>";
+        romData += "<td.openfile><input|text.doc value='"+CONF.Lang.ClickEdit+"' readonly='readonly' /></td>";
+        romData += "<td.openfile><input|text.strategy value='"+CONF.Lang.ClickEdit+"' readonly='readonly' /></td>";
         romData += "</tr>"
     }
     $(#romlist_media tbody).html = romData;
@@ -326,7 +326,7 @@ function managerSetMedia(obj) {
     obj.attributes.removeClass("nosave");
     if(uri == ""){
         mainView.DeleteThumbs(opt,id);
-        alert("图片删除成功");
+        alert(CONF.Lang.DeletePicSuccess);
     }else{
         mainView.EditRomThumbs(opt,id,uri);
     }
@@ -352,7 +352,7 @@ function managerChangeSimulatorPlatform(platformId){
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
-        menulist.html = "<option value=''>全部游戏</option>"; //生成dom
+        menulist.html = "<option value=''>"+ CONF.Lang.AllGames +"</option>"; //生成dom
     }
 
     //创建模拟器列表
@@ -389,7 +389,7 @@ function managerCreateSimulator(romjson){
         var filename = romPath[romPath.length - 1].split(".");
         
         var simConf = {};
-        var unzipText = "否";
+        var unzipText = CONF.Lang.No;
         var unzip = 0;
         var bootFile = "";
         var simName = "";
@@ -420,7 +420,7 @@ function managerCreateSimulator(romjson){
             simConf = JSON.parse(obj.SimConf);
             simConf = simConf[simId.toString()];
             if(simConf != undefined){
-                unzipText = simConf.Unzip == 1 ? "是" : "否";
+                unzipText = simConf.Unzip == 1 ? CONF.Lang.Yes : CONF.Lang.No;
                 bootFile = simConf.File;
                 if(simConf.Cmd != ""){
                     cmd = simConf.Cmd;
@@ -430,7 +430,7 @@ function managerCreateSimulator(romjson){
             }
         }else{
             simConf = CONF.Platform[obj.Platform.toString()].UseSim;
-            unzipText = simConf.Unzip == 1 ? "是" : "否";
+            unzipText = simConf.Unzip == 1 ? CONF.Lang.Yes : CONF.Lang.No;
             bootFile = "";
             unzip = simConf.Unzip;
             lua = simConf.Lua;
@@ -512,7 +512,7 @@ function managerChangeRomSimulator(obj){
         return;
     }
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -569,11 +569,11 @@ function managerChangeRomUnzipRunGame(obj){
         return;
     }
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
-    var text = obj.value == 1 ? "是":"否";
+    var text = obj.value == 1 ? CONF.Lang.Yes:CONF.Lang.No;
     for(var c in checks){
 
     var tr = c.parent.parent;
@@ -605,7 +605,7 @@ function openFileLua(evt) {
 
     var checks = $$(#romlist_sim .check_simulator:checked);
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -613,7 +613,7 @@ function openFileLua(evt) {
 
     const defaultExt = "";
     const initialPath = "";
-    const caption = "请选择文件";
+    const caption = CONF.Lang.SelectFile;
     var url = view.selectFile("", filter, defaultExt, initialPath, caption );
     if(url){
         url = URL.toPath(url);
@@ -659,7 +659,7 @@ function managerChangeRomFilePlatform(platformId){
     if(dd != ""){
         menulist.html = dd; //生成dom
     }else{
-        menulist.html = "<option value=''>全部游戏</option>"; //生成dom
+        menulist.html = "<option value=''>"+ CONF.Lang.AllGames +"</option>"; //生成dom
     }
 
     //生成默认游戏列表
@@ -685,7 +685,7 @@ function managerCreateRomFile(romjson){
             obj.Menu = "";
         }
 
-        var hide = obj.Hide == 1? "隐藏":"显示";
+        var hide = obj.Hide == 1? CONF.Lang.Show:CONF.Lang.Hide;
 
         romData += "<tr rid='"+ obj.Id +"'>";
         var romName = obj.RomPath.replace("\\","/");
@@ -741,7 +741,7 @@ function managerChangeRomHide(hide){
         return;
     }
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -750,7 +750,7 @@ function managerChangeRomHide(hide){
         arr.push(c.value);
     }
     var ids = arr.join(",");
-    var text = hide == 1 ? "隐藏":"显示";
+    var text = hide == 1 ? CONF.Lang.Hide:CONF.Lang.Show;
 
     mainView.SetHide(ids,hide);
     for(var c in checks){
@@ -766,7 +766,7 @@ function managerFileMoveRom(){
 
     var checks = $$(#romlist_file .check_file:checked);
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -785,8 +785,7 @@ function managerFileMoveRom(){
         };
     });
     if(platform == "1"){
-        //view.CreateRomCache(0);
-        alert("移动成功");
+        alert(CONF.Lang.RomMoveSuccess);
     }
 }
 
@@ -795,7 +794,7 @@ function managerFileDelete(){
 
     var checks = $$(#romlist_file .check_file:checked);
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -839,7 +838,7 @@ function managerCheckRepeat(){
     var platformId = $(#platform_repeat).value;
 
     if (platformId == "0"){
-        alert("请选择平台");
+        alert(CONF.Lang.SelectPlatform);
         return;
     }
 
@@ -847,12 +846,12 @@ function managerCheckRepeat(){
     var romobj = JSON.parse(romjson);
 
     if(romobj.length == 0 ){
-        alert("没有发现重复文件");
+        alert(CONF.Lang.DuplicateFilesNotFound);
         return;
     }
 
     if(romobj.length > 500 ){
-        alert("发现的重复文件大于500个，此次结果将只显示500个，请处理重复rom后再次执行本操作");
+        alert(CONF.Lang.TipDuplicateFilesFound);
         return;
     }
 
@@ -863,7 +862,7 @@ function managerCheckRepeat(){
         romData += "<td>"+ obj.name +"</td>";
         romData += "<td>"+ obj.path +"</td>";
         romData += "<td>"+ obj.size +"</td>";
-        romData += "<td><button class='rungame'>启动</button></td>";
+        romData += "<td><button class='rungame'>"+CONF.Lang.Run+"</button></td>";
         romData += "</tr>"
     }
     $(#romlist_repeat tbody).html = romData;
@@ -877,7 +876,7 @@ function managerFileRepeatMoveRom(){
 
     var checks = $$(#romlist_repeat .check_repeat:checked);
     if(checks.length == 0){
-        alert("您没有选择游戏");
+        alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -902,7 +901,7 @@ function managerFileRepeatDelete(){
 
     var checks = $$(#romlist_repeat .check_repeat:checked);
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -951,7 +950,7 @@ function managerCheckZombie(){
     var platformId = $(#platform_zombie).value;
 
     if (platformId == "0"){
-        alert("请选择平台");
+        alert(CONF.Lang.SelectPlatform);
         return;
     }
 
@@ -959,12 +958,12 @@ function managerCheckZombie(){
     var romobj = JSON.parse(romjson);
 
     if(romobj.length == 0 ){
-        alert("没有发现重复文件");
+        alert(CONF.Lang.NoInvalidFilesNotFound);
         return;
     }
 
     if(romobj.length > 500 ){
-        alert("发现的重复文件大于500个，此次结果将只显示500个，请处理重复rom后再次执行本操作");
+        alert(CONF.Lang.TipNoInvalidFilesFound);
         return;
     }
 
@@ -974,14 +973,14 @@ function managerCheckZombie(){
     for(var obj in romobj) {
 
         if(obj.type == 1){
-            type = "无效资源";
-            desc = "无效资源是指找不到rom的资源文件，是和现有rom无关联的资源文件"
+            type = CONF.Lang.NoInvalidFile;
+            desc = CONF.Lang.TipNoInvalidFile;
         }else if(obj.type == 2){
-            type = "重复资源";
-            desc = "重复资源是指一个rom下存在多张同类型的资源"
+            type = CONF.Lang.DuplicateFiles;
+            desc = CONF.Lang.TipDuplicateFiles;
         }else{
-            type = "子游戏资源";
-            desc = "子游戏不需要设置资源文件"
+            type = CONF.Lang.SubGameFiles;
+            desc = CONF.Lang.TipSubGameFiles;
         }
 
         romData += "<tr>";
@@ -998,7 +997,7 @@ function managerFileZombieMoveRom(){
 
     var checks = $$(#romlist_zombie .check_zombie:checked);
     if(checks.length == 0){
-        alert("您没有选择游戏");
+        alert(CONF.Lang.NotSelectGames);
         return;
     }
 
@@ -1023,7 +1022,7 @@ function managerFileZombieDelete(){
 
     var checks = $$(#romlist_zombie .check_zombie:checked);
     if(checks.length == 0){
-    alert("您没有选择游戏");
+    alert(CONF.Lang.NotSelectGames);
         return;
     }
 

@@ -82,6 +82,14 @@ view.root.on("ready", function(){
         createCache(this);
     });
 
+    //清理资料文件
+    self.on("click", "#clear_rombase", function(evt) {
+        clearRombase(this);
+    });
+
+
+    
+
     //弹出设置窗口
     self.on("click", "#config", function(evt) {
         openConfig(this);

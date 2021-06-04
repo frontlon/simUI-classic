@@ -139,24 +139,24 @@
   <body>
     <tabs class="tabs" id="mytabs">
       <strip>
-        <label ww="1200dip" wh="700dip" for="first" selected>资料管理</label>
-        <label ww="1200dip" wh="700dip" for="second">媒体管理</label>
-        <label ww="1200dip" wh="700dip" for="third">模拟器管理</label>
-        <label ww="800dip" wh="700dip" for="fourth">文件管理</label>
-        <label ww="800dip" wh="700dip" for="fifth">rom去重</label>
-        <label ww="800dip" wh="700dip" for="sixth">无效资源清理</label>
+        <label ww="1200dip" wh="700dip" for="first" selected>{{RombaseManager}}</label>
+        <label ww="1200dip" wh="700dip" for="second">{{MediaManager}}</label>
+        <label ww="1200dip" wh="700dip" for="third">{{SimulatorManager}}</label>
+        <label ww="800dip" wh="700dip" for="fourth">{{FileManager}}</label>
+        <label ww="800dip" wh="700dip" for="fifth">{{RomRemoveDuplicate}}</label>
+        <label ww="800dip" wh="700dip" for="sixth">{{InvalidResourceCleanup}}</label>
       </strip>
       <panels>
         <!-- 资料管理 -->
         <section id="first">
-          <div class="tab_tip">输入完成后按回车键保存</div>
+          <div class="tab_tip">{{TipEnterSave}}</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
                 <select id="platform_rombase"></select>
                 &nbsp;
                 <select id="menu_rombase">
-                  <option id="">请选择目录</option>
+                  <option id="">{{SelectMenu}}</option>
                 </select>
               </div>
               <div class="titlebar_right"></div>
@@ -165,14 +165,14 @@
               <table id="romlist_rombase">
                 <thead>
                   <tr>
-                    <th>文件名</th>
-                    <th>游戏名称</th>
-                    <th>年份</th>
-                    <th>类型</th>
-                    <th>发行商</th>
-                    <th>地区</th>
-                    <th>汉化组</th>
-                    <th>版本</th>
+                    <th>{{BaseRomName}}</th>
+                    <th>{{BaseName}}</th>
+                    <th>{{BaseYear}}</th>
+                    <th>{{BaseType}}</th>
+                    <th>{{BasePublisher}}</th>
+                    <th>{{BaseCountry}}</th>
+                    <th>{{BaseTranslate}}</th>
+                    <th>{{BaseVersion}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -183,14 +183,14 @@
         </section>
         <!-- 媒体管理 -->
         <section id="second">
-          <div class="tab_tip">单击手动输入路径，三击选择文件</div>
+          <div class="tab_tip">{{TipInputPath}}</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
                 <select id="platform_media"></select>
                 &nbsp;
                 <select id="menu_media">
-                  <option>请选择目录</option>
+                  <option>{{SelectMenu}}</option>
                 </select>
               </div>
               <div class="titlebar_right"></div>
@@ -199,20 +199,20 @@
               <table id="romlist_media">
                 <thead>
                   <tr>
-                    <th>文件名</th>
-                    <th>游戏名称</th>
-                    <th>展示图</th>
-                    <th>插画</th>
-                    <th>标题图</th>
-                    <th>海报</th>
-                    <th>包装盒</th>
-                    <th>卡带图</th>
-                    <th>图标</th>
-                    <th>动画</th>
-                    <th>背景图</th>
-                    <th>游戏视频</th>
-                    <th>文档</th>
-                    <th>攻略</th>
+                    <th>{{BaseRomName}}</th>
+                    <th>{{BaseName}}</th>
+                    <th>{{Thumb}}</th>
+                    <th>{{Snap}}</th>
+                    <th>{{TitlePic}}</th>
+                    <th>{{Poster}}</th>
+                    <th>{{Packing}}</th>
+                    <th>{{CassettePic}}</th>
+                    <th>{{IconPic}}</th>
+                    <th>{{GifPic}}</th>
+                    <th>{{BackgroundPic}}</th>
+                    <th>{{Video}}</th>
+                    <th>{{Doc}}</th>
+                    <th>{{SideTabStrategy}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -229,33 +229,33 @@
                 <select id="platform_sim"></select>
                 &nbsp;
                 <select id="menu_sim">
-                  <option id="">请选择目录</option>
+                  <option id="">{{SelectMenu}}</option>
                 </select>
               </div>
               <div class="titlebar_right">
                 <select id="select_sim">
-                  <option>选择模拟器</option>
+                  <option>{{SelectSimulator}}</option>
                 </select>
                 <select id="select_unzip">
-                  <option value="">解压后运行</option>
-                  <option value="0">否</option>
-                  <option value="1">是</option>
+                  <option value="">{{UnzipRun}}</option>
+                  <option value="0">{{No}}</option>
+                  <option value="1">{{Yes}}</option>
                 </select>
-                <button id="select_lua">选择Lua脚本</button>
+                <button id="select_lua">{{SelectLua}}</button>
               </div>
             </div>
             <div class="content">
               <table id="romlist_sim" class="check_table">
                 <thead>
                   <tr>
-                    <th>选择</th>
-                    <th>文件名</th>
-                    <th>游戏名称</th>
-                    <th>模拟器名称</th>
-                    <th>启动参数</th>
-                    <th>解压后运行</th>
-                    <th>运行文件名</th>
-                    <th>Lua脚本</th>
+                    <th>{{Select}}</th>
+                    <th>{{BaseRomName}}</th>
+                    <th>{{BaseName}}</th>
+                    <th>{{SimulatorName}}</th>
+                    <th>{{BootParams}}</th>
+                    <th>{{UnzipRun}}</th>
+                    <th>{{RomCmdFile}}</th>
+                    <th>{{Lua}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -266,35 +266,34 @@
         </section>
         <!-- 文件管理 -->
         <section id="fourth">
-          <div class="tab_tip">这里是文字介绍4</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
                 <select id="platform_file"></select>
                 &nbsp;
                 <select id="menu_file">
-                  <option>请选择目录</option>
+                  <option>{{SelectMenu}}</option>
                 </select>
               </div>
               <div class="titlebar_right">
                 <select id="select_hide">
-                  <option value="">隐藏显示</option>
-                  <option value="1">隐藏</option>
-                  <option value="0">显示</option>
+                  <option value="">{{ShowHide}}</option>
+                  <option value="1">{{Hide}}</option>
+                  <option value="0">{{Show}}</option>
                 </select>
-                <button id="select_move">移动</button>
-                <button id="select_delete">删除</button>
+                <button id="select_move">{{Move}}</button>
+                <button id="select_delete">{{Delete}}</button>
               </div>
             </div>
             <div class="content">
               <table class="check_table" id="romlist_file">
                 <thead>
                   <tr>
-                    <th>选择</th>
-                    <th>文件名</th>
-                    <th>游戏名称</th>
-                    <th>目录</th>
-                    <th>隐藏</th>
+                    <th>{{Select}}</th>
+                    <th>{{BaseRomName}}</th>
+                    <th>{{BaseName}}</th>
+                    <th>{{FilterMenu}}</th>
+                    <th>{{Hide}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -306,7 +305,7 @@
         <!-- rom去重 -->
         <section id="fifth">
           <div class="tab_tip">
-            rom去重是根据文件大小进行对比，如果发现两个文件大小一致，则认为是重复。会将两个文件同时列出。
+            {{TipRomRemoveDuplicate}}
           </div>
           <div class="wrapper">
             <div class="titlebar">
@@ -314,20 +313,20 @@
                 <select id="platform_repeat"></select>
               </div>
               <div class="titlebar_right">
-                <button id="select_check_repeat">检测重复</button>
-                <button id="select_move_repeat">移动</button>
-                <button id="select_delete_repeat">删除</button>
+                <button id="select_check_repeat">{{CheckDuplicate}}</button>
+                <button id="select_move_repeat">{{Move}}</button>
+                <button id="select_delete_repeat">{{Delete}}</button>
               </div>
             </div>
             <div class="content">
               <table class="check_table" id="romlist_repeat">
                 <thead>
                   <tr>
-                    <th>选择</th>
-                    <th>游戏名称</th>
-                    <th>文件路径</th>
-                    <th>文件大小</th>
-                    <th>功能</th>
+                    <th>{{Select}}</th>
+                    <th>{{BaseName}}</th>
+                    <th>{{FilePath}}</th>
+                    <th>{{FileSize}}</th>
+                    <th>{{Function}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -337,25 +336,25 @@
         </section>
         <!-- 无效资源清理 -->
         <section id="sixth">
-          <div class="tab_tip">无效资源是没有和游戏相关联的无效资源文件。</div>
+          <div class="tab_tip">{{TipClearZombie}}</div>
           <div class="wrapper">
             <div class="titlebar">
               <div class="titlebar_left">
                 <select id="platform_zombie"></select>
               </div>
               <div class="titlebar_right">
-                <button id="select_check_zombie">检测无效资源</button>
-                <button id="select_move_zombie">移动</button>
-                <button id="select_delete_zombie">删除</button>
+                <button id="select_check_zombie">{{CheckZombie}}</button>
+                <button id="select_move_zombie">{{Move}}</button>
+                <button id="select_delete_zombie">{{Delete}}</button>
               </div>
             </div>
             <div class="content">
               <table class="check_table" id="romlist_zombie">
                 <thead>
                   <tr>
-                    <th>选择</th>
-                    <th>类型</th>
-                    <th>文件路径</th>
+                    <th>{{Select}}</th>
+                    <th>{{BaseType}}</th>
+                    <th>{{FilePath}}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

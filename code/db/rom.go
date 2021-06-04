@@ -376,9 +376,27 @@ func (m *Rom) UpdateRomPath() error {
 	return result.Error
 }
 
+//更新子游戏pname
+func (m *Rom) UpdateSubRomPname(oldName string,newName string) error {
+	result := getDb().Table(m.TableName()).Where("pname=?", oldName).Update("pname", newName)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //删除一个rom
 func (m *Rom) DeleteById(id uint64) error {
 	result := getDb().Where("id=? ", id).Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+//删除一个rom
+func (m *Rom) DeleteSubRomd(pname string) error {
+	result := getDb().Where("pname=? ", pname).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -499,7 +517,7 @@ func (sim *Rom) GetFilter(platform uint32, t string) ([]string, error) {
 	return create, result.Error
 }
 
-//更新喜爱状态
+//更新游戏资料
 func (m *Rom) UpdateRomBase(id uint64) error {
 
 	create := map[string]string{
@@ -512,11 +530,6 @@ func (m *Rom) UpdateRomBase(id uint64) error {
 		"name":           m.Name,
 		"pinyin":         utils.TextToPinyin(m.Name),
 	}
-
-	/*if m.Name != "" {
-		create["name"] = m.Name
-		create["pinyin"] = utils.TextToPinyin(m.Name)
-	}*/
 
 	result := getDb().Table(m.TableName()).Where("id=?", id).Updates(create)
 	if result.Error != nil {

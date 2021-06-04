@@ -116,4 +116,48 @@ func CacheController() {
 
 		return sciter.NullValue()
 	})
+
+	//清理csv文件
+	utils.Window.DefineFunction("ClearRombase", func(args ...*sciter.Value) *sciter.Value {
+
+		go func() {
+			PlatformList := config.Cfg.Platform
+			total := 0 //总清理数
+			for platform, _ := range PlatformList {
+				nameList := []string{}
+				count := 0
+				romList, _ := (&db.Rom{}).GetByPlatform(platform)
+				for _, v := range romList {
+					nameList = append(nameList,utils.GetFileName(v.RomPath))
+				}
+				//读取csv文件数据
+				romBase, _ := modules.GetRomBase(platform)
+
+				if romBase == nil{
+					continue
+				}
+
+				for a, _ := range romBase {
+					//如果rom列表中无此游戏，则清理
+					if !utils.InSliceString(a, nameList) {
+						delete(romBase, a)
+						count ++
+					}
+
+				}
+				if count > 0 {
+					_ = modules.CoverRomBaseFile(platform, romBase)
+					total += count
+				}
+			}
+
+			//数据更新完成后，页面回调，更新页面DOM
+			if _, err := utils.Window.Call("CB_clearRombase", sciter.NewValue(utils.ToString(total))); err != nil {
+				fmt.Print(err)
+			}
+		}();
+		return sciter.NullValue()
+
+	})
+
 }

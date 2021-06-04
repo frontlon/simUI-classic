@@ -19,8 +19,6 @@ type RomBase struct {
 	Version   string // 版本
 }
 
-var Baseinfo map[uint32]map[string]*RomBase
-
 //读取详情文件
 func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 
@@ -28,23 +26,21 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 		return map[string]*RomBase{}, nil
 	}
 
-	if Baseinfo[platform] != nil {
-		return Baseinfo[platform], nil
+	if !utils.FileExists(config.Cfg.Platform[platform].Rombase) {
+		return map[string]*RomBase{}, nil
 	}
-
-	Baseinfo = map[uint32]map[string]*RomBase{}
 
 	des := map[string]*RomBase{}
 	records, err := utils.ReadCsv(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
-		return nil, nil //直接返回空，不返回错误
+		return map[string]*RomBase{}, nil //直接返回空，不返回错误
 	}
 
 	isUtf8 := false
 	if len(records) > 0 {
 		isUtf8 = utils.IsUTF8(records[0][0])
 	} else {
-		return Baseinfo[platform], nil
+		return nil, nil
 	}
 
 	for k, r := range records {
@@ -53,7 +49,7 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 			continue
 		}
 
-		create := []string{"", "", "", "", "", "", "",""}
+		create := []string{"", "", "", "", "", "", "", ""}
 
 		for a, b := range r {
 			create[a] = b
@@ -82,7 +78,6 @@ func GetRomBase(platform uint32) (map[string]*RomBase, error) {
 		}
 	}
 
-	Baseinfo[platform] = des
 	return des, nil
 }
 
@@ -115,6 +110,46 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	writer.Write(getCsvTitle())
 
 	for _, v := range info {
+
+		writer.Write([]string{
+			strings.Trim(v.RomName, " "),
+			strings.Trim(v.Name, " "),
+			strings.Trim(v.Type, " "),
+			strings.Trim(v.Year, " "),
+			strings.Trim(v.Publisher, " "),
+			strings.Trim(v.Country, " "),
+			strings.Trim(v.Translate, " "),
+			strings.Trim(v.Version, " "),
+		})
+
+	}
+	writer.Flush() // 此时才会将缓冲区数据写入
+
+	return nil
+}
+
+//覆盖csv文件
+func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
+
+	if config.Cfg.Platform[platform].Rombase == "" {
+		return nil
+	}
+
+	//转换为切片
+	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
+
+	writer := csv.NewWriter(f)
+
+	//表头
+	writer.Write(getCsvTitle())
+
+	for _, v := range newData {
 
 		writer.Write([]string{
 			strings.Trim(v.RomName, " "),

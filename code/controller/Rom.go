@@ -62,7 +62,7 @@ func RomController() {
 
 	//读取游戏列表
 	utils.Window.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
-		showHide := uint8(utils.ToInt(args[0].String()))        //平台
+		showHide := uint8(utils.ToInt(args[0].String()))         //平台
 		platform := uint32(utils.ToInt(args[1].String()))        //平台
 		catname := strings.Trim(args[2].String(), " ")           //分类
 		keyword := strings.Trim(args[3].String(), " ")           //关键字
@@ -97,10 +97,10 @@ func RomController() {
 		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(showHide,page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+			newlist, _ = (&db.Rom{}).Get(showHide, page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		} else {
 			//按拼音查询
-			newlist, _ = (&db.Rom{}).GetByPinyin(showHide,page, platform, catname, num)
+			newlist, _ = (&db.Rom{}).GetByPinyin(showHide, page, platform, catname, num)
 		}
 
 		jsonRom, _ := json.Marshal(newlist)
@@ -134,7 +134,7 @@ func RomController() {
 		baseCountry := args[7].String()
 		baseTranslate := args[8].String()
 		baseVersion := args[9].String()
-		count, _ := (&db.Rom{}).Count(showHide,platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+		count, _ := (&db.Rom{}).Count(showHide, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -226,7 +226,7 @@ func RomController() {
 		ishide := uint8(utils.ToInt(args[1].String()))
 
 		//更新数据
-		if err := (&db.Rom{}).UpdateHide(romIdsStr,ishide); err != nil {
+		if err := (&db.Rom{}).UpdateHide(romIdsStr, ishide); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -291,7 +291,7 @@ func RomController() {
 		data := args[0].String()
 
 		d := make(map[string]string)
-		json.Unmarshal([]byte(data), &d)
+		_ = json.Unmarshal([]byte(data), &d)
 
 		rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
 		romName := utils.GetFileName(rom.RomPath)
@@ -331,6 +331,14 @@ func RomController() {
 		if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
+		}
+
+		//更新子游戏pname
+		if rom.Name != name {
+			if err := dbRom.UpdateSubRomPname(rom.Name, name); err != nil {
+				utils.WriteLog(err.Error())
+				return utils.ErrorMsg(err.Error())
+			}
 		}
 
 		jsonstr, _ := json.Marshal(&dbRom)
@@ -379,7 +387,15 @@ func RomController() {
 		}
 
 		//删除数据库缓存
+		info, err := (&db.Rom{}).GetById(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+		}
 		err = (&db.Rom{}).DeleteById(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+		}
+		err = (&db.Rom{}).DeleteSubRomd(info.Name)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}

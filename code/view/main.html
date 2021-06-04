@@ -251,7 +251,8 @@
     #second_thumbs img{display:block;max-width:300px;width:100%;margin:0 auto}
     #third_strategy{color:color(desc-content-text-color);line-height:1.5em}
     #third_strategy p{line-height:2em;}
-    #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle}
+    #third_strategy img{display:block;max-width:300px;width:100%;margin:0 auto}
+    #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle;display:inline}
     #third_strategy pre{color:color(desc-quote-text-color);margin-left:20dip;padding-left:10dip;border-left:2px solid color(desc-quote-border-color);}
     #third_strategy font{margin:10dip 0;display:inline-block;color:color(desc-title-text-color)}
 
@@ -360,8 +361,9 @@
             <menu>
                 <li id="create_cache" opt="platform"><i.cache></i><span>{{CreateCachePlatform}}</span></li>
                 <li id="create_cache" opt="all"><i.cache></i><span>{{CreateCacheAll}}</span></li>
-                <li id="create_cache" opt="res"><i.cache></i><span>{{ClearResCache}}</span></li>
                 <li id="create_cache" opt="zip"><i.cache></i><span>{{ZipResImages}}</span></li>
+                <li id="clear_rombase" opt="res"><i.cache></i><span>{{ClearRombase}}</span></li>
+
             </menu>
         </button><button type="menu" title="{{Config}}"><i.config.minsize></i>
             <menu>

@@ -389,21 +389,32 @@ func DeleteRomAndRes(id uint64) error {
 
 	//删除rom文件
 	go func() {
-		romFiles, _ := utils.ScanDirByKeyword(platform.RomPath, fname)
+
+		//删除主游戏
+		_ = utils.FileDelete(platform.RomPath + config.Cfg.Separator + info.RomPath)
+
+		//删除子游戏
+		romFiles, _ := utils.ScanDirByKeyword(platform.RomPath, fname+"__")
 		for _, f := range romFiles {
-			utils.FileDelete(f)
+			_ = utils.FileDelete(f)
 		}
 	}()
 
 	//删除资源文件
-	for _, path := range config.GetResPath(platform.Id) {
-		go func() {
-			resFiles, _ := utils.ScanDirByKeyword(path, fname)
+	exts := config.GetResExts()
+	go func() {
+		for t, path := range config.GetResPath(platform.Id) {
+
+			for _, v := range exts[t] {
+				_ = utils.FileDelete(path + config.Cfg.Separator + fname + v)
+			}
+
+			resFiles, _ := utils.ScanDirByKeyword(path, fname+"__")
 			for _, f := range resFiles {
 				utils.FileDelete(f)
 			}
-		}()
-	}
+		}
+	}()
 
 	return nil
 }
