@@ -159,11 +159,12 @@
     .romlist > li div:nth-child(6){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romlist > li div:nth-child(8){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
-    .romth div{color:#fff!important;font-weight:bold;}
+    .romth div{color:color(rom-list-title-text-color)!important;font-weight:bold;}
     .rom_star {background: yellow;position:absolute;bottom:-20px; right:-30px;width:50px; height:10px; transform:rotate(-45deg);transform-origin:top left;-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform-origin:top left;-webkit-transform-origin:top left;}
 
     /* 右侧边栏 */
     #right_title_ pic{text-align:center;margin-bottom:10dip}
+    #right h1{font-size:20dip;color:color(sidebar-name-text-color);display:block;text-shadow: 1px 1px 2px color(sidebar-name-text-shadow);}
     #right h2{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color);font-weight:normal;font-size:11dip;line-height:19dip;margin:0}
     #right .run{padding:4dip;line-height:1.5em;height:auto;width:*;display:block;background:color(run-button-background-color);color:color(run-button-text-color);text-align:center;margin-bottom:9dip;overflow:hidden;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     #right .run:hover{color:color(run-button-hover-text-color);background:color(run-button-hover-background-color);}
@@ -215,7 +216,6 @@
 
     /* rom右键菜单 */
     #romcontext{font-size: 10dip;width:auto;max-height:max-content;overflow:auto}
-    #romcontext caption{background: #1b2128;color:#FFF;padding:5dip 16dip 5dip 9dip;font-weight: bold}
     #romcontext  li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
     #romcontext .file{behavior: shell-icon;foreground-repeat:no-repeat;foreground-position:4dip 50%;}
     #romcontext .folder{background-image:url(this://app/images/fileico_folder.png);}
@@ -286,8 +286,8 @@
     .file-drop-zone video{size:*;foreground-repeat:no-repeat;foreground-position:top center}
     .file-drop-zone-empty{width:*;min-height:width(75%);line-height:1em;border: 1px dashed;text-align:center;font-size:12dip;vertical-align:middle;color: gray;}
 
-    #search_box{background:#666;border-radius:5px;box-shadow:0 0 20dip #222;position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:none}
-    #search_box input{color:#FFF;display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
+    #search_box{background:color(search-box-background-color);border-radius:5px;box-shadow:0 0 20dip color(search-box-box-shadow);position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:block}
+    #search_box input{color:color(search-box-text-color);display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 
     #right_video_wrapper{size:*;}
     #right_video_wrapper video{max-width:320dip;max-height:320dip;;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
@@ -301,22 +301,16 @@
     .widthMode{height:*}
     .widthMode #right_first h2{display:none;}
     .right_bg{display:none}
-    .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip #575757;}
-
-    #right h1{font-size:20dip;color:#FFF;display:block;text-shadow: 1px 1px 2px #000;}
+    .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color);}
     .widthMode .margin_wrapper{margin-top:-50dip;}
-
     .widthMode .rotate_wrapper{height:80dip;}
     .widthMode .stack{position:absolute;top:-120dip;width:200dip;right:40dip;}
     .widthMode .stack>img{width:auto;height:180dip;}
-
     .widthMode .sim_select{display:block;width:*;}
     .widthMode .buttons{display:block;width:*;margin-left:10dip}
     .widthMode .flow_wrapper{flow:horizontal-flow;width:*}
-
     .widthMode #sim_select li{padding-top:3dip;padding-bottom:3dip;}
     .widthMode #right_rombase{width:*;margin-right:10dip;}
-
     .widthMode #doc{width:*;}
 
 

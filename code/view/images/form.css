@@ -5,10 +5,10 @@
 th {
   text-align: left;
   padding: 16dip 0 0 0;
-  color: #ccc;
+  color: color(general-text-color);
 }
 td {
-  color: #ccc;
+  color: color(general-text-color);
   padding: 3dip 0;
   line-height: 28dip;
   text-align: left;

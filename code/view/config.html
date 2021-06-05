@@ -13,15 +13,15 @@
     .frame_right input[type="text"]{width:*}
    
     .platform_control{margin:0 0 0 10dip;}
-    .platform_control button{height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #666;background:none;width:*;margin:0}
-    .platform_control button:hover{background:#eee;cursor: pointer}
-    .platform_control button:active{background:#ddd}
-    .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #666;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
+    .platform_control button{height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid color(config-platform-button-border-color);background:none;width:*;margin:0}
+    .platform_control button:hover{background:color(config-platform-button-hover-background-color);cursor: pointer}
+    .platform_control button:active{background:color(config-platform-button-active-background-color)}
+    .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid color(config-platform-button-border-color);border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
 
-    .platform_list{width:*;height:*;display:block;border:1dip solid #666;padding:0;margin:0 0 0 10dip}
-    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip;color:#999}
-    .platform_list li:current{background:#3399ff;color:#FFF}
-    .platform_list li:drag-source { background-color:#eee;}
+    .platform_list{width:*;height:*;display:block;border:1dip solid color(config-platform-border-color);padding:0;margin:0 0 0 10dip}
+    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip;color:color(config-platform-text-color)}
+    .platform_list li:current{background:color(config-platform-current-background-color);color:color(config-platform-current-text-color)}
+    .platform_list li:drag-source { background-color:color(config-platform-background-color);}
 
     #table_default td:first-child{width:120dip;}
     .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;}

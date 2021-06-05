@@ -281,7 +281,7 @@ func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string
 func (*Rom) GetByPlatform(platform uint32) ([]*Rom, error) {
 
 	volist := []*Rom{}
-	result := getDb().Select("*").Where("platform = ?",platform).Order("pinyin ASC").Find(&volist)
+	result := getDb().Select("*").Where("platform = ?", platform).Order("pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -293,7 +293,7 @@ func (*Rom) GetByPlatform(platform uint32) ([]*Rom, error) {
 func (*Rom) GetMasterRomByPlatform(platform uint32) ([]*Rom, error) {
 
 	volist := []*Rom{}
-	result := getDb().Select("*").Where("platform = ? AND pname = ''",platform).Order("pinyin ASC").Find(&volist)
+	result := getDb().Select("*").Where("platform = ? AND pname = ''", platform).Order("pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -377,7 +377,7 @@ func (m *Rom) UpdateRomPath() error {
 }
 
 //更新子游戏pname
-func (m *Rom) UpdateSubRomPname(oldName string,newName string) error {
+func (m *Rom) UpdateSubRomPname(oldName string, newName string) error {
 	result := getDb().Table(m.TableName()).Where("pname=?", oldName).Update("pname", newName)
 	if result.Error != nil {
 		fmt.Println(result.Error)

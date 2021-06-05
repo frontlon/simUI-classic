@@ -127,4 +127,91 @@ html:theme(red) {
     var(desc-title-text-color) : #FFF;
     var(desc-quote-text-color) : #f8dae3;
     var(desc-quote-border-color) : #451826;
+
+    /* 表单按钮 */
+    var(form-bottom-hr-color) : #233041;
+    var(button-border-color) : #592130;
+    var(button-background-color) : #4c1c29;
+    var(button-text-color) : #ccc;
+    var(button-disabled-background-color) : #4c1c29;
+    var(button-disabled-text-color) : #ccc;
+    var(button-disabled-border-color) : #592130;
+    var(button-hover-border-color) : #777;
+    var(button-active-background-color) : #4c1c29;
+    var(button-ok-background-color) : #ff5e66;
+    var(button-ok-text-color) : #fff;
+    var(button-cancel-background-color) : #4c1c29;
+    var(button-cancel-text-color) : #999;
+
+    /* 表单输入框 */
+    var(input-background-color) : #4c1c29;
+    var(input-text-color) : #ccc;
+    var(input-border-color) : #592130;
+    var(input-hover-border-color) : #662638;
+    var(input-focus-background-color) : #662638;
+    var(input-disabled-border-color) : #4c1c29;
+    var(input-disabled-text-color) : #1c2838;
+
+    /* 表单下拉框 */
+    var(select-border-color) : #592130;
+    var(select-background-color) : #4c1c29;
+    var(select-text-color) : #fff;
+    var(select-button-fill-color) : #999;
+    var(select-button-background-color) : #4c1c29;
+    var(select-button-hover-background-color) : #4c1c29;
+    var(select-popup-text-color) : #fff;
+    var(select-popup-background-color) : #999;
+    var(select-popup-border-color) : #592130;
+    var(select-popup-option-background-color) : #4c1c29;
+    var(select-popup-option-text-color) : #fff;
+    var(select-popup-option-hover-background-color) : #592130;
+    var(select-caption-option-text-color) : #fff;
+    var(select-disabled-border-color) : #592130;
+    var(select-disabled-caption-text-color) : #592130;
+    var(select-disabled-caption-background-color) : #4c1c29;
+
+    /* 表单tab */
+    var(tabs-strip-border-color) : #592130;
+    var(tabs-strip-label-text-color) : #ff5e66;
+    var(tabs-strip-label-current-text-color) : #fff;
+
+    /* 关于页面 */
+    var(about-background-color) : #3f1722;
+    var(about-thumb-line-color) : #1366cc;
+    var(about-text-color) : #999;
+    var(about-link-color) : #1366cc;
+
+    /* 通用字体颜色 */
+    var(general-text-color) : #fff;
+
+    /* 搜索栏 */
+    var(search-box-background-color) : #ff5e66;
+    var(search-box-box-shadow) : #222;
+    var(search-box-text-color) : #fff;
+
+    /* 侧边栏游戏名称 */
+    var(sidebar-name-text-color):#fff;
+    var(sidebar-name-text-shadow):#000;
+
+    /* rom管理页面 */
+    var(manager-table-border-color) :#4b1c29;
+    var(manager-tr-checked-background-color) :#4b1c29;
+    var(manager-tr-hover-background-color) :#4b1c29;
+    var(manager-input-nosave-text-color) :#fff;
+    var(manager-pages-text-color) :#999;
+    var(manager-pages-background-color) :#4b1c29;
+    var(manager-pages-border-color) :#2d415a;
+    var(manager-pages-hover-background-color) :#2d415a;
+    var(manager-tip-text-color) :#db859d;
+    var(manager-tip-background-color) :#4b1c29;
+
+    /* 设置页面平台select */
+    var(config-platform-background-color) :#eee;
+    var(config-platform-border-color) :#592130;
+    var(config-platform-text-color) :#999;
+    var(config-platform-current-background-color) :#3399ff;
+    var(config-platform-current-text-color) :#FFF;
+    var(config-platform-button-border-color) :#592130;
+    var(config-platform-button-hover-background-color) :#4a1b28;
+    var(config-platform-button-active-background-color) :#4a1b28;
 }

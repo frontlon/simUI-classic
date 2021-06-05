@@ -52,7 +52,7 @@
       table th {
         font-size: 12dip;
         padding: 0;
-        border: 1px solid #333;
+        border: 1px solid color(manager-table-border-color);
         padding: 5dip;
         width: *;
         text-align: left;
@@ -61,16 +61,16 @@
       table td {
         font-size: 12dip;
         padding: 0;
-        border: 1px solid #333;
+        border: 1px solid color(manager-table-border-color);
         padding: 0 5dip;
         width: *;
         text-align: left;
       }
       table tr.checked {
-        background: #444;
+        background: color(manager-tr-checked-background-color);
       }
       table tr:hover {
-        background: #444;
+        background: color(manager-tr-hover-background-color);
       }
       table th:nth-child(1) {
         width: 30dip;
@@ -89,7 +89,7 @@
         background: none;
       }
       table .nosave {
-        color: #fff;
+        color: color(manager-input-nosave-text-color);
       }
 
       .openfile {
@@ -104,14 +104,14 @@
         display: inline-block;
         size: 20dip;
         line-height: 20dip;
-        border: 1px solid #555;
-        background: #444;
+        border: 1px solid color(manager-pages-border-color);
+        background: color(manager-pages-background-color);
         text-align: center;
-        color: #999;
+        color: color(manager-pages-text-color);
         margin: 0 2dip;
       }
       .pages li:hover {
-        background: #555;
+        background: color(manager-pages-hover-background-color);
       }
       .pages li:current {
         background: none;
@@ -125,8 +125,8 @@
         display: block;
       }
       .tab_tip {
-        background: #333;
-        color: #999;
+        background: color(manager-tip-background-color);
+        color: color(manager-tip-text-color);
         line-height: 20dip;
         height: 20dip;
         font-size: 12dip;
