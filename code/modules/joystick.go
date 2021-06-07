@@ -138,8 +138,17 @@ func GetJoystickButtons(button uint32) int {
 	case 32:
 		btn = 6 //RB
 		break
+	case 64:
+		btn = 7 //back
+		break
+	case 128:
+		btn = 8 //start
+		break
+	case 192:
+		btn = 9 //start + back
+		break
 	default:
-		btn = 0
+		btn = int(button)
 	}
 	return btn
 }
