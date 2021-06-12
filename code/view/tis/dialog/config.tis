@@ -241,7 +241,6 @@ function platformSubmit(evt){
     $(#platform_list).select("li:current").html = data.name;
     //更新平台信息
     var result = mainView.UpdatePlatform(JSON.stringify(data));
-
     mainView.CreatePlatform(data.id); //创建资源目录及资料文件
 
     if( result.toString() == "1"){
@@ -339,7 +338,7 @@ function openPlatformFolder(evt) {
         url = URL.toPath(url);
         url = url.split("\/").join(CONF.Separator.toString());
         url = url.split(CONF.RootPath.toString()).join("");
-
+   
         //资料文件名
         var rombase = $(#platform_name).value == "" ? "rombase" : $(#platform_name).value;
 

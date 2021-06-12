@@ -398,6 +398,7 @@ func getShortcut() ([]*db.Shortcut, error) {
 
 //读取全部资源目录
 func GetResPath(platformId uint32) map[string]string {
+
 	platform := Cfg.Platform[platformId]
 	res := map[string]string{}
 	res["thumb"] = platform.ThumbPath

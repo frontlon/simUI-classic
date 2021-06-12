@@ -95,7 +95,7 @@ function openSidebar(obj){
         $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
     }else{
         $(#center).style["background-image"] = "none";
-        $(#right_bg).style["background-image"] = "";
+        $(#right_bg).style["background-image"] = "none";
 
     }
 
@@ -664,7 +664,7 @@ function sidebarSize(){
     //界面宽窄模式
     var right = $(#right);
     var has = right.attributes.hasClass("widthMode")
-    if(width >= 600){
+    if(width >= 500){
         if(has == false){
             $(#right).attributes.addClass("widthMode");
         }

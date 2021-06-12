@@ -156,6 +156,10 @@ func PlatformController() {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
+
+		//更新缓存
+		_ = config.InitConf()
+
 		return sciter.NewValue("1")
 	})
 

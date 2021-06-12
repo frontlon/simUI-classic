@@ -16,12 +16,16 @@ func CreatePlatform(id uint32) error {
 		return err
 	}
 
-	dirList := config.GetResPath(id)
+	//创建rom目录
+	if !utils.FolderExists(config.Cfg.Platform[id].RomPath) {
+		utils.CreateDir(config.Cfg.Platform[id].RomPath)
+	}
 
+	//创建资源目录
+	dirList := config.GetResPath(id)
 	for _, v := range dirList {
-		path := config.Cfg.RootPath + v
-		if !utils.FolderExists(path) {
-			utils.CreateDir(path)
+		if !utils.FolderExists(v) {
+			utils.CreateDir(v)
 		}
 	}
 

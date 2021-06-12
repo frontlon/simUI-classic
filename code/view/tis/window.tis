@@ -29,7 +29,7 @@ function Init(){
 
     if (CONF.Default.PanelSidebarWidth != ""){
         $(#right).style["width"] = CONF.Default.PanelSidebarWidth;
-        if (CONF.Default.PanelSidebarWidth >= 600){
+        if (CONF.Default.PanelSidebarWidth >= 500){
             $(#right).attributes.addClass("widthMode");
         }
     }

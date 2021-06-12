@@ -2,9 +2,6 @@ package modules
 
 import (
 	"github.com/simulatedsimian/joystick"
-	"os"
-	"os/exec"
-	"runtime"
 	"simUI/code/utils"
 	"sync"
 	"time"
@@ -68,15 +65,14 @@ func CheckJoystick() (status int8) {
 
 				if btn > 0 {
 
-					if btn == 1 || btn == 2 {
-						if current-btnLock[btn] < 500 {
-							break
-						}
+					if current-btnLock[btn] < 500 {
+						break
+					}
 
-					} else if btn == 3 || btn == 4 {
-						if current-btnLock[btn] < 500 {
-							break
-						}
+					//关闭游戏
+					if (btn == 9) {
+						_ = utils.KillGame()
+						return;
 					}
 
 					btnLock[btn] = current
@@ -151,23 +147,4 @@ func GetJoystickButtons(button uint32) int {
 		btn = int(button)
 	}
 	return btn
-}
-
-/**
- * 关闭simui
- **/
-func killSoft() error {
-
-	switch runtime.GOOS {
-	case "darwin":
-		c := exec.Command("kill", utils.ToString(os.Getpid()))
-		c.Start()
-	case "windows":
-		c := exec.Command("taskkill.exe", "/T", "/PID", utils.ToString(os.Getpid()))
-		c.Start()
-	case "linux":
-		c := exec.Command("kill", utils.ToString(os.Getpid()))
-		c.Start()
-	}
-	return nil
 }

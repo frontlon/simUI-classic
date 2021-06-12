@@ -1,14 +1,8 @@
 ﻿
 view.root.on("ready", function(){
 
-
-
-     //数据初始化
+    //数据初始化
     Init();
-
-
-    //openRomManager(this);
-
 
 
     /**
