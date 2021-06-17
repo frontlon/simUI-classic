@@ -36,7 +36,7 @@ function keyRomLeft(){
         //读取上一个节点
         var pri = $(#romlist li:current).priorNode;
         //如果没有上一个节点，直接返回
-        if(pri == undefined || pri.style["display"] == "none"){
+        if(pri == undefined || pri.style["display"] == "none" || pri.attributes.hasClass("romth")){
             return;
         }else{
             pri.state.current = true;
@@ -137,8 +137,10 @@ function keyRomDown(){
             nextDom = rootDom.select("li:last-child").state.current = true; //定位到最后一个
         }
     }
-    nextDom.state.current = true;
-    openSidebar(nextDom);
+    if(nextDom == undefined){
+        nextDom.state.current = true;
+        openSidebar(nextDom);
+    }
 }
 
 //计算出每行li的数量

@@ -4,15 +4,15 @@ function rotateAttached()
     stackdom = $(#stack);
     stackdom.shown = stackdom[0]; 
     for( var i = 1; i < stackdom.length; ++i )
-       stackdom[i].style#visibility = "hidden";
+       stackdom[i].style#display = "none";
 }
 function rotateTo( el, whenEnds = null )
     {
     const hiddenScale = 0.5; // hidden panel is twice less in size than normal view 
     var elementToHide = stackdom.shown;
     var elementToShow = stackdom.shown = el;
-    elementToHide.style#visibility = "visible";
-    elementToShow.style#visibility = "visible"; 
+    elementToHide.style#display = "block";
+    elementToShow.style#display = "block"; 
     assert  elementToHide.parent === elementToShow.parent; 
     var container = elementToHide.parent;
     var (w,h) = container.box(#dimension, #inner);
@@ -29,7 +29,7 @@ function rotateTo( el, whenEnds = null )
     {
       progress += 0.1;
       if( progress > 1.0 ) { 
-          elementToHide.style#visibility = "hidden"; 
+          elementToHide.style#display = "none"; 
           if(whenEnds) whenEnds();
           return false; /*stop animation*/ 
       }

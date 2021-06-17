@@ -67,9 +67,9 @@ function openSidebar(obj){
     favorite.attributes["rid"] = info.Id.toHtmlString();
     favorite.attributes["value"] = info.Star.toHtmlString();
     if(info.Star == "1"){
-        favorite.html = "<img src='this://app/images/fileico_fav_0.png' />";
-    }else{
         favorite.html = "<img src='this://app/images/fileico_fav_1.png' />";
+    }else{
+        favorite.html = "<img src='this://app/images/fileico_fav_0.png' />";
     }
 
     //生成隐藏按钮
@@ -77,9 +77,9 @@ function openSidebar(obj){
     hide.attributes["rid"] = info.Id.toHtmlString();
     hide.attributes["value"] = info.Hide.toHtmlString();
     if(info.Hide == "1"){
-        hide.html = "<img src='this://app/images/fileico_hide_0.png' />";
-    }else{
         hide.html = "<img src='this://app/images/fileico_hide_1.png' />";
+    }else{
+        hide.html = "<img src='this://app/images/fileico_hide_0.png' />";
     }
 
     //创建滑动图
@@ -94,9 +94,14 @@ function openSidebar(obj){
         centerDom.style["background-repeat"] = "no-repeat";
         $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
     }else{
-        $(#center).style["background-image"] = "none";
-        $(#right_bg).style["background-image"] = "none";
-
+        if(CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"] != undefined){
+            var themePath = CONF.RootPath + "theme/";
+            $(#center).style["background-image"] = "none";
+            $(#right_bg).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"])];
+        }else{
+            $(#center).style["background-image"] = "none";
+            $(#right_bg).style["background-image"] = "none";
+        }
     }
 
     //显示简介
@@ -154,15 +159,15 @@ function openSidebar(obj){
     //显示游戏基础信息
     var rombase = "";
 
-    if(info.BaseType != "")     {rombase += "<li>" + info.BaseType      + "</li>";}
-    if(info.BaseYear != "")     {rombase += "<li>" + info.BaseYear      + "</li>";}
-    if(info.BasePublisher != ""){rombase += "<li>" + info.BasePublisher + "</li>";}
-    if(info.BaseCountry != "")  {rombase += "<li>" + info.BaseCountry + "</li>";}
-    if(info.BaseTranslate != "")  {rombase += "<li>" + info.BaseTranslate + "</li>";}
-    if(info.BaseVersion != "")  {rombase += "<li>" + info.BaseVersion + "</li>";}
+    if(info.BaseType != "")     {rombase += "<li title='"+ CONF.Lang.BaseType +"'>" + info.BaseType      + "</li>";}
+    if(info.BaseYear != "")     {rombase += "<li title='"+ CONF.Lang.BaseYear +"'>" + info.BaseYear      + "</li>";}
+    if(info.BasePublisher != ""){rombase += "<li title='"+ CONF.Lang.BasePublisher +"'>" + info.BasePublisher + "</li>";}
+    if(info.BaseCountry != "")  {rombase += "<li title='"+ CONF.Lang.BaseCountry +"'>" + info.BaseCountry + "</li>";}
+    if(info.BaseTranslate != "")  {rombase += "<li title='"+ CONF.Lang.BaseTranslate +"'>" + info.BaseTranslate + "</li>";}
+    if(info.BaseVersion != "")  {rombase += "<li title='"+ CONF.Lang.BaseVersion +"'>" + info.BaseVersion + "</li>";}
 
-    rombase += "<li>" + info.RomPath + "</li>";
-    rombase += "<li>" + detailObj.RomFileSize + "</li>";
+    rombase += "<li title='"+ CONF.Lang.BaseRomName +"'>" + info.RomPath + "</li>";
+    rombase += "<li title='"+ CONF.Lang.FileSize +"'>" + detailObj.RomFileSize + "</li>";
 
     $(#right_rombase).html = rombase;
 
@@ -481,7 +486,7 @@ function SetRomCmd(evt){
 function thumbSlider(evt){
     var container = $(div#stack);
     var next = container.shown.next || container.first;
-    rotateTo(next, :: (this super).state.disabled = false);
+    rotateTo(next,false);
 }
 
 

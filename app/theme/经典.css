@@ -8,6 +8,9 @@ html:theme(light) {
     /* 侧边栏初始化图片 */
     var(sidebar-image) : sidebar.png;
 
+    /* 侧边栏默认背景图片 */
+    var(sidebar-background-image) : bg.png;
+
     /* 默认缩略图 */
     var(default-thumb-image) : light_thumbs.png;
 
@@ -123,6 +126,7 @@ html:theme(light) {
     var(rom-block-active-border-color) : #5b93d3;
 
     /* rom列表（列表） */
+    var(rom-list-title-text-color) : #333;
     var(rom-list-odd-text-color) : #666;
     var(rom-list-odd-background-color) : #d8dce3;
     var(rom-list-even-text-color) : #666;
