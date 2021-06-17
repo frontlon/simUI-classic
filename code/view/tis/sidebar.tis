@@ -278,9 +278,10 @@ function _createRotate(info){
 
     if(video != ""){
         var volume = VIDEO_VALUME == 0 ? "<i.sound_on></i>" :"<i.sound_off></i>";
+        var play = "<i.video_pause></i>";
         pics += "<div#right_video_wrapper>";
         pics += "<video#right_video src='"+video+"'/>";
-        pics += "<div.bar><button#video_play></button><button#right_volume>"+ volume +"</button></div>";
+        pics += "<div.bar><button#video_play>"+ play +"</button><button#right_volume>"+ volume +"</button></div>";
         pics += "</div>";
     }
 
@@ -562,6 +563,8 @@ function videoPlay(evt){
     var position = video.videoPosition();
     var duration = video.videoDuration();
     if (video.videoIsPlaying()){
+        VIDEO_PLAY_STATE = 0;
+        evt.html = "<i.video_play></i>";
         video.videoStop();
     }else{
         if (position == duration){
@@ -569,6 +572,9 @@ function videoPlay(evt){
         }else{
             video.videoPlay(position);
         }
+        VIDEO_PLAY_STATE = 1;
+        evt.html = "<i.video_pause></i>";
+
     }
 }
 

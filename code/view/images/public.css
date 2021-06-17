@@ -86,6 +86,12 @@ i.top {
 i.update {
   background-image: url(svg/update.svg);
 }
+i.video_play {
+  background-image: url(svg/play.svg);
+}
+i.video_pause {
+  background-image: url(svg/pause.svg);
+}
 
 #loading {
   box-shadow: 0 0 9dip #fff;

@@ -171,6 +171,7 @@
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .filedrop_ctl_btn{top:-28dip;right:0dip;position:absolute;}
     #right .doc{height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .button_wrapper{position:relative;z-index:2}
     .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
     .funbtn img{width:19dip;vertical-align:middle;margin:auto}
     .funbtn:hover{background:color(func-button-background-color);opacity:0.5}
@@ -180,7 +181,7 @@
     
     /* 基础信息表格 */
     #right_rombase{width:*;padding:0 10dip;margin:0;background:color(right-doc-background-color);}
-    #right_rombase li{margin:5dip 10dip 5dip 0 ;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;display:inline-block;border-radius:15dip}
+    #right_rombase li{margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;display:inline-block;border-radius:15dip}
     #right_rombase li:hover{opacity:0.8}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
     #right_rombase li:nth-child(2){background-color:color(right-play-info-background-color-2);}
@@ -199,7 +200,7 @@
     .stack>img{max-width:320dip;width:100%;margin:0 auto}
 
     /* 右侧边栏遮罩 */
-    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:2;text-align:center;vertical-align:middle;display:block;background-size:70%;}
+    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:3;text-align:center;vertical-align:middle;display:block;background-size:70%;}
     #mask img{width:60%;display:block;opacity: 0.3;}
     #mask p{font-size:16dip;display: block;opacity: 0.5;margin-bottom:50dip}
 

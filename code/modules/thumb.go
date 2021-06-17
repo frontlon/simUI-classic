@@ -87,7 +87,7 @@ func EditRomThumbs(typeName string, id uint64, picPath string) (string, error) {
 	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + utils.GetFileExt(picPath) //生成新文件的完整绝路路径地址
 	//复制文件
 	if err := utils.FileCopy(picPath, newFileName); err != nil {
-		return "", err
+		return "", errors.New(config.Cfg.Lang["ResFileNotFound"])
 	}
 
 	return newFileName, nil

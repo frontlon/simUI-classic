@@ -276,8 +276,6 @@ function managerCreateMedia(romjson){
         romData += "<td.openfile><input|text.gif value='"+ gif +"' /></td>";
         romData += "<td.openfile><input|text.background value='"+ background +"' /></td>";
         romData += "<td.openfile><input|text.video value='"+ video +"' /></td>";
-        romData += "<td.openfile><input|text.doc value='"+CONF.Lang.ClickEdit+"' readonly='readonly' /></td>";
-        romData += "<td.openfile><input|text.strategy value='"+CONF.Lang.ClickEdit+"' readonly='readonly' /></td>";
         romData += "</tr>"
     }
     $(#romlist_media tbody).html = romData;
@@ -331,7 +329,6 @@ function managerSetMedia(obj) {
         mainView.EditRomThumbs(opt,id,uri);
     }
     
-
 }
 
 /**

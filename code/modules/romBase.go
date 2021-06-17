@@ -2,6 +2,7 @@ package modules
 
 import (
 	"encoding/csv"
+	"errors"
 	"os"
 	"simUI/code/config"
 	"simUI/code/utils"
@@ -97,17 +98,19 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	}
 	//转换为切片
 	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
-	if err != nil {
-		panic(err)
-	}
 	defer f.Close()
+	if err != nil {
+		return errors.New(config.Cfg.Lang["TipRombaseWriteError"])
+	}
 
 	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
 
 	writer := csv.NewWriter(f)
 
 	//表头
-	writer.Write(getCsvTitle())
+	if err := writer.Write(getCsvTitle());err !=nil{
+		return err
+	}
 
 	for _, v := range info {
 
