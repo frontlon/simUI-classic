@@ -430,6 +430,6 @@ func GetResExts() map[string][]string {
 	res["background"] = PIC_EXTS
 	res["video"] = PIC_EXTS
 	res["doc"] = DOC_EXTS
-	res["strategy"] = RUN_EXTS
+	res["strategy"] = DOC_EXTS
 	return res
 }

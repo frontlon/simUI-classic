@@ -477,7 +477,7 @@ view.root.on("ready", function(){
             }
         }else if(evt.keyCode == Event.VK_F5){ //F5刷新缓存
             startLoading(); 
-            view.CreateRomCache();
+            view.CreateRomCache($(#platform_ul).select("li:current").attributes["platform"]);
         }else if(evt.keyCode == Event.VK_F1){ //F1启动帮助
             runHelp();
         }else if (evt.keyCode == Event.VK_SHIFT){ //shift

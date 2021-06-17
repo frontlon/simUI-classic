@@ -98,7 +98,15 @@ html:theme(light) {
     var(run-button-active-background-color) : #0866c6;
     
     /* 右侧边栏 游戏信息和简介 */
-    var(right-play-info-text-color) : #999;
+    var(right-play-info-text-color) : #fff;
+    var(right-play-info-background-color-1) : #cc3333;
+    var(right-play-info-background-color-2) : #669900;
+    var(right-play-info-background-color-3) : #ff6600;
+    var(right-play-info-background-color-4) : #006699;
+    var(right-play-info-background-color-5) : #999900;
+    var(right-play-info-background-color-6) : #cc0099;
+    var(right-play-info-background-color-7) : #009999;
+    var(right-play-info-background-color-8) : #990066;
     var(right-doc-border-color) : #eee;
     var(right-doc-text-color) : #444;
     var(right-doc-background-color) : #FFF;

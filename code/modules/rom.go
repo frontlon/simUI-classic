@@ -491,6 +491,7 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//如果位置一样则不用移动
+
 	if (oldFile == newFile) {
 		return nil
 	}

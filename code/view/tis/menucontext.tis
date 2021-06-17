@@ -30,7 +30,7 @@ function renameMenu(evt){
     if(newName == undefined){
         return;
     }
-    view.CreateRomCache(0);
+    view.CreateRomCache($(#platform_ul).select("li:current").attributes["platform"]);
 }
 
 
@@ -53,6 +53,6 @@ function deleteMenu(obj){
     }
 
     view.DeleteMenu($(#platform_ul).select("li:current").attributes["platform"],obj.attributes["opt"]); //删除实体文件
-    view.CreateRomCache(0);
+    view.CreateRomCache($(#platform_ul).select("li:current").attributes["platform"]);
 
 }

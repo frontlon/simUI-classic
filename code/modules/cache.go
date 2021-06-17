@@ -2,7 +2,6 @@ package modules
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -134,7 +133,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 			}
 			return nil
 		}); err != nil {
-		fmt.Println(err)
+		return nil,errors.New(config.Cfg.Lang["RomMenuCanNotBeExists"])
 	}
 
 	return romlist, nil

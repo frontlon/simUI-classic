@@ -2,7 +2,6 @@ package modules
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"simUI/code/config"
 	"simUI/code/db"
@@ -74,7 +73,6 @@ func AddMenu(platform uint32,name string) error {
 	if utils.FolderExists(folder){
 		return errors.New(config.Cfg.Lang["MenuExists"])
 	}
-	fmt.Println("folder:",folder)
 	if err := utils.CreateDir(folder);err != nil{
 		return err
 	}

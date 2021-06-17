@@ -213,19 +213,18 @@ function loadMenuList(menujson){
 
 //添加菜单
 function addMenu(evt){
-    
+    var platform = $(#platform_ul).select("li:current").attributes["platform"];
     var data = view.dialog({
         url:self.url(ROOTPATH + "menu_add.html"),
         width:self.toPixels(400dip),
         height:self.toPixels(200dip),
         parameters: {
-            platform:$(#platform_ul).select("li:current").attributes["platform"].toString();
+            platform:platform.toString();
         };
     });
-
 
     if(data == undefined){
         return;
     }
-    view.CreateRomCache(0);    
+    view.CreateRomCache(platform);    
 }
