@@ -19,7 +19,7 @@ function openFolder(evt){
 //移动rom
 function romMove(evt){
     var newPfId = view.dialog({
-        url:self.url(ROOTPATH + "move_rom.html"),
+        url:self.url(ROOTPATH + "rom_move.html"),
         width:self.toPixels(300dip),
         height:self.toPixels(565dip),
         parameters: {

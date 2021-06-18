@@ -429,32 +429,36 @@
       }
 
       /**
-       * 资源编辑
+       * 媒体资源编辑
       **/
 
 
-      //分页 - 资源编辑
+      //分页 - 媒体资源编辑
       event click $(#romlist_media .openfile){
        openFile(this);
+       var type = this.select("input").attributes["class"];
+       var id = this.parent.attributes["rid"];
+       var path = this.select("input").value;
+       mainView.EditRomThumbs(type,id,path);
       }
 
 
-      //切换平台 - 资源编辑
+      //切换平台 - 媒体资源编辑
       event change $(#platform_media){
         managerChangeMediaPlatform(this.value);
       }
 
-      //切换目录 - 资源编辑
+      //切换目录 - 媒体资源编辑
       event change $(#menu_media){
         managerChangeMediaMenu(this.value);
       }
 
-      //分页 - 资源编辑
+      //分页 - 媒体资源编辑
       event click $(#pages_media li){
         managerCreateMediaByPages(this);
       }
 
-      //编辑文本框 - 资源编辑
+      //编辑文本框 - 媒体资源编辑
       event keydown $(#romlist_media input[type=text]) (evt,input) {
         if(evt.keyCode != Event.VK_RETURN){
           return ;
