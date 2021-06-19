@@ -18,7 +18,7 @@ function openFolder(evt){
 
 //移动rom
 function romMove(evt){
-    var newPfId = view.dialog({
+    var response = view.dialog({
         url:self.url(ROOTPATH + "rom_move.html"),
         width:self.toPixels(300dip),
         height:self.toPixels(565dip),
@@ -27,9 +27,10 @@ function romMove(evt){
         };
     });
 
-    if(newPfId != undefined){
+    if(response != undefined){
+        var info = JSON.parse(response);
         view.CreateRomCache(ACTIVE_PLATFORM);
-        view.CreateRomCache(newPfId);
+        view.CreateRomCache(info.platform);
     }
 }
 

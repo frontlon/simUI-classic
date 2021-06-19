@@ -299,6 +299,9 @@ func GetRomMd5(par ...string) string {
  **/
 func UpdateFilterDB(platform uint32) {
 
+	//清空过滤器
+	_ = (&db.Filter{}).Truncate()
+
 	baseType, _ := (&db.Rom{}).GetFilter(platform, "base_type")
 	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
 	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")

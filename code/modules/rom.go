@@ -491,15 +491,31 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//如果位置一样则不用移动
-
 	if (oldFile == newFile) {
 		return nil
 	}
 
-	//移动文件
+	//移动主rom文件
 	if err := utils.FileMove(oldFile, newFile); err != nil {
 		return err
 	}
+
+	//移动子rom
+	subName := utils.GetFileName(romName)
+	romFiles, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].RomPath, subName+"__")
+
+	for _, f := range romFiles {
+		subRomName := utils.GetFileNameAndExt(f);
+		newSubFile := ""
+		if newFolder == "/" {
+			newSubFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + subRomName
+		} else {
+			newSubFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + newFolder + config.Cfg.Separator + subRomName
+		}
+		
+		if err := utils.FileMove(f, newSubFile); err != nil {}
+	}
+
 
 	//同平台下不用移动资源文件
 	if rom.Platform == newPlatform {

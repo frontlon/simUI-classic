@@ -67,39 +67,36 @@ func CacheController() {
 				}
 			}
 
-			//清空过滤器
-			_ = (&db.Filter{}).Truncate()
-			
 			//开始重建缓存
 			for platform, _ := range PlatformList {
 
-				//创建rom缓存
+				//第一步：创建rom缓存
 				romlist, err := modules.CreateRomData(platform)
 				if err != nil {
 					utils.WriteLog(err.Error())
 					return utils.ErrorMsg(err.Error())
 				}
 
-				//读取rom目录
+				//第二步：更新rom数据
+				if err := modules.UpdateRomDB(platform, romlist); err != nil {
+					utils.WriteLog(err.Error())
+					return utils.ErrorMsg(err.Error())
+				}
+
+				//第三步：读取rom目录
 				menu ,err := modules.CreateMenuList(platform)
 				if err != nil {
 					utils.WriteLog(err.Error())
 					return utils.ErrorMsg(err.Error())
 				}
 
-				//更新rom数据
-				if err := modules.UpdateRomDB(platform, romlist); err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-
-				//更新menu数据
+				//第四步：更新menu数据
 				if err := modules.UpdateMenuDB(platform, menu); err != nil {
 					utils.WriteLog(err.Error())
 					return utils.ErrorMsg(err.Error())
 				}
 
-				//更新filter数据
+				//第五步：更新filter数据
 				modules.UpdateFilterDB(platform);
 
 			}

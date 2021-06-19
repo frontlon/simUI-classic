@@ -86,7 +86,12 @@
             mainView.MoveRom(id,newPlatform,newMenu);
         }
 
-        view.close(newPlatform);
+        var response = {
+            "platform":newPlatform,
+            "menu":newMenu,
+        }
+
+        view.close(JSON.stringify(response));
     }
 
 

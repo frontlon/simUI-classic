@@ -332,11 +332,17 @@ function openConfig(evt){
 
 //弹出rom管理窗口
 function openRomManager(evt){
+    startLoading();
+    view.CreateRomCache();
+    endLoading();
     view.dialog({
         width:self.toPixels(1200dip),
         height:self.toPixels(700dip),
         url:self.url(ROOTPATH + "rom_manager.html")
     });
+    startLoading();
+    view.CreateRomCache();
+    endLoading();
 }
 
 
@@ -424,6 +430,21 @@ function filterClear(){
 
 //清理资料文件
 function clearRombase(){
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:CONF.Lang.TipClearZombieComfirm, 
+        caption:CONF.Lang.Confirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.ClearRombase},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if(result != yes){
+        return;
+    }
+
     $(body).state.disabled = true;
     $(#create).attributes.addClass("disabled");
     startLoading();
