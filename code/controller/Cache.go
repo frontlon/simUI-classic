@@ -67,6 +67,9 @@ func CacheController() {
 				}
 			}
 
+			//清空过滤器
+			_ = (&db.Filter{}).Truncate()
+
 			//开始重建缓存
 			for platform, _ := range PlatformList {
 
