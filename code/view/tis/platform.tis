@@ -76,7 +76,7 @@ function initPlatform(){
     for(var pf in CONF.PlatformList) {
         img = "";
         if(pf.Icon != ""){
-            img = "<div class='imgdiv'><img src='"+ pf.Icon +"' /></div>";
+            img = "<div class='imgdiv'><img src='"+  URL.fromPath(pf.Icon) +"' /></div>";
         }
         dd += "<li platform='"+ pf.Id +"'>" + img + "<p>" + pf.Name + "</p></li>";
     }

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var ROM_PAGE_NUM = 100 //每页加载rom数量
+var ROM_PAGE_NUM = 80 //每页加载rom数量
 var TIP_NUM = 100      //每tip个更新提示一次
 
 type Rom struct {

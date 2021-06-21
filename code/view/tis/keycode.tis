@@ -137,7 +137,7 @@ function keyRomDown(){
             nextDom = rootDom.select("li:last-child").state.current = true; //定位到最后一个
         }
     }
-    if(nextDom == undefined){
+    if(nextDom != undefined){
         nextDom.state.current = true;
         openSidebar(nextDom);
     }

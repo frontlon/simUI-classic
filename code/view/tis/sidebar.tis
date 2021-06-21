@@ -438,7 +438,8 @@ function _getSideSecondDom(type,url){
 
 //游戏启动（侧边栏）
 function sidebarRunGame(evt){
-     var simdom = $(#sim_select).select("li:current");
+    videoPause();
+    var simdom = $(#sim_select).select("li:current");
     var sim = "";
     if(simdom != undefined){
         sim = simdom.attributes["sim"];
@@ -557,7 +558,6 @@ function setHide(evt){
 }
 
 //控制视频播放
-var VIDEO_VALUME;
 function videoPlay(evt){
     var video = $(#right_video);
     var position = video.videoPosition();
@@ -578,7 +578,24 @@ function videoPlay(evt){
     }
 }
 
+//控制视频播放 - 暂停
+function videoPause(){
+    var video = $(#right_video);
+    if(video != undefined){
+        var position = video.videoPosition();
+        var duration = video.videoDuration();
+        if (video.videoIsPlaying()){
+            VIDEO_PLAY_STATE = 0;
+            video.videoStop();
+            if($(#video_play) != undefined){
+                $(#video_play).html = "<i.video_play></i>";
+            }
+        }
+    } 
+}
+
 //控制视频音量
+var VIDEO_VALUME;
 function videoVolume(evt){
     var video = $(#right_video);
     if(VIDEO_VALUME == 0 ){

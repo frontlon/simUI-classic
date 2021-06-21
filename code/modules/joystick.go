@@ -30,7 +30,7 @@ func CheckJoystick() (status int8) {
 			wg.Done()
 			return
 		}
-		var btnLock [5]int64
+		var btnLock [10]int64
 		var dirLock int64
 		JOYSTICK = 1
 		wg.Done()

@@ -443,7 +443,6 @@ view.root.on("ready", function(){
 
     //键盘按下
     self.on("keyup", function(evt) {
-        
         var switch_romlist = $(#switch_romlist).attributes["value"];
         
         if(evt.keyCode == Event.VK_UP){
@@ -473,6 +472,7 @@ view.root.on("ready", function(){
         }else if(evt.keyCode == Event.VK_RETURN){ //回车键启动游戏
             var rom = $(#romlist).select("li:current");
             if (rom != undefined){
+                videoPause();
                 view.RunGame(rom.attributes["rid"],"");
             }
         }else if(evt.keyCode == Event.VK_F5){ //F5刷新缓存

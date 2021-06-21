@@ -1,11 +1,12 @@
 package db
+
 import (
 	"bufio"
 	"database/sql"
-	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"io"
 	"os"
+	"simUI/code/utils"
 )
 
 //升级数据库
@@ -34,9 +35,8 @@ func UpgradeDB() {
 		if len(a) == 0 {
 			continue
 		}
-		fmt.Println(string(a))
-
-		db.Exec(string(a))
-
+		if _,err := db.Exec(string(a));err != nil{
+			utils.WriteLog(err.Error())
+		}
 	}
 }

@@ -76,7 +76,7 @@ function setFontsize(obj){
 
     var v = 'fontsize'+obj.html;
     dom.attributes.addClass(v);
-    view.UpdateConfig("font_size",obj.html); 
+    view.UpdateConfig("romlist_font_size",obj.html); 
 }
 
 //列表图标缩放

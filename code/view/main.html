@@ -21,7 +21,7 @@
     
     /* 菜单 */
     menu{display:none;border:1dip solid color(context-border-color);padding:0}
-    menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none}
+    menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none;}
     menu li:nth-child(odd){ background:color(context-odd-background-color)}
     menu li:nth-child(even){ background:color(context-even-background-color)}
     menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);}
@@ -47,11 +47,11 @@
     .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
     .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
     .statebar .filter{color:color(statebar-text-color);position:absolute;left:17dip;line-height:42dip}
-    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:80dip}
+    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:60dip}
     .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
     .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
     .statebar .filter select > caption{color:color(filter-text-color)}
-    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:95dip;padding:0 5dip;display:inline-block;vertical-align: middle}
+    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:60dip;padding:0 5dip;display:inline-block;vertical-align: middle}
     .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);height:24dip;border:0;vertical-align: middle}
 
     /* 字母选择 */
@@ -62,17 +62,17 @@
 
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
-    #platform_ul li{display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul li{font-size:12dip;display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
     #platform_ul li .imgdiv{display: block}
     #platform_ul li img{size:28dip;margin:3dip auto 5dip auto;}
-    #platform_ul li p{margin:0;line-height:1.4em;display:block}
+    #platform_ul li p{margin:0;line-height:1.4em;display:block;}
     #platform_ul li:hover{opacity:0.7;}
     #platform_ul li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
 
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;}
     #menulist dt{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color)}
-    #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);context-menu:selector(menu#menucontext);}
+    #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);context-menu:selector(menu#menucontext);font-size:12dip;}
     #menulist dd:current{background-color:color(menu-active-background-color);color:color(menu-active-text-color);}
 
     #menucontext li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
@@ -171,7 +171,7 @@
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .filedrop_ctl_btn{top:-28dip;right:0dip;position:absolute;}
     #right .doc{height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:10dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
-    .button_wrapper{position:relative;z-index:2}
+    .button_wrapper{position:relative;z-index:2;}
     .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
     .funbtn img{width:19dip;vertical-align:middle;margin:auto}
     .funbtn:hover{background:color(func-button-background-color);opacity:0.5}
@@ -180,7 +180,7 @@
     #add_menu{position:absolute;top:18dip;right:8dip}
     
     /* 基础信息表格 */
-    #right_rombase{width:*;padding:0 10dip;margin:0;background:color(right-doc-background-color);}
+    #right_rombase{width:*;padding:0;margin:0;background:color(right-doc-background-color);}
     #right_rombase li{margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;display:inline-block;border-radius:15dip}
     #right_rombase li:hover{opacity:0.8}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
@@ -257,7 +257,7 @@
     #third_strategy{color:color(desc-content-text-color);line-height:1.5em;padding-top:10dip}
     #third_strategy p{line-height:2em;}
     #third_strategy img{display:block;max-width:300px;width:100%;margin:0 auto}
-    #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle;display:inline}
+    #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle;display:inline-block;}
     #third_strategy pre{color:color(desc-quote-text-color);margin-left:20dip;padding-left:10dip;border-left:2px solid color(desc-quote-border-color);}
     #third_strategy font{margin:10dip 0;display:inline-block;color:color(desc-title-text-color)}
 
@@ -276,7 +276,7 @@
 
     #right_video_wrapper{size:*;}
     #right_video_wrapper video{max-width:320dip;max-height:320dip;;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
-    #right_video_wrapper .bar {width:*;height:*;margin-top:* 0 0 0;flow:horizontal;padding:4dip;position:absolute;top:0;display:none;}
+    #right_video_wrapper .bar {text-align:center;width:*;height:*;margin:*;flow:horizontal;padding:4dip;position:absolute;top:0;display:none;}
 
     #right_video_wrapper:hover .bar{display:block;}
     #right_video_wrapper .bar > button {vertical-align:middle;display:block;size:70dip;background:#000;opacity:0.7;border:0;color:#fff;}
@@ -288,21 +288,21 @@
     .widthMode #funBtn_h2{display:none;}
     .right_bg{display:none}
     .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color)}
-    .widthMode .margin_wrapper{margin-top:-50dip;}
-
-    .widthMode #rotate{height:35dip;line-height:35dip;width:35dip;top:-40dip;right:0dip;position:absolute;z-index:2;}
-    .widthMode .rotate_wrapper{height:80dip;}
+    .widthMode .margin_wrapper{margin-top:-50dip;height:*}
+    .widthMode .button_wrapper{top:60dip;max-width:210dip;width:40%;}
+    .widthMode .rotate_wrapper{height:90dip;}
     .widthMode  #right_title{display:block}
-    .widthMode .stack{position:absolute;top:-120dip;width:auto;min-width:200dip;height:180px;right:40dip;}
-    .widthMode .stack>img{max-width:auto;width:auto;height:180dip}
+    .widthMode #rotate{height:35dip;line-height:35dip;width:35dip;top:-40dip;right:0dip;position:absolute;z-index:2;}
+    .widthMode .stack{position:absolute;top:-120dip;width:auto;min-width:200dip;height:200px;right:40dip;}
+    .widthMode .stack>img{max-width:auto;width:auto;height:200dip}
     .widthMode .sim_select{display:block;width:*;}
     .widthMode .buttons{display:block;width:*;}
-    .widthMode .flow_wrapper{flow:horizontal-flow;width:*}
-    .widthMode .flow_wrapper_left{width:*;display:block;margin-right:20dip;}
-    .widthMode .flow_wrapper_right{width:*;display:block;}
+    .widthMode .flow_wrapper{flow:horizontal-flow;width:*;height:*;}
+    .widthMode .flow_wrapper_left{width:*;height:*;display:block;margin-right:20dip;}
+    .widthMode .flow_wrapper_right{width:*;height:*;display:block;}
     .widthMode #sim_select li{padding-top:3dip;padding-bottom:3dip;}
     .widthMode #right_rombase{width:*;margin-right:10dip;}
-    .widthMode #doc{width:*;}
+    .widthMode .doc{width:*;height:*}
 
 </style>
 
@@ -424,8 +424,8 @@
                     <menu id="foldercontext" type="menu"></menu>
                 </button>
                 <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>
-            </div>
             <h1 id="right_title"></h1>
+            </div>
 
             <h2 id="thumb_h2">{{Thumb}}</h2>
             <div class="rotate_wrapper">

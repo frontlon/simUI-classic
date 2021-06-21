@@ -37,7 +37,7 @@ func CheckRomRepeat(platformId uint32) ([]map[string]interface{}, error) {
 	result := []map[string]interface{}{}
 
 	for _, v := range repeatList {
-		if len(v) == 0 {
+		if len(v) <=1 {
 			continue
 		}
 		for _, b := range v {
