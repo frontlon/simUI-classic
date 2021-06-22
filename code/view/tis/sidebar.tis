@@ -149,7 +149,7 @@ function openSidebar(obj){
         SimDom.state.current = true;
     }
 
-    //生成按钮
+    //生成运行游戏按钮
     var btndata = "<div class='run' rid='"+ info.Id +"'>"+info.Name.toHtmlString()+"</div>";
     for(var sub in detailObj.Sublist) {
         btndata += "<div class='run' rid='"+ sub.Id +"'>"+sub.Name.toHtmlString()+"</div>";
@@ -170,6 +170,28 @@ function openSidebar(obj){
     rombase += "<li title='"+ CONF.Lang.FileSize +"'>" + detailObj.RomFileSize + "</li>";
 
     $(#right_rombase).html = rombase;
+
+
+    //读取相关游戏
+    var related = view.GetRelatedGames(obj.attributes["rid"]);
+    var relatedObj = JSON.parse(related);
+    var relatedDom = ""
+    for(var obj in relatedObj) {
+
+        var romName = getRomName(obj.RomPath);
+        var thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
+
+        //没有找到图片，读取默认缩略图
+        if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+            thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+        }
+
+        relatedDom += "<li rid='"+obj.Id+"'>";
+        relatedDom += "<img src='"+ thumb +"'/>";
+        relatedDom += "<p>"+ obj.Name +"</p></li>";
+    }
+    $(#related).html = relatedDom;
+
 
     //选项卡2图集
     _createSecondThumbs(info);

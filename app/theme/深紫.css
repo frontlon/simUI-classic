@@ -227,4 +227,8 @@ html:theme(purple) {
     var(config-platform-button-border-color) :#4e355b;
     var(config-platform-button-hover-background-color) :#442e4f;
     var(config-platform-button-active-background-color) :#442e4f;
+
+    /* 相关游戏 */
+    var(related-background-color): #442d54;
+    var(related-border-color): #352241;
 }

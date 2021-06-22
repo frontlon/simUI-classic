@@ -96,3 +96,18 @@ var h = time.hour;
 var mm = time.minute;
 return y+'-'+m+'-'+d+' '+h+':'+mm;
 }
+
+//读取rom名称
+function getRomName(p){
+    //读取缩略图地址
+    var romPath = URL.parse(p);
+    //如果文件名中存在#号
+    if(romPath.anchor != ""){
+        var pathArr = obj.p.split("/");
+        pathArr = pathArr[pathArr.length-1].split("\\");
+        pathArr = pathArr[pathArr.length-1].split(".");
+        pathArr.remove(pathArr.length-1);
+        romPath.name = pathArr.join(".");
+    }
+    return romPath.name;
+}

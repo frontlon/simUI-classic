@@ -8,7 +8,7 @@ import (
 )
 
 var ROM_PAGE_NUM = 80 //每页加载rom数量
-var TIP_NUM = 100      //每tip个更新提示一次
+var TIP_NUM = 100     //每tip个更新提示一次
 
 type Rom struct {
 	Id            uint64
@@ -299,6 +299,32 @@ func (*Rom) GetMasterRomByPlatform(platform uint32) ([]*Rom, error) {
 	}
 
 	return volist, result.Error
+}
+
+//读取相关游戏
+func (*Rom) GetRelatedGames(id uint64) ([]*Rom, error) {
+
+	vo, _ := (&Rom{}).GetById(id)
+	platform := vo.Platform
+	baseType := vo.BaseType
+
+	volist := []*Rom{}
+	//先读取同类型游戏
+	result := getDb().Select("*").Where("id != ? AND platform = ? AND pname='' AND  baseType = ?", id, platform, baseType).Order("random()").Limit(6).Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	//如果找不到同类型游戏，则读取平台下的随机游戏
+	if len(volist) == 0 {
+		result = getDb().Select("*").Where("id != ? AND platform = ? AND  pname=''", id, platform).Order("random()").Limit(6).Find(&volist)
+		if result.Error != nil {
+			fmt.Println(result.Error)
+		}
+	}
+
+	return volist, result.Error
+
 }
 
 //更新名称

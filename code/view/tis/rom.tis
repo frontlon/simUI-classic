@@ -41,18 +41,9 @@ function createRomList(cls=0){
             title = "";
         }
 
-        //读取缩略图地址
-        romPath = URL.parse(obj.RomPath);
-        //如果文件名中存在#号
-        if(romPath.anchor != ""){
-            var pathArr = obj.RomPath.split("/");
-            pathArr = pathArr[pathArr.length-1].split("\\");
-            pathArr = pathArr[pathArr.length-1].split(".");
-            pathArr.remove(pathArr.length-1);
-            romPath.name = pathArr.join(".");
-        }
 
-        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romPath.name);
+        var romName = getRomName(obj.RomPath)
+        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
 
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){

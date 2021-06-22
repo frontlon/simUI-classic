@@ -229,7 +229,12 @@ view.root.on("ready", function(){
     //游戏启动（侧边栏）
     self.on("click", "#right div[class=run]", function(evt) {
        sidebarRunGame(this);
-    });    
+    });
+
+    //游戏启动（侧边栏 - 相关游戏）
+    self.on("click", "#related li", function(evt) {
+        romListRunGame(this);
+    });
            
     //设置喜爱（侧边栏）
     self.on("click", "#right_favorite", function(evt) {

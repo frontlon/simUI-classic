@@ -303,6 +303,14 @@
     .widthMode #right_rombase{width:*;margin-right:10dip;}
     .widthMode .doc{width:*;height:*}
 
+    /* 相关游戏 */
+    .widthMode .related{flow:horizontal-flow;clear:both;padding:0;}
+    .widthMode .related > li{min-width:60dip;width:*;height:80dip;border:1px solid color(related-border-color);background:color(related-background-color);text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;overflow:hidden;margin:0 5dip 5dip 5dip;padding:10dip}
+    .widthMode .related > li:hover{opacity:0.7}
+    .widthMode .related > li img{width:48dip;height:48dip;border-radius:48dip;margin:0 auto}
+    .widthMode .related > li > p{margin-bottom:0;display:block;}
+
+
 </style>
 
 </head>
@@ -404,11 +412,9 @@
         </strip>
         <panels>
         <section id="right_first">
-
-
+            <!-- 选项卡1 -->
             <div class="right_bg" id="right_bg"></div>
 
-            <!-- 选项卡1 -->
             <div class="margin_wrapper">
             <h2 id="funBtn_h2">{{FunButton}}</h2>
             <div class="button_wrapper">
@@ -419,9 +425,7 @@
                 <button id="right_edit_doc" class="funbtn" platform="" name="" value="" rid="" title="{{EditDoc}}"><img src="this://app/images/fileico_doc.png" /></button>
                 <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditStrategy}}"><img src="this://app/images/fileico_strategy.png" /></button>
                 <button id="right_move" class="funbtn" platform="" name="" value="" rid="" title="{{RomMove}}"><img src="this://app/images/fileico_move.png" /></button>
-                <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" />
-                    <menu id="foldercontext" type="menu"></menu>
-                </button>
+                <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" /><menu id="foldercontext" type="menu"></menu></button>
                 <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>
             <h1 id="right_title"></h1>
             </div>
@@ -437,6 +441,8 @@
                     <h2>{{RunGame}}</h2>
                     <ul class="sim_select" id="sim_select"></ul>
                     <div class="buttons" id="buttons"></div>
+                    <h2>相关游戏</h2>
+                    <ul id="related" class="related"></ul>
                 </div>
                 <div class="flow_wrapper_right">
                     <h2>{{BaseInfo}}</h2>

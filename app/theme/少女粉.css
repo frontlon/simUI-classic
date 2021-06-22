@@ -227,4 +227,8 @@ html:theme(girl) {
     var(config-platform-button-border-color) :#f8e1e1;
     var(config-platform-button-hover-background-color) :#e3e8ee;
     var(config-platform-button-active-background-color) :#e3e8ee;
+
+    /* 相关游戏 */
+    var(related-background-color): #f58493;
+    var(related-border-color): #e87d8b;
 }

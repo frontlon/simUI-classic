@@ -227,4 +227,7 @@ html:theme(steam) {
     var(config-platform-button-hover-background-color) :#417997;
     var(config-platform-button-active-background-color) :#3399ff;
 
+    /* 相关游戏 */
+    var(related-background-color): #324862;
+    var(related-border-color): #293b51;
 }

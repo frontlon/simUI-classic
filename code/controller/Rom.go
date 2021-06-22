@@ -418,4 +418,12 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//读取相关游戏
+	utils.Window.DefineFunction("GetRelatedGames", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String())) //romId
+		romlist, _ := (&db.Rom{}).GetRelatedGames(id)
+		jsonRom, _ := json.Marshal(romlist)
+		return sciter.NewValue(string(jsonRom))
+	})
+
 }
