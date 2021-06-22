@@ -40,6 +40,9 @@
 
     input[type=hslider]{width:50%}
 
+    .rombaseEnum_wrapper{flow:horizontal-flow;clear:both;}
+    .rombaseEnum_wrapper > textarea{display:inline-block;position:relative;margin:0 5dip 5dip 5dip}
+    
 
   </style>
   </head>
@@ -50,7 +53,8 @@
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="980dip" wh="590dip" for="second">{{PlatformConfig}}</label>
       <label ww="450dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
-      <label ww="540dip" wh="300dip" for="fourth">{{Shortcut}}</label>
+      <label ww="450dip" wh="270dip" for="fourth">{{RombaseEnum}}</label>
+      <label ww="540dip" wh="300dip" for="fifth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -159,7 +163,7 @@
           </div>
         </div>
       </section>
- <section id="third">
+      <section id="third">
         <!-- 界面设置 -->
 
           <table class="table_interface">
@@ -189,6 +193,19 @@
           </div>
       </section>
       <section id="fourth">
+      
+      <div class="rombaseEnum_wrapper">
+      <textarea></textarea>
+      <textarea></textarea>
+      <textarea></textarea>
+      <textarea></textarea>
+
+      </div>
+      
+      
+      
+      </section>
+      <section id="fifth">
         <!-- 快捷工具 -->
         <div class="wrapper">
           <ul id="shortcut_list"></ul>

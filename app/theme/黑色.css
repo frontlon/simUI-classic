@@ -108,7 +108,7 @@ html:theme(dark) {
     var(right-play-info-background-color-8) : #990066;
     var(right-doc-border-color) : #666;
     var(right-doc-text-color) : #ccc;
-    var(right-doc-background-color) : #f18291;
+    var(right-doc-background-color) : #575757;
 
     /* 字母索引 */
     var(num-index-text-color) : #666;
