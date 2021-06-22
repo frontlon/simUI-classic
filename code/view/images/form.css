@@ -66,15 +66,26 @@ button.cancel {
   font-size: 14dip;
 }
 
+textarea,
 input[type='text'] {
   border: 1px solid color(input-border-color);
   background: color(input-background-color);
   color: color(input-text-color);
-  height: 28dip;
-  line-height: 28dip;
   padding: 0 2dip;
   border-radius: 4dip;
+  font-rendering-mode: snap-pixel;
+  font-family: monospace;
 }
+
+textarea{
+  overflow:scroll-indicator;
+}
+
+input[type='text'] {
+  height: 28dip;
+  line-height: 28dip;
+}
+
 input[type='text']:hover,
 textarea:hover {
   border-color: color(input-hover-border-color);
@@ -83,11 +94,7 @@ input[type='text']:focus,
 textarea:focus {
   background: color(input-focus-background-color);
 }
-input[type='text'],
-textarea {
-  font-rendering-mode: snap-pixel;
-  font-family: monospace;
-}
+
 input[type='text']:disabled,
 textarea:disabled {
   border: 1px solid color(input-disabled-border-color);

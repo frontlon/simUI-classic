@@ -21,6 +21,8 @@
             padding: 8 dip;
         }
 
+        input,select{width:150dip}
+
     </style>
 </head>
 <body>
@@ -38,6 +40,7 @@
             <td>{{BaseType}}：</td>
             <td>
                 <select id="type" editable>
+                    <!--
                     <option value="ACT{{TypeACT}}">ACT{{TypeACT}}</option>
                     <option value="RPG{{TypeRPG}}">RPG{{TypeRPG}}</option>
                     <option value="FTG{{TypeFTG}}">FTG{{TypeFTG}}</option>
@@ -50,6 +53,7 @@
                     <option value="FPS{{TypeFPS}}">FPS{{TypeFPS}}</option>
                     <option value="LGG{{TypeFREE}}">LGG{{TypeLGG}}</option>
                     <option value="MSC{{TypeMSC}}">MSC{{TypeMSC}}</option>
+                    -->
                 </select>
             </td>
         </tr>
@@ -58,6 +62,7 @@
             <td>{{BasePublisher}}：</td>
             <td>
                 <select id="publisher" editable>
+                    <!--
                     <option value="NINTENDO">NINTENDO</option>
                     <option value="FALCOM">FALCOM</option>
                     <option value="CAPCOM">CAPCOM</option>
@@ -72,6 +77,7 @@
                     <option value="DATA EAST">DATA EAST</option>
                     <option value="DISNEY">DISNEY</option>
                     <option value="KOEI">KOEI</option>
+                    -->
                 </select>
             </td>
         </tr>
@@ -79,6 +85,7 @@
             <td>{{BaseCountry}}：</td>
             <td>
                 <select id="country" editable>
+                    <!--
                     <option value="{{CountryJapanese}}">{{CountryJapanese}}</option>
                     <option value="{{CountryEnglish}}">{{CountryEnglish}}</option>
                     <option value="{{CountryChinese}}">{{CountryChinese}}</option>
@@ -93,7 +100,9 @@
                     <option value="{{CountryPolish}}">{{CountryPolish}}</option>
                     <option value="{{CountryPortuguese}}">{{CountryPortuguese}}</option>
                     <option value="{{CountrySpanish}}">{{CountrySpanish}}</option>
+                    -->
                 </select>
+                
             </td>
         </tr>
         <tr>
@@ -142,6 +151,36 @@ view.root.on("ready", function(){
         if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
         if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
     }
+
+    
+    //填充列表
+    var typeList = JSON.parse(mainView.GetRombaseEnumList("type"));
+    var typeDom = "";
+    for(var obj in typeList) {
+        typeDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#type).html = typeDom;
+
+    var publisherList = JSON.parse(mainView.GetRombaseEnumList("publisher"));
+    var publisherDom = "";
+    for(var obj in publisherList) {
+        publisherDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#publisher).html = publisherDom;
+
+    var countryList = JSON.parse(mainView.GetRombaseEnumList("country"));
+    var countryDom = "";
+    for(var obj in countryList) {
+        countryDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#country).html = countryDom;
+
+    var versionList = JSON.parse(mainView.GetRombaseEnumList("version"));
+    var versionDom = "";
+    for(var obj in versionList) {
+        versionDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#version).html = versionDom;
 
 });
 

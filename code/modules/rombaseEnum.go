@@ -8,7 +8,7 @@ import (
 func UpdateRomBaseEnum(t string, data []string) error {
 
 	//先删除记录
-	_ := (&db.RombaseEnum{Type: t}).DeleteByType()
+	_ = (&db.RombaseEnum{Type: t}).DeleteByType()
 
 	if len(data) == 0 {
 		return nil
@@ -16,6 +16,9 @@ func UpdateRomBaseEnum(t string, data []string) error {
 
 	create := []*db.RombaseEnum{}
 	for _, v := range data {
+		if v == "" {
+			continue
+		}
 		c := &db.RombaseEnum{}
 		c.Type = t
 		c.Name = v

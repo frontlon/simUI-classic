@@ -85,6 +85,13 @@ function Init(){
         shortcut += "</li>";
     }
     $(#shortcut_list).html = shortcut;
+
+    //游戏资料枚举
+    $(#rombase_type).value = mainView.GetRombaseEnumByType("type");
+    $(#rombase_publisher).value = mainView.GetRombaseEnumByType("publisher");
+    $(#rombase_country).value = mainView.GetRombaseEnumByType("country");
+    $(#rombase_version).value = mainView.GetRombaseEnumByType("version");
+
 }
 
 //平台列表点击
@@ -560,5 +567,14 @@ function interfaceSubmit(obj){
     mainView.UpdateConfig("background_image",background_image);
     mainView.UpdateConfig("background_repeat",background_repeat);
 
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+}
+
+//游戏资料枚举设置
+function rombaseSubmit(){
+    mainView.UpdateRomBaseEnumByType("type",$(#rombase_type).value);
+    mainView.UpdateRomBaseEnumByType("publisher",$(#rombase_publisher).value);
+    mainView.UpdateRomBaseEnumByType("country",$(#rombase_country).value);
+    mainView.UpdateRomBaseEnumByType("version",$(#rombase_version).value);
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }

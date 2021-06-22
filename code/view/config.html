@@ -32,7 +32,7 @@
     #platform_ico{max-width:220dip;}
 
     #shortcut_list{padding:0;}
-    #shortcut_list li{flow:row(input,input,button,button,button,label);list-style:none}
+    #shortcut_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
     #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
     #shortcut_list li input[type="text"]:nth-child(1){width:130px;}
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
@@ -41,7 +41,9 @@
     input[type=hslider]{width:50%}
 
     .rombaseEnum_wrapper{flow:horizontal-flow;clear:both;}
-    .rombaseEnum_wrapper > textarea{display:inline-block;position:relative;margin:0 5dip 5dip 5dip}
+    .rombaseEnum_wrapper p{font-size:12dip;color:color(general-text-color)}
+    .rombaseEnum_wrapper div{display:block;position:relative;padding:0 5dip 5dip 5dip;width:120dip;}
+    .rombaseEnum_wrapper textarea{height:200dip;display:block;width:auto}
     
 
   </style>
@@ -52,9 +54,9 @@
     <strip>
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="980dip" wh="590dip" for="second">{{PlatformConfig}}</label>
-      <label ww="450dip" wh="270dip" for="third">{{InterfaceConfig}}</label>
-      <label ww="450dip" wh="270dip" for="fourth">{{RombaseEnum}}</label>
-      <label ww="540dip" wh="300dip" for="fifth">{{Shortcut}}</label>
+      <label ww="540dip" wh="280dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="540dip" wh="400dip" for="fourth">{{RombaseEnum}}</label>
+      <label ww="570dip" wh="300dip" for="fifth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -195,13 +197,15 @@
       <section id="fourth">
       
       <div class="rombaseEnum_wrapper">
-      <textarea></textarea>
-      <textarea></textarea>
-      <textarea></textarea>
-      <textarea></textarea>
-
+        <div><p>{{BaseType}}</p><textarea id="rombase_type"></textarea></div>
+        <div><p>{{BasePublisher}}</p><textarea id="rombase_publisher"></textarea></div>
+        <div><p>{{BaseCountry}}</p><textarea id="rombase_country"></textarea></div>
+        <div><p>{{BaseVersion}}</p><textarea id="rombase_version"></textarea></div>
       </div>
-      
+      <div class="form_bottom">
+              <button class="cancel">{{Cancel}}</button>
+              <button class="ok" id="rombase_submit">{{UpdateConfig}}</button>
+          </div>
       
       
       </section>
@@ -321,6 +325,12 @@
     event click $(.cancel){
         view.close();
     }
+
+    //添加快捷工具
+    event click $(#rombase_submit){
+        rombaseSubmit();
+    }
+    
 
 
 </script>
