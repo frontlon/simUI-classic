@@ -103,7 +103,7 @@ function getRomName(p){
     var romPath = URL.parse(p);
     //如果文件名中存在#号
     if(romPath.anchor != ""){
-        var pathArr = obj.p.split("/");
+        var pathArr = p.split("/");
         pathArr = pathArr[pathArr.length-1].split("\\");
         pathArr = pathArr[pathArr.length-1].split(".");
         pathArr.remove(pathArr.length-1);
