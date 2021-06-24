@@ -68,13 +68,7 @@ func CheckJoystick() (status int8) {
 					if current-btnLock[btn] < 500 {
 						break
 					}
-
-					//关闭游戏
-					if (btn == 9) {
-						_ = utils.KillGame()
-						return;
-					}
-
+					
 					btnLock[btn] = current
 					utils.ViewButton(btn)
 					//fmt.Println("AxisData:", btn, current-btnLock[btn])
