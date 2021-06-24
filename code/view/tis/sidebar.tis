@@ -330,7 +330,7 @@ function _createRotate(info){
     rotateAttached();
     //视频状态控制
     _setVideoControl(video);
-    if($$(#stack > img).length == 1){
+    if($$(#stack > *).length == 1){
         $(#rotate).style["display"] = "none";
     }else{
         $(#rotate).style["display"] = undefined;

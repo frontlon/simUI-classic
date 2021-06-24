@@ -65,9 +65,7 @@
         <tr>
             <td>{{BaseTranslate}}：</td>
             <td>
-            <select id="translate" editable>
-                
-                </select>
+            <input type="text" id="translate">
             
             </td>
         </tr>
@@ -89,6 +87,37 @@ view.root.on("ready", function(){
     //渲染语言
     createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;
+    
+    //填充列表
+    var typeList = JSON.parse(mainView.GetRombaseEnumList("type"));
+    var typeDom = "";
+    for(var obj in typeList) {
+        typeDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#type).options.html = typeDom;
+
+    var publisherList = JSON.parse(mainView.GetRombaseEnumList("publisher"));
+    var publisherDom = "";
+    for(var obj in publisherList) {
+        publisherDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#publisher).options.html = publisherDom;
+
+    var countryList = JSON.parse(mainView.GetRombaseEnumList("country"));
+    var countryDom = "";
+    for(var obj in countryList) {
+        countryDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#country).options.html = countryDom;
+
+    var versionList = JSON.parse(mainView.GetRombaseEnumList("version"));
+    var versionDom = "";
+    for(var obj in versionList) {
+        versionDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#version).options.html  = versionDom;
+
+    //填充值
     var getjson = mainView.GetRomBase(view.parameters.id);
     if(getjson != undefined){
         var info = JSON.parse(getjson);
@@ -100,37 +129,7 @@ view.root.on("ready", function(){
         if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
         if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
     }
-
     
-    //填充列表
-    var typeList = JSON.parse(mainView.GetRombaseEnumList("type"));
-    var typeDom = "";
-    for(var obj in typeList) {
-        typeDom += "<option value='"+ obj +"'>"+obj+"</option>";
-    }
-    $(#type).html = typeDom;
-
-    var publisherList = JSON.parse(mainView.GetRombaseEnumList("publisher"));
-    var publisherDom = "";
-    for(var obj in publisherList) {
-        publisherDom += "<option value='"+ obj +"'>"+obj+"</option>";
-    }
-    $(#publisher).html = publisherDom;
-
-    var countryList = JSON.parse(mainView.GetRombaseEnumList("country"));
-    var countryDom = "";
-    for(var obj in countryList) {
-        countryDom += "<option value='"+ obj +"'>"+obj+"</option>";
-    }
-    $(#country).html = countryDom;
-
-    var versionList = JSON.parse(mainView.GetRombaseEnumList("version"));
-    var versionDom = "";
-    for(var obj in versionList) {
-        versionDom += "<option value='"+ obj +"'>"+obj+"</option>";
-    }
-    $(#version).html = versionDom;
-
 });
 
 event click $(#submit){
