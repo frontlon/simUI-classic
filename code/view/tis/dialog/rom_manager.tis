@@ -225,7 +225,7 @@ function managerChangeMediaPlatform(platformId){
 
     //生成默认游戏列表
     var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","");
-    $(#romlist_rombase tbody).html = "";
+    $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
 
     //生成分页数据
@@ -288,7 +288,7 @@ function managerChangeMediaMenu(menuName){
 
     //生成默认游戏列表
     var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","");
-    $(#romlist_rombase tbody).html = "";
+    $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
 
     var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
@@ -309,7 +309,7 @@ function managerCreateMediaByPages(obj){
     var id = obj.parent.id;
     var num = obj.html.toInteger() - 1;
     var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","");
-    $(#romlist_rombase tbody).html = "";
+    $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
     obj.state.current = true;
     $(body).scrollTo(0,0, false);

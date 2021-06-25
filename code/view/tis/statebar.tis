@@ -102,67 +102,77 @@ function initBaseFilter(platform){
     //年份
     $(#filter_year).value = "";
     $(#filter_year).options.clear();
-    $(#filter_year).options.$append(<option value=''>{CONF.Lang.BaseYear}</option>);
+    var filter_yearData = "<option value=''>" + CONF.Lang.BaseYear + "</option>";
+
     getjson = view.GetFilter(platform,"base_year");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_year).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+            filter_yearData += "<option value=\"" + obj.Name +"\">" + obj.Name + "</option>";
         }
     }
+    $(#filter_year).options.html = filter_yearData;
     $(#filter_year).value = "";
 
     //发行商
     $(#filter_publisher).value = "";
     $(#filter_publisher).options.clear();
-    $(#filter_publisher).options.$append(<option value=''>{CONF.Lang.BasePublisher}</option>);
+    var filter_publisherData = "<option value=''>" + CONF.Lang.BasePublisher + "</option>";
 
     getjson = view.GetFilter(platform,"base_publisher");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_publisher).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+            filter_publisherData += "<option value=\"" + obj.Name +"\">" + obj.Name + "</option>";
         }
     }
+    $(#filter_publisher).options.html = filter_publisherData;
     $(#filter_publisher).value = "";
     
     //地区
     $(#filter_country).value = "";
     $(#filter_country).options.clear();
-    $(#filter_country).options.$append(<option value=''>{CONF.Lang.BaseCountry}</option>);
+    var filter_countryData = "<option value=''>"+CONF.Lang.BaseCountry +"</option>";
     getjson = view.GetFilter(platform,"base_country");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_country).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+            filter_countryData += "<option value=\"" + obj.Name + "\"}>"+ obj.Name "+</option>";
         }
     }
+    $(#filter_country).options.html = filter_countryData;
     $(#filter_country).value = "";
 
     //汉化组
     $(#filter_translate).value = "";
     $(#filter_translate).options.clear();
-    $(#filter_translate).options.$append(<option value=''>{CONF.Lang.BaseTranslate}</option>);
+    var filter_translateData = "<option value=''>"+CONF.Lang.BaseTranslate +"</option>";
+
     getjson = view.GetFilter(platform,"base_translate");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_translate).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+            filter_translateData += "<option value=\"" + obj.Name + "\"}>"+ obj.Name "+</option>";
+
         }
     }
+    $(#filter_translate).options.html = filter_translateData;
     $(#filter_translate).value = "";
 
     //版本
     $(#filter_version).value = "";
     $(#filter_version).options.clear();
-    $(#filter_version).options.$append(<option value=''>{CONF.Lang.BaseVersion}</option>);
+    var filter_versionData = "<option value=''>"+CONF.Lang.BaseVersion +"</option>";
+
     getjson = view.GetFilter(platform,"base_version");
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            $(#filter_version).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+            filter_versionData += "<option value=\"" + obj.Name + "\"}>"+ obj.Name "+</option>";
+
         }
     }
+    $(#filter_version).options.html = filter_versionData;
     $(#filter_version).value = "";
 
     //是否显示和隐藏
