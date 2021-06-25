@@ -106,6 +106,7 @@ function openSidebar(obj){
 
     //显示简介
     if(detailObj.DocContent != ""){
+
         $(#doc_title).style["display"] = "inhert";
         $(#doc).style["display"] = "block";
         //$(#doc).html = markdown.parse(detailObj.DocContent);
@@ -434,7 +435,7 @@ function _getSideSecondDom(type,url){
         html += "<h2>"+title+"</h2>";
         html += "<div class='filedropzone_widget'>";
         html += "<button class='funbtn filedrop_ctl_btn' type='menu'><i.setting></i><menu>";
-        html += "<li class='openfile' for='video' caption='"+CONF.Lang.SelectVideoFile +"' filter='video Files (*.wmv;*.mp4)|.wmv;.mp4|All Files (*.*)|*.*'><div class='file-drop-zone-empty'>" + CONF.Lang.SelectVideo + "</li>";
+        html += "<li class='openfile' for='video' caption='"+CONF.Lang.SelectVideoFile +"' filter='video Files (*.wmv;*.mp4;*.avi)|.wmv;.mp4;.avi|All Files (*.*)|*.*'><div class='file-drop-zone-empty'>" + CONF.Lang.SelectVideo + "</li>";
         html += "<li class='thumb_delete' value='video'>"+CONF.Lang.DeleteVideo+"</li>";
         html += "</menu></button>";
         html += "<div.file-drop-zone  opt='video' accept-drop='*.wmv;*.mp4'>";
