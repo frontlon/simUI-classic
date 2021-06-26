@@ -2,8 +2,11 @@
 view.root.on("ready", function(){
 
     //初始化方法
+    try{
     Init();
-
+}catch(e){
+    alert(e);
+}
     //快捷软件拖动排序
     DragDrop{
         what      : "#shortcut_list li",
@@ -66,8 +69,6 @@ function Init(){
     //生成界面选项
     $(#config_background).value = CONF.Default.BackgroundImage;
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
-    $(#config_background_opacity).value = CONF.Default.BackgroundOpacity;
-    $(#info_background_opacity).html = CONF.Default.BackgroundOpacity + "%";
     $(#config_cursor).html = cursor_url;
 
     //生成快捷工具列表
@@ -91,7 +92,6 @@ function Init(){
     $(#rombase_publisher).value = mainView.GetRombaseEnumByType("publisher");
     $(#rombase_country).value = mainView.GetRombaseEnumByType("country");
     $(#rombase_version).value = mainView.GetRombaseEnumByType("version");
-
 }
 
 //平台列表点击
@@ -539,20 +539,6 @@ function setBackgroundRepeat(obj){
         mainView.root.$(body).style["background-repeat"] = obj.value;
         mainView.root.$(body).style["background-size"] = "contain";
     }
-}
-
-//更新透明度
-function setBackgroundOpacity(obj){
-    var val = obj.value.toFloat() / 100;
-    mainView.root.$(#titlebar).style["opacity"] = val.toString();
-    mainView.root.$(#left_platform).style["opacity"] = val.toString();
-    mainView.root.$(#left_menu).style["opacity"] = val.toString();
-    mainView.root.$(#center).style["opacity"] = val.toString();
-    mainView.root.$(#right).style["opacity"] = val.toString();
-    mainView.root.$(#menu_splitter).style["opacity"] = val.toString();
-    mainView.root.$(#platform_splitter).style["opacity"] = val.toString();
-    mainView.root.$(#right_splitter).style["opacity"] = val.toString();
-    $(#info_background_opacity).html = obj.value + "%";
 }
 
 //提交界面样式

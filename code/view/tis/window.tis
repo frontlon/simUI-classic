@@ -138,15 +138,4 @@ function initInterface(){
         $(#center).style["background-size"] = "contain";
     }
 
-    //更新透明度
-    var opacity = CONF.Default.BackgroundOpacity.toFloat() / 100;
-    mainView.root.$(#romwrapper).style["opacity"] = opacity.toString();
-   // mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
-   // mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
-   // mainView.root.$(#left_menu).style["opacity"] = opacity.toString();
-    //mainView.root.$(#center).style["opacity"] = opacity.toString();
-   // mainView.root.$(#right).style["opacity"] = opacity.toString();
-    //mainView.root.$(#menu_splitter).style["opacity"] = opacity.toString();
-    //mainView.root.$(#platform_splitter).style["opacity"] = opacity.toString();
-    //mainView.root.$(#right_splitter).style["opacity"] = opacity.toString();
 }

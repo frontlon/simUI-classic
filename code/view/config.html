@@ -184,10 +184,6 @@
                 </select>
               </td>
             </tr>
-            <tr>
-              <td>{{BackgroundOpacity}}：</td>
-              <td colspan="3"><input type="hslider" id="config_background_opacity" min="70" max="100" step="5" /> <span id="info_background_opacity"></span></td>
-            </tr>
           </table>
           <div class="form_bottom">
                 <button class="cancel">{{Cancel}}</button>
@@ -305,11 +301,6 @@
     //背景显示方式
     event change $(#config_background_repeat) {
         setBackgroundRepeat(this);
-    }
-
-    //内容透明度
-    event change $(#config_background_opacity) {
-        setBackgroundOpacity(this);
     }
 
     //更换鼠标指针

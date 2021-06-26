@@ -256,9 +256,7 @@ function _setVideoControl(movie){
     if (vdom == undefined){
         return;
     }
-    if(vdom.videoIsPlaying()){
-        vdom.videoStop();
-    }
+    vdom.videoStop();
     vdom.videoUnload();
     vdom.videoLoad(movie)
     vdom.videoPlay();
@@ -340,7 +338,9 @@ function _createRotate(info){
     $(#stack).refresh();
     rotateAttached();
     //视频状态控制
-    _setVideoControl(video);
+    try{
+        _setVideoControl(video);
+    }catch(e){}
     if($$(#stack > *).length == 1){
         $(#rotate).style["display"] = "none";
     }else{
