@@ -28,13 +28,6 @@ function openSidebar(obj){
 
     obj.state.current = true;
     
-   
-
-    if(MASK == true){
-        MASK = false;
-        $(#mask).style["display"] = "none";
-    }
-
     var getjson = view.GetGameDetail(obj.attributes["rid"]);
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
@@ -59,6 +52,11 @@ function openSidebar(obj){
         return;
     }
 
+    if(MASK == true){
+        MASK = false;
+        $(#mask).style["display"] = "none";
+    }   
+
    //侧边栏背景图片
     if(background != ""){
         $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
@@ -72,9 +70,6 @@ function openSidebar(obj){
         }
 
     }
-
-
-
 
     $(#right_title).html = info.Name;
 
@@ -453,7 +448,7 @@ function _getSideSecondDom(type,url){
         html += "<li class='openfile' for='video' caption='"+CONF.Lang.SelectVideoFile +"' filter='video Files (*.wmv;*.mp4;*.avi)|.wmv;.mp4;.avi|All Files (*.*)|*.*'><div class='file-drop-zone-empty'>" + CONF.Lang.SelectVideo + "</li>";
         html += "<li class='thumb_delete' value='video'>"+CONF.Lang.DeleteVideo+"</li>";
         html += "</menu></button>";
-        html += "<div.file-drop-zone  opt='video' accept-drop='*.wmv;*.mp4'>";
+        html += "<div.file-drop-zone  opt='video' accept-drop='*.wmv;*.mp4;*.avi'>";
         html += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropVideoToHere+"<br>("+CONF.Lang.VideoExts+")</div>";
         html += "</div></div>";
     }else{
@@ -466,7 +461,7 @@ function _getSideSecondDom(type,url){
         html += "</menu></button>";
 
         if(url == ""){
-           imgContent += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropPicToHere+"<br>("+CONF.Lang.PicExts"+)</div>";
+           imgContent += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropPicToHere+"<br>("+CONF.Lang.PicExts+")</div>";
         }else{
             imgContent += "<img src='"+url+"'>";
         }
