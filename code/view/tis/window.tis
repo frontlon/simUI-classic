@@ -126,26 +126,27 @@ function initInterface(){
     $(body).style["cursor"] = [url:URL.fromPath(CONF.Default.Cursor)];
 
     //更新背景图
-    $(body).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
+    $(#center).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
 
     //更新背景循环方式
     var repeat = CONF.Default.BackgroundRepeat;
     if(repeat == "cover"){
-        $(body).style["background-size"] = repeat;
-        $(body).style["background-repeat"] = "no-repeat";
+        $(#center).style["background-size"] = repeat;
+        $(#center).style["background-repeat"] = "no-repeat";
     }else{
-        $(body).style["background-repeat"] = repeat;
-        $(body).style["background-size"] = "contain";
+        $(#center).style["background-repeat"] = repeat;
+        $(#center).style["background-size"] = "contain";
     }
 
     //更新透明度
     var opacity = CONF.Default.BackgroundOpacity.toFloat() / 100;
-    mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
-    mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
-    mainView.root.$(#left_menu).style["opacity"] = opacity.toString();
-    mainView.root.$(#center).style["opacity"] = opacity.toString();
-    mainView.root.$(#right).style["opacity"] = opacity.toString();
-    mainView.root.$(#menu_splitter).style["opacity"] = opacity.toString();
-    mainView.root.$(#platform_splitter).style["opacity"] = opacity.toString();
-    mainView.root.$(#right_splitter).style["opacity"] = opacity.toString();
+    mainView.root.$(#romlist).style["opacity"] = opacity.toString();
+   // mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
+   // mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
+   // mainView.root.$(#left_menu).style["opacity"] = opacity.toString();
+    //mainView.root.$(#center).style["opacity"] = opacity.toString();
+   // mainView.root.$(#right).style["opacity"] = opacity.toString();
+    //mainView.root.$(#menu_splitter).style["opacity"] = opacity.toString();
+    //mainView.root.$(#platform_splitter).style["opacity"] = opacity.toString();
+    //mainView.root.$(#right_splitter).style["opacity"] = opacity.toString();
 }

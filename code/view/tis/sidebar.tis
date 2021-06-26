@@ -90,18 +90,22 @@ function openSidebar(obj){
     if(background != ""){
         var centerDom = $(#center);
         centerDom.style["background-image"] = [url:URL.fromPath(background)];
-        centerDom.style["background-size"] = "cover";
-        centerDom.style["background-repeat"] = "no-repeat";
         $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
+
     }else{
         if(CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"] != undefined){
             var themePath = CONF.RootPath + "theme/";
-            $(#center).style["background-image"] = "none";
             $(#right_bg).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"])];
         }else{
-            $(#center).style["background-image"] = "none";
             $(#right_bg).style["background-image"] = "none";
         }
+
+        if(CONF.Default.BackgroundImage != ""){
+            $(#center).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
+        }else{
+            $(#center).style["background-image"] = "none";
+        }
+
     }
 
     //显示简介
@@ -248,7 +252,9 @@ function _setVideoControl(movie){
     if (vdom == undefined){
         return;
     }
-    vdom.videoStop();
+    if(vdom.videoIsPlaying()){
+        vdom.videoStop();
+    }
     vdom.videoUnload();
     vdom.videoLoad(movie)
     vdom.videoPlay();
