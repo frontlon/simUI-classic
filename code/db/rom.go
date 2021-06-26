@@ -192,7 +192,13 @@ func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string,
 	}
 
 	if menu != "" {
-		where["menu"] = menu
+		if menu == "favorite" {
+			where["star"] = 1
+		} else if menu == "hide" {
+			where["hide"] = 1
+		} else {
+			where["menu"] = menu
+		}
 	}
 	if showHide == 0 {
 		where["hide"] = 0
