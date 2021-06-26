@@ -28,10 +28,7 @@ function openSidebar(obj){
 
     obj.state.current = true;
     
-    //侧边栏隐藏的情况下，不执行操作
-    if ($(#right).style["display"] == "none"){
-        return;
-    }
+   
 
     if(MASK == true){
         MASK = false;
@@ -42,6 +39,41 @@ function openSidebar(obj){
     var detailObj = JSON.parse(getjson);
     var info = detailObj.Info;
     var romPath = URL.parse(info.RomPath);
+
+
+    //列表背景图片
+    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
+    if(background != ""){
+        $(#center).style["background-image"] = [url:URL.fromPath(background)];
+    }else{
+        if(CONF.Default.BackgroundImage != ""){
+            $(#center).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
+        }else{
+            $(#center).style["background-image"] = "none";
+        }
+
+    }
+
+    //侧边栏隐藏的情况下，不执行后续操作
+    if ($(#right).style["display"] == "none"){
+        return;
+    }
+
+   //侧边栏背景图片
+    if(background != ""){
+        $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
+
+    }else{
+        if(CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"] != undefined){
+            var themePath = CONF.RootPath + "theme/";
+            $(#right_bg).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"])];
+        }else{
+            $(#right_bg).style["background-image"] = "none";
+        }
+
+    }
+
+
 
 
     $(#right_title).html = info.Name;
@@ -84,29 +116,6 @@ function openSidebar(obj){
 
     //创建滑动图
     _createRotate(info);
-
-    //背景图片
-    var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
-    if(background != ""){
-        var centerDom = $(#center);
-        centerDom.style["background-image"] = [url:URL.fromPath(background)];
-        $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
-
-    }else{
-        if(CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"] != undefined){
-            var themePath = CONF.RootPath + "theme/";
-            $(#right_bg).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"])];
-        }else{
-            $(#right_bg).style["background-image"] = "none";
-        }
-
-        if(CONF.Default.BackgroundImage != ""){
-            $(#center).style["background-image"] = [url:URL.fromPath(CONF.Default.BackgroundImage)];
-        }else{
-            $(#center).style["background-image"] = "none";
-        }
-
-    }
 
     //显示简介
     if(detailObj.DocContent != ""){
