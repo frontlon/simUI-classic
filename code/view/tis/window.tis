@@ -140,7 +140,7 @@ function initInterface(){
 
     //更新透明度
     var opacity = CONF.Default.BackgroundOpacity.toFloat() / 100;
-    mainView.root.$(#romlist).style["opacity"] = opacity.toString();
+    mainView.root.$(#romwrapper).style["opacity"] = opacity.toString();
    // mainView.root.$(#titlebar).style["opacity"] = opacity.toString();
    // mainView.root.$(#left_platform).style["opacity"] = opacity.toString();
    // mainView.root.$(#left_menu).style["opacity"] = opacity.toString();

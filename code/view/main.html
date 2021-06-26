@@ -56,9 +56,9 @@
 
     /* 字母选择 */
     #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;width:30dip}
-    #num_search li{display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
+    #num_search li{text-shadow: 1px 1px 1px #000;display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
     #num_search li:hover{color:color(num-index-hover-text-color)}
-    #num_search li:current{color:color(num-index-active-text-color);}
+    #num_search li:current{font-size:14dip;color:color(num-index-active-text-color);}
 
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
@@ -98,6 +98,7 @@
     .romblock li div:nth-child(7){display:none}
     .romblock li div:nth-child(8){display:none}
 
+    #romlist.textShadow{text-shadow: 1px 1px 1px #000}
     #romlist.fontsize1 li{display:inherit;font-size:8dip;}
     #romlist.fontsize2 li{display:inherit;font-size:9dip}
     #romlist.fontsize3 li{display:inherit;font-size:10dip}
@@ -161,7 +162,7 @@
     .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romlist > li div:nth-child(8){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romth div{color:color(rom-list-title-text-color)!important;font-weight:bold;}
-    .rom_star {background: yellow;position:absolute;bottom:-20px; right:-30px;width:50px; height:10px; transform:rotate(-45deg);transform-origin:top left;-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform-origin:top left;-webkit-transform-origin:top left;}
+    .rom_star {background: yellow;position:absolute;top:0; left:0;width:50px; height:10px; transform:rotate(-45deg);transform-origin:top right;-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform-origin:top right;-webkit-transform-origin:top right;}
 
     /* 右侧边栏 */
     #right h1{font-size:20dip;color:color(sidebar-name-text-color);display:none;text-shadow: 1px 1px 2px color(sidebar-name-text-shadow);}

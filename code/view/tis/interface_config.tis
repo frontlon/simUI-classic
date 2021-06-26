@@ -46,6 +46,7 @@ function setFontBackgrond(obj){
     var romlist = $(#romlist);
     romlist.attributes.removeClass("bgshow");
     romlist.attributes.removeClass("bghide");
+    romlist.attributes.removeClass("textShadow");
 
     //先清除所有缩放样式
     for(var i=0;i<=2;i++){
@@ -54,6 +55,11 @@ function setFontBackgrond(obj){
             romlist.attributes.removeClass("bg" + i);
         }
     }
+
+    if(obj.attributes["opt"] == 0){
+        romlist.attributes.addClass("textShadow");
+    }
+
 
     $(#config_font_background).select("li[opt="+ obj.attributes["opt"] +"]").attributes.addClass("active");
 

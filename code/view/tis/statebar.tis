@@ -35,6 +35,11 @@ function initRomListStyle(){
     //是否显示rom列表的标题背景颜色
     romlist.attributes.addClass("bg" + CONF.Default.RomlistFontBackground);
 
+    //字体阴影
+    if(CONF.Default.RomlistFontBackground == 0){
+        romlist.attributes.addClass("textShadow");
+    }
+
     //初始化rom列表图片显示方向
     if(romlist.attributes.hasClass("horizontal")){romlist.attributes.removeClass("horizontal");}
     if(romlist.attributes.hasClass("vertical")){romlist.attributes.removeClass("vertical");}
