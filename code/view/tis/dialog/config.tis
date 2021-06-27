@@ -120,6 +120,7 @@ function GetPlatformItem(evt){
     $(#platform_gif).value = info.GifPath;
     $(#platform_background).value = info.BackgroundPath;
     $(#platform_video).value = info.VideoPath;
+    $(#platform_files).value = info.FilesPath;
     $(#platform_rombase).value = info.Rombase;
 
     //如果没有扩展名，则自动填充大量扩展名
@@ -166,6 +167,7 @@ function GetPlatformItem(evt){
         $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
         $(#platform_video).state.disabled = false;
+        $(#platform_files).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
@@ -186,6 +188,7 @@ function GetPlatformItem(evt){
         $(#platform_gif).state.disabled = true;
         $(#platform_background).state.disabled = true;
         $(#platform_video).state.disabled = true;
+        $(#platform_files).state.disabled = true;
         $(#platform_rombase).state.disabled = true;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
@@ -234,6 +237,7 @@ function platformSubmit(evt){
         video      : $(#platform_video).value,
         strategy   : $(#platform_strategy).value,
         doc        : $(#platform_doc).value,
+        files      : $(#platform_files).value,
         rombase    : $(#platform_rombase).value,
     };
     if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
@@ -362,6 +366,7 @@ function openPlatformFolder(evt) {
         $(#platform_title).value = url + SEPARATOR + "title";
         $(#platform_background).value = url + SEPARATOR + "background";
         $(#platform_video).value = url + SEPARATOR + "video";
+        $(#platform_files).value = url + SEPARATOR + "files";
         $(#platform_rombase).value = url + SEPARATOR + rombase.toLowerCase() + ".csv";
 
         $(#platform_doc).state.disabled = false;
@@ -377,6 +382,7 @@ function openPlatformFolder(evt) {
         $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
         $(#platform_video).state.disabled = false;
+        $(#platform_files).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
@@ -452,8 +458,8 @@ function shortcutAdd(evt) {
     if(insertId != "0"){
         var shortcut = "";
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
-        shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
+        shortcut += "<input type='text' novalue='"+ CONF.Lang.FileName +"' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
+        shortcut += "<input type='text' novalue='"+ CONF.Lang.FilePath +"'  id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
         shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>...</button>";
         shortcut += "<button class='shortcut_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";

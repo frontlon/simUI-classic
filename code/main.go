@@ -131,6 +131,7 @@ func regViewFunction() {
 	controller.JoystickController()
 	controller.RomManagerController()
 	controller.RomBaseEnumController()
+	controller.StrategyFilesController()
 }
 
 //资源加载

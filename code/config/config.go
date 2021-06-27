@@ -176,6 +176,11 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].VideoPath = platformList[k].VideoPath
 		}
 
+		if v.FilesPath != "" {
+			platformList[k].FilesPath, _ = filepath.Abs(v.FilesPath)
+			platform[v.Id].FilesPath = platformList[k].FilesPath
+		}
+
 		if v.Rombase != "" {
 			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
 			platform[v.Id].Rombase = platformList[k].Rombase
@@ -413,6 +418,7 @@ func GetResPath(platformId uint32) map[string]string {
 	res["video"] = platform.VideoPath
 	res["doc"] = platform.DocPath
 	res["strategy"] = platform.StrategyPath
+	res["files"] = platform.FilesPath
 	return res
 }
 
@@ -431,5 +437,6 @@ func GetResExts() map[string][]string {
 	res["video"] = PIC_EXTS
 	res["doc"] = DOC_EXTS
 	res["strategy"] = DOC_EXTS
+	res["files"] = RUN_EXTS
 	return res
 }

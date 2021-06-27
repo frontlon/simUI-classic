@@ -53,10 +53,10 @@
   <tabs class="tabs" id="mytabs">
     <strip>
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
-      <label ww="980dip" wh="590dip" for="second">{{PlatformConfig}}</label>
-      <label ww="540dip" wh="280dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="980dip" wh="630dip" for="second">{{PlatformConfig}}</label>
+      <label ww="540dip" wh="240dip" for="third">{{InterfaceConfig}}</label>
       <label ww="540dip" wh="500dip" for="fourth">{{RombaseEnum}}</label>
-      <label ww="570dip" wh="300dip" for="fifth">{{Shortcut}}</label>
+      <label ww="570dip" wh="350dip" for="fifth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -154,8 +154,14 @@
                 <tr>
                     <td>{{StrategyMenu}}：</td>
                     <td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>...</button></td>
+                    <td>{{FilesMenu}}：</td>
+                    <td><input type="text" id="platform_files" value="" disabled> <button class="openfolder" for="platform_files" caption="{{SelectFolder}}" disabled>...</button></td>
+                </tr>
+                <tr>
                     <td><div class="tip" title="{{RombaseTip}}">?</div>{{Rombase}}：</td>
                     <td><input type="text"  id="platform_rombase" value="" disabled> <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>...</button></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </table>
             <div class="form_bottom">

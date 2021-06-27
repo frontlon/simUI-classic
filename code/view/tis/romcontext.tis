@@ -196,6 +196,7 @@ function romContextMenu(obj){
     btndata += "<li class='baseinfo' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditBaseInfo +"</li>";
     btndata += "<li class='doc' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditDoc +"</li>";
     btndata += "<li class='strategy' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditStrategy +"</li>";
+    btndata += "<li class='files' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.EditFiles +"</li>";
     btndata += "<hr />";
     btndata += "<li class='move' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.RomMove +"</li>";
     btndata += "<li class='delete' rid='"+ detailObj.Info.Id +"'>"+ CONF.Lang.Delete +"</li>";
@@ -232,4 +233,22 @@ function deleteRom(obj){
     view.DeleteRom(id); //删除实体文件
     alert(CONF.Lang.DeleteSuccess); //删除成功
 
+}
+
+//编辑攻略文件
+function editFiles(evt){
+    var response = view.dialog({
+        url:self.url(ROOTPATH + "rom_files.html"),
+        width:self.toPixels(560dip),
+        height:self.toPixels(565dip),
+        parameters: {
+            id:evt.attributes["rid"];
+        };
+    });
+
+    if(response != undefined){
+        var info = JSON.parse(response);
+        view.CreateRomCache(ACTIVE_PLATFORM);
+        view.CreateRomCache(info.platform);
+    }
 }

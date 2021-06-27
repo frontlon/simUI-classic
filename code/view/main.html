@@ -288,6 +288,14 @@
     #right_video_wrapper .bar > button:first-child { margin-left:*;margin-right:10dip }
     #right_video_wrapper .bar > button:last-child { margin-right:*;margin-left:10dip }
 
+    /* 攻略文件 */
+    #third_files{flow:horizontal-flow;padding:0}
+    #third_files li{display:block;color:#ccc;border:1px solid #777;background:#666;width:*;min-width:150dip;height:40dip;line-height:40dip;margin:0 5dip 5dip 5dip}
+    #third_files li:hover{opacity:0.8}
+    #third_files li:active{opacity:0.4}
+    #third_files li img{display:inline-block;vertical-align:middle;margin:0 10dip;}
+
+    /* 宽模式 */
     .widthMode{height:*}
     .widthMode #thumb_h2{display:none;}
     .widthMode #funBtn_h2{display:none;}
@@ -298,7 +306,6 @@
     .widthMode .rotate_wrapper{height:90dip;}
     .widthMode  #right_title{display:block}
     .widthMode #rotate{height:35dip;line-height:35dip;width:35dip;top:-40dip;right:0dip;position:absolute;z-index:2;}
-    
     .widthMode .stack{position:absolute;top:-120dip;width:auto;height:200px;right:40dip;}
     .widthMode .stack>img{max-width:auto;width:auto;height:200dip;}
     .widthMode video{margin:0;padding:0}
@@ -473,7 +480,8 @@
 
         <section id="right_third">
         <!-- 选项卡3 -->
-        <div id="third_strategy"></div>
+            <ul id="third_files"></ul>
+            <div id="third_strategy"></div>
         </section>
 
         </panels>
@@ -489,6 +497,7 @@
     var SEPARATOR = view.GetSeparator(); //路径分隔符
     var mediaVars = view.mediaVars();
     var mainView  = view;
+
     include ROOTPATH + "tis/plugins/decorators.tis";
     include ROOTPATH + "tis/plugins/tabs.tis";
     include ROOTPATH + "tis/plugins/rotator.tis";
@@ -509,6 +518,5 @@
     include ROOTPATH + "tis/menucontext.tis";
     include ROOTPATH + "tis/keycode.tis";
     include ROOTPATH + "tis/event.tis";
-
 </script>
 </html>

@@ -306,6 +306,10 @@ view.root.on("ready", function(){
         editStrategy(this);
     });
 
+    //打开资料文件
+    self.on("click", "#third_files li", function(evt) {
+        view.OpenStrategyFiles(this.attributes["path"]);
+    });
 
 
     /**
@@ -365,6 +369,11 @@ view.root.on("ready", function(){
     //编辑游戏攻略
     self.on("click", "#romcontext .strategy", function(evt) {
         editStrategy(this);
+    });
+
+    //编辑游戏攻略文件
+    self.on("click", "#romcontext .files", function(evt) {
+        editFiles(this);
     });
 
     //右键菜单设置喜爱

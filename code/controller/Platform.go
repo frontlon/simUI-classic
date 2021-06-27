@@ -128,7 +128,8 @@ func PlatformController() {
 		d["strategy"] = strings.TrimRight(d["strategy"], `/`)
 		d["doc"] = strings.TrimRight(d["doc"], `\`)
 		d["doc"] = strings.TrimRight(d["doc"], `/`)
-
+		d["files"] = strings.TrimRight(d["files"], `\`)
+		d["files"] = strings.TrimRight(d["files"], `/`)
 		platform := &db.Platform{
 			Id:             id,
 			Name:           d["name"],
@@ -147,6 +148,7 @@ func PlatformController() {
 			StrategyPath:   d["strategy"],
 			VideoPath:      d["video"],
 			DocPath:        d["doc"],
+			FilesPath:      d["files"],
 			Rombase:        d["rombase"],
 			Pinyin:         utils.TextToPinyin(d["name"]),
 		}

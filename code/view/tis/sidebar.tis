@@ -205,6 +205,14 @@ function openSidebar(obj){
     //选项卡2图集
     _createSecondThumbs(info);
 
+    //攻略文件
+    var strategyFiles =JSON.parse(view.GetStrategyFile(info.Id));
+    var files = "";
+        for(var f in strategyFiles) {
+            files += "<li path='"+ f.path +"'><img src='D:/work/go/src/simUI/app/icons/files/chm.gif' />"+ f.name +"</li>";
+        }
+    $(#third_files).html = files;
+
     //攻略
     var strategy = view.GetGameDoc("strategy",obj.attributes["rid"]);
     if(strategy != ""){
@@ -737,4 +745,3 @@ function sidebarSize(){
         }
     }
 }
-    

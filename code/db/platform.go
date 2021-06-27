@@ -24,6 +24,7 @@ type Platform struct {
 	DocPath        string
 	StrategyPath   string
 	VideoPath      string
+	FilesPath      string
 	Rombase        string
 	Pinyin         string
 	Sort           uint32
@@ -86,6 +87,7 @@ func (m *Platform) UpdateById() error {
 		"strategy_path":   m.StrategyPath,
 		"video_path":      m.VideoPath,
 		"doc_path":        m.DocPath,
+		"files_path":      m.FilesPath,
 		"rombase":         m.Rombase,
 		"pinyin":          m.Pinyin,
 	}
