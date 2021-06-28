@@ -111,3 +111,11 @@ function getRomName(p){
     }
     return romPath.name;
 }
+
+//读取文件扩展名
+function getFileExt(p){
+      var pic = p.replace("\\","/");
+      var parr = pic.split("/");
+      var filename = parr[parr.length-1].split(".");
+      return filename[filename.length-1];
+}

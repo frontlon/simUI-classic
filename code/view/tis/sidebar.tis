@@ -209,7 +209,9 @@ function openSidebar(obj){
     var strategyFiles =JSON.parse(view.GetStrategyFile(info.Id));
     var files = "";
         for(var f in strategyFiles) {
-            files += "<li path='"+ f.path +"'><img src='D:/work/go/src/simUI/app/icons/files/chm.gif' />"+ f.name +"</li>";
+            var fileExt = getFileExt(f.path);
+            var ico = "this://app/images/filetype/"+ fileExt +".png";
+            files += "<li path='"+ f.path +"' style='background-image:url("+ ico +")'>"+ f.name +"</li>";
         }
     $(#third_files).html = files;
 
