@@ -391,11 +391,19 @@ func RomController() {
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
+
+		//删除攻略文件
+		fname := utils.GetFileName(info.RomPath)
+		romFiles, _ := utils.ScanDirByKeyword(config.Cfg.Platform[info.Platform].FilesPath, fname+"__")
+		for _, f := range romFiles {
+			_ = utils.FileDelete(f)
+		}
+		
 		err = (&db.Rom{}).DeleteById(id)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
-		err = (&db.Rom{}).DeleteSubRomd(info.Name)
+		err = (&db.Rom{}).DeleteSubRom(info.Name)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}

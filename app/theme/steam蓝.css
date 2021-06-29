@@ -134,6 +134,15 @@ html:theme(steam) {
     var(rom-list-active-background-color) : #417997;
     var(rom-list-text-slave-color) : #acdbf5;
 
+    /* 相关游戏 */
+    var(related-background-color): #324862;
+    var(related-border-color): #293b51;
+
+    /* 攻略文件 */
+    var(files-text-color) : #ccc;
+    var(files-background-color) : #354c67;
+    var(files-border-color) : #3c5673;
+
     /* 攻略文档窗口 */
     var(desc-content-text-color) : #acdbf5;
     var(desc-title-text-color) : #FFF;
@@ -227,7 +236,4 @@ html:theme(steam) {
     var(config-platform-button-hover-background-color) :#417997;
     var(config-platform-button-active-background-color) :#3399ff;
 
-    /* 相关游戏 */
-    var(related-background-color): #324862;
-    var(related-border-color): #293b51;
 }

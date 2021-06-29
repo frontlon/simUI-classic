@@ -39,7 +39,8 @@ func UploadStrategyFile(id uint64, name string, p string) (string, error) {
 		return "", errors.New(config.Cfg.Lang["FilesMenuCanNotBeEmpty"])
 	}
 	ext := utils.GetFileExt(p)
-	newPath := config.Cfg.Platform[vo.Platform].FilesPath + config.Cfg.Separator + vo.Name + "__" + name + ext
+	fileName := utils.GetFileName(vo.RomPath)
+	newPath := config.Cfg.Platform[vo.Platform].FilesPath + config.Cfg.Separator + fileName + "__" + name + ext
 	if err := utils.FileCopy(p, newPath); err != nil {
 		return "", err
 	}

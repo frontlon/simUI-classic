@@ -217,6 +217,12 @@ function openSidebar(obj){
 
     //攻略
     var strategy = view.GetGameDoc("strategy",obj.attributes["rid"]);
+    if(strategy == "" && files == ""){
+        $(#label_third).attributes.addClass("disable");
+    }else{
+        $(#label_third).attributes.removeClass("disable");
+    }
+
     if(strategy != ""){
         strategy = strategy.replace("_+","<img class='ctl' src='this://app/images/ctl_+.png' />");
         strategy = strategy.replace("_1","<img class='ctl' src='this://app/images/ctl_1.png' />");
@@ -250,11 +256,8 @@ function openSidebar(obj){
         strategy = strategy.replace("_k","<img class='ctl' src='this://app/images/ctl_K.png' />");
         var background = getRomPicPath("background",info.Platform,romPath.name); //背景图
         $(#third_strategy).html = strategy;
-        $(#label_third).attributes.removeClass("disable");
     }else{
         $(#third_strategy).html = "<div class='sidebar_empty'>"+ CONF.Lang.StrategyEmpty +"</div>";
-        $(#label_third).attributes.addClass("disable");
-
     }
 
 }

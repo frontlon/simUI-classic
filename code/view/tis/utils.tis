@@ -119,3 +119,12 @@ function getFileExt(p){
       var filename = parr[parr.length-1].split(".");
       return filename[filename.length-1];
 }
+//读取文件扩展名
+function getFileName(p){
+      var pic = p.replace("\\","/");
+      var parr = pic.split("/");
+      var filename = parr[parr.length-1].split(".");
+      filename.remove(filename.length-1);
+      filename = filename.join(".");
+      return filename;
+}

@@ -134,6 +134,15 @@ html:theme(red) {
     var(rom-list-active-background-color) : #7f374b;
     var(rom-list-text-slave-color) : #ccc;
 
+    /* 相关游戏 */
+    var(related-background-color): #5b2232;
+    var(related-border-color): #4a1b29;
+
+    /* 攻略文件 */
+    var(files-text-color) : #ccc;
+    var(files-background-color) : #5e2234;
+    var(files-border-color) : #69273b;
+
     /* 攻略文档窗口 */
     var(desc-content-text-color) : #f8dae3;
     var(desc-title-text-color) : #FFF;
@@ -226,8 +235,4 @@ html:theme(red) {
     var(config-platform-button-border-color) :#592130;
     var(config-platform-button-hover-background-color) :#4a1b28;
     var(config-platform-button-active-background-color) :#4a1b28;
-
-    /* 相关游戏 */
-    var(related-background-color): #5b2232;
-    var(related-border-color): #4a1b29;
 }

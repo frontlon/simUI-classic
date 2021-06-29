@@ -427,7 +427,7 @@ func (m *Rom) DeleteById(id uint64) error {
 }
 
 //删除一个rom
-func (m *Rom) DeleteSubRomd(pname string) error {
+func (m *Rom) DeleteSubRom(pname string) error {
 	result := getDb().Where("pname=? ", pname).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)

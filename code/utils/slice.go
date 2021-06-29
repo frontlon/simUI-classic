@@ -4,7 +4,7 @@ import "bytes"
 
 /**
 切片合并为字符串
- */
+*/
 func SlicetoString(glue string, pieces []string) string {
 	var buf bytes.Buffer
 	l := len(pieces)
@@ -66,4 +66,15 @@ func SliceIntersect(list1 []string, list2 []string) []string {
 		}
 	}
 	return b2
+}
+
+/*
+删除最后一个元素
+*/
+func SliceDeleteLast(s []string) []string {
+	if len(s) == 0 {
+		return s
+	}
+	s = append(s[:len(s)-1])
+	return s
 }

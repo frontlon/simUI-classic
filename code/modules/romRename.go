@@ -77,13 +77,27 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 		if path != "" {
 			for _, ext := range resExts[resName] {
 				picpath := path + "/" + oldfileName + ext
-				if (utils.FileExists(picpath)) {
+				if utils.FileExists(picpath) {
 					if err := utils.Rename(picpath, name); err != nil {
 						return err
 					}
 					break
 				}
 			}
+		}
+	}
+	//修改攻略文件
+	masterName := utils.GetFileName(rom.RomPath)
+	files, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].FilesPath, masterName+"__")
+	for _, f := range files {
+		fArr := strings.Split(f, "__")
+		fName := fArr[len(fArr)-1]
+		fArr = strings.Split(fName,".")
+		fArr = utils.SliceDeleteLast(fArr)
+		fName = strings.Join(fArr,".")
+		newName := name + "__" + fName
+		if err := utils.Rename(f, newName); err != nil {
+			return err
 		}
 	}
 	return nil

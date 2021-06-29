@@ -134,12 +134,20 @@ html:theme(girl) {
     var(rom-list-active-background-color) : #e85d71;
     var(rom-list-text-slave-color) : #666;
 
+    /* 相关游戏 */
+    var(related-background-color): #f58493;
+    var(related-border-color): #e87d8b;
+
+    /* 攻略文件 */
+    var(files-text-color) : #fff;
+    var(files-background-color) : #f98898;
+    var(files-border-color) : #fb97a5;
+
     /* 攻略文档窗口 */
     var(desc-content-text-color) : #403739;
     var(desc-title-text-color) : #000;
     var(desc-quote-text-color) : #403739;
     var(desc-quote-border-color) : #da7684;
-
 
     /* 表单按钮 */
     var(form-bottom-hr-color) : #233041;
@@ -227,8 +235,4 @@ html:theme(girl) {
     var(config-platform-button-border-color) :#f8e1e1;
     var(config-platform-button-hover-background-color) :#e3e8ee;
     var(config-platform-button-active-background-color) :#e3e8ee;
-
-    /* 相关游戏 */
-    var(related-background-color): #f58493;
-    var(related-border-color): #e87d8b;
 }

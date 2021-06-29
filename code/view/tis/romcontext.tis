@@ -83,13 +83,13 @@ function contextSetHide(evt){
 function rename(evt){
     var getjson = view.GetGameDetail(evt.attributes["rid"])
     var detailObj = JSON.parse(getjson);
-
+    var name = getFileName(detailObj.Info.RomPath);
     var data = view.dialog({
         url:self.url(ROOTPATH + "rom_rename.html"),
         width:self.toPixels(300dip),
         height:self.toPixels(225dip),
         parameters: {
-            name:detailObj.Info.Name
+            name:name
         };
     });
 
