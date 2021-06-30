@@ -239,7 +239,7 @@ function deleteRom(obj){
 function editFiles(evt){
     var response = view.dialog({
         url:self.url(ROOTPATH + "rom_files.html"),
-        width:self.toPixels(560dip),
+        width:self.toPixels(500dip),
         height:self.toPixels(565dip),
         parameters: {
             id:evt.attributes["rid"];

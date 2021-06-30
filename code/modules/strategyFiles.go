@@ -41,6 +41,12 @@ func UploadStrategyFile(id uint64, name string, p string) (string, error) {
 	ext := utils.GetFileExt(p)
 	fileName := utils.GetFileName(vo.RomPath)
 	newPath := config.Cfg.Platform[vo.Platform].FilesPath + config.Cfg.Separator + fileName + "__" + name + ext
+
+	rel := strings.Replace(newPath, config.Cfg.RootPath, "", 1)
+	if rel == p{
+		return p,nil
+	}
+
 	if err := utils.FileCopy(p, newPath); err != nil {
 		return "", err
 	}

@@ -14,7 +14,6 @@ view.root.on("ready", function(){
         files += "<input type='text' id='files_name_"+ i + "' value='"+ s.name +"' />";
         files += "<input type='text' id='files_path_"+ i + "' value='"+ s.path +"' />";
         files += "<button class='openfile' for='files_path_" + s.Id + "' caption='' filter='Doc Files (*.pdf;*.chm;*.exe;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx)|*.pdf;*.chm;*.exe;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx|All Files (*.*)|*.*'>...</button>";
-        files += "<button class='files_update' value='"+ i +"'>"+CONF.Lang.Update+"</button>";
         files += "<button class='files_delete' value='"+ i +"'>"+CONF.Lang.Delete+"</button>";
         files += "</li>";
         i++;
@@ -32,7 +31,6 @@ function filesAdd(evt) {
     files += "<input type='text' novalue='"+ CONF.Lang.FileName +"' id='files_name_"+ insertId + "' value='' />";
     files += "<input type='text' novalue='"+ CONF.Lang.FilePath +"' id='files_path_"+ insertId + "' value='' />";
     files += "<button class='openfile' for='files_path_" + insertId + "' caption='"+ CONF.Lang.SelectFile +"' filter='Files (*.pdf;*.chm;*.exe;*.url;*.html;*.htm;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx)|*.pdf;*.chm;*.exe;*.url;*.html;*.htm;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx|All Files (*.*)|*.*'>...</button>";
-    files += "<button class='files_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
     files += "<button class='files_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";
     files += "</li>";
     $(#files_list).append(files);
@@ -62,51 +60,33 @@ function openFile(evt) {
     }
 }
 
-//上传文件
-function uploadFile(evt){
-
-    var num = evt.attributes["value"];
-    var parentDom = $(#files_list);
-    var name = parentDom.select("#files_name_" + num).value;
-    var path = parentDom.select("#files_path_" + num).value;
-    if(name == "" || name == undefined ){
-        view.msgbox(#alert,CONF.Lang.ShortcutNameNotFound);
-        return;
-    }
-
-    if(path == "" || path == undefined){
-        view.msgbox(#alert,CONF.Lang.ShortcutPathNotFound);
-        return;
-    }
-
-    var newPath = mainView.UploadStrategyFile(view.parameters.id,name,path);
-    parentDom.select("#files_path_" + num).value = newPath;
-    alert(CONF.Lang.UpdateSuccess);
-
-}
-
 //更新配置
 function filesUpdate(evt) {
-
     var lists = $$(#files_list li);
     var data = [];
     var i = 0;
     for(var dom in lists) {
+
         var id = dom.attributes["value"].toInteger();
     
         var name = self.select("#files_name_"+ id).value;
         var path = self.select("#files_path_"+ id).value;
         if(name == ""){
-            alert(CONF.Lang.filesNameNotFound);
-            continue;
+            alert(CONF.Lang.FilesNameIsNotEmpty);
+            return;
         }
         if(path == ""){
-            alert(CONF.Lang.filesPathNotFound);
-            continue;
+            alert(CONF.Lang.FilesPathIsNotEmpty);
+            return;
         }
+
+        //上传文件
+        var newPath = mainView.UploadStrategyFile(view.parameters.id,name,path);
+        $(#files_list).select("#files_path_" + id).value = newPath;
+
         var obj = {
             name:name,
-            path:path,
+            path:newPath,
         };
         data[i] = obj;
         i++;
@@ -115,5 +95,6 @@ function filesUpdate(evt) {
     var datastr = JSON.stringify(data);
     mainView.UpdateStrategyFiles(view.parameters.id,datastr);
     alert(CONF.Lang.UpdateSuccess);
+
     
 }

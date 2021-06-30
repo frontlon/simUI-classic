@@ -69,6 +69,7 @@ function Init(){
     //生成界面选项
     $(#config_background).value = CONF.Default.BackgroundImage;
     $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
+    $(#config_wallpaper).value = CONF.Default.WallpaperImage;
     $(#config_cursor).html = cursor_url;
 
     //生成快捷工具列表

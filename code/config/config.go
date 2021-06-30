@@ -229,8 +229,13 @@ func getDefault() (*db.Config, error) {
 	}
 
 	//如果背景图片文件存在，则转换为绝对路径
-	if utils.FileExists(vo.BackgroundOpacity) == true {
-		vo.BackgroundOpacity, _ = filepath.Abs(vo.BackgroundOpacity)
+	if utils.FileExists(vo.BackgroundImage) == true {
+		vo.BackgroundImage, _ = filepath.Abs(vo.BackgroundImage)
+	}
+
+	//如果背景图片文件存在，则转换为绝对路径
+	if utils.FileExists(vo.WallpaperImage) == true {
+		vo.WallpaperImage, _ = filepath.Abs(vo.WallpaperImage)
 	}
 
 	//如果鼠标指针文件存在，则转换为绝对路径

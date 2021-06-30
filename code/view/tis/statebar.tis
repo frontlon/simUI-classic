@@ -142,7 +142,7 @@ function initBaseFilter(platform){
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            filter_countryData += "<option value=\"" + obj.Name + "\"}>"+ obj.Name "+</option>";
+            filter_countryData += "<option value=\"" + obj.Name + "\">"+ obj.Name +"</option>";
         }
     }
     $(#filter_country).options.html = filter_countryData;
@@ -157,7 +157,7 @@ function initBaseFilter(platform){
     jsonObj = JSON.parse(getjson);
     if (jsonObj.length > 0){
         for(var obj in jsonObj) {
-            filter_translateData += "<option value=\"" + obj.Name + "\"}>"+ obj.Name "+</option>";
+            filter_translateData += "<option value=\"" + obj.Name + "\">"+ obj.Name +"</option>";
 
         }
     }

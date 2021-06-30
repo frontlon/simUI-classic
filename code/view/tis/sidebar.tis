@@ -58,13 +58,12 @@ function openSidebar(obj){
     }   
 
    //侧边栏背景图片
-    if(background != ""){
-        $(#right_bg).style["background-image"] = [url:URL.fromPath(background)];
-
+    var wallpaper = getRomPicPath("wallpaper",info.Platform,romPath.name); //背景图
+    if(wallpaper != ""){
+        $(#right_bg).style["background-image"] = [url:URL.fromPath(wallpaper)];
     }else{
-        if(CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"] != undefined){
-            var themePath = CONF.RootPath + "theme/";
-            $(#right_bg).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[CONF.Default.Theme].Params["sidebar-background-image"])];
+        if(CONF.Default.WallpaperImage != ""){
+            $(#right_bg).style["background-image"] = [url:URL.fromPath(CONF.Default.WallpaperImage)];
         }else{
             $(#right_bg).style["background-image"] = "none";
         }
@@ -414,7 +413,7 @@ function _createSecondThumbs(info){
         else bottomHtml += _getSideSecondDom("gif",gif);      
     if(background != "") topHtml += _getSideSecondDom("background",background);
         else bottomHtml += _getSideSecondDom("background",background);
-    if(wallpaper != "") topHtml += _getSideSecondDom("wallpaper",background);
+    if(wallpaper != "") topHtml += _getSideSecondDom("wallpaper",wallpaper);
         else bottomHtml += _getSideSecondDom("wallpaper",background);
     //视频在最下方且不自动播放
     bottomHtml += _getSideSecondDom("video",video);
