@@ -180,6 +180,9 @@ function getRomPicPath(type,platform,name){
         case "background":
             path = CONF.Platform[platform.toString()].BackgroundPath + "/" + name ;
             break;
+        case "wallpaper":
+            path = CONF.Platform[platform.toString()].WallpaperPath + "/" + name ;
+            break;
         case "video":
             path = CONF.Platform[platform.toString()].VideoPath + "/" + name ;
             break;

@@ -54,7 +54,7 @@
     <strip>
       <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="980dip" wh="630dip" for="second">{{PlatformConfig}}</label>
-      <label ww="540dip" wh="240dip" for="third">{{InterfaceConfig}}</label>
+      <label ww="540dip" wh="260dip" for="third">{{InterfaceConfig}}</label>
       <label ww="540dip" wh="500dip" for="fourth">{{RombaseEnum}}</label>
       <label ww="570dip" wh="350dip" for="fifth">{{Shortcut}}</label>
     </strip>
@@ -144,8 +144,8 @@
                 <tr>
                     <td>{{BackgroundMenu}}：</td>
                     <td><input type="text" id="platform_background" value="" disabled> <button class="openfolder" for="platform_background" caption="{{SelectFolder}}" disabled>...</button></td>
-                    <td>{{SidePicMenu}}：</td>
-                    <td><input type="text" id="platform_sidepic" value="" disabled> <button class="openfolder" for="platform_sidepic" caption="{{SelectFolder}}" disabled>...</button></td>
+                    <td>{{WallpaperMenu}}：</td>
+                    <td><input type="text" id="platform_wallpaper" value="" disabled> <button class="openfolder" for="platform_wallpaper" caption="{{SelectFolder}}" disabled>...</button></td>
                     </tr>
                 <tr>
 
@@ -187,13 +187,18 @@
               <td colspan="3"><input type="text"  id="config_cursor" value=""> <button class="openfile" for="config_cursor" caption="{{SelectPicFile}}" filter="cursor Files (*.cur,*.ani,*.png,*.gif)|*.cur;*.ani;*.png;*.gif|All Files (*.*)|*.*">...</button></td>
             </tr>
             <tr>
-              <td>{{BackgroundPic}}：</td>
+              <td><div class="tip" title="{{TipBackground}}">?</div>{{DefaultBackgroundPic}}：</td>
               <td colspan="3"><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button>
                 <select id="config_background_repeat">
                     <option value="repeat">{{BackgroundRepeat}}</option>
                     <option value="cover">{{BackgroundCover}}</option>
                     <option value="no-repeat">{{BackgroundNoRepeat}}</option>
                 </select>
+              </td>
+            </tr>
+            <tr>
+              <td><div class="tip" title="{{TipWallpaper}}">?</div>{{DefaultWallpaperPic}}：</td>
+              <td colspan="3"><input type="text"  id="config_wallpaper" value=""> <button class="openfile" for="config_wallpaper" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button>
               </td>
             </tr>
           </table>

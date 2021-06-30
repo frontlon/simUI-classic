@@ -21,7 +21,7 @@ type Platform struct {
 	IconPath       string
 	GifPath        string
 	BackgroundPath string
-	SidepicPath    string
+	WallpaperPath  string
 	DocPath        string
 	StrategyPath   string
 	VideoPath      string
@@ -85,7 +85,7 @@ func (m *Platform) UpdateById() error {
 		"packing_path":    m.PackingPath,
 		"title_path":      m.TitlePath,
 		"background_path": m.BackgroundPath,
-		"sidepic_path":    m.SidepicPath,
+		"wallpaper_path":  m.WallpaperPath,
 		"strategy_path":   m.StrategyPath,
 		"video_path":      m.VideoPath,
 		"doc_path":        m.DocPath,
