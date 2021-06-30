@@ -96,5 +96,4 @@ function filesUpdate(evt) {
     mainView.UpdateStrategyFiles(view.parameters.id,datastr);
     alert(CONF.Lang.UpdateSuccess);
 
-    
 }

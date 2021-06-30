@@ -9,10 +9,13 @@ ALTER TABLE platform ADD COLUMN "cassette_path"  TEXT NOT NULL DEFAULT '';
 ALTER TABLE platform ADD COLUMN "icon_path"  TEXT NOT NULL DEFAULT '';
 ALTER TABLE platform ADD COLUMN "gif_path"  TEXT NOT NULL DEFAULT '';
 ALTER TABLE platform ADD COLUMN "files_path"  TEXT NOT NULL DEFAULT '';
+ALTER TABLE platform ADD COLUMN "wallpaper_path"  TEXT NOT NULL DEFAULT '';
+
 ALTER TABLE simulator ADD COLUMN "sort" INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE simulator ADD COLUMN "lua" TEXT NOT NULL DEFAULT '';
 ALTER TABLE rom ADD COLUMN "base_version" TEXT NOT NULL,
 ALTER TABLE config ADD COLUMN "romlist_font_size" TEXT NOT NULL DEFAULT '';
+ALTER TABLE config ADD COLUMN "wallpaper_image" TEXT NOT NULL DEFAULT '';
 CREATE TABLE "rombase_enum" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"type" TEXT NOT NULL DEFAULT '',"name" TEXT NOT NULL DEFAULT '');
 INSERT INTO "rombase_enum" VALUES (1, 'publisher', 'NINTENDO');
 INSERT INTO "rombase_enum" VALUES (2, 'publisher', 'FALCOM');

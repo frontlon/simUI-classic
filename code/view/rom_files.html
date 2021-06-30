@@ -26,6 +26,7 @@
         <ul id="files_list"></ul>
         <div class="add_wrapper"><button id="files_add">{{AddFiles}}</button></div>
         <div class="form_bottom">
+            <button class="cancel" id="close-dialog">{{Cancel}}</button>
             <button class="ok" id="submit">{{OK}}</button>
         </div>
     </div>
@@ -51,10 +52,11 @@
 
     //提交
     event click $(#submit){
-    try{
         filesUpdate(this);
-        }catch(e){
-        alert(e);}
+    }
+
+    event click $(#close-dialog){
+        view.close();
     }
     
     </script>
