@@ -306,6 +306,11 @@ view.root.on("ready", function(){
         editStrategy(this);
     });
 
+    //编辑游戏攻略文件
+    self.on("click", "#right_edit_files", function(evt) {
+        editFiles(this);
+    });
+
     //打开资料文件
     self.on("click", "#third_files li", function(evt) {
         view.OpenStrategyFiles(this.attributes["path"]);
