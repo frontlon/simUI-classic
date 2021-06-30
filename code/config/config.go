@@ -171,6 +171,12 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platformList[k].BackgroundPath, _ = filepath.Abs(v.BackgroundPath)
 			platform[v.Id].BackgroundPath = platformList[k].BackgroundPath
 		}
+
+		if v.SidepicPath != "" {
+			platformList[k].SidepicPath, _ = filepath.Abs(v.SidepicPath)
+			platform[v.Id].SidepicPath = platformList[k].SidepicPath
+		}
+
 		if v.VideoPath != "" {
 			platformList[k].VideoPath, _ = filepath.Abs(v.VideoPath)
 			platform[v.Id].VideoPath = platformList[k].VideoPath
@@ -415,6 +421,7 @@ func GetResPath(platformId uint32) map[string]string {
 	res["icon"] = platform.IconPath
 	res["gif"] = platform.GifPath
 	res["background"] = platform.BackgroundPath
+	res["sidepic"] = platform.SidepicPath
 	res["video"] = platform.VideoPath
 	res["doc"] = platform.DocPath
 	res["strategy"] = platform.StrategyPath
@@ -434,6 +441,7 @@ func GetResExts() map[string][]string {
 	res["icon"] = PIC_EXTS
 	res["gif"] = PIC_EXTS
 	res["background"] = PIC_EXTS
+	res["sidepic"] = PIC_EXTS
 	res["video"] = PIC_EXTS
 	res["doc"] = DOC_EXTS
 	res["strategy"] = DOC_EXTS

@@ -119,6 +119,7 @@ function GetPlatformItem(evt){
     $(#platform_icon).value = info.IconPath;
     $(#platform_gif).value = info.GifPath;
     $(#platform_background).value = info.BackgroundPath;
+    $(#platform_sidepic).value = info.SidepicPath;
     $(#platform_video).value = info.VideoPath;
     $(#platform_files).value = info.FilesPath;
     $(#platform_rombase).value = info.Rombase;
@@ -166,6 +167,7 @@ function GetPlatformItem(evt){
         $(#platform_icon).state.disabled = false;
         $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
+        $(#platform_sidepic).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_files).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
@@ -187,6 +189,7 @@ function GetPlatformItem(evt){
         $(#platform_icon).state.disabled = true;
         $(#platform_gif).state.disabled = true;
         $(#platform_background).state.disabled = true;
+        $(#platform_sidepic).state.disabled = true;
         $(#platform_video).state.disabled = true;
         $(#platform_files).state.disabled = true;
         $(#platform_rombase).state.disabled = true;
@@ -234,6 +237,7 @@ function platformSubmit(evt){
         icon       : $(#platform_icon).value,
         gif        : $(#platform_gif).value,
         background : $(#platform_background).value,
+        sidepic    : $(#platform_sidepic).value,
         video      : $(#platform_video).value,
         strategy   : $(#platform_strategy).value,
         doc        : $(#platform_doc).value,
@@ -365,6 +369,7 @@ function openPlatformFolder(evt) {
         $(#platform_packing).value = url + SEPARATOR + "packing";
         $(#platform_title).value = url + SEPARATOR + "title";
         $(#platform_background).value = url + SEPARATOR + "background";
+        $(#platform_sidepic).value = url + SEPARATOR + "sidepic";
         $(#platform_video).value = url + SEPARATOR + "video";
         $(#platform_files).value = url + SEPARATOR + "files";
         $(#platform_rombase).value = url + SEPARATOR + rombase.toLowerCase() + ".csv";
@@ -381,6 +386,7 @@ function openPlatformFolder(evt) {
         $(#platform_icon).state.disabled = false;
         $(#platform_gif).state.disabled = false;
         $(#platform_background).state.disabled = false;
+        $(#platform_sidepic).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_files).state.disabled = false;
         $(#platform_rombase).state.disabled = false;

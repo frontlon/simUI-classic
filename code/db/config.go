@@ -35,6 +35,7 @@ type Config struct {
 	BackgroundImage       string // 背景图片
 	BackgroundRepeat      string // 背景循环方式
 	BackgroundOpacity     string // 背景透明度
+	SideImage          string // 侧边栏图图片
 	Cursor                string // 鼠标指针
 	VideoVolume           string // 视频默认音量状态
 }
