@@ -550,7 +550,6 @@ function setBackgroundRepeat(obj){
 //提交界面样式
 function interfaceSubmit(obj){
     var cursor = $(#config_cursor).value;
-    var opacity = $(#config_background_opacity).value;
     var background_image = $(#config_background).value;
     var background_repeat = $(#config_background_repeat).value;
 

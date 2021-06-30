@@ -316,7 +316,7 @@ func (*Rom) GetRelatedGames(id uint64) ([]*Rom, error) {
 
 	volist := []*Rom{}
 	//先读取同类型游戏
-	result := getDb().Select("*").Where("id != ? AND platform = ? AND pname='' AND  baseType = ?", id, platform, baseType).Order("random()").Limit(6).Find(&volist)
+	result := getDb().Select("*").Where("id != ? AND platform = ? AND pname='' AND  base_type = ?", id, platform, baseType).Order("random()").Limit(6).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
