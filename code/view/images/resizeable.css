@@ -1,0 +1,12 @@
+﻿@set resizeable {
+
+  table:root {
+    prototype: VGrid url(vlist.tis);  
+    flow:table-fixed;
+    overflow-x:auto;
+  }
+  
+  table:root[resizeable] > thead {
+    behavior:column-resizer;
+  }
+}

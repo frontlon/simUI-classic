@@ -1,140 +1,46 @@
 ﻿<html>
   <head>
     <title></title>
-    <div id="themefile"></div>
+    <div id="themefile"></div>    
     <style>
       @import 'this://app/images/public.css';
       @import 'this://app/images/form.css';
-      html,
-      body {
-        overflow: scroll-indicator;
-        margin: 0;
-        background: color(center-background-color);
-        padding: 0;
-        width: 100%;
-      }
-      .wrapper {
-        height: *;
-        padding: 0 10dip;
-        margin: 0;
-      }
+      @import 'this://app/images/resizeable.css';
+      html,body {overflow:scroll-indicator;margin:0;background:color(center-background-color);padding:0;width:100%;}
+      .wrapper {height:*;padding:0 10dip;margin:0;}
+      .titlebar {flow:horizontal-flow;width:*;display:block;}
+      .titlebar_left {width:*;display:block;}
+      .titlebar_right {width:*;text-align:right;display:block;}
+      .content {display:block;clear:both;}
+      label {display:block;}
+      table {style-set:resizeable;border-collapse:collapse;border-spacing:0;width:*;margin-top:10dip;}
+      table label {text-align:left;}
+      table th {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:5dip;text-align:left;font-weight:bold;}
+      table td {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:0 5dip;text-align:left;}
+      table tr.checked {background:color(manager-tr-checked-background-color);}
+      table tr:hover {background:color(manager-tr-hover-background-color);}
+      table th:nth-child(1) {width:30dip;}
+      table td:nth-child(1) {width:30dip;}
+      table input[type='text'] {background:none;border:1px solid #f00;margin:0;text-align:left;display:block;}
+      table input[type='text']:hover {background:none;}
+      table .nosave {color:color(manager-input-nosave-text-color);}
+      .openfile {cursor:pointer;}
+      .pages {width:*;text-align:right;}
+      .pages li {display:inline-block;size:20dip;line-height:20dip;border:1px solid color(manager-pages-border-color);background:color(manager-pages-background-color);text-align:center;color:color(manager-pages-text-color);margin:0 2dip;}
+      .pages li:hover {background:color(manager-pages-hover-background-color);}
+      .pages li:current {background:none;border:0;}
+      select {width:100dip;}
+      select option {display:block;}
+      .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:-7dip 0 7dip 0;}
 
-      .titlebar {
-        flow: horizontal-flow;
-        width: *;
-        display: block;
-      }
-      .titlebar_left {
-        width: *;
-        display: block;
-      }
-      .titlebar_right {
-        width: *;
-        text-align: right;
-        display: block;
-      }
-      .content {
-        display: block;
-        clear: both;
-      }
-      label {
-        display: block;
-      }
-      table {
-        border-collapse: collapse;
-        border-spacing: 0;
-        width: *;
-        margin-top: 10dip;
-      }
-      table label {
-        text-align: left;
-      }
-      table th {
-        font-size: 12dip;
-        padding: 0;
-        border: 1px solid color(manager-table-border-color);
-        padding: 5dip;
-        width: *;
-        text-align: left;
-        font-weight: bold;
-      }
-      table td {
-        font-size: 12dip;
-        padding: 0;
-        border: 1px solid color(manager-table-border-color);
-        padding: 0 5dip;
-        width: *;
-        text-align: left;
-      }
-      table tr.checked {
-        background: color(manager-tr-checked-background-color);
-      }
-      table tr:hover {
-        background: color(manager-tr-hover-background-color);
-      }
-      table th:nth-child(1) {
-        width: 30dip;
-      }
-      table td:nth-child(1) {
-        width: 30dip;
-      }
+    /* 表格宽度 */
+    #romlist_rombase th,#romlist_rombase td input{width:240dip}
+    #romlist_rombase th:nth-child(3),#romlist_rombase td:nth-child(3) input{width:40dip}
+    #romlist_rombase th:nth-child(4),#romlist_rombase td:nth-child(4) input{width:100dip}
+    #romlist_rombase th:nth-child(5),#romlist_rombase td:nth-child(5) input{width:80dip}
+    #romlist_rombase th:nth-child(6),#romlist_rombase td:nth-child(6) input{width:70dip}
+    #romlist_rombase th:nth-child(8),#romlist_rombase td:nth-child(8) input{width:40dip}
 
-      table input[type='text'] {
-        background: none;
-        border:0;
-        width: 130dip;
-        margin: 0;
-        text-align:left;
-      }
-      table input[type='text']:hover {
-        background: none;
-      }
-      table .nosave {
-        color: color(manager-input-nosave-text-color);
-      }
-
-      .openfile {
-        cursor: pointer;
-      }
-
-      .pages {
-        width: *;
-        text-align: right;
-      }
-      .pages li {
-        display: inline-block;
-        size: 20dip;
-        line-height: 20dip;
-        border: 1px solid color(manager-pages-border-color);
-        background: color(manager-pages-background-color);
-        text-align: center;
-        color: color(manager-pages-text-color);
-        margin: 0 2dip;
-      }
-      .pages li:hover {
-        background: color(manager-pages-hover-background-color);
-      }
-      .pages li:current {
-        background: none;
-        border: 0;
-      }
-
-      select {
-        width: 100dip;
-      }
-      select option {
-        display: block;
-      }
-      .tab_tip {
-        background: color(manager-tip-background-color);
-        color: color(manager-tip-text-color);
-        line-height: 20dip;
-        height: 20dip;
-        font-size: 12dip;
-        display: block;
-        padding: 5dip;
-        margin: -7dip 0 7dip 0;
-      }
     </style>
   </head>
   <body>
@@ -163,7 +69,7 @@
               <div class="titlebar_right"></div>
             </div>
             <div class="content">
-              <table id="romlist_rombase">
+              <table id="romlist_rombase" resizeable>
                 <thead>
                   <tr>
                     <th>{{BaseRomName}}</th>
@@ -197,7 +103,7 @@
               <div class="titlebar_right"></div>
             </div>
             <div class="content">
-              <table id="romlist_media">
+              <table id="romlist_media" resizeable>
                 <thead>
                   <tr>
                     <th>{{BaseRomName}}</th>
@@ -244,7 +150,7 @@
               </div>
             </div>
             <div class="content">
-              <table id="romlist_sim" class="check_table">
+              <table id="romlist_sim" class="check_table" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}</th>
@@ -285,7 +191,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_file">
+              <table class="check_table" id="romlist_file" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}</th>
@@ -318,7 +224,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_repeat">
+              <table class="check_table" id="romlist_repeat" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}</th>
@@ -348,7 +254,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_zombie">
+              <table class="check_table" id="romlist_zombie" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}</th>
