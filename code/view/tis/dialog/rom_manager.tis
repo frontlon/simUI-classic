@@ -260,6 +260,7 @@ function managerCreateMedia(romjson){
         var icon = getRomPicPath("icon",obj.Platform,filename[0]);
         var gif = getRomPicPath("gif",obj.Platform,filename[0]);
         var background = getRomPicPath("background",obj.Platform,filename[0]);
+        var wallpaper = getRomPicPath("wallpaper",obj.Platform,filename[0]);
         var video = getRomPicPath("video",obj.Platform,filename[0]);
        // var doc = mainView.GetGameDoc("doc",obj.Id);
         //var strategy = mainView.GetGameDoc("strategy",obj.Id);
@@ -275,6 +276,7 @@ function managerCreateMedia(romjson){
         romData += "<td.openfile><input|text.icon value='"+ icon +"' /></td>";
         romData += "<td.openfile><input|text.gif value='"+ gif +"' /></td>";
         romData += "<td.openfile><input|text.background value='"+ background +"' /></td>";
+        romData += "<td.openfile><input|text.wallpaper value='"+ wallpaper +"' /></td>";
         romData += "<td.openfile><input|text.video value='"+ video +"' /></td>";
         romData += "</tr>"
     }
@@ -981,7 +983,6 @@ function managerCheckZombie(){
 
     if(romobj.length > 500 ){
         alert(CONF.Lang.TipNoInvalidFilesFound);
-        return;
     }
 
     var romData = "";
