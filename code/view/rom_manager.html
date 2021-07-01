@@ -385,14 +385,11 @@
       }
 
       //批量更新 - 游戏资料管理
-      /*
-      event keydown $(#romlist_rombase input[type=text]) (evt,input) {
-        if(evt.keyCode != Event.VK_RETURN){
-          return ;
-        }
-        managerRombaseBatchSave(this);
+      
+      event click $(#rombase_submit) {
+        managerRombaseBatchSave();
       }
-      */
+      
 
       //分页 - 游戏资料管理
       event click $(#pages_rombase li){

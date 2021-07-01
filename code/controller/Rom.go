@@ -285,6 +285,20 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//批量重命名
+	utils.Window.DefineFunction("BatchRomRename", func(args ...*sciter.Value) *sciter.Value {
+		data := args[0].String()
+
+		d := []map[string]string{}
+		_ = json.Unmarshal([]byte(data), &d)
+		err := modules.BatchRomRename(d)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
 	//编辑rom基础信息
 	utils.Window.DefineFunction("SetRomBase", func(args ...*sciter.Value) *sciter.Value {
 

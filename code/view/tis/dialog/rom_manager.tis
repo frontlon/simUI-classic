@@ -213,7 +213,8 @@ function managerRombaseSave(obj){
 function managerRombaseBatchSave(){
 
     var trs = $$(#romlist_rombase tbody tr);
-    var create = [];
+    var rombaseList = [];
+    var renameList = [];
     var i = 0;
     for(var tr in trs){
         var filename = tr.select(".filename").value;
@@ -221,8 +222,16 @@ function managerRombaseBatchSave(){
             alert(CONF.Lang.FilenameNotEmpty);
             return;
         }
-        //更新资料
-        var data = {
+
+        //批量改名
+        var rename = {
+            id:tr.attributes["rid"],
+            filename:filename,
+        }
+
+        //批量更新资料
+        /* 
+        var base = {
             id:tr.attributes["rid"];
             name:tr.select(".name").value,
             year:tr.select(".year").value,
@@ -233,13 +242,18 @@ function managerRombaseBatchSave(){
             version:tr.select(".version").value,
         }
 
-        //更改游戏名称
-        mainView.RomRename(tr.attributes["rid"],filename);
-        obj.attributes.removeClass("nosave");
-        create[i] = data;
+        rombaseList[i] = base;
+        */
+        renameList[i] = rename;
         i++;
     }
-    mainView.BatchSetRomBase(JSON.stringify(create));
+
+    //更改游戏名称
+    mainView.BatchRomRename(JSON.stringify(renameList));
+    //更改游戏资料
+    //mainView.BatchSetRomBase(JSON.stringify(create));
+    //obj.attributes.removeClass("nosave");
+
 }
 
 /**

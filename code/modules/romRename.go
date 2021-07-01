@@ -43,6 +43,65 @@ func RomRename(id uint64, filename string) error {
 	return nil
 }
 
+//rom批量重命名
+func BatchRomRename(data []map[string]string) error {
+	ids := []uint64{}
+	create := map[string]map[string]string{}
+	for _, v := range data {
+		ids = append(ids, uint64(utils.ToInt(v["id"])))
+		c := map[string]string{}
+		c["id"] = v["id"]
+		c["filename"] = v["filename"]
+		create[c["filename"]] = c
+	}
+	//读取老信息
+	volist, _ := (&db.Rom{}).GetByIds(ids)
+	romlist := map[uint64]*db.Rom{}
+	for _, v := range volist {
+		romlist[v.Id] = v
+		filename := utils.GetFileName(v.RomPath)
+		//同名等于没改名
+		if filename == create[filename]["filename"] {
+			delete(create, filename)
+		}
+	}
+
+	if len(create) == 0 {
+		return nil
+	}
+
+	//开始遍历修改
+	for _, v := range create {
+		rom := romlist[uint64(utils.ToInt(v["id"]))]
+		filename := v["filename"]
+		//读取子游戏
+		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
+
+		err := errors.New("")
+
+		if err = renameFile(filename, rom, subRom); err != nil {
+			return err
+		}
+
+		//更新数据库
+		fname := rom.RomPath
+		fpath := utils.GetFilePath(rom.RomPath)
+		fext := utils.GetFileExt(rom.RomPath)
+		fname = filename + fext
+		if fpath != "." {
+			fname = fpath + "/" + filename + fext
+		}
+
+		err = (&db.Rom{Id: uint64(utils.ToInt(v["id"])), Name: filename, RomPath: fname, Pinyin: utils.TextToPinyin(filename)}).UpdateName()
+		if err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
 //修改文件名
 func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	platform := rom.Platform
