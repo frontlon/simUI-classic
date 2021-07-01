@@ -24,7 +24,7 @@
       table input[type='text']:hover {background:none;}
       table .nosave {color:color(manager-input-nosave-text-color);}
       .openfile {cursor:pointer;}
-      .pages {width:*;text-align:right;}
+      .pages {width:*;text-align:center;}
       .pages li {display:inline-block;size:20dip;line-height:20dip;border:1px solid color(manager-pages-border-color);background:color(manager-pages-background-color);text-align:center;color:color(manager-pages-text-color);margin:0 2dip;}
       .pages li:hover {background:color(manager-pages-hover-background-color);}
       .pages li:current {background:none;border:0;}
@@ -39,6 +39,8 @@
       #romlist_rombase th:nth-child(5),#romlist_rombase td:nth-child(5) input{width:80dip}
       #romlist_rombase th:nth-child(6),#romlist_rombase td:nth-child(6) input{width:70dip}
       #romlist_rombase th:nth-child(8),#romlist_rombase td:nth-child(8) input{width:40dip}
+
+      .form_bottom{border:0}
 
     </style>
   </head>
@@ -84,6 +86,9 @@
                 <tbody></tbody>
               </table>
               <ul class="pages" id="pages_rombase"></ul>
+              <div class="form_bottom">
+                <button class="ok" id="rombase_submit">{{BatchUpdate}}</button>
+          </div>
             </div>
           </div>
         </section>
@@ -378,6 +383,16 @@
         }
         managerRombaseSave(this);
       }
+
+      //批量更新 - 游戏资料管理
+      /*
+      event keydown $(#romlist_rombase input[type=text]) (evt,input) {
+        if(evt.keyCode != Event.VK_RETURN){
+          return ;
+        }
+        managerRombaseBatchSave(this);
+      }
+      */
 
       //分页 - 游戏资料管理
       event click $(#pages_rombase li){

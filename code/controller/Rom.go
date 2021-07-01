@@ -293,56 +293,32 @@ func RomController() {
 		d := make(map[string]string)
 		_ = json.Unmarshal([]byte(data), &d)
 
-		rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
-		romName := utils.GetFileName(rom.RomPath)
-		romBase := &modules.RomBase{
-			RomName:   romName,
-			Name:      d["name"],
-			Type:      d["type"],
-			Year:      d["year"],
-			Publisher: d["publisher"],
-			Country:   d["country"],
-			Translate: d["translate"],
-			Version:   d["version"],
-		}
-
-		//写入配置文件
-		if err := modules.WriteRomBaseFile(rom.Platform, romBase); err != nil {
+		dbRom,err := modules.SetRomBase(d)
+		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
-		}
-		name := ""
-		if d["name"] == "" {
-			name = romName
-		} else {
-			name = d["name"]
-		}
-
-		//更新到数据库
-		dbRom := &db.Rom{
-			Name:          name,
-			BaseType:      d["type"],
-			BaseYear:      d["year"],
-			BasePublisher: d["publisher"],
-			BaseCountry:   d["country"],
-			BaseTranslate: d["translate"],
-			BaseVersion:   d["version"],
-		}
-		if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
-			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
-		}
-
-		//更新子游戏pname
-		if rom.Name != name {
-			if err := dbRom.UpdateSubRomPname(rom.Name, name); err != nil {
-				utils.WriteLog(err.Error())
-				return utils.ErrorMsg(err.Error())
-			}
 		}
 
 		jsonstr, _ := json.Marshal(&dbRom)
 		return sciter.NewValue(string(jsonstr))
+
+	})
+
+	//批量编辑rom基础信息
+	utils.Window.DefineFunction("BatchSetRomBase", func(args ...*sciter.Value) *sciter.Value {
+
+		/*data := args[0].String()
+
+		d := []map[string]string{}
+		_ = json.Unmarshal([]byte(data), &d)
+
+		err := modules.BatchSetRomBase(d)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}*/
+
+		return sciter.NewValue(1)
 
 	})
 
@@ -353,7 +329,7 @@ func RomController() {
 		rom, _ := (&db.Rom{}).GetById(id)
 
 		romName := utils.GetFileName(rom.RomPath)
-		baseinfo, _ := modules.GetRomBase(rom.Platform)
+		baseinfo, _ := modules.GetRomBaseList(rom.Platform)
 
 		if _, ok := baseinfo[romName]; ok {
 			jsonMenu, _ := json.Marshal(baseinfo[romName])

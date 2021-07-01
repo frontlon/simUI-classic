@@ -9,11 +9,11 @@ import (
 )
 
 //rom重命名
-func RomRename(id uint64, name string) error {
+func RomRename(id uint64, filename string) error {
 
 	//读取老信息
 	rom, _ := (&db.Rom{}).GetById(id)
-	if name == rom.Name || name == "" { //如果名称一样则不用修改
+	if filename == rom.Name || filename == "" { //如果名称一样则不用修改
 		return nil
 	}
 
@@ -22,7 +22,7 @@ func RomRename(id uint64, name string) error {
 
 	err := errors.New("")
 
-	if err = renameFile(name, rom, subRom); err != nil {
+	if err = renameFile(filename, rom, subRom); err != nil {
 		return err
 	}
 
@@ -30,12 +30,12 @@ func RomRename(id uint64, name string) error {
 	fname := rom.RomPath
 	fpath := utils.GetFilePath(rom.RomPath)
 	fext := utils.GetFileExt(rom.RomPath)
-	fname = name + fext
+	fname = filename + fext
 	if fpath != "." {
-		fname = fpath + "/" + name + fext
+		fname = fpath + "/" + filename + fext
 	}
 
-	err = (&db.Rom{Id: id, Name: name, RomPath: fname, Pinyin: utils.TextToPinyin(name)}).UpdateName()
+	err = (&db.Rom{Id: id, Name: filename, RomPath: fname, Pinyin: utils.TextToPinyin(filename)}).UpdateName()
 	if err != nil {
 		return err
 	}
@@ -92,9 +92,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	for _, f := range files {
 		fArr := strings.Split(f, "__")
 		fName := fArr[len(fArr)-1]
-		fArr = strings.Split(fName,".")
+		fArr = strings.Split(fName, ".")
 		fArr = utils.SliceDeleteLast(fArr)
-		fName = strings.Join(fArr,".")
+		fName = strings.Join(fArr, ".")
 		newName := name + "__" + fName
 		if err := utils.Rename(f, newName); err != nil {
 			return err

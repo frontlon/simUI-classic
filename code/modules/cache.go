@@ -21,7 +21,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 
 	RomPath := config.Cfg.Platform[platform].RomPath                    //rom文件路径
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
-	BaseInfo, err := GetRomBase(platform)
+	BaseInfo, err := GetRomBaseList(platform)
 
 	if err != nil {
 		return nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())

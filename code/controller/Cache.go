@@ -131,7 +131,7 @@ func CacheController() {
 					nameList = append(nameList,utils.GetFileName(v.RomPath))
 				}
 				//读取csv文件数据
-				romBase, _ := modules.GetRomBase(platform)
+				romBase, _ := modules.GetRomBaseList(platform)
 
 				if romBase == nil{
 					continue

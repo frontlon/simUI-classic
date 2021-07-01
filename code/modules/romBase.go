@@ -20,8 +20,9 @@ type RomBase struct {
 	Version   string // 版本
 }
 
-//读取详情文件
-func GetRomBase(platform uint32) (map[string]*RomBase, error) {
+
+//读取游戏资料列表
+func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 
 	if config.Cfg.Platform[platform].Rombase == "" {
 		return map[string]*RomBase{}, nil
@@ -89,9 +90,9 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 		return nil
 	}
 
-	info, _ := GetRomBase(platform) //读取老数据
+	info, _ := GetRomBaseList(platform) //读取老数据
 	//如果全为空则删除当前记录
-	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" && newData.Translate == "" {
+	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" && newData.Translate == "" && newData.Version == "" {
 		delete(info, newData.RomName)
 	} else {
 		info[newData.RomName] = newData //并入新数据
@@ -108,7 +109,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	writer := csv.NewWriter(f)
 
 	//表头
-	if err := writer.Write(getCsvTitle());err !=nil{
+	if err := writer.Write(getCsvTitle()); err != nil {
 		return err
 	}
 
@@ -153,6 +154,10 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 	writer.Write(getCsvTitle())
 
 	for _, v := range newData {
+
+		if v.Name == "" && v.Publisher == "" && v.Year == "" && v.Type == "" && v.Country == "" && v.Translate == "" && v.Version == "" {
+			continue
+		}
 
 		writer.Write([]string{
 			strings.Trim(v.RomName, " "),

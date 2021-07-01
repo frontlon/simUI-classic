@@ -59,6 +59,9 @@ function managerChangeRombasePlatform(platformId){
     if(pages != ""){
         $(#pages_rombase).select("li:nth-child(1)").state.current = true;
     }
+    if($$(#pages_rombase li).length == 1){
+        $(#pages_rombase).style["display"] = "none";
+    }
 }
 
 //创建菜单选项 - 游戏资料管理
@@ -132,6 +135,9 @@ function managerChangeRombaseMenu(menuName){
     if(pages != ""){
         $(#pages_rombase).select("li:nth-child(1)").state.current = true;
     }
+    if($$(#pages_rombase li).length == 1){
+        $(#pages_rombase).style["display"] = "none";
+    }
 }
 
 //创建资料rom列表 - 游戏资料管理
@@ -184,6 +190,10 @@ function managerRombaseSave(obj){
         warning(CONF.Lang.FilenameNotEmpty);
         return;
     }
+
+    //更改游戏名称
+    mainView.RomRename(tr.attributes["rid"],filename);
+
     //更新资料
     var data = {
         id:tr.attributes["rid"];
@@ -196,10 +206,40 @@ function managerRombaseSave(obj){
         version:tr.select(".version").value,
     }
     mainView.SetRomBase(JSON.stringify(data));
-
-    //更改游戏名称
-    mainView.RomRename(tr.attributes["rid"],filename);
     obj.attributes.removeClass("nosave");
+}
+
+//批量更新 - 游戏资料管理
+function managerRombaseBatchSave(){
+
+    var trs = $$(#romlist_rombase tbody tr);
+    var create = [];
+    var i = 0;
+    for(var tr in trs){
+        var filename = tr.select(".filename").value;
+        if(filename.trim() == ""){
+            alert(CONF.Lang.FilenameNotEmpty);
+            return;
+        }
+        //更新资料
+        var data = {
+            id:tr.attributes["rid"];
+            name:tr.select(".name").value,
+            year:tr.select(".year").value,
+            type:tr.select(".type").value,
+            publisher:tr.select(".publisher").value,
+            country:tr.select(".country").value,
+            translate:tr.select(".translate").value,
+            version:tr.select(".version").value,
+        }
+
+        //更改游戏名称
+        mainView.RomRename(tr.attributes["rid"],filename);
+        obj.attributes.removeClass("nosave");
+        create[i] = data;
+        i++;
+    }
+    mainView.BatchSetRomBase(JSON.stringify(create));
 }
 
 /**
@@ -234,6 +274,9 @@ function managerChangeMediaPlatform(platformId){
     $(#pages_media).html = pages;
     if (pages != ""){
         $(#pages_media).select("li:nth-child(1)").state.current = true;
+    }
+    if($$(#pages_media li).length == 1){
+        $(#pages_media).style["display"] = "none";
     }
 }
 
@@ -299,6 +342,9 @@ function managerChangeMediaMenu(menuName){
     if(pages != ""){
         $(#pages_media).select("li:nth-child(1)").state.current = true;
     }
+    if($$(#pages_media li).length == 1){
+        $(#pages_media).style["display"] = "none";
+    }
 }
 
 
@@ -332,6 +378,7 @@ function managerSetMedia(obj) {
     }
     
 }
+
 
 /**
  * 模拟器管理
@@ -372,6 +419,9 @@ function managerChangeSimulatorPlatform(platformId){
     $(#pages_sim).html = pages;
     if (pages != ""){
         $(#pages_sim).select("li:nth-child(1)").state.current = true;
+    }
+    if($$(#pages_sim li).length == 1){
+        $(#pages_sim).style["display"] = "none";
     }
 }
 
@@ -463,6 +513,9 @@ function managerChangeSimulatorMenu(menuName){
     $(#pages_sim).html = pages;
     if(pages != ""){
         $(#pages_sim).select("li:nth-child(1)").state.current = true;
+    }
+    if($$(#pages_sim li).length == 1){
+        $(#pages_sim).style["display"] = "none";
     }
 }
 
@@ -673,6 +726,9 @@ function managerChangeRomFilePlatform(platformId){
     if(pages != ""){
         $(#pages_file).select("li:nth-child(1)").state.current = true;
     }
+    if($$(#pages_file li).length == 1){
+        $(#pages_file).style["display"] = "none";
+    }
 }
 
 //创建资料rom列表 - 文件管理
@@ -715,6 +771,9 @@ function managerChangeRomFileMenu(menuName){
     $(#pages_file).html = pages;
     if(pages != ""){
         $(#pages_file).select("li:nth-child(1)").state.current = true;
+    }
+    if($$(#pages_file li).length == 1){
+        $(#pages_file).style["display"] = "none";
     }
 }
 

@@ -512,10 +512,10 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 		} else {
 			newSubFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + newFolder + config.Cfg.Separator + subRomName
 		}
-		
-		if err := utils.FileMove(f, newSubFile); err != nil {}
-	}
 
+		if err := utils.FileMove(f, newSubFile); err != nil {
+		}
+	}
 
 	//同平台下不用移动资源文件
 	if rom.Platform == newPlatform {
@@ -532,13 +532,64 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//移动攻略文件
-	if config.Cfg.Platform[newPlatform].FilesPath == ""{
+	if config.Cfg.Platform[newPlatform].FilesPath == "" {
 		return errors.New(config.Cfg.Lang["TipMoveFiles"])
 	}
 	files, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].FilesPath, romName+"__")
 	filesPath := config.Cfg.Platform[newPlatform].FilesPath
 	for _, f := range files {
-		_ = utils.FileMove(f, filesPath +config.Cfg.Separator+utils.GetFileNameAndExt(f));
+		_ = utils.FileMove(f, filesPath+config.Cfg.Separator+utils.GetFileNameAndExt(f));
 	}
 	return nil
 }
+
+//编辑rom基础信息
+func SetRomBase(d map[string]string) (*db.Rom,error) {
+
+	rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
+	romName := utils.GetFileName(rom.RomPath)
+	romBase := &RomBase{
+		RomName:   romName,
+		Name:      d["name"],
+		Type:      d["type"],
+		Year:      d["year"],
+		Publisher: d["publisher"],
+		Country:   d["country"],
+		Translate: d["translate"],
+		Version:   d["version"],
+	}
+
+	//写入配置文件
+	if err := WriteRomBaseFile(rom.Platform, romBase); err != nil {
+		return nil,err
+	}
+	name := ""
+	if d["name"] == "" {
+		name = romName
+	} else {
+		name = d["name"]
+	}
+
+	//更新到数据库
+	dbRom := &db.Rom{
+		Name:          name,
+		BaseType:      d["type"],
+		BaseYear:      d["year"],
+		BasePublisher: d["publisher"],
+		BaseCountry:   d["country"],
+		BaseTranslate: d["translate"],
+		BaseVersion:   d["version"],
+	}
+	if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
+		return nil,err
+	}
+
+	//更新子游戏pname
+	if rom.Name != name {
+		if err := dbRom.UpdateSubRomPname(rom.Name, name); err != nil {
+			return nil,err
+		}
+	}
+	return dbRom,nil
+}
+
