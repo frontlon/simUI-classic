@@ -39,9 +39,6 @@ function thumbDown(evt){
     });
 
     if(result != undefined){
-        if (type == "thumb"){
-            THUMB = result;
-        }
         self.select(".file-drop-zone[opt="+ type +"]").html = "<img src='"+ result +"'>";
     }
 
