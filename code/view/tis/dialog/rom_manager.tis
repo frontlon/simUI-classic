@@ -156,19 +156,22 @@ function managerCreateRombase(romjson){
         var romName = obj.RomPath.replace("\\","/");
         var romPath = romName.split("/");
         var filename = romPath[romPath.length - 1].split(".");
+        filename.remove(filename.length-1);
+        filename = filename.join(".").toHtmlString();
+
         var alias = obj.Name.toHtmlString();
-        if (filename[0] == obj.Name){
+        if (filename == obj.Name){
             alias = "";
         }
 
-        romData += "<td><input|text.filename value='"+ filename[0] +"'/></td>";
-        romData += "<td><input|text.name value='"+ alias +"'/></td>";
-        romData += "<td><input|text.year value='"+ obj.BaseYear +"'/></td>";
-        romData += "<td><input|text.type value='"+ obj.BaseType +"'/></td>";
-        romData += "<td><input|text.publisher value='"+ obj.BasePublisher +"'/></td>";
-        romData += "<td><input|text.country value='"+ obj.BaseCountry +"'/></td>";
-        romData += "<td><input|text.translate value='"+ obj.BaseTranslate +"'/></td>";
-        romData += "<td><input|text.version value='"+ obj.BaseVersion +"'/></td>";
+        romData += "<td><input|text.filename value=\""+ filename +"\"/></td>";
+        romData += "<td><input|text.name value=\""+ alias +"\"/></td>";
+        romData += "<td><input|text.year value=\""+ obj.BaseYear +"\"/></td>";
+        romData += "<td><input|text.type value=\""+ obj.BaseType +"\"/></td>";
+        romData += "<td><input|text.publisher value=\""+ obj.BasePublisher +"\"/></td>";
+        romData += "<td><input|text.country value=\""+ obj.BaseCountry +"\"/></td>";
+        romData += "<td><input|text.translate value=\""+ obj.BaseTranslate +"\"/></td>";
+        romData += "<td><input|text.version value=\""+ obj.BaseVersion +"\"/></td>";
         romData += "</tr>"
     }
     $(#romlist_rombase tbody).html = romData;

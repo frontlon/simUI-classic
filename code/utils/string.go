@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"simUI/code/utils/pinyin"
+	"strings"
 )
 
 /**
@@ -24,6 +25,8 @@ func TextToPinyin(str string) string {
 	if err != nil {
 		// 错误处理
 	}
+	str = strings.ToLower(str)
+	str = strings.ReplaceAll(str, " ", "")
 	return str
 }
 
