@@ -62,6 +62,9 @@ function managerChangeRombasePlatform(platformId){
     if($$(#pages_rombase li).length == 1){
         $(#pages_rombase).style["display"] = "none";
     }
+
+    //显示批量操作按钮
+    $(#rombase_submit).style["display"] = "inline-block";
 }
 
 //创建菜单选项 - 游戏资料管理
@@ -153,8 +156,13 @@ function managerCreateRombase(romjson){
         var romName = obj.RomPath.replace("\\","/");
         var romPath = romName.split("/");
         var filename = romPath[romPath.length - 1].split(".");
+        var alias = obj.Name.toHtmlString();
+        if (filename[0] == obj.Name){
+            alias = "";
+        }
+
         romData += "<td><input|text.filename value='"+ filename[0] +"'/></td>";
-        romData += "<td><input|text.name value='"+ obj.Name.toHtmlString() +"'/></td>";
+        romData += "<td><input|text.name value='"+ alias +"'/></td>";
         romData += "<td><input|text.year value='"+ obj.BaseYear +"'/></td>";
         romData += "<td><input|text.type value='"+ obj.BaseType +"'/></td>";
         romData += "<td><input|text.publisher value='"+ obj.BasePublisher +"'/></td>";
@@ -223,6 +231,12 @@ function managerRombaseBatchSave(){
             return;
         }
 
+        //取掉input高亮
+        var input = $$(#romlist_rombase input);
+        for (var ipt in input){
+            ipt.attributes.removeClass("nosave");
+        }
+
         //批量改名
         var rename = {
             id:tr.attributes["rid"],
@@ -230,7 +244,6 @@ function managerRombaseBatchSave(){
         }
 
         //批量更新资料
-        /* 
         var base = {
             id:tr.attributes["rid"];
             name:tr.select(".name").value,
@@ -243,16 +256,16 @@ function managerRombaseBatchSave(){
         }
 
         rombaseList[i] = base;
-        */
         renameList[i] = rename;
         i++;
     }
 
+
     //更改游戏名称
     mainView.BatchRomRename(JSON.stringify(renameList));
     //更改游戏资料
-    //mainView.BatchSetRomBase(JSON.stringify(create));
-    //obj.attributes.removeClass("nosave");
+    mainView.BatchSetRomBase(JSON.stringify(rombaseList));
+    alert(CONF.Lang.UpdateSuccess);
 
 }
 

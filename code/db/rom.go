@@ -124,7 +124,7 @@ func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword
 	if baseTranslate != "" {
 		where["base_translate"] = baseTranslate
 	}
-	if baseTranslate != "" {
+	if baseVersion != "" {
 		where["base_version"] = baseVersion
 	}
 	likeWhere := ""

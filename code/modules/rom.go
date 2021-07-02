@@ -251,7 +251,7 @@ func GetGameDoc(t string, id uint64) (string, error) {
 }
 
 //读取游戏攻略内容
-func SetGameDoc(t string, id uint64, content string) (error) {
+func SetGameDoc(t string, id uint64, content string) error {
 
 	//游戏游戏详细数据
 	info, err := (&db.Rom{}).GetById(id)
@@ -262,21 +262,21 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 
 	//如果没有执行运行的文件，则读取文档内容
 	romName := utils.GetFileName(filepath.Base(info.RomPath)) //生成新文件的完整绝路路径地址
-	newExt := "";
+	newExt := ""
 	Filename := ""
 	for _, v := range config.DOC_EXTS {
 		strategyFileName := ""
 		if t == "strategy" {
 			strategyFileName = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + v
-			newExt = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + ".md";
+			newExt = config.Cfg.Platform[info.Platform].StrategyPath + config.Cfg.Separator + romName + ".md"
 		} else if t == "doc" {
 			strategyFileName = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + v
-			newExt = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + ".txt";
+			newExt = config.Cfg.Platform[info.Platform].DocPath + config.Cfg.Separator + romName + ".txt"
 		}
 
-		if (utils.FileExists(strategyFileName)) {
-			Filename = strategyFileName;
-			break;
+		if utils.FileExists(strategyFileName) {
+			Filename = strategyFileName
+			break
 		}
 	}
 
@@ -295,7 +295,7 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 	}
 
 	//替换图片路径为相对路径
-	content = strings.ReplaceAll(content, config.Cfg.RootPath, "");
+	content = strings.ReplaceAll(content, config.Cfg.RootPath, "")
 	if err := utils.OverlayWriteFile(Filename, content); err != nil {
 		return err
 	}
@@ -304,7 +304,7 @@ func SetGameDoc(t string, id uint64, content string) (error) {
 }
 
 //读取游戏攻略内容
-func DelGameDoc(t string, id uint64) (error) {
+func DelGameDoc(t string, id uint64) error {
 
 	//游戏游戏详细数据
 	info, err := (&db.Rom{}).GetById(id)
@@ -320,9 +320,9 @@ func DelGameDoc(t string, id uint64) (error) {
 	for _, v := range config.DOC_EXTS {
 		strategyFileName := res[t] + config.Cfg.Separator + romName + v
 
-		if (utils.FileExists(strategyFileName)) {
-			Filename = strategyFileName;
-			break;
+		if utils.FileExists(strategyFileName) {
+			Filename = strategyFileName
+			break
 		}
 	}
 
@@ -433,7 +433,7 @@ func UploadStrategyImages(id uint64, p string) (string, error) {
 	}
 
 	//先检查目录是否存在，不存在创建目录
-	if (!utils.FolderExists(strategyPath)) {
+	if !utils.FolderExists(strategyPath) {
 		if err := utils.CreateDir(strategyPath); err != nil {
 			return "", err
 		}
@@ -461,7 +461,7 @@ func GetRomRes(typ string, pf uint32, romName string) string {
 		for _, v := range types[typ] {
 			fileName = res[typ] + config.Cfg.Separator + romName + v
 			if utils.FileExists(fileName) {
-				resName = fileName;
+				resName = fileName
 				break
 			}
 		}
@@ -480,7 +480,7 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//生成目录地址
-	romName := utils.GetFileNameAndExt(rom.RomPath);
+	romName := utils.GetFileNameAndExt(rom.RomPath)
 	oldFile := config.Cfg.Platform[rom.Platform].RomPath + config.Cfg.Separator + rom.RomPath
 	newFile := ""
 
@@ -491,7 +491,7 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	}
 
 	//如果位置一样则不用移动
-	if (oldFile == newFile) {
+	if oldFile == newFile {
 		return nil
 	}
 
@@ -505,7 +505,7 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	romFiles, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].RomPath, subName+"__")
 
 	for _, f := range romFiles {
-		subRomName := utils.GetFileNameAndExt(f);
+		subRomName := utils.GetFileNameAndExt(f)
 		newSubFile := ""
 		if newFolder == "/" {
 			newSubFile = config.Cfg.Platform[newPlatform].RomPath + config.Cfg.Separator + subRomName
@@ -527,7 +527,7 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	for resName, path := range config.GetResPath(newPlatform) {
 		name := GetRomRes(resName, rom.Platform, romName)
 		if name != "" {
-			_ = utils.FileMove(name, path+config.Cfg.Separator+utils.GetFileNameAndExt(name));
+			_ = utils.FileMove(name, path+config.Cfg.Separator+utils.GetFileNameAndExt(name))
 		}
 	}
 
@@ -538,13 +538,13 @@ func MoveRom(id uint64, newPlatform uint32, newFolder string) error {
 	files, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].FilesPath, romName+"__")
 	filesPath := config.Cfg.Platform[newPlatform].FilesPath
 	for _, f := range files {
-		_ = utils.FileMove(f, filesPath+config.Cfg.Separator+utils.GetFileNameAndExt(f));
+		_ = utils.FileMove(f, filesPath+config.Cfg.Separator+utils.GetFileNameAndExt(f))
 	}
 	return nil
 }
 
 //编辑rom基础信息
-func SetRomBase(d map[string]string) (*db.Rom,error) {
+func SetRomBase(d map[string]string) (*db.Rom, error) {
 
 	rom, _ := (&db.Rom{}).GetById(uint64(utils.ToInt(d["id"])))
 	romName := utils.GetFileName(rom.RomPath)
@@ -561,13 +561,12 @@ func SetRomBase(d map[string]string) (*db.Rom,error) {
 
 	//写入配置文件
 	if err := WriteRomBaseFile(rom.Platform, romBase); err != nil {
-		return nil,err
+		return nil, err
 	}
-	name := ""
-	if d["name"] == "" {
-		name = romName
-	} else {
-		name = d["name"]
+
+	name := d["name"]
+	if d["name"] == romName {
+		name = ""
 	}
 
 	//更新到数据库
@@ -581,15 +580,63 @@ func SetRomBase(d map[string]string) (*db.Rom,error) {
 		BaseVersion:   d["version"],
 	}
 	if err := dbRom.UpdateRomBase(uint64(utils.ToInt(d["id"]))); err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	//更新子游戏pname
 	if rom.Name != name {
 		if err := dbRom.UpdateSubRomPname(rom.Name, name); err != nil {
-			return nil,err
+			return nil, err
 		}
 	}
-	return dbRom,nil
+	return dbRom, nil
 }
 
+//批量编辑rom基础信息
+func BatchSetRomBase(data []map[string]string) error {
+	ids := []uint64{}
+	for _, v := range data {
+		ids = append(ids, uint64(utils.ToInt(v["id"])))
+	}
+
+	voList, _ := (&db.Rom{}).GetByIds(ids)
+	romList := map[uint64]*db.Rom{}
+	platform := uint32(0)
+	for _, v := range voList {
+		if platform == 0 {
+			platform = v.Platform
+		}
+		ids = append(ids, uint64(utils.ToInt(v.Id)))
+		romList[v.Id] = v
+	}
+
+	//读取出所有资料
+	rombaseList, _ := GetRomBaseList(platform)
+	for _, d := range data {
+
+		rom := romList[uint64(utils.ToInt(d["id"]))]
+
+		romName := utils.GetFileName(rom.RomPath)
+
+		base := &RomBase{
+			RomName:   romName,
+			Name:      d["name"],
+			Type:      d["type"],
+			Year:      d["year"],
+			Publisher: d["publisher"],
+			Country:   d["country"],
+			Translate: d["translate"],
+			Version:   d["version"],
+		}
+
+		rombaseList[romName] = base
+
+	}
+
+	//写入配置文件
+	if err := CoverRomBaseFile(platform, rombaseList); err != nil {
+		return err
+	}
+
+	return nil
+}

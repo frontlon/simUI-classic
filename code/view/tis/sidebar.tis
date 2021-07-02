@@ -679,11 +679,13 @@ function createOpenFolderMenu(info){
         simId = CONF.Platform[pfId].UseSim["Id"];
     }
 
-    var btndata = "";
+    var btndata = "<li class='folder'>"+ CONF.Lang.LocationResDir +"<menu>";
 
 
     btndata += "<li class='folder' rid='"+ info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
  
+    btndata +="<hr>";
+
     if(CONF.Platform[pfId].ThumbPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='thumb'>"+ CONF.Lang.LocationThumbFile +"</li>";
     }
@@ -718,9 +720,15 @@ function createOpenFolderMenu(info){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='background'>"+ CONF.Lang.LocationBackgroundFile +"</li>";
     }
 
+    if(CONF.Platform[pfId].WallpaperPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='wallpaper'>"+ CONF.Lang.LocationWallpaperFile +"</li>";
+    }
+
     if(CONF.Platform[pfId].VideoPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='video'>"+ CONF.Lang.LocationVideoFile +"</li>";
     }
+
+    btndata +="<hr>";
 
     if(CONF.Platform[pfId].DocPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='doc'>"+ CONF.Lang.LocationDocFile +"</li>";
@@ -730,7 +738,16 @@ function createOpenFolderMenu(info){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='strategy'>"+ CONF.Lang.LocationStrategyFile +"</li>";
     }
 
-    btndata += "<hr />";
+    if(CONF.Platform[pfId].StrategyPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='strategy'>"+ CONF.Lang.LocationStrategyFile +"</li>";
+    }
+
+    if(CONF.Platform[pfId].FilesPath != ""){
+        btndata += "<li class='folder' rid='"+ info.Id +"' opt='files'>"+ CONF.Lang.LocationStrategyFiles +"</li>";
+    }
+
+    btndata += "</menu></li>"
+    btndata += "<li class='folder'>"+ CONF.Lang.LocationSimDir +"<menu>"
 
     //定位模拟器目录
    if(CONF.Platform[pfId].SimList.length > 0){
@@ -739,6 +756,8 @@ function createOpenFolderMenu(info){
         }
 
     }
+
+    btndata += "</menu></li>"
     return btndata;
 }
 

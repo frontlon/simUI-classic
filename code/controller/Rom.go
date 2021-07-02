@@ -321,7 +321,7 @@ func RomController() {
 	//批量编辑rom基础信息
 	utils.Window.DefineFunction("BatchSetRomBase", func(args ...*sciter.Value) *sciter.Value {
 
-		/*data := args[0].String()
+		data := args[0].String()
 
 		d := []map[string]string{}
 		_ = json.Unmarshal([]byte(data), &d)
@@ -330,7 +330,7 @@ func RomController() {
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
-		}*/
+		}
 
 		return sciter.NewValue(1)
 
