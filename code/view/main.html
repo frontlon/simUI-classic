@@ -18,6 +18,7 @@ solid-with-shadow
     body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover;margin:0}
     splitter{background:color(sidebar-background-color);}
     splitter:hover{background:color(sidebar-background-color)}
+    .clearfix{display:block;clear:both;}
     #left_platform{background-color:color(sidebar-background-color);height:*;}
     #left_menu{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
@@ -190,7 +191,7 @@ solid-with-shadow
     #add_menu{position:absolute;top:18dip;right:8dip}
     
     /* 基础信息表格 */
-    #right_rombase{width:*;padding:0;margin:0;background:color(right-doc-background-color);clear:both}
+    #right_rombase{width:*;padding:0;margin:0;background:color(right-doc-background-color);}
     #right_rombase li{margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;display:table-cell;border-radius:15dip;float:left}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
     #right_rombase li:nth-child(2){background-color:color(right-play-info-background-color-2);}
@@ -471,6 +472,7 @@ solid-with-shadow
                 <div class="flow_wrapper_right">
                     <h2>{{BaseInfo}}</h2>
                     <ul id="right_rombase"></ul>
+                    <div class="clearfix"></div>
                     <h2 id="doc_title">{{Doc}}</h2>
                     <div id="doc" class="doc"></div>
                 </div>
