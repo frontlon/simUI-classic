@@ -347,6 +347,7 @@ view.root.on("ready", function(){
       self.on("contextmenusetup", "#romlist li", function(evt) {
         //如果是th右键，则忽略
         if (this.attributes.hasClass("romth") == false){
+            openSidebar(this);
             romContextMenu(this);
         }
     });
