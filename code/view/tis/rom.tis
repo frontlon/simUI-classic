@@ -98,9 +98,8 @@ function _createRomListList(romobj,cls){
         }
         
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
-
         if(obj.Star == 1){
-            data += "<div.start><img src='"+ thumb +"' /></div>";
+            data += "<div.star><img src='"+ thumb +"' /></div>";
         }else{
             data += "<div><img src='"+ thumb +"' /></div>";
         }
