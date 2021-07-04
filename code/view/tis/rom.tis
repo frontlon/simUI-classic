@@ -49,7 +49,6 @@ function _createRomListBlock(romobj){
         data += "<div><img src='"+ thumb +"' /></div>";
         data += "<div>"+ obj.Name.toHtmlString() +"</div>";
         if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
-        else{data += "<span class='rom_star' style='display:none'></span>";}
         data += "</li>"
     }
     return data;
@@ -97,8 +96,15 @@ function _createRomListList(romobj,cls){
                 thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
             }
         }
+        
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
-        data += "<div><img src='"+ thumb +"' /></div>";
+
+        if(obj.Star == 1){
+            data += "<div.start><img src='"+ thumb +"' /></div>";
+        }else{
+            data += "<div><img src='"+ thumb +"' /></div>";
+        }
+
         data += "<div>"+ obj.Name.toHtmlString() +"</div>";
         if(column[0] == 1){data += "<div>"+ obj.Menu.toHtmlString() +"</div>";}
         if(column[1] == 1){data += "<div>"+ obj.BaseType +"</div>";}
