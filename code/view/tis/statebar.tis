@@ -10,16 +10,9 @@ function initRomListStyle(){
     if(CONF.Default.RomlistStyle == "1"){
         $(#switch_romlist).html = "<i.block.minsize></i>";
         romlist.attributes.addClass("romblock");
-        if($(.romth) != undefined){
-            $(.romth).style["display"]="none";
-        }
-        
     }else{
         $(#switch_romlist).html = "<i.list.minsize></i>";
         romlist.attributes.addClass("romlist");
-        if($(.romth) != undefined){
-            $(.romth).style["display"]="block";
-        }
     }
 
     //初始化rom列表模块大小
@@ -243,14 +236,15 @@ function switchRomListStyle(obj){
         obj.html = "<i.list.minsize></i>";
         self.$(#romlist).attributes.removeClass("romblock");
         self.$(#romlist).attributes.addClass("romlist");
-        self.$(.romth).style["display"]="block";
     }else{
         obj.attributes["value"] = "1";
         obj.html = "<i.block.minsize></i>";
         self.$(#romlist).attributes.removeClass("romlist");
         self.$(#romlist).attributes.addClass("romblock");
-        self.$(.romth).style["display"]="none";
     }
+
+    ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","","")
+    createRomList(1);
     //更新配置文件
     view.UpdateConfig("romlist_style",obj.attributes["value"]);
 }

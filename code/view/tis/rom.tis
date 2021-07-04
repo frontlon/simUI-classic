@@ -9,16 +9,61 @@ var ROMJSON;//rom列表
 function createRomList(cls=0){
     var romobj = JSON.parse(ROMJSON);
     var romlist = self.$(#romlist);
-    var data = "";
     var switch_romlist = $(#switch_romlist).attributes["value"];
+    var data = "";
+
+    //如果清理参数=1，则清理掉所有数据
+    if(cls == 1){
+        romlist.clear();
+    }
+
+    if(switch_romlist == 1){
+        //模块模式
+        data = _createRomListBlock(romobj);
+    }else{
+        //列表模式
+        data = _createRomListList(romobj,cls);
+
+    }
+    
+    romlist.append(data);
+    SCROLL_PAGE++;
+}
+
+//列表样式数据 - 模块
+function _createRomListBlock(romobj){
     var title = "";
     var thumb = "";
     var romPath = "";
-    
+    var data = "";
+    for(var obj in romobj) {
+  
+        var romName = getRomName(obj.RomPath)
+        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
+
+        //没有找到图片，读取默认缩略图
+        if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+            thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+        }
+        data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
+        data += "<div><img src='"+ thumb +"' /></div>";
+        data += "<div>"+ obj.Name.toHtmlString() +"</div>";
+        if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
+        else{data += "<span class='rom_star' style='display:none'></span>";}
+        data += "</li>"
+    }
+    return data;
+}
+
+//列表样式数据 - 列表
+function _createRomListList(romobj,cls){
+    var title = "";
+    var romPath = "";
+    var data = "";
+
     //标题列
     var column = CONF.Default.RomlistColumn.split(",");
     if(cls == 1){
-        romlist.clear(); //如果清理参数=1，则清理掉所有数据
         data += "<li class='romth'>";
         data += "<div></div>";
         data += "<div>"+CONF.Lang["BaseName"]+"</div>";
@@ -42,12 +87,15 @@ function createRomList(cls=0){
         }
 
 
-        var romName = getRomName(obj.RomPath)
-        thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
-
-        //没有找到图片，读取默认缩略图
-        if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
-            thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+        var romName = getRomName(obj.RomPath);
+        //现读图标
+        var thumb = getRomPicPath("icon",obj.Platform,romName);
+        //没有找到图标，找缩略图，读取默认缩略图
+        if (thumb == ""){
+            thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
+            if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
+                thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
+            }
         }
         data += "<li class='romitem' rid='"+ obj.Id +"' title='"+ title +"'>";
         data += "<div><img src='"+ thumb +"' /></div>";
@@ -59,12 +107,12 @@ function createRomList(cls=0){
         if(column[4] == 1){data += "<div>"+ obj.BaseCountry +"</div>";}
         if(column[5] == 1){data += "<div>"+ obj.BaseTranslate +"</div>";}
         if(column[6] == 1){data += "<div>"+ obj.BaseVersion +"</div>";}
-        if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
-        else{data += "<span class='rom_star' style='display:none'></span>";}
+        //if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
+        //else{data += "<span class='rom_star' style='display:none'></span>";}
         data += "</li>"
     }
-    romlist.append(data);
-    SCROLL_PAGE++;
+    return data;
+
 }
 
 //rom分页
