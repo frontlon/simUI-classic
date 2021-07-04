@@ -338,7 +338,7 @@ function _createRotate(info){
     if(cassette != ""){ pics += "<img src=\""+ cassette +"\" />"; }
     if(icon != ""){ pics += "<img src=\""+ icon +"\" />"; }
     if(gif != ""){ pics += "<img src=\""+ gif +"\" />"; }
-    if(background != ""){ pics += "<img src=\""+ background +"\" />"; }
+    //if(background != ""){ pics += "<img src=\""+ background +"\" />"; }
     if(wallpaper != ""){ pics += "<img src=\""+ wallpaper +"\" />";}
 
     //游戏缩略图
