@@ -182,7 +182,7 @@ func CreateNewRomBaseFile(p string) error {
 	//转换为切片
 	f, err := os.Create(p)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer f.Close()
 
