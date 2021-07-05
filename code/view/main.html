@@ -305,7 +305,7 @@ solid-with-shadow
     .widthMode #thumb_h2{display:none;}
     .widthMode #funBtn_h2{display:none;}
     .right_bg{display:none}
-    .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color)}
+    .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color);position:relative}
     .widthMode .margin_wrapper{margin-top:-50dip;height:*;}
     .widthMode .button_wrapper{top:60dip;width:50%}
     .widthMode .rotate_wrapper{height:90dip;}
@@ -332,11 +332,6 @@ solid-with-shadow
     .widthMode .related > li:hover{opacity:0.7}
     .widthMode .related > li img{width:48dip;height:48dip;border-radius:48dip;margin:0 auto}
     .widthMode .related > li > p{margin-bottom:0;display:block;font-size:10dip}
-
-
-
-    .ssmoke{size:400dip;margin:*;aspect: Smoke url(this://app/tis/plugins/smoke.tis);}
-
 </style>
 
 </head>
@@ -439,11 +434,7 @@ solid-with-shadow
         <panels>
         <section id="right_first">
             <!-- 选项卡1 -->
-            <div class="smoke"></div>
-            <div class="right_bg" id="right_bg">
-              
-
-            </div>
+            <div class="right_bg" id="right_bg"></div>
 
             <div class="margin_wrapper">
             <h2 id="funBtn_h2">{{FunButton}}</h2>
