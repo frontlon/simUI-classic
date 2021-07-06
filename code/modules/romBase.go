@@ -142,7 +142,7 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 	//转换为切片
 	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer f.Close()
 
