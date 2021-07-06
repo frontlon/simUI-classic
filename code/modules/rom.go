@@ -65,7 +65,7 @@ func RunGame(romId uint64, simId uint32) error {
 
 		//如果指定了执行文件
 		if romCmd.File != "" {
-			rom.RomPath = utils.GetFilePath(rom.RomPath) + "/" + romCmd.File
+			rom.RomPath = utils.GetFileAbsPath(rom.RomPath) + "/" + romCmd.File
 		}
 
 	}

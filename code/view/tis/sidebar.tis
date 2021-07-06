@@ -558,13 +558,21 @@ function setFavorite(evt){
         star = "0";
         evt.html = "<img src='this://app/images/fileico_fav_0.png' />";
         if(rdom != undefined){
-            rdom.select(".rom_star").style["display"] = "block";
+            if($(#switch_romlist).attributes["value"] == 1){
+                rdom.select(".rom_star").style["display"] = "none";
+            }else{
+                rdom.select("div").attributes.removeClass("star");
+            }
         }
     }else{
         star = "1";
         evt.html = "<img src='this://app/images/fileico_fav_1.png' />";
         if(rdom != undefined){
-          rdom.select(".rom_star").style["display"] = "none";
+            if($(#switch_romlist).attributes["value"] == 1){
+                rdom.select(".rom_star").style["display"] = "block";
+            }else{
+                rdom.select("div").attributes.addClass("star");
+            }
         }
     }
 

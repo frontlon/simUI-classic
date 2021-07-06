@@ -66,7 +66,7 @@ func MoveZombieByFile(f string, p string) error {
 
 	fileName := utils.GetFileName(f)
 	ext := utils.GetFileExt(f)
-	oldPathArr := strings.Split(utils.GetFilePath(f), config.Cfg.Separator)
+	oldPathArr := strings.Split(utils.GetFileAbsPath(f), config.Cfg.Separator)
 	newPath := p + config.Cfg.Separator + fileName + "_" + oldPathArr[len(oldPathArr)-1] + ext
 	if err := utils.FileMove(f, newPath); err != nil {
 		return err

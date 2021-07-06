@@ -49,6 +49,7 @@ function _createRomListBlock(romobj){
         data += "<div><img src='"+ thumb +"' /></div>";
         data += "<div>"+ obj.Name.toHtmlString() +"</div>";
         if(obj.Star == 1){data += "<span class='rom_star' style='display:block'></span>";}
+        else{data += "<span class='rom_star' style='display:none'></span>";}
         data += "</li>"
     }
     return data;

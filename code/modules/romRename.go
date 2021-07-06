@@ -28,7 +28,7 @@ func RomRename(id uint64, filename string) error {
 
 	//更新数据库
 	fname := rom.RomPath
-	fpath := utils.GetFilePath(rom.RomPath)
+	fpath := utils.GetFileAbsPath(rom.RomPath)
 	fext := utils.GetFileExt(rom.RomPath)
 	fname = filename + fext
 	if fpath != "." {
@@ -85,7 +85,7 @@ func BatchRomRename(data []map[string]string) error {
 
 		//更新数据库
 		fname := rom.RomPath
-		fpath := utils.GetFilePath(rom.RomPath)
+		fpath := utils.GetFileAbsPath(rom.RomPath)
 		fext := utils.GetFileExt(rom.RomPath)
 		fname = filename + fext
 		if fpath != "." {

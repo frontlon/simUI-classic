@@ -44,13 +44,22 @@ function contextSetFavorite(evt){
         evt.attributes.addClass('fav0');
         evt.attributes["value"] = 0;
         evt.html = CONF.Lang.CancelFavorite;
-        rdom.select(".rom_star").style["display"] = "block";
+
+        if($(#switch_romlist).attributes["value"] == 1){
+            rdom.select(".rom_star").style["display"] = "block";
+        }else{
+            rdom.select("div").attributes.addClass("star");
+        }
     }else{
         evt.attributes.removeClass('fav0');
         evt.attributes.addClass('fav1');
         evt.attributes["value"] = 1;
         evt.html = CONF.Lang.SetFavorite;
-        rdom.select(".rom_star").style["display"] = "none";
+        if($(#switch_romlist).attributes["value"] == 1){
+            rdom.select(".rom_star").style["display"] = "none";
+        }else{
+            rdom.select("div").attributes.removeClass("star");
+        }
     }
 }
 

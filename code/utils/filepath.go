@@ -24,12 +24,13 @@ func GetFileExt(p string) string {
 }
 
 /*
- 从完整路径中获取文件路径，不包含结尾  /
+ 获取文件的绝对路径
 */
-func GetFilePath(p string) string {
+func GetFileAbsPath(p string) string {
 	dir := filepath.Dir(p)
 	return strings.Replace(dir, "./", "", 1)
 }
+
 
 /*
  从路径中读取文件名+扩展名

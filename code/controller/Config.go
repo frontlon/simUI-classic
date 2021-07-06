@@ -68,4 +68,19 @@ func ConfigController() {
 		return sciter.NewValue(body)
 	})
 
+	//导出设置
+	utils.Window.DefineFunction("InputPlatform", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+		modules.InputPlatform(p)
+		return sciter.NewValue(1)
+	})
+
+	//导出设置
+	utils.Window.DefineFunction("OutputPlatform", func(args ...*sciter.Value) *sciter.Value {
+		platform := uint32(utils.ToInt(args[0].String()))
+		p := args[1].String()
+		modules.OutputPlatform(platform,p)
+		return sciter.NewValue(1)
+	})
+
 }
