@@ -37,7 +37,6 @@ function _createRomListBlock(romobj){
     var romPath = "";
     var data = "";
     for(var obj in romobj) {
-  
         var romName = getRomName(obj.RomPath)
         thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
 
@@ -152,7 +151,7 @@ function scrollLoadRom(evtPos){
         var filter_country = $(#filter_country).value;
         var filter_translate = $(#filter_translate).value;
         var filter_version = $(#filter_version).value;
-        ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,menu,val,"",SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate,filter_version);
+        ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,menu,val,num,SCROLL_PAGE,filter_type,filter_publisher,filter_year,filter_country,filter_translate,filter_version);
 
         if(ROMJSON != "[]"){
             createRomList(0);

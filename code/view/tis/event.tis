@@ -6,7 +6,7 @@ view.root.on("ready", function(){
 
 
 
-    view.OutputPlatform(19,"/Users/frontlon/go/src/simui/app");
+    //view.OutputPlatform(19,"/Users/frontlon/go/src/simui/app");
 
 
 

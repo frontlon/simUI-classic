@@ -217,6 +217,7 @@ func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string,
 		}
 		result.Where(where).Where(subWhere).Find(&volist)
 	} else {
+		keyword = strings.ToLower(keyword)
 		result.Where(where).Where("pinyin LIKE ?", keyword+"%").Find(&volist)
 	}
 
