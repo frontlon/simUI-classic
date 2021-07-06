@@ -5,6 +5,11 @@ view.root.on("ready", function(){
     Init();
 
 
+
+    view.OutputPlatform(19,"/Users/frontlon/go/src/simui/app");
+
+
+
     /**
     * 窗口
     **/
@@ -511,7 +516,7 @@ view.root.on("ready", function(){
                 $(#search_box_input).state.focus = true;
          }
         }
-    });  
+    });
 
 });
 
