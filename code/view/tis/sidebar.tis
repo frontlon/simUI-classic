@@ -687,11 +687,6 @@ function createOpenFolderMenu(info){
 
     var btndata = "<li class='folder'>"+ CONF.Lang.LocationResDir +"<menu>";
 
-
-    btndata += "<li class='folder' rid='"+ info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
- 
-    btndata +="<hr>";
-
     if(CONF.Platform[pfId].ThumbPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='thumb'>"+ CONF.Lang.LocationThumbFile +"</li>";
     }
