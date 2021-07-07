@@ -92,7 +92,7 @@ function openFile(evt) {
 
     var filter = "";
     if(evt.attributes.hasClass("video")){
-        filter = "Video Files (*.mp4,*.wmv,*.avi)|*.mp4;*.wmv;*.avi|All Files (*.*)|*.*";
+        filter = "Video Files (*.mp4,*.wmv,*.avi,*.flv)|*.mp4;*.wmv;*.avi;*.fiv|All Files (*.*)|*.*";
     }else if (evt.attributes.hasClass("doc") || evt.attributes.hasClass("strategy")){
         filter = "";
         filter = "Doc Files (*.txt,*.md,*.html)|*.txt;*.md;*.html|All Files (*.*)|*.*";

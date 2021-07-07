@@ -245,7 +245,7 @@ function getRomPicPath(type,platform,name){
 
     var exts = [];
     if (type == "video"){
-         exts = ["wmv","mp4","avi"]; //支持的视频类型
+         exts = ["mp4","flv","wmv","avi",]; //支持的视频类型
     }else{
          exts = ["png","jpg","gif","ico","jpeg","bmp"]; //支持的图片类型
     }
