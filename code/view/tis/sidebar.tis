@@ -690,8 +690,9 @@ function createOpenFolderMenu(info){
     }else if (CONF.Platform[pfId].UseSim != undefined){
         simId = CONF.Platform[pfId].UseSim["Id"];
     }
-
-    var btndata = "<li class='folder'>"+ CONF.Lang.LocationResDir +"<menu>";
+    var btndata = "<li class='folder' rid='"+ info.Id +"' opt='rom'>"+ CONF.Lang.LocationRomFile +"</li>";
+    
+    btndata += "<li class='folder'>"+ CONF.Lang.LocationResDir +"<menu>";
 
     if(CONF.Platform[pfId].ThumbPath != ""){
         btndata += "<li class='folder' rid='"+ info.Id +"' opt='thumb'>"+ CONF.Lang.LocationThumbFile +"</li>";
