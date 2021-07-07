@@ -13,13 +13,19 @@ import (
 )
 
 var outputCfg = ini.Empty()
+var outputConfigFile = "./cache/config.ini"
 
-func OutputPlatform(platformId uint32, p string) {
+func OutputPlatform(platformId uint32, p string) error {
 	setIniPlatform((platformId))
 	setIniSimulator(platformId)
 	setIniRomSet(platformId)
-	packFiles(platformId)
-	outputCfg.SaveTo("./output.ini")
+	err := outputCfg.SaveTo(outputConfigFile);
+	defer utils.FileDelete(outputConfigFile)
+	if err != nil {
+		return err
+	}
+	packFiles(platformId, p)
+	return nil
 }
 
 //设置ini - 平台信息
@@ -37,6 +43,8 @@ func setIniPlatform(platformId uint32) {
 	outputCfg.Section(section).Key("icon").SetValue(utils.GetFileNameAndExt(platform.IconPath))
 	outputCfg.Section(section).Key("exts").SetValue(platform.RomExts)
 	outputCfg.Section(section).Key("rombase").SetValue(utils.GetFileNameAndExt(platform.Rombase))
+	outputCfg.Section(section).Key("rom").SetValue(platform.RomPath)
+	outputCfg.Section(section).Key("ico").SetValue(utils.GetFileNameAndExt(platform.Icon))
 
 	for k, v := range paths {
 		if v != "" {
@@ -104,7 +112,7 @@ func setIniRomSet(platformId uint32) {
 }
 
 //打包文件
-func packFiles(platformId uint32) {
+func packFiles(platformId uint32, p string) {
 	platform, _ := (&db.Platform{}).GetById(platformId)
 	files := map[string]*os.File{}
 
@@ -116,7 +124,7 @@ func packFiles(platformId uint32) {
 		files[k], _ = os.Open(v)
 	}
 
-	compreFile, _ := os.Create("./1/1.zip")
+	compreFile, _ := os.Create("./1/" + platform.Name + ".zip")
 	zw := zip.NewWriter(compreFile)
 	defer zw.Close()
 
@@ -131,6 +139,28 @@ func packFiles(platformId uint32) {
 		defer file.Close()
 	}
 
+	//模拟器文件
+	sims, _ := (&db.Simulator{}).GetByPlatform(platformId)
+	simList := []*os.File{}
+	for _, v := range sims {
+
+		a, _ := os.Open(utils.GetFileAbsPath(v.Path))
+		simList = append(simList, a)
+	}
+	for _, file := range simList {
+
+		err := compress_zip(file, "simulator/", zw)
+		if err != nil {
+			//return err
+		}
+		defer file.Close()
+	}
+
+	//ini配置文件
+	c, _ := os.Open(outputConfigFile)
+	_ = compress_zip(c, "", zw)
+
+	defer c.Close()
 }
 
 func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
@@ -139,8 +169,11 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 		return err
 	}
 	if info.IsDir() {
-		//prefix = prefix + "/" + info.Name()
-		prefix := info.Name()
+		if strings.Contains(prefix, "/") {
+			prefix = prefix + "/" + info.Name()
+		} else {
+			prefix = info.Name()
+		}
 		fileInfos, err := file.Readdir(-1)
 		if err != nil {
 			return err

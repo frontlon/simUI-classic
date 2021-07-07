@@ -964,8 +964,17 @@ function managerCheckRepeat(){
     }
 
     var romData = "";
+    var upSize = 0;
+    var color1 = "grp1";
+    var color2 = "grp2";
+    var clr = color1;
     for(var obj in romobj) {
-        romData += "<tr opt='" + obj.path + "' rid='"+obj.id+"'>";
+        //颜色
+        if(upSize == 0){upSize = obj.size;}
+        if (obj.size != upSize){clr = (clr == color1) ? color2 : color1}
+        upSize = obj.size
+
+        romData += "<tr opt='" + obj.path + "' rid='"+obj.id+"' class='"+clr+"'>";
         romData += "<td><input class='check_repeat' type='checkbox' value='"+ obj.id +"' /></td>";
         romData += "<td>"+ obj.name +"</td>";
         romData += "<td>"+ obj.path +"</td>";

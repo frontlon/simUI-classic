@@ -225,7 +225,9 @@ html:theme(steam) {
     var(manager-pages-hover-background-color) :#2d415a;
     var(manager-tip-text-color) :#7a9fcc;
     var(manager-tip-background-color) :#223245;
-
+    var(manager-grp1-tr-background-color):#6d0303;
+    var(manager-grp2-tr-background-color):#6d6203;
+    
     /* 设置页面平台select */
     var(config-platform-background-color) :#eee;
     var(config-platform-border-color) :#2b394b;
