@@ -37,7 +37,7 @@ func CheckRomRepeat(platformId uint32) ([]map[string]interface{}, error) {
 	result := []map[string]interface{}{}
 
 	for _, v := range repeatList {
-		if len(v) <=1 {
+		if len(v) <= 1 {
 			continue
 		}
 		for _, b := range v {
@@ -87,8 +87,14 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 		existsMap[v.Name] = ""
 	}
 
+	res := config.GetResPath(platformId)
+
 	//先检查重复资料
-	for _, path := range config.GetResPath(platformId) {
+	for k, path := range res {
+		//攻略文件单独去处理
+		if k == "files" {
+			continue
+		}
 		existsList := map[string][]string{}
 		if path == "" {
 			continue
@@ -132,18 +138,32 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 
 		}
 	}
-	return notExistsList, nil
-}
 
-//移动无效僵尸文件
-func MoveZombieFile(f string, p string) error {
-
-	fileName := utils.GetFileNameAndExt(f)
-	newPath := p + config.Cfg.Separator + fileName
-
-	if err := utils.FileMove(f, newPath); err != nil {
-		return err
+	//处理攻略，攻略文件都是以__分割的文件名，且一个rom可存在多个攻略文件
+	if err := filepath.Walk(res["files"],
+		func(p string, f os.FileInfo, err error) error {
+			if f == nil {
+				return nil
+			}
+			if f.IsDir() == true {
+				return nil
+			}
+			name := utils.GetFileName(p)
+			if name == "" {
+				return nil
+			}
+			//检查子游戏
+			nameArr := strings.Split(name, "__")
+			if _, ok := existsMap[nameArr[0]]; !ok {
+				//检查无效文件
+				repeat := map[string]string{}
+				repeat["path"] = p
+				repeat["type"] = "1"
+				notExistsList = append(notExistsList, repeat)
+			}
+			return nil
+		}); err != nil {
 	}
 
-	return nil
+	return notExistsList, nil
 }
