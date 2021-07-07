@@ -223,6 +223,8 @@ html:theme(dark) {
     var(manager-pages-hover-background-color) :#555;
     var(manager-tip-text-color) :#999;
     var(manager-tip-background-color) :#333;
+    var(manager-grp1-tr-background-color):#6d0303;
+    var(manager-grp2-tr-background-color):#6d6203;
 
     /* 设置页面平台select */
     var(config-platform-background-color) :#eee;

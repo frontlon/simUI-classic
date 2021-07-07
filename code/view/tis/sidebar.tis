@@ -470,8 +470,14 @@ function _getSideSecondDom(type,url){
         html += "<li class='thumb_delete' value='video'>"+CONF.Lang.DeleteVideo+"</li>";
         html += "</menu></button>";
         html += "<div.file-drop-zone  opt='video' accept-drop='*.wmv;*.mp4;*.avi'>";
-        html += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropVideoToHere+"<br>("+CONF.Lang.VideoExts+")</div>";
-        html += "</div></div>";
+
+        if(url == ""){
+            html += "<div class='file-drop-zone-empty'>"+CONF.Lang.DropVideoToHere+"<br>("+CONF.Lang.VideoExts+")</div>";
+        }else{
+            html += "<div class='file-drop-zone-empty'>("+ CONF.Lang.VideoCanNotBePreviewed + ")<br>"+CONF.Lang.VideoUrl + "<br>" + URL.toPath(url) + "</div>";
+        }
+        html += "</div>";
+        html += "</div>";
     }else{
         html += "<h2>"+title+"</h2>";
         html += "<div class='filedropzone_widget'>";

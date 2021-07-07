@@ -225,6 +225,8 @@ html:theme(girl) {
     var(manager-pages-hover-background-color) :#f8e1e1;
     var(manager-tip-text-color) :#666;
     var(manager-tip-background-color) :#e2e7ee;
+    var(manager-grp1-tr-background-color):#f8cece;
+    var(manager-grp2-tr-background-color):#f8f8ce;
 
     /* 设置页面平台select */
     var(config-platform-background-color) :#eee;

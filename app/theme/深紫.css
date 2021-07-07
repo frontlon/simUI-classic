@@ -226,7 +226,9 @@ html:theme(purple) {
     var(manager-pages-hover-background-color) :#4e355b;
     var(manager-tip-text-color) :#a466c5;
     var(manager-tip-background-color) :#452f51;
-
+    var(manager-grp1-tr-background-color):#6d0303;
+    var(manager-grp2-tr-background-color):#6d6203;
+    
     /* 设置页面平台select */
     var(config-platform-background-color) :#eee;
     var(config-platform-border-color) :#4e355b;
