@@ -565,8 +565,8 @@ func SetRomBase(d map[string]string) (*db.Rom, error) {
 	}
 
 	name := d["name"]
-	if d["name"] == romName {
-		name = ""
+	if name == "" || d["name"] == romName {
+		name = romName
 	}
 
 	//更新到数据库
@@ -584,7 +584,10 @@ func SetRomBase(d map[string]string) (*db.Rom, error) {
 	}
 
 	//更新子游戏pname
-	if rom.Name != name {
+	if rom.Name != name && rom.Name != "" {
+		fmt.Println("===========")
+		fmt.Println("rom.name",rom.Name)
+		fmt.Println("name",name)
 		if err := dbRom.UpdateSubRomPname(rom.Name, name); err != nil {
 			return nil, err
 		}
