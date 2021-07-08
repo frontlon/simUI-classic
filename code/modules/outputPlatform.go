@@ -19,7 +19,7 @@ func OutputPlatform(platformId uint32, p string) error {
 	setIniPlatform((platformId))
 	setIniSimulator(platformId)
 	setIniRomSet(platformId)
-	err := outputCfg.SaveTo(outputConfigFile);
+	err := outputCfg.SaveTo(outputConfigFile)
 	defer utils.FileDelete(outputConfigFile)
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func setIniPlatform(platformId uint32) {
 
 	paths := config.GetResPath(platformId)
 
-	if (platform.RomPath != "") {
+	if platform.RomPath != "" {
 		platform.RomPath = strings.ReplaceAll(platform.RomPath, "\\", "/")
 	}
 
@@ -65,7 +65,7 @@ func setIniSimulator(platformId uint32) {
 		if v.Path != "" {
 			p := strings.ReplaceAll(v.Path, "\\", "/")
 			varr := strings.Split(p, "/")
-			if (len(varr) > 1) {
+			if len(varr) > 1 {
 				v.Path = varr[len(varr)-2] + config.Cfg.Separator + varr[len(varr)-1]
 			} else {
 				v.Path = varr[len(varr)-1]
@@ -83,6 +83,11 @@ func setIniSimulator(platformId uint32) {
 //设置ini - rom信息
 func setIniRomSet(platformId uint32) {
 	roms, _ := (&db.Rom{}).GetByPlatform(platformId)
+	simList, _ := (&db.Simulator{}).GetByPlatform(platformId)
+	simMap := map[uint32]string{}
+	for _, v := range simList {
+		simMap[v.Id] = v.Name
+	}
 	stars := []string{}
 	hides := []string{}
 	sims := map[string]string{}
@@ -94,8 +99,17 @@ func setIniRomSet(platformId uint32) {
 		if v.Hide == 1 {
 			hides = append(hides, v.Name)
 		}
+		//处理rom的模拟器配置
 		if v.SimConf != "{}" && v.SimConf != "" {
-			sims[v.Name] = v.SimConf
+			d := make(map[string]map[string]string)
+			simConf := make(map[string]map[string]string)
+			json.Unmarshal([]byte(v.SimConf), &d)
+			for k, v := range d {
+				//把数组的key，从id变为name
+				simConf[simMap[uint32(utils.ToInt(k))]] = v
+			}
+			simConfStr, _ := json.Marshal(simConf)
+			sims[v.Name] = string(simConfStr)
 		}
 	}
 
@@ -116,23 +130,25 @@ func packFiles(platformId uint32, p string) {
 	platform, _ := (&db.Platform{}).GetById(platformId)
 	files := map[string]*os.File{}
 
+	//压缩rom
+	files["rom"], _ = os.Open(platform.RomPath)
 	//压缩资源
 	files["rombase"], _ = os.Open(platform.Rombase)
 	files["ico"], _ = os.Open(platform.Icon)
+
 	res := config.GetResPath(platformId)
 	for k, v := range res {
 		files[k], _ = os.Open(v)
 	}
 
-	compreFile, _ := os.Create("./1/" + platform.Name + ".zip")
+	compreFile, _ := os.Create("./" + platform.Name + ".zip")
 	zw := zip.NewWriter(compreFile)
 	defer zw.Close()
-
 	for k, file := range files {
 		if k == "rombase" || k == "ico" {
 			k = ""
 		}
-		err := compress_zip(file, k, zw)
+		err := compress_zip(file, "", zw)
 		if err != nil {
 			//return err
 		}
@@ -145,11 +161,12 @@ func packFiles(platformId uint32, p string) {
 	for _, v := range sims {
 
 		a, _ := os.Open(utils.GetFileAbsPath(v.Path))
+		defer a.Close()
 		simList = append(simList, a)
 	}
 	for _, file := range simList {
 
-		err := compress_zip(file, "simulator/", zw)
+		err := compress_zip(file, "simulator", zw)
 		if err != nil {
 			//return err
 		}
@@ -158,8 +175,7 @@ func packFiles(platformId uint32, p string) {
 
 	//ini配置文件
 	c, _ := os.Open(outputConfigFile)
-	_ = compress_zip(c, "", zw)
-
+	compress_zip(c, "", zw)
 	defer c.Close()
 }
 
@@ -169,8 +185,8 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 		return err
 	}
 	if info.IsDir() {
-		if strings.Contains(prefix, "/") {
-			prefix = prefix + "/" + info.Name()
+		if prefix != "" {
+			prefix = prefix + "\\" + info.Name()
 		} else {
 			prefix = info.Name()
 		}
@@ -190,7 +206,10 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 		}
 	} else {
 		header, err := zip.FileInfoHeader(info)
-		header.Name = prefix + "/" + header.Name
+		if prefix != "" {
+			header.Name = prefix + "/" + header.Name
+		}
+
 		if err != nil {
 			return err
 		}

@@ -6,8 +6,8 @@ view.root.on("ready", function(){
 
 
 
-    //view.OutputPlatform(19,"/Users/frontlon/go/src/simui/app");
-    //view.InputPlatform("/Users/frontlon/go/src/simui/app/1/MacOS2.zip");
+    //view.OutputPlatform(20,"D:\\work\\go\\src\\simUI\\app");
+    view.InputPlatform("D:\\work\\go\\src\\simUI\\app\\PC2.zip");
 
 
 

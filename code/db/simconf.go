@@ -73,6 +73,15 @@ func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8,
 	return result.Error
 }
 
+//更新模拟器配置
+func (m *Rom) UpdateSimConfById(id uint64, conf string) error {
+	result := getDb().Table(m.TableName()).Where("id = ?",id).Update("sim_conf", conf)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //删除一个rom模拟器参数
 func (m *Rom) DelSimConf(romId uint64, simId uint32) error {
 

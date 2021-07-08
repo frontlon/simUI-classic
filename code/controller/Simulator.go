@@ -96,7 +96,7 @@ func SimulatorController() {
 		romIds := strings.Split(args[0].String(),",")
 		simId := uint32(utils.ToInt(args[1].String()))
 		//更新数据
-		if err := (&db.Rom{}).UpdateSimulatorBatch(romIds,simId); err != nil {
+		if err := (&db.Rom{}).UpdateSimIdByIds(romIds,simId); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

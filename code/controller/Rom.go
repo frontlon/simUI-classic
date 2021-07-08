@@ -225,8 +225,12 @@ func RomController() {
 		romIdsStr := strings.Split(args[0].String(), ",");
 		ishide := uint8(utils.ToInt(args[1].String()))
 
+		romIds := []uint64{}
+		for _,v := range romIdsStr{
+			romIds = append(romIds,uint64(utils.ToInt(v)))
+		}
 		//更新数据
-		if err := (&db.Rom{}).UpdateHide(romIdsStr, ishide); err != nil {
+		if err := (&db.Rom{}).UpdateHideByIds(romIds, ishide); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

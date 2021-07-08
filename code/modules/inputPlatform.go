@@ -2,10 +2,12 @@ package modules
 
 import (
 	"archive/zip"
+	"encoding/json"
 	"fmt"
 	"github.com/go-ini/ini"
 	"io"
 	"os"
+	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
 	"time"
@@ -16,7 +18,7 @@ var dir = ""
 func InputPlatform(p string) error {
 
 	//解压文件
-	dir = "games/input_" + utils.ToString(time.Now().Unix()) + "/"
+	dir = "games" + config.Cfg.Separator + "input_" + utils.ToString(time.Now().Unix()) + config.Cfg.Separator
 	if err := deCompress(p, dir); err != nil {
 		return err
 	}
@@ -69,7 +71,6 @@ func inputIniConfig(p string) error {
 	}
 
 	//载入平台数据
-
 	ico := ""
 	rom := ""
 	thumb := ""
@@ -164,23 +165,78 @@ func inputIniConfig(p string) error {
 		Pinyin:         utils.TextToPinyin(platformSection.Key("name").String()),
 		Sort:           0,
 	}
-	fmt.Println(platformDom)
 
 	platformId, err := platformDom.Add()
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("============", platformId)
-
-	/*simSection := file.Section("simulator")
-	if simSection != nil{
+	//载入模拟器数据
+	simSection := file.Section("simulator")
+	simIds := map[string]uint32{}
+	if simSection != nil {
 		sims := simSection.ChildSections()
-		for _,v := range sims{
-			sim := &db.Simulator{}
-			fmt.Println(v.Key("name"))
+		for _, v := range sims {
+			sim := &db.Simulator{
+				Name:     v.Key("name").String(),
+				Platform: uint32(utils.ToInt(platformId)),
+				Path:     v.Key("path").String(),
+				Cmd:      v.Key("cmd").String(),
+				Unzip:    uint8(utils.ToInt(v.Key("unzip").String())),
+				Default:  uint8(utils.ToInt(v.Key("default").String())),
+				Pinyin:   utils.TextToPinyin(v.Key("name").String()),
+			}
+			simIds[v.Key("name").String()], _ = sim.Add()
 		}
-	}*/
+	}
+
+	//更新rom缓存
+	if err := CreateRomCache(platformId);err != nil{
+		return err
+	}
+
+	//写入rom数据
+	starList := []string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("star").String())), &starList)
+	hideList := []string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("hide").String())), &hideList)
+	simList := map[string]map[string]string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("sim").String())), &simList)
+
+	//合并name，根据name读取ids
+	nameList := []string{}
+	for _,v:= range starList{
+		nameList = append(nameList,v)
+	}
+	for _,v:= range starList{
+		nameList = append(nameList,v)
+	}
+	for k,_:= range simList{
+		nameList = append(nameList,k)
+	}
+	IdList,_ := (&db.Rom{}).GetIdsByNames(platformId,nameList)
+
+	//更新star
+	starIds := []uint64{}
+	for _,v := range starList {
+		starIds = append(starIds,IdList[v])
+	}
+	(&db.Rom{}).UpdateStarByIds(starIds,1)
+
+	//更新hide
+	hideIds := []uint64{}
+	for _,v := range hideList {
+		hideIds = append(hideIds,IdList[v])
+	}
+	(&db.Rom{}).UpdateHideByIds(hideIds,1)
+
+	for _,v := range simList {
+		//sim := map[string]string{}
+		for a,b := range v{
+			fmt.Println("========",a,b)
+		}
+		//(&db.Rom{}).UpdateSimConfById(IdList[k],v)
+	}
 
 	return nil
 }

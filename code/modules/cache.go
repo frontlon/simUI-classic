@@ -2,6 +2,7 @@ package modules
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -9,8 +10,76 @@ import (
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
+	"simUI/code/utils/go-sciter"
 	"strings"
 )
+
+/**
+ * 创建缓存入口
+ **/
+func CreateRomCache(getPlatform uint32) error{
+
+
+		//检查更新一个平台还是所有平台
+		PlatformList := map[uint32]*db.Platform{}
+		if getPlatform == 0 { //所有平台
+			PlatformList = config.Cfg.Platform
+		} else { //一个平台
+			if _, ok := config.Cfg.Platform[getPlatform]; ok {
+				PlatformList[getPlatform] = config.Cfg.Platform[getPlatform]
+			}
+		}
+
+		//先检查平台，将不存在的平台数据先干掉
+		if getPlatform == 0 {
+			if err := ClearPlatform(); err != nil {
+				return err
+			}
+		}
+
+		//清空过滤器
+		_ = (&db.Filter{}).Truncate()
+
+		//开始重建缓存
+		for platform, _ := range PlatformList {
+
+			//第一步：创建rom缓存
+			romlist, err := CreateRomData(platform)
+			if err != nil {
+				return err
+			}
+
+			//第二步：更新rom数据
+			if err := UpdateRomDB(platform, romlist); err != nil {
+				return err
+			}
+
+			//第三步：读取rom目录
+			menu ,err := CreateMenuList(platform)
+			if err != nil {
+				return err
+			}
+
+			//第四步：更新menu数据
+			if err := UpdateMenuDB(platform, menu); err != nil {
+				return err
+			}
+
+			//第五步：更新filter数据
+			UpdateFilterDB(platform);
+
+		}
+
+		//收缩数据库
+		db.Vacuum()
+
+		//数据更新完成后，页面回调，更新页面DOM
+		if _, err := utils.Window.Call("CB_createCache", sciter.NewValue("")); err != nil {
+			fmt.Print(err)
+		}
+		return nil
+
+}
 
 /**
  * 创建缓存

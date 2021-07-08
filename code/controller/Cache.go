@@ -46,74 +46,13 @@ func CacheController() {
 			}
 			return sciter.NullValue()
 		}
-
 		go func() *sciter.Value {
-
-			//检查更新一个平台还是所有平台
-			PlatformList := map[uint32]*db.Platform{}
-			if getPlatform == 0 { //所有平台
-				PlatformList = config.Cfg.Platform
-			} else { //一个平台
-				if _, ok := config.Cfg.Platform[getPlatform]; ok {
-					PlatformList[getPlatform] = config.Cfg.Platform[getPlatform]
-				}
-			}
-
-			//先检查平台，将不存在的平台数据先干掉
-			if getPlatform == 0 {
-				if err := modules.ClearPlatform(); err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-			}
-
-			//清空过滤器
-			_ = (&db.Filter{}).Truncate()
-
-			//开始重建缓存
-			for platform, _ := range PlatformList {
-
-				//第一步：创建rom缓存
-				romlist, err := modules.CreateRomData(platform)
-				if err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-
-				//第二步：更新rom数据
-				if err := modules.UpdateRomDB(platform, romlist); err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-
-				//第三步：读取rom目录
-				menu ,err := modules.CreateMenuList(platform)
-				if err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-
-				//第四步：更新menu数据
-				if err := modules.UpdateMenuDB(platform, menu); err != nil {
-					utils.WriteLog(err.Error())
-					return utils.ErrorMsg(err.Error())
-				}
-
-				//第五步：更新filter数据
-				modules.UpdateFilterDB(platform);
-
-			}
-
-			//收缩数据库
-			db.Vacuum()
-
-			//数据更新完成后，页面回调，更新页面DOM
-			if _, err := utils.Window.Call("CB_createCache", sciter.NewValue("")); err != nil {
-				fmt.Print(err)
+			if err := modules.CreateRomCache(getPlatform);err != nil{
+				utils.WriteLog(err.Error())
+				return utils.ErrorMsg(err.Error())
 			}
 			return sciter.NullValue()
 		}()
-
 		return sciter.NullValue()
 	})
 

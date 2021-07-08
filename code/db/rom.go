@@ -334,6 +334,24 @@ func (*Rom) GetRelatedGames(id uint64) ([]*Rom, error) {
 
 }
 
+//读取相关游戏
+func (*Rom) GetIdsByNames(platform uint32, names []string) (map[string]uint64, error) {
+
+	volist := []*Rom{}
+	//先读取同类型游戏
+	result := getDb().Select("id,name").Where("platform = ? AND name in (?)", platform, names).Find(&volist)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	data := map[string]uint64{}
+	for _, v := range volist {
+		data[v.Name] = v.Id
+	}
+
+	return data, result.Error
+
+}
+
 //更新名称
 func (m *Rom) UpdateName() error {
 
@@ -382,8 +400,11 @@ func (m *Rom) UpdateStar() error {
 	return result.Error
 }
 
-//更新隐藏状态
-func (m *Rom) UpdateHide(ids []string, hide uint8) error {
+//批量更新隐藏状态
+func (m *Rom) UpdateHideByIds(ids []uint64, hide uint8) error {
+	if len(ids) == 0 {
+		return nil
+	}
 	result := getDb().Table(m.TableName()).Where("id in (?)", ids).Update("hide", hide)
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -391,8 +412,20 @@ func (m *Rom) UpdateHide(ids []string, hide uint8) error {
 	return result.Error
 }
 
+//批量更新喜好状态
+func (m *Rom) UpdateStarByIds(ids []uint64, star uint8) error {
+	if len(ids) == 0 {
+		return nil
+	}
+	result := getDb().Table(m.TableName()).Where("id in (?)", ids).Update("star", star)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
 //更新模拟器
-func (m *Rom) UpdateSimulatorBatch(romIds []string, simId uint32) error {
+func (m *Rom) UpdateSimIdByIds(romIds []string, simId uint32) error {
 	result := getDb().Table(m.TableName()).Where("id in (?)", romIds).Update("sim_id", simId)
 	if result.Error != nil {
 		fmt.Println(result.Error)
