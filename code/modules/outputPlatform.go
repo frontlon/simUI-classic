@@ -43,8 +43,13 @@ func setIniPlatform(platformId uint32) {
 	outputCfg.Section(section).Key("icon").SetValue(utils.GetFileNameAndExt(platform.IconPath))
 	outputCfg.Section(section).Key("exts").SetValue(platform.RomExts)
 	outputCfg.Section(section).Key("rombase").SetValue(utils.GetFileNameAndExt(platform.Rombase))
-	outputCfg.Section(section).Key("rom").SetValue(platform.RomPath)
 	outputCfg.Section(section).Key("ico").SetValue(utils.GetFileNameAndExt(platform.Icon))
+	//rom目录
+	romPath := strings.ReplaceAll(platform.RomPath, "\\", "/")
+	varr := strings.Split(romPath, "/")
+	romPath = varr[len(varr)-1]
+	outputCfg.Section(section).Key("rom").SetValue(romPath)
+
 
 	for k, v := range paths {
 		if v != "" {
@@ -90,14 +95,23 @@ func setIniRomSet(platformId uint32) {
 	}
 	stars := []string{}
 	hides := []string{}
+	simIds := map[string][]string{}
 	sims := map[string]string{}
 
 	for _, v := range roms {
+		//记录star
 		if v.Star == 1 {
 			stars = append(stars, v.Name)
 		}
+		//记录hide
 		if v.Hide == 1 {
 			hides = append(hides, v.Name)
+		}
+		//记录sim_id
+		if v.SimId != 0 {
+			if _, ok := simMap[v.SimId]; ok {
+				simIds[simMap[v.SimId]] = append(simIds[simMap[v.SimId]], v.Name)
+			}
 		}
 		//处理rom的模拟器配置
 		if v.SimConf != "{}" && v.SimConf != "" {
@@ -116,13 +130,16 @@ func setIniRomSet(platformId uint32) {
 	starJson, _ := json.Marshal(stars)
 	hideJson, _ := json.Marshal(hides)
 	simJson, _ := json.Marshal(sims)
+	simIdJson, _ := json.Marshal(simIds)
 	starStr := utils.Base64Encode(string(starJson))
 	hideStr := utils.Base64Encode(string(hideJson))
 	simStr := utils.Base64Encode(string(simJson))
+	simIdStr := utils.Base64Encode(string(simIdJson))
 
 	outputCfg.Section("rom").Key("star").SetValue(starStr)
 	outputCfg.Section("rom").Key("hide").SetValue(hideStr)
 	outputCfg.Section("rom").Key("sim").SetValue(simStr)
+	outputCfg.Section("rom").Key("simId").SetValue(simIdStr)
 }
 
 //打包文件

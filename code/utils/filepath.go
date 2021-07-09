@@ -11,6 +11,9 @@ import (
  从路径中读取文件名，不包含扩展名
 */
 func GetFileName(p string) string {
+	if p == "" {
+		return ""
+	}
 	base := filepath.Base(p);
 	str := strings.TrimSuffix(base, path.Ext(base))
 	return str
@@ -20,6 +23,9 @@ func GetFileName(p string) string {
  从路径中读取文件名扩展名
 */
 func GetFileExt(p string) string {
+	if p == "" {
+		return ""
+	}
 	return path.Ext(p)
 }
 
@@ -27,15 +33,20 @@ func GetFileExt(p string) string {
  获取文件的绝对路径
 */
 func GetFileAbsPath(p string) string {
+	if p == "" {
+		return ""
+	}
 	dir := filepath.Dir(p)
 	return strings.Replace(dir, "./", "", 1)
 }
-
 
 /*
  从路径中读取文件名+扩展名
 */
 func GetFileNameAndExt(p string) string {
+	if p == "" {
+		return ""
+	}
 	return filepath.Base(p);
 }
 
@@ -43,8 +54,11 @@ func GetFileNameAndExt(p string) string {
  路径转换为绝对路径
 */
 func AbsPath(p string) string {
-	if(!filepath.IsAbs(p)){
-		p,_ = filepath.Abs(p)
+	if p == "" {
+		return ""
+	}
+	if (!filepath.IsAbs(p)) {
+		p, _ = filepath.Abs(p)
 	}
 	return p
 }
@@ -53,11 +67,17 @@ func AbsPath(p string) string {
  检查路径是否为绝对路径
 */
 func IsAbsPath(p string) bool {
+	if p == "" {
+		return false
+	}
 	return filepath.IsAbs(p)
 }
 
 // 判断所给路径是否为文件夹
 func IsDir(path string) bool {
+	if path == "" {
+		return false
+	}
 	s, err := os.Stat(path)
 	if err != nil {
 		return false
@@ -111,7 +131,6 @@ func IsExist(f string) bool {
 	_, err := os.Stat(f)
 	return err == nil || os.IsExist(err)
 }
-
 
 /**
  * 根据关键字扫描目录和子目录，查询出符合条件的文件名

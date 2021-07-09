@@ -268,16 +268,15 @@ function _setVideoControl(movie){
         return;
     }
     try{
-    vdom.videoStop();
+        vdom.videoStop();
+        vdom.videoUnload();
+        vdom.videoLoad(movie)
+        vdom.videoPlay();
+        vdom.audioVolume(VIDEO_VALUME);
+        VIDEO_PLAY_STATE = 1;
+        $(#right_video_wrapper).style["height"] = vdom.videoHeight();
     }catch(e){}
-    vdom.videoUnload();
-    vdom.videoLoad(movie)
-    vdom.videoPlay();
-    vdom.audioVolume(VIDEO_VALUME);
-    VIDEO_PLAY_STATE = 1;
-
-    $(#right_video_wrapper).style["height"] = vdom.videoHeight();
-
+   
     $(#right_video).onControlEvent = function(evt) {
         if(evt.type == Event.VIDEO_STOPPED){
             if ( this.videoDuration() - this.videoPosition()  < 1){
@@ -651,18 +650,20 @@ function videoPlay(evt){
 
 //控制视频播放 - 暂停
 function videoPause(){
-    var video = $(#right_video);
-    if(video != undefined){
-        var position = video.videoPosition();
-        var duration = video.videoDuration();
-        if (video.videoIsPlaying()){
-            VIDEO_PLAY_STATE = 0;
-            video.videoStop();
-            if($(#video_play) != undefined){
-                $(#video_play).html = "<i.video_play></i>";
+    try{
+        var video = $(#right_video);
+        if(video != undefined){
+            var position = video.videoPosition();
+            var duration = video.videoDuration();
+            if (video.videoIsPlaying()){
+                VIDEO_PLAY_STATE = 0;
+                video.videoStop();
+                if($(#video_play) != undefined){
+                    $(#video_play).html = "<i.video_play></i>";
+                }
             }
         }
-    } 
+    }catch(e){}
 }
 
 //控制视频音量

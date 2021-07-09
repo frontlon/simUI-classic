@@ -78,7 +78,7 @@ function DownThumb(evt){
     };
     if(result == "yes"){
         //下载图片
-        var newpath = mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
+        mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
         view.close(evt.select("img").attributes["src"]);
     }
 }

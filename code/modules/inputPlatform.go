@@ -70,6 +70,100 @@ func inputIniConfig(p string) error {
 		return err
 	}
 
+	//导入平台数据
+	platformId, err := inputPlatformData(file)
+	if err != nil {
+		return err
+	}
+	//导入模拟器数据
+	simIds, err := inputSimulatormData(file, platformId)
+	if err != nil {
+		return err
+	}
+	//更新rom缓存
+	config.InitConf()
+	if err := CreateRomCache(platformId); err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	//写入rom数据
+	starList := []string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("star").String())), &starList)
+	hideList := []string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("hide").String())), &hideList)
+	simList := map[string]string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("sim").String())), &simList)
+
+	simIdList := map[string][]string{}
+	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("simId").String())), &simIdList)
+	//合并name，根据name读取ids
+	nameList := []string{}
+	for _, v := range starList {
+		nameList = append(nameList, v)
+	}
+	for _, v := range hideList {
+		nameList = append(nameList, v)
+	}
+	for k, _ := range simList {
+		nameList = append(nameList, k)
+	}
+	for _, v := range simIdList {
+		for _, b := range v {
+			nameList = append(nameList, b)
+		}
+	}
+
+	nameList = utils.SliceRemoveDuplicate(nameList)
+
+	IdList, _ := (&db.Rom{}).GetIdsByNames(platformId, nameList)
+
+	//更新star到数据库
+	starIds := []uint64{}
+	for _, v := range starList {
+		starIds = append(starIds, IdList[v])
+	}
+	(&db.Rom{}).UpdateStarByIds(starIds, 1)
+
+	//更新hide到数据库
+	hideIds := []uint64{}
+	for _, v := range hideList {
+		hideIds = append(hideIds, IdList[v])
+	}
+	(&db.Rom{}).UpdateHideByIds(hideIds, 1)
+
+	//更新simId到数据库
+	for k, v := range simIdList {
+		simListIds := []string{}
+		for _, b := range v {
+			simListIds = append(simListIds, utils.ToString(IdList[b]))
+		}
+		(&db.Rom{}).UpdateSimIdByIds(simListIds, simIds[k])
+	}
+
+	//更新sim_conf到数据库
+	for romName, v := range simList {
+		romData := map[string]map[string]string{}
+		json.Unmarshal([]byte(v), &romData)
+
+		romId := IdList[romName]
+
+		//遍历rom
+		simData := map[string]map[string]string{}
+		for simName, b := range romData {
+			simData[utils.ToString(simIds[simName])] = b
+		}
+
+		//写入数据库
+		create, _ := json.Marshal(&simData)
+		(&db.Rom{}).UpdateSimConfById(romId, string(create))
+	}
+
+	return nil
+}
+
+//导入平台数据
+func inputPlatformData(file *ini.File) (uint32, error) {
 	//载入平台数据
 	ico := ""
 	rom := ""
@@ -168,10 +262,13 @@ func inputIniConfig(p string) error {
 
 	platformId, err := platformDom.Add()
 	if err != nil {
-		return err
+		return 0, err
 	}
+	return platformId, nil
+}
 
-	//载入模拟器数据
+//导入模拟器数据
+func inputSimulatormData(file *ini.File, platformId uint32) (map[string]uint32, error) {
 	simSection := file.Section("simulator")
 	simIds := map[string]uint32{}
 	if simSection != nil {
@@ -189,54 +286,5 @@ func inputIniConfig(p string) error {
 			simIds[v.Key("name").String()], _ = sim.Add()
 		}
 	}
-
-	//更新rom缓存
-	if err := CreateRomCache(platformId);err != nil{
-		return err
-	}
-
-	//写入rom数据
-	starList := []string{}
-	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("star").String())), &starList)
-	hideList := []string{}
-	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("hide").String())), &hideList)
-	simList := map[string]map[string]string{}
-	json.Unmarshal([]byte(utils.Base64Decode(file.Section("rom").Key("sim").String())), &simList)
-
-	//合并name，根据name读取ids
-	nameList := []string{}
-	for _,v:= range starList{
-		nameList = append(nameList,v)
-	}
-	for _,v:= range starList{
-		nameList = append(nameList,v)
-	}
-	for k,_:= range simList{
-		nameList = append(nameList,k)
-	}
-	IdList,_ := (&db.Rom{}).GetIdsByNames(platformId,nameList)
-
-	//更新star
-	starIds := []uint64{}
-	for _,v := range starList {
-		starIds = append(starIds,IdList[v])
-	}
-	(&db.Rom{}).UpdateStarByIds(starIds,1)
-
-	//更新hide
-	hideIds := []uint64{}
-	for _,v := range hideList {
-		hideIds = append(hideIds,IdList[v])
-	}
-	(&db.Rom{}).UpdateHideByIds(hideIds,1)
-
-	for _,v := range simList {
-		//sim := map[string]string{}
-		for a,b := range v{
-			fmt.Println("========",a,b)
-		}
-		//(&db.Rom{}).UpdateSimConfById(IdList[k],v)
-	}
-
-	return nil
+	return simIds, nil
 }
