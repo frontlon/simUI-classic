@@ -234,7 +234,4 @@ html:theme(girl) {
     var(config-platform-text-color) :#999;
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
-    var(config-platform-button-border-color) :#f8e1e1;
-    var(config-platform-button-hover-background-color) :#e3e8ee;
-    var(config-platform-button-active-background-color) :#e3e8ee;
 }

@@ -87,9 +87,10 @@ view.root.on("ready", function(){
         clearRombase(this);
     });
 
-
-    
-
+    //弹出平台配置窗口
+    self.on("click", "#platform_config", function(evt) {
+        openPlatformConfig(this);
+    });
     //弹出设置窗口
     self.on("click", "#config", function(evt) {
         openConfig(this);

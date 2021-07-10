@@ -232,8 +232,5 @@ html:theme(dark) {
     var(config-platform-text-color) :#999;
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
-    var(config-platform-button-border-color) :#666;
-    var(config-platform-button-hover-background-color) :#eee;
-    var(config-platform-button-active-background-color) :#ddd;
 
 }

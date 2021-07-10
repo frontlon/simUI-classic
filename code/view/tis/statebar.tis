@@ -327,6 +327,19 @@ function openAbout(){
         height:self.toPixels(400dip),
     })
 }
+
+//弹出平台配置窗口
+function openPlatformConfig(evt){
+    view.dialog({
+        url:self.url(ROOTPATH + "platform_config.html"),
+        width:980,
+        height:630
+    });
+    startLoading();
+    initConfig("1");
+    endLoading();
+}
+
 //弹出设置窗口
 function openConfig(evt){
     view.dialog({

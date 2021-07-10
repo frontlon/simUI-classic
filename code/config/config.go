@@ -16,16 +16,16 @@ import (
 
 //配置文件
 var (
-	Cfg      *ConfStruct                                                                      //公共配置
-	ENV      string                                                                           //环境配置
-	DOC_EXTS = []string{".txt", ".md"}                                                        //doc文档支持的扩展名
-	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", ".wmv", ".mp4", ".avi","flv"} //支持的图片类型
+	Cfg      *ConfStruct                                                                                //公共配置
+	ENV      string                                                                                     //环境配置
+	DOC_EXTS = []string{".txt", ".html", ".htm", ".md"}                                                 //doc文档支持的扩展名
+	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", ".wmv", ".mp4", ".avi", "flv"} //支持的图片类型
 	RUN_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                                         //可直接运行的doc文档支持的扩展名
-	Window *window.Window                                                                     //窗体
+	}                                                                                                   //可直接运行的doc文档支持的扩展名
+	Window *window.Window                                                                               //窗体
 )
 
 //配置文件

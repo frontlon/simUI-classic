@@ -235,7 +235,5 @@ html:theme(purple) {
     var(config-platform-text-color) :#999;
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
-    var(config-platform-button-border-color) :#4e355b;
-    var(config-platform-button-hover-background-color) :#442e4f;
-    var(config-platform-button-active-background-color) :#442e4f;
+
 }

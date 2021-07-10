@@ -234,7 +234,4 @@ html:theme(red) {
     var(config-platform-text-color) :#999;
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
-    var(config-platform-button-border-color) :#592130;
-    var(config-platform-button-hover-background-color) :#4a1b28;
-    var(config-platform-button-active-background-color) :#4a1b28;
 }

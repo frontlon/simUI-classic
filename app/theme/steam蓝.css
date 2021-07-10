@@ -234,8 +234,5 @@ html:theme(steam) {
     var(config-platform-text-color) :#999;
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
-    var(config-platform-button-border-color) :#2b394b;
-    var(config-platform-button-hover-background-color) :#417997;
-    var(config-platform-button-active-background-color) :#3399ff;
 
 }
