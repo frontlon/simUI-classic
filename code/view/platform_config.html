@@ -14,13 +14,7 @@
    
     .platform_control{margin:0 0 0 0;width:*;padding-left:10dip}
     .platform_control button{margin:0 0 5dip 0;width:*}
-
-#platform_add{background: color(button-ok-background-color);
-  color: color(button-ok-text-color);
-  border: 0;
-  }
-
-
+    #platform_add{background: color(button-ok-background-color);color: color(button-ok-text-color);border: 0;}
     .platform_list{border-radius:5dip;width:*;height:*;display:block;border:1dip solid color(config-platform-border-color);padding:0;margin:0 0 0 10dip}
     .platform_list li{height:30dip;line-height:30dip;display: block;padding-left:5dip;color:color(config-platform-text-color)}
     .platform_list li:current{background:color(config-platform-current-background-color);color:color(config-platform-current-text-color)}
@@ -32,6 +26,12 @@
     #platform_exts{width:662dip;}
     #platform_ico{max-width:220dip;}
 
+    progress{width:396dip;margin-top:5dip;}
+
+    .table_output input[type="text"]{width:*}
+    .table_output textarea{width:400dip}
+
+
   </style>
   </head>
 <body>
@@ -39,8 +39,8 @@
   <tabs class="tabs" id="mytabs">
     <strip>
       <label ww="1100dip" wh="630dip" for="first" selected>{{PlatformConfig}}</label>
-      <label ww="540dip" wh="275dip" for="second">{{OutputPlatform}}</label>
-      <label ww="540dip" wh="275dip" for="third">{{InputPlatform}}</label>
+      <label ww="490dip" wh="600dip" for="second">{{OutputPlatform}}</label>
+      <label ww="540dip" wh="600dip" for="third">{{InputPlatform}}</label>
     </strip>
     <panels>
       
@@ -144,10 +144,39 @@
 </div>
       </section>
       <section id="second">
-        <!-- 界面设置 -->
+        <!-- 导出配置 -->
+
+          <table class="table_output">
+            <tr><td>选择平台：</td><td>
+            <select>
+            <option>Arcade</option>
+            </select>
+            </td></tr>
+            <tr><td>导出位置：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button></td></tr>
+            <tr><td><div class="tip" title="由于程序无法识别rom目录是否在模拟器目录下，这里需要手动选择，如果选择错误，会导致rom无法导出，请认真选择">?</div>ROM目录：</td><td><select id="config_lang">
+            <option>我的rom【不在】模拟器目录内</option>
+            <option>我的rom【在】模拟器目录内</option>
+            </select></td></tr>
+            <tr><td><div class="tip" title="压缩会减小导出的数据大小，但是会降低导出速度">?</div>是否压缩：</td><td><select id="config_lang">
+            <option>是</option>
+            <option>否</option>
+            </select></td></tr>
+            <tr><td>操作日志：</td><td>
+                <textarea row="10" readonly></textarea>
+                <progress id="viewer-loading" max="100" value="40"/>
+            </td></tr>
+
+          </table>
+          
+          <div class="form_bottom">
+              <button class="ok" id="config_submit">开始导出</button>
+          </div>
+
+
 
       </section>
       <section id="third">
+      <!-- 导入配置 -->
       </section>
     </panels>
   </tabs>

@@ -233,4 +233,9 @@ html:theme(dark) {
     var(config-platform-current-background-color) :#3399ff;
     var(config-platform-current-text-color) :#FFF;
 
+
+    var(progress-border-color):#666;
+    var(progress-foreground-color):#1366cc;
+    
+
 }
