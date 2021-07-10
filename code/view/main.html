@@ -189,7 +189,7 @@ solid-with-shadow
     
     /* 基础信息表格 */
     #right_rombase{width:*;display:block;clear:both;height:auto;padding:0;margin:0;background:color(right-doc-background-color);}
-    #right_rombase li{display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;}
+    #right_rombase li{word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
     #right_rombase li:nth-child(2){background-color:color(right-play-info-background-color-2);}
     #right_rombase li:nth-child(3){background-color:color(right-play-info-background-color-3);}
@@ -198,6 +198,7 @@ solid-with-shadow
     #right_rombase li:nth-child(6){background-color:color(right-play-info-background-color-6);}
     #right_rombase li:nth-child(7){background-color:color(right-play-info-background-color-7);}
     #right_rombase li:nth-child(8){background-color:color(right-play-info-background-color-8);}
+    #right_rombase_name{word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;background-color:color(right-play-info-background-color-8);}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative;}
@@ -462,13 +463,14 @@ solid-with-shadow
                     <h2>{{RunGame}}</h2>
                     <ul class="sim_select" id="sim_select"></ul>
                     <div class="buttons" id="buttons"></div>
-                    <h2 class="related_h2">相关游戏</h2>
+                    <h2 class="related_h2">{{RelatedGame}}</h2>
                     <ul id="related" class="related"></ul>
                 </div>
                 <div class="flow_wrapper_right">
                     <h2>{{BaseInfo}}</h2>
                     <ul id="right_rombase">
                     </ul>
+                    <div title="{{FileName}}" id="right_rombase_name"></div>
                     <h2 id="doc_title">{{Doc}}</h2>
                     <div id="doc" class="doc"></div>
                 </div>

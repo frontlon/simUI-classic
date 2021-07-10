@@ -167,7 +167,6 @@ function openSidebar(obj){
 
     //显示游戏基础信息
     var rombase = "";
-
     if(info.BaseType != "")      {rombase += "<li title=\""+ CONF.Lang.BaseType +"\">" + info.BaseType      + "</li>";}
     if(info.BaseYear != "")      {rombase += "<li title=\""+ CONF.Lang.BaseYear +"\">" + info.BaseYear      + "</li>";}
     if(info.BasePublisher != "") {rombase += "<li title=\""+ CONF.Lang.BasePublisher +"\">" + info.BasePublisher + "</li>";}
@@ -175,9 +174,10 @@ function openSidebar(obj){
     if(info.BaseTranslate != "") {rombase += "<li title=\""+ CONF.Lang.BaseTranslate +"\">" + info.BaseTranslate + "</li>";}
     if(info.BaseVersion != "")   {rombase += "<li title=\""+ CONF.Lang.BaseVersion +"\">" + info.BaseVersion + "</li>";}
     rombase += "<li title=\""+ CONF.Lang.FileSize +"\">" + detailObj.RomFileSize + "</li>";
-    //rombase += "<li title=\""+ CONF.Lang.BaseRomName +"\">" + info.RomPath + "</li>";
     $(#right_rombase).html = rombase;
 
+    //文件名
+    $(#right_rombase_name).html = info.RomPath;
 
     //读取相关游戏
     var related = view.GetRelatedGames(obj.attributes["rid"]);
@@ -198,7 +198,6 @@ function openSidebar(obj){
         relatedDom += "<p>"+ obj.Name +"</p></li>";
     }
     $(#related).html = relatedDom;
-
 
     //选项卡2图集
     _createSecondThumbs(info);
