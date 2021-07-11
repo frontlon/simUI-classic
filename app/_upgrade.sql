@@ -15,6 +15,7 @@ ALTER TABLE simulator ADD COLUMN "lua" TEXT NOT NULL DEFAULT '';
 ALTER TABLE rom ADD COLUMN "base_version" TEXT NOT NULL,
 ALTER TABLE config ADD COLUMN "romlist_font_size" TEXT NOT NULL DEFAULT '';
 ALTER TABLE config ADD COLUMN "wallpaper_image" TEXT NOT NULL DEFAULT '';
+ALTER TABLE config ADD COLUMN "romlist_name_type" INTEGER NOT NULL DEFAULT 0;
 update config SET search_engines = 'https://image.baidu.com/search/acjson?tn=resultjson_com&logid=8695915517170565368&ipn=rj&ct=201326592&is=&fp=result&queryWord=fc&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=&z=&ic=&hd=&latest=&copyright=&word={$keyword}&s=&se=&tab=&width=&height=&face=&istype=&qc=&nc=1&fr=&expermode=&force=&pn={$NumIndex}&rn={$pageNum}&gsm=78&1622211780093=' where id = 1;
 CREATE TABLE "rombase_enum" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"type" TEXT NOT NULL DEFAULT '',"name" TEXT NOT NULL DEFAULT '');
 INSERT INTO "rombase_enum" VALUES (1, 'publisher', 'NINTENDO');
