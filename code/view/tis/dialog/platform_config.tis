@@ -19,15 +19,21 @@ function Init(){
 
     //生成平台列表
     var pfdata = "";
+    var outdata = "<option value='0'>"+ CONF.Lang.SelectPlatform +"</option>";
     
     var liststr = mainView.GetPlatform();
     var lists = JSON.parse(liststr);
     
     var platform_list = $(#platform_list);
+    var out_platform = $(#out_platform);
+    
     for(var pf in lists) {
         pfdata += '<li value="'+ pf.Id +'">'+ pf.Name +'</li>';
+        outdata += '<option value="'+ pf.Id +'">'+ pf.Name +'</option>';
     }
     platform_list.html = pfdata;
+    out_platform.options.html = outdata;
+    out_platform.value = 0;
 
 }
 
@@ -376,4 +382,29 @@ function platformDel(evt) {
         $(#platform_list li:current).remove();
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);
     }
+}
+
+//导出平台
+function outputPlatform(){
+    var platform = $(#out_platform).value;
+    var p = $(#out_file).value;
+    var compress = $(#out_compress).value;
+    //var packRom = $(#out_pack_rom).value;
+
+    if(platform == 0){
+        alert("平台不能为空");
+        return;
+    }
+    if(p == ""){
+        alert("请选择保存路径");
+        return;
+    }
+
+    mainView.OutputPlatform(platform,p,compress);
+
+
+}
+
+//导入平台
+function inputPlatform(){
 }

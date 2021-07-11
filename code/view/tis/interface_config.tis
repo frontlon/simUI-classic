@@ -134,3 +134,14 @@ function setRomlistColumn(obj){
     //更新配置
     CB_createCache();
 }
+
+//列表名称显示类型
+//0别名；1文件名
+function setShowNameType(obj){
+    $(#config_show_name_type).select("li[opt=0]").attributes.removeClass("active");
+    $(#config_show_name_type).select("li[opt=1]").attributes.removeClass("active");
+    obj.attributes.addClass("active");
+    view.UpdateConfig("romlist_name_type",obj.attributes["opt"]);
+    //更新配置
+    CB_createCache();
+}

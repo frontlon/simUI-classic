@@ -48,9 +48,9 @@ solid-with-shadow
     #tb_left button{border-right:1dip solid color(platform-arrow-border-light);border-left:1dip solid color(platform-arrow-border-dark);margin:0;padding:0}
 
     /* 状态栏筛选栏 */
-    .statebar{background:color(statebar-background-color);height:42dip;width:*;margin-top:0;}
-    .statebar .counnum{color:color(statebar-text-color);position:absolute;right:17dip;line-height:42dip}
-    .statebar .filter{color:color(statebar-text-color);position:absolute;left:17dip;line-height:42dip}
+    .statebar{background:color(statebar-background-color);height:auto;width:*;margin-top:0;flow:horizontal-flow}
+    .statebar .counnum{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:right;width:max-content;padding-right:10dip}
+    .statebar .filter{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:left;width:*;padding-left:10dip}
     .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:60dip}
     .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
     .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
@@ -59,7 +59,7 @@ solid-with-shadow
     .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);height:24dip;border:0;vertical-align: middle}
 
     /* 字母选择 */
-    #num_search{position:fixed;display:block;top:100dip;height:*;padding:0;width:30dip}
+    #num_search{position:fixed;display:block;top:130dip;height:*;padding:0;width:30dip}
     #num_search li{text-shadow: 1px 1px 1px #000;display:block;font-size:10dip;padding:3dip;text-align:center;color:color(num-index-text-color)}
     #num_search li:hover{color:color(num-index-hover-text-color)}
     #num_search li:current{font-size:14dip;color:color(num-index-active-text-color);}
@@ -79,6 +79,7 @@ solid-with-shadow
     #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);context-menu:selector(menu#menucontext);font-size:12dip;}
     #menulist dd:current{background-color:color(menu-active-background-color);color:color(menu-active-text-color);}
 
+    /* 菜单 */
     #menucontext li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
     #menucontext .rename{background-image:url(this://app/images/fileico_rename.png);}
     #menucontext .delete{background-image:url(this://app/images/fileico_delete.png);}
@@ -363,6 +364,7 @@ solid-with-shadow
                 <li><label><input class="romlist_column" opt="5" type="checkbox"> {{BaseTranslate}}</label></li>
                 <li><label><input class="romlist_column" opt="6" type="checkbox"> {{BaseVersion}}</label></li>
             </menu></li>
+            <li id="config_show_name_type">{{ShowNameType}}<menu><li opt="0">{{Alias}}</li><li opt="1">{{FileName}}</li></menu></li>
         </menu></button>
 
         <button id="istop" value="" title="{{GoTop}}"><i.top.minsize></i></button>

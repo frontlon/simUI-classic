@@ -15,7 +15,6 @@ import (
 
 func ConfigController() {
 
-
 	//读取视图路径
 	utils.Window.DefineFunction("GetViewPath", func(args ...*sciter.Value) *sciter.Value {
 		return sciter.NewValue(config.Cfg.ViewPath);
@@ -79,7 +78,10 @@ func ConfigController() {
 	utils.Window.DefineFunction("OutputPlatform", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		p := args[1].String()
-		modules.OutputPlatform(platform,p)
+		compress := utils.ToInt(args[2].String())
+		go func() {
+			modules.OutputPlatform(platform, p, compress)
+		}()
 		return sciter.NewValue(1)
 	})
 

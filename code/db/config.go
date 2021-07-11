@@ -18,6 +18,7 @@ type Config struct {
 	RomlistDirection      string // 模块显示方向（自动、横向、竖向）
 	RomlistColumn         string // 列表列
 	RomlistFontSize       string // 字体大小
+	RomlistNameType       string // 显示名称类型(0:别名;1:文件名)
 	SearchEngines         string // 搜索引擎地址
 	RootPath              string // 当前根目录
 	WindowWidth           string // 当前窗口宽度
@@ -35,7 +36,7 @@ type Config struct {
 	BackgroundImage       string // 背景图片
 	BackgroundRepeat      string // 背景循环方式
 	BackgroundOpacity     string // 背景透明度
-	WallpaperImage             string // 侧边栏图图片
+	WallpaperImage        string // 侧边栏图图片
 	Cursor                string // 鼠标指针
 	VideoVolume           string // 视频默认音量状态
 }

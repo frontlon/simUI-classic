@@ -3,6 +3,7 @@ package modules
 import (
 	"archive/zip"
 	"encoding/json"
+	"fmt"
 	"github.com/go-ini/ini"
 	"io"
 	"os"
@@ -14,8 +15,14 @@ import (
 
 var outputCfg = ini.Empty()
 var outputConfigFile = "./cache/config.ini"
+var zipMethod = 0
+var romHash = map[string]bool{}
 
-func OutputPlatform(platformId uint32, p string) error {
+func OutputPlatform(platformId uint32, p string, compress int) error {
+
+	//压缩方式
+	zipMethod = compress
+
 	setIniPlatform((platformId))
 	setIniSimulator(platformId)
 	setIniRomSet(platformId)
@@ -49,7 +56,6 @@ func setIniPlatform(platformId uint32) {
 	varr := strings.Split(romPath, "/")
 	romPath = varr[len(varr)-1]
 	outputCfg.Section(section).Key("rom").SetValue(romPath)
-
 
 	for k, v := range paths {
 		if v != "" {
@@ -149,6 +155,7 @@ func packFiles(platformId uint32, p string) {
 
 	//压缩rom
 	files["rom"], _ = os.Open(platform.RomPath)
+
 	//压缩资源
 	files["rombase"], _ = os.Open(platform.Rombase)
 	files["ico"], _ = os.Open(platform.Icon)
@@ -162,6 +169,7 @@ func packFiles(platformId uint32, p string) {
 	zw := zip.NewWriter(compreFile)
 	defer zw.Close()
 	for k, file := range files {
+		defer file.Close()
 		if k == "rombase" || k == "ico" {
 			k = ""
 		}
@@ -169,11 +177,10 @@ func packFiles(platformId uint32, p string) {
 		if err != nil {
 			//return err
 		}
-		defer file.Close()
 	}
 
 	//模拟器文件
-	sims, _ := (&db.Simulator{}).GetByPlatform(platformId)
+	/*sims, _ := (&db.Simulator{}).GetByPlatform(platformId)
 	simList := []*os.File{}
 	for _, v := range sims {
 
@@ -182,18 +189,17 @@ func packFiles(platformId uint32, p string) {
 		simList = append(simList, a)
 	}
 	for _, file := range simList {
-
+		defer file.Close()
 		err := compress_zip(file, "simulator", zw)
 		if err != nil {
 			//return err
 		}
-		defer file.Close()
-	}
+	}*/
 
 	//ini配置文件
 	c, _ := os.Open(outputConfigFile)
-	compress_zip(c, "", zw)
 	defer c.Close()
+	compress_zip(c, "", zw)
 }
 
 func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
@@ -203,7 +209,7 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 	}
 	if info.IsDir() {
 		if prefix != "" {
-			prefix = prefix + "\\" + info.Name()
+			prefix = prefix + config.Cfg.Separator + info.Name()
 		} else {
 			prefix = info.Name()
 		}
@@ -212,7 +218,7 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 			return err
 		}
 		for _, fi := range fileInfos {
-			f, err := os.Open(file.Name() + "/" + fi.Name())
+			f, err := os.Open(file.Name() + config.Cfg.Separator + fi.Name())
 			if err != nil {
 				return err
 			}
@@ -222,11 +228,29 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 			}
 		}
 	} else {
+
+		//防止rom被重复压缩
+		if prefix == "rom"{
+			romHash[info.Name()] = true
+		}
+		if prefix == "simulator"{
+			if _, ok := romHash[info.Name()];ok{
+				fmt.Println("rom已经存在，不再压缩",info.Name())
+				return nil
+			}
+
+		}
+
 		header, err := zip.FileInfoHeader(info)
+
 		if prefix != "" {
 			header.Name = prefix + "/" + header.Name
 		}
-
+		if zipMethod == 1 {
+			header.Method = zip.Deflate //压缩
+		} else {
+			header.Method = zip.Store //仅存储
+		}
 		if err != nil {
 			return err
 		}
@@ -234,6 +258,7 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 		if err != nil {
 			return err
 		}
+
 		_, err = io.Copy(writer, file)
 		file.Close()
 		if err != nil {

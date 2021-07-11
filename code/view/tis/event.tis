@@ -467,6 +467,11 @@ view.root.on("ready", function(){
         setRomlistColumn(this);
     });
 
+    //列表名称显示类型
+    self.on("click", "#config_show_name_type menu li", function(evt) {
+        setShowNameType(this);
+    });
+
 
     //键盘按下
     self.on("keyup", function(evt) {
