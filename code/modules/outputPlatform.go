@@ -3,7 +3,6 @@ package modules
 import (
 	"archive/zip"
 	"encoding/json"
-	"fmt"
 	"github.com/go-ini/ini"
 	"io"
 	"os"
@@ -16,13 +15,16 @@ import (
 var outputCfg = ini.Empty()
 var outputConfigFile = "./cache/config.ini"
 var zipMethod = 0
-var romHash = map[string]bool{}
+//var romHash = map[string]bool{}
+var packRom = 0
 
-func OutputPlatform(platformId uint32, p string, compress int) error {
+func OutputPlatform(platformId uint32, p string, compress int, packrom int) error {
 
 	//压缩方式
 	zipMethod = compress
 
+	//是否打包rom 0不打包;1打包（rom在模拟器目录时不用打包）
+	packRom = packrom
 	setIniPlatform((platformId))
 	setIniSimulator(platformId)
 	setIniRomSet(platformId)
@@ -154,8 +156,9 @@ func packFiles(platformId uint32, p string) {
 	files := map[string]*os.File{}
 
 	//压缩rom
-	files["rom"], _ = os.Open(platform.RomPath)
-
+	if packRom == 1 {
+		files["rom"], _ = os.Open(platform.RomPath)
+	}
 	//压缩资源
 	files["rombase"], _ = os.Open(platform.Rombase)
 	files["ico"], _ = os.Open(platform.Icon)
@@ -180,7 +183,7 @@ func packFiles(platformId uint32, p string) {
 	}
 
 	//模拟器文件
-	/*sims, _ := (&db.Simulator{}).GetByPlatform(platformId)
+	sims, _ := (&db.Simulator{}).GetByPlatform(platformId)
 	simList := []*os.File{}
 	for _, v := range sims {
 
@@ -194,7 +197,7 @@ func packFiles(platformId uint32, p string) {
 		if err != nil {
 			//return err
 		}
-	}*/
+	}
 
 	//ini配置文件
 	c, _ := os.Open(outputConfigFile)
@@ -230,16 +233,16 @@ func compress_zip(file *os.File, prefix string, zw *zip.Writer) error {
 	} else {
 
 		//防止rom被重复压缩
-		if prefix == "rom"{
+		/*if prefix == "rom" {
 			romHash[info.Name()] = true
 		}
-		if prefix == "simulator"{
-			if _, ok := romHash[info.Name()];ok{
-				fmt.Println("rom已经存在，不再压缩",info.Name())
+		if prefix == "simulator" {
+			if _, ok := romHash[info.Name()]; ok {
+				fmt.Println("rom已经存在，不再压缩", info.Name())
 				return nil
 			}
 
-		}
+		}*/
 
 		header, err := zip.FileInfoHeader(info)
 

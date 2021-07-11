@@ -79,8 +79,12 @@ func ConfigController() {
 		platform := uint32(utils.ToInt(args[0].String()))
 		p := args[1].String()
 		compress := utils.ToInt(args[2].String())
+		packRom := utils.ToInt(args[3].String())
+
+
+
 		go func() {
-			modules.OutputPlatform(platform, p, compress)
+			modules.OutputPlatform(platform, p, compress,packRom)
 		}()
 		return sciter.NewValue(1)
 	})

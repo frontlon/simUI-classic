@@ -389,7 +389,7 @@ function outputPlatform(){
     var platform = $(#out_platform).value;
     var p = $(#out_file).value;
     var compress = $(#out_compress).value;
-    //var packRom = $(#out_pack_rom).value;
+    var packRom = $(#out_pack_rom).value;
 
     if(platform == 0){
         alert("平台不能为空");
@@ -400,7 +400,7 @@ function outputPlatform(){
         return;
     }
 
-    mainView.OutputPlatform(platform,p,compress);
+    mainView.OutputPlatform(platform,p,compress,packRom);
 
 
 }
