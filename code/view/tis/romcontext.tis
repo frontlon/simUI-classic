@@ -151,8 +151,8 @@ function editDoc(evt){
 function editStrategy(evt){
     var data = view.dialog({
         url:self.url(ROOTPATH + "edit_rom_strategy.html"),
-        width:self.toPixels(800dip),
-        height:self.toPixels(730dip),
+        width:self.toPixels(550dip),
+        height:self.toPixels(610dip),
         parameters: {
             id:evt.attributes["rid"],
         };
