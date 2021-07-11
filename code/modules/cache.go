@@ -118,7 +118,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
 
 			//如果该文件是游戏rom
-			if f.IsDir() == false && utils.InSliceString(romExt, RomExt) {
+			if f.IsDir() == false && utils.InSliceStringToLower(romExt, RomExt) {
 				romName := utils.GetFileName(f.Name())
 				title := romName
 
