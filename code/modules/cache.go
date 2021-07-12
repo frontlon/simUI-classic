@@ -302,6 +302,9 @@ func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 	//更新现有rom
 	(&db.Rom{}).BatchUpdate(updateIssetData)
 
+	//删除重复数据
+	(&db.Rom{}).DeleteRepeat(platform)
+
 	return nil
 }
 

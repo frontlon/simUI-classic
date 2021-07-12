@@ -72,20 +72,13 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 		return
 	}
 
-	repeatList := map[string]bool{}
 	count := len(romlist)
 	utils.Loading("[2/3]开始写入缓存(1/"+utils.ToString(count)+")", "")
 	tx := getDb().Begin()
 	for k, v := range romlist {
 
-		//如果存在则不写入
-		if _, ok := repeatList[v.InfoMd5]; ok {
-			continue
-		}
-
 		tx.Create(&v)
 		//记录md5数据
-		repeatList[v.InfoMd5] = true;
 
 		if k%TIP_NUM == 0 {
 			utils.Loading("[2/3]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
@@ -527,6 +520,14 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 	}
 
 	return nil
+}
+
+//删除重复rom
+func (m *Rom) DeleteRepeat(platform uint32) {
+	sql := "DELETE FROM rom WHERE platform = "+ utils.ToString(platform) +" AND id NOT IN (SELECT max(id) FROM rom WHERE platform = "+ utils.ToString(platform) +" GROUP BY info_md5)"
+	tx := getDb().Begin()
+	tx.Exec(sql)
+	tx.Commit()
 }
 
 //读取一个平台下的所有md5
