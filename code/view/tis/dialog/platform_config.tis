@@ -69,7 +69,7 @@ function GetPlatformItem(evt){
 
     //如果没有扩展名，则自动填充大量扩展名
     if($(#platform_exts).value.trim() == ""){
-        var exts = ".zip,.NES,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups,.exe,.lnk";
+        var exts = ".zip,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups,.exe,.lnk";
         $(#platform_exts).value = exts;
     }
 
