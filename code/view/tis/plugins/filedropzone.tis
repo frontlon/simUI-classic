@@ -54,7 +54,9 @@ class FileDropZone : Element
         var img = "";
         mainView.EditRomThumbs(opt,id,uri);
         if(opt == "video"){
-            img = "<video src='"+ this.files +"'/>";
+            //img = "<video src='"+ this.files +"'/>";
+            img = "<div class='file-drop-zone-empty'>("+ CONF.Lang.VideoCanNotBePreviewed + ")<br>"+CONF.Lang.VideoUrl + "<br>" + URL.toPath(this.files) + "</div>";
+            //img = "<div class='file-drop-zone-empty'>"+ URL.toPath(this.files) + "</div>";
         }else{
             img = "<img src='"+ this.files +"'>";
         }

@@ -72,11 +72,21 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 		return
 	}
 
+	repeatList := map[string]bool{}
 	count := len(romlist)
 	utils.Loading("[2/3]开始写入缓存(1/"+utils.ToString(count)+")", "")
 	tx := getDb().Begin()
 	for k, v := range romlist {
+
+		//如果存在则不写入
+		if _, ok := repeatList[v.InfoMd5]; ok {
+			continue
+		}
+
 		tx.Create(&v)
+		//记录md5数据
+		repeatList[v.InfoMd5] = true;
+
 		if k%TIP_NUM == 0 {
 			utils.Loading("[2/3]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}

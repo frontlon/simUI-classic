@@ -51,7 +51,8 @@ func CreateRomCache(getPlatform uint32) error{
 
 			//第二步：更新rom数据
 			if err := UpdateRomDB(platform, romlist); err != nil {
-				return err
+				//不报错，只记录错误日志
+				utils.WriteLog(err.Error())
 			}
 
 			//第三步：读取rom目录
@@ -277,7 +278,7 @@ func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 			addData = append(addData, v) //添加的数据
 		}
 		if !utils.InSliceString(v.FileMd5, addAndSubFileUniq) {
-			updateData = append(updateData, v) //添加的数据
+			updateData = append(updateData, v) //更新的数据
 		}
 	}
 

@@ -54,11 +54,17 @@ func setIniPlatform(platformId uint32) {
 	outputCfg.Section(section).Key("rombase").SetValue(utils.GetFileNameAndExt(platform.Rombase))
 	outputCfg.Section(section).Key("ico").SetValue(utils.GetFileNameAndExt(platform.Icon))
 	//rom目录
-	romPath := strings.ReplaceAll(platform.RomPath, "\\", "/")
-	varr := strings.Split(romPath, "/")
-	romPath = varr[len(varr)-1]
-	outputCfg.Section(section).Key("rom").SetValue(romPath)
 
+	if packRom == 1 {
+
+		romPath := strings.ReplaceAll(platform.RomPath, "\\", "/")
+		varr := strings.Split(romPath, "/")
+		romPath = varr[len(varr)-1]
+		outputCfg.Section(section).Key("rom").SetValue(romPath)
+	}else{
+		outputCfg.Section(section).Key("rom").SetValue(platform.RomPath)
+
+	}
 	for k, v := range paths {
 		if v != "" {
 			v = strings.ReplaceAll(v, "\\", "/")

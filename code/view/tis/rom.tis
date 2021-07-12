@@ -14,6 +14,11 @@ function createRomList(cls=0){
 
     //如果清理参数=1，则清理掉所有数据
     if(cls == 1){
+        //重置翻页数据
+        SCROLL_PAGE = 0;
+        SCROLL_POS = 0;
+        SCROLL_LOCK = false;
+        //清理游戏列表
         romlist.clear();
     }
 
