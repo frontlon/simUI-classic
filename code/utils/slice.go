@@ -1,6 +1,9 @@
 package utils
 
-import "bytes"
+import (
+	"bytes"
+	"strings"
+)
 
 /**
 切片合并为字符串
@@ -15,6 +18,21 @@ func SlicetoString(glue string, pieces []string) string {
 		}
 	}
 	return buf.String()
+}
+
+/*
+查看slice中一个字段是否存在
+字符串
+*/
+func InSliceStringToLower(str string, slice []string) bool {
+	isset := false
+	for _, v := range slice {
+		if strings.ToLower(v) == strings.ToLower(str) {
+			isset = true
+			break
+		}
+	}
+	return isset
 }
 
 /*
