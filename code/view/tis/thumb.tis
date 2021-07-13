@@ -7,11 +7,30 @@ function openThumbFile(evt) {
     const caption = evt.attributes["caption"];
     var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
     
+    var getjson = view.GetGameDetail(ACTIVE_ROM_ID);
+    var detailObj = JSON.parse(getjson);
+    var info = detailObj.Info;
+    var type = evt.attributes["for"];
+    view.EditRomThumbs(type,ACTIVE_ROM_ID,URL.toPath(url));
+
      if(url){
         url = URL.toPath(url);
-        var out = self.select(".file-drop-zone[opt="+ evt.attributes["for"] +"]");
+        var out = self.select(".file-drop-zone[opt="+ type +"]");
         out.html = "<img src='"+ url +"'>";
      }
+
+    //更新列表缩略图
+    if(ACTIVE_PLATFORM != 0){
+
+        if(type == CONF.Default.Thumb){
+
+            var romName = getRomName(info.RomPath);
+            var thumb = getRomPicPath(CONF.Default.Thumb,ACTIVE_PLATFORM,romName);
+            if(thumb != ""){
+                $(#romlist).select("li[rid="+ info.Id +"] img").attributes["src"] = thumb;
+            }
+        }
+    }
 }
 
 //启动图片下载
@@ -40,6 +59,17 @@ function thumbDown(evt){
 
     if(result != undefined){
         self.select(".file-drop-zone[opt="+ type +"]").html = "<img src='"+ result +"'>";
+    }
+
+    //更新列表缩略图
+    if(ACTIVE_PLATFORM != 0){
+        if(type == CONF.Default.Thumb){
+            var romName = getRomName(info.RomPath);
+            var thumb = getRomPicPath(CONF.Default.Thumb,ACTIVE_PLATFORM,romName);
+            if(thumb != ""){
+            $(#romlist).select("li[rid="+ id +"] img").attributes["src"] = thumb;
+            }
+        }
     }
 
 }
