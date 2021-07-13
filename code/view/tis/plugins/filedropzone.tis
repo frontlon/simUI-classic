@@ -81,7 +81,7 @@ class FileDropZone : Element
         this.html = img;
 
         //更新列表缩略图
-        if(opt == CONF.Default.Thumb){
+        if(opt == CONF.Default.Thumb && $(#romlist).select("li[rid="+ id +"] img") != undefined){
             var romName = getRomName(newName);
             var thumb = getRomPicPath(CONF.Default.Thumb,ACTIVE_PLATFORM,romName);
             $(#romlist).select("li[rid="+ id +"] img").attributes["src"] = thumb;        

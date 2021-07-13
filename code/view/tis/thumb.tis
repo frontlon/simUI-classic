@@ -26,7 +26,7 @@ function openThumbFile(evt) {
 
             var romName = getRomName(info.RomPath);
             var thumb = getRomPicPath(CONF.Default.Thumb,ACTIVE_PLATFORM,romName);
-            if(thumb != ""){
+            if(thumb != "" && $(#romlist).select("li[rid="+ info.Id +"] img") != undefined){
                 $(#romlist).select("li[rid="+ info.Id +"] img").attributes["src"] = thumb;
             }
         }
@@ -66,8 +66,8 @@ function thumbDown(evt){
         if(type == CONF.Default.Thumb){
             var romName = getRomName(info.RomPath);
             var thumb = getRomPicPath(CONF.Default.Thumb,ACTIVE_PLATFORM,romName);
-            if(thumb != ""){
-            $(#romlist).select("li[rid="+ id +"] img").attributes["src"] = thumb;
+            if(thumb != "" && $(#romlist).select("li[rid="+ id +"] img") != undefined){
+                $(#romlist).select("li[rid="+ id +"] img").attributes["src"] = thumb;
             }
         }
     }

@@ -48,13 +48,6 @@ function _createRomListBlock(romobj){
         var romName = getRomName(obj.RomPath)
         thumb = getRomPicPath(CONF.Default.Thumb,obj.Platform,romName);
 
-        //根据缩略图显示rom
-        if(SHOW_THUMB_ROM == 0){
-            if(thumb != ""){continue;}
-        }else if (SHOW_THUMB_ROM == 1){
-            if(thumb == ""){continue;}
-        }
-
         //没有找到图片，读取默认缩略图
         if(thumb == "" && CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"] != undefined){
             thumb = URL.fromPath(CONF.RootPath + "theme/" + CONF.Theme[CONF.Default.Theme].Params["default-thumb-image"]);
@@ -111,13 +104,6 @@ function _createRomListList(romobj,cls){
         var romName = getRomName(obj.RomPath);
         //现读图标
         var thumb = getRomPicPath("icon",obj.Platform,romName);
-
-        //根据缩略图显示rom
-        if(SHOW_THUMB_ROM == 0){
-            if(thumb != ""){continue;}
-        }else if (SHOW_THUMB_ROM == 1){
-            if(thumb == ""){continue;}
-        }
 
         //没有找到图标，找缩略图，读取默认缩略图
         if (thumb == ""){

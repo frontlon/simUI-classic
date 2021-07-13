@@ -472,12 +472,6 @@ view.root.on("ready", function(){
         setShowNameType(this);
     });
 
-    //临时显示是否有缩略图的rom
-    self.on("click", "#config_show_empty_thumb menu li", function(evt) {
-        setShowThumbRom(this);
-    });
-
-
     //键盘按下
     self.on("keyup", function(evt) {
         var switch_romlist = $(#switch_romlist).attributes["value"];
