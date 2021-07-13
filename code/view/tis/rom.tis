@@ -18,6 +18,8 @@ function createRomList(cls=0){
         SCROLL_PAGE = 0;
         SCROLL_POS = 0;
         SCROLL_LOCK = false;
+        //滚动条移到最上面
+        $(#center).scrollTo(0,0, false);
         //清理游戏列表
         romlist.clear();
     }
