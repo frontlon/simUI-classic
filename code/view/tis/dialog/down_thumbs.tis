@@ -85,7 +85,6 @@ function DownThumb(evt){
 
 //点击搜索按钮
 function searchThumb(evt){
-     try{
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){
@@ -104,9 +103,6 @@ function searchThumb(evt){
     //搜索内容
    
     searchPic(keyword);
-    }catch(e){
-        alert(e);
-    }
 }
 
 //图片搜索

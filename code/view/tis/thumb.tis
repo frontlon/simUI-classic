@@ -64,4 +64,5 @@ function DeleteThumb(evt){
     var type = evt.attributes["value"];
     mainView.DeleteThumbs(type,ACTIVE_ROM_ID);
     self.select(".file-drop-zone[opt="+ type +"]").html = "<div class='file-drop-zone-empty'>" + CONF.Lang.DropPicToHere + "</div>";
+
 }

@@ -145,3 +145,16 @@ function setShowNameType(obj){
     //更新配置
     CB_createCache();
 }
+
+//临时显示是否有缩略图的rom
+//0只显示没有缩略图rom；1显示有缩略图rom；2显示全部rom
+var SHOW_THUMB_ROM = 2;
+function setShowThumbRom(obj){
+    $(#config_show_empty_thumb).select("li[opt=0]").attributes.removeClass("active");
+    $(#config_show_empty_thumb).select("li[opt=1]").attributes.removeClass("active");
+    $(#config_show_empty_thumb).select("li[opt=2]").attributes.removeClass("active");
+    obj.attributes.addClass("active");
+    SHOW_THUMB_ROM = obj.attributes["opt"];
+    //更新配置
+    CB_createCache();
+}

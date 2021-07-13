@@ -117,7 +117,7 @@
               file:$(#file).value.toString(),
               lua:$(#sim_lua).value.toString(),
           }
-          var datastr = JSON.stringify(data);
+          var datastr = stringify(data);
           view.close(datastr);
       }
 
