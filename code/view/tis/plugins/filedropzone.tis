@@ -49,6 +49,20 @@ class FileDropZone : Element
     {
         this.attributes.removeClass("active-target");
         var opt = this.attributes["opt"];
+
+        //先把视频结束掉
+        if(opt == "video"){
+            var vdom = $(#right_video);
+            if (vdom != undefined){
+                try{
+                    vdom.videoStop();
+                    vdom.videoUnload();
+                }catch(e){
+
+                }
+            }
+        }
+    
         var id = ACTIVE_ROM_ID;
         var uri = URL.toPath(this.files.toString());
         var img = "";
