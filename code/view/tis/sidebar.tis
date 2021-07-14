@@ -173,7 +173,9 @@ function openSidebar(obj){
     if(info.BaseCountry != "")   {rombase += "<li title=\""+ CONF.Lang.BaseCountry +"\">" + info.BaseCountry + "</li>";}
     if(info.BaseTranslate != "") {rombase += "<li title=\""+ CONF.Lang.BaseTranslate +"\">" + info.BaseTranslate + "</li>";}
     if(info.BaseVersion != "")   {rombase += "<li title=\""+ CONF.Lang.BaseVersion +"\">" + info.BaseVersion + "</li>";}
-    rombase += "<li title=\""+ CONF.Lang.FileSize +"\">" + detailObj.RomFileSize + "</li>";
+    if(detailObj.RomFileSize != ""){
+        rombase += "<li title=\""+ CONF.Lang.FileSize +"\">" + detailObj.RomFileSize + "</li>";
+    }
     $(#right_rombase).html = rombase;
 
     //文件名
