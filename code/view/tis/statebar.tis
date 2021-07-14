@@ -47,10 +47,6 @@ function initRomListStyle(){
           obj.checked = column[i] == 1 ? true : false;
           i++;
       }
-    
-    //高亮名称类型选项
-    $(#config_show_name_type).select("li[opt="+ CONF.Default.RomlistNameType +"]").attributes.addClass("active");
-
    
 }
 
