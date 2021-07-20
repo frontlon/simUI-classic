@@ -1,4 +1,4 @@
-
+**由于github在中国大陆太卡了，simUI从2.7开始迁移到https://gitee.com/frontlon/SimUI**
 
 ![](readme/logo.png)
 
