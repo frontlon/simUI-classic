@@ -74,7 +74,7 @@ func FileDelete(src string) (error) {
 //删除目录
 func DeleteDir(src string) (error) {
 	if FolderExists(src) {
-		err := os.Remove(src)
+		err := os.RemoveAll(src)
 		return err
 	}
 	return nil

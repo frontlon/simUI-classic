@@ -5,72 +5,83 @@
     <style>
         @import "this://app/images/public.css";
         @import "images/form.css";
-
-        html, body {
-            width: *;
-            height: *;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            background: color(center-background-color);
-            color: color(general-text-color)
-        }
-
-        .wrapper {
-            width: *;
-            padding: 8 dip;
-        }
-
+        html, body {width: *;height: *;overflow: hidden;margin: 0;padding: 0;background: color(center-background-color);color: color(general-text-color)}
         input,select{width:150dip}
-
+        .wrapper {width: *;padding: 8 dip;flow:horizontal-flow;}
+        .inner {display:block;width:*}
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <table>
-        <tr>
-            <td>{{BaseName}}：</td>
-            <td><input type="text" id="name" value=""></td>
-        </tr>
-        <tr>
-            <td>{{BaseYear}}：</td>
-            <td><input type="text" id="year" value="" maxlength="4"></td>
-        </tr>
-        <tr>
-            <td>{{BaseType}}：</td>
-            <td>
-                <select id="type" editable></select>
-            </td>
-        </tr>
 
-        <tr>
-            <td>{{BasePublisher}}：</td>
-            <td>
-                <select id="publisher" editable></select>
-            </td>
-        </tr>
-        <tr>
-            <td>{{BaseCountry}}：</td>
-            <td>
-                <select id="country" editable></select>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>{{BaseVersion}}：</td>
-            <td>
-            <select id="version" editable></select>
-            </td>
-        </tr>
-        <tr>
-            <td>{{BaseTranslate}}：</td>
-            <td>
-            <input type="text" id="translate">
+    <div class="inner">
+        <table>
+            <tr>
+                <td>{{BaseType}}：</td>
+                <td><select id="type" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseYear}}：</td>
+                <td><input type="text" id="year" value="" maxlength="4"></td>
+            </tr>
+            <tr>
+                <td>{{BaseProducer}}：</td>
+                <td><select id="producer" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BasePublisher}}：</td>
+                <td><select id="publisher" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseCountry}}：</td>
+                <td><select id="country" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseVersion}}：</td>
+                <td><select id="version" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseTranslate}}：</td>
+                <td><input type="text" id="translate"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="inner">
+        <table>
+            <tr>
+                <td>{{BaseName}}：</td>
+                <td><input type="text" id="name" value=""></td>
+            </tr>
+            <tr>
+                <td>{{BaseNameEN}}：</td>
+                <td><input type="text" id="name_en" value=""></td>
+            </tr>
+            <tr>
+                <td>{{BaseNameJP}}：</td>
+                <td><input type="text" id="name_jp" value=""></td>
+            </tr>
             
-            </td>
-        </tr>
+            <tr>
+                <td>{{BaseOther}}：</td>
+                <td><input type="text" id="other_a">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_b"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_c"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_d"></td>
+            </tr>
+        </table>
+    </div>
 
-    </table>
 </div>
 <div class="form_bottom">
     <button class="cancel" id="close-dialog">{{Cancel}}</button>
@@ -103,6 +114,13 @@ view.root.on("ready", function(){
     }
     $(#publisher).options.html = publisherDom;
 
+    var producerList = JSON.parse(mainView.GetRombaseEnumList("producer"));
+    var producerDom = "";
+    for(var obj in producerList) {
+        producerDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#producer).options.html = producerDom;
+
     var countryList = JSON.parse(mainView.GetRombaseEnumList("country"));
     var countryDom = "";
     for(var obj in countryList) {
@@ -125,9 +143,18 @@ view.root.on("ready", function(){
         if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
         if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
         if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
+        if(info.Producer != undefined && info.Producer != ""){$(#producer).value = info.Producer;}
         if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
         if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
         if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
+
+        if(info.NameEN != undefined && info.NameEN != ""){$(#name_en).value = info.NameEN;}
+        if(info.NameJP != undefined && info.NameJP != ""){$(#name_jp).value = info.NameJP;}
+        if(info.OtherA != undefined && info.OtherA != ""){$(#other_a).value = info.OtherA;}
+        if(info.OtherB != undefined && info.OtherB != ""){$(#other_b).value = info.OtherB;}
+        if(info.OtherC != undefined && info.OtherC != ""){$(#other_c).value = info.OtherC;}
+        if(info.OtherD != undefined && info.OtherD != ""){$(#other_d).value = info.OtherD;}
+
     }
     
 });
@@ -145,9 +172,17 @@ event click $(#submit){
         year:year,
         type:$(#type).value,
         publisher:$(#publisher).value,
+        producer:$(#producer).value,
         country:$(#country).value,
         translate:$(#translate).value,
         version:$(#version).value,
+        name_en:$(#name_en).value,
+        name_jp:$(#name_jp).value,
+        other_a:$(#other_a).value,
+        other_b:$(#other_b).value,
+        other_c:$(#other_c).value,
+        other_d:$(#other_d).value,
+
     }
     var result = mainView.SetRomBase(JSON.stringify(data));
     view.close(result);

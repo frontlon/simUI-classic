@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
@@ -132,6 +133,8 @@ func PlatformController() {
 		d["doc"] = strings.TrimRight(d["doc"], `/`)
 		d["files"] = strings.TrimRight(d["files"], `\`)
 		d["files"] = strings.TrimRight(d["files"], `/`)
+		d["audio"] = strings.TrimRight(d["audio"], `\`)
+		d["audio"] = strings.TrimRight(d["audio"], `/`)
 		platform := &db.Platform{
 			Id:             id,
 			Name:           d["name"],
@@ -152,10 +155,13 @@ func PlatformController() {
 			VideoPath:      d["video"],
 			DocPath:        d["doc"],
 			FilesPath:      d["files"],
+			AudioPath:      d["audio"],
 			Rombase:        d["rombase"],
 			Pinyin:         utils.TextToPinyin(d["name"]),
 		}
 
+
+		fmt.Println("d[\"audio\"]",d["audio"])
 		err := platform.UpdateById()
 		if err != nil {
 			utils.WriteLog(err.Error())

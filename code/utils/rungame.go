@@ -39,7 +39,7 @@ func runGameWindows(exeFile string, cmd []string) error {
 	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
 		return err
 	}
-	result := exec.Command(exeFile,cmd...)
+	result := exec.Command(exeFile, cmd...)
 	if err := result.Start(); err != nil {
 		return err
 	}
@@ -170,4 +170,13 @@ func getDarwinAppName(p string) string {
 		}
 	}
 	return ""
+}
+
+//播放音频
+func PlayAudio(params []string) error {
+	player := "tools/CHKenPlayer/CHKenPlayer.exe"
+	if err := exec.Command(player, params...).Start(); err != nil {
+		return err
+	}
+	return nil
 }

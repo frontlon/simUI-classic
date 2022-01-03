@@ -58,15 +58,7 @@ class FileDropZone : Element
 
         //先把视频结束掉
         if(opt == "video"){
-            var vdom = $(#right_video);
-            if (vdom != undefined){
-                try{
-                    vdom.videoStop();
-                    vdom.videoUnload();
-                }catch(e){
-
-                }
-            }
+            closeRightVideo();
         }
     
         var id = ACTIVE_ROM_ID;

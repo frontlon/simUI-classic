@@ -86,7 +86,7 @@ build_script:
   - cmd: cd
   - go build -x
 
-  - go get github.com/sciter-sdk/go-sciter
+  - go get simUI/code/utils/go-sciter
 
   - cmd: echo Building examples
   - cmd: cd examples

@@ -134,7 +134,7 @@ var (
 //  \param[in] data \b LPBYTE, pointer to data buffer.
 //  \param[in] requestId \b LPVOID, SCN_LOAD_DATA requestId.
 //  \return \b BOOL, TRUE if Sciter accepts the data or \c FALSE if error occured
-func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointer) bool {
+func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId C.HREQUEST) bool {
 	// args
 	var pData C.LPCBYTE
 	if len(data) > 0 {
@@ -143,6 +143,7 @@ func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointe
 	curi := StringToWcharPtr(uri)
 	cdataLength := C.UINT(len(data))
 	crequestId := C.LPVOID(requestId)
+
 	// cgo call
 	ret := C.SciterDataReadyAsync(s.hwnd, curi, pData, cdataLength, crequestId)
 	if ret == 0 {
@@ -400,7 +401,7 @@ func (s *Sciter) Eval(script string) (retval *Value, ok bool) {
 	if err != nil {
 		return nil, false
 	}
-	cscriptLength := C.UINT(len(u16))
+	cscriptLength := C.UINT(len(u16) - 1)
 	cscript := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
@@ -827,7 +828,7 @@ func (e *Element) SetText(text string) error {
 	if err != nil {
 		return err
 	}
-	clength := C.UINT(len(u16))
+	clength := C.UINT(len(u16) - 1)
 	ctext := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	// cgo call
 	r := C.SciterSetElementText(e.handle, ctext, clength)
@@ -2329,7 +2330,7 @@ func (pdst *Value) ConvertFromString(str string, how ValueStringConvertType) err
 	if err != nil {
 		return err
 	}
-	clen := C.UINT(len(u16))
+	clen := C.UINT(len(u16) - 1)
 	cstr := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	chow := C.UINT(how)
 	// cgo call

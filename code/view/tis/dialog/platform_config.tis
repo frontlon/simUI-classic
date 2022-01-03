@@ -65,11 +65,12 @@ function GetPlatformItem(evt){
     $(#platform_wallpaper).value = info.WallpaperPath;
     $(#platform_video).value = info.VideoPath;
     $(#platform_files).value = info.FilesPath;
+    $(#platform_audio).value = info.AudioPath;
     $(#platform_rombase).value = info.Rombase;
 
     //如果没有扩展名，则自动填充大量扩展名
     if($(#platform_exts).value.trim() == ""){
-        var exts = ".zip,.nes,.7z,.rar,.unf,.fds,.bin,.gen,.md,.32x,.iso,.smd,.smc,.sfc,.img,.cue,.ccd,.mds,.pbp,.ecm,.gba,.elf,.agb,.mb,.rom,.gb,.gbc,.sgb,.mvl,.nsf,.nsfe,.unif,.studybox,.ipd,.bps,.ups,.exe,.lnk";
+        var exts = ".20,.40,.48,.58,.60,.78,.2hd,.2mg,.32x,.3ds,.3dsx,.68k,.7z,.7zip,.88d,.98d,.a0,.a26,.a52,.a78,.abs,.adf,.adz,.agb,.app,.arc,.atr,.atx,.aus,.axf,.b0,.b5t,.b6t,.bat,.bin,.bml,.bps,.bs,.bsx,.bwt,.car,.cas,.cbn,.ccd,.cci,.cdi,.cdm,.cdt,.cfg,.cgb,.ch8,.chd,.ciso,.cmd,.cof,.col,.com,.conf,.crt,.cso,.csw,.cue,.cxi,.d13,.d1m,.d2m,.d4m,.d64,.d6z,.d71,.d7z,.d80,.d81,.d82,.d88,.d8z,.d98,.dat,.dci,.dcm,.dff,.dim,.dmg,.dms,.do,.dol,.dsk,.dup,.dx2,.elf,.eur,.exe,.fd,.fdd,.fdi,.fds,.fig,.fm2,.fs-uae,.g41,.g4z,.g64,.g6z,.gb,.gba,.gbc,.gbs,.gbz,.gcm,.gcz,.gd3,.gd7,.gdi,.gen,.gg,.gz,.hdd,.hdf,.hdi,.hdm,.hdn,.hdz,.img,.int,.ipf,.ips,.iso,.isz,.j64,.jag,.jap,.jma,.k7,.kcr,.ldb,.lha,.lnx,.lst,.lzx,.m3u,.m5,.m7,.mb,.md,.mdf,.mds,.mdx,.mgd,.mgh,.mgw,.msa,.mv,.mx1,.mx2,.n64,.nca,.ndd,.nds,.nes,.nez,.nfse,.ngc,.ngp,.ngpc,.nhd,.npc,.nrg,.nro,.nsf,.nsfe,.nso,.nsp,.o,.obx,.p,.p00,.p64,.pal,.pbp,.pc2,.pce,.pdi,.po,.prg,.pro,.prof,.prx,.psexe,.pzx,.qd,.rar,.raw,.ri,.rom,.rpx,.rvz,.rzx,.sap,.sc,.scl,.scp,.sfc,.sg,.sgb,.sgg,.sgx,.sk,.smc,.smd,.sms,.sna,.st,.stx,.swc,.swf,.t64,.t81,.tap,.tar,.tfd,.tgc,.thd,.toc,.trd,.tzx,.u1,.uae,.ufo,.unf,.unif,.ups,.usa,.uze,.v64,.vb,.vboy,.vec,.vms,.voc,.vpk,.vsf,.wad,.wav,.wbfs,.wia,.woz,.ws,.wsc,.wud,.wux,.x64,.x6z,.xbe,.xci,.xdf,.xex,.xfd,.xml,.z64,.z80,.zip";
         $(#platform_exts).value = exts;
     }
 
@@ -113,6 +114,7 @@ function GetPlatformItem(evt){
         $(#platform_wallpaper).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_files).state.disabled = false;
+        $(#platform_audio).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
@@ -135,6 +137,7 @@ function GetPlatformItem(evt){
         $(#platform_wallpaper).state.disabled = true;
         $(#platform_video).state.disabled = true;
         $(#platform_files).state.disabled = true;
+        $(#platform_audio).state.disabled = true;
         $(#platform_rombase).state.disabled = true;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
@@ -142,7 +145,6 @@ function GetPlatformItem(evt){
         for(var f in files) {f.state.disabled = true;}
     }
 
- 
 }
 
 
@@ -168,6 +170,7 @@ function platformSubmit(evt){
         strategy   : $(#platform_strategy).value,
         doc        : $(#platform_doc).value,
         files      : $(#platform_files).value,
+        audio      : $(#platform_audio).value,
         rombase    : $(#platform_rombase).value,
     };
     if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
@@ -248,7 +251,7 @@ function openFolder(evt) {
     var out = self.select("#"+evt.attributes["for"]);
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
     }
@@ -260,11 +263,11 @@ function openFile(evt) {
     const initialPath = "";
     const filter = evt.attributes["filter"];
     const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
     var out = self.select("#"+evt.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
         out.focus = true;
@@ -277,7 +280,7 @@ function openPlatformFolder(evt) {
     var url = view.selectFolder(evt.attributes["caption"]);
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
    
         //资料文件名
@@ -298,6 +301,7 @@ function openPlatformFolder(evt) {
         $(#platform_wallpaper).value = url + SEPARATOR + "wallpaper";
         $(#platform_video).value = url + SEPARATOR + "video";
         $(#platform_files).value = url + SEPARATOR + "files";
+        $(#platform_audio).value = url + SEPARATOR + "audio";
         $(#platform_rombase).value = url + SEPARATOR + rombase.toLowerCase() + ".csv";
 
         $(#platform_doc).state.disabled = false;
@@ -315,6 +319,7 @@ function openPlatformFolder(evt) {
         $(#platform_wallpaper).state.disabled = false;
         $(#platform_video).state.disabled = false;
         $(#platform_files).state.disabled = false;
+        $(#platform_audio).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);

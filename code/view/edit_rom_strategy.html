@@ -5,66 +5,99 @@
     <style>
         @import "this://app/images/public.css";
         @import "images/form.css";
-        html{background:color(center-background-color);}
-        body{margin:0;padding:0;}
-        textarea{color:color(general-text-color);size:*;height:500dip;padding:5dip;border:0;overflow:scroll-indicator;}
-    </style>
 
+        html{background:color(center-background-color)}
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        textarea{color:color(general-text-color);background:none;size:*;height:500dip;padding:5dip;width:*;border:0;overflow:scroll-indicator;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+
+        #files_list{padding:0;}
+        #files_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
+        #files_list li *{margin: 0 3dip;vertical-align: middle}
+        #files_list li input[type="text"]:nth-child(1){width:130px;}
+        #files_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
+        #files_list li .openfile{margin-left:0;}
+        .add_wrapper{text-align:center}
+
+    </style>
 </head>
 <body>
-    <textarea></textarea>
-    <div class="form_bottom">
-        <button class="cancel" id="delete">{{Delete}}</button>
-        <button class="ok" id="update">{{Update}}</button>
-    </div>
 
-    <script type="text/tiscript">
-        include ROOTPATH + "tis/utils.tis";
-        createLang(); //创建语言
+  <tabs class="tabs" id="mytabs">
+    <strip>
+      <label ww="650dip" wh="660dip" for="first" selected>{{Doc}}</label>
+      <label ww="650dip" wh="660dip" for="second">{{Strategy}}</label>
+      <label ww="490dip" wh="500dip" for="third">{{StrategyFiles}}</label>
+    </strip>
+    <panels>
+    <section id="first">
+        <textarea id="doc"></textarea>
+        <div class="form_bottom">
+            <button class="cancel" id="delete_doc">{{Delete}}</button>
+            <button class="ok" id="update_doc">{{Update}}</button>
+        </div>
+    </section>
+    <section id="second">
+        <textarea id="strategy"></textarea>
+        <div class="form_bottom">
+            <button class="cancel" id="delete_strategy">{{Delete}}</button>
+            <button class="ok" id="update_strategy">{{Update}}</button>
+        </div>
+    </section>
+    <section id="third">
+        <div class="wrapper">
+            <ul id="files_list"></ul>
+            <div class="add_wrapper"><button id="files_add">{{AddFiles}}</button></div>
+            <div class="form_bottom">
+                <button class="cancel" id="close-dialog">{{Cancel}}</button>
+                <button class="ok" id="submit_files">{{OK}}</button>
+            </div>
+        </div>
 
-        //初始化主题
-        initUiTheme();
+    </section>
 
-        view.root.on("ready", function(){
-            view.windowCaption =  CONF.Lang.EditStrategy;
-            var docContent = mainView.GetGameDoc("strategy",view.parameters.id);
+<script type="text/tiscript">
+    include ROOTPATH + "tis/plugins/tabs.tis";
+    include ROOTPATH + "tis/utils.tis";
 
-            if(docContent != ""){
-                docContent = docContent.trim();
-                $(textarea).value = docContent;
-            }
-        });
 
-        //更新攻略
-        event click $(#update){
-            var richtext = $(textarea).value;
-            if (richtext != ""){
-                richtext = richtext.trim();
-                mainView.SetGameDoc("strategy",view.parameters.id,richtext);
-                alert(CONF.Lang.UpdateSuccess);
-            }else{
-                alert(CONF.Lang.ContentIsNotEmpty);
-            }
-        }
+    try{
+    include ROOTPATH + "tis/dialog/edit_strategy.tis";
+    }catch(e){
+    alert(e);
+    }
 
-        //删除攻略
-        event click $(#delete){
-            var result = view.msgbox {
-                type:#warning, 
-                content:CONF.Lang.DeleteStrategyConfirm, 
-                caption:CONF.Lang.DeleteStrategy,
-                buttons:[
-                    {id:#yes,text:CONF.Lang.Delete},
-                    {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
-                ]
-            };
-            if (result != "yes"){
-                return true;
-            }
-            mainView.DelGameDoc("strategy",view.parameters.id);
-            alert(CONF.Lang.DeleteSuccess);
-            view.close();
-        }
-    </script>
+
+    //更新攻略
+    event click $(#update_strategy){
+        updateStrategy();
+    }
+
+    //删除攻略
+    event click $(#delete_strategy){
+        deleteStrategy();
+    }
+
+    //添加攻略文件
+    event click $(#files_add){
+        addFiles();
+    }
+
+    //删除攻略文件
+    event click $(.files_delete){
+        deleteFiles();
+    }
+
+    //更新配置
+    event click $(#submit_files){
+        submitFiles();
+    }
+
+    //选择文件
+    event click $(.openfile){
+        openFile(this);
+    }
+
+</script>
+
 </body>
 </html>

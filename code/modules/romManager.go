@@ -84,7 +84,8 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 	existsMap := map[string]string{}
 	//读取已存在rom
 	for _, v := range romlist {
-		existsMap[v.Name] = ""
+		name := utils.GetFileName(v.RomPath)
+		existsMap[name] = ""
 	}
 
 	res := config.GetResPath(platformId)
@@ -92,7 +93,7 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 	//先检查重复资料
 	for k, path := range res {
 		//攻略文件单独去处理
-		if k == "files" {
+		if k == "files" || k == "audio" {
 			continue
 		}
 		existsList := map[string][]string{}
@@ -141,6 +142,32 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 
 	//处理攻略，攻略文件都是以__分割的文件名，且一个rom可存在多个攻略文件
 	if err := filepath.Walk(res["files"],
+		func(p string, f os.FileInfo, err error) error {
+			if f == nil {
+				return nil
+			}
+			if f.IsDir() == true {
+				return nil
+			}
+			name := utils.GetFileName(p)
+			if name == "" {
+				return nil
+			}
+			//检查子游戏
+			nameArr := strings.Split(name, "__")
+			if _, ok := existsMap[nameArr[0]]; !ok {
+				//检查无效文件
+				repeat := map[string]string{}
+				repeat["path"] = p
+				repeat["type"] = "1"
+				notExistsList = append(notExistsList, repeat)
+			}
+			return nil
+		}); err != nil {
+	}
+
+	//处理音频，音频文件都是以__分割的文件名，且一个rom可存在多个音频文件
+	if err := filepath.Walk(res["audio"],
 		func(p string, f os.FileInfo, err error) error {
 			if f == nil {
 				return nil

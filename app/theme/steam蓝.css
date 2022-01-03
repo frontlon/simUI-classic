@@ -1,6 +1,9 @@
 /* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
 html:theme(steam) {
 
+    /* 滚动条 */
+    var(scroll-slider-color) : #314d6c;
+    
     /* 窗体背景 */
     var(center-background-color) : #1C2837;
     var(center-box-shadow-color) : #121A23;
@@ -112,6 +115,7 @@ html:theme(steam) {
     var(right-doc-border-color) : #395371;
     var(right-doc-text-color) : #acdbf5;
     var(right-doc-background-color) : #2E4259;
+    var(right-no-doc-text-color) : #acdbf5;
 
     /* 字母索引 */
     var(num-index-text-color) : #c7d5e0;
@@ -123,13 +127,12 @@ html:theme(steam) {
     var(rom-block-background-color) : #37424E;
     var(rom-block-hover-box-shadow-color) : #0e0d1d;
     var(rom-block-active-border-color) : #417997;
+    var(rom-block-text-shadow-color) : #000;
 
     /* rom列表（列表） */
     var(rom-list-title-text-color) : #FFF;
-    var(rom-list-odd-text-color) : #FFF;
-    var(rom-list-odd-background-color) : #1C2837;
-    var(rom-list-even-text-color) : #FFF;
-    var(rom-list-even-background-color) : #253648;
+    var(rom-list-text-color) : #FFF;
+    var(rom-list-text-shadow-color) : #000;
     var(rom-list-active-text-color) : #FFF;
     var(rom-list-active-background-color) : #417997;
     var(rom-list-text-slave-color) : #acdbf5;
@@ -148,7 +151,14 @@ html:theme(steam) {
     var(desc-title-text-color) : #FFF;
     var(desc-quote-text-color) : #acdbf5;
     var(desc-quote-border-color) : #27384c;
+    
+    /* 游戏统计信息 */
+    var(right-stat-text-color) :#acdbf5;
 
+    /* 游戏原声 */
+    var(right-audio-border-color) : #27384c;
+    var(right-audio-text-color) : #acdbf5;
+    
     /* 表单按钮 */
     var(form-bottom-hr-color) : #233041;
     var(button-border-color) : #2b394b;

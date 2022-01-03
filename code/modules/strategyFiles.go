@@ -11,12 +11,15 @@ import (
 
 func GetStrategyFile(id uint64) ([]map[string]string, error) {
 	vo, err := (&db.Rom{}).GetById(id)
+	name := utils.GetFileName(vo.RomPath)
+
 	if err != nil {
 		return nil, err
 	}
 
 	//搜索攻略文件
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, vo.Name+"__")
+	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, name+"__")
+
 	volist := []map[string]string{}
 	for _, v := range exists {
 		name := utils.GetFileName(v)
@@ -43,8 +46,8 @@ func UploadStrategyFile(id uint64, name string, p string) (string, error) {
 	newPath := config.Cfg.Platform[vo.Platform].FilesPath + config.Cfg.Separator + fileName + "__" + name + ext
 
 	rel := strings.Replace(newPath, config.Cfg.RootPath, "", 1)
-	if rel == p{
-		return p,nil
+	if rel == p {
+		return p, nil
 	}
 
 	if err := utils.FileCopy(p, newPath); err != nil {
@@ -94,8 +97,8 @@ func OpenStrategyFiles(p string) error {
 		return errors.New(p + config.Cfg.Lang["FileNotFound"])
 	}
 
-	cmd:= []string{}
-	cmd = append(cmd,p)
+	cmd := []string{}
+	cmd = append(cmd, p)
 
 	if err := utils.RunGame("", cmd); err != nil {
 		return err

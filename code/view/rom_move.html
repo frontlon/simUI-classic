@@ -81,6 +81,9 @@
             return;
         }
 
+        //结束掉侧边栏视频
+        closeRightVideo();
+
         var ids = view.parameters.id.split(",");
         for(var id in ids) {
             mainView.MoveRom(id,newPlatform,newMenu);

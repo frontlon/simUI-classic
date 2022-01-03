@@ -40,18 +40,29 @@ func DownloadRomThumbs(typeName string, id uint64, newPath string) (string, erro
 	}
 
 	//备份老图片
-	backupOldPic(platformPath, vo.RomPath)
+	if err := backupOldPic(platformPath, vo.RomPath); err != nil {
+		return "", err
+	}
 
 	//生成新文件
+	ext := utils.GetFileExt(newPath)
+	if ext == ""{
+		ext = ".jpg"
+	}
 	platformPathAbs, err := filepath.Abs(platformPath) //读取平台图片路径
 	RomFileName := utils.GetFileName(vo.RomPath)
-	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + utils.GetFileExt(newPath) //生成新文件的完整绝路路径地址
+	newFileName := platformPathAbs + config.Cfg.Separator + RomFileName + ext //生成新文件的完整绝路路径地址
+
 	f, err := os.Create(newFileName)
 	defer f.Close()
+
 	if err != nil {
 		return "", err
 	}
-	io.Copy(f, response.Body)
+	if _, err := io.Copy(f, response.Body); err != nil {
+		return "", err
+	}
+
 	return newFileName, nil
 }
 

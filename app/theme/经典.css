@@ -1,6 +1,9 @@
 /* 复制出新主题，一定要注意第一行的标识，不能和其他主题重复 */
 html:theme(light) {
 
+    /* 滚动条 */
+    var(scroll-slider-color) : #666;
+
     /* 窗体背景 */
     var(center-background-color) : #d8dce3;
     var(center-box-shadow-color) : #999;
@@ -113,6 +116,7 @@ html:theme(light) {
     var(right-doc-border-color) : #eee;
     var(right-doc-text-color) : #444;
     var(right-doc-background-color) : #FFF;
+    var(right-no-doc-text-color) : #999;
 
     /* 字母索引 */
     var(num-index-text-color) : #666;
@@ -124,13 +128,12 @@ html:theme(light) {
     var(rom-block-background-color) : #FFF;
     var(rom-block-hover-box-shadow-color) : #999;
     var(rom-block-active-border-color) : #5b93d3;
+    var(rom-block-text-shadow-color) : #999;
 
     /* rom列表（列表） */
     var(rom-list-title-text-color) : #333;
-    var(rom-list-odd-text-color) : #666;
-    var(rom-list-odd-background-color) : #d8dce3;
-    var(rom-list-even-text-color) : #666;
-    var(rom-list-even-background-color) : #e9ecef;
+    var(rom-list-text-color) : #666;
+    var(rom-list-text-shadow-color) : #999;
     var(rom-list-active-text-color) : #FFF;
     var(rom-list-active-background-color) : #5b93d3;
     var(rom-list-text-slave-color) : #666;
@@ -149,6 +152,13 @@ html:theme(light) {
     var(desc-title-text-color) : #000;
     var(desc-quote-text-color) : #444;
     var(desc-quote-border-color) : #ccc;
+
+    /* 游戏统计信息 */
+    var(right-stat-text-color) :#444;
+
+    /* 游戏原声 */
+    var(right-audio-border-color) :#ccc;
+    var(right-audio-text-color) :#444;
 
     /* 表单按钮 */
     var(form-bottom-hr-color) : #233041;

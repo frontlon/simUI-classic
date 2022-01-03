@@ -1,22 +1,8 @@
-# Attention!
-
-> :warning: [Crowdfunding campaign to Open Source Sciter and Sciter.JS engines is in effect right now on KickStarter](https://www.kickstarter.com/projects/c-smile/open-source-sciter-engine)
-
-Open Source version of Sciter opens opprtunity to use Sciter as CGO module (statically linked) in Go, so
-
-Please help to Open Source the Sciter by:
-
-* donating to the campaign or/and</li>
-* by spreading the word about the campaign.
-
-#### [Let's make it happen!](https://www.kickstarter.com/projects/c-smile/open-source-sciter-engine)
-
-
 # Go bindings for Sciter
 
-[![Build status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
-[![Build Status](https://img.shields.io/travis/sciter-sdk/go-sciter/master.svg)](https://travis-ci.org/sciter-sdk/go-sciter)
-[![License](https://img.shields.io/github/license/sciter-sdk/go-sciter.svg)](https://github.com/sciter-sdk/go-sciter)
+[![AppVeyor status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
+[![Travis Status](https://travis-ci.com/sciter-sdk/go-sciter.svg?branch=master)](https://travis-ci.com/sciter-sdk/go-sciter)
+[![License](https://img.shields.io/github/license/sciter-sdk/go-sciter.svg)](https://simUI/code/utils/go-sciter)
 [![Join the forums at https://sciter.com/forums](https://img.shields.io/badge/forum-sciter.com-orange.svg)](https://sciter.com/forums)
 
 Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other language bindings (Delphi / D / Go / .NET / Python / Rust).
@@ -27,7 +13,7 @@ Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other l
 # Attention
 
 The ownership of project is transferred to this new organization.
-Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, but the package name is still `sciter`.
+Thus the `import path` for golang should now be `simUI/code/utils/go-sciter`, but the package name is still `sciter`.
 
 # Introduction
 
@@ -81,7 +67,7 @@ Things that are not supported:
 
     Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
 
- 4. `go get -x github.com/sciter-sdk/go-sciter`
+ 4. `go get -x simUI/code/utils/go-sciter`
 
  5. Run the example and enjoy :)
 

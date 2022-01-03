@@ -48,12 +48,12 @@ function managerChangeRombasePlatform(platformId){
     }
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","","");
     $(#romlist_rombase tbody).html = "";
     managerCreateRombase(romjson);
 
     //生成分页数据
-    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_rombase).html = pages;
     if(pages != ""){
@@ -103,10 +103,10 @@ function openFile(evt) {
     const defaultExt = "";
     const initialPath = "";
     const caption = CONF.Lang.SelectFile;
-    var url = view.selectFile("", filter, defaultExt, initialPath, caption );
+    var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         evt.select("input[type=text]").value = url;
     }
@@ -114,7 +114,8 @@ function openFile(evt) {
 
 //创建分页数据 - 游戏资料管理
 function managerCreatePages(romCount){
-    var num = Math.ceil(romCount.toFloat() / 100);
+    var num = Math.ceil(romCount.toFloat() / 200);
+
     var pages = "";
     for(var i=1;i<=num;i++) {
         pages += "<li>"+i+"</li>";
@@ -128,11 +129,11 @@ function managerChangeRombaseMenu(menuName){
     var platformId = $(#platform_rombase).value;
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","","");
     $(#romlist_rombase tbody).html = "";
     managerCreateRombase(romjson);
 
-    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_rombase).html = pages;
     if(pages != ""){
@@ -168,10 +169,18 @@ function managerCreateRombase(romjson){
         romData += "<td><input|text.name value=\""+ alias +"\"/></td>";
         romData += "<td><input|text.year value=\""+ obj.BaseYear +"\"/></td>";
         romData += "<td><input|text.type value=\""+ obj.BaseType +"\"/></td>";
+        romData += "<td><input|text.producer value=\""+ obj.BaseProducer +"\"/></td>";
         romData += "<td><input|text.publisher value=\""+ obj.BasePublisher +"\"/></td>";
         romData += "<td><input|text.country value=\""+ obj.BaseCountry +"\"/></td>";
         romData += "<td><input|text.translate value=\""+ obj.BaseTranslate +"\"/></td>";
         romData += "<td><input|text.version value=\""+ obj.BaseVersion +"\"/></td>";
+        romData += "<td><input|text.name_en value=\""+ obj.BaseNameEn +"\"/></td>";
+        romData += "<td><input|text.name_jp value=\""+ obj.BaseNameJp +"\"/></td>";
+        romData += "<td><input|text.other_a value=\""+ obj.BaseOtherA +"\"/></td>";
+        romData += "<td><input|text.other_b value=\""+ obj.BaseOtherB +"\"/></td>";
+        romData += "<td><input|text.other_c value=\""+ obj.BaseOtherC +"\"/></td>";
+        romData += "<td><input|text.other_d value=\""+ obj.BaseOtherD +"\"/></td>";
+
         romData += "</tr>"
     }
     $(#romlist_rombase tbody).html = romData;
@@ -185,7 +194,7 @@ function managerCreateRombaseByPages(obj){
     var platformId = $(#platform_rombase).value;
     var id = obj.parent.id;
     var num = obj.html.toInteger() - 1;
-    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","","");
     $(#romlist_rombase tbody).html = "";
     managerCreateRombase(romjson);
     obj.state.current = true;
@@ -215,6 +224,12 @@ function managerRombaseSave(obj){
         country:tr.select(".country").value,
         translate:tr.select(".translate").value,
         version:tr.select(".version").value,
+        name_en:tr.select(".name_en").value,
+        name_jp:tr.select(".name_jp").value,
+        other_a:tr.select(".other_a").value,
+        other_b:tr.select(".other_b").value,
+        other_c:tr.select(".other_c").value,
+        other_d:tr.select(".other_d").value,
     }
     mainView.SetRomBase(JSON.stringify(data));
     obj.attributes.removeClass("nosave");
@@ -256,6 +271,12 @@ function managerRombaseBatchSave(){
             country:tr.select(".country").value,
             translate:tr.select(".translate").value,
             version:tr.select(".version").value,
+            name_en:tr.select(".name_en").value,
+            name_jp:tr.select(".name_jp").value,
+            other_a:tr.select(".other_a").value,
+            other_b:tr.select(".other_b").value,
+            other_c:tr.select(".other_c").value,
+            other_d:tr.select(".other_d").value,
         }
 
         rombaseList[i] = base;
@@ -294,12 +315,12 @@ function managerChangeMediaPlatform(platformId){
     }
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","","");
     $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
 
     //生成分页数据
-    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_media).html = pages;
     if (pages != ""){
@@ -362,11 +383,11 @@ function managerChangeMediaMenu(menuName){
     var platformId = $(#platform_media).value;
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","","");
     $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
 
-    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_media).html = pages;
     if(pages != ""){
@@ -386,7 +407,7 @@ function managerCreateMediaByPages(obj){
     var platformId = $(#platform_media).value;
     var id = obj.parent.id;
     var num = obj.html.toInteger() - 1;
-    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","","");
     $(#romlist_media tbody).html = "";
     managerCreateMedia(romjson);
     obj.state.current = true;
@@ -439,12 +460,12 @@ function managerChangeSimulatorPlatform(platformId){
     $(#select_sim).html = sim;
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",0,"","","","","","","");
     $(#romlist_sim tbody).html = "";
     managerCreateSimulator(romjson);
 
     //生成分页数据
-    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,"","","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_sim).html = pages;
     if (pages != ""){
@@ -534,11 +555,11 @@ function managerChangeSimulatorMenu(menuName){
     var platformId = $(#platform_sim).value;
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,menuName,"","",0,"","","","","","","");
     $(#romlist_sim tbody).html = "";
     managerCreateSimulator(romjson);
 
-    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(0,platformId,menuName,"","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_sim).html = pages;
     if(pages != ""){
@@ -557,7 +578,7 @@ function managerCreateSimulatorByPages(obj){
     var platformId = $(#platform_sim).value;
     var id = obj.parent.id;
     var num = obj.html.toInteger() - 1;
-    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","");
+    var romjson = mainView.GetGameList(0,platformId,"","","",num,"","","","","","","");
     $(#romlist_sim tbody).html = "";
     managerCreateSimulator(romjson);
     obj.state.current = true;
@@ -696,10 +717,10 @@ function openFileLua(evt) {
     const defaultExt = "";
     const initialPath = "";
     const caption = CONF.Lang.SelectFile;
-    var url = view.selectFile("", filter, defaultExt, initialPath, caption );
+    var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         evt.html = url;
         for(var c in checks){
@@ -745,12 +766,12 @@ function managerChangeRomFilePlatform(platformId){
     }
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(1,platformId,"","","",0,"","","","","","");
+    var romjson = mainView.GetGameList(1,platformId,"","","",0,"","","","","","","");
     $(#romlist_file tbody).html = "";
     managerCreateRomFile(romjson);
 
     //生成分页数据
-    var romCount = mainView.GetGameCount(1,platformId,"","","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(1,platformId,"","","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_file).html = pages;
     if(pages != ""){
@@ -792,11 +813,11 @@ function managerChangeRomFileMenu(menuName){
     var platformId = $(#platform_file).value;
 
     //生成默认游戏列表
-    var romjson = mainView.GetGameList(1,platformId,menuName,"","",0,"","","","","","");
+    var romjson = mainView.GetGameList(1,platformId,menuName,"","",0,"","","","","","","");
     $(#romlist_file tbody).html = "";
     managerCreateRomFile(romjson);
 
-    var romCount = mainView.GetGameCount(1,platformId,menuName,"","","","","","",""); //必须在获取rom的方法下面
+    var romCount = mainView.GetGameCount(1,platformId,menuName,"","","","","","","",""); //必须在获取rom的方法下面
     var pages = managerCreatePages(romCount);
     $(#pages_file).html = pages;
     if(pages != ""){
@@ -815,7 +836,7 @@ function managerCreateRomFileByPages(obj){
     var platformId = $(#platform_file).value;
     var id = obj.parent.id;
     var num = obj.html.toInteger() - 1;
-    var romjson = mainView.GetGameList(1,platformId,"","","",num,"","","","","","");
+    var romjson = mainView.GetGameList(1,platformId,"","","",num,"","","","","","","");
     $(#romlist_file tbody).html = "";
     managerCreateRomFile(romjson);
     obj.state.current = true;
@@ -954,13 +975,14 @@ function managerCheckRepeat(){
     var romobj = JSON.parse(romjson);
 
     if(romobj.length == 0 ){
+        $(#romlist_repeat tbody).html = "";
         alert(CONF.Lang.DuplicateFilesNotFound);
         return;
     }
 
-    if(romobj.length > 500 ){
+    var max= 3000;
+    if(romobj.length > max ){
         alert(CONF.Lang.TipDuplicateFilesFound);
-        return;
     }
 
     var romData = "";
@@ -968,17 +990,20 @@ function managerCheckRepeat(){
     var color1 = "grp1";
     var color2 = "grp2";
     var clr = color1;
-    for(var obj in romobj) {
+    for(var i=0;i<=max;i++) {
+        if(romobj[i] == undefined){
+            break;
+        }
         //颜色
-        if(upSize == 0){upSize = obj.size;}
-        if (obj.size != upSize){clr = (clr == color1) ? color2 : color1}
-        upSize = obj.size
+        if(upSize == 0){upSize = romobj[i].size;}
+        if (romobj[i].size != upSize){clr = (clr == color1) ? color2 : color1}
+        upSize = romobj[i].size
 
-        romData += "<tr opt='" + obj.path + "' rid='"+obj.id+"' class='"+clr+"'>";
-        romData += "<td><input class='check_repeat' type='checkbox' value='"+ obj.id +"' /></td>";
-        romData += "<td>"+ obj.name +"</td>";
-        romData += "<td>"+ obj.path +"</td>";
-        romData += "<td>"+ obj.size +"</td>";
+        romData += "<tr opt=\"" + romobj[i].path + "\" rid='"+ romobj[i].id +"' class='"+clr+"'>";
+        romData += "<td><input class='check_repeat' type='checkbox' value='"+ romobj[i].id +"' /></td>";
+        romData += "<td>"+ romobj[i].name +"</td>";
+        romData += "<td>"+ romobj[i].path +"</td>";
+        romData += "<td>"+ romobj[i].size +"</td>";
         romData += "<td><button class='rungame'>"+CONF.Lang.Run+"</button></td>";
         romData += "</tr>"
     }
@@ -1005,12 +1030,13 @@ function managerFileRepeatMoveRom(){
     var url = view.selectFolder(CONF.Lang.SelectFolder);
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
 
         mainView.MoveRomByFileManager(JSON.stringify(paths),url);
-        managerCheckRepeat();
     }
+
+    alert(CONF.Lang.RomMoveSuccess);
 }
 
 //删除文件 - 文件去重
@@ -1048,8 +1074,8 @@ function managerFileRepeatDelete(){
         mainView.DeleteRom(id); //删除实体文件
         //删除页面上的dom
     }
+    alert(CONF.Lang.DeleteSuccess);
 
-    managerCheckRepeat();
 }
 
 //运行游戏 - 文件去重
@@ -1075,23 +1101,26 @@ function managerCheckZombie(){
     var romobj = JSON.parse(romjson);
 
     if(romobj.length == 0 ){
+        $(#romlist_zombie tbody).html = "";
         alert(CONF.Lang.NoInvalidFilesNotFound);
         return;
     }
-
-    if(romobj.length > 500 ){
+    var max = 3000;
+    if(romobj.length > max ){
         alert(CONF.Lang.TipNoInvalidFilesFound);
     }
 
     var romData = "";
     var type = "";
     var desc = "";
-    for(var obj in romobj) {
-
-        if(obj.type == 1){
+    for(var i=0;i<=max;i++) {
+        if(romobj[i] == undefined){
+            break;
+        }
+        if(romobj[i].type == 1){
             type = CONF.Lang.NoInvalidFile;
             desc = CONF.Lang.TipNoInvalidFile;
-        }else if(obj.type == 2){
+        }else if(romobj[i].type == 2){
             type = CONF.Lang.DuplicateFiles;
             desc = CONF.Lang.TipDuplicateFiles;
         }else{
@@ -1100,9 +1129,9 @@ function managerCheckZombie(){
         }
 
         romData += "<tr>";
-        romData += "<td><input class='check_zombie' type='checkbox' value='"+ obj.path +"' /></td>";
+        romData += "<td><input class='check_zombie' type='checkbox' value=\""+ romobj[i].path.toHtmlString() +"\" /></td>";
         romData += "<td title='"+ desc +"'>"+ type +"</td>";
-        romData += "<td>"+ obj.path +"</td>";
+        romData += "<td>"+ romobj[i].path.toHtmlString() +"</td>";
         romData += "</tr>"
     }
     $(#romlist_zombie tbody).html = romData;
@@ -1125,12 +1154,13 @@ function managerFileZombieMoveRom(){
     var url = view.selectFolder(CONF.Lang.SelectFolder);
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
 
         mainView.MoveZombieByFileManager(JSON.stringify(paths),url);
-        managerCheckZombie();
     }
+
+    alert(CONF.Lang.RomMoveSuccess);
 }
 
 //删除文件 - 无效资源清理
@@ -1165,8 +1195,8 @@ function managerFileZombieDelete(){
 
     for(var p in arr) {
         mainView.DeleteZombieByFileManager(p); //删除实体文件
-        //删除页面上的dom
     }
 
-    managerCheckZombie();
+    alert(CONF.Lang.DeleteSuccess);
+
 }

@@ -20,8 +20,14 @@ solid-with-shadow
     splitter:hover{background:color(sidebar-background-color)}
     #left_platform{background-color:color(sidebar-background-color);height:*;}
     #left_menu{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative}
-    #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;overflow:scroll-indicator;position:relative;}
-    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;padding:0 9dip;width:205dip;position:relative;min-width:217dip;max-width:700dip}
+    #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;position:relative;}
+    #center_fuzzy{backdrop-filter:blur(3dip);position:absolute;size:*;display:none}
+    #center_mask{position:absolute;z-index:2;size:*;background-repeat:repeat}
+    #center_video{position:absolute;size:*;display:none}
+    #center_video video{foreground-size:cover;foreground-repeat:no-repeat;image-rendering:optimize-qualitydisplay:block;width:*;height:*}
+
+    #center_content{position:absolute;z-index:3;size:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";}
+    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";padding:0 9dip;position:relative;min-width:217px;max-width:700px}
     
     /* 菜单 */
     menu{display:none;border:1dip solid color(context-border-color);padding:0}
@@ -34,11 +40,13 @@ solid-with-shadow
     menu hr{display:block;background:none;border:0;border-top:1px solid color(context-hr-dark-color);border-bottom:1px solid color(context-hr-light-color);padding:0;margin:0}
 
     /* 标题栏 */
-    #titlebar{height:36dip;line-height:36dip;width:100%;position:relative;flow:horizontal-flow;background:color(platform-background-color);}
-    #logo{color:color(logo-text-color);width:202dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
+    frameset{position:relative}
+    .title_wrapper{width:*}
+    #titlebar{display:block;height:36dip;line-height:36dip;flow:horizontal-flow;background:color(platform-background-color);}
+    #logo{color:color(logo-text-color);width:202dip;height:36dip;line-height:36dip;display:inline-block;text-align:center;font-size:14dip;background-color:color(titlebar-background-color);}
     #logo img{max-width:202dip;max-height:36dip;width:auto;height:auto;}
     #tb_left{text-align:left;width:*;display:inline-block;height:36dip;overflow:hidden;}
-    #tb_right{text-align:right;width:223dip;display:inline;background-color:color(titlebar-background-color);}
+    #tb_right{text-align:right;width:224dip;display:inline;background-color:color(titlebar-background-color);}
     #titlebar i{display:block;}
     #titlebar .minsize{background-size:60%;}
     #titlebar button{color:color(titlebar-button-text-color);background:color(titlebar-button-background-color);size:36dip;line-height:36dip;display:inline-block;margin-left:1dip;font-size:11dip;padding:0;border:0;border-radius:0}
@@ -51,7 +59,7 @@ solid-with-shadow
     .statebar{background:color(statebar-background-color);height:auto;width:*;margin-top:0;flow:horizontal-flow}
     .statebar .counnum{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:right;width:max-content;padding-right:10dip}
     .statebar .filter{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:left;width:*;padding-left:10dip}
-    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:60dip}
+    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:80dip}
     .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
     .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
     .statebar .filter select > caption{color:color(filter-text-color)}
@@ -65,16 +73,18 @@ solid-with-shadow
     #num_search li:current{font-size:14dip;color:color(num-index-active-text-color);}
 
     /* 平台按钮 */
-    #platform_ul{overflow:scroll-indicator;height:*;margin:0;padding:0;background:color(platform-background-color);}
-    #platform_ul li{font-size:12dip;display:block;text-align:center;vertical-align: middle;padding:5dip;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
-    #platform_ul li .imgdiv{display: block}
-    #platform_ul li img{size:28dip;margin:3dip auto 5dip auto;}
-    #platform_ul li p{margin:0;line-height:1.4em;display:block;}
+    #platform_ul{overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";height:*;margin:0;padding:0;background:color(platform-background-color);}
+    #platform_ul >li{flow:horizontal-flow;display:block;text-align:center;vertical-align: middle;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);}
+    #platform_ul >li .leftdiv{size:*;margin:0;padding:5dip;border-right:1dip solid color(platform-arrow-border-dark);vertical-align:middle;}
+    #platform_ul >li img{size:28dip;margin:3dip auto 5dip auto;}
+    #platform_ul >li p{margin:0;line-height:1.4em;display:block;font-size:12dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    #platform_ul >li button{width:10dip;line-height:1em;padding:0;color:#FFF;background:none;vertical-align:middle;border-radius:0;margin:0;border:0;border-left:1dip solid color(platform-arrow-border-light);}
+    #platform_ul >li button i{height:*;line-height:*;vertical-align:middle;background-size: 120%;}
     #platform_ul li:hover{opacity:0.7;}
     #platform_ul li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
 
     /* 侧边栏菜单 */
-    #menulist{padding:0 9dip;height:*;}
+    #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";}
     #menulist dt{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color)}
     #menulist dd{color:color(menu-text-color);line-height:1.4em;min-height:25dip;padding:2dip 5dip 2dip 10dip;vertical-align: middle;border-top:1dip solid color(menu-separator-color);context-menu:selector(menu#menucontext);font-size:12dip;}
     #menulist dd:current{background-color:color(menu-active-background-color);color:color(menu-active-text-color);}
@@ -101,7 +111,9 @@ solid-with-shadow
     .romblock li div:nth-child(7){display:none}
     .romblock li div:nth-child(8){display:none}
 
-    #romlist.textShadow{text-shadow: 1px 1px 1px #000}
+    #romlist.textShadow{text-shadow: 1px 1px 1px color(rom-block-text-shadow-color);box-shadow:0}
+    #romlist.textShadow li:current{border:0;box-shadow:0;overflow:visable}
+    #romlist.textShadow li:current img {border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);}
     #romlist.fontsize1 li{display:inherit;font-size:8dip;}
     #romlist.fontsize2 li{display:inherit;font-size:9dip}
     #romlist.fontsize3 li{display:inherit;font-size:10dip}
@@ -113,30 +125,41 @@ solid-with-shadow
     #romlist.fontsize9 li{display:inherit;font-size:16dip}
     #romlist.fontsize10 li{display:inherit;font-size:17dip}
     #romlist.fontsize11 li{display:inherit;font-size:18dip}
-    #romlist.fontsize12 li{display:inherit;font-size:36dip;line-height:52dip;height:52dip}
-    #romlist.fontsize13 li{display:inherit;font-size:48dip;line-height:70dip;height:70dip}
-    #romlist.fontsize12 li div:nth-child(1){width:45dip;}
-    #romlist.fontsize12 li img{width:32dip;height:32dip;margin-top:1dip;}
-    #romlist.fontsize13 li div:nth-child(1){width:60dip}
-    #romlist.fontsize13 li img{width:40dip;height:40dip;margin-top:6dip;}
+    #romlist.fontsize12 li{display:inherit;font-size:20dip}
+    #romlist.fontsize13 li{display:inherit;font-size:24dip}
+    #romlist.fontsize14 li{display:inherit;font-size:36dip;line-height:52dip;height:52dip}
+    #romlist.fontsize15 li{display:inherit;font-size:48dip;line-height:70dip;height:70dip}
+    #romlist.fontsize14 li div:nth-child(1){width:45dip;}
+    #romlist.fontsize14 li img{width:32dip;height:32dip;margin-top:1dip;}
+    #romlist.fontsize15 li div:nth-child(1){width:60dip}
+    #romlist.fontsize15 li img{width:40dip;height:40dip;margin-top:6dip;}
     
-    .romblock.zoom1 > li{min-width:80dip;max-width:100dip;}
-    .romblock.zoom2 > li{min-width:100dip;max-width:130dip;}
-    .romblock.zoom3 > li{min-width:120dip;max-width:150dip;}
-    .romblock.zoom4 > li{min-width:140dip;max-width:180dip;}
-    .romblock.zoom5 > li{min-width:170dip;max-width:200dip;}
-    .romblock.zoom6 > li{min-width:200dip;max-width:300dip;}
+    .romblock.zoom1 > li{min-width:32dip;max-width:48dip;}
+    .romblock.zoom2 > li{min-width:80dip;max-width:100dip;}
+    .romblock.zoom3 > li{min-width:100dip;max-width:130dip;}
+    .romblock.zoom4 > li{min-width:120dip;max-width:150dip;}
+    .romblock.zoom5 > li{min-width:140dip;max-width:180dip;}
+    .romblock.zoom6 > li{min-width:170dip;max-width:200dip;}
+    .romblock.zoom7 > li{min-width:200dip;max-width:240dip;}
+    .romblock.zoom8 > li{min-width:240dip;max-width:280dip;}
+    .romblock.zoom9 > li{min-width:280dip;max-width:320dip;}
+    .romblock.zoom10 > li{min-width:320dip;max-width:360dip;}
 
     .romblock.margin1 > li{margin:3dip 6dip;}
     .romblock.margin2 > li{margin:6dip 12dip}
     .romblock.margin3 > li{margin:9dip 18dip;}
     .romblock.margin4 > li{margin:12dip 24dip}
     .romblock.margin5 > li{margin:15dip 30dip}
-    .romblock.margin6 > li{margin:18dip 36dip}
-    .romblock.margin7 > li{margin:21dip 42dip}
-    .romblock.margin8 > li{margin:24dip 48dip}
-    .romblock.margin9 > li{margin:27dip 54dip}
-    .romblock.margin10 > li{margin:30dip 60dip}
+    .romblock.margin6 > li{margin:20dip 40dip}
+    .romblock.margin7 > li{margin:25dip 50dip}
+    .romblock.margin8 > li{margin:30dip 60dip}
+    .romblock.margin9 > li{margin:35dip 70dip}
+    .romblock.margin10 > li{margin:40dip 80dip}
+    .romblock.margin11 > li{margin:45dip 90dip}
+    .romblock.margin12 > li{margin:50dip 100dip}
+    .romblock.margin13 > li{margin:55dip 110dip}
+    .romblock.margin14 > li{margin:60dip 120dip}
+    .romblock.margin15 > li{margin:65dip 130dip}
 
     .romblock.bg0 > li{background:none}
     .romblock.bg0 > li div:nth-child(2){display:block}
@@ -148,12 +171,10 @@ solid-with-shadow
     .romblock.vertical >li img{height:width(125%);}
 
     /* rom列表 */
-    .romlist{width:*;margin-top:24dip;margin-left:30dip;list-style-type:none;padding:0;}
-    .romlist > li{position:relative;flow:horizontal-flow;vertical-align:middle;line-height:36dip;height:36dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}
-    .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);color:color(rom-list-odd-text-color);}
-    .romlist > li:nth-child(even){background:color(rom-list-even-background-color);color:color(rom-list-even-text-color);}
+    .romlist{width:*;margin-top:24dip;margin:0 20dip 0 30dip;list-style-type:none;padding:0;}
+    .romlist > li{color:color(rom-list-text-color);text-shadow: 1px 1px 1px color(rom-block-text-shadow-color);position:relative;flow:horizontal-flow;vertical-align:middle;line-height:36dip;height:36dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
-    .romlist > li img{border-radius:50%;width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
+    .romlist > li img{width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
     .romlist > li:current img{transform: scale(1.5);}
     .romlist > li div{width:*;display:inline-block;white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;}
     .romlist > li div:nth-child(1){display:inline-block;width:30dip;height:*;overflow:visable;padding-left:12dip}
@@ -165,7 +186,7 @@ solid-with-shadow
     .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romlist > li div:nth-child(8){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
     .romth div{color:color(rom-list-title-text-color)!important;font-weight:bold;}
-    .rom_star {background: yellow;position:absolute;top:0; left:0;width:50px; height:10px; transform:rotate(-45deg);transform-origin:top right;-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform-origin:top right;-webkit-transform-origin:top right;}
+    .rom_star {position:absolute;top:0; left:0;width:12px; height:12px;background:url(this://app/images/star.gif) no-repeat left top}
     .romlist > li div.star{border-left:3px solid yellow}
     /* 右侧边栏 */
     #right h1{font-size:20dip;color:color(sidebar-name-text-color);display:none;text-shadow: 1px 1px 2px color(sidebar-name-text-shadow);}
@@ -175,22 +196,25 @@ solid-with-shadow
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
     #right .filedrop_ctl_btn{top:-28dip;left:0dip;position:absolute;}
     #right_second h2{margin-left:25dip;}
-    #right .doc{height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:2dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;font-size:14dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .doc{vertical-align:top;height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:2dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;font-size:14dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+    .nodoc{vertical-align:middle;text-align:center;font-size:12dip;color:color(right-no-doc-text-color)}
     .button_wrapper{position:relative;z-index:2;}
     .funbtn{border:0;text-align:center;height:19dip;line-height:19dip;width:19dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0}
     .funbtn img{width:19dip;vertical-align:middle;margin:auto}
     .funbtn:hover{background:color(func-button-background-color);opacity:0.5}
     .funbtn i{display:block}
 
+    .game_stat{margin:0;padding:0;position:relative}
+    .game_stat li{color:color(right-stat-text-color);list-style:none;padding:3dip 0 3dip 15dip;background:url(this://app/images/gamestat.gif) no-repeat left center;background-size:9px;}
 
     .flow_wrapper{;height:*;}
     .flow_wrapper_left{height:auto;flow:none;}
     .flow_wrapper_right{height:*;}
     .margin_wrapper{height:*;}
-    #add_menu{position:absolute;top:18dip;right:8dip}
+    .menulist_menu{position:absolute;top:18dip;right:8dip}
     
     /* 基础信息表格 */
-    #right_rombase{width:*;display:block;clear:both;height:auto;padding:0;margin:0;background:color(right-doc-background-color);}
+    #right_rombase{width:*;overflow:hidden;display:block;clear:both;height:auto;padding:0;margin:0;background:color(right-doc-background-color);}
     #right_rombase li{word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
     #right_rombase li:nth-child(2){background-color:color(right-play-info-background-color-2);}
@@ -200,17 +224,24 @@ solid-with-shadow
     #right_rombase li:nth-child(6){background-color:color(right-play-info-background-color-6);}
     #right_rombase li:nth-child(7){background-color:color(right-play-info-background-color-7);}
     #right_rombase li:nth-child(8){background-color:color(right-play-info-background-color-8);}
-    #right_rombase_name{word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;background-color:color(right-play-info-background-color-8);}
+    #right_rombase li:nth-child(9){background-color:color(right-play-info-background-color-1);}
+    #right_rombase li:nth-child(10){background-color:color(right-play-info-background-color-2);}
+    #right_rombase li:nth-child(11){background-color:color(right-play-info-background-color-3);}
+    #right_rombase li:nth-child(12){background-color:color(right-play-info-background-color-4);}
+    #right_rombase li:nth-child(13){background-color:color(right-play-info-background-color-5);}
+    #right_rombase li:nth-child(14){background-color:color(right-play-info-background-color-6);}
+    #right_rombase li:nth-child(15){background-color:color(right-play-info-background-color-1);}
 
     /* 侧边栏滚动图片 */
     .rotate_wrapper{position:relative;}
-    #rotate{border:0;text-align:center;height:25dip;line-height:25dip;width:25dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0;top:-35dip;right:0dip;position:absolute;opacity:0.8}
+    #rotate{border:0;text-align:center;height:25dip;line-height:25dip;width:25dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0;top:-30dip;right:0dip;position:absolute;opacity:0.8}
     #rotate:hover{opacity:1}
     .stack{overflow:hidden;flow:stack;width:100%;text-align:center;}
     .stack>img{max-width:360dip;width:100%;margin:0 auto}
+    .stack>img:hover{cursor:pointer;opacity:0.8;}
 
     /* 右侧边栏遮罩 */
-    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:3;text-align:center;vertical-align:middle;display:block;background-size:70%;}
+    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:5;text-align:center;vertical-align:middle;display:block;background-size:70%;}
     #mask img{width:60%;display:block;opacity: 0.3;}
     #mask p{font-size:16dip;display: block;opacity: 0.5;margin-bottom:50dip}
 
@@ -223,9 +254,10 @@ solid-with-shadow
     #sim_select li:current{color:color(sim-switch-active-text-color);background:color(sim-switch-active-background-color);}
 
     /* 侧边栏文档简介 */
+    #doc{font-size:12dip}
     #doc h1,#doc h2,#doc h3,#doc h4,#doc h5,#doc h6,#doc pre,
     #doc ul,#doc li,#doc ol,#doc li,#doc dl,#doc dd,#doc tr,
-    #doc th,#doc td,#doc p,#doc strong,#doc em,#doc code,#doc del{font-size:11dip;font-weight:normal;list-style:none;padding:0;margin:0;font-style:normal}
+    #doc th,#doc td,#doc p,#doc strong,#doc em,#doc code,#doc del{font-weight:normal;list-style:none;padding:0;margin:0;font-style:normal}
     #doc p{display:block;margin-bottom:12dip}
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
@@ -244,15 +276,17 @@ solid-with-shadow
     #romcontext .doc{background-image:url(this://app/images/fileico_doc.png);}
     #romcontext .files{background-image:url(this://app/images/fileico_files.png);}
     #romcontext .strategy{background-image:url(this://app/images/fileico_strategy.png);}
+    #romcontext .audio{background-image:url(this://app/images/fileico_audio.png);}
     #romcontext .delete{background-image:url(this://app/images/fileico_delete.png);}
     #romcontext .move{background-image:url(this://app/images/fileico_move.png);}
+    #romcontext .subgame{background-image:url(this://app/images/fileico_sub.png);}
 
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
     #ping{width:1;height:1;position: absolute;top:0;left:0;}
 
     /* 侧边栏tab选项卡 */
-    .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical}
+    .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical;}
     .sidetabs>strip{display:block;flow:horizontal;font-size:17dip;padding-top:5dip}
     .sidetabs>strip>label{display:block;height:*;width:*;background:none;text-align:center;color:color(tab-text-color);background:color(tab-background-color);margin:0 1px;padding:3dip 0 }
     .sidetabs>strip>label.disable{color:color(tab-text-disable-color)}
@@ -265,7 +299,8 @@ solid-with-shadow
     .sidetabs>panels>:expanded{visibility:visible;height:*;background:none;}
     
     #second_thumbs img{display:block;max-width:360px;width:100%;margin:0 auto}
-    #third_strategy{color:color(desc-content-text-color);line-height:1.5em;padding-top:10dip}
+    #second_thumbs img:hover{opacity:0.8;}
+    #third_strategy{color:color(desc-content-text-color);line-height:1.5em;padding-top:10dip;font-size:14dip;}
     #third_strategy p{line-height:2em;}
     #third_strategy img{display:block;max-width:300px;width:100%;margin:0 auto}
     #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle;display:inline-block;}
@@ -285,8 +320,8 @@ solid-with-shadow
     #search_box{background:color(search-box-background-color);border-radius:5px;box-shadow:0 0 20dip color(search-box-box-shadow);position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:none}
     #search_box input{color:color(search-box-text-color);display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 
-    #right_video_wrapper{width:*;}
-    #right_video_wrapper video{max-width:360dip;max-height:360dip;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
+    #right_video_wrapper{width:*}
+    #right_video_wrapper video{max-width:360dip;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
     #right_video_wrapper .bar {text-align:center;width:*;height:*;margin:*;flow:horizontal;padding:4dip;position:absolute;top:0;display:none;}
 
     #right_video_wrapper:hover .bar{display:block;}
@@ -300,20 +335,25 @@ solid-with-shadow
     #third_files li:hover{opacity:0.8}
     #third_files li:active{opacity:0.4}
 
+    /* 大缩略图 */
+    #big_thumb_wrapper{position:absolute;top:0;left:0;size:*;z-index:10;display:block;display:none}
+    #big_thumb_bg{z-index:5;size:*;background-color:rgba(0, 0, 0, 0.55);position:absolute;backdrop-filter:blur(5dip);}
+    #big_thumb_content{z-index:6;position:absolute;size:*;vertical-align:middle;text-align:center;margin:auto;}
+    #big_thumb_content img{vertical-align:middle;margin:auto;display:block}
 
     /* 宽模式 */
     .widthMode{height:*}
     .widthMode #thumb_h2{display:none;}
     .widthMode #funBtn_h2{display:none;}
     .right_bg{display:none}
-    .widthMode  .right_bg{background:no-repeat center center;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color);position:relative}
+    .widthMode  .right_bg{background:no-repeat center top;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color);position:relative}
     .widthMode .margin_wrapper{margin-top:-50dip;height:*;}
-    .widthMode .button_wrapper{top:60dip;width:50%}
+    .widthMode .button_wrapper{display:none}
     .widthMode .rotate_wrapper{height:90dip;z-index:3}
     .widthMode  #right_title{display:block}
     .widthMode #rotate{height:35dip;line-height:35dip;width:35dip;top:-40dip;right:0dip;position:absolute;z-index:2;}
-    .widthMode .stack{position:absolute;top:-120dip;width:auto;height:200px;right:40dip;}
-    .widthMode .stack>img{max-width:auto;width:auto;height:200dip;}
+    .widthMode .stack{position:absolute;top:-120dip;width:auto;height:200px;right:40dip;vertical-align:middle;text-align:right}
+    .widthMode .stack>img{max-width:auto;width:auto;height:200dip;margin-right:0}
     .widthMode video{margin:0;padding:0}
     .widthMode .sim_select{display:block;width:*;}
     .widthMode .buttons{display:block;width:*;}
@@ -328,19 +368,37 @@ solid-with-shadow
     .related{display:none}
     .related_h2{display:none}
     .widthMode .related_h2{display:inherit}
-    .widthMode .related{flow:horizontal-flow;clear:both;padding:0;display:inherit}
+    .widthMode .related{flow:horizontal-flow;clear:both;padding:0;margin:0;display:inherit}
     .widthMode .related > li{min-width:60dip;width:*;height:82dip;border:1px solid color(related-border-color);background:color(related-background-color);text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;overflow:hidden;margin:0 5dip 5dip 5dip;padding:10dip}
     .widthMode .related > li:hover{opacity:0.7}
     .widthMode .related > li img{width:48dip;height:48dip;border-radius:48dip;margin:0 auto}
     .widthMode .related > li > p{margin-bottom:0;display:block;font-size:10dip}
+
+    /* 音频 */
+    .audio{padding:0;margin:0;width:*;}
+    .audio li{vertical-align:middle;color:color(right-audio-text-color);background:url(this://app/images/fileico_audio.png) no-repeat left center;background-size:12dip;padding-left:18dip;margin-bottom:15dip;display:block;width:*;float:none;}
+    .widthMode .audio li:nth-child(odd){margin-right:20dip;width:42%;display:inline-block;}
+    .widthMode .audio li:nth-child(even){width:42%;display:inline-block;}
+    .audio li:hover{opacity:0.8}
+    .audio li:active{opacity:0.5}
+    .audio li:last-child{border-bottom:0}
+    .audio_title_wrapper{flow:horizontal-flow;width:*;}
+    .audio_title_wrapper h2{width:*;}
+    .audio_title_wrapper button{margin-top:9dip;size:17dip}
+
 </style>
 
 </head>
 <body>
 
-<div id="search_box">
-<input type="text" id="search_box_input" value="" novalue="请输入搜索关键字" />
+<!-- 大图 -->
+<div id="big_thumb_wrapper">
+    <div id="big_thumb_bg"></div>
+    <div id="big_thumb_content"><img id="big_thumb" src="" /></div>
 </div>
+<!-- 搜索框 -->
+<div id="search_box"><input type="text" id="search_box_input" value="" novalue="请输入搜索关键字" /></div>
+
 <div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
 <div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
 <menu.context id="romcontext"></menu>
@@ -353,9 +411,9 @@ solid-with-shadow
             <li id="config_romlist_direction">{{ThumbDirection}}<menu><li opt="0">{{ThumbAuto}}</li><li opt="1">{{ThumbHorizontal}}</li><li opt="2">{{ThumbVertical}}</li></menu></li>
             <li id="config_thumb">{{IndexThumb}}<menu><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="title">{{TitlePic}}</li><li opt="cassette">{{CassettePic}}</li><li opt="icon">{{IconPic}}</li><li opt="gif">{{GifPic}}</li><li opt="wallpaper">{{WallpaperPic}}</li><li opt="background">{{BackgroundPic}}</li></menu></li>
             <li id="config_font_background">{{TitleBackground}}<menu><li opt="2">{{TitleShow}}</li><li opt="0">{{TitleHideBackground}}</li><li opt="1">{{TitleHide}}</li></menu></li>
-            <li id="config_title_fontsize">{{TitleFontSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li><li opt="11">11</li><li opt="12">12</li><li opt="13">13</li></menu></li>
-            <li id="config_romlist_size">{{BlockSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li></menu></li>
-            <li id="config_romlist_margin">{{BlockMargin}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li></menu></li>
+            <li id="config_title_fontsize">{{TitleFontSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li><li opt="11">11</li><li opt="12">12</li><li opt="13">13</li><li opt="14">14</li><li opt="15">15</li></menu></li>
+            <li id="config_romlist_size">{{BlockSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li></menu></li>
+            <li id="config_romlist_margin">{{BlockMargin}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li><li opt="11">11</li><li opt="12">12</li><li opt="13">13</li><li opt="14">14</li><li opt="15">15</li></menu></li>
             <li>{{RomlistColumn}}<menu>
                 <li><label><input class="romlist_column" opt="0" type="checkbox"> {{FilterMenu}}</label></li>
                 <li><label><input class="romlist_column" opt="1" type="checkbox"> {{BaseType}}</label></li>
@@ -364,6 +422,7 @@ solid-with-shadow
                 <li><label><input class="romlist_column" opt="4" type="checkbox"> {{BaseCountry}}</label></li>
                 <li><label><input class="romlist_column" opt="5" type="checkbox"> {{BaseTranslate}}</label></li>
                 <li><label><input class="romlist_column" opt="6" type="checkbox"> {{BaseVersion}}</label></li>
+                <li><label><input class="romlist_column" opt="7" type="checkbox"> {{BaseProducer}}</label></li>
             </menu></li>
             <li id="config_show_name_type">{{ShowNameType}}<menu><li opt="0">{{Alias}}</li><li opt="1">{{FileName}}</li></menu></li>
         </menu></button>
@@ -377,7 +436,6 @@ solid-with-shadow
                 <li id="create_cache" opt="platform"><i.cache></i><span>{{CreateCachePlatform}}</span></li>
                 <li id="create_cache" opt="all"><i.cache></i><span>{{CreateCacheAll}}</span></li>
                 <li id="clear_rombase" opt="res"><i.cache></i><span>{{ClearRombase}}</span></li>
-
             </menu>
         </button><button type="menu" title="{{Config}}"><i.config.minsize></i>
             <menu>
@@ -393,6 +451,23 @@ solid-with-shadow
         </button><button role="window-minimize"><i.minimize.minsize></i></button><button role="window-maximize"><i.maximize.minsize></i></button><button role="window-close"><i.close.minsize></i></button>
     </div>
 </div>
+<!-- 状态栏 -->
+<div class="statebar">
+    <div class="filter">
+        <select id="filter_type"><option value="">{{BaseType}}</option></select>
+        <select id="filter_year"><option value="">{{BaseYear}}</option></select>
+        <select id="filter_producer"><option value="">{{BaseProducer}}</option></select>
+        <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
+        <select id="filter_country"><option value="">{{BaseCountry}}</option></select>
+        <select id="filter_translate"><option value="">{{BaseTranslate}}</option></select>
+        <select id="filter_version"><option value="">{{BaseVersion}}</option></select>
+        <input type="text" id="search_input" novalue="{{Keyword}}" />
+        <button id="filter_clear">{{FilterClear}}</button>
+    </div>
+    <div class="counnum">
+        <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>
+</div>
+
 <frameset cols="62dip,140dip,*,217dip" noresize="noresize">
     <section id="left_platform">
         <ul id="platform_ul"></ul>
@@ -400,30 +475,24 @@ solid-with-shadow
     <splitter id="platform_splitter" />
     <section id="left_menu">
         <dl id="menulist"></dl>
-        <button id="add_menu" class="funbtn" title="{{AddMenu}}"><i>+</i></button>
+       
+        <button type="menu" class="menulist_menu funbtn" title="{{Config}}"><i.setting></i>
+            <menu>
+                <li id="add_menu">{{AddMenu}}</li>
+                <li id="romlist_hide">{{HideGame}}</li>
+            </menu>
+        
+        </button>
     </section>
     <splitter id="menu_splitter" />
     <section id="center" class="scrollbar">
+    <div id="center_video"></div>
+    <div id="center_fuzzy"></div>
+    <div id="center_mask"></div>
+    <div id="center_content">
         <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
-
-        <div class="statebar">
-            <div class="filter">
-                <select id="filter_type"><option value="">{{BaseType}}</option></select>
-                <select id="filter_year"><option value="">{{BaseYear}}</option></select>
-                <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
-                <select id="filter_country"><option value="">{{BaseCountry}}</option></select>
-                <select id="filter_translate"><option value="">{{BaseTranslate}}</option></select>
-                <select id="filter_version"><option value="">{{BaseVersion}}</option></select>
-                <input type="text" id="search_input" novalue="{{Keyword}}" />
-                <button id="filter_clear">{{FilterClear}}</button>
-            </div>
-            <div class="counnum">
-                <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>
-        </div>
-        <div id="romwrapper">
-            <ul id="romlist">
-            </ul>
-        </div>
+        <div id="romwrapper"><ul id="romlist"></ul></div>
+    </div>
     </section>
     <splitter id="right_splitter" />
     <section id="right">
@@ -440,22 +509,20 @@ solid-with-shadow
             <div class="right_bg" id="right_bg"></div>
 
             <div class="margin_wrapper">
-            <h2 id="funBtn_h2">{{FunButton}}</h2>
             <div class="button_wrapper">
-                <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"></button>
-                <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
-                <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
-                <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
-                <button id="right_edit_doc" class="funbtn" platform="" name="" value="" rid="" title="{{EditDoc}}"><img src="this://app/images/fileico_doc.png" /></button>
-                <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditStrategy}}"><img src="this://app/images/fileico_strategy.png" /></button>
-                <button id="right_edit_files" class="funbtn" rid="" rname="" title="{{EditFiles}}"><img src="this://app/images/fileico_files.png" /></button>
-                <button id="right_move" class="funbtn" platform="" name="" value="" rid="" title="{{RomMove}}"><img src="this://app/images/fileico_move.png" /></button>
-                <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" /><menu id="foldercontext" type="menu"></menu></button>
-                <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>
-            <h1 id="right_title"></h1>
+                <h2 id="funBtn_h2">{{FunButton}}</h2>
+                    <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"></button>
+                    <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
+                    <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
+                    <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
+                    <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditDocAndStrategy}}"><img src="this://app/images/fileico_strategy.png" /></button>
+                    <button id="right_edit_audio" class="funbtn" rid="" rname="" title="{{EditAudio}}"><img src="this://app/images/fileico_audio.png" /></button>
+                    <button id="right_move" class="funbtn" platform="" name="" value="" rid="" title="{{RomMove}}"><img src="this://app/images/fileico_move.png" /></button>
+                    <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" /><menu id="foldercontext" type="menu"></menu></button>
+                    <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>                
             </div>
 
-            <h2 id="thumb_h2">{{Thumb}}</h2>
+            <h2 id="thumb_h2">{{SideTabThumb}}</h2>
             <div class="rotate_wrapper">
                 <button id="rotate">&gt;</button>
                 <div class="stack" id="stack"></div>
@@ -466,18 +533,33 @@ solid-with-shadow
                     <h2>{{RunGame}}</h2>
                     <ul class="sim_select" id="sim_select"></ul>
                     <div class="buttons" id="buttons"></div>
-                    <h2 class="related_h2">{{RelatedGame}}</h2>
+                    <h2 class="related_h2">{{PlayMost}}</h2>
                     <ul id="related" class="related"></ul>
                 </div>
                 <div class="flow_wrapper_right">
                     <h2>{{BaseInfo}}</h2>
                     <ul id="right_rombase">
                     </ul>
-                    <div title="{{FileName}}" id="right_rombase_name"></div>
+
+                    <h2 id="game_stat">{{GameStat}}</h2>
+                    <ul class="game_stat">
+                        <li>{{GameRunNum}}：<span id="run_num"></span></li>
+                        <li>{{GameRunLasttime}}：<span id="run_lasttime"></span></li>
+                    </ul>
+
                     <h2 id="doc_title">{{Doc}}</h2>
                     <div id="doc" class="doc"></div>
+
                 </div>
             </div>
+
+
+            <div class="audio_title_wrapper" id="audio_title_wrapper">
+                <h2 id="audio_title">{{Audio}}</h2>
+                <button id="play_audio_all" class="funbtn" title="{{AudioPlayAll}}"><i.video_play></i></button>
+            </div>
+            <ul class="audio" id="audio"></ul>
+
 
             </div>
             </div>
@@ -514,18 +596,25 @@ solid-with-shadow
     include ROOTPATH + "tis/plugins/dragdrop.tis";
     include ROOTPATH + "tis/plugins/filedropzone.tis";
     include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/joystick.tis";
-    include ROOTPATH + "tis/rom.tis";
-    include ROOTPATH + "tis/platform.tis";
-    include ROOTPATH + "tis/menu.tis";
-    include ROOTPATH + "tis/sidebar.tis";
-    include ROOTPATH + "tis/statebar.tis";
-    include ROOTPATH + "tis/thumb.tis";
-    include ROOTPATH + "tis/interface_config.tis";
-    include ROOTPATH + "tis/window.tis";
-    include ROOTPATH + "tis/romcontext.tis";
-    include ROOTPATH + "tis/menucontext.tis";
-    include ROOTPATH + "tis/keycode.tis";
+
+    include ROOTPATH + "tis/libs/joystick.tis";
+    include ROOTPATH + "tis/libs/rom.tis";
+    include ROOTPATH + "tis/libs/platform.tis";
+    include ROOTPATH + "tis/libs/menu.tis";
+    include ROOTPATH + "tis/libs/sidebar.tis";
+    include ROOTPATH + "tis/libs/statebar.tis";
+    include ROOTPATH + "tis/libs/thumb.tis";
+    include ROOTPATH + "tis/libs/interface_config.tis";
+    include ROOTPATH + "tis/libs/window.tis";
+    include ROOTPATH + "tis/libs/romcontext.tis";
+    include ROOTPATH + "tis/libs/menucontext.tis";
+    include ROOTPATH + "tis/libs/audio.tis";
+    include ROOTPATH + "tis/libs/keycode.tis";
+    include ROOTPATH + "tis/libs/cache.tis";
+    
     include ROOTPATH + "tis/event.tis";
+    include ROOTPATH + "tis/app.tis";
+
 </script>
 </html>
+

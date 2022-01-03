@@ -1,12 +1,10 @@
-var stackdom;
-function rotateAttached()
+function rotateAttached(stackdom)
 {
-    stackdom = $(#stack);
     stackdom.shown = stackdom[0]; 
     for( var i = 1; i < stackdom.length; ++i )
        stackdom[i].style#display = "none";
 }
-function rotateTo( el, whenEnds = null )
+function rotateTo(stackdom, el, whenEnds = null )
     {
     const hiddenScale = 0.5; // hidden panel is twice less in size than normal view 
     var elementToHide = stackdom.shown;

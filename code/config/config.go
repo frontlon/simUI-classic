@@ -24,8 +24,10 @@ var (
 		".html", ".htm", ".mht", ".mhtml", ".url",
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                                                   //可直接运行的doc文档支持的扩展名
-	Window *window.Window                                                                               //窗体
+	} //可直接运行的doc文档支持的扩展名
+	AUDIO_EXTS = []string{".mp3",".dmi", ".wav",".wma"} //支持的音频类型
+
+	Window *window.Window //窗体
 )
 
 //配置文件
@@ -186,7 +188,10 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platformList[k].FilesPath, _ = filepath.Abs(v.FilesPath)
 			platform[v.Id].FilesPath = platformList[k].FilesPath
 		}
-
+		if v.AudioPath != "" {
+			platformList[k].AudioPath, _ = filepath.Abs(v.AudioPath)
+			platform[v.Id].AudioPath = platformList[k].AudioPath
+		}
 		if v.Rombase != "" {
 			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
 			platform[v.Id].Rombase = platformList[k].Rombase
@@ -238,6 +243,11 @@ func getDefault() (*db.Config, error) {
 		vo.WallpaperImage, _ = filepath.Abs(vo.WallpaperImage)
 	}
 
+	//如果背景遮罩文件存在，则转换为绝对路径
+	if utils.FileExists(vo.BackgroundMask) == true {
+		vo.BackgroundMask, _ = filepath.Abs(vo.BackgroundMask)
+	}
+
 	//如果鼠标指针文件存在，则转换为绝对路径
 	if utils.FileExists(vo.Cursor) == true {
 		vo.Cursor, _ = filepath.Abs(vo.Cursor)
@@ -279,7 +289,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" { // 忽略目录
+		if !fi.IsDir() && ext == ".css" {           // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件
@@ -430,6 +440,7 @@ func GetResPath(platformId uint32) map[string]string {
 	res["video"] = platform.VideoPath
 	res["doc"] = platform.DocPath
 	res["strategy"] = platform.StrategyPath
+	res["audio"] = platform.AudioPath
 	res["files"] = platform.FilesPath
 	return res
 }
@@ -451,5 +462,6 @@ func GetResExts() map[string][]string {
 	res["doc"] = DOC_EXTS
 	res["strategy"] = DOC_EXTS
 	res["files"] = RUN_EXTS
+	res["audio"] = AUDIO_EXTS
 	return res
 }

@@ -1,0 +1,139 @@
+﻿//初始化
+function Init(){
+
+    //初始化全局配置
+    initConfig("0");
+
+    //改变默认窗口尺寸
+    view.state = CONF.Default.WindowState.toInteger();
+
+    //窗口面板显示状态
+    if (CONF.Default.PanelPlatform.toInteger() == 0){
+        $(#left_platform).style["display"] = "none"
+    }
+    if (CONF.Default.PanelMenu.toInteger() == 0){
+        $(#left_menu).style["display"] = "none"
+    }
+    if (CONF.Default.PanelSidebar.toInteger() == 0){
+        $(#right).style["display"] = "none"
+    }
+
+    //窗口框架宽度
+    if (CONF.Default.PanelPlatformWidth != ""){
+        $(#left_platform).style["width"] = CONF.Default.PanelPlatformWidth;
+    }
+
+    if (CONF.Default.PanelMenuWidth != ""){
+        $(#left_menu).style["width"] = CONF.Default.PanelMenuWidth;
+    }
+
+    if (CONF.Default.PanelSidebarWidth != ""){
+        $(#right).style["width"] = CONF.Default.PanelSidebarWidth;
+        if (CONF.Default.PanelSidebarWidth >= 500){
+            $(#right).attributes.addClass("widthMode");
+        }
+    }
+
+    //初始化rom
+    var pf = CONF.Default.Platform;
+    var menu =  $(#menulist).select("dd:current").attributes["opt"];
+    ROMJSON = view.GetGameList(0,pf,menu,"","",SCROLL_PAGE,"","","","","","","");
+
+    createRomList(1); //生成rom列表
+    //生成rom数量
+    var romCount = view.GetGameCount(0,pf,CONF.Default.Menu,"","","","","","","","");
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //初始化音量控制
+    VIDEO_VALUME = CONF.Default.VideoVolume;
+
+    $(body).state.focus = true;
+
+    //如果没有平台，则自动打开平台设置窗口
+    if(CONF.PlatformList.length == 0){
+         openPlatformConfig();
+    }
+
+}
+
+//初始化配置
+function initConfig(isfresh){
+
+
+    var confstr = view.InitData("config",isfresh);
+    CONF = JSON.parse(confstr);
+
+    //如果初始路径不同，则刷新数据
+    if(CONF.RootPath != CONF.Default.RootPath){
+        view.UpdateConfig("root_path",CONF.RootPath);
+    }
+
+    //软件名称
+    if(System.scanFiles(CONF.Default.SoftName)){ //图片logo
+        $(#logo).html = "<img src='"+ URL.fromPath(CONF.Default.SoftName) +"' />";
+    }else{
+         $(#logo).html =  CONF.Default.SoftName; //文字logo
+    }
+
+    //创建语言
+    if (isfresh == "0"){
+        createLang();
+    }
+    
+    initTheme(); //创建主题
+    initInterface(); //创建界面设置（背景、透明度）
+    initPlatform(); //生成平台列表
+    initShortcutList(); //初始化快捷工具列表
+    initRomListStyle(); //初始化游戏列表样式
+    initBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
+    //生成菜单
+    var menujson = view.GetMenuList(CONF.Default.Platform,0);
+    createMenuList(menujson);
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
+
+}
+
+
+//生成缓存
+function createCache(){
+    $(body).state.disabled = true;
+    $(#create).attributes.addClass("disabled");
+    startLoading();
+    var platform = ACTIVE_PLATFORM;
+    view.CreateRomCache(platform);
+}
+
+
+
+//更新缓存回调
+function CB_createCache(){
+
+    $(body).state.disabled = false;
+
+    //更新配置
+    initConfig("1");
+
+    //重置滚动翻页数据
+    resetScroll();
+
+    //初始化rom
+    
+    ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","","","")
+    $(#filter_type).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_year).value = "";
+    $(#filter_country).value = "";
+    $(#filter_translate).value = "";
+    $(#filter_producer).value = "";
+
+    createRomList(1); //生成rom列表
+
+    //生成rom数量
+    var romCount = view.GetGameCount(0,ACTIVE_PLATFORM,"","","","","","","","","");
+    $(#rom_count_num).html = romCount; //初始化在线人数
+    endLoading(); //关闭loading框
+
+    $(#create).attributes.removeClass("disabled");
+}

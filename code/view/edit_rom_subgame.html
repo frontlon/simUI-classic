@@ -1,0 +1,87 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style>
+        @import "this://app/images/public.css";
+        @import "images/form.css";
+
+        html{background:color(center-background-color)}
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        textarea{color:color(general-text-color);background:none;size:*;height:500dip;padding:5dip;width:*;border:0;overflow:scroll-indicator;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+
+        #game_list{padding:0;}
+        #game_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
+        #game_list li *{margin: 0 3dip;vertical-align: middle}
+        #game_list li input[type="text"]:nth-child(1){width:130px;}
+        #game_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
+        #game_list li .openfile{margin-left:0;}
+        .add_wrapper{text-align:center}
+
+    </style>
+</head>
+<body>
+
+    <section>
+        <div class="wrapper">
+            <ul id="game_list"></ul>
+            <div class="add_wrapper"><button id="game_add">{{AddSubGame}}</button></div>
+            <div class="form_bottom">
+                <button class="cancel" id="close-dialog">{{Cancel}}</button>
+                <button class="ok" id="submit_game">{{OK}}</button>
+            </div>
+        </div>
+
+    </section>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/plugins/tabs.tis";
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/edit_subgame.tis";
+   
+    //更新子游戏
+    event click $(#update_game){
+        updateGame();
+    }
+
+    //删除子游戏
+    event click $(#delete_game){
+        deleteGame();
+    }
+
+    //添加子游戏文件
+    event click $(#game_add){
+        try{
+            addGame();
+        }catch(e){
+            alert(e);
+        }
+    }
+
+    //删除子游戏文件
+    event click $(.game_delete){
+        deleteGame(this);
+    }
+
+    //更新配置
+    event click $(#submit_game){
+        try{
+            submitGame();
+        }catch(e){
+            alert(e);
+        }
+    }
+
+    //选择文件
+    event click $(.openfile){
+        try{
+            openFile(this);
+        }catch(e){
+            alert(e);
+        }
+    }
+
+</script>
+
+</body>
+</html>

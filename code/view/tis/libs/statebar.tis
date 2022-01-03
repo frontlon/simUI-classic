@@ -1,0 +1,460 @@
+﻿
+
+//初始化游戏列表样式
+function initRomListStyle(){
+
+    var romlist = $(#romlist);
+
+    //初始化游戏列表样式
+    if(CONF.Default.RomlistStyle == "1"){
+        $(#switch_romlist).html = "<i.block.minsize></i>";
+        romlist.attributes.addClass("romblock");
+    }else{
+        $(#switch_romlist).html = "<i.list.minsize></i>";
+        romlist.attributes.addClass("romlist");
+    }
+
+    //初始化rom列表模块大小
+    romlist.attributes.addClass("zoom"+CONF.Default.RomlistSize);
+    $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
+
+     //初始化rom列表字体大小
+    romlist.attributes.addClass('fontsize'+CONF.Default.RomlistFontSize);
+
+    //初始化列表模块间距
+    romlist.attributes.addClass("margin" + CONF.Default.RomlistMargin);
+
+    //是否显示rom列表的标题背景颜色
+    romlist.attributes.addClass("bg" + CONF.Default.RomlistFontBackground);
+
+    //字体阴影
+    if(CONF.Default.RomlistFontBackground == 0){
+        romlist.attributes.addClass("textShadow");
+    }
+
+    //初始化rom列表图片显示方向
+    if(romlist.attributes.hasClass("horizontal")){romlist.attributes.removeClass("horizontal");}
+    if(romlist.attributes.hasClass("vertical")){romlist.attributes.removeClass("vertical");}
+    if(CONF.Default.RomlistDirection == 1){romlist.attributes.addClass("horizontal");}
+    else if(CONF.Default.RomlistDirection == 2){romlist.attributes.addClass("vertical");}
+
+    //初始化列表列显示项
+    var column = CONF.Default.RomlistColumn.split(",");
+    var dom = $$(.romlist_column);
+    var i = 0;
+      for(var obj in dom){
+          obj.checked = column[i] == 1 ? true : false;
+          i++;
+      }
+   
+}
+
+//生成快捷工具列表
+function initShortcutList(){
+    var li = ""; 
+    for(var obj in CONF.Shortcut) {
+        li += "<li path='"+ obj.Path +"'>"+ obj.Name + "</li>";
+    }
+    $(#shortcut menu).html = li; //生成dom
+}
+
+//创建主题
+function initTheme(){
+
+    //默认主题
+    self.attributes["theme"] = CONF.Default.Theme;
+
+
+    //渲染页面主题
+    initUiTheme();
+
+    //生成主题列表
+    var menu = "";
+    for(var themeId in CONF.Theme) {
+        menu += "<li id="+ themeId +">"+  CONF.Theme[themeId].Name +"</li>"; //填充菜单
+    }
+    $(#theme menu).html = menu;
+
+    //设置首页主题样式
+    setTheme(CONF.Default.Theme);
+}
+
+function initBaseFilter(platform){
+
+    $(#search_input).value = "";
+
+    $(#filter_type).value = "";
+    $(#filter_type).options.clear();
+    $(#filter_type).options.$append(<option value=''>{CONF.Lang.BaseType}</option>);
+
+    var getjson = view.GetFilter(platform,"base_type");
+    var jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            $(#filter_type).options.$append(<option value={obj.Name}>{obj.Name}</option>);
+        }
+    }
+    $(#filter_type).value = "";
+    
+    //年份
+    $(#filter_year).value = "";
+    $(#filter_year).options.clear();
+    var filter_yearData = "<option value=''>" + CONF.Lang.BaseYear + "</option>";
+
+    getjson = view.GetFilter(platform,"base_year");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_yearData += "<option value=\"" + obj.Name +"\">" + obj.Name + "</option>";
+        }
+    }
+    $(#filter_year).options.html = filter_yearData;
+    $(#filter_year).value = "";
+
+    //制作商
+    $(#filter_producer).value = "";
+    $(#filter_producer).options.clear();
+    var filter_producerData = "<option value=''>" + CONF.Lang.BaseProducer + "</option>";
+
+    getjson = view.GetFilter(platform,"base_producer");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_producerData += "<option value=\"" + obj.Name +"\">" + obj.Name + "</option>";
+        }
+    }
+    $(#filter_producer).options.html = filter_producerData;
+    $(#filter_producer).value = "";
+
+    //发行商
+    $(#filter_publisher).value = "";
+    $(#filter_publisher).options.clear();
+    var filter_publisherData = "<option value=''>" + CONF.Lang.BasePublisher + "</option>";
+
+    getjson = view.GetFilter(platform,"base_publisher");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_publisherData += "<option value=\"" + obj.Name +"\">" + obj.Name + "</option>";
+        }
+    }
+    $(#filter_publisher).options.html = filter_publisherData;
+    $(#filter_publisher).value = "";
+    
+    //地区
+    $(#filter_country).value = "";
+    $(#filter_country).options.clear();
+    var filter_countryData = "<option value=''>"+CONF.Lang.BaseCountry +"</option>";
+    getjson = view.GetFilter(platform,"base_country");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_countryData += "<option value=\"" + obj.Name + "\">"+ obj.Name +"</option>";
+        }
+    }
+    $(#filter_country).options.html = filter_countryData;
+    $(#filter_country).value = "";
+
+    //汉化组
+    $(#filter_translate).value = "";
+    $(#filter_translate).options.clear();
+    var filter_translateData = "<option value=''>"+CONF.Lang.BaseTranslate +"</option>";
+
+    getjson = view.GetFilter(platform,"base_translate");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_translateData += "<option value=\"" + obj.Name + "\">"+ obj.Name +"</option>";
+
+        }
+    }
+    $(#filter_translate).options.html = filter_translateData;
+    $(#filter_translate).value = "";
+
+    //版本
+    $(#filter_version).value = "";
+    $(#filter_version).options.clear();
+    var filter_versionData = "<option value=''>"+CONF.Lang.BaseVersion +"</option>";
+
+    getjson = view.GetFilter(platform,"base_version");
+    jsonObj = JSON.parse(getjson);
+    if (jsonObj.length > 0){
+        for(var obj in jsonObj) {
+            filter_versionData += "<option value=\"" + obj.Name + "\">"+ obj.Name +"</option>";
+        }
+    }
+    $(#filter_version).options.html = filter_versionData;
+    $(#filter_version).value = "";
+
+    //是否显示和隐藏
+    var column = CONF.Default.RomlistColumn.split(",");
+    $(#filter_type).style["display"]      = column[1] == 1 ? "inline-block" : "none";
+    $(#filter_year).style["display"]      = column[2] == 1 ? "inline-block" : "none";
+    $(#filter_publisher).style["display"] = column[3] == 1 ? "inline-block" : "none";
+    $(#filter_country).style["display"]   = column[4] == 1 ? "inline-block" : "none";
+    $(#filter_translate).style["display"] = column[5] == 1 ? "inline-block" : "none";
+    $(#filter_version).style["display"]   = column[6] == 1 ? "inline-block" : "none";
+    $(#filter_producer).style["display"]  = column[7] == 1 ? "inline-block" : "none";
+
+}
+
+//开启关闭平台栏
+function togglePlatform(){
+    var dom = $(#left_platform);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_platform",val);
+}
+//开启关闭菜单栏
+function toggleMenu(){
+    var dom = $(#left_menu);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_menu",val);
+}
+//开启关闭侧边栏
+function toggleSidebar(){
+    var dom = $(#right);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+    //更新数据库配置
+    view.UpdateConfig("panel_sidebar",val);
+}
+
+ //切换rom列表样式
+function switchRomListStyle(obj){
+    if(obj.attributes["value"] == "1"){
+        obj.attributes["value"] = "2";
+        obj.html = "<i.list.minsize></i>";
+        self.$(#romlist).attributes.removeClass("romblock");
+        self.$(#romlist).attributes.addClass("romlist");
+    }else{
+        obj.attributes["value"] = "1";
+        obj.html = "<i.block.minsize></i>";
+        self.$(#romlist).attributes.removeClass("romlist");
+        self.$(#romlist).attributes.addClass("romblock");
+    }
+
+    ROMJSON = view.GetGameList(0,ACTIVE_PLATFORM,ACTIVE_MENU,"","",0,"","","","","","","")
+    createRomList(1);
+    //更新配置文件
+    view.UpdateConfig("romlist_style",obj.attributes["value"]);
+}
+
+//运行快捷工具
+function runShortcut(obj){
+    var path = obj.attributes["path"];
+    view.RunShortcut(path);
+}
+
+//切换主题
+function changeTheme(obj){
+    var id = obj.attributes["id"]; //主题列表
+    self.attributes["theme"] = id;
+    
+    //更新主题样式
+    setTheme(id);
+    
+    //更新配置文件
+    view.UpdateConfig("theme",id)
+}
+
+//设置主题样式
+function setTheme(themeId){
+
+    if(CONF.Theme[themeId].Params["body-opacity"] != undefined){
+        $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_platform).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_menu).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        //$(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#center).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+    }
+
+    var themePath = CONF.RootPath + "theme/";
+
+    if(CONF.Theme[themeId].Params["window-opacity"] != undefined){
+        $(body).style["opacity"] = CONF.Theme[themeId].Params["window-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["window-background-image"] != undefined){
+        $(body).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[themeId].Params["window-background-image"])];
+    }
+
+    if(CONF.Theme[themeId].Params["sidebar-image"] != undefined){
+        $(#mask).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[themeId].Params["sidebar-image"])];
+    }    
+}
+
+//检查更新
+function checkUpgrade(evt){
+    var data = view.CheckUpgrade();
+    if(data != ""){
+        upgrade(data)
+    }else{
+        view.msgbox(#info,CONF.Lang.Latestversion);
+    }
+}
+
+//弹出关于窗口
+function openAbout(){
+    view.dialog({
+        url:self.url(ROOTPATH + "about.html"),
+        width:600,
+        height:self.toPixels(400dip),
+    })
+}
+
+//弹出平台配置窗口
+function openPlatformConfig(){
+    view.dialog({
+        url:self.url(ROOTPATH + "platform_config.html"),
+        width:self.toPixels(1100dip),
+        height:self.toPixels(670dip)
+    });
+    startLoading();
+    initConfig("1");
+    endLoading();
+}
+
+//弹出设置窗口
+function openConfig(evt){
+    view.dialog({
+        url:self.url(ROOTPATH + "config.html"),
+        width:655,
+        height:600
+    });
+    startLoading();
+    initConfig("1");
+    endLoading();
+}
+
+//弹出rom管理窗口
+function openRomManager(evt){
+    startLoading();
+    view.CreateRomCache();
+    endLoading();
+    view.dialog({
+        width:self.toPixels(1200dip),
+        height:self.toPixels(700dip),
+        url:self.url(ROOTPATH + "rom_manager.html")
+    });
+    startLoading();
+    view.CreateRomCache();
+    endLoading();
+}
+
+
+
+//启动帮助
+function runHelp(){
+    Sciter.launch("http://www.simui.net/");
+}
+
+//发现更新
+function upgrade(data){
+    if (data == ""){
+        return;
+    }else if (data == "error"){
+        view.msgbox(#warning,CONF.Lang.NetworkRequestFailed);
+        return;
+    }
+ 
+    var dataObj = JSON.parse(data);
+
+    //选择窗口
+    var result = view.msgbox {
+        type:#information, 
+        caption:CONF.Lang.CheckUpgrade,
+        content:CONF.Lang.FoundNewversion + ": " + dataObj.version, 
+        buttons:[
+            {id:#download,text:CONF.Lang.DownloadNewVersion},
+            {id:#never,text:CONF.Lang.NotTip},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    switch(result){
+        case "download":
+            Sciter.launch("http://www.simui.net/");
+            break;
+        case "never":
+            //更新平台信息
+            view.UpdateConfig("upgrade_id",dataObj.id.toString());
+            break;
+    }
+}
+
+
+
+
+//清理掉资料过滤条件
+function filterClear(){
+    $(#filter_type).value = "";
+    $(#filter_publisher).value = "";
+    $(#filter_producer).value = "";
+    $(#filter_year).value = "";
+    $(#filter_country).value = "";
+    $(#filter_translate).value = "";
+    $(#search_input).value = "";
+    search();
+}
+
+//清理资料文件
+function clearRombase(){
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:CONF.Lang.TipClearZombieComfirm, 
+        caption:CONF.Lang.Confirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.ClearRombase},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if(result != "yes"){
+        return;
+    }
+
+    $(body).state.disabled = true;
+    $(#create).attributes.addClass("disabled");
+    startLoading();
+    view.ClearRombase();
+}
+
+//清理资料文件回调
+function CB_clearRombase(count){
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+    alert("清理完成，共清理掉" + count + "条记录");
+}
+
+//回到顶部
+function gotoTop(){
+    $(#center_content).scrollTo(0,0, false);
+
+}

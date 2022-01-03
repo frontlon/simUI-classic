@@ -11,15 +11,22 @@ import (
 
 type RomBase struct {
 	RomName   string // rom文件名
-	Name      string // 游戏名称
+	Name      string // 中文名
+	NameEN    string // 英文名
+	NameJP    string // 日文名
 	Type      string // 类型
 	Year      string // 年份
+	Producer  string // 制造商
 	Publisher string // 出品公司
 	Country   string // 国家
 	Translate string // 汉化组
 	Version   string // 版本
-}
+	OtherA    string // 其他内容a
+	OtherB    string // 其他内容b
+	OtherC    string // 其他内容c
+	OtherD    string // 其他内容d
 
+}
 
 //读取游戏资料列表
 func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
@@ -51,7 +58,7 @@ func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 			continue
 		}
 
-		create := []string{"", "", "", "", "", "", "", ""}
+		create := []string{"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}
 
 		for a, b := range r {
 			create[a] = b
@@ -66,10 +73,17 @@ func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 			create[5] = utils.ToUTF8(create[5])
 			create[6] = utils.ToUTF8(create[6])
 			create[7] = utils.ToUTF8(create[7])
+			create[8] = utils.ToUTF8(create[8])
+			create[9] = utils.ToUTF8(create[9])
+			create[10] = utils.ToUTF8(create[10])
+			create[11] = utils.ToUTF8(create[11])
+			create[12] = utils.ToUTF8(create[12])
+			create[13] = utils.ToUTF8(create[13])
+			create[14] = utils.ToUTF8(create[14])
 		}
 
 		des[create[0]] = &RomBase{
-			RomName:   strings.Trim(create[0], " "),
+			RomName:   create[0],
 			Name:      strings.Trim(create[1], " "),
 			Type:      strings.Trim(create[2], " "),
 			Year:      strings.Trim(create[3], " "),
@@ -77,6 +91,13 @@ func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 			Country:   strings.Trim(create[5], " "),
 			Translate: strings.Trim(create[6], " "),
 			Version:   strings.Trim(create[7], " "),
+			Producer:  strings.Trim(create[8], " "),
+			NameEN:    strings.Trim(create[9], " "),
+			NameJP:    strings.Trim(create[10], " "),
+			OtherA:    strings.Trim(create[11], " "),
+			OtherB:    strings.Trim(create[12], " "),
+			OtherC:    strings.Trim(create[13], " "),
+			OtherD:    strings.Trim(create[14], " "),
 		}
 	}
 
@@ -116,7 +137,7 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 	for _, v := range info {
 
 		writer.Write([]string{
-			strings.Trim(v.RomName, " "),
+			v.RomName,
 			strings.Trim(v.Name, " "),
 			strings.Trim(v.Type, " "),
 			strings.Trim(v.Year, " "),
@@ -124,6 +145,13 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 			strings.Trim(v.Country, " "),
 			strings.Trim(v.Translate, " "),
 			strings.Trim(v.Version, " "),
+			strings.Trim(v.Producer, " "),
+			strings.Trim(v.NameEN, " "),
+			strings.Trim(v.NameJP, " "),
+			strings.Trim(v.OtherA, " "),
+			strings.Trim(v.OtherB, " "),
+			strings.Trim(v.OtherC, " "),
+			strings.Trim(v.OtherD, " "),
 		})
 
 	}
@@ -155,12 +183,12 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 
 	for _, v := range newData {
 
-		if v.Name == "" && v.Publisher == "" && v.Year == "" && v.Type == "" && v.Country == "" && v.Translate == "" && v.Version == "" {
+		if v.Name == "" && v.Producer == "" && v.Publisher == "" && v.Year == "" && v.Type == "" && v.Country == "" && v.Translate == "" && v.Version == "" && v.NameEN == "" && v.NameJP == "" && v.OtherA == "" && v.OtherB == "" && v.OtherC == "" && v.OtherD == "" {
 			continue
 		}
 
 		writer.Write([]string{
-			strings.Trim(v.RomName, " "),
+			v.RomName,
 			strings.Trim(v.Name, " "),
 			strings.Trim(v.Type, " "),
 			strings.Trim(v.Year, " "),
@@ -168,6 +196,13 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 			strings.Trim(v.Country, " "),
 			strings.Trim(v.Translate, " "),
 			strings.Trim(v.Version, " "),
+			strings.Trim(v.Producer, " "),
+			strings.Trim(v.NameEN, " "),
+			strings.Trim(v.NameJP, " "),
+			strings.Trim(v.OtherA, " "),
+			strings.Trim(v.OtherB, " "),
+			strings.Trim(v.OtherC, " "),
+			strings.Trim(v.OtherD, " "),
 		})
 
 	}
@@ -207,5 +242,12 @@ func getCsvTitle() []string {
 		config.Cfg.Lang["BaseCountry"],
 		config.Cfg.Lang["BaseTranslate"],
 		config.Cfg.Lang["BaseVersion"],
+		config.Cfg.Lang["BaseProducer"],
+		config.Cfg.Lang["BaseNameEN"],
+		config.Cfg.Lang["BaseNameJP"],
+		config.Cfg.Lang["BaseOther"] + "A",
+		config.Cfg.Lang["BaseOther"] + "B",
+		config.Cfg.Lang["BaseOther"] + "C",
+		config.Cfg.Lang["BaseOther"] + "D",
 	}
 }

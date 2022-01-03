@@ -2,34 +2,45 @@ package db
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"simUI/code/utils"
 	"strings"
+	"time"
 )
 
-var ROM_PAGE_NUM = 80 //每页加载rom数量
-var TIP_NUM = 100     //每tip个更新提示一次
+var ROM_PAGE_NUM = 200 //每页加载rom数量
+var TIP_NUM = 200     //每tip个更新提示一次(更新缓存)
 
 type Rom struct {
 	Id            uint64
 	Pname         string // 所属主游戏
 	Menu          string // 菜单名称
-	Name          string // 游戏名称
+	Name          string // 中文名
 	Platform      uint32 // 平台
 	RomPath       string // rom路径
 	SimId         uint32 // 正在使用的模拟器id
 	SimConf       string // 模拟器参数独立配置
 	Star          uint8  // 喜好，星级
 	Hide          uint8  // 是否隐藏
+	BaseNameEn    string // 英文名
+	BaseNameJp    string // 日文名
 	BaseType      string // 游戏类型，如RPG
 	BaseYear      string // 游戏年份
+	BaseProducer  string // 游戏出品公司
 	BasePublisher string // 游戏出品公司
 	BaseCountry   string // 游戏国家
 	BaseTranslate string // 汉化组
 	BaseVersion   string // 版本
+	BaseOtherA    string // 其他信息A
+	BaseOtherB    string // 其他信息B
+	BaseOtherC    string // 其他信息C
+	BaseOtherD    string // 其他信息D
 	Pinyin        string // 拼音索引
 	InfoMd5       string // 信息md5，包含资料信息
 	FileMd5       string // 文件md5，仅包含平台和文件名
+	RunNum        uint64 //运行次数
+	RunLasttime   string //最后运行时间
 }
 
 func (*Rom) TableName() string {
@@ -51,10 +62,17 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 			"rom_path":       v.RomPath,
 			"base_type":      v.BaseType,
 			"base_year":      v.BaseYear,
+			"base_producer":  v.BaseProducer,
 			"base_publisher": v.BasePublisher,
 			"base_country":   v.BaseCountry,
 			"base_translate": v.BaseTranslate,
 			"base_version":   v.BaseVersion,
+			"base_name_en":   v.BaseNameEn,
+			"base_name_jp":   v.BaseNameJp,
+			"base_other_a":   v.BaseOtherA,
+			"base_other_b":   v.BaseOtherB,
+			"base_other_c":   v.BaseOtherC,
+			"base_other_d":   v.BaseOtherD,
 			"pinyin":         v.Pinyin,
 			"info_md5":       v.InfoMd5,
 		}
@@ -66,21 +84,23 @@ func (m *Rom) BatchUpdate(romlist []*Rom) {
 	tx.Commit()
 }
 
-func (m *Rom) BatchAdd(romlist []*Rom) {
+func (m *Rom) BatchAdd(romlist []*Rom, showLoading int) {
 
 	if len(romlist) == 0 {
 		return
 	}
 
 	count := len(romlist)
-	utils.Loading("[2/3]开始写入缓存(1/"+utils.ToString(count)+")", "")
+	if showLoading == 1 {
+		utils.Loading("[2/3]开始写入缓存(1/"+utils.ToString(count)+")", "")
+	}
 	tx := getDb().Begin()
 	for k, v := range romlist {
 
 		tx.Create(&v)
 		//记录md5数据
 
-		if k%TIP_NUM == 0 {
+		if showLoading == 1 && k%TIP_NUM == 0 {
 			utils.Loading("[2/3]开始写入缓存("+utils.ToString(k+1)+"/"+utils.ToString(count)+")", "")
 		}
 	}
@@ -88,13 +108,12 @@ func (m *Rom) BatchAdd(romlist []*Rom) {
 }
 
 //根据条件，查询多条数据
-func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) ([]*Rom, error) {
+func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string, baseProducer string) ([]*Rom, error) {
 
 	volist := []*Rom{}
 	where := map[string]interface{}{}
-	if showHide == 0 {
-		where["hide"] = 0
-	}
+	where["hide"] = showHide
+
 	if platform != 0 {
 		where["platform"] = platform
 	}
@@ -114,7 +133,9 @@ func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword
 	if baseType != "" {
 		where["base_type"] = baseType
 	}
-
+	if baseProducer != "" {
+		where["base_producer"] = baseProducer
+	}
 	if basePublisher != "" {
 		where["base_publisher"] = basePublisher
 	}
@@ -132,7 +153,7 @@ func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword
 	}
 	likeWhere := ""
 	if keyword != "" {
-		likeWhere = `name LIKE "%` + keyword + `%"`
+		likeWhere = `name LIKE "%` + keyword + `%" or rom_path LIKE "%` + keyword +`%"`
 	}
 
 	offset := pages * ROM_PAGE_NUM
@@ -232,7 +253,7 @@ func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string,
 }
 
 //根据满足条件的rom数量
-func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string) (int, error) {
+func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string, baseProducer string) (int, error) {
 	count := 0
 	where := map[string]interface{}{
 	}
@@ -259,7 +280,9 @@ func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string
 	if baseType != "" {
 		where["base_type"] = baseType
 	}
-
+	if baseProducer != "" {
+		where["base_producer"] = baseProducer
+	}
 	if basePublisher != "" {
 		where["base_publisher"] = basePublisher
 	}
@@ -315,26 +338,14 @@ func (*Rom) GetMasterRomByPlatform(platform uint32) ([]*Rom, error) {
 func (*Rom) GetRelatedGames(id uint64) ([]*Rom, error) {
 
 	vo, _ := (&Rom{}).GetById(id)
-	platform := vo.Platform
-	baseType := vo.BaseType
-
 	volist := []*Rom{}
-	//先读取同类型游戏
-	result := getDb().Select("*").Where("id != ? AND platform = ? AND pname='' AND  base_type = ?", id, platform, baseType).Order("random()").Limit(6).Find(&volist)
+
+	result := getDb().Select("*").Where("id != ? AND platform = ? AND pname='' AND hide = 0 ", id, vo.Platform).Order("run_num desc").Limit(6).Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
-	//如果找不到同类型游戏，则读取平台下的随机游戏
-	if len(volist) == 0 {
-		result = getDb().Select("*").Where("id != ? AND platform = ? AND  pname=''", id, platform).Order("random()").Limit(6).Find(&volist)
-		if result.Error != nil {
-			fmt.Println(result.Error)
-		}
-	}
-
 	return volist, result.Error
-
 }
 
 //读取相关游戏
@@ -446,8 +457,8 @@ func (m *Rom) UpdateRomPath() error {
 }
 
 //更新子游戏pname
-func (m *Rom) UpdateSubRomPname(oldName string, newName string) error {
-	result := getDb().Table(m.TableName()).Where("pname=?", oldName).Update("pname", newName)
+func (m *Rom) UpdateSubRomPname(platform uint32, oldName string, newName string) error {
+	result := getDb().Table(m.TableName()).Where("platform = ? AND pname=?", platform, oldName).Update("pname", newName)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -464,8 +475,8 @@ func (m *Rom) DeleteById(id uint64) error {
 }
 
 //删除一个rom
-func (m *Rom) DeleteSubRom(pname string) error {
-	result := getDb().Where("pname=? ", pname).Delete(&m)
+func (m *Rom) DeleteSubRom(platform uint32, pname string) error {
+	result := getDb().Where("platform = ? AND pname=? ", platform, pname).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -524,7 +535,7 @@ func (m *Rom) DeleteByMd5(platform uint32, uniqs []string) error {
 
 //删除重复rom
 func (m *Rom) DeleteRepeat(platform uint32) {
-	sql := "DELETE FROM rom WHERE platform = "+ utils.ToString(platform) +" AND id NOT IN (SELECT max(id) FROM rom WHERE platform = "+ utils.ToString(platform) +" GROUP BY info_md5)"
+	sql := "DELETE FROM rom WHERE platform = " + utils.ToString(platform) + " AND id NOT IN (SELECT max(id) FROM rom WHERE platform = " + utils.ToString(platform) + " GROUP BY info_md5)"
 	tx := getDb().Begin()
 	tx.Exec(sql)
 	tx.Commit()
@@ -569,6 +580,11 @@ func (sim *Rom) GetFilter(platform uint32, t string) ([]string, error) {
 			create = append(create, v.BaseYear)
 		}
 		break
+	case "base_producer":
+		for _, v := range volist {
+			create = append(create, v.BaseProducer)
+		}
+		break
 	case "base_publisher":
 		for _, v := range volist {
 			create = append(create, v.BasePublisher)
@@ -600,15 +616,34 @@ func (m *Rom) UpdateRomBase(id uint64) error {
 	create := map[string]string{
 		"base_type":      m.BaseType,
 		"base_year":      m.BaseYear,
+		"base_producer":  m.BaseProducer,
 		"base_publisher": m.BasePublisher,
 		"base_country":   m.BaseCountry,
 		"base_translate": m.BaseTranslate,
 		"base_version":   m.BaseVersion,
+		"base_name_en":   m.BaseNameEn,
+		"base_name_jp":   m.BaseNameJp,
+		"base_other_a":   m.BaseOtherA,
+		"base_other_b":   m.BaseOtherB,
+		"base_other_c":   m.BaseOtherC,
+		"base_other_d":   m.BaseOtherD,
 		"name":           m.Name,
 		"pinyin":         utils.TextToPinyin(m.Name),
+		"info_md5":       m.InfoMd5,
+		"file_md5":       m.FileMd5,
 	}
 
 	result := getDb().Table(m.TableName()).Where("id=?", id).Updates(create)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+//更新运行次数和最后运行时间
+func (m *Rom) UpdateRunNumAndTime(id uint64) error {
+	result := getDb().Table(m.TableName()).Where("id=?", id).Update("run_num", gorm.Expr("run_num + 1"))
+	getDb().Table(m.TableName()).Where("id=?", id).Update("run_lasttime", time.Now().Unix())
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

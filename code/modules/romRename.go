@@ -18,7 +18,8 @@ func RomRename(id uint64, filename string) error {
 	}
 
 	//读取子游戏
-	subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
+	romName := utils.GetFileName(rom.RomPath)
+	subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, romName)
 
 	err := errors.New("")
 
@@ -75,7 +76,8 @@ func BatchRomRename(data []map[string]string) error {
 		rom := romlist[uint64(utils.ToInt(v["id"]))]
 		filename := v["filename"]
 		//读取子游戏
-		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.Name)
+		romName := utils.GetFileName(rom.RomPath)
+		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, romName)
 
 		err := errors.New("")
 
@@ -119,7 +121,9 @@ func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
 	//子rom
 	for _, v := range subRom {
 		fileName := utils.GetFileName(v.RomPath)
-		newName := strings.Replace(fileName, rom.Name+"__", name+"__", 1)
+		fileNameArr := strings.Split(fileName, "__")
+		newName := name + "__" + fileNameArr[1]
+
 		rompath := config.Cfg.Platform[platform].RomPath + "/" + v.RomPath
 		if utils.IsAbsPath(v.RomPath) {
 			rompath = v.RomPath

@@ -83,11 +83,11 @@
         const initialPath = "";
         const filter = evt.attributes["filter"];
         const caption = evt.attributes["caption"];
-        var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+        var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
         var out = self.select("#"+evt.attributes["for"]);  
         if(url){
             url = URL.toPath(url);
-            url = url.split("\/").join(CONF.Separator.toString());
+            url = url.split("\/").join(SEPARATOR);
             url = url.split(CONF.RootPath.toString()).join("");
             out.value = url;
         }

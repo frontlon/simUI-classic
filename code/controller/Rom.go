@@ -75,9 +75,14 @@ func RomController() {
 		baseCountry := args[9].String()
 		baseTranslate := args[10].String()
 		baseVersion := args[11].String()
+		baseProducer := args[12].String()
 
 		if baseType == config.Cfg.Lang["BaseType"] {
 			baseType = ""
+		}
+
+		if baseProducer == config.Cfg.Lang["BaseProducer"] {
+			baseProducer = ""
 		}
 
 		if basePublisher == config.Cfg.Lang["BasePublisher"] {
@@ -97,7 +102,7 @@ func RomController() {
 		}
 		newlist := []*db.Rom{}
 		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(showHide, page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+			newlist, _ = (&db.Rom{}).Get(showHide, page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion,baseProducer)
 		} else {
 			//按拼音查询
 			newlist, _ = (&db.Rom{}).GetByPinyin(showHide, page, platform, catname, num)
@@ -110,10 +115,10 @@ func RomController() {
 	//根据id列表读取rom
 	utils.Window.DefineFunction("GetGameListByIds", func(args ...*sciter.Value) *sciter.Value {
 
-		romIdsStr := strings.Split(args[0].String(), ",");
-		ids := []uint64{};
+		romIdsStr := strings.Split(args[0].String(), ",")
+		ids := []uint64{}
 		for _, v := range romIdsStr {
-			ids = append(ids, uint64(utils.ToInt(v)));
+			ids = append(ids, uint64(utils.ToInt(v)))
 		}
 		newlist, _ := (&db.Rom{}).GetByIds(ids)
 
@@ -134,7 +139,8 @@ func RomController() {
 		baseCountry := args[7].String()
 		baseTranslate := args[8].String()
 		baseVersion := args[9].String()
-		count, _ := (&db.Rom{}).Count(showHide, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion)
+		baseProducer := args[10].String()
+		count, _ := (&db.Rom{}).Count(showHide, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion,baseProducer)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -222,12 +228,12 @@ func RomController() {
 	//设为隐藏
 	utils.Window.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
 
-		romIdsStr := strings.Split(args[0].String(), ",");
+		romIdsStr := strings.Split(args[0].String(), ",")
 		ishide := uint8(utils.ToInt(args[1].String()))
 
 		romIds := []uint64{}
-		for _,v := range romIdsStr{
-			romIds = append(romIds,uint64(utils.ToInt(v)))
+		for _, v := range romIdsStr {
+			romIds = append(romIds, uint64(utils.ToInt(v)))
 		}
 		//更新数据
 		if err := (&db.Rom{}).UpdateHideByIds(romIds, ishide); err != nil {
@@ -311,7 +317,7 @@ func RomController() {
 		d := make(map[string]string)
 		_ = json.Unmarshal([]byte(data), &d)
 
-		dbRom,err := modules.SetRomBase(d)
+		dbRom, err := modules.SetRomBase(d)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -373,9 +379,10 @@ func RomController() {
 	//删除rom
 	utils.Window.DefineFunction("DeleteRom", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
+		deleteRes := utils.ToInt(args[1].String())
 
 		//删除文件
-		err := modules.DeleteRomAndRes(id)
+		err := modules.DeleteRomAndRes(id, deleteRes)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
@@ -392,12 +399,12 @@ func RomController() {
 		for _, f := range romFiles {
 			_ = utils.FileDelete(f)
 		}
-		
+
 		err = (&db.Rom{}).DeleteById(id)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
-		err = (&db.Rom{}).DeleteSubRom(info.Name)
+		err = (&db.Rom{}).DeleteSubRom(info.Platform,info.Name)
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
@@ -426,6 +433,42 @@ func RomController() {
 		romlist, _ := (&db.Rom{}).GetRelatedGames(id)
 		jsonRom, _ := json.Marshal(romlist)
 		return sciter.NewValue(string(jsonRom))
+	})
+
+	//读取子游戏
+	utils.Window.DefineFunction("GetSubGames", func(args ...*sciter.Value) *sciter.Value {
+		pid := uint64(utils.ToInt(args[0].String())) //romId
+		rom, _ := (&db.Rom{}).GetById(pid)
+		romName := utils.GetFileName(rom.RomPath)
+		romlist, _ := (&db.Rom{}).GetSubRom(rom.Platform,romName)
+		jsonRom, _ := json.Marshal(romlist)
+		return sciter.NewValue(string(jsonRom))
+	})
+
+	//上传sub rom文件
+	utils.Window.DefineFunction("UploadSubGameFile", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		name := args[1].String()
+		p := args[2].String()
+
+		relPath, err := modules.UploadSubGameFile(id, name, p)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NewValue(relPath)
+	})
+
+	//更新sub rom配置
+	utils.Window.DefineFunction("UpdateSubGameInfo", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		data := args[1].String()
+		if err := modules.UpdateSubGameFiles(id, data); err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
 	})
 
 }

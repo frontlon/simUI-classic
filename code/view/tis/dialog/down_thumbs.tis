@@ -66,21 +66,10 @@ function DownThumb(evt){
     var content = "";
     caption = CONF.Lang.Thumb;
     content = CONF.Lang.SetThumbConfirm;
-   
-    var result = view.msgbox {
-        type:#question, 
-        caption:caption,
-        content:content,
-        buttons:[
-            {id:#yes,text:CONF.Lang.Yes},
-            {id:#cancel,text:CONF.Lang.Cancel},
-        ]
-    };
-    if(result == "yes"){
-        //下载图片
-        mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
-        view.close(evt.select("img").attributes["src"]);
-    }
+
+    //下载图片
+    mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
+    view.close(evt.select("img").attributes["src"]);
 }
 
 //点击搜索按钮
@@ -122,28 +111,22 @@ function searchPic(keyword){
 
     startLoading();
 
-    //生成平台列表    
-	view.request({
-        type:#get,
-        url:url,
-        protocol:#json,
-        success:function(data,status){
-            var content = "";
-            for(var item in data.data) {
+    //生成平台列表
+    try {
+        var [text,response] = await view.request{type:#get,url:url,protocol:#json,output:#json};
+        var content = "";
+        if(text != undefined){
+            for(var item in text.data) {
                 if(item.thumbURL != undefined){
                     content +="<li><img src='"+item.thumbURL+"'/></li>";
                 }
             }
-            $(#down_thumb_list).append(content);
-            endLoading();
-
-            return true;
-        },
-        error:function(err,status){
-            view.msgbox(#alert,CONF.Lang.NetworkRequestFailed);
-            endLoading();
-            return false;
         }
-	});
+        $(#down_thumb_list).append(content);
+        endLoading();
+    } catch(e) {
+        view.msgbox(#alert,CONF.Lang.NetworkRequestFailed);
+    }
+
     return false;
 }
