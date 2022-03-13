@@ -18,18 +18,24 @@ func CacheController() {
 	//删除所有缓存
 	utils.Window.DefineFunction("TruncateRomCache", func(args ...*sciter.Value) *sciter.Value {
 
-		//清空rom表
-		if err := (&db.Rom{}).Truncate(); err != nil {
-			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
+		var getPlatform uint32 = 0
+		if len(args) > 0 {
+			getPlatform = uint32(utils.ToInt(args[0].String()))
 		}
 
-		//清空menu表
-		if err := (&db.Menu{}).Truncate(); err != nil {
-			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
+		//如果没有任何平台，则不用更新
+		if len(config.Cfg.Platform) == 0 {
+			if _, err := utils.Window.Call("CB_clearDB", sciter.NewValue("")); err != nil {
+			}
+			return sciter.NullValue()
 		}
-
+		go func() *sciter.Value {
+			if err := modules.TruncateRomCache(getPlatform); err != nil {
+				utils.WriteLog(err.Error())
+				return utils.ErrorMsg(err.Error())
+			}
+			return sciter.NullValue()
+		}()
 		return sciter.NullValue()
 	})
 
@@ -47,7 +53,7 @@ func CacheController() {
 			return sciter.NullValue()
 		}
 		go func() *sciter.Value {
-			if err := modules.CreateRomCache(getPlatform);err != nil{
+			if err := modules.CreateRomCache(getPlatform); err != nil {
 				utils.WriteLog(err.Error())
 				return utils.ErrorMsg(err.Error())
 			}
@@ -67,12 +73,12 @@ func CacheController() {
 				count := 0
 				romList, _ := (&db.Rom{}).GetByPlatform(platform)
 				for _, v := range romList {
-					nameList = append(nameList,utils.GetFileName(v.RomPath))
+					nameList = append(nameList, utils.GetFileName(v.RomPath))
 				}
 				//读取csv文件数据
 				romBase, _ := modules.GetRomBaseList(platform)
 
-				if romBase == nil{
+				if romBase == nil {
 					continue
 				}
 
@@ -80,7 +86,7 @@ func CacheController() {
 					//如果rom列表中无此游戏，则清理
 					if !utils.InSliceString(a, nameList) {
 						delete(romBase, a)
-						count ++
+						count++
 					}
 
 				}
@@ -92,11 +98,10 @@ func CacheController() {
 
 			//数据更新完成后，页面回调，更新页面DOM
 			if _, err := utils.Window.Call("CB_clearRombase", sciter.NewValue(utils.ToString(total))); err != nil {
-				fmt.Print(err)
+				fmt.Println(err)
 			}
-		}();
+		}()
 		return sciter.NullValue()
 
 	})
-
 }

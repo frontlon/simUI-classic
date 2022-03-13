@@ -10,6 +10,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/lxn/win v0.0.0-20191128105842-2da648fda5b4
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/simulatedsimian/joystick v1.0.1
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect

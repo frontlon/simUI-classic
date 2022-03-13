@@ -28,7 +28,6 @@
     .table_output textarea{width:*}
     .table_output button{margin-right:0}
     .table_output tr td:first-child{width:15dip}
-
   </style>
   </head>
 <body>
@@ -81,7 +80,7 @@
             <tr>
               <th>{{MenuConfig}}：</th>
               <th colspan="3" style="text-align:right">{{SetPlatformTip}}：
-                <button id="openPlatformFolder" caption="{{SelectFolder}}">...</button></th>
+                <button id="openPlatformFolder" class="primary" caption="{{SelectFolder}}" disabled>...</button></th>
             </tr>
             <tr>
               <td>{{RomMenu}}：</td>
@@ -169,8 +168,9 @@
                 <td>
                   <input type="text" id="platform_rombase" value="" disabled>
                   <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>...</button></td>
-                  <td></td>
-                  <td></td>
+                  <td><div class="tip" title="{{OptimizedCacheTip}}">?</div>{{OptimizedCacheMenu}}：</td>
+                  <td><input type="text" id="platform_optimized" value="" disabled>
+                  <button class="openfolder" for="platform_optimized" caption="{{SelectFolder}}" disabled>...</button></td>
               </tr>
           </table>
           <div class="form_bottom">

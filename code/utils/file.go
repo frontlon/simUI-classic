@@ -10,7 +10,7 @@ import (
 )
 
 //复制文件
-func FileCopy(src, dst string) (error) {
+func FileCopy(src, dst string) error {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func FileCopy(src, dst string) (error) {
 }
 
 //移动文件
-func FileMove(oldFile string, newFile string) (error) {
+func FileMove(oldFile string, newFile string) error {
 	if FileExists(oldFile) {
 		err := os.Rename(oldFile, newFile)
 		return err
@@ -46,7 +46,7 @@ func FileMove(oldFile string, newFile string) (error) {
 }
 
 //移动文件夹
-func FolderMove(oldFolder string, newFolder string) (error) {
+func FolderMove(oldFolder string, newFolder string) error {
 	if FolderExists(oldFolder) {
 		err := os.Rename(oldFolder, newFolder)
 		return err
@@ -63,7 +63,7 @@ func Rename(oldpath string, filename string) error {
 }
 
 //删除文件
-func FileDelete(src string) (error) {
+func FileDelete(src string) error {
 	if FileExists(src) {
 		err := os.Remove(src)
 		return err
@@ -72,7 +72,7 @@ func FileDelete(src string) (error) {
 }
 
 //删除目录
-func DeleteDir(src string) (error) {
+func DeleteDir(src string) error {
 	if FolderExists(src) {
 		err := os.RemoveAll(src)
 		return err

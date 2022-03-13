@@ -140,6 +140,7 @@ func regViewFunction() {
 	controller.RomBaseEnumController()
 	controller.StrategyFilesController()
 	controller.AudioController()
+	controller.ImageController()
 }
 
 //资源加载

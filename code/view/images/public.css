@@ -92,6 +92,12 @@ i.video_play {
 i.video_pause {
   background-image: url(svg/pause.svg);
 }
+i.optimized {
+  background-image: url(svg/optimized.svg);
+}
+i.clear {
+  background-image: url(svg/clear.svg);
+}
 
 #loading {
   box-shadow: 0 0 9dip #fff;

@@ -25,7 +25,7 @@ var (
 		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
 	} //可直接运行的doc文档支持的扩展名
-	AUDIO_EXTS = []string{".mp3",".dmi", ".wav",".wma"} //支持的音频类型
+	AUDIO_EXTS = []string{".mp3", ".dmi", ".wav", ".wma"} //支持的音频类型
 
 	Window *window.Window //窗体
 )
@@ -195,6 +195,10 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 		if v.Rombase != "" {
 			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
 			platform[v.Id].Rombase = platformList[k].Rombase
+		}
+		if v.OptimizedPath != "" {
+			platformList[k].OptimizedPath, _ = filepath.Abs(v.OptimizedPath)
+			platform[v.Id].OptimizedPath = platformList[k].OptimizedPath
 		}
 
 		//填充模拟器列表
@@ -436,6 +440,7 @@ func GetResPath(platformId uint32) map[string]string {
 	res["icon"] = platform.IconPath
 	res["gif"] = platform.GifPath
 	res["background"] = platform.BackgroundPath
+	res["optimized"] = platform.OptimizedPath
 	res["wallpaper"] = platform.WallpaperPath
 	res["video"] = platform.VideoPath
 	res["doc"] = platform.DocPath
@@ -458,6 +463,7 @@ func GetResExts() map[string][]string {
 	res["gif"] = PIC_EXTS
 	res["background"] = PIC_EXTS
 	res["wallpaper"] = PIC_EXTS
+	res["optimized"] = PIC_EXTS
 	res["video"] = PIC_EXTS
 	res["doc"] = DOC_EXTS
 	res["strategy"] = DOC_EXTS

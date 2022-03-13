@@ -216,16 +216,13 @@ function openSidebar(obj){
     if(info.BaseCountry != "")   {rombase += "<li title=\""+ CONF.Lang.BaseCountry +"\">" + info.BaseCountry.toHtmlString() + "</li>";}
     if(info.BaseTranslate != "") {rombase += "<li title=\""+ CONF.Lang.BaseTranslate +"\">" + info.BaseTranslate.toHtmlString() + "</li>";}
     if(info.BaseVersion != "")   {rombase += "<li title=\""+ CONF.Lang.BaseVersion +"\">" + info.BaseVersion.toHtmlString() + "</li>";}
-    if(detailObj.RomFileSize != ""){
-        rombase += "<li title=\""+ CONF.Lang.FileSize +"\">" + detailObj.RomFileSize.toHtmlString() + "</li>";
-    }
-
-    if(info.BaseNameEn != "")      {rombase += "<li title=\""+ CONF.Lang.BaseNameEn +"\">" + info.BaseNameEn.toHtmlString()      + "</li>";}
-    if(info.BaseNameJp != "")      {rombase += "<li title=\""+ CONF.Lang.BaseNameJp +"\">" + info.BaseNameJp.toHtmlString()      + "</li>";}
-    if(info.BaseOtherA != "")      {rombase += "<li>" + info.BaseOtherA.toHtmlString() + "</li>";}
-    if(info.BaseOtherB != "")      {rombase += "<li>" + info.BaseOtherB.toHtmlString() + "</li>";}
-    if(info.BaseOtherC != "")      {rombase += "<li>" + info.BaseOtherC.toHtmlString() + "</li>";}
-    if(info.BaseOtherD != "")      {rombase += "<li>" + info.BaseOtherD.toHtmlString() + "</li>";}
+    if(info.Size != "")       {rombase += "<li title=\""+ CONF.Lang.FileSize +"\">" + info.Size.toHtmlString() + "</li>";}
+    if(info.BaseNameEn != "")    {rombase += "<li title=\""+ CONF.Lang.BaseNameEn +"\">" + info.BaseNameEn.toHtmlString()      + "</li>";}
+    if(info.BaseNameJp != "")    {rombase += "<li title=\""+ CONF.Lang.BaseNameJp +"\">" + info.BaseNameJp.toHtmlString()      + "</li>";}
+    if(info.BaseOtherA != "")    {rombase += "<li>" + info.BaseOtherA.toHtmlString() + "</li>";}
+    if(info.BaseOtherB != "")    {rombase += "<li>" + info.BaseOtherB.toHtmlString() + "</li>";}
+    if(info.BaseOtherC != "")    {rombase += "<li>" + info.BaseOtherC.toHtmlString() + "</li>";}
+    if(info.BaseOtherD != "")    {rombase += "<li>" + info.BaseOtherD.toHtmlString() + "</li>";}
     rombase += "<li title=\""+ CONF.Lang.FileName +"\">" + info.RomPath.toHtmlString() + "</li>";
 
     $(#right_rombase).html = rombase;

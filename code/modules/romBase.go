@@ -59,8 +59,13 @@ func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 		}
 
 		create := []string{"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}
-
+		createLen := len(create)
+		i := 1
 		for a, b := range r {
+			if i > createLen {
+				continue
+			}
+			i++
 			create[a] = b
 		}
 

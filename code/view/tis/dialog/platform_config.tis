@@ -67,6 +67,7 @@ function GetPlatformItem(evt){
     $(#platform_files).value = info.FilesPath;
     $(#platform_audio).value = info.AudioPath;
     $(#platform_rombase).value = info.Rombase;
+    $(#platform_optimized).value = info.OptimizedPath;
 
     //如果没有扩展名，则自动填充大量扩展名
     if($(#platform_exts).value.trim() == ""){
@@ -88,6 +89,7 @@ function GetPlatformItem(evt){
     platform_sim.value = 0;
  
     //激活提交按钮
+    $(#openPlatformFolder).state.disabled = false;
     $(#platform_submit).state.disabled = false;
     $(#add_sim).state.disabled = false;
     $(#platform_sim).state.disabled = false;
@@ -116,6 +118,7 @@ function GetPlatformItem(evt){
         $(#platform_files).state.disabled = false;
         $(#platform_audio).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
+        $(#platform_optimized).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
         for(var f in folders) {f.state.disabled = false;}
@@ -139,6 +142,8 @@ function GetPlatformItem(evt){
         $(#platform_files).state.disabled = true;
         $(#platform_audio).state.disabled = true;
         $(#platform_rombase).state.disabled = true;
+        $(#platform_optimized).state.disabled = true;
+
         var folders = $$(.openfolder);
         var files = $$(.openfile);
         for(var f in folders) {f.state.disabled = true;}
@@ -172,6 +177,7 @@ function platformSubmit(evt){
         files      : $(#platform_files).value,
         audio      : $(#platform_audio).value,
         rombase    : $(#platform_rombase).value,
+        optimized  : $(#platform_optimized).value,
     };
     if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
@@ -303,6 +309,7 @@ function openPlatformFolder(evt) {
         $(#platform_files).value = url + SEPARATOR + "files";
         $(#platform_audio).value = url + SEPARATOR + "audio";
         $(#platform_rombase).value = url + SEPARATOR + rombase.toLowerCase() + ".csv";
+        $(#platform_optimized).value = url + SEPARATOR + "optimized";
 
         $(#platform_doc).state.disabled = false;
         $(#platform_strategy).state.disabled = false;
@@ -321,6 +328,7 @@ function openPlatformFolder(evt) {
         $(#platform_files).state.disabled = false;
         $(#platform_audio).state.disabled = false;
         $(#platform_rombase).state.disabled = false;
+        $(#platform_optimized).state.disabled = false;
         var folders = $$(.openfolder);
         var files = $$(.openfile);
         for(var f in folders) {f.state.disabled = false;}

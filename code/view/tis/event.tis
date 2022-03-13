@@ -76,12 +76,22 @@ view.root.on("ready", function(){
 
     //生成缓存
     self.on("click", "#create_cache", function(evt) {
-        createCache();
+        createCache(this);
+    });
+
+    //重建优化图片缓存
+    self.on("click", "#create_optimized li", function(evt) {
+        createOptimizedCache(this);
     });
 
     //清理资料文件
     self.on("click", "#clear_rombase", function(evt) {
         clearRombase(this);
+    });
+
+    //清空缓存
+    self.on("click", "#clear_db", function(evt) {
+        clearDB(this);
     });
 
     //弹出平台配置窗口
@@ -133,11 +143,6 @@ view.root.on("ready", function(){
     self.on("click", "#platform_ul > li", function(evt) {
         changePlatform(this);
     });
-
-    //rom分页
-    $(#left_menu).onScroll = function(evt) {
-        scrollLoadMenu(evt.scrollPos);
-    };
 
 
    /**

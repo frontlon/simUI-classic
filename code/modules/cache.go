@@ -91,7 +91,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 	//获取扩展名并转换成map
 	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
 	RomExtMap := map[string]bool{}
-	for _,v := range RomExt{
+	for _, v := range RomExt {
 		RomExtMap[v] = true
 	}
 	BaseInfo, err := GetRomBaseList(platform)
@@ -120,7 +120,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 			}
 			subpath := strings.Split(newpath, config.Cfg.Separator)
 			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
-			romExists := false //rom是否存在
+			romExists := false                     //rom是否存在
 
 			if _, ok := RomExtMap[romExt]; ok {
 				romExists = true //rom存在
@@ -146,7 +146,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 				}
 
 				fileMd5 := GetRomMd5(utils.ToString(platform), p)
-				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Producer, base.Publisher, base.Country, base.Translate, base.Version, base.NameEN, base.NameJP, base.OtherA, base.OtherB, base.OtherC, base.OtherD)
+				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Producer, base.Publisher, base.Country, base.Translate, base.Version, base.NameEN, base.NameJP, base.OtherA, base.OtherB, base.OtherC, base.OtherD, utils.ToString(f.Size()))
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
@@ -154,6 +154,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 					menu = subpath[0]
 				}
 
+				//读取rom大小
 				//如果游戏名称存在分隔符，说明是子游戏
 				if strings.Contains(title, ConstSeparator) {
 
@@ -169,6 +170,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 						Platform:      platform,
 						Star:          0,
 						Hide:          0,
+						Size:          utils.GetFileSizeString(f.Size()),
 						Pinyin:        utils.TextToPinyin(sub[1]),
 						InfoMd5:       infoMd5,
 						FileMd5:       fileMd5,
@@ -197,6 +199,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 						RomPath:       p,
 						Star:          0,
 						Hide:          0,
+						Size:          utils.GetFileSizeString(f.Size()),
 						Pinyin:        utils.TextToPinyin(title),
 						InfoMd5:       infoMd5,
 						FileMd5:       fileMd5,
@@ -259,12 +262,12 @@ func ClearPlatform() error {
 	}
 
 	//清空不存在的平台（rom表）
-	if err := (&db.Rom{}).ClearByPlatform(pfs); err != nil {
+	if err := (&db.Rom{}).ClearByNotPlatform(pfs); err != nil {
 		return err
 	}
 
 	//清空不存在的平台（menu表）
-	if err := (&db.Menu{}).ClearByPlatform(pfs); err != nil {
+	if err := (&db.Menu{}).ClearByNotPlatform(pfs); err != nil {
 		return err
 	}
 	return nil
@@ -392,7 +395,7 @@ func GetRomMd5(par ...string) string {
 func UpdateFilterDB(platform uint32) {
 
 	//清空过滤器
-	(&db.Filter{}).DeleteByPlatform(platform)
+	(&db.Filter{Platform: platform}).DeleteByPlatform()
 
 	baseType, _ := (&db.Rom{}).GetFilter(platform, "base_type")
 	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
@@ -465,5 +468,52 @@ func UpdateFilterDB(platform uint32) {
 		filters = append(filters, data)
 	}
 	(&db.Filter{}).BatchAdd(filters)
+
+}
+
+/**
+ * 清空缓存
+ */
+/**
+ * 创建缓存入口
+ **/
+func TruncateRomCache(getPlatform uint32) error {
+
+	//检查更新一个平台还是所有平台
+	PlatformList := map[uint32]*db.Platform{}
+	if getPlatform == 0 { //所有平台
+		PlatformList = config.Cfg.Platform
+	} else { //一个平台
+		if _, ok := config.Cfg.Platform[getPlatform]; ok {
+			PlatformList[getPlatform] = config.Cfg.Platform[getPlatform]
+		}
+	}
+
+	//开始重建缓存
+	for platform, _ := range PlatformList {
+
+		//清空rom表
+		if err := (&db.Rom{Platform: platform}).DeleteByPlatform(); err != nil {
+			return err
+		}
+
+		//清空menu表
+		if err := (&db.Menu{Platform: platform}).DeleteByPlatform(); err != nil {
+			return err
+		}
+
+		//清空filter表
+		if err := (&db.Filter{Platform: platform}).DeleteByPlatform(); err != nil {
+			return err
+		}
+	}
+
+	//收缩数据库
+	db.Vacuum()
+
+	if _, err := utils.Window.Call("CB_clearDB"); err != nil {
+	}
+
+	return nil
 
 }

@@ -27,6 +27,7 @@ function setThumbDirection(obj){
 //更改rom列表展示图类型
 function setThumbType(obj){
 
+    $(#config_thumb).select("li[opt=optimized]").attributes.removeClass("active");
     $(#config_thumb).select("li[opt=thumb]").attributes.removeClass("active");
     $(#config_thumb).select("li[opt=snap]").attributes.removeClass("active");
     $(#config_thumb).select("li[opt=poster]").attributes.removeClass("active");

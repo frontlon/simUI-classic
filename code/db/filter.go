@@ -50,11 +50,19 @@ func (*Filter) GetByPlatform(platform uint32, t string) ([]*Filter, error) {
 }
 
 //删除一个平台的数据
-func (f *Filter) DeleteByPlatform(platform uint32) error {
-
-	result := getDb().Where("platform = ?", platform).Delete(&f)
+func (f *Filter) DeleteByPlatform() error {
+	result := getDb().Where("platform = ?", f.Platform).Delete(&f)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 	return nil
+}
+
+//清空表数据
+func (m *Filter) Truncate() error {
+	result := getDb().Delete(&m)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
 }

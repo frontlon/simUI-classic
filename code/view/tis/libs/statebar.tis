@@ -312,6 +312,7 @@ function setTheme(themeId){
 //检查更新
 function checkUpgrade(evt){
     var data = view.CheckUpgrade();
+
     if(data != ""){
         upgrade(data)
     }else{
@@ -431,7 +432,7 @@ function clearRombase(){
         content:CONF.Lang.TipClearZombieComfirm, 
         caption:CONF.Lang.Confirm,
         buttons:[
-            {id:#yes,text:CONF.Lang.ClearRombase},
+            {id:#yes,text:CONF.Lang.OK},
             {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
         ]
     };
@@ -453,8 +454,77 @@ function CB_clearRombase(count){
     alert("清理完成，共清理掉" + count + "条记录");
 }
 
+//清空缓存
+function clearDB(obj){
+
+    var TipContent = CONF.Lang.TipClearDBPlatformComfirm;
+    var platform = ACTIVE_PLATFORM;
+    if(obj.attributes["opt"] == "all"){
+        TipContent = CONF.Lang.TipClearDBAllComfirm;
+        platform = 0;
+    }
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:TipContent, 
+        caption:CONF.Lang.Confirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.OK},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if(result != "yes"){
+        return;
+    }
+
+    $(body).state.disabled = true;
+    $(#create).attributes.addClass("disabled");
+    startLoading();
+    view.TruncateRomCache(platform);
+    
+}
+
+//清空缓存回调
+function CB_clearDB(){
+    $(#romlist).clear();
+    $(#menulist).clear();
+    $(#create).attributes.removeClass("disabled");
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+    alert("清理完成");
+}
+
+
 //回到顶部
 function gotoTop(){
     $(#center_content).scrollTo(0,0, false);
 
+}
+
+//重建优化图片缓存
+function createOptimizedCache(obj){
+
+    if(ACTIVE_PLATFORM == 0 ){
+        alert(CONF.Lang.NotSelectPlatform);
+        return;
+    }
+
+    if(CONF.Platform[ACTIVE_PLATFORM.toString()].OptimizedPath == ""){
+        alert(CONF.Lang.OptimizedCacheNotSet);
+        return;
+    }
+
+    $(body).state.disabled = true;
+    startLoading();
+
+    //开始重建缓存
+    view.CreateOptimizedImage(ACTIVE_PLATFORM,obj.attributes["opt"]);
+    
+}
+
+//重建优化图片缓存 - 回调
+function CB_createOptimizedCache(){
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
 }

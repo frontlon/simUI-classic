@@ -23,7 +23,6 @@ type RomDetail struct {
 	AudioList     []map[string]string //音频文件列表
 	Sublist       []*db.Rom           //子游戏
 	Simlist       []*db.Simulator     //模拟器
-	RomFileSize   string              //rom文件大小
 }
 
 //运行游戏
@@ -186,22 +185,14 @@ func GetGameDetail(id uint64) (*RomDetail, error) {
 	if err != nil {
 		return res, err
 	}
-	//子游戏列表
+
 	romName := utils.GetFileName(info.RomPath)
+	//子游戏列表
 	sub, _ := (&db.Rom{}).GetSubRom(info.Platform, romName)
 
 	res.Info = info
 	res.Sublist = sub
 	res.Simlist, _ = (&db.Simulator{}).GetByPlatform(info.Platform)
-
-	//获取rom文件大小
-	if res.Info.RomPath != "" {
-		fi := config.Cfg.Platform[info.Platform].RomPath + config.Cfg.Separator + res.Info.RomPath
-		f, err := os.Stat(fi)
-		if err == nil {
-			res.RomFileSize = utils.GetFileSizeString(f.Size())
-		}
-	}
 
 	for k, v := range res.Simlist {
 		if res.Simlist[k].Path != "" {
@@ -709,11 +700,11 @@ func UploadSubGameFile(id uint64, name string, p string) (string, error) {
 		return p, nil
 	}
 
-	if(strings.Contains(newPath,filepath.Dir(p))){
+	if strings.Contains(newPath, filepath.Dir(p)) {
 		if err := utils.FileMove(p, newPath); err != nil {
 			return "", err
 		}
-	}else{
+	} else {
 		if err := utils.FileCopy(p, newPath); err != nil {
 			return "", err
 		}

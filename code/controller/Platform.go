@@ -125,6 +125,8 @@ func PlatformController() {
 		d["icon"] = strings.TrimRight(d["icon"], `/`)
 		d["gif"] = strings.TrimRight(d["gif"], `\`)
 		d["gif"] = strings.TrimRight(d["gif"], `/`)
+		d["optimized"] = strings.TrimRight(d["optimized"], `\`)
+		d["optimized"] = strings.TrimRight(d["optimized"], `/`)
 		d["video"] = strings.TrimRight(d["video"], `\`)
 		d["video"] = strings.TrimRight(d["video"], `/`)
 		d["strategy"] = strings.TrimRight(d["strategy"], `\`)
@@ -151,6 +153,7 @@ func PlatformController() {
 			CassettePath:   d["cassette"],
 			IconPath:       d["icon"],
 			GifPath:        d["gif"],
+			OptimizedPath:  d["optimized"],
 			StrategyPath:   d["strategy"],
 			VideoPath:      d["video"],
 			DocPath:        d["doc"],
@@ -160,8 +163,7 @@ func PlatformController() {
 			Pinyin:         utils.TextToPinyin(d["name"]),
 		}
 
-
-		fmt.Println("d[\"audio\"]",d["audio"])
+		fmt.Println("d[\"audio\"]", d["audio"])
 		err := platform.UpdateById()
 		if err != nil {
 			utils.WriteLog(err.Error())

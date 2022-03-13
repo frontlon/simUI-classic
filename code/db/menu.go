@@ -38,9 +38,9 @@ func (*Menu) GetByPlatform(platform uint32, pages uint32) ([]*Menu, error) {
 
 	volist := []*Menu{}
 
-	pageNum := 200
-	offset := int(pages) * pageNum
-	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Limit(pageNum).Offset(offset).Find(&volist)
+	//pageNum := 200
+	//offset := int(pages) * pageNum
+	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -81,9 +81,20 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 }
 
 //删除不存在的平台下的所有menu
-func (*Menu) ClearByPlatform(platforms []string) error {
+func (*Menu) ClearByNotPlatform(platforms []string) error {
 	m := &Menu{}
 	result := getDb().Not("platform", platforms).Delete(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return result.Error
+}
+
+//删除平台下的所有menu
+func (m *Menu) DeleteByPlatform() error {
+	result := getDb().Where("platform = ?", m.Platform).Delete(&m)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)

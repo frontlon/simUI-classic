@@ -173,6 +173,9 @@ html:theme(red) {
     var(button-ok-text-color) : #fff;
     var(button-cancel-background-color) : #4c1c29;
     var(button-cancel-text-color) : #999;
+    var(button-primary-background-color) : #ff5e66;
+    var(button-primary-text-color) : #fff;
+    var(button-primary-border-color) : #ff5e66;
 
     /* 表单输入框 */
     var(input-background-color) : #4c1c29;

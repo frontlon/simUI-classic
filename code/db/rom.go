@@ -10,7 +10,7 @@ import (
 )
 
 var ROM_PAGE_NUM = 200 //每页加载rom数量
-var TIP_NUM = 200     //每tip个更新提示一次(更新缓存)
+var TIP_NUM = 200      //每tip个更新提示一次(更新缓存)
 
 type Rom struct {
 	Id            uint64
@@ -23,6 +23,7 @@ type Rom struct {
 	SimConf       string // 模拟器参数独立配置
 	Star          uint8  // 喜好，星级
 	Hide          uint8  // 是否隐藏
+	Size          string // rom文件大小
 	BaseNameEn    string // 英文名
 	BaseNameJp    string // 日文名
 	BaseType      string // 游戏类型，如RPG
@@ -153,7 +154,7 @@ func (*Rom) Get(showHide uint8, pages int, platform uint32, menu string, keyword
 	}
 	likeWhere := ""
 	if keyword != "" {
-		likeWhere = `name LIKE "%` + keyword + `%" or rom_path LIKE "%` + keyword +`%"`
+		likeWhere = `name LIKE "%` + keyword + `%" or rom_path LIKE "%` + keyword + `%"`
 	}
 
 	offset := pages * ROM_PAGE_NUM
@@ -255,8 +256,7 @@ func (*Rom) GetByPinyin(showHide uint8, pages int, platform uint32, menu string,
 //根据满足条件的rom数量
 func (m *Rom) Count(showHide uint8, platform uint32, menu string, keyword string, baseType string, basePublisher string, baseYear string, baseCountry string, baseTranslate string, baseVersion string, baseProducer string) (int, error) {
 	count := 0
-	where := map[string]interface{}{
-	}
+	where := map[string]interface{}{}
 
 	if platform != 0 {
 		where["platform"] = platform
@@ -651,7 +651,7 @@ func (m *Rom) UpdateRunNumAndTime(id uint64) error {
 }
 
 //删除不存在的平台下的所有rom
-func (m *Rom) ClearByPlatform(platforms []string) error {
+func (m *Rom) ClearByNotPlatform(platforms []string) error {
 	result := getDb().Where("platform not in (?)", platforms).Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error)

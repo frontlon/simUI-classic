@@ -172,41 +172,6 @@ function nextMenu(){
     }
 }
 
-
-
-//menu分页
-function scrollLoadMenu(evtPos){
-
-
-    var scrollPos = evtPos.toInteger() + $(#left_menu).box(#height);
-    var boxHeight = $(#menulist).box(#height);
-
-    if(MENU_SCROLL_POS == 0){
-        MENU_SCROLL_POS = scrollPos;
-    }
-
-    if ((boxHeight - scrollPos <=50) && (scrollPos > MENU_SCROLL_POS)){
-        //如果加锁中，则不执行后续逻辑，防止重复触发
-        if (MENU_SCROLL_LOCK == true){
-            return;
-        }
-        MENU_SCROLL_LOCK = true; //加锁
-    
-        //生成菜单
-        var menujson = view.GetMenuList(CONF.Default.Platform,MENU_SCROLL_PAGE);
-
-            if(menujson != "[]"){
-                loadMenuList(menujson);
-                MENU_SCROLL_POS = scrollPos;
-                MENU_SCROLL_LOCK = false;
-                MENU_SCROLL_PAGE++;
-
-            }
-        }
-
-}
-
-
 //生成菜单列表
 function loadMenuList(menujson){
     var menuobj = JSON.parse(menujson);

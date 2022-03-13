@@ -11,8 +11,8 @@
         textarea{color:color(general-text-color);background:none;size:*;height:500dip;padding:5dip;width:*;border:0;overflow:scroll-indicator;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
 
         #files_list{padding:0;}
-        #files_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
-        #files_list li *{margin: 0 3dip;vertical-align: middle}
+        #files_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip;}
+        #files_list li *{margin: 0 3dip;vertical-align: middle;}
         #files_list li input[type="text"]:nth-child(1){width:130px;}
         #files_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
         #files_list li .openfile{margin-left:0;}
@@ -84,7 +84,7 @@
 
     //删除攻略文件
     event click $(.files_delete){
-        deleteFiles();
+        deleteFiles(this);
     }
 
     //更新配置

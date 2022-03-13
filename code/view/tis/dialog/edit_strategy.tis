@@ -136,7 +136,7 @@ function addFiles(){
     }
 
 
-    var insertId = $$(#audio_list li).length;
+    var insertId = $$(#files_list li).length;
     var files = "";
     for(var url in urls){
         //转换url
@@ -153,12 +153,13 @@ function addFiles(){
         files += "</li>";
         insertId++;
     }
+    
     $(#files_list).append(files);
 }
 
 //删除攻略文件
-function deleteFiles(){
-    var id = this.attributes["value"];
+function deleteFiles(obj){
+    var id = obj.attributes["value"];
     self.select("#files_li_" + id).remove();
 }
 

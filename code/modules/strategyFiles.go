@@ -75,11 +75,14 @@ func UpdateStrategyFiles(id uint64, data string) error {
 	}
 
 	//读取已存在的文件
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, vo.Name+"__")
+	fileName := utils.GetFileName(vo.RomPath)
+	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, fileName+"__")
 	for _, v := range exists {
 		rel := strings.Replace(v, config.Cfg.RootPath, "", 1)
 		if !utils.InSliceString(rel, newData) {
-			utils.FileDelete(v)
+			if err := utils.FileDelete(v); err != nil {
+				return err
+			}
 		}
 	}
 

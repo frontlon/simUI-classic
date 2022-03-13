@@ -1,6 +1,4 @@
-﻿
-
-//创建游戏rom dom
+﻿//创建游戏rom dom
 function createRomList(cls=0){
     var romobj = JSON.parse(ROMJSON);
     var romlist = self.$(#romlist);
@@ -269,6 +267,9 @@ function getRomPicPath(type,platform,name){
             break;
         case "video":
             path = CONF.Platform[platform.toString()].VideoPath + "/" + name ;
+            break;
+        case "optimized":
+            path = CONF.Platform[platform.toString()].OptimizedPath + "/" + name ;
             break;
         default:
             return "";

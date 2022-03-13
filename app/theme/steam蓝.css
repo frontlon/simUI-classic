@@ -173,6 +173,9 @@ html:theme(steam) {
     var(button-ok-text-color) : #fff;
     var(button-cancel-background-color) : #233041;
     var(button-cancel-text-color) : #999;
+    var(button-primary-background-color) : #417997;
+    var(button-primary-text-color) : #fff;
+    var(button-primary-border-color) : #417997;
 
     /* 表单输入框 */
     var(input-background-color) : #233041;

@@ -97,11 +97,15 @@ function initConfig(isfresh){
 
 
 //生成缓存
-function createCache(){
+function createCache(obj){
     $(body).state.disabled = true;
     $(#create).attributes.addClass("disabled");
     startLoading();
-    var platform = ACTIVE_PLATFORM;
+    var platform = 0;
+    if(obj.attributes["opt"] == "platform"){
+        platform = ACTIVE_PLATFORM;
+    }
+
     view.CreateRomCache(platform);
 }
 

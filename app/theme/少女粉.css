@@ -173,6 +173,9 @@ html:theme(girl) {
     var(button-ok-text-color) : #fff;
     var(button-cancel-background-color) : #ccc;
     var(button-cancel-text-color) : #999;
+    var(button-primary-background-color) : #e85d71;
+    var(button-primary-text-color) : #fff;
+    var(button-primary-border-color) : #e85d71;
 
     /* 表单输入框 */
     var(input-background-color) : #fff8f8;
