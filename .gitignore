@@ -1,4 +1,16 @@
 bak/
 .idea/
 code/res.go
-app/
+code/res.syso
+app/cache
+app/env
+app/games
+app/tools
+app/simUI-32.exe
+app/simUI-64.exe
+app/simUI-64
+app/simUI
+app/sciter-32.dll
+app/sciter-64.dll
+app/sciter-osx-64.dylib
+app/data.dll

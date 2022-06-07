@@ -1,10 +1,15 @@
 package utils
 
-import "github.com/axgle/mahonia"
-
+import (
+	"github.com/axgle/mahonia"
+	"golang.org/x/text/encoding/simplifiedchinese"
+)
 
 //转换为utf8
 func ToUTF8(str string) string {
+	if str == "" {
+		return str
+	}
 	srcCoder := mahonia.NewDecoder("gbk")
 	srcResult := srcCoder.ConvertString(str)
 	tagCoder := mahonia.NewDecoder("utf-8")
@@ -39,13 +44,8 @@ func IsUTF8(str string) bool {
 	return nBytes == 0
 }
 
-//公共转换字符转换
-//ConvertCoder(str, "gbk", "utf-8")
-func ConvertCoder(src string, srcCode string, tagCode string) string {
-	srcCoder := mahonia.NewDecoder(srcCode)
-	srcResult := srcCoder.ConvertString(src)
-	tagCoder := mahonia.NewDecoder(tagCode)
-	_, cdata, _ := tagCoder.Translate([]byte(srcResult), true)
-	result := string(cdata)
-	return result
+//utf8编码转gbk编码
+func Utf8ToGbk(str string) string {
+	h, _ := simplifiedchinese.GBK.NewEncoder().Bytes([]byte(str))
+	return string(h)
 }

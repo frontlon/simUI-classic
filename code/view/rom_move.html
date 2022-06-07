@@ -1,0 +1,107 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style>
+        @import "this://app/images/public.css";
+        @import "images/form.css";
+        html{background:color(center-background-color)}
+        body{color:color(general-text-color);width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        .wrapper{padding:10dip;}
+        h1{font-size:16dip;}
+        #menu{height:400dip;width:*;overflow:scroll-indicator}
+        #menu img{width:16dip;vertical-align:middle}
+        #menu option{line-height:16dip;vertical-align:middle}
+    </style>
+
+</head>
+<body>
+    <div class="wrapper">
+    <h1></h1>
+        <select id="menu" type="tree">
+        </select>
+        <div class="form_bottom">
+        <button class="ok" id="submit">{{Confirm}}</button>
+    </div>
+
+    </div>
+    
+    <script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
+    //创建语言
+    createLang();
+    view.root.on("ready", function(){
+
+        //初始化主题
+        initUiTheme();
+        
+        view.windowCaption =  CONF.Lang.RomMove;
+
+        //标题
+        var ids = view.parameters.id.split(",");
+        var platform = view.parameters.platform;
+
+        if(ids.length == 1){
+            var getjson = mainView.GetGameById(view.parameters.id);
+            var detailObj = JSON.parse(getjson);
+            platform = detailObj.Platform;
+            $(h1).html = detailObj.Name;
+        }else{
+            $(h1).html = CONF.Lang.RomMove;
+        }
+
+
+        //读取平台信息
+        var platformInfo = JSON.parse(mainView.GetPlatformById(platform));
+
+        //读取平台菜单
+        var menuList = JSON.parse(mainView.GetMenuList(platform,100))
+
+        //生成列表
+        var create = "<option class='title' expanded value=''>";
+        create += "<caption class='title'>"+platformInfo.Name+"</caption>";
+        for(var obj in menuList) {
+            var name = obj.Name == "_7b9" ? CONF.Lang.Uncate : obj.Name;
+            create += "<option value='"+ obj.Name +"'><img src='this://app/images/folder.png'> "+ name +"</option>";
+        }
+        create += "</option>";
+        
+        $(#menu).html = create;
+    });
+
+
+    //确定功能
+    event click $(#submit){
+        
+        var obj = $(#menu).select("option:current")
+        
+        if(obj == undefined){
+            alert(CONF.Lang.NotSelectDirectory);
+            return;
+        }
+        
+        var newMenu = obj.attributes["value"];
+        if(newMenu == undefined || newMenu == ""){
+            alert(CONF.Lang.NotSelectDirectory);
+            return;
+        }
+
+        //结束掉侧边栏视频
+        closeRightVideo();
+
+        var ids = view.parameters.id.split(",");
+        for(var id in ids) {
+            mainView.MoveRom(id,newMenu);
+        }
+
+        var response = {
+            "menu":newMenu,
+        }
+
+        view.close(JSON.stringify(response));
+    }
+
+
+    </script>
+</body>
+</html>

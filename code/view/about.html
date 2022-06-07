@@ -1,18 +1,35 @@
 ﻿<html>
 <head>
   <title>关于SimUI</title>
-  
+  <div id="themefile"></div>
   <style>
-    @import "this://app/images/public.css";
-    html,body{width:max-intrinsic; height:max-intrinsic; overflow:hidden;margin:0;padding:0;background:#FFF}
-    #thumb{height:123px;width:480px;background-repeat:no-repeat;border-bottom:3px solid #6699ff}
+    @import "images/public.css";
+    @import "images/form.css";
+    html,body{overflow:hidden;margin:0;padding:0;background:color(about-background-color);color:color(about-text-color)}
+    #thumb{height:123px;width:*;background-repeat:no-repeat;background-size:100% auto;border-bottom:3px solid color(about-thumb-line-color);}
     .content{padding:8dip}
-    .btn{text-align:right;background:#eee;padding:8dip}
     p{font-size:10dip}
+    p a{color:color(about-link-color)}
+    #qq_group{text-decoration:underline}
   </style>
   <script type="text/tiscript">
+
     include ROOTPATH + "tis/plugins/decorators.tis";
-    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.jpg" +")"
+    include ROOTPATH + "tis/utils.tis";
+
+    //初始化主题
+    initUiTheme();
+    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.jpg" +")";
+
+    //读取sciter版本
+    var ver = String.printf("%d.%d.%d.%d", 
+		  (Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
+		  (Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+    $(#sciter-version).text = ver;
+
+
+    //读取软件编译时间
+    $(#build-time).text = CONST_SOFT_BUILD_TIME;
 
     $(#close).setState(Element.STATE_FOCUS);
     @click @on "#close":
@@ -26,17 +43,27 @@
         Sciter.launch(href);
         return true;
     });
+
+     //打开网址
+    self.on("click", "#qq_group", function(evt) {
+        Sciter.launch("https://qm.qq.com/cgi-bin/qm/qr?k=1RxGE9izpXHFnS48ocXzjwpqu6yQUSkb&jump_from=webapi");
+        return true;
+    });
     </script>
 </head>
 <body>
 <div id="thumb"></div>
 <div class="content">
-    <p>版本：v2.5</p>
+    <p>simUI版本：v2.9</p>
+    <p>编译时间：<span#build-time></span></p>
+    <p>引擎版本：<span#sciter-version></span>(感谢sciter提供引擎支持)</p>
     <p>文档：<a href="http://www.simui.net/" target="_blank" title="点击访问网站" id="link">http://www.simui.net/</a></p>
     <p>作者：frontLon</p>
-    <p>ＱＱ群：851347939</p>
+    <p>ＱＱ群：<span#qq_group>851347939</span></p>
     <p>邮件：front_diablo@163.com</p>
 </div>
-<div class="btn"><button id="close">确定</button></div>
+<div class="form_bottom">
+    <button class="ok" id="close">确定</button>
+</div>
 </body>
 </html>

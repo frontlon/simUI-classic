@@ -30,6 +30,7 @@ function Init(){
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
         $(#sim_cmd).value = sim.Cmd;
+        $(#lua).value = sim.Lua;
         $(#unzip).value = sim.Unzip;
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
@@ -48,6 +49,7 @@ function simSubmit(evt){
         path:$(#sim_path).value,
         cmd:$(#sim_cmd).value,
         unzip:$(#unzip).value,
+        lua:$(#lua).value,
     };
 
     if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
@@ -99,22 +101,6 @@ function simDelete(evt){
         var datastr = JSON.stringify(data);
         view.msgbox(#alert,CONF.Lang.DeleteSuccess);
         view.close(datastr); //如果更新成功，则关闭窗口，并把修改后的数据返回
-    }
-}
-
-//选择文件
-function openFile(evt){
-    const defaultExt = "";
-    const initialPath = "";
-    const filter = evt.attributes["filter"];
-    const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+evt.attributes["for"]);  
-    if(url){
-        url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
-        url = url.split(CONF.RootPath.toString()).join("");
-        out.value = url;
     }
 }
 

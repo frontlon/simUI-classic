@@ -1,0 +1,82 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style>
+        @import "this://app/images/public.css";
+        @import "images/form.css";
+
+        html{background:color(center-background-color)}
+        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
+        textarea{color:color(general-text-color);background:none;size:*;height:500dip;padding:5dip;width:*;border:0;overflow:scroll-indicator;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+
+        #audio_list{padding:0;}
+        #audio_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
+        #audio_list li *{margin: 0 3dip;vertical-align: middle}
+        #audio_list li input[type="text"]:nth-child(1){width:130px;}
+        #audio_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
+        #audio_list li .openfile{margin-left:0;}
+        .add_wrapper{text-align:center}
+
+    </style>
+</head>
+<body>
+
+    <section>
+        <div class="wrapper">
+            <ul id="audio_list"></ul>
+            <div class="add_wrapper"><button id="audio_add">{{AddAudio}}</button></div>
+            <div class="form_bottom">
+                <button class="cancel" id="close-dialog">{{Cancel}}</button>
+                <button class="ok" id="submit_audio">{{OK}}</button>
+            </div>
+        </div>
+
+    </section>
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/plugins/tabs.tis";
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/edit_audio.tis";
+   
+    //更新攻略
+    event click $(#update_audio){
+        updateAudio();
+    }
+
+    //删除攻略
+    event click $(#delete_audio){
+        deleteAudio();
+    }
+
+    //添加攻略文件
+    event click $(#audio_add){
+    try{
+        addAudio();
+        }catch(e){
+        alert(e);}
+    }
+
+    //删除攻略文件
+    event click $(.audio_delete){
+        deleteAudio(this);
+    }
+
+    //更新配置
+    event click $(#submit_audio){
+        submitAudio();
+    }
+
+    //选择文件
+    event click $(.openfile){
+        try{
+            openFile(this);
+        }catch(e){
+        alert(e);
+        }
+    }
+
+</script>
+
+</body>
+</html>

@@ -29,7 +29,7 @@ func (m *Menu) Add() error {
 }
 
 //根据条件，查询多条数据
-func (*Menu) GetByPlatform(platform uint32,pages uint32) ([]*Menu, error) {
+func (*Menu) GetByPlatform(platform uint32, pages uint32) ([]*Menu, error) {
 	where := map[string]interface{}{}
 
 	if platform > 0 {
@@ -38,9 +38,19 @@ func (*Menu) GetByPlatform(platform uint32,pages uint32) ([]*Menu, error) {
 
 	volist := []*Menu{}
 
-	pageNum := 200
-	offset := int(pages) * pageNum
-	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Limit(pageNum).Offset(offset).Find(&volist)
+	//pageNum := 200
+	//offset := int(pages) * pageNum
+	result := getDb().Select("name,platform").Where(where).Order("sort ASC,pinyin ASC").Find(&volist)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return volist, nil
+}
+
+//读取所有菜单数据
+func (*Menu) GetAll() ([]*Menu, error) {
+	volist := []*Menu{}
+	result := getDb().Select("name,platform").Order("sort ASC,pinyin ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -58,8 +68,8 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 
 	//数据量不会很大，慢慢删。
 	tx := getDb().Begin()
-	for _,v:= range menus{
-		tx.Where("platform=(?) AND name=(?)", platform,v).Delete(&m)
+	for _, v := range menus {
+		tx.Where("platform=(?) AND name=(?)", platform, v).Delete(&m)
 	}
 	result = tx.Commit()
 
@@ -71,9 +81,20 @@ func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 }
 
 //删除不存在的平台下的所有menu
-func (*Menu) ClearByPlatform(platforms []string) error {
+func (*Menu) ClearByNotPlatform(platforms []string) error {
 	m := &Menu{}
 	result := getDb().Not("platform", platforms).Delete(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return result.Error
+}
+
+//删除平台下的所有menu
+func (m *Menu) DeleteByPlatform() error {
+	result := getDb().Where("platform = ?", m.Platform).Delete(&m)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)

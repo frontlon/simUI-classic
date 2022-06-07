@@ -1,17 +1,14 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
-        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
-        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
-        label{font-size:11dip;}
-        table{width:100%;}
-        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
-        tr:last-child td{text-align: center;padding-bottom:0}
-        .submit{margin:0 8dip}
+        @import "images/form.css";
+    
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);height:100%;background:color(center-background-color);}
+        #wrapper{width:*;padding:8dip;}
+
     </style>
 </head>
 <body>
@@ -21,34 +18,53 @@
             <label><input type='checkbox' value='1' id="sim_default" /><span>{{SetDefaultSimulator}}</span></label></td></tr>
             <tr><td>{{Path}}：</td><td>
                 <input type="text" id="sim_path" value="">
-                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="ini Files (*.exe)|*.exe|All Files (*.*)|*.*">&#x2026;</button>
+                <button class="openfile" for="sim_path" id="lang_SelectBootFile" caption="{{SelectBootFile}}" filter="application Files (*.exe)|*.exe;*.app|All Files (*.*)|*.*">...</button>
             </td></tr>
-            <tr><td><div class="tip" title="{{SimParamsDesc}}">&#xf3c1;</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            <tr><td><div class="tip" title="{{SimParamsDesc}}">?</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
-                <option value="">Default</option>
-                <option value="{RomName}">MAME</option>
-                <option value="-g {RomName} -w">FBAS</option>
-                <option value="{RomName}">Winkawaks</option>
-                <option value='-loadbin {RomFullPath} -nogui'>ePsXe</option>
-                <option value="-e {RomFullPath}">Dolphin</option>
-                <option value="-rom={RomName}">Demul</option>
-            </select>
+                    <option value=''>Default</option>
+                    <option value='{RomName}'>MAME</option>
+                    <option value='{RomName}'>Winkawaks</option>
+                    <option value='-g {RomName} -w'>FBA Shuffle</option>
+                    <option value='-run=dc -image={RomFullPath}'>Demul</option>
+                    <option value='-loadbin {RomFullPath} -nogui'>ePsXe</option>
+                    <option value='-e {RomFullPath}'>Dolphin</option>
+                    <option value='load {RomFullPath}'>OpenBOR</option>
+                    <option value='-L cores\xxx.dll {RomFullPath}'>RetroArch</option>
+                    <option value='-conf {RomFullPath} -exit'>DosBox</option>
+                    <option value='{RomFullPath} -batch'>DuckStation</option>
+                    <option value='{RomName}'>Nebula2</option>
+                    <option value='-config nullDC:Emulator.Autostart=1 -config ImageReader:LoadDefaultImage=1 -config ImageReader:DefaultImage={RomFullPath}'>NullDC</option>
+                    <option value='–iso={RomFullPath}'>Yabuse</option>
+                    <option value='–config {RomFullPath} -f'>PCem</option>
+                    <option value='-g {RomFullPath} -f'>Cemu</option>
+                </select>
             </td></tr>
-            <tr><td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}：</td><td>
+            <tr><td><div class="tip" title="{{LuaDesc}}">?</div>{{Lua}}：</td><td>
+                <input type="text" id="lua" value="">
+                <button class="openfile" for="lua" caption="{{SelectBootFile}}" filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*">...</button>
+            </td></tr>
+            <tr><td><div class="tip" title="{{UnzipRunDesc}}">?</div>{{UnzipRun}}：</td><td>
                 <select id="unzip">
                     <option value="0">{{No}}</option>
                     <option value="1">{{Yes}}</option>
                 </select>
             </td></tr>
-            <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="sim_submit"></button><button class="submit" id="sim_delete">{{DeleteSimulator}}</button></td></tr>
+    
         </table>
+        <div class="form_bottom">
+              <button class="cancel" id="sim_delete">{{DeleteSimulator}}</button>
+              <button class="ok" id="sim_submit">{{Cancel}}</button>
+          </div>
     </div>
 
 <script type="text/tiscript">
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog/edit_sim.tis";
  
+    //初始化主题
+    initUiTheme();
+
     //更新模拟器信息
     event click $(#sim_submit) {
         simSubmit(this);
@@ -67,6 +83,23 @@
     //设置命令代码
     event change $(#set_cmd) {
         setCmd(this);
+    }
+
+
+    //选择文件
+    function openFile(evt){
+        const defaultExt = "";
+        const initialPath = "";
+        const filter = evt.attributes["filter"];
+        const caption = evt.attributes["caption"];
+        var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
+        var out = self.select("#"+evt.attributes["for"]);  
+        if(url){
+            url = URL.toPath(url);
+            url = url.split("\/").join(SEPARATOR);
+            url = url.split(CONF.RootPath.toString()).join("");
+            out.value = url;
+        }
     }
 
 </script>

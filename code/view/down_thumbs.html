@@ -9,7 +9,7 @@
         #down_thumb_list li{display: inline-block;min-width:136dip;max-width:160dip;margin:12dip;}
         #down_thumb_list li:hover{box-shadow:0 0 12dip #666}
         #down_thumb_list li:active{transform:scale(0.95);transition:transform(bounce-in,0s,bounce-out);}
-        #down_thumb_list li img{width:100%;height:width(80%);}
+        #down_thumb_list li img{width:*;height:width(80%);}
         .thumb_bg{width:100%;height:200dip;background:url(this://app/images/down_thumbs.jpg) no-repeat center center;clear:both;}
         .thumb_search{width:320dip;height:38dip;padding:0;margin:80dip auto 0 250dip;}
         .thumb_search .input{opacity: 0.8;background:#fff;height:38dip;line-height:38dip;border:0;display:block;float:left;width:240dip;color:#333;font-size:14dip;text-align:center;padding:0;border-radius: 6dip 0 0 6dip}
@@ -37,12 +37,20 @@
 
     //点击图片
     event click $(#down_thumb_list li){
-        DownThumb(this);
+        try{
+            DownThumb(this);
+        }catch(e){
+            alert(e);
+        }
     }
 
     //点击搜索按钮
     event click $(#submit){
-        searchThumb(this);
+        try{
+            searchThumb(this);
+        }catch(e){
+            alert(e);
+        }
     }
 </script>
 </body>

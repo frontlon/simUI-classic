@@ -1,47 +1,34 @@
 package utils
 
 import (
-	"os"
-	"os/exec"
-	"path/filepath"
+	"strings"
 )
 
-var LAST_PROCESS int = 0
+var prefix = "t0Ic" //前缀
 
-/**
- * 运行游戏
- **/
-func RunGame(exeFile string, cmd []string) error {
-
-	//更改程序运行目录
-	if err := os.Chdir(filepath.Dir(exeFile)); err != nil {
-		return err
-	}
-
-	result := exec.Command(exeFile, cmd...)
-
-	if err := result.Start(); err != nil {
-		return err
-	}
-
-	//保存进程id
-	LAST_PROCESS = result.Process.Pid
-
-	return nil
+//创建rom唯一id
+func CreateRomUniqId(t string, s int64) string {
+	return prefix + "_" + t + "_" + ToString(s)
 }
 
-/**
- * 关闭游戏
- **/
-func KillGame() error {
-
-	if LAST_PROCESS == 0 {
-		return nil
+//分割rom唯一id
+func SplitRomUniqId(uniqId string) (string, string) {
+	if uniqId == "" {
+		return "", ""
 	}
+	sli := strings.Split(uniqId, "_")
+	return sli[1], sli[2] //返回 时间,大小
+}
 
-	c := exec.Command("taskkill.exe", "/T", "/PID", ToString(LAST_PROCESS))
-	err := c.Start()
+//检查是不是唯一ID
+func HasRomUniqId(uniqId string) bool {
+	if uniqId == "" {
+		return false
+	}
+	sli := strings.Split(uniqId, "_")
 
-	LAST_PROCESS = 0
-	return err
+	if sli[0] == prefix {
+		return true
+	}
+	return false
 }

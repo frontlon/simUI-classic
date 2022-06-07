@@ -1,0 +1,338 @@
+﻿//初始化
+function Init(){
+
+    //初始化全局配置
+    initConfig("0");
+
+    //改变默认窗口尺寸
+    view.state = CONF.Default.WindowState.toInteger();
+
+    //窗口面板显示状态
+    if (CONF.Default.PanelPlatform.toInteger() == 0){
+        $(#left_platform).style["display"] = "none"
+    }
+    if (CONF.Default.PanelMenu.toInteger() == 0){
+        $(#left_menu).style["display"] = "none"
+    }
+    if (CONF.Default.PanelSidebar.toInteger() == 0){
+        $(#right).style["display"] = "none"
+    }
+
+    //窗口框架宽度
+    if (CONF.Default.PanelPlatformWidth != ""){
+        $(#left_platform).style["width"] = px(CONF.Default.PanelPlatformWidth.toInteger());
+    }
+
+    if (CONF.Default.PanelMenuWidth != ""){
+        $(#left_menu).style["width"] = px(CONF.Default.PanelMenuWidth.toInteger());
+    }
+
+    if (CONF.Default.PanelSidebarWidth != ""){
+        $(#right).style["width"] = CONF.Default.PanelSidebarWidth < 230 ? px(230) : px(CONF.Default.PanelSidebarWidth.toInteger());
+        if (CONF.Default.PanelSidebarWidth >= 500){
+            $(#right).attributes.addClass("widthMode");
+        }
+    }
+
+    //初始化rom
+    var pf = CONF.Default.Platform;
+    var menu =  $(#menulist).select("dd:current").attributes["opt"];
+    
+    //设置全局变量
+    ACTIVE_PLATFORM = CONF.Default.Platform;
+
+    var req = {
+        "platform" : pf.toInteger(),
+        "catname" : menu,
+    };
+    var request = JSON.stringify(req);
+
+    ROMJSON = view.GetGameList(request);
+
+    if(pf == 0){
+        $(#add_rom).style["display"] = "none";
+    }else{
+        $(#add_rom).style["display"] = "block";
+    }
+
+    createRomList(1); //生成rom列表
+    //生成rom数量
+    var romCount = view.GetGameCount(request);
+    $(#rom_count_num).html = romCount; //初始化在线人数
+
+    //更新侧边栏平台介绍
+    sidebarPlatformDesc(pf);
+    
+    //初始化音量控制
+    VIDEO_VALUME = CONF.Default.VideoVolume;
+
+    $(body).state.focus = true;
+
+    //如果没有平台，则自动打开平台设置窗口
+    if(CONF.PlatformList.length == 0){
+         openPlatformConfig();
+    }
+
+}
+
+//初始化配置
+function initConfig(isfresh){
+
+    var confstr = view.InitData("config",isfresh);
+    CONF = JSON.parse(confstr);
+
+    //如果初始路径不同，则刷新数据
+    if(CONF.RootPath != CONF.Default.RootPath){
+        view.UpdateConfig("root_path",CONF.RootPath);
+    }
+
+    //软件名称
+    if(System.scanFiles(CONF.Default.SoftName)){ //图片logo
+        $(#logo).html = "<img src='"+ URL.fromPath(CONF.Default.SoftName) +"' />";
+    }else{
+         $(#logo).html =  CONF.Default.SoftName; //文字logo
+    }
+
+    //创建语言
+    if (isfresh == "0"){
+        createLang();
+    }
+    
+    initTheme(); //创建主题
+    initInterface(); //创建界面设置（背景、透明度）
+    initPlatform(); //生成平台列表
+    initShortcutList(); //初始化快捷工具列表
+    initRomListStyle(); //初始化游戏列表样式
+    initBaseFilter(CONF.Default.Platform); //初始化基本信息过滤器
+    //生成菜单
+    var menujson = view.GetMenuList(CONF.Default.Platform,0);
+    createMenuList(menujson);
+
+    //激活第一个字母索引
+    $(#num_search li).state.current = true;
+
+}
+
+//创建界面设置
+function initInterface(){
+
+    //初始化选项
+    $(#config_romlist_direction).select("li[opt="+ CONF.Default.RomlistDirection +"]").attributes.addClass("active");
+    $(#config_font_background).select("li[opt="+ CONF.Default.RomlistFontBackground +"]").attributes.addClass("active");
+    $(#config_title_fontsize).select("li[opt="+ CONF.Default.RomlistFontSize +"]").attributes.addClass("active");
+    $(#config_romlist_size).select("li[opt="+ CONF.Default.RomlistSize +"]").attributes.addClass("active");
+    $(#config_romlist_margin).select("li[opt="+ CONF.Default.RomlistMargin +"]").attributes.addClass("active");
+
+    //各平台缩略图类型
+    initConfigThumb();
+    var configThumb = $(#config_thumb);
+    configThumb.select("li[opt="+ CONF.Default.Thumb +"]").attributes.addClass("active");
+    for(var pf in CONF.PlatformList) {
+        if(pf.Thumb != ""){
+            var dom = configThumb.select("li[opt="+ pf.Id +"] li[opt="+ pf.Thumb +"]");
+            dom.attributes.addClass("active");
+        }
+    }
+ 
+    //更换鼠标指针
+    $(body).style["cursor"] = [url:URL.fromPath(CONF.Default.Cursor)];
+
+    //更新背景图
+    if(CONF.Default.BackgroundImage != ""){
+        showListBackground("");
+    }
+
+    //更新背景循环方式
+    var repeat = CONF.Default.BackgroundRepeat;
+    if(repeat == "cover"){
+        $(#center).style["background-size"] = repeat;
+        $(#center).style["background-repeat"] = "no-repeat";
+    }else if(repeat == "repeat"){
+        $(#center).style["background-repeat"] = repeat;
+        $(#center).style["background-size"] = "auto auto";
+    }else{
+        $(#center).style["background-repeat"] = repeat;
+        $(#center).style["background-size"] = "contain";
+    }
+
+}
+
+//初始化游戏列表样式
+function initRomListStyle(){
+
+    var romlist = $(#romlist);
+
+    //初始化游戏列表样式
+    if(CONF.Default.RomlistStyle == "1"){
+        $(#switch_romlist).html = "<i.block.minsize></i>";
+        romlist.attributes.addClass("romblock");
+    }else{
+        $(#switch_romlist).html = "<i.list.minsize></i>";
+        romlist.attributes.addClass("romlist");
+    }
+
+    //初始化rom列表模块大小
+    romlist.attributes.addClass("zoom"+CONF.Default.RomlistSize);
+    $(#switch_romlist).attributes["value"] = CONF.Default.RomlistStyle;
+
+     //初始化rom列表字体大小
+    romlist.attributes.addClass("fontsize"+CONF.Default.RomlistFontSize);
+
+    //初始化列表模块间距
+    romlist.attributes.addClass("margin" + CONF.Default.RomlistMargin);
+
+    //是否显示rom列表的标题背景颜色
+    romlist.attributes.addClass("bg" + CONF.Default.RomlistFontBackground);
+
+    //字体阴影
+    if(CONF.Default.RomlistFontBackground == 0){
+        romlist.attributes.addClass("textShadow");
+    }
+
+    //初始化rom列表图片显示方向
+    if(romlist.attributes.hasClass("horizontal")){romlist.attributes.removeClass("horizontal");}
+    if(romlist.attributes.hasClass("vertical")){romlist.attributes.removeClass("vertical");}
+    if(CONF.Default.RomlistDirection == 1){romlist.attributes.addClass("horizontal");}
+    else if(CONF.Default.RomlistDirection == 2){romlist.attributes.addClass("vertical");}
+
+    //初始化列表列显示项
+    var column = CONF.Default.RomlistColumn.split(",");
+    var dom = $$(.romlist_column);
+    var i = 0;
+      for(var obj in dom){
+          obj.checked = column[i] == 1 ? true : false;
+          i++;
+      }
+   
+}
+
+//生成快捷工具列表
+function initShortcutList(){
+    var li = ""; 
+    for(var obj in CONF.Shortcut) {
+        li += "<li path='"+ obj.Path +"'>"+ obj.Name + "</li>";
+    }
+    $(#shortcut menu).html = li; //生成dom
+}
+
+//创建主题
+function initTheme(){
+
+    //默认主题
+    self.attributes["theme"] = CONF.Default.Theme;
+
+
+    //渲染页面主题
+    initUiTheme();
+
+    //生成主题列表
+    var menu = "";
+    for(var themeId in CONF.Theme) {
+        menu += "<li id="+ themeId +">"+  CONF.Theme[themeId].Name +"</li>"; //填充菜单
+    }
+    $(#theme menu).html = menu;
+
+    //设置首页主题样式
+    setTheme(CONF.Default.Theme);
+}
+
+//初始化过滤器
+function initBaseFilter(platform){
+
+    //resetFilterOptions();
+    $(#search_input).value = "";
+
+    //填充数据
+    var getjson = view.GetFilter(platform);
+    var jsonObj = JSON.parse(getjson);
+    for(var type in jsonObj) {
+        initBaseFilterOptions(type,jsonObj[type]);
+    }
+    
+
+    //是否显示和隐藏
+    var column = CONF.Default.RomlistColumn.split(",");
+    $(#filter_type).style["display"]      = column[1] == 1 ? "inline-block" : "none";
+    $(#filter_year).style["display"]      = column[2] == 1 ? "inline-block" : "none";
+    $(#filter_publisher).style["display"] = column[3] == 1 ? "inline-block" : "none";
+    $(#filter_country).style["display"]   = column[4] == 1 ? "inline-block" : "none";
+    $(#filter_translate).style["display"] = column[5] == 1 ? "inline-block" : "none";
+    $(#filter_version).style["display"]   = column[6] == 1 ? "inline-block" : "none";
+    $(#filter_producer).style["display"]  = column[7] == 1 ? "inline-block" : "none";
+}
+
+//初始化过滤器选项
+function initBaseFilterOptions(type,data){
+
+    var dom;
+    var title = "";
+
+    switch(type){
+        case "base_type":
+            dom = $(#filter_type);
+            title = CONF.Lang.BaseType;
+            break;
+        case "base_year":
+            dom = $(#filter_year);
+            title = CONF.Lang.BaseYear;
+            break;
+        case "base_producer":
+            dom = $(#filter_producer);
+            title = CONF.Lang.BaseProducer;
+            break;
+        case "base_publisher":
+            dom = $(#filter_publisher);
+            title = CONF.Lang.BasePublisher;
+            break;
+        case "base_country":
+            dom = $(#filter_country);
+            title = CONF.Lang.BaseCountry;
+            break;
+        case "base_translate":
+            dom = $(#filter_translate);
+            title = CONF.Lang.BaseTranslate;
+            break;
+        case "base_version":
+            dom = $(#filter_version);
+            title = CONF.Lang.BaseVersion;
+            break;
+
+    }
+
+    dom.value = "";
+    dom.options.clear();
+    var domData = "<option value=''>"+ title +"</option>";
+
+    if (data != undefined && data.length > 0){
+        for(var name in data) {
+            domData += "<option value=\"" + name + "\">"+ name +"</option>";
+        }
+    }
+    dom.options.html = domData;
+    dom.value = "";
+}
+
+function initConfigThumb(){
+    var list = "";
+    list += "<li opt='optimized'>"+ CONF.Lang.OptimizedCache +"</li>";
+    list += "<li opt='thumb'>"+ CONF.Lang.Thumb +"</li>";
+    list += "<li opt='snap'>"+ CONF.Lang.Snap +"</li>";
+    list += "<li opt='poster'>"+ CONF.Lang.Poster +"</li>";
+    list += "<li opt='packing'>"+ CONF.Lang.Packing +"</li>";
+    list += "<li opt='title'>"+ CONF.Lang.TitlePic +"</li>";
+    list += "<li opt='cassette'>"+ CONF.Lang.CassettePic +"</li>";
+    list += "<li opt='icon'>"+ CONF.Lang.IconPic +"</li>";
+    list += "<li opt='gif'>"+ CONF.Lang.GifPic +"</li>";
+    list += "<li opt='wallpaper'>"+ CONF.Lang.WallpaperPic +"</li>";
+    list += "<li opt='background'>"+ CONF.Lang.BackgroundPic +"</li>";
+
+    var data = "";
+    data += "<li opt='all'>"+ CONF.Lang.AllPlatform +"<menu>"+ list +"</menu></li>";
+    for(var pf in CONF.PlatformList) {
+        data += "<li opt='"+ pf.Id +"'>"+ pf.Name +"<menu>"+ list +"</menu></li>";
+    }
+
+   var menucontext = $(#config_thumb menu);
+    menucontext.clear();
+    menucontext.append(data);
+}

@@ -1,78 +1,161 @@
 ﻿<html>
-<head>
+  <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
-        @import "this://app/images/public.css";
-        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
-        input{width:*;}
-        .input_wrapper{padding:0 10dip 10dip 10dip;flow:row(label,input);}
-        .submit_wrapper{background:#eee;padding:6dip 0;text-align:center;}
-        h4{margin:7dip 0}
-
-        table td{vertical-align: middle;padding-bottom:5dip}
-        table td:first-child{width:50dip}
-
+      @import 'this://app/images/public.css';
+      @import 'images/form.css';
+      html {
+        background: color(center-background-color);
+      }
+      body {
+        width: *;
+        height: max-content;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        font-size: 12dip;
+        color: color(general-text-color);
+      }
+      input {
+        width: *;
+      }
+      .input_wrapper {
+        padding: 0 10dip 10dip 10dip;
+        flow: row(label, input);
+      }
+      table td {
+        vertical-align: middle;
+        padding-bottom: 5dip;
+      }
+      table td:first-child {
+        width: 40dip;
+      }
     </style>
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="input_wrapper">
-        <h4 id="desc"></h4>
-
-        <table>
-            <tr>
-                <td><div class="tip" title="{{RomSimParamsDesc}}">&#xf3c1;</div>{{SimParams}}</td>
-                <td><input type="text" id="cmd" value="" novalue="{{InputPlatformName}}" /></td>
-            </tr>
-            <tr>
-                <td><div class="tip" title="{{UnzipRunDesc}}">&#xf3c1;</div>{{UnzipRun}}</td>
-                <td><select id="unzip"><option value="2">{{UnzipDefault}}</option><option value="0">{{No}}</option><option value="1">{{Yes}}</option></select></td>
-            </tr>
-             <tr id="file_tr">
-                <td><div class="tip" title="{{RomCmdFileTip}}">&#xf3c1;</div>{{RomCmdFile}}</td>
-                <td><input id="file" value="" /></td>
-            </tr>
-
-        </table>
-
+      <table>
+        <tr><td>{{FilePath}}：</td><td><input type="text" id="name" value="12345" readonly></td></tr>
+        <tr>
+          <td>
+            <div class="tip" title="{{RomSimParamsDesc}}">?</div>
+            {{SimParams}}：
+          </td>
+          <td><input type="text" id="cmd" value="" novalue="{{SimParams}}" /></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tip" title="{{LuaDesc}}">?</div>
+            {{Lua}}：
+          </td>
+          <td>
+            <input type="text" id="sim_lua" value="" />
+            <button
+              class="openfile"
+              for="sim_lua"
+              id="lang_SelectBootFile"
+              caption="{{SelectBootFile}}"
+              filter="lua Files (*.lua)|*.lua|All Files (*.*)|*.*"
+            >
+              ...
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tip" title="{{UnzipRunDesc}}">?</div>
+            {{UnzipRun}}：
+          </td>
+          <td>
+            <select id="unzip">
+              <option value="0">{{UnzipDefault}}</option>
+              <option value="2">{{No}}</option>
+              <option value="1">{{Yes}}</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tip" title="{{RomCmdFileTip}}">?</div>
+            {{RomCmdFile}}：
+          </td>
+          <td><input type="text" id="file" value="" /></td>
+        </tr>
+      </table>
     </div>
-    <div class="submit_wrapper">
-        <button id="close-dialog" role="default-button">{{Confirm}}</button>
+    <div class="form_bottom">
+      <button class="cancel" id="close-dialog">{{Cancel}}</button>
+      <button class="ok" id="ok" role="default-button">{{OK}}</button>
     </div>
     <script type="text/tiscript">
 
-        include ROOTPATH + "tis/utils.tis";
+      include ROOTPATH + "tis/utils.tis";
 
-        //创建语言
-        createLang();
- 
-        view.root.on("ready", function(){
-            $(#cmd).value = view.parameters.cmd;
-            $(#cmd).setState(Element.STATE_FOCUS);
-            $(#desc).html = view.parameters.name;
-            $(#unzip).value = view.parameters.unzip;
-            $(#file).value = view.parameters.file;
-            view.windowCaption =  CONF.Lang.EditRomCmd;
-        });
+      //初始化主题
+      initUiTheme();
 
-        event click $(#close-dialog){
-            var data = {
-                cmd:$(#cmd).value,
-                unzip:$(#unzip).value.toString(),
-                file:$(#file).value.toString(),
-            }
-            var datastr = JSON.stringify(data);
-            view.close(datastr);
-        }
+      //创建语言
+      createLang();
 
-        event change $(#unzip){
-           if(this.value == 1){
-            $(#file_tr).style["display"] = "block";
-           }else{
-            $(#file_tr).style["display"] = "none";
-           }
-        }
+      view.root.on("ready", function(){
 
+          var romId = view.parameters.romId;
+          var simId = view.parameters.simId;
+          var cmd = JSON.parse(mainView.GetRomCmd(romId,simId));
+          var sim = JSON.parse(mainView.GetSimulatorById(simId));
+      
+          $(#name).value = sim.Path;
+          $(#cmd).value = cmd.Cmd;
+          $(#unzip).value = cmd.Unzip;
+          $(#file).value = cmd.File;
+          $(#sim_lua).value = cmd.Lua;
+
+          view.windowCaption =  sim.Name;
+      });
+
+      //保存修改
+      event click $(#ok){
+          var data = {
+              cmd:$(#cmd).value,
+              unzip:$(#unzip).value.toString(),
+              file:$(#file).value.toString(),
+              lua:$(#sim_lua).value.toString(),
+          }
+          var datastr = JSON.stringify(data);
+          
+          var romId = view.parameters.romId;
+          var simId = view.parameters.simId;
+
+          mainView.UpdateRomCmd(romId,simId,datastr);
+          view.close();
+      }
+
+      //关闭
+      event click $(#close-dialog){
+          view.close();
+      }
+
+      //选择文件
+      event click $(.openfile){
+          openFile(this);
+      }
+
+      //选择文件
+      function openFile(evt){
+          const defaultExt = "";
+          const initialPath = "";
+          const filter = evt.attributes["filter"];
+          const caption = evt.attributes["caption"];
+          var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
+          var out = self.select("#"+evt.attributes["for"]);
+          if(url){
+              url = URL.toPath(url);
+              url = url.split("\/").join(SEPARATOR);
+              url = url.split(CONF.RootPath.toString()).join("");
+              out.value = url;
+          }
+      }
     </script>
-</body>
+  </body>
 </html>

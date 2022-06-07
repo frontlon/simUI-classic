@@ -2,7 +2,7 @@ package window
 
 import (
 	"simUI/code/utils/go-sciter"
-	// "runtime"
+	"runtime"
 )
 
 type Window struct {
@@ -12,4 +12,10 @@ type Window struct {
 
 func (w *Window) run() {
 	// runtime.LockOSThread()
+}
+
+// https://github.com/golang/go/wiki/LockOSThread
+// https://simUI/code/utils/go-sciter/issues/201
+func init() {
+	runtime.LockOSThread()
 }

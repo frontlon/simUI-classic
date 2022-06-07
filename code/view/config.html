@@ -1,117 +1,131 @@
 ﻿<html>
   <head>
   <title></title>
+  <div id="themefile"></div>
   <style>
     @import "this://app/images/public.css";
-    html,body{width:*;height:*;overflow:hidden;margin:0;padding:4dip;}
-    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:8dip;}
-    .frame_left{width:120dip;height:*;display:inline-block;}
-    .frame_right{width:320dip;height:*;display:inline-block;padding-left:8dip;}
-    .frame_right input[type="text"]{border:1dip solid #999;border-radius:2dip}
-    
-    table{width:*;display:block}
-    th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-    td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
-    tr:last-child td{text-align:center;padding-bottom:0}
-    .platform_list{width:*;height:740px;display:block;border:1dip solid #ccc;padding:0;margin:0}
-    .platform_list li{height:24dip;line-height:24dip;display: block;padding-left:5dip}
-    .platform_list li:current{background:#3399ff;color:#FFF}
-    .platform_list li:drag-source { background-color:#eee;}
+    @import "this://app/images/form.css";
+    html,body{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0;}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;}
 
+    .frame_left{width:120dip;height:*;display:inline-block;}
+    .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip;}
+    .frame_right input[type="text"]{width:*}
+  
     #table_default td:first-child{width:120dip;}
-    #table_backup td{text-align:left;}
-    #table_backup td:first-child{width:40dip}
-    #table_backup .backup_info{font-size:10dip;line-height:1.5em}
+    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;}
+    .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px;}
+    .table_interface tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;min-width:80dip}
+    .table_interface tr td:nth-child(even){text-align:left;padding-bottom:0;}
+    #platform_exts{width:662dip;}
+    #platform_ico{max-width:220dip;}
 
     #shortcut_list{padding:0;}
-    #shortcut_list li{flow:row(input,input,button,button,button,label);}
+    #shortcut_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
     #shortcut_list li *{margin: 0 3dip;vertical-align: middle}
     #shortcut_list li input[type="text"]:nth-child(1){width:130px;}
     #shortcut_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
     #shortcut_list li .openfile{margin-left:0;}
 
-    .platform_control{height:16dip;flow:horizontal-flow;}
-    .platform_control button{width:42dip;height:16dip;line-height:16dip;font-size: 10dip;border-radius:0;border:1dip solid #ccc;background:none}
-    .platform_control button:hover{background:#eee;cursor: pointer}
-    .platform_control button:active{background:#ddd}
-    .platform_control input{display:inline-block;width:76dip;height:17dip;font-size:10dip;border:1dip solid #ccc;border-top:0;padding:0 4dip;margin:0;top:-2dip;position:relative;}
+    input[type=text]{vertical-align:middle}
+    .rombaseEnum_wrapper{flow:horizontal-flow;clear:both;}
+    .rombaseEnum_wrapper p{font-size:12dip;color:color(general-text-color)}
+    .rombaseEnum_wrapper div{display:block;position:relative;padding:0 5dip 5dip 5dip;width:120dip;}
+    .rombaseEnum_wrapper textarea{height:300dip;display:block;width:auto}
+    
 
   </style>
   </head>
 <body>
 
-  <tabs id="mytabs">
+  <tabs class="tabs" id="mytabs">
     <strip>
-      <label for="first" selected>{{GeneralConfig}}</label>
-      <label for="second">{{PlatformConfig}}</label>
-      <label for="third">{{Shortcut}}</label>
+      <label ww="650dip" wh="350dip" for="first" selected>{{GeneralConfig}}</label>
+      <label ww="540dip" wh="305dip" for="second">{{InterfaceConfig}}</label>
+      <label ww="670dip" wh="500dip" for="third">{{RombaseEnum}}</label>
+      <label ww="570dip" wh="350dip" for="fourth">{{Shortcut}}</label>
     </strip>
     <panels>
       <section id="first">
-        <div class="wrapper">
+        <!-- 通用配置 -->
           <table id="table_default">
-            <tr><td><div class="tip" title="{{SoftNameTip}}">&#xf3c1;</div>{{SoftName}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">&#x2026;</button></td></tr>
-            <tr><td><div class="tip" title="{{LangTip}}">&#xf3c1;</div>{{Lang}}：</td><td><select id="config_lang"></select></td></tr>
-            <tr><td><div class="tip" title="{{ThumbTip}}">&#xf3c1;</div>{{IndexThumb}}：</td><td><select id="config_thumb">
-              <option value="thumb">{{Thumb}}</option>
-              <option value="snap">{{Snap}}</option>
-              <option value="poster">{{Poster}}</option>
-              <option value="packing">{{Packing}}</option>
-            </select></td></tr>
+            <tr><td><div class="tip" title="{{SoftTitleTip}}">?</div>{{SoftTitle}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button></td></tr>
+            <tr><td><div class="tip" title="{{LangTip}}">?</div>{{Lang}}：</td><td><select id="config_lang"></select></td></tr>
+            <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">?</div>{{PicSearchEngines}}：</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>  
+            <tr><td><div class="tip" title="{{MusicPlayerTip}}">?</div>{{MusicPlayer}}：</td><td><input type="text"  id="config_music_player" value=""> <button class="openfile" for="config_music_player" caption="{{SelectPicFile}}" filter="picture Files (*.exe)|*.exe|All Files (*.*)|*.*">...</button></td></tr>
 
-              <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">&#xf3c1;</div>{{PicSearchEngines}}：</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>
-              
-              <tr><td>{{StartCheckUpgrade}}：</td><td><select id="config_enable_upgrade">
+            <tr><td>{{StartCheckUpgrade}}：</td><td><select id="config_enable_upgrade">
                 <option value="1">{{Yes}}</option>
                 <option value="0">{{No}}</option>
               </select>
               </td></tr>
-              <tr><td colspan="2"><button id="config_submit">{{UpdateConfig}}</button></td></tr>
           </table>
-        </div>
+          <div class="form_bottom">
+              <button class="cancel">{{Cancel}}</button>
+              <button class="ok" id="config_submit">{{UpdateConfig}}</button>
+          </div>
       </section>
+     
       <section id="second">
-        <div class="wrapper">
-          <div class="frame_left">
-              <ul class="platform_list" id="platform_list" size="5"></ul>
-              <div class="platform_control">
-                <button class="sub" id="platform_del" title="{{DeletePlatform}}">{{DeletePlatform}}</button>
-                <button class="add" id="platform_add" title="{{AddNewPlatform}}">{{AddNewPlatform}}</button>
-              </div>
-          </div>
-          <div class="frame_right">
-            <table>
-                <tr><th colspan="2" style="padding-top:0">{{BaseInfo}}</th></tr>
-                <tr><td>{{Title}}：</td><td><input type="text" value="" id="platform_name" disabled></td></tr>
-                <tr><td><div class="tip" title="{{PlatformIconTip}}">&#xf3c1;</div>{{Icon}}：</td><td><input type="text"  id="platform_icon" value="" disabled> <button class="openfile" for="platform_icon" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{RomType}}：</td><td><input type="text" value=""  id="platform_exts" disabled></td></tr>
-                <tr><td>{{Simulator}}：</td><td>
-                  <select id="platform_sim" disabled></select>
-                  <button id="add_sim" disabled>{{AddSimulator}}</button>
-                </td></tr>
-                <tr><th colspan="2">{{MenuConfig}}</th></tr>
-                <tr><td>{{RomMenu}}：</td><td><input type="text"  id="platform_rom" value="" disabled> <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{ThumbMenu}}：</td><td><input type="text" id="platform_thumb" value="" disabled> <button class="openfolder" for="platform_thumb" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{SanpMenu}}：</td><td><input type="text" id="platform_snap" value="" disabled> <button class="openfolder" for="platform_snap" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{PosterMenu}}：</td><td><input type="text" id="platform_poster" value="" disabled> <button class="openfolder" for="platform_poster" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{PackingMenu}}：</td><td><input type="text" id="platform_packing" value="" disabled> <button class="openfolder" for="platform_packing" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{TitleMenu}}：</td><td><input type="text" id="platform_title" value="" disabled> <button class="openfolder" for="platform_title" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{BackgroundMenu}}：</td><td><input type="text" id="platform_background" value="" disabled> <button class="openfolder" for="platform_background" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{VideoMenu}}：</td><td><input type="text" id="platform_video" value="" disabled> <button class="openfolder" for="platform_video" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{DescMenu}}：</td><td><input type="text"  id="platform_doc" value="" disabled> <button class="openfolder" for="platform_doc" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td>{{StrategyMenu}}：</td><td><input type="text" id="platform_strategy"  value="" disabled> <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>&#x2026;</button></td></tr>
-                <tr><td><div class="tip" title="{{RombaseTip}}">&#xf3c1;</div>{{Rombase}}：</td><td><input type="text"  id="platform_rombase" value="" disabled> <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>&#x2026;</button></td></tr>
-                <tr><th colspan="2"></th></tr>
-                <tr><td colspan="2"><button id="platform_submit" disabled>{{UpdateConfig}}</button></td></tr>
-            </table>
-          </div>
-        </div>
-      </section>
+        <!-- 界面设置 -->
 
+          <table class="table_interface">
+
+            <tr>
+              <td>{{Cursor}}：</td>
+              <td colspan="3"><input type="text"  id="config_cursor" value=""> <button class="openfile" for="config_cursor" caption="{{SelectPicFile}}" filter="cursor Files (*.cur,*.ani,*.png,*.gif)|*.cur;*.ani;*.png;*.gif|All Files (*.*)|*.*">...</button></td>
+            </tr>
+            <tr>
+              <td><div class="tip" title="{{TipBackground}}">?</div>{{DefaultBackground}}：</td>
+              <td colspan="3"><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="Media Files (*.png,*.gif,*.jpg,*.jpeg,,*.webp,*.mp4,*.wmv,*.flv,*.avi)|*.png;*.gif;*.jpg;*.jpeg;*.webp;*.mp4;*.wmv;*.flv;*.avi;*.webm|All Files (*.*)|*.*">...</button>
+                <select id="config_background_repeat">
+                    <option value="repeat">{{BackgroundRepeat}}</option>
+                    <option value="cover">{{BackgroundCover}}</option>
+                    <option value="no-repeat">{{BackgroundNoRepeat}}</option>
+                </select>
+                <select id="config_background_fuzzy">
+                    <option value="0">{{NotFuzzy}}</option>
+                    <option value="1">{{Fuzzy}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><div class="tip" title="{{TipBackgroundMask}}">?</div>{{DefaultBackgroundMask}}：</td>
+              <td colspan="3"><input type="text" id="config_background_mask" value=""> <button class="openfile" for="config_background_mask" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp,*.webp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp;*.webp|All Files (*.*)|*.*">...</button>
+              </td>
+            </tr>
+            <tr>
+              <td><div class="tip" title="{{TipWallpaper}}">?</div>{{DefaultWallpaper}}：</td>
+              <td colspan="3"><input type="text"  id="config_wallpaper" value=""> <button class="openfile" for="config_wallpaper" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp,*.webp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp;*.webp|All Files (*.*)|*.*">...</button>
+              </td>
+            </tr>
+          </table>
+          <div class="form_bottom">
+                <button class="cancel">{{Cancel}}</button>
+                <button class="ok" id="interface_submit">{{UpdateConfig}}</button>
+          </div>
+      </section>
       <section id="third">
+      
+      <div class="rombaseEnum_wrapper">
+        <div><p>{{BaseType}}</p><textarea id="rombase_type"></textarea></div>
+        <div><p>{{BaseProducer}}</p><textarea id="rombase_producer"></textarea></div>
+        <div><p>{{BasePublisher}}</p><textarea id="rombase_publisher"></textarea></div>
+        <div><p>{{BaseCountry}}</p><textarea id="rombase_country"></textarea></div>
+        <div><p>{{BaseVersion}}</p><textarea id="rombase_version"></textarea></div>
+      </div>
+      <div class="form_bottom">
+              <button class="cancel">{{Cancel}}</button>
+              <button class="ok" id="rombase_submit">{{UpdateConfig}}</button>
+          </div>
+      
+      
+      </section>
+      <section id="fourth">
+        <!-- 快捷工具 -->
         <div class="wrapper">
           <ul id="shortcut_list"></ul>
-          <table><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
+          <table><tr><th colspan="4"></th></tr><tr><td style="text-align:center"><button id="shortcut_add">{{AddShortcut}}</button></td></tr></table>
         </div>
       </section>
 
@@ -124,33 +138,19 @@
     include ROOTPATH + "tis/utils.tis";
     include ROOTPATH + "tis/dialog/config.tis";
 
+    //初始化主题
+    initUiTheme();
+
     //平台列表点击
     event click $(#platform_list li) {
-    try{
-      GetPlatformLitem(this);
-      }catch(e){
-      alert(e);}
+      GetPlatformItem(this);
     }
-
+    
     //更新通用配置信息
     event click $(#config_submit) {
       configSubmit(this);
     }
 
-    //更新平台信息
-    event click $(#platform_submit) {
-      platformSubmit(this);
-    }
-
-    //添加模拟器
-    event click $(#add_sim) {
-      addSim(this);
-    };
-
-    //修改模拟器模拟器
-    event change $(#platform_sim) {
-      editSim(this);
-    }
 
     //选择文件夹
     event click $(.openfolder){
@@ -160,16 +160,6 @@
     //选择文件
     event click $(.openfile){
       openFile(this);
-    }
-
-    //添加平台
-    event click $(#platform_add){
-        platformAdd(this);
-    }
-
-    //删除平台
-    event click $(#platform_del){
-      platformDel(this);
     }
 
     //添加快捷工具
@@ -186,6 +176,47 @@
     event click $(.shortcut_delete){
         shortcutDelete(this);
     }
+
+    //背景图片
+    event blur $(#config_background) {
+        setBackgroundImage(this);
+    }
+
+    //背景显示方式
+    event change $(#config_background_repeat) {
+        setBackgroundRepeat(this);
+    }
+
+    //背景模糊度数
+    event change $(#config_background_fuzzy) {
+        setBackgroundFuzzy(this);
+    }
+
+    //背景遮罩图片
+    event change $(#config_background_mask) {
+        setBackgroundMask(this);
+    }
+
+    //更换鼠标指针
+    event blur $(#config_cursor) {
+        setCursor(this);
+    }
+
+    //提交界面变更
+    event click $(#interface_submit) {
+        interfaceSubmit(this);
+    }
+
+    event click $(.cancel){
+        view.close();
+    }
+
+    //添加快捷工具
+    event click $(#rombase_submit){
+        rombaseSubmit();
+    }
+    
+
 
 </script>
 </body>

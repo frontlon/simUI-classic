@@ -1,7 +1,11 @@
 package modules
 
 import (
+	"errors"
+	"io/ioutil"
+	"simUI/code/config"
 	"simUI/code/db"
+	"simUI/code/utils"
 )
 
 //读取菜单列表
@@ -13,7 +17,7 @@ func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 		return newMenu, err
 	}
 	//读取根目录下是否有rom
-	count, err := (&db.Rom{}).Count(platform, ConstMenuRootKey, "", "", "", "", "")
+	count, err := (&db.Rom{}).Count(0,platform, ConstMenuRootKey, "", "", "", "", "", "","","")
 	if err != nil {
 		return newMenu, err
 	}
@@ -32,7 +36,78 @@ func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 	return newMenu, nil
 }
 
-//更新菜单排序
-func UpdateMenuSort() {
+//读取所有平台的菜单列表
+func GetAllPlatformMenuList() (map[string][]map[string]string, error) {
 
+	platformList, _ := (&db.Platform{}).GetAll()
+	menuList, _ := (&db.Menu{}).GetAll()
+
+	create := map[string][]map[string]string{}
+	for _, platform := range platformList {
+
+		//平台菜单根目录
+		vo := map[string]string{
+			"platform": utils.ToString(platform.Id),
+			"name":     "/",
+		}
+		create[platform.Name] = append(create[platform.Name], vo)
+
+		for _, menu := range menuList {
+			if platform.Id == menu.Platform {
+				vo := map[string]string{
+					"platform": utils.ToString(menu.Platform),
+					"name":     menu.Name,
+				}
+				create[platform.Name] = append(create[platform.Name], vo)
+			}
+		}
+	}
+
+	return create, nil
+
+}
+
+func AddMenu(platform uint32,name string) error {
+	folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+
+	if utils.FolderExists(folder){
+		return errors.New(config.Cfg.Lang["MenuExists"])
+	}
+	if err := utils.CreateDir(folder);err != nil{
+		return err
+	}
+	return nil
+}
+
+func MenuRename(platform uint32,oldName string,newName string) error {
+	oldMenu := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + oldName
+	newMenu := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + newName
+
+	if !utils.FolderExists(oldMenu){
+		return errors.New(config.Cfg.Lang["MenuIsNotExists"])
+	}
+	if err := utils.FolderMove(oldMenu,newMenu);err != nil{
+		return err
+	}
+	return nil
+
+}
+
+func DeleteMenu(platform uint32,name string) error {
+	folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+
+	if !utils.FolderExists(folder){
+		return errors.New(config.Cfg.Lang["MenuIsNotExists"])
+	}
+
+	dir, _ := ioutil.ReadDir(folder)
+	if len(dir) > 0{
+		return errors.New(config.Cfg.Lang["MenuIsNotEmpty"])
+	}
+
+
+	if err := utils.DeleteDir(folder);err != nil{
+		return err
+	}
+	return nil
 }

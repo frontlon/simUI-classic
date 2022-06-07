@@ -1,0 +1,88 @@
+class FileDropZone : Element 
+{
+    this var filter;  
+    this var files = []; // filtered files
+
+    function checkFiles(list) {
+    if(typeof list != #array )
+        list = [list];
+    const patterns = this.filter;
+    function flt(fn) {
+        for(var x in patterns)
+        if( fn like x ) return true;
+        return false;
+    }
+    this.files = list.filter(flt);
+    return this.files.length > 0;
+    }
+
+    function attached() {
+    this.filter = (this.attributes["accept-drop"] || "*").split(";");
+    debug filter: this.filter;
+    }
+
+    event dragaccept (evt) {
+    if(evt.draggingDataType == #file && this.checkFiles(evt.dragging))
+        return true; // accept only files
+    return false;
+    }
+
+    event dragenter (evt) 
+    {
+    this.attributes.addClass("active-target");
+    return true;
+    }  
+
+    event dragleave (evt) 
+    {
+    this.attributes.removeClass("active-target");
+    return true;
+    }
+
+    event drag (evt) 
+    {
+    stdout.println(evt.x,evt.y);
+    return true;
+    }  
+
+    event drop (evt) 
+    {
+
+        var id = ACTIVE_ROM_ID;
+        var platform = ACTIVE_PLATFORM;
+
+        if(platform == 0){
+            var detailObj = JSON.parse(view.GetGameById(id));
+            platform = detailObj.Platform;
+        }
+   
+        this.attributes.removeClass("active-target");
+        var opt = this.attributes["opt"];
+
+        //先把视频结束掉
+        if(opt == "video"){
+            closeRightVideo();
+        }
+    
+        var uri = URL.toPath(this.files.toString());
+        var img = "";
+        var newName = mainView.EditRomThumbs(opt,id,uri);
+        if(opt == "video"){
+            img = "<div class='file-drop-zone-empty'>("+ CONF.Lang.VideoCanNotBePreviewed + ")<br>"+CONF.Lang.VideoUrl + "<br>" + uri + "</div>";
+        }else{
+            img = "<img src='"+ this.files +"'>";
+        }
+        this.html = img;
+
+        //更新列表缩略图
+        var type = CONF.Platform[platform.toString()].Thumb != "" ? CONF.Platform[platform.toString()].Thumb : CONF.Default.Thumb;
+
+        if(opt == type && $(#romlist).select("li[rid="+ id +"] img") != undefined){
+            var romName = getRomName(newName);
+            var thumb = getRomPicPath("",platform,romName);
+            $(#romlist).select("li[rid="+ id +"] img").attributes["src"] = thumb;        
+        }
+
+        return true;
+    }       
+}

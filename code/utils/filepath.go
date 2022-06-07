@@ -11,7 +11,10 @@ import (
  从路径中读取文件名，不包含扩展名
 */
 func GetFileName(p string) string {
-	base := filepath.Base(p);
+	if p == "" {
+		return ""
+	}
+	base := filepath.Base(p)
 	str := strings.TrimSuffix(base, path.Ext(base))
 	return str
 }
@@ -20,21 +23,30 @@ func GetFileName(p string) string {
  从路径中读取文件名扩展名
 */
 func GetFileExt(p string) string {
+	if p == "" {
+		return ""
+	}
 	return path.Ext(p)
 }
 
 /*
- 重命名
+ 获取文件的路径部分
 */
-func Rename(oldpath string, filename string) error {
-	newpath := filepath.Dir(oldpath) + "/" + filename + path.Ext(oldpath)
-	return os.Rename(oldpath, newpath)
+func GetFilePath(p string) string {
+	if p == "" {
+		return ""
+	}
+	paths, _ := filepath.Split(p)
+	return paths
 }
 
 /*
- 从完整路径中获取文件路径，不包含结尾  /
+ 获取文件的绝对路径
 */
-func GetFilePath(p string) string {
+func GetFileAbsPath(p string) string {
+	if p == "" {
+		return ""
+	}
 	dir := filepath.Dir(p)
 	return strings.Replace(dir, "./", "", 1)
 }
@@ -43,14 +55,45 @@ func GetFilePath(p string) string {
  从路径中读取文件名+扩展名
 */
 func GetFileNameAndExt(p string) string {
-	return filepath.Base(p);
+	if p == "" {
+		return ""
+	}
+	return filepath.Base(p)
+}
+
+/*
+ 路径转换为绝对路径
+*/
+func AbsPath(p string) string {
+	if p == "" {
+		return ""
+	}
+	if !filepath.IsAbs(p) {
+		p, _ = filepath.Abs(p)
+	}
+	return p
 }
 
 /*
  检查路径是否为绝对路径
 */
 func IsAbsPath(p string) bool {
+	if p == "" {
+		return false
+	}
 	return filepath.IsAbs(p)
+}
+
+// 判断所给路径是否为文件夹
+func IsDir(path string) bool {
+	if path == "" {
+		return false
+	}
+	s, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return s.IsDir()
 }
 
 /**
@@ -101,15 +144,95 @@ func IsExist(f string) bool {
 }
 
 /**
- * 创建多层文件夹
+ * 根据关键字扫描目录和子目录，查询出符合条件的文件名
+ * 如果keyword不为空，则查询keyword关键字相关的程序
  **/
-func CreateDir(p string) error {
-	err := os.MkdirAll(p, os.ModePerm)
-	if err != nil {
-		return err
+func ScanDirByKeyword(dir string, keyword string) ([]string, error) {
+
+	files := []string{}
+	if keyword != "" {
+		keyword = strings.ToUpper(keyword) //忽略后缀匹配的大小写
 	}
-	if err := os.Chmod(p, os.ModePerm); err != nil {
-		return err
+	err := filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error { //遍历目录
+		if err != nil {                                                                //忽略错误
+			return err
+		}
+
+		if fi.IsDir() { // 忽略目录
+			return nil
+		}
+
+		if keyword == "" {
+			files = append(files, filename)
+			return nil
+		}
+
+		if strings.Contains(strings.ToUpper(fi.Name()), keyword) { //如果包含关键字
+			files = append(files, filename)
+		}
+
+		return nil
+	})
+
+	return files, err
+}
+
+/**
+ *  根据两个路径，读取出from对应to的相对路径
+ **/
+func GetRelPathByTowPath(from string, to string) string {
+
+	separator := string(os.PathSeparator)
+	root, _ := os.Getwd()
+	root += separator
+
+	root = strings.ReplaceAll(root, `/`, separator)
+	root = strings.ReplaceAll(root, `\`, separator)
+	from = strings.ReplaceAll(from, `/`, separator)
+	from = strings.ReplaceAll(from, `\`, separator)
+	to = strings.ReplaceAll(to, `/`, separator)
+	to = strings.ReplaceAll(to, `\`, separator)
+
+	newrel := ""
+
+	if strings.Contains(to, root) == true {
+
+		from = strings.Replace(GetFilePath(from), root, "", -1)
+		to = strings.Replace(GetFilePath(to), root, "", -1)
+
+		fromArr := strings.Split(from, separator)
+		toArr := strings.Split(to, separator)
+
+		repeatArr := []string{}
+
+		//获取重复路径
+		for k, _ := range fromArr {
+			if fromArr[k] == toArr[k] && fromArr[k] != "" {
+				repeatArr = append(repeatArr, fromArr[k])
+			} else {
+				break
+			}
+		}
+
+		if len(repeatArr) > 0 {
+			repeat := strings.Join(repeatArr, separator) + separator
+			from = strings.Replace(from, repeat, "", -1)
+			to = strings.Replace(to, repeat, "", -1)
+		}
+		from2 := strings.Split(from, separator)
+		for _, v := range from2 {
+			if v == "" {
+				continue
+			}
+			newrel += ".." + separator
+		}
+
+		newrel += to
+
+	} else {
+		//不在simui目录内，直接读取全路径
+		newrel = GetFilePath(to)
 	}
-	return nil
+
+	return newrel
 }

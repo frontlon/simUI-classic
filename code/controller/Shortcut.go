@@ -1,12 +1,13 @@
 package controller
 
 import (
+	"encoding/json"
+	"os"
+	"simUI/code/compoments"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
-	"os"
 )
 
 /**
@@ -114,7 +115,7 @@ func ShortcutController() {
 			return utils.ErrorMsg( config.Cfg.Lang["ShortcutNotExists"])
 		}
 
-		err = utils.RunGame("explorer", []string{shortcut})
+		err = compoments.RunGame("", []string{shortcut})
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())

@@ -1,0 +1,189 @@
+﻿<html>
+  <head>
+    <title></title>
+    <div id="themefile"></div>    
+    <style>
+      @import 'this://app/images/public.css';
+      @import 'this://app/images/form.css';
+
+    body,html{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;padding-top:10dip}
+    .frame_left{width:150dip;height:*;display:inline-block}
+    .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip}
+    .frame_right input[type=text]{width:*}
+    .platform_control{margin:0;width:*;padding-left:10dip}
+    .platform_control button{margin:0 0 5dip 0;width:*}
+    #platform_add{background:color(button-ok-background-color);color:color(button-ok-text-color);border:0}
+    .platform_list{border-radius:5dip;width:*;height:*;display:block;border:1dip solid color(config-platform-border-color);padding:0;margin:0 0 0 10dip}
+    .platform_list li{height:30dip;line-height:30dip;display:block;padding-left:5dip;color:color(config-platform-text-color)}
+    .platform_list li:current{background:color(config-platform-current-background-color);color:color(config-platform-current-text-color)}
+    .platform_list li:drag-source{background-color:color(config-platform-background-color)}
+    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0}
+    .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px}
+    .table_platform button{margin-right:0}
+    #platform_exts{width:662dip}
+    #platform_ico{max-width:220dip}
+    progress{width:*;margin-top:5dip}
+    .table_output{margin-right:10dip}
+    .table_output input[type=text]{width:*}
+    .table_output textarea{width:*}
+    .table_output button{margin-right:0}
+    .table_output tr td:first-child{width:50dip}
+
+    fieldset{border:1px solid color(input-border-color);display:block;background:none;border-radius:4dip;}
+    fieldset legend{color:color(input-text-color);background:color(input-border-color);border:0;border-radius:4dip}
+    .outer{padding:10dip 10dip 0 10dip}
+
+    .fieldset_outer{margin:0 15dip 15dip 15dip;width:*}
+
+
+
+    </style>
+  </head>
+  <body>
+    <tabs class="tabs" id="mytabs">
+      <strip>
+        <label ww="1200dip" wh="700dip" for="first" selected>配置备份</label>
+        <label ww="1200dip" wh="700dip" for="second" selected>平台分享</label>
+      </strip>
+      <panels>
+        <!-- rom配置 -->
+        <section id="first">
+            <div class="fieldset_outer">
+              <fieldset>
+                <legend>导出rom配置</legend>
+                  <div class="outer">
+                    <div class="pdb10">
+                        <table class="table_output">
+                          <tr>
+                            <td>选择文件：</td>
+                            <td>
+                              <input type="text" id="out_file" value="">
+                              <button class="openfolder" for="out_file" caption="{{SelectFolder}}">...</button></td>
+                          </tr>
+                          <tr>
+                          <td>导出选项：</td>
+                          <td>
+                            <label><input type="checkbox" value='1' />子游戏绑定关系</label>
+                            <label><input type="checkbox" value='1' />我的喜爱</label>
+                            <label><input type="checkbox" value='1' />隐藏的游戏</label>
+                            <label><input type="checkbox" value='1' />玩的次数</label>
+                          </td>
+                          </tr>
+                        </table>
+                    </div>
+                    <div class="tr">
+                      <button class="ok" id="out_submit">开始导出</button>
+                    </div>
+                  <div>
+              </fieldset>
+            </div>
+
+            <div class="fieldset_outer">
+              <fieldset>
+                <legend>导入rom配置</legend>
+                <div class="outer">
+                    <div class="pdb10">
+                        <table class="table_output">
+                          <tr>
+                            <td>选择文件：</td>
+                            <td>
+                              <input type="text" id="out_file" value="">
+                              <button class="openfolder" for="out_file" caption="{{SelectFolder}}">...</button></td>
+                          </tr>
+                          <tr>
+                          <td>导入选项：</td>
+                          <td>
+                            <label><input type="checkbox" value='1' />子游戏绑定关系</label>
+                            <label><input type="checkbox" value='1' />我的喜爱</label>
+                            <label><input type="checkbox" value='1' />隐藏的游戏</label>
+                            <label><input type="checkbox" value='1' />玩的次数</label>
+                          </td>
+                          </tr>
+                        </table>
+                    </div>
+                    <div class="tr">
+                      <button class="ok" id="out_submit">开始导入</button>
+                    </div>
+                <div>
+              </fieldset>
+            </div>
+
+
+        </section>
+
+        <section id="second">
+second
+        </section>
+
+
+      </panels>
+    </tabs>
+
+    <script type="text/tiscript">
+      include ROOTPATH + "tis/plugins/tabs.tis";
+      include ROOTPATH + "tis/utils.tis";
+      include ROOTPATH + "tis/dialog/output.tis";
+    </script>
+  </body>
+</html>
+
+
+<!--
+ <section id="third">
+                    <table class="table_output">
+  
+                      <tr>
+                        <td>导出位置：</td>
+                        <td>
+                          <input type="text" id="out_file" value="">
+                          <button class="openfolder" for="out_file" caption="{{SelectFolder}}">...</button></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="tip" title="由于程序无法识别rom目录是否在模拟器目录下，这里需要手动选择，如果选择错误，会导致rom压缩出错">?</div>ROM目录：</td>
+                        <td>
+                          <select id="out_pack_rom">
+                            <option value='1'>我的rom【不在】模拟器目录下</option>
+                            <option value='0'>我的rom【在】模拟器目录下</option></select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="tip" title="压缩会减小导出的数据大小，但是会降低导出速度">?</div>是否压缩：</td>
+                        <td>
+                          <select id="out_compress">
+                            <option value="1">是</option>
+                            <option value="0">否</option></select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>操作日志：</td>
+                        <td>
+                          <textarea row="10" readonly></textarea>
+                          <progress id="out-loading" max="100" value="40" /></td>
+                      </tr>
+                    </table>
+                    <div class="form_bottom">
+                      <button class="ok" id="out_submit">开始导出</button></div>
+                  </section>
+                  <section id="third">
+                    <table class="table_output">
+                      <tr>
+                        <td>导入文件：</td>
+                        <td>
+                          <input type="text" id="in_file" value="">
+                          <button class="openfolder" for="in_file" caption="{{SelectFolder}}" disabled>...</button></td>
+                      </tr>
+                      <tr>
+                        <td>操作日志：</td>
+                        <td>
+                          <textarea row="10" readonly></textarea>
+                          <progress id="in-loading" max="100" value="40" /></td>
+                      </tr>
+                    </table>
+                    <div class="form_bottom">
+                      <button class="ok" id="in_submit">开始导入</button></div>
+                  </section>
+-->
+

@@ -1,7 +1,8 @@
-packfolder.exe ../code/view ../code/res.go -v "res" -go
+set GO111MODULE=on
+
+z:
+cd Z:\work\go\src\SimUI\build
 windres -o ../code/res.syso main.rc
-cd ../code
+cd Z:\work\go\src\SimUI\code
 go build -ldflags="-H windowsgui -w -s" -o ../app/simUI-32.exe
-cd ../app/
-simUI-32.exe
 pause

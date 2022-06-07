@@ -1,0 +1,429 @@
+﻿//开启关闭平台栏
+function togglePlatform(){
+    var dom = $(#left_platform);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_platform",val);
+}
+//开启关闭菜单栏
+function toggleMenu(){
+    var dom = $(#left_menu);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+
+    //更新数据库配置
+    view.UpdateConfig("panel_menu",val);
+}
+//开启关闭侧边栏
+function toggleSidebar(){
+    var dom = $(#right);
+    var val = 0;
+    if (dom.style["display"] == "block"){
+        dom.style["display"] = "none";
+        val = 0;
+    }else{
+        dom.style["display"] = "block";
+        val = 1;
+    }
+    //更新数据库配置
+    view.UpdateConfig("panel_sidebar",val);
+}
+
+ //切换rom列表样式
+function switchRomListStyle(obj){
+    if(obj.attributes["value"] == "1"){
+        obj.attributes["value"] = "2";
+        obj.html = "<i.list.minsize></i>";
+        self.$(#romlist).attributes.removeClass("romblock");
+        self.$(#romlist).attributes.addClass("romlist");
+    }else{
+        obj.attributes["value"] = "1";
+        obj.html = "<i.block.minsize></i>";
+        self.$(#romlist).attributes.removeClass("romlist");
+        self.$(#romlist).attributes.addClass("romblock");
+    }
+
+
+    //清空背景图
+    CONF.Default.RomlistStyle = obj.attributes["value"];
+    showListBackground();
+
+    var req = {
+        "platform" : ACTIVE_PLATFORM.toInteger(),
+        "catname" : ACTIVE_MENU,
+    };
+    var request = JSON.stringify(req);
+
+    ROMJSON = view.GetGameList(request);
+    createRomList(1);
+    //更新配置文件
+    view.UpdateConfig("romlist_style",obj.attributes["value"]);
+}
+
+//运行快捷工具
+function runShortcut(obj){
+    var path = obj.attributes["path"];
+    view.RunShortcut(path);
+}
+
+//切换主题
+function changeTheme(obj){
+    var id = obj.attributes["id"]; //主题列表
+    self.attributes["theme"] = id;
+    
+    //更新主题样式
+    setTheme(id);
+    
+    //更新配置文件
+    view.UpdateConfig("theme",id)
+}
+
+//设置主题样式
+function setTheme(themeId){
+
+    if(CONF.Theme[themeId].Params["body-opacity"] != undefined){
+        $(#titlebar).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_platform).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#left_menu).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        //$(#left_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#center).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+        $(#right_splitter).style["opacity"] = CONF.Theme[themeId].Params["body-opacity"];
+    }
+
+    var themePath = CONF.RootPath + "theme/";
+
+    if(CONF.Theme[themeId].Params["window-opacity"] != undefined){
+        $(body).style["opacity"] = CONF.Theme[themeId].Params["window-opacity"];
+    }
+
+    if(CONF.Theme[themeId].Params["window-background-image"] != undefined){
+        $(body).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[themeId].Params["window-background-image"])];
+    }
+
+    if(CONF.Theme[themeId].Params["sidebar-image"] != undefined){
+        $(#mask).style["background-image"] = [url:URL.fromPath(themePath + CONF.Theme[themeId].Params["sidebar-image"])];
+    }    
+}
+
+//检查更新
+function checkUpgrade(evt){
+    var data = view.CheckUpgrade();
+
+    if(data != ""){
+        upgrade(data)
+    }else{
+        view.msgbox(#info,CONF.Lang.Latestversion);
+    }
+}
+
+//弹出关于窗口
+function openAbout(){
+    view.dialog({
+        url:self.url(ROOTPATH + "about.html"),
+        width:600,
+        height:self.toPixels(420dip),
+    })
+}
+
+//弹出平台配置窗口
+function openPlatformConfig(){
+    view.dialog({
+        url:self.url(ROOTPATH + "platform_config.html"),
+        width:self.toPixels(1100dip),
+        height:self.toPixels(670dip)
+    });
+    startLoading();
+    initConfig("1");
+    endLoading();
+}
+
+//弹出设置窗口
+function openConfig(evt){
+    view.dialog({
+        url:self.url(ROOTPATH + "config.html"),
+        width:655,
+        height:630
+    });
+    startLoading();
+    initConfig("1");
+    endLoading();
+}
+
+//弹出导入/导出窗口
+function openOutput(){
+    view.dialog({
+        url:self.url(ROOTPATH + "output.html"),
+        width:self.toPixels(1200dip),
+        height:self.toPixels(670dip)
+    });
+}
+
+//弹出rom管理窗口
+function openRomManager(evt){
+    view.dialog({
+        width:self.toPixels(1200dip),
+        height:self.toPixels(700dip),
+        url:self.url(ROOTPATH + "rom_manager.html")
+    });
+    createCache("all");
+}
+
+
+
+//启动帮助
+function runHelp(){
+    Sciter.launch("http://www.simui.net/");
+}
+
+//发现更新
+function upgrade(data){
+    if (data == ""){
+        return;
+    }else if (data == "error"){
+        view.msgbox(#warning,CONF.Lang.NetworkRequestFailed);
+        return;
+    }
+ 
+    var dataObj = JSON.parse(data);
+
+    //选择窗口
+    var result = view.msgbox {
+        type:#information, 
+        caption:CONF.Lang.CheckUpgrade,
+        content:CONF.Lang.FoundNewversion + ": " + dataObj.version, 
+        buttons:[
+            {id:#download,text:CONF.Lang.DownloadNewVersion},
+            {id:#never,text:CONF.Lang.NotTip},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    switch(result){
+        case "download":
+            Sciter.launch("http://www.simui.net/");
+            break;
+        case "never":
+            //更新平台信息
+            view.UpdateConfig("upgrade_id",dataObj.id.toString());
+            break;
+    }
+}
+
+
+
+
+//清理掉资料过滤条件
+function filterClear(){
+    resetFilterOptions();
+    $(#search_input).value = "";
+    search();
+}
+
+//清理资料文件
+function clearRombase(){
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:CONF.Lang.TipClearZombieComfirm, 
+        caption:CONF.Lang.Confirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.OK},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if(result != "yes"){
+        return;
+    }
+
+    $(body).state.disabled = true;
+    $(#create).attributes.addClass("disabled");
+    startLoading();
+    view.ClearRombase();
+}
+
+//清理资料文件回调
+function CB_clearRombase(count){
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+    alert("清理完成，共清理掉" + count + "条记录");
+}
+
+//清空缓存
+function clearDB(obj){
+
+    var TipContent = CONF.Lang.TipClearDBPlatformComfirm;
+    var platform = ACTIVE_PLATFORM;
+    if(obj.attributes["opt"] == "all"){
+        TipContent = CONF.Lang.TipClearDBAllComfirm;
+        platform = 0;
+    }
+
+    var result = view.msgbox {
+        type:#warning, 
+        content:TipContent, 
+        caption:CONF.Lang.Confirm,
+        buttons:[
+            {id:#yes,text:CONF.Lang.OK},
+            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
+        ]
+    };
+
+    if(result != "yes"){
+        return;
+    }
+
+    $(body).state.disabled = true;
+    $(#create).attributes.addClass("disabled");
+    startLoading();
+    view.TruncateRomCache(platform);
+    
+}
+
+//清空缓存回调
+function CB_clearDB(){
+    $(#romlist).clear();
+    $(#menulist).clear();
+    $(#create).attributes.removeClass("disabled");
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+    alert("清理完成");
+}
+
+
+//回到顶部
+function gotoTop(){
+    $(#center_content).scrollTo(0,0, false);
+
+}
+
+//重建优化图片缓存
+function createOptimizedCache(obj){
+
+    if(ACTIVE_PLATFORM == 0 ){
+        alert(CONF.Lang.NotSelectPlatform);
+        return;
+    }
+
+    if(CONF.Platform[ACTIVE_PLATFORM.toString()].OptimizedPath == ""){
+        alert(CONF.Lang.OptimizedCacheNotSet);
+        return;
+    }
+
+    $(body).state.disabled = true;
+    startLoading();
+
+    //开始重建缓存
+    view.CreateOptimizedImage(ACTIVE_PLATFORM,obj.attributes["opt"]);
+    
+}
+
+//重建优化图片缓存 - 回调
+function CB_createOptimizedCache(){
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+}
+
+
+//打开rom存储目录
+function openRomFolder(){
+    if(ACTIVE_PLATFORM == 0){
+        alert(CONF.Lang.RomMenuCanNotBeExists);
+        return;
+    }
+    view.OpenRomPathFolder(ACTIVE_PLATFORM);
+}
+
+//添加pc游戏
+function addPcGame(){
+
+    if(ACTIVE_PLATFORM == 0){
+        alert(CONF.Lang.RomMenuCanNotBeExists);
+        return;
+    }
+
+    const defaultExt = "";
+    const initialPath = "";
+    var exts = "*.exe;*.bat;*.lnk";
+    const filter = "Files ("+ exts +")|"+ exts +"|All Files (*.*)|*.*";
+    const caption = CONF.Lang.SelectFile;
+    var selectFile = view.selectFile(#open-multiple, filter, defaultExt, initialPath, caption );
+
+
+    if(selectFile == undefined){
+        return;
+    }
+    
+    var urls = [];
+    if(typeof(selectFile) == "string"){
+        urls[0] = URL.toPath(selectFile);
+    }else{
+        for(var url in selectFile){
+            urls.push(URL.toPath(url));
+        }        
+    }
+
+
+    var datastr = JSON.stringify(urls);
+
+    view.AddPcGame(ACTIVE_PLATFORM,ACTIVE_MENU,datastr);
+
+    //更新缓存
+    createCache();
+}
+
+//导出rom配置
+function rom_config_output(){
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = "Backup File (*.ini)|*.ini";
+    const caption = '';
+    var url = view.selectFile(#save, filter, defaultExt, initialPath, caption );
+    if(url){
+        $(body).state.disabled = true;
+        startLoading();
+        url = URL.toPath(url);
+        view.BackupRomConfig(url);
+    }
+}
+
+//导入rom配置
+function rom_config_input(){
+    const defaultExt = "";
+    const initialPath = "";
+    const filter = "Backup File (*.ini)|*.ini";
+    const caption = '';
+    var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
+    if(url){
+        $(body).state.disabled = true;
+        startLoading();
+        url = URL.toPath(url);
+        view.RestoreRomConfig(url);
+    }
+}
+
+//导入rom配置 - 回调
+function CB_rom_config_input(){
+    view.CreateRomCache();
+}
+
+//导出rom配置 - 回调
+function CB_rom_config_output(){
+    $(body).state.disabled = false;
+    endLoading(); //关闭loading框
+}

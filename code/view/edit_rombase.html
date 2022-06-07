@@ -1,82 +1,141 @@
 ﻿<html>
 <head>
     <title></title>
+    <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:#000;height:100%;background:#fff;}
-        #wrapper{width:*;flow:horizontal-flow;overflow: hidden;padding:8dip;}
-        input[type="text"]{border:1dip solid #999;border-radius:2dip;display:inline-block;font-size:11dip;}
-        label{font-size:11dip;}
-        table{width:100%;}
-        th{text-align:left;border-bottom:1dip solid #ccc;padding:16dip 0 4dip 0;}
-        td:first-child{font-size:11dip;text-align:right;padding:8dip 0;}
-        tr:last-child td{text-align: center;padding-bottom:0}
-        .submit{margin:0 8dip}
+        @import "images/form.css";
+        html, body {width: *;height: *;overflow: hidden;margin: 0;padding: 0;background: color(center-background-color);color: color(general-text-color)}
+        input,select{width:150dip}
+        .wrapper {width: *;padding: 8 dip;flow:horizontal-flow;}
+        .inner {display:block;width:*}
     </style>
 </head>
 <body>
-    <div id="wrapper">
-        <table>
-            <tr><td>{{BaseName}}：</td><td><input type="text" id="name" value=""></td></tr>
-            <tr><td>{{BaseYear}}：</td><td><input type="number" id="year" value="" maxlength="4"></td></tr>
-            <tr><td>{{BaseType}}：</td><td>
-                <select id="type" editable>
-                    <option value="ACT{{TypeACT}}">ACT{{TypeACT}}</option>
-                    <option value="RPG{{TypeRPG}}">RPG{{TypeRPG}}</option>
-                    <option value="FTG{{TypeFTG}}">FTG{{TypeFTG}}</option>
-                    <option value="RAC{{TypeRAC}}">RAC{{TypeRAC}}</option>
-                    <option value="SLG{{TypeSLG}}">SLG{{TypeSLG}}</option>
-                    <option value="SPT{{TypeSPT}}">SPT{{TypeSPT}}</option>
-                    <option value="STG{{TypeSTG}}">STG{{TypeSTG}}</option>
-                    <option value="TAB{{TypeTAB}}">TAB{{TypeTAB}}</option>
-                    <option value="PUZ{{TypePUZ}}">PUZ{{TypePUZ}}</option>
-                    <option value="FPS{{TypeFPS}}">FPS{{TypeFPS}}</option>
-                    <option value="LGG{{TypeFREE}}">LGG{{TypeLGG}}</option>
-                    <option value="MSC{{TypeMSC}}">MSC{{TypeMSC}}</option>
-                </select>
-            </td></tr>
+<div class="wrapper">
 
-            <tr><td>{{BasePublisher}}：</td><td>
-            <select id="publisher" editable>
-                <option value="NINTENDO">NINTENDO</option>
-                <option value="FALCOM">FALCOM</option>
-                <option value="CAPCOM">CAPCOM</option>
-                <option value="SQUARE">SQUARE</option>
-                <option value="SNK">SNK</option>
-                <option value="SEGA">SEGA</option>
-                <option value="KONAMI">KONAMI</option>
-                <option value="TECHNŌS">TECHNŌS</option>
-                <option value="TAITO">TAITO</option>
-                <option value="BANDAI">BANDAI</option>
-                <option value="IGS">IGS</option>
-                <option value="DATA EAST">DATA EAST</option>
-                <option value="DISNEY">DISNEY</option>
-                <option value="KOEI">KOEI</option>
-            </select>
-            </td></tr>
-            <tr><td>{{BaseCountry}}：</td><td>
-            <select id="country" editable>
-                <option value="{{CountryJP}}">{{CountryJP}}</option>
-                <option value="{{CountryUS}}">{{CountryUS}}</option>
-                <option value="{{CountryUK}}">{{CountryUK}}</option>
-                <option value="{{CountryCN}}">{{CountryCN}}</option>
-                <option value="{{CountryFR}}">{{CountryFR}}</option>
-                <option value="{{CountryKR}}">{{CountryKR}}</option>
-            </select>
-            </td></tr>
-            <tr><th colspan="2"></th></tr>
-            <tr><td colspan="2"><button class="submit" id="submit">{{Confirm}}</button><button class="submit" id="close-dialog">{{Cancel}}</button></td></tr>
+    <div class="inner">
+        <table>
+            <tr>
+                <td>{{BaseType}}：</td>
+                <td><select id="type" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseYear}}：</td>
+                <td><input type="text" id="year" value="" maxlength="4"></td>
+            </tr>
+            <tr>
+                <td>{{BaseProducer}}：</td>
+                <td><select id="producer" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BasePublisher}}：</td>
+                <td><select id="publisher" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseCountry}}：</td>
+                <td><select id="country" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseVersion}}：</td>
+                <td><select id="version" editable></select></td>
+            </tr>
+            <tr>
+                <td>{{BaseTranslate}}：</td>
+                <td><input type="text" id="translate"></td>
+            </tr>
         </table>
     </div>
+
+    <div class="inner">
+        <table>
+            <tr>
+                <td>{{BaseName}}：</td>
+                <td><input type="text" id="name" value=""></td>
+            </tr>
+            <tr>
+                <td>{{BaseNameEN}}：</td>
+                <td><input type="text" id="name_en" value=""></td>
+            </tr>
+            <tr>
+                <td>{{BaseNameJP}}：</td>
+                <td><input type="text" id="name_jp" value=""></td>
+            </tr>
+            
+            <tr>
+                <td>{{BaseOther}}：</td>
+                <td><input type="text" id="other_a">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_b"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_c"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" id="other_d"></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<div class="form_bottom">
+    <button class="cancel" id="close-dialog">{{Cancel}}</button>
+    <button class="ok" id="submit">{{Confirm}}</button>
+</div>
 
 <script type="text/tiscript">
 include ROOTPATH + "tis/utils.tis";
 
 view.root.on("ready", function(){
-
+    //初始化主题
+    initUiTheme();
+    
     //渲染语言
     createLang();
     view.windowCaption = CONF.Lang.EditBaseInfo;
+    
+    //填充列表
+    var typeList = JSON.parse(mainView.GetRombaseEnumList("type"));
+    var typeDom = "";
+    for(var obj in typeList) {
+        typeDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#type).options.html = typeDom;
+
+    var publisherList = JSON.parse(mainView.GetRombaseEnumList("publisher"));
+    var publisherDom = "";
+    for(var obj in publisherList) {
+        publisherDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#publisher).options.html = publisherDom;
+
+    var producerList = JSON.parse(mainView.GetRombaseEnumList("producer"));
+    var producerDom = "";
+    for(var obj in producerList) {
+        producerDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#producer).options.html = producerDom;
+
+    var countryList = JSON.parse(mainView.GetRombaseEnumList("country"));
+    var countryDom = "";
+    for(var obj in countryList) {
+        countryDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#country).options.html = countryDom;
+
+    var versionList = JSON.parse(mainView.GetRombaseEnumList("version"));
+    var versionDom = "";
+    for(var obj in versionList) {
+        versionDom += "<option value='"+ obj +"'>"+obj+"</option>";
+    }
+    $(#version).options.html  = versionDom;
+
+    //填充值
     var getjson = mainView.GetRomBase(view.parameters.id);
     if(getjson != undefined){
         var info = JSON.parse(getjson);
@@ -84,9 +143,20 @@ view.root.on("ready", function(){
         if(info.Type != undefined && info.Type != ""){$(#type).value = info.Type;}
         if(info.Year != undefined && info.Year != ""){$(#year).value = info.Year;}
         if(info.Publisher != undefined && info.Publisher != ""){$(#publisher).value = info.Publisher;}
+        if(info.Producer != undefined && info.Producer != ""){$(#producer).value = info.Producer;}
         if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
-    }
+        if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
+        if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
 
+        if(info.NameEN != undefined && info.NameEN != ""){$(#name_en).value = info.NameEN;}
+        if(info.NameJP != undefined && info.NameJP != ""){$(#name_jp).value = info.NameJP;}
+        if(info.OtherA != undefined && info.OtherA != ""){$(#other_a).value = info.OtherA;}
+        if(info.OtherB != undefined && info.OtherB != ""){$(#other_b).value = info.OtherB;}
+        if(info.OtherC != undefined && info.OtherC != ""){$(#other_c).value = info.OtherC;}
+        if(info.OtherD != undefined && info.OtherD != ""){$(#other_d).value = info.OtherD;}
+
+    }
+    
 });
 
 event click $(#submit){
@@ -102,7 +172,17 @@ event click $(#submit){
         year:year,
         type:$(#type).value,
         publisher:$(#publisher).value,
+        producer:$(#producer).value,
         country:$(#country).value,
+        translate:$(#translate).value,
+        version:$(#version).value,
+        name_en:$(#name_en).value,
+        name_jp:$(#name_jp).value,
+        other_a:$(#other_a).value,
+        other_b:$(#other_b).value,
+        other_c:$(#other_c).value,
+        other_d:$(#other_d).value,
+
     }
     var result = mainView.SetRomBase(JSON.stringify(data));
     view.close(result);
@@ -111,6 +191,8 @@ event click $(#submit){
 event click $(#close-dialog){
     view.close();
 }
+
+
 
 </script>
 

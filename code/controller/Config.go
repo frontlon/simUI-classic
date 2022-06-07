@@ -14,7 +14,8 @@ import (
  **/
 
 func ConfigController() {
-	
+
+	//初始化数据
 	utils.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 
 		ctype := args[0].String()
@@ -56,9 +57,26 @@ func ConfigController() {
 		return sciter.NewValue(body)
 	})
 
-	//获取当前环境
-	utils.Window.DefineFunction("GetEnv", func(args ...*sciter.Value) *sciter.Value {
-		return sciter.NewValue(config.ENV)
+	//导出平台设置
+	utils.Window.DefineFunction("InputPlatform", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+		modules.InputPlatform(p)
+		return sciter.NewValue(1)
+	})
+
+	//导出平台设置
+	utils.Window.DefineFunction("OutputPlatform", func(args ...*sciter.Value) *sciter.Value {
+		platform := uint32(utils.ToInt(args[0].String()))
+		p := args[1].String()
+		compress := utils.ToInt(args[2].String())
+		packRom := utils.ToInt(args[3].String())
+
+
+
+		go func() {
+			modules.OutputPlatform(platform, p, compress,packRom)
+		}()
+		return sciter.NewValue(1)
 	})
 
 }

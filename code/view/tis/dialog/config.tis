@@ -2,8 +2,11 @@
 view.root.on("ready", function(){
 
     //初始化方法
+    try{
     Init();
-
+}catch(e){
+    alert(e);
+}
     //快捷软件拖动排序
     DragDrop{
         what      : "#shortcut_list li",
@@ -41,26 +44,42 @@ function Init(){
 
     $(#config_lang).value = CONF.Default.Lang;
     $(#config_soft_name).value = CONF.Default.SoftName;
-    $(#config_thumb).value = CONF.Default.Thumb;
     $(#config_enable_upgrade).value = CONF.Default.EnableUpgrade;
 
     //图片搜索引擎
     $(#config_search_engines).value = CONF.Default.SearchEngines;
 
-    //生成平台列表
-    var pfdata = "";
-    
-    var liststr = mainView.GetPlatform();
-    var lists = JSON.parse(liststr);
-    
-    var platform_list = $(#platform_list);
-    for(var pf in lists) {
-        pfdata += '<li value="'+ pf.Id +'">'+ pf.Name +'</li>';
-    }
-    platform_list.html = pfdata;
+    var cursor_url = CONF.Default.Cursor;
+    cursor_url = cursor_url.split("\/").join(SEPARATOR);
+    cursor_url = cursor_url.split(CONF.RootPath.toString()).join("");
+
+    var backgroundImage = CONF.Default.BackgroundImage;
+    backgroundImage = backgroundImage.split("\/").join(SEPARATOR);
+    backgroundImage = backgroundImage.split(CONF.RootPath.toString()).join("");
+
+    var backgroundMask = CONF.Default.BackgroundMask;
+    backgroundMask = backgroundMask.split("\/").join(SEPARATOR);
+    backgroundMask = backgroundMask.split(CONF.RootPath.toString()).join("");
+
+    var musicPlayer = CONF.Default.MusicPlayer;
+    musicPlayer = musicPlayer.split("\/").join(SEPARATOR);
+    musicPlayer = musicPlayer.split(CONF.RootPath.toString()).join("");
+
+    //生成界面选项
+    $(#config_background).value = backgroundImage;
+    $(#config_background_repeat).value = CONF.Default.BackgroundRepeat;
+    $(#config_background_fuzzy).value = CONF.Default.BackgroundFuzzy;
+    $(#config_background_mask).value = backgroundMask;
+    $(#config_cursor).html = cursor_url;
+    $(#config_music_player).html = musicPlayer;
+
+    //壁纸
+    var wallpaper_image = CONF.Default.WallpaperImage.split("\/").join(SEPARATOR);
+    wallpaper_image = wallpaper_image.split(CONF.RootPath.toString()).join("");
+    $(#config_wallpaper).value = wallpaper_image;
+
 
     //生成快捷工具列表
-    
     var shortcut = "";
     var shortcut_list = JSON.parse(mainView.GetShortcut());
 
@@ -68,82 +87,22 @@ function Init(){
         shortcut += "<li id='shortcut_li_"+ s.Id +"' value='"+ s.Id +"'>";
         shortcut += "<input type='text' id='shortcut_name_"+ s.Id + "' value='"+ s.Name +"' title='"+CONF.Lang.ShortcutNameDesc+"' />";
         shortcut += "<input type='text' id='shortcut_path_"+ s.Id + "' value='"+ s.Path +"' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<button class='openfile' for='shortcut_path_" + s.Id + "' caption='' filter='All Files (*.*)|*.*'>...</button>";
         shortcut += "<button class='shortcut_update' value='"+ s.Id +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ s.Id +"'>"+CONF.Lang.Delete+"</button>";
-        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i.sort></i></label>";
         shortcut += "</li>";
     }
     $(#shortcut_list).html = shortcut;
+
+    //游戏资料枚举
+    $(#rombase_type).value = mainView.GetRombaseEnumByType("type");
+    $(#rombase_producer).value = mainView.GetRombaseEnumByType("producer");
+    $(#rombase_publisher).value = mainView.GetRombaseEnumByType("publisher");
+    $(#rombase_country).value = mainView.GetRombaseEnumByType("country");
+    $(#rombase_version).value = mainView.GetRombaseEnumByType("version");
 }
 
-//平台列表点击
-function GetPlatformLitem(evt){
-
-    pfId = evt.attributes["value"].toString();
-
-    //激活按钮改变样式
-    evt.state.current = true;
-
-    //读取平台信息
-    var info = JSON.parse(mainView.GetPlatformById(pfId));
-    $(#platform_name).value = info.Name;
-    $(#platform_icon).value = info.Icon;
-    $(#platform_exts).value = info.RomExts;
-    $(#platform_doc).value = info.DocPath;
-    $(#platform_strategy).value = info.StrategyPath;
-    $(#platform_rom).value = info.RomPath;
-    $(#platform_thumb).value = info.ThumbPath;
-    $(#platform_snap).value = info.SnapPath;
-    $(#platform_poster).value = info.PosterPath;
-    $(#platform_packing).value = info.PackingPath;
-    $(#platform_title).value = info.TitlePath;
-    $(#platform_background).value = info.BackgroundPath;
-    $(#platform_video).value = info.VideoPath;
-    $(#platform_rombase).value = info.Rombase;
-    //模拟器数据
-    var platform_sim = $(#platform_sim);
-    platform_sim.options.clear();
-   
-    //读取模拟器列表
-    var sims = JSON.parse(mainView.GetSimulatorByPlatform(pfId));
-
-    platform_sim.options.$append(<option value=0>{CONF.Lang.EditSimulator}</option>);
-    for(var sim in sims) {
-        platform_sim.options.$append(<option value={sim.Id}>{sim.Name}</option>);
-    }
-    platform_sim.value = 0;
- 
-    //激活提交按钮
-    $(#platform_submit).state.disabled = false;
-    $(#add_sim).state.disabled = false;
-    $(#platform_sim).state.disabled = false;
-    $(#platform_name).state.disabled = false;
-    $(#platform_icon).state.disabled = false;
-    $(#platform_exts).state.disabled = false;
-    $(#platform_doc).state.disabled = false;
-    $(#platform_strategy).state.disabled = false;
-    $(#platform_rom).state.disabled = false;
-    $(#platform_thumb).state.disabled = false;
-    $(#platform_snap).state.disabled = false;
-    $(#platform_poster).state.disabled = false;
-    $(#platform_packing).state.disabled = false;
-    $(#platform_title).state.disabled = false;
-    $(#platform_background).state.disabled = false;
-    $(#platform_video).state.disabled = false;
-    $(#platform_rombase).state.disabled = false;
-
-    var openfile = $$(.openfile);
-    for(var of in openfile) {
-        of.state.disabled = false;
-    }
-
-    var openfolders = $$(.openfolder);
-    for(var of in openfolders) {
-        of.state.disabled = false;
-    }
-
-}
 
 //更新通用配置信息
 function configSubmit(evt){
@@ -152,8 +111,8 @@ function configSubmit(evt){
         lang : $(#config_lang).value.toString(),
         soft_name : $(#config_soft_name).value.toString(),
         search_engines : $(#config_search_engines).value.toString(),
-        thumb : $(#config_thumb).value.toString(),
         enable_upgrade :$(#config_enable_upgrade).value,
+        music_player :$(#config_music_player).value,
     };
 
     //更新平台信息
@@ -164,101 +123,13 @@ function configSubmit(evt){
     view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }
 
-//更新平台信息
-function platformSubmit(evt){
-    var data = {
-        id         : $(#platform_list).select("li:current").attributes["value"].toString();
-        name       : $(#platform_name).value,
-        icon       : $(#platform_icon).value,
-        exts       : $(#platform_exts).value,
-        rom        : $(#platform_rom).value,
-        thumb      : $(#platform_thumb).value,
-        snap       : $(#platform_snap).value,
-        poster     : $(#platform_poster).value,
-        packing    : $(#platform_packing).value,
-        title      : $(#platform_title).value,
-        background : $(#platform_background).value,
-        video      : $(#platform_video).value,
-        strategy   : $(#platform_strategy).value,
-        doc        : $(#platform_doc).value,
-        rombase    : $(#platform_rombase).value,
-    };
-    if(data.id == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
-    if(data.name == ""){view.msgbox(#alert,CONF.Lang.PlatformNameCanNotBeEmpty);return true;}
-    if(data.exts == ""){view.msgbox(#alert,CONF.Lang.RomTypeCanNotBeEmpty);return true;}
-    if(data.rom == ""){view.msgbox(#alert,CONF.Lang.RomMenuCanNotBeEmpty);return true;}
-    //检查并补全扩展名
-    data.exts = completeExt(data.exts);
-    //更新补全的扩展名到文本框中
-    $(#platform_exts).value = data.exts;
-    //更新名称到列表中
-    $(#platform_list).select("li:current").html = data.name;
-    //更新平台信息
-    var result = mainView.UpdatePlatform(JSON.stringify(data));
-    if( result.toString() == "1"){
-        view.msgbox(#alert,CONF.Lang.UpdateSuccess);
-    }
-
-}
-
-
-//添加模拟器
-function addSim(evt) {
-
-    var res = view.dialog({
-        url:self.url(ROOTPATH + "edit_sim.html"),
-        width:490,
-        height:300,
-        parameters: {
-            id:0,
-            platform:pfId,
-        }
-    })
-
-    //更新option选项
-    if(res != ""){
-        var sim = JSON.parse(res);
-        $(#platform_sim).options.$append(<option value={sim.Id}>{sim.Name}</option>);
-    }
-
-};
-
-//修改模拟器模拟器
-function editSim(evt) {
-   if(evt.value == 0){return true;}
-   var res = view.dialog({
-        url:self.url(ROOTPATH + "edit_sim.html"),
-        width:490,
-        height:300,
-        parameters: {
-            id:evt.value,
-            platform:pfId,
-        };
-    });
-
-    //将选择还原回【选择模拟器】项目，防止项目被选定
-    evt.value = 0;
-
-    //更新option选项
-    if(res != ""){
-        var sim = JSON.parse(res);
-        if(sim.Opt == undefined){
-            //修改
-            $(#platform_sim).select("option[value="+sim.Id+"]").html = sim.Name;
-        }else{
-            //删除
-            $(#platform_sim).select("option[value="+sim.Id+"]").remove();
-        }
-    }
-}
-
 //选择文件夹
 function openFolder(evt) {
     var url = view.selectFolder(evt.attributes["caption"]);
     var out = self.select("#"+evt.attributes["for"]);
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
     }
@@ -270,83 +141,31 @@ function openFile(evt) {
     const initialPath = "";
     const filter = evt.attributes["filter"];
     const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
+    var url = view.selectFile(#open, filter, defaultExt, initialPath, caption );
     var out = self.select("#"+evt.attributes["for"]);  
     if(url){
         url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
+        url = url.split("\/").join(SEPARATOR);
         url = url.split(CONF.RootPath.toString()).join("");
         out.value = url;
+        out.focus = true;
+        out.focus = false;
     }
 }
 
-//添加平台
-function platformAdd(evt) {
-    var name =  view.dialog({
-        url:self.url(ROOTPATH + "add_platform.html"),
-        width:310,
-        height:172,
-        parameters: {};
-    });
-
-    if(name == "" || name == undefined){
-        return;
-    }
-
-    //开始添加平台
-    var insertId = mainView.AddPlatform(name);
-
-    if(insertId != "0"){
-        var newopt = "<li value='"+ insertId +"'>"+ name +"</li>";
-        $(#platform_list).append(newopt);
-        view.msgbox(#alert,CONF.Lang.AddSuccess);
-    }
-}
-
-//删除平台
-function platformDel(evt) {
-    var pfId = $(#platform_list li:current).attributes["value"];
-    if (pfId == undefined){
-        view.msgbox(#alert,CONF.Lang.NotSelectPlatform);
-        return true;
-    }
-
-    //确认窗口
-    var result = view.msgbox {
-        type:#question, 
-        content:CONF.Lang.DeletePlatformConfirm, 
-        caption:CONF.Lang.DeletePlatform,
-        buttons:[
-            {id:#yes,text:CONF.Lang.Delete},
-            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
-        ]
-    };
-
-    if (result != "yes"){
-        return true;
-    }
-
-    //删除平台
-    result = mainView.DelPlatform(pfId);
-    if(result == "1"){
-        $(#platform_list li:current).remove();
-        view.msgbox(#alert,CONF.Lang.DeleteSuccess);
-    }
-}
 
 //添加快捷工具
 function shortcutAdd(evt) {
     var insertId = mainView.AddShortcut();
-
     if(insertId != "0"){
         var shortcut = "";
         shortcut += "<li id='shortcut_li_"+ insertId +"' value='"+ insertId +"'>";
-        shortcut += "<input type='text' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
-        shortcut += "<input type='text' id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
-        shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>&#x2026;</button>";
+        shortcut += "<input type='text' novalue='"+ CONF.Lang.FileName +"' id='shortcut_name_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutNameDesc+"' />";
+        shortcut += "<input type='text' novalue='"+ CONF.Lang.FilePath +"'  id='shortcut_path_"+ insertId + "' value='' title='"+CONF.Lang.ShortcutPathDesc+"' />";
+        shortcut += "<button class='openfile' for='shortcut_path_" + insertId + "' caption='' filter='All Files (*.*)|*.*'>...</button>";
         shortcut += "<button class='shortcut_update' value='"+ insertId +"'>"+CONF.Lang.Update+"</button>";
         shortcut += "<button class='shortcut_delete' value='"+ insertId +"'>"+CONF.Lang.Delete+"</button>";
-        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i>&#xe839;</i></label>";
+        shortcut += "<label title='"+CONF.Lang.ShortcutSortDesc+"'><i.sort></i></label>";
         shortcut += "</li>";
         $(#shortcut_list).append(shortcut);
     }
@@ -401,4 +220,81 @@ function shortcutDelete(evt) {
     if(result == "1"){
         self.select("#shortcut_li_" + id).remove();
     }
+}
+
+//更新鼠标指针
+function setCursor(obj){
+    var saveVal = URL.toPath(obj.value);
+    saveVal = saveVal.split("\/").join(SEPARATOR);
+    saveVal = saveVal.split(CONF.RootPath.toString()).join("");
+    $(body).style["cursor"] = [url:URL.fromPath(obj.value)];
+}
+
+//更新背景图片
+function setBackgroundImage(obj){
+    mainView.root.$(body).style["background-image"] = [url:URL.fromPath(obj.value)];
+    var saveVal = URL.toPath(obj.value);
+    saveVal = saveVal.split("\/").join(SEPARATOR);
+    saveVal = saveVal.split(CONF.RootPath.toString()).join("");
+}
+
+//更新背景循环方式
+function setBackgroundRepeat(obj){
+    if(obj.value == "cover"){
+        mainView.root.$(#center).style["background-size"] = obj.value;
+        mainView.root.$(#center).style["background-repeat"] = "no-repeat";
+    }else if(obj.value == "repeat"){
+        mainView.root.$(#center).style["background-repeat"] = obj.value;
+        mainView.root.$(#center).style["background-size"] = "auto auto";
+    }else{
+        mainView.root.$(#center).style["background-repeat"] = obj.value;
+        mainView.root.$(#center).style["background-size"] = "contain";
+    }
+}
+
+//背景模糊度数
+function setBackgroundFuzzy(obj){
+    var center = mainView.root.$(#center);
+    if(obj.value == 1 && center.style["background-image"] != "" && center.style["background-image"] != "url()"){
+        mainView.root.$(#center_fuzzy).style["display"] = "block"; 
+    }else{
+        mainView.root.$(#center_fuzzy).style["display"] = "none"; 
+    }
+}
+
+//背景遮罩图片
+function setBackgroundMask(obj){
+    mainView.root.$(#center_mask).style["background-image"] = [url:URL.fromPath(obj.value)];
+    var saveVal = URL.toPath(obj.value);
+    saveVal = saveVal.split("\/").join(SEPARATOR);
+    saveVal = saveVal.split(CONF.RootPath.toString()).join("");
+}
+
+//提交界面样式
+function interfaceSubmit(obj){
+    var cursor = $(#config_cursor).value;
+    var background_image = $(#config_background).value;
+    var background_repeat = $(#config_background_repeat).value;
+    var background_fuzzy = $(#config_background_fuzzy).value;
+    var background_mask = $(#config_background_mask).value;
+    var wallpaper_image = $(#config_wallpaper).value;
+
+    mainView.UpdateConfig("cursor",cursor);
+    mainView.UpdateConfig("background_image",background_image);
+    mainView.UpdateConfig("background_repeat",background_repeat);
+    mainView.UpdateConfig("background_fuzzy",background_fuzzy);
+    mainView.UpdateConfig("background_mask",background_mask);
+    mainView.UpdateConfig("wallpaper_image",wallpaper_image);
+
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+}
+
+//游戏资料枚举设置
+function rombaseSubmit(){
+    mainView.UpdateRomBaseEnumByType("type",$(#rombase_type).value);
+    mainView.UpdateRomBaseEnumByType("publisher",$(#rombase_publisher).value);
+    mainView.UpdateRomBaseEnumByType("producer",$(#rombase_producer).value);
+    mainView.UpdateRomBaseEnumByType("country",$(#rombase_country).value);
+    mainView.UpdateRomBaseEnumByType("version",$(#rombase_version).value);
+    view.msgbox(#alert,CONF.Lang.UpdateSuccess);
 }

@@ -1,0 +1,22 @@
+﻿view.root.on("ready", function(){
+    try{
+        Init();
+    }catch(e){
+        alert(e);
+    }
+});
+
+//初始化方法
+function Init(){
+
+    //初始化主题
+    initUiTheme();
+
+    //渲染语言
+    createLang();
+
+    //定义标题
+    view.windowCaption = CONF.Lang.PlatformConfig;
+
+   
+}
