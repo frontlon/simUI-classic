@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
 )
 
@@ -31,6 +31,7 @@ func RomCmdController() {
 		id := uint64(utils.ToInt(args[0].String()))
 		simId := uint32(utils.ToInt(args[1].String()))
 		data := args[2].String()
+
 		d := make(map[string]string)
 		json.Unmarshal([]byte(data), &d)
 

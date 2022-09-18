@@ -10,6 +10,7 @@ type Platform struct {
 	Id             uint32
 	Name           string
 	Icon           string
+	Tag            string
 	RomExts        string
 	RomPath        string
 	ThumbPath      string
@@ -17,13 +18,23 @@ type Platform struct {
 	PosterPath     string
 	PackingPath    string
 	TitlePath      string
+	CassettePath   string
+	IconPath       string
+	GifPath        string
 	BackgroundPath string
+	WallpaperPath  string
+	OptimizedPath  string
 	DocPath        string
 	StrategyPath   string
 	VideoPath      string
+	FilesPath      string
+	AudioPath      string
 	Rombase        string
 	Pinyin         string
 	Sort           uint32
+	Desc           string
+	Thumb          string
+	ThumbDirection string
 	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
 	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
 }
@@ -69,17 +80,25 @@ func (m *Platform) UpdateById() error {
 	create := map[string]interface{}{
 		"name":            m.Name,
 		"icon":            m.Icon,
+		"tag":             m.Tag,
 		"rom_exts":        m.RomExts,
 		"rom_path":        m.RomPath,
 		"thumb_path":      m.ThumbPath,
+		"cassette_path":   m.CassettePath,
+		"icon_path":       m.IconPath,
+		"gif_path":        m.GifPath,
 		"snap_path":       m.SnapPath,
 		"poster_path":     m.PosterPath,
 		"packing_path":    m.PackingPath,
 		"title_path":      m.TitlePath,
 		"background_path": m.BackgroundPath,
+		"wallpaper_path":  m.WallpaperPath,
+		"optimized_path":  m.OptimizedPath,
 		"strategy_path":   m.StrategyPath,
 		"video_path":      m.VideoPath,
 		"doc_path":        m.DocPath,
+		"files_path":      m.FilesPath,
+		"audio_path":      m.AudioPath,
 		"rombase":         m.Rombase,
 		"pinyin":          m.Pinyin,
 	}
@@ -120,6 +139,51 @@ func (m *Platform) DeleteById() error {
 //更新排序
 func (m *Platform) UpdateSortById() error {
 	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sort", m.Sort)
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//更新平台介绍
+func (m *Platform) UpdateDescById() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("desc", m.Desc)
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//更新平台缩略图类型
+func (m *Platform) UpdateThumbById() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("thumb", m.Thumb)
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//清空所有平台缩略图类型
+func (m *Platform) ClearAllThumb() error {
+	result := getDb().Table(m.TableName()).Update("thumb","")
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//更新平台缩略图方向
+func (m *Platform) UpdateThumbDirectionById() error {
+	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("thumb_direction", m.ThumbDirection)
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+	return result.Error
+}
+
+//清空所有平台缩略图方向
+func (m *Platform) ClearAllThumbDirection() error {
+	result := getDb().Table(m.TableName()).Update("thumb_direction","")
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}

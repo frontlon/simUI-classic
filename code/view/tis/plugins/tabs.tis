@@ -23,8 +23,11 @@ class Tabs : Element
 
       if(label) 
         this.post( function() {
-          if( !this.$(:root>strip>label:current) ) // if it was not set by code
-             this.activate(label, false);       // proceed with initialization.
+          if( !this.$(:root>strip>label:current) ){ // if it was not set by code
+             var ww = label.attributes["ww"];
+             var wh = label.attributes["wh"];
+             this.activate(label, false,ww,wh);       // proceed with initialization.
+             }
         });
     }
      
@@ -36,20 +39,25 @@ class Tabs : Element
       } 
       set {
         var label = this.$(:root>strip>label[for='{v}']);
-        this.activate(label,false);
+        var ww = label.attributes["ww"];
+        var wh = label.attributes["wh"];
+        this.activate(label,false,ww,wh);
       }
     }
 
     function onMouse(event)
     {
+      
       if( event.type != (Event.MOUSE_DOWN | Event.SINKING) && event.type != (Event.MOUSE_DCLICK | Event.SINKING))
         return false;
         
       var label = event.target.$p(label);
       
-      if( label && label.parent === this.$(:root>strip) )
-        return this.activate( label );
-        
+      if( label && label.parent === this.$(:root>strip) ){
+        var ww = label.attributes["ww"];
+        var wh = label.attributes["wh"];
+        return this.activate( label,true,ww,wh );
+      }
       return false;        
     }
     
@@ -70,23 +78,26 @@ class Tabs : Element
         return false;
 
       var currentLabel = this.$(:root>strip>label:current);
+      var ww = currentLabel.attributes["ww"];
+      var wh = currentLabel.attributes["wh"];
+
 
       switch( event.keyCode )
       {
         case Event.VK_TAB: 
           if( event.ctrlKey ) 
-            return this.activate( event.shiftKey? currentLabel.prior : currentLabel.next );
+            return this.activate( event.shiftKey? currentLabel.prior : currentLabel.next,true,ww,wh );
           break;
-        case Event.VK_LEFT: return this.activate( currentLabel.prior );
-        case Event.VK_RIGHT: return this.activate( currentLabel.next );
-        case Event.VK_HOME: return this.activate( currentLabel.parent.first );
-        case Event.VK_END: return this.activate( currentLabel.parent.last );
+        case Event.VK_LEFT: return this.activate( currentLabel.prior,true,ww,wh );
+        case Event.VK_RIGHT: return this.activate( currentLabel.next ,true,ww,wh);
+        case Event.VK_HOME: return this.activate( currentLabel.parent.first ,true,ww,wh);
+        case Event.VK_END: return this.activate( currentLabel.parent.last,true,ww,wh );
       }
       return false; 
     }
 
     // a.k.a. select tab, label here is a <label> inside <strip> 
-    function activate( label, notify = true )
+    function activate( label, notify = true,ww="",wh="" )
     {
       if( !label )
         return false;
@@ -94,6 +105,22 @@ class Tabs : Element
         // already selected, nothing to do...
         return true; // but we've handled it.
      
+
+      //异步加载图集
+      var attrId = label.attributes["id"];
+      if(attrId == "idx_label_second"){
+          var images = $$(#second_thumbs img);
+          if(images.length > 0 ){
+              for (var image in images){
+                if(image.attributes["data-src"] != "" && image.attributes["data-src"] != undefined){
+                  image.attributes["src"] = image.attributes["data-src"];
+                  image.attributes["data-src"] = "";
+                }
+              }
+          }
+
+      }
+
       var strip = this.$(:root>strip);
      
       //find currently selected element (tab and panel) and remove "selected" from them
@@ -118,6 +145,12 @@ class Tabs : Element
       panel.state.expanded = true; // expand it
       label.state.current = true;
       
+      if (ww != undefined && wh != undefined && ww != "" && wh != ""){
+        var (x,y,w,h) = view.box(#rectw,#border,#screen);
+        view.move(x,y,self.toPixels(ww),self.toPixels(wh));
+        //view.move(x,y,ww.toInteger(),wh.toInteger());
+      }
+
       if(notify)
         this.postEvent("statechange");
       

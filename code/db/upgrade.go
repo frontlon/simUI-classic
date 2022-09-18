@@ -1,8 +1,8 @@
 package db
+
 import (
 	"bufio"
 	"database/sql"
-	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"io"
 	"os"
@@ -11,7 +11,8 @@ import (
 //升级数据库
 func UpgradeDB() {
 
-	db, _ := sql.Open("sqlite3", "./data.dll")
+	dbFileName, _ := GetDbFileName()
+	db, _ := sql.Open("sqlite3", dbFileName)
 
 	filename := "upgrade.sql"
 	f, err := os.Open(filename)
@@ -34,9 +35,6 @@ func UpgradeDB() {
 		if len(a) == 0 {
 			continue
 		}
-		fmt.Println(string(a))
-
 		db.Exec(string(a))
-
 	}
 }

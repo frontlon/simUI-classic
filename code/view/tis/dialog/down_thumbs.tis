@@ -1,4 +1,6 @@
 ﻿var ID;
+var SID;
+var PLATFORM;
 var PAGE=0;
 var PAGENUM = 30;
 var SCROLL_POS = 0;
@@ -13,12 +15,14 @@ function Init(){
 
     var keyword = view.parameters.keyword;
     ID = view.parameters.id;
+    SID = view.parameters.sid;
+    PLATFORM = view.parameters.platform;
 
     //创建语言
     createLang();
 
     $(#search_input).value = keyword;
-    searchPic(keyword,1);
+    searchPic(keyword);
 
     //分页
     self.onScroll = function(evt) {
@@ -48,7 +52,7 @@ function pages(evt){
         var ctype = $(.submit.active).attributes['value'];
 
         PAGE++;
-        var result = searchPic(keyword,ctype);
+        var result = searchPic(keyword);
         if(result == true){
             SCROLL_POS = scrollPos;
         }
@@ -66,30 +70,21 @@ function DownThumb(evt){
     var content = "";
     caption = CONF.Lang.Thumb;
     content = CONF.Lang.SetThumbConfirm;
-   
-    var result = view.msgbox {
-        type:#question, 
-        caption:caption,
-        content:content,
-        buttons:[
-            {id:#yes,text:CONF.Lang.Yes},
-            {id:#cancel,text:CONF.Lang.Cancel},
-        ]
-    };
-    if(result == "yes"){
-        //下载图片
-        var newpath = mainView.DownloadRomThumbs(ctype,ID,evt.select("img").attributes["src"]);
-        view.close(evt.select("img").attributes["src"]);
-    }
+
+    //下载图片
+    var url = evt.select("img").attributes["src"];
+    var ext = evt.select("img").attributes["ext"];
+
+    //更改图片
+    createFileDropZone(PLATFORM,ctype,SID,url,ext);
 }
 
 //点击搜索按钮
 function searchThumb(evt){
-     try{
     var keyword  = $(#search_input).value;
 
     if(keyword == ""){
-        view.msgbox(#alert,CONF.Lang.InputKeyword);
+        alert(CONF.Lang.InputKeyword);
         return true;
     }
 
@@ -102,11 +97,7 @@ function searchThumb(evt){
     PAGE = 0;
 
     //搜索内容
-   
     searchPic(keyword);
-    }catch(e){
-        alert(e);
-    }
 }
 
 //图片搜索
@@ -115,39 +106,21 @@ function searchPic(keyword){
     //过滤特殊字符
     keyword = keyword.replace(/[\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\;\'\:\"\'\,\.\/\<\>\?\-\=\_\+]/g,"");
     var newkeyword = keyword.urlEscape(); //unicode转码
-    var num = PAGE*PAGENUM;
-
-    //载入url
-    var url = CONF.Default.SearchEngines;
-    //替换关键字
-    url = url.replace("{$keyword}",keyword);
-    url = url.replace("{$NumIndex}",num.toString());
-    url = url.replace("{$pageNum}",PAGENUM.toString());
 
     startLoading();
-
-    //生成平台列表    
-	view.request({
-        type:#get,
-        url:url,
-        protocol:#json,
-        success:function(data,status){
-            var content = "";
-            for(var item in data.data) {
-                if(item.thumbURL != undefined){
-                    content +="<li><img src='"+item.thumbURL+"'/></li>";
-                }
-            }
-            $(#down_thumb_list).append(content);
-            endLoading();
-
-            return true;
-        },
-        error:function(err,status){
-            view.msgbox(#alert,CONF.Lang.NetworkRequestFailed);
-            endLoading();
-            return false;
+    var response = mainView.DownloadThumbs(keyword,PAGE);
+    var content = "";
+    if(response == "[]"){
+        alert(CONF.Lang.SearchEmpty);
+    }else if(response != undefined){
+        var data = JSON.parse(response);
+        for(var item in data) {
+            var desc = item.Width + "X" + item.Height + " ." + item.Ext;
+            content +="<li><img ext='."+ item.Ext +"' src='"+item.ImgUrl+"'/><p>"+ desc +"</p></li>";
         }
-	});
+    }
+    $(#down_thumb_list).append(content);
+    endLoading();
+
     return false;
 }

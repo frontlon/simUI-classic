@@ -25,34 +25,39 @@ typedef enum SCITER_X_MSG_CODE {
   SXM_DESTROY = 1,
   SXM_SIZE    = 2,
   SXM_PAINT   = 3,
-}SCITER_X_MSG_CODE;
+  SXM_RESOLUTION = 4,
+  SXM_HEARTBIT = 5,
+  SXM_MOUSE = 6,
+  SXM_KEY = 7,
+  SXM_FOCUS = 8,
+} SCITER_X_MSG_CODE;
 
 /** #SCITER_X_MSG common header of message structures passed to SciterProcX */
 typedef struct SCITER_X_MSG
 {
-  UINT msg;  /**< [in] one of the codes of #SCITER_X_MSG_CODE.*/
+  UINT msg;     /**< [in]  one of the codes of #SCITER_X_MSG_CODE.*/
 #ifdef __cplusplus
   SCITER_X_MSG(UINT m) : msg(m) {}
 #endif
-}SCITER_X_MSG;
+} SCITER_X_MSG;
 
 typedef struct SCITER_X_MSG_CREATE
 {
   SCITER_X_MSG header;
           UINT backend;
-          BOOL transparent;
+          SBOOL transparent;
 #ifdef __cplusplus
-   SCITER_X_MSG_CREATE(UINT backendType = GFX_LAYER_SKIA_OPENGL, BOOL isTransparent = TRUE )
+   SCITER_X_MSG_CREATE(UINT backendType = GFX_LAYER_SKIA_OPENGL, SBOOL isTransparent = TRUE )
      : header(SXM_CREATE), backend(backendType), transparent(isTransparent) {}
 #endif
-}SCITER_X_MSG_CREATE;
+} SCITER_X_MSG_CREATE;
 
 typedef struct SCITER_X_MSG_DESTROY {
   SCITER_X_MSG header;
 #ifdef __cplusplus
   SCITER_X_MSG_DESTROY() : header(SXM_DESTROY) {}
 #endif
-}SCITER_X_MSG_DESTROY;
+} SCITER_X_MSG_DESTROY;
 
 typedef struct SCITER_X_MSG_SIZE {
   SCITER_X_MSG header;
@@ -61,7 +66,53 @@ typedef struct SCITER_X_MSG_SIZE {
 #ifdef __cplusplus
   SCITER_X_MSG_SIZE(UINT w, UINT h) : header(SXM_SIZE), width(w), height(h) {}
 #endif
-}SCITER_X_MSG_SIZE;
+} SCITER_X_MSG_SIZE;
+
+typedef struct SCITER_X_MSG_RESOLUTION {
+  SCITER_X_MSG header;
+  UINT pixelsPerInch;
+#ifdef __cplusplus
+  SCITER_X_MSG_RESOLUTION(UINT ppi) : header(SXM_RESOLUTION), pixelsPerInch(ppi) {}
+#endif
+} SCITER_X_MSG_RESOLUTION;
+
+typedef struct SCITER_X_MSG_MOUSE {
+  SCITER_X_MSG    header;
+  enum MOUSE_EVENTS    event;
+  enum MOUSE_BUTTONS   button;
+  enum KEYBOARD_STATES modifiers;
+  POINT           pos;
+#ifdef __cplusplus
+  SCITER_X_MSG_MOUSE(MOUSE_EVENTS e, MOUSE_BUTTONS b, KEYBOARD_STATES mods, POINT p) : header(SXM_MOUSE), event(e), button(b), modifiers(mods), pos(p) {}
+#endif
+} SCITER_X_MSG_MOUSE;
+
+typedef struct SCITER_X_MSG_KEY {
+  SCITER_X_MSG    header;
+  enum KEY_EVENTS      event;
+  UINT            code;
+  enum KEYBOARD_STATES modifiers;
+#ifdef __cplusplus
+  SCITER_X_MSG_KEY(KEY_EVENTS e, UINT c, KEYBOARD_STATES mods) : header(SXM_KEY), event(e), code(c), modifiers(mods) {}
+#endif
+} SCITER_X_MSG_KEY;
+
+typedef struct SCITER_X_MSG_FOCUS {
+  SCITER_X_MSG    header;
+  SBOOL            got; // true - got, false - lost
+#ifdef __cplusplus
+  SCITER_X_MSG_FOCUS(SBOOL g) : header(SXM_FOCUS), got(g) {}
+#endif
+} SCITER_X_MSG_FOCUS;
+
+
+typedef struct SCITER_X_MSG_HEARTBIT {
+  SCITER_X_MSG header;
+  UINT time;
+#ifdef __cplusplus
+  SCITER_X_MSG_HEARTBIT(UINT t) : header(SXM_HEARTBIT), time(t) {}
+#endif
+} SCITER_X_MSG_HEARTBIT;
 
 
 /** #ELEMENT_BITMAP_RECEIVER - callback function that receives pointer to pixmap and location
@@ -78,17 +129,19 @@ typedef VOID SC_CALLBACK ELEMENT_BITMAP_RECEIVER(LPCBYTE rgba, INT x, INT y, UIN
 typedef enum SCITER_PAINT_TARGET_TYPE {
   SPT_DEFAULT   = 0,  /**< default rendering target - window surface */
   SPT_RECEIVER  = 1,  /**< target::receiver fields are valid */
-  SPT_DC        = 2,  /**< target::dc is valid */
-  // ...
-}SCITER_PAINT_TARGET_TYPE;
+  SPT_SURFACE   = 2,  /**< target::pSurface is valid */
+  //SPT_OPENGL    = 3,  /**< target is not used - caller shall set current context on its side  */
+  //SPT_OPENGLES  = 4,  /**< target is not used - caller shall set current context on its side  */
+  //SPT_
+} SCITER_PAINT_TARGET_TYPE;
 
 typedef struct SCITER_X_MSG_PAINT {
   SCITER_X_MSG header;
       HELEMENT element;    /**< [in] layer #HELEMENT, can be NULL if whole tree (document) needs to be rendered.*/
-      BOOL     isFore;     /**< [in] if element is not null tells if that element is fore-layer.*/
+      SBOOL     isFore;     /**< [in] if element is not null tells if that element is fore-layer.*/
       UINT     targetType; /**< [in] one of #SCITER_PAINT_TARGET_TYPE values */
       union {
-        HDC hdc;
+        LPVOID pSurface;   /**< [in] must be IDXGISurface* */
         struct {
           VOID*                    param;
           ELEMENT_BITMAP_RECEIVER* callback;
@@ -96,8 +149,8 @@ typedef struct SCITER_X_MSG_PAINT {
       } target;
 
 #ifdef __cplusplus
-  SCITER_X_MSG_PAINT(HELEMENT layerElement = NULL, BOOL foreLayer = TRUE) : header(SXM_PAINT), element(layerElement), isFore(foreLayer), targetType(SPT_DEFAULT) {}
+  SCITER_X_MSG_PAINT(HELEMENT layerElement = NULL, SBOOL foreLayer = TRUE) : header(SXM_PAINT), element(layerElement), isFore(foreLayer), targetType(SPT_DEFAULT) {}
 #endif
-}SCITER_X_MSG_PAINT;
+} SCITER_X_MSG_PAINT;
 
 #endif

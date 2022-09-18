@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style>
+        @import "this://app/images/public.css";
+        @import "images/form.css";
+        html{background:color(center-background-color)}
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);}
+        .desc{font-size:11dip;color:#666}
+        .input_wrapper{padding:0 10dip 10dip 10dip;}
+        .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;font-size:12dip;display:block;padding:5dip;margin:0 0 7dip 0;}
+        input{width:*;}
+    </style>
+</head>
+<body>
+    <div class="tab_tip">{{TipDirAdd}}</div>
+    <div class="input_wrapper">
+        <select id="platform"></select>
+        <select id="virtual">
+            <option value="1" selected>{{virtualDir}}</option>
+            <option value="0">{{Folder}}</option>
+        </select>
+        <input type="text" id="menuname" value="" />
+    </div>
+    <div class="form_bottom">
+        <button class="cancel" id="close-dialog" role="default-button">{{Cancel}}</button>&#12288;
+        <button class="ok" id="confirm-dialog">{{Confirm}}</button>
+    </div>
+
+
+<script type="text/tiscript">
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/menu_add.tis";
+
+    //初始化主题
+    initUiTheme();
+
+    //确定
+    event click $(#confirm-dialog) {
+        confirmDialog(this);
+    }
+
+    event click $(#close-dialog){
+        view.close();
+    }
+
+</script>
+</body>
+</html>

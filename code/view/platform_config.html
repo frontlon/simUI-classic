@@ -1,0 +1,281 @@
+﻿<html>
+  <head>
+  <title></title>
+  <div id="themefile"></div>
+  <style>
+    @import "this://app/images/public.css";
+    @import "this://app/images/form.css";
+    body,html{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0}
+    .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;padding-top:10dip}
+    .frame_left{width:150dip;height:*;display:inline-block}
+    .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip}
+    .frame_right input[type=text]{width:260dip}
+    .platform_control{margin:0;width:*;padding-left:10dip}
+    .platform_control button{margin:0 0 5dip 0;width:*}
+    #platform_add{background:color(button-ok-background-color);color:color(button-ok-text-color);border:0}
+    .platform_list{border-radius:5dip;width:*;height:540dip;overflow:scroll-indicator;display:block;border:1dip solid color(config-platform-border-color);padding:0;margin:0 0 0 10dip}
+    .platform_list li{height:30dip;line-height:30dip;display:block;padding-left:5dip;color:color(config-platform-text-color)}
+    .platform_list li:current{background:color(config-platform-current-background-color);color:color(config-platform-current-text-color)}
+    .platform_list li:drag-source{background-color:color(config-platform-background-color)}
+    .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0}
+    .table_platform tr td:nth-child(even){text-align:left;padding-bottom:0;width:180px}
+    .table_platform button{margin-right:0}
+    #platform_exts{width:720dip}
+    #platform_ico{max-width:220dip}
+    #platform_desc{height:470dip;display:block;width:*;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;height:20dip;font-size:12dip;padding:5dip;width:*;margin:-7dip 0 10dip 0}
+    a{text-decoration:underline;color:#FFF}
+  </style>
+  </head>
+<body>
+
+      <!-- 平台设置 -->
+      <div class="wrapper">
+        <div id="frame_left" class="frame_left">
+          <div class="platform_control">
+            <button class="add" id="platform_add" title="{{AddNewPlatform}}">{{AddNewPlatform}}</button>
+            <button class="sub" id="platform_del" title="{{DeletePlatform}}">{{DeletePlatform}}</button></div>
+          <ul class="platform_list" id="platform_list" size="5"></ul>
+        </div>
+        <div id="frame_right" class="frame_right">
+
+
+            <tabs class="tabs" id="mytabs">
+              <strip>
+                <label id="platform_first" for="first" selected>{{PlatformConfig}}</label>
+                <label id="platform_second" for="second">{{PlatformDesc}}</label>
+                </strip>
+                <panels>
+                <!-- 平台配置 -->
+                <section id="first">
+
+                      <table class="table_platform">
+                        <tr>
+                          <th colspan="4" style="padding-top:0">{{BasicInfo}}：</th></tr>
+                        <tr>
+                          <td>{{Title}}：</td>
+                          <td>
+                            <input type="text" value="" id="platform_name" disabled>
+                          </td>
+                          <td>{{Tag}}：
+                          </td>
+                          <td><input type="text" value="" id="platform_tag" disabled>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="tip" title="{{TipRomType}}">?</div>
+                            {{RomType}}：
+                          </td>
+                          <td colspan="3">
+                            <input type="text" value="" id="platform_exts" disabled></td>
+                        </tr>
+                        <tr>
+                          <td>{{Simulator}}：</td>
+                          <td>
+                            <select id="platform_sim" disabled></select>
+                            <button id="add_sim" disabled>{{AddSimulator}}</button>
+                          </td>
+                          <td>
+                            <div class="tip" title="{{PlatformIconTip}}">?</div>{{Icon}}：</td>
+                          <td>
+                            <input type="text" id="platform_ico" value="" disabled>
+                            <button class="openfile" for="platform_ico" caption="{{SelectConfigFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*" disabled>...</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>{{MenuConfig}}：</th>
+                          <th colspan="3" style="text-align:right">{{SetPlatformTip}}：
+                            <button id="openPlatformFolder" class="primary" caption="{{SelectFolder}}" disabled>...</button></th>
+                        </tr>
+                        <tr>
+                          <td>{{RomMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_rom" value="" disabled>
+                            <button class="openfolder" for="platform_rom" caption="{{SelectFolder}}" disabled>...</button></td>
+                          <td>{{ThumbMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_thumb" value="" disabled>
+                            <button class="openfolder" for="platform_thumb" caption="{{SelectFolder}}" disabled>...</button></td>
+                        </tr>
+                        <tr>
+                          <td>{{SanpMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_snap" value="" disabled>
+                            <button class="openfolder" for="platform_snap" caption="{{SelectFolder}}" disabled>...</button></td>
+                          <td>{{PosterMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_poster" value="" disabled>
+                            <button class="openfolder" for="platform_poster" caption="{{SelectFolder}}" disabled>...</button></td>
+                        </tr>
+                        <tr>
+                          <td>{{PackingMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_packing" value="" disabled>
+                            <button class="openfolder" for="platform_packing" caption="{{SelectFolder}}" disabled>...</button></td>
+                          <td>{{CassetteMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_cassette" value="" disabled>
+                            <button class="openfolder" for="platform_cassette" caption="{{SelectFolder}}" disabled>...</button></td>
+                        </tr>
+                        <tr>
+                          <td>{{TitleMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_title" value="" disabled>
+                            <button class="openfolder" for="platform_title" caption="{{SelectFolder}}" disabled>...</button></td>
+                          <td>{{IconMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_icon" value="" disabled>
+                            <button class="openfolder" for="platform_icon" caption="{{SelectFolder}}" disabled>...</button></td>
+                        </tr>
+                        <tr>
+                          <td>{{BackgroundMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_background" value="" disabled>
+                            <button class="openfolder" for="platform_background" caption="{{SelectFolder}}" disabled>...</button></td>
+                          <td><div class="tip" title="{{TipWallpaper}}">?</div>{{WallpaperMenu}}：</td>
+                          <td>
+                            <input type="text" id="platform_wallpaper" value="" disabled>
+                            <button class="openfolder" for="platform_wallpaper" caption="{{SelectFolder}}" disabled>...</button></td>
+                        </tr>
+                        <tr>
+                          <tr>
+                            <td>{{GifMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_gif" value="" disabled>
+                              <button class="openfolder" for="platform_gif" caption="{{SelectFolder}}" disabled>...</button></td>
+                            <td>{{VideoMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_video" value="" disabled>
+                              <button class="openfolder" for="platform_video" caption="{{SelectFolder}}" disabled>...</button></td>
+                          </tr>
+                          <tr>
+                            <td>{{DescMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_doc" value="" disabled>
+                              <button class="openfolder" for="platform_doc" caption="{{SelectFolder}}" disabled>...</button></td>
+                            <td>{{StrategyMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_strategy" value="" disabled>
+                              <button class="openfolder" for="platform_strategy" caption="{{SelectFolder}}" disabled>...</button></td>
+                          </tr>
+                          <tr>
+                            <td>{{FilesMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_files" value="" disabled>
+                              <button class="openfolder" for="platform_files" caption="{{SelectFolder}}" disabled>...</button></td>
+                            <td>{{AudioMenu}}：</td>
+                            <td>
+                              <input type="text" id="platform_audio" value="" disabled>
+                              <button class="openfolder" for="platform_audio" caption="{{SelectFolder}}" disabled>...</button></td>
+                          </tr>
+                          <tr>
+                            <td><div class="tip" title="{{RombaseTip}}">?</div>{{Rombase}}：</td>
+                            <td>
+                              <input type="text" id="platform_rombase" value="" disabled>
+                              <button class="openfile" for="platform_rombase" caption="{{SelectConfigFile}}" filter="csv Files (*.csv)|*.csv|All Files (*.*)|*.*" disabled>...</button></td>
+                              <td><div class="tip" title="{{OptimizedCacheTip}}">?</div>{{OptimizedCacheMenu}}：</td>
+                              <td><input type="text" id="platform_optimized" value="" disabled>
+                              <button class="openfolder" for="platform_optimized" caption="{{SelectFolder}}" disabled>...</button></td>
+                          </tr>
+                      </table>
+                      <div class="form_bottom">
+                        <button class="cancel">{{Cancel}}</button>
+                        <button class="ok" id="platform_submit">{{UpdateConfig}}</button>
+                    </div>
+
+                </section>
+
+                <!-- 平台介绍 -->
+                <section id="second">
+                    <div class="tab_tip">编辑区域支持HTML语法，如果你不懂HTML，可以<a id="online_html">点击这里</a>进行在线编辑后，将代码粘贴进来。</div>
+                    <textarea id="platform_desc"></textarea>
+                    <div class="form_bottom">
+                        <button class="cancel">{{Cancel}}</button>
+                        <button class="ok" id="desc_submit">{{Update}}</button>
+                    </div>
+                </section>
+
+              </panels>
+            </tabs>
+
+      </div><!-- frame right -->
+      </div><!-- wrapper -->
+
+
+  <script type="text/tiscript">
+    include ROOTPATH + "tis/plugins/tabs.tis";
+    include ROOTPATH + "tis/plugins/dragdrop.tis";
+    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "tis/dialog/platform_config.tis";
+
+    //初始化主题
+    initUiTheme();
+
+    //平台列表点击
+    event click $(#platform_list li) {
+      try{
+        GetPlatformItem(this);
+      }catch(e){
+        alert(e);}
+    }
+
+    //更新平台信息
+    event click $(#platform_submit) {
+      platformSubmit(this);
+    }
+
+    //添加模拟器
+    event click $(#add_sim) {
+      addSim(this);
+    };
+
+    //修改模拟器模拟器
+    event change $(#platform_sim) {
+      editSim(this);
+    }
+
+    //选择文件夹
+    event click $(.openfolder){
+        openFolder(this);
+    }
+
+    //选择文件
+    event click $(.openfile){
+      openFile(this);
+    }
+
+    //添加平台
+    event click $(#platform_add){
+        platformAdd(this);
+    }
+
+    //删除平台
+    event click $(#platform_del){
+      platformDel(this);
+    }
+
+    //选择平台目录
+    event click $(#openPlatformFolder) {
+        openPlatformFolder(this);
+    }
+
+    //取消按钮
+    event click $(.cancel){
+        view.close();
+    }
+
+    //更新平台介绍
+    event click $(#desc_submit) {
+        updatePlatformDesc();
+    }
+
+
+    //打开在线编辑器
+    event click $(#online_html) {
+        Sciter.launch("http://www.simui.net/editor/");
+    }
+
+</script>
+</body>
+</html>

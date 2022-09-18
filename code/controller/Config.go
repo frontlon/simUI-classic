@@ -5,8 +5,10 @@ import (
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
+	"simUI/code/request"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter"
+	"strings"
 )
 
 /**
@@ -14,7 +16,8 @@ import (
  **/
 
 func ConfigController() {
-	
+
+	//初始化数据
 	utils.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
 
 		ctype := args[0].String()
@@ -56,9 +59,25 @@ func ConfigController() {
 		return sciter.NewValue(body)
 	})
 
-	//获取当前环境
-	utils.Window.DefineFunction("GetEnv", func(args ...*sciter.Value) *sciter.Value {
-		return sciter.NewValue(config.ENV)
+	//导出平台设置
+	utils.Window.DefineFunction("InputPlatform", func(args ...*sciter.Value) *sciter.Value {
+		p := args[0].String()
+		modules.InputPlatform(p)
+		return sciter.NewValue(1)
+	})
+
+	//导出(分享)rom
+	utils.Window.DefineFunction("OutputRom", func(args ...*sciter.Value) *sciter.Value {
+		request := &request.OutputRom{}
+
+		_ = json.Unmarshal([]byte(args[0].String()), &request)
+
+		request.Save = strings.Replace(request.Save, `file://`, "", 1)
+		request.Save = strings.Replace(request.Save, `file:\\`, "", 1)
+
+		modules.OutputRom(request)
+
+		return sciter.NewValue(1)
 	})
 
 }

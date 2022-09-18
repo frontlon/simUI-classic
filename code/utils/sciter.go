@@ -26,7 +26,7 @@ func Loading(str string, platform string) *sciter.Value {
 //检查当前窗口激活状态
 func CheckWinActive() bool {
 	active, err := Window.Call("checkWinActive")
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 	}
 	return active.Bool()
@@ -35,16 +35,16 @@ func CheckWinActive() bool {
 //调用视图中的方向控制【手柄】
 func ViewDirection(dir int) bool {
 	active, err := Window.Call("joystickDirection", sciter.NewValue(dir))
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 	}
 	return active.Bool()
 }
 
 //调用视图中的按钮控制【手柄】
-func ViewButton(btn int) bool {
+func ViewButton(btn string) bool {
 	active, err := Window.Call("joystickButton", sciter.NewValue(btn))
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 	}
 	return active.Bool()

@@ -30,6 +30,7 @@ function Init(){
         $(#sim_default).value = sim.Default;
         $(#sim_path).value = sim.Path;
         $(#sim_cmd).value = sim.Cmd;
+        $(#lua).value = sim.Lua;
         $(#unzip).value = sim.Unzip;
         if(sim.Default == 1){$(#sim_default).checked = true;}
     }
@@ -48,17 +49,18 @@ function simSubmit(evt){
         path:$(#sim_path).value,
         cmd:$(#sim_cmd).value,
         unzip:$(#unzip).value,
+        lua:$(#lua).value,
     };
 
-    if(data.name == ""){view.msgbox(#alert,CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
-    if(data.sim_path == ""){view.msgbox(#alert,CONF.Lang.SimulatorPathCanNotBeEmpty);return true;}
-    if(data.platform == ""){view.msgbox(#alert,CONF.Lang.SelectPlatform);return true;}
+    if(data.name == ""){alert(CONF.Lang.SimulatorNameCanNotBeEmpty);return true;}
+    if(data.sim_path == ""){alert(CONF.Lang.SimulatorPathCanNotBeEmpty);return true;}
+    if(data.platform == ""){alert(CONF.Lang.SelectPlatform);return true;}
     if(id == 0){
         //添加模拟器
         result = mainView.AddSimulator(JSON.stringify(data));
 
         if(result != ""){
-            view.msgbox(#alert,CONF.Lang.AddSuccess);
+            alert(CONF.Lang.AddSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }else{
@@ -66,7 +68,7 @@ function simSubmit(evt){
         result = mainView.UpdateSimulator(JSON.stringify(data));
 
         if(result != ""){
-            view.msgbox(#alert,CONF.Lang.UpdateSuccess);
+            alert(CONF.Lang.UpdateSuccess);
             view.close(result); //如果更新成功，则关闭窗口，并把修改后的数据返回
         }
     }
@@ -74,16 +76,7 @@ function simSubmit(evt){
 
 //删除模拟器
 function simDelete(evt){
-    var result = view.msgbox {
-        type:#warning, 
-        content:CONF.Lang.DeleteSimulatorConfirm, 
-        caption:CONF.Lang.DeleteSimulator,
-        buttons:[
-            {id:#yes,text:CONF.Lang.Delete},
-            {id:#cancel,text:CONF.Lang.Cancel,role:"default-button"}
-        ]
-    };
-
+    var result = confirm(CONF.Lang.DeleteSimulatorConfirm,CONF.Lang.DeleteSimulator);
     if (result != "yes"){
         return true;
     }
@@ -97,24 +90,8 @@ function simDelete(evt){
             Id:result,
         };
         var datastr = JSON.stringify(data);
-        view.msgbox(#alert,CONF.Lang.DeleteSuccess);
+        alert(CONF.Lang.DeleteSuccess);
         view.close(datastr); //如果更新成功，则关闭窗口，并把修改后的数据返回
-    }
-}
-
-//选择文件
-function openFile(evt){
-    const defaultExt = "";
-    const initialPath = "";
-    const filter = evt.attributes["filter"];
-    const caption = evt.attributes["caption"];
-    var url = view.selectFile("#"+evt.attributes["for"], filter, defaultExt, initialPath, caption );
-    var out = self.select("#"+evt.attributes["for"]);  
-    if(url){
-        url = URL.toPath(url);
-        url = url.split("\/").join(CONF.Separator.toString());
-        url = url.split(CONF.RootPath.toString()).join("");
-        out.value = url;
     }
 }
 

@@ -49,16 +49,21 @@ func (s *Window) SetTitle(title string) {
 	C.SetWindowTextW(hwnd, (*C.WCHAR)(unsafe.Pointer(sciter.StringToWcharPtr(title))))
 }
 
+func (s *Window) AddQuitMenu() {
+	// Define behaviour for windows
+}
+
 func (s *Window) Run() {
 	// for system drag-n-drop
 	// win.OleInitialize()
 	// defer win.OleUninitialize()
 	s.run()
 	// start main gui message loop
-	var msg win.MSG
-	for win.GetMessage(&msg, 0, 0, 0) > 0 {
-		win.TranslateMessage(&msg)
-		win.DispatchMessage(&msg)
+	msg := (*win.MSG)(unsafe.Pointer(win.GlobalAlloc(0, unsafe.Sizeof(win.MSG{}))))
+	defer win.GlobalFree(win.HGLOBAL(unsafe.Pointer(msg)))
+	for win.GetMessage(msg, 0, 0, 0) > 0 {
+		win.TranslateMessage(msg)
+		win.DispatchMessage(msg)
 	}
 }
 

@@ -1,4 +1,16 @@
 bak/
 .idea/
+main
 code/res.go
-app/
+code/res.syso
+code/view/view.code-workspace
+app/cache
+app/env
+app/games
+app/tools
+app/simUI-64
+app/simUI
+*.exe
+*.dll
+*.dylib
+*.zip

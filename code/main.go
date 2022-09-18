@@ -17,28 +17,41 @@ import (
 
 func main() {
 
-	isDebug := false
-	ROOTPATH := "this://app/main.html" //go用路径
-	if isDebug == true {
-		ROOTPATH = "D:\\work\\go\\src\\simUI\\code\\view\\main.html" //go 用路径
-	}
-
-	db.UpgradeDB() //检测新版
-
 	runtime.LockOSThread()
 
+	db.UpgradeDB() //数据库升级
+	env, _ := utils.ReadFile("env")
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	separator := string(os.PathSeparator)                             //系统路径分隔符
+	separator := string(os.PathSeparator) //系统路径分隔符
+
+	if env == "" {
+		config.Cfg.ViewPath = "this://app/" //生产环境
+	} else {
+		config.Cfg.ViewPath = env //测试环境
+	}
+
 	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
 	config.Cfg.Separator = separator                                  //系统的目录分隔符
 	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
 	config.Cfg.UnzipPath = config.Cfg.CachePath + "unzip" + separator //rom解压路径
 
 	defer func() {
+
+		//删除解压的缓存
+		err := utils.DeleteDir(config.Cfg.UnzipPath)
+
+		fmt.Println(err)
+
 		if r := recover(); r != nil {
+			var trace [1024]byte
+			n := runtime.Stack(trace[:], true)
+			utils.WriteLog("==================")
 			utils.WriteLog("recover:" + fmt.Sprintf("%s", r))
+			utils.WriteLog("trace:" + string(trace[:n]))
+			utils.WriteLog("==================")
 			fmt.Println("recover:", fmt.Sprintf("%s", r))
+			fmt.Println("trace:" + string(trace[:n]))
 		}
 	}()
 
@@ -53,13 +66,10 @@ func main() {
 	height := config.Cfg.Default.WindowHeight
 
 	//创建window窗口
-	//err := errors.New("")
 	w, err := window.New(
-		sciter.SW_MAIN|
-			//sciter.SW_RESIZEABLE|
-			//sciter.SW_CONTROLS|
-			sciter.SW_ENABLE_DEBUG,
+		sciter.SW_MAIN|sciter.SW_RESIZEABLE|sciter.SW_ENABLE_DEBUG,
 		&sciter.Rect{Left: 0, Top: 0, Right: int32(utils.ToInt(width)), Bottom: int32(utils.ToInt(height))})
+
 	if err != nil {
 		utils.WriteLog(err.Error())
 	}
@@ -69,6 +79,9 @@ func main() {
 	//设置view权限
 	w.SetOption(sciter.SCITER_SET_SCRIPT_RUNTIME_FEATURES, sciter.ALLOW_SYSINFO|sciter.ALLOW_FILE_IO|sciter.ALLOW_SOCKET_IO)
 
+	//定义view函数
+	regViewFunction()
+
 	//设置回调
 	w.SetCallback(newHandler(w.Sciter))
 
@@ -76,7 +89,7 @@ func main() {
 	w.OpenArchive(res)
 
 	//加载文件
-	err = w.LoadFile(ROOTPATH)
+	err = w.LoadFile(config.Cfg.ViewPath + "main.html")
 	if err != nil {
 		utils.ErrorMsg(err.Error())
 		return
@@ -90,17 +103,14 @@ func main() {
 	}
 
 	if len(config.Cfg.Lang) == 0 {
-		utils.WriteLog("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
-		utils.ErrorMsg("没有找到语言文件或语言文件为空\nNo language files or language files found empty")
+		utils.WriteLog("没有找到语言文件或语言文件为空\n language files is not exists")
+		utils.ErrorMsg("没有找到语言文件或语言文件为空\n language files is not exists")
 		os.Exit(1)
 		return
 	}
 
 	//设置标题
 	w.SetTitle(config.Cfg.Lang["SoftName"])
-
-	//定义view函数
-	defineViewFunction()
 
 	//显示窗口
 	w.Show()
@@ -115,8 +125,8 @@ func main() {
 	w.Run()
 }
 
-//定义控制器方法
-func defineViewFunction() {
+//注册控制器
+func regViewFunction() {
 	controller.CacheController()
 	controller.ConfigController()
 	controller.MenuController()
@@ -126,6 +136,13 @@ func defineViewFunction() {
 	controller.ShortcutController()
 	controller.SimulatorController()
 	controller.JoystickController()
+	controller.RomManagerController()
+	controller.RomBaseEnumController()
+	controller.StrategyFilesController()
+	controller.AudioController()
+	controller.ImageController()
+	controller.BackupController()
+	controller.OthersController()
 }
 
 //资源加载

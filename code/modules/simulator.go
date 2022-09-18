@@ -14,6 +14,7 @@ func AddSimulator(data map[string]interface{}) (*db.Simulator, error) {
 		Platform: pfId,
 		Path:     utils.ToString(data["path"]),
 		Cmd:      utils.ToString(data["cmd"]),
+		Lua:      utils.ToString(data["lua"]),
 		Unzip:    uint8(utils.ToInt(data["unzip"])),
 		Pinyin:   utils.TextToPinyin(utils.ToString(data["name"])),
 	}
@@ -41,6 +42,7 @@ func UpdateSimulator(data map[string]interface{}) (*db.Simulator, error) {
 		Platform: pfId,
 		Path:     utils.ToString(data["path"]),
 		Cmd:      utils.ToString(data["cmd"]),
+		Lua:      utils.ToString(data["lua"]),
 		Pinyin:   utils.TextToPinyin(utils.ToString(data["name"])),
 		Unzip:    uint8(utils.ToInt(data["unzip"])),
 	}
@@ -57,4 +59,26 @@ func UpdateSimulator(data map[string]interface{}) (*db.Simulator, error) {
 		}
 	}
 	return sim, nil
+}
+
+func SetRomSimulator(romIds []uint64, simId uint32) error {
+
+	roms, _ := (&db.Rom{}).GetByIds(romIds)
+
+	fileMd5List := []string{}
+	for _, v := range roms {
+		fileMd5List = append(fileMd5List, v.FileMd5)
+	}
+
+	if err := (&db.Rom{}).UpdateSimIdByIds(romIds, simId); err != nil {
+		utils.WriteLog(err.Error())
+		return err
+	}
+
+	if err := (&db.RomSetting{}).UpdateSimIds(roms[0].Platform, fileMd5List, simId); err != nil {
+		utils.WriteLog(err.Error())
+		return err
+	}
+
+	return nil
 }

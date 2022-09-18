@@ -1,10 +1,10 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- *
+ * 
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- *
+ * 
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -26,6 +26,7 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
 
     struct debug_output
     {
+     
       debug_output(HWINDOW hwnd = 0)
       {
         setup_on(hwnd);
@@ -34,8 +35,15 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
       void setup_on(HWINDOW hwnd = 0)
       {
         ::SciterSetupDebugOutput(hwnd,this,_output_debug);
+        instance(this);
       }
 
+      static debug_output* instance(debug_output* pi = nullptr) {
+        static debug_output* _instance = nullptr;
+        if (pi) _instance = pi;
+        return _instance;
+      }
+      
       static VOID SC_CALLBACK _output_debug(LPVOID param, UINT subsystem, UINT severity, LPCWSTR text, UINT text_length)
       {
         static_cast<debug_output*>(param)->output((OUTPUT_SUBSYTEMS)subsystem,(OUTPUT_SEVERITY)severity, (const WCHAR*)text,text_length);
@@ -76,7 +84,11 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
         char buffer [ 2049 ];
         va_list args;
         va_start ( args, fmt );
+#if _MSC_VER == 1400
+        int len = vsnprintf( buffer, sizeof(buffer), _TRUNCATE, fmt, args );
+#else
         int len = vsnprintf( buffer, sizeof(buffer), fmt, args );
+#endif
         va_end ( args );
         buffer [ len ] = 0;
         buffer [ 2048 ] = 0;
@@ -135,6 +147,13 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
           freopen("conin$", "r", stdin);
           freopen("conout$", "w", stdout);
           freopen("conout$", "w", stderr);
+#if 0          
+          DWORD cm;
+          if(GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),&cm))
+            SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), cm | ENABLE_VIRTUAL_TERMINAL_INPUT);
+          if (GetConsoleMode(GetStdHandle(STD_ERROR_HANDLE), &cm))
+            SetConsoleMode(GetStdHandle(STD_ERROR_HANDLE), cm | ENABLE_VIRTUAL_TERMINAL_INPUT);
+#endif            
 #pragma warning( pop )
           initialized = true;
         }
@@ -161,7 +180,9 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
         fputs(text, f);
       }
 #endif
+
     };
+
   }
 
 #endif

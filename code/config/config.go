@@ -16,22 +16,30 @@ import (
 
 //配置文件
 var (
-	Cfg      *ConfStruct                                                        //公共配置
-	ENV      string                                                             //环境配置
-	DOC_EXTS = []string{".txt", ".md"}                                          //doc文档支持的扩展名
-	PIC_EXTS = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", "wmv"} //支持的图片类型
-	RUN_EXTS = []string{
+	Cfg       *ConfStruct                                                                                                   //公共配置
+	ENV       string                                                                                                        //环境配置
+	DOC_EXTS  = []string{".txt", ".html", ".htm", ".md"}                                                                    //doc文档支持的扩展名
+	PIC_EXTS  = []string{".png", ".jpg", ".gif", ".ico", ".jpeg", ".bmp", ".wmv", ".mp4", ".avi", ".flv", ".webp", ".webm"} //支持的图片类型
+	FILE_EXTS = []string{
 		".html", ".htm", ".mht", ".mhtml", ".url",
-		".pdf", ".chm", ".doc", ".docx", ".ppt", ".pptx", "xls", "xlsx", ".rtf",
+		".chm", ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".rtf",
 		".exe", ".com", ".cmd", ".bat", ".lnk",
-	}                                                                           //可直接运行的doc文档支持的扩展名
-	Window *window.Window                                                       //窗体
+	} //可直接运行的doc文档支持的扩展名
+	RUN_EXTS = []string{".exe", ".cmd", ".bat",".lnk"} //可直接运行的扩展名
+	/*EXPLORER_EXTS = []string{
+		".lnk", ".html", ".htm", ".mht", ".mhtml", ".url",
+		".chm", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".rtf",
+	} //通过explorer运行的扩展名*/
+
+	AUDIO_EXTS = []string{".mp3", ".dmi", ".wav", ".wma"} //支持的音频类型
+	Window     *window.Window                             //窗体
 )
 
 //配置文件
 type ConfStruct struct {
+	ViewPath     string                  //代码路径
 	RootPath     string                  //exe文件的当前路径
-	Separator    string                  //exe文件的当前路径
+	Separator    string                  //分隔符
 	CachePath    string                  //缓存路径
 	UnzipPath    string                  //rom解压路径
 	Default      *db.Config              //默认配置
@@ -154,18 +162,65 @@ func getPlatform() ([]*db.Platform, map[uint32]*db.Platform, error) {
 			platform[v.Id].TitlePath = platformList[k].TitlePath
 		}
 
+		if v.CassettePath != "" {
+			platformList[k].CassettePath, _ = filepath.Abs(v.CassettePath)
+			platform[v.Id].CassettePath = platformList[k].CassettePath
+		}
+		if v.IconPath != "" {
+			platformList[k].IconPath, _ = filepath.Abs(v.IconPath)
+			platform[v.Id].IconPath = platformList[k].IconPath
+		}
+		if v.GifPath != "" {
+			platformList[k].GifPath, _ = filepath.Abs(v.GifPath)
+			platform[v.Id].GifPath = platformList[k].GifPath
+		}
 		if v.BackgroundPath != "" {
 			platformList[k].BackgroundPath, _ = filepath.Abs(v.BackgroundPath)
 			platform[v.Id].BackgroundPath = platformList[k].BackgroundPath
 		}
+
+		if v.WallpaperPath != "" {
+			platformList[k].WallpaperPath, _ = filepath.Abs(v.WallpaperPath)
+			platform[v.Id].WallpaperPath = platformList[k].WallpaperPath
+		}
+
 		if v.VideoPath != "" {
 			platformList[k].VideoPath, _ = filepath.Abs(v.VideoPath)
 			platform[v.Id].VideoPath = platformList[k].VideoPath
 		}
 
+		if v.FilesPath != "" {
+			platformList[k].FilesPath, _ = filepath.Abs(v.FilesPath)
+			platform[v.Id].FilesPath = platformList[k].FilesPath
+		}
+		if v.AudioPath != "" {
+			platformList[k].AudioPath, _ = filepath.Abs(v.AudioPath)
+			platform[v.Id].AudioPath = platformList[k].AudioPath
+		}
 		if v.Rombase != "" {
+
+			//检查语言csv是否存在
+			basePath := utils.GetFilePath(v.Rombase)
+			baseName := utils.GetFileName(v.Rombase)
+			baseExt := utils.GetFileExt(v.Rombase)
+			langBaseFile, _ := filepath.Abs(basePath + Cfg.Separator + baseName + "_" + Cfg.Default.Lang + baseExt)
+			if utils.FileExists(langBaseFile) {
+				v.Rombase = langBaseFile
+			}
+
 			platformList[k].Rombase, _ = filepath.Abs(v.Rombase)
 			platform[v.Id].Rombase = platformList[k].Rombase
+		}
+		if v.OptimizedPath != "" {
+			platformList[k].OptimizedPath, _ = filepath.Abs(v.OptimizedPath)
+			platform[v.Id].OptimizedPath = platformList[k].OptimizedPath
+		}
+
+		//攻略中相对路径都改成绝对路径
+		if v.Desc != "" {
+			v.Desc = strings.ReplaceAll(v.Desc, `<img src="`, `<img src="`+Cfg.RootPath)
+			platformList[k].Desc = v.Desc
+			platform[v.Id].Desc = v.Desc
 		}
 
 		//填充模拟器列表
@@ -199,8 +254,39 @@ func getDefault() (*db.Config, error) {
 	vo, err := (&db.Config{}).Get()
 
 	//如果软件名称是图片，则转换为绝对路径
-	if utils.FileExists(vo.SoftName) == true {
+
+	if strings.ToLower(vo.SoftName) != "simui" && utils.FileExists(vo.SoftName) == true {
 		vo.SoftName, _ = filepath.Abs(vo.SoftName)
+	}
+
+	//如果背景图片文件存在，则转换为绝对路径
+	if vo.BackgroundImage != "" {
+		vo.BackgroundImage, _ = filepath.Abs(vo.BackgroundImage)
+	}
+
+	//如果背景图片文件存在，则转换为绝对路径
+	if vo.WallpaperImage != "" {
+		vo.WallpaperImage, _ = filepath.Abs(vo.WallpaperImage)
+	}
+
+	//如果背景遮罩文件存在，则转换为绝对路径
+	if vo.BackgroundMask != "" {
+		vo.BackgroundMask, _ = filepath.Abs(vo.BackgroundMask)
+	}
+
+	//如果鼠标指针文件存在，则转换为绝对路径
+	if vo.Cursor != "" {
+		vo.Cursor, _ = filepath.Abs(vo.Cursor)
+	}
+
+	//如果音乐播放器文件存在，则转换为绝对路径
+	if vo.MusicPlayer != "" {
+		vo.MusicPlayer, _ = filepath.Abs(vo.MusicPlayer)
+	}
+
+	//如果图集排序为空，则填充默认值
+	if vo.ThumbOrders == "" {
+		vo.ThumbOrders = "[]"
 	}
 
 	if err != nil {
@@ -239,7 +325,7 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	themelist := map[string]*ThemeStruct{}
 	for _, fi := range lists {
 		ext := strings.ToLower(path.Ext(fi.Name())) //获取文件后缀
-		if !fi.IsDir() && ext == ".css" { // 忽略目录
+		if !fi.IsDir() && ext == ".css" {           // 忽略目录
 
 			filename := dirPth + fi.Name()
 			file, err := os.Open(filename) //打开文件
@@ -319,7 +405,6 @@ func getTheme() (map[string]*ThemeStruct, error) {
 	return themelist, nil
 }
 
-
 //读取语言参数配置
 func getLang(lang string) (map[string]string, error) {
 	langpath := Cfg.RootPath + "lang" + Cfg.Separator
@@ -371,4 +456,50 @@ func getShortcut() ([]*db.Shortcut, error) {
 		shortcutList[k].Path, _ = filepath.Abs(v.Path)
 	}
 	return shortcutList, nil
+}
+
+//读取全部资源目录
+func GetResPath(platformId uint32) map[string]string {
+
+	platform := Cfg.Platform[platformId]
+	res := map[string]string{}
+	res["thumb"] = platform.ThumbPath
+	res["snap"] = platform.SnapPath
+	res["poster"] = platform.PosterPath
+	res["packing"] = platform.PackingPath
+	res["title"] = platform.TitlePath
+	res["cassette"] = platform.CassettePath
+	res["icon"] = platform.IconPath
+	res["gif"] = platform.GifPath
+	res["background"] = platform.BackgroundPath
+	res["optimized"] = platform.OptimizedPath
+	res["wallpaper"] = platform.WallpaperPath
+	res["video"] = platform.VideoPath
+	res["doc"] = platform.DocPath
+	res["strategy"] = platform.StrategyPath
+	res["audio"] = platform.AudioPath
+	res["files"] = platform.FilesPath
+	return res
+}
+
+//读取资源类型名
+func GetResExts() map[string][]string {
+	res := map[string][]string{}
+	res["thumb"] = PIC_EXTS
+	res["snap"] = PIC_EXTS
+	res["poster"] = PIC_EXTS
+	res["packing"] = PIC_EXTS
+	res["title"] = PIC_EXTS
+	res["cassette"] = PIC_EXTS
+	res["icon"] = PIC_EXTS
+	res["gif"] = PIC_EXTS
+	res["background"] = PIC_EXTS
+	res["wallpaper"] = PIC_EXTS
+	res["optimized"] = PIC_EXTS
+	res["video"] = PIC_EXTS
+	res["doc"] = DOC_EXTS
+	res["strategy"] = DOC_EXTS
+	res["files"] = FILE_EXTS
+	res["audio"] = AUDIO_EXTS
+	return res
 }

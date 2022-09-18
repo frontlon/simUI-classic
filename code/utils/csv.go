@@ -26,9 +26,6 @@ func ReadCsv(filename string) ([][]string, error) {
 		record, err := reader.Read()
 		if err == io.EOF {
 			break
-		} else if err != nil {
-			fmt.Println("Error:", err)
-			return nil, err
 		}
 		data = append(data, record)
 	}

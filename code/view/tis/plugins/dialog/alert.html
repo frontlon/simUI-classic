@@ -1,0 +1,106 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style type="text/css">
+        @import "this://app/images/public.css";
+        @import "this://app/images/form.css";
+        html{height:max-content;width:max-content;overflow:hidden;background:color(center-background-color)}
+        .wrapper{padding:15dip;min-width:300dip;}
+        .icon{size:48dip;font-size:32dip;line-height:48dip;text-align:center;display:inline-block;font-style:normal;border:3dip solid;border-radius:50%;vertical-align:middle;}
+        .text{behavior:edit;flow:text;color:color(rom-list-text-color);width:300dip;max-height:70dip;display:inline-block;overflow:scroll-indicator;vertical-align:middle;padding-left:15dip;font-size:14dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+        .alert{color:#57C038;border-color:#57C038}
+        .warning{color:#3399CC;border-color:#3399CC}
+        .error{color:#CC0033;border-color:#CC0033}
+        .form_bottom{height:50dip;}
+    </style>
+
+</head>
+<body>
+<div.wrapper>
+    <i.icon#icon></i>
+    <div.text#text readonly></div>
+</div>
+
+<div.form_bottom#button_list></div>
+    <script type="text/tiscript">
+        include ROOTPATH + "tis/utils.tis";
+
+      view.root.on("ready", function(){
+
+        //初始化主题
+        initUiTheme();
+
+        //创建语言
+        createLang();
+
+        var type = view.parameters.type;
+        var text = view.parameters.text;
+        var buttons = view.parameters.buttons;
+        var icon = $(#icon);
+
+        switch(typeof(text)){
+        case "integer":
+            $(#text).html = text.toString();
+        break;
+        case "string":
+            $(#text).html = text.toHtmlString();
+        break;
+        case "array":
+        case "object":
+            $(#text).html =  JSON.stringify(text);
+            break;
+        case "undefined":
+            $(#text).html = "undefined";
+            break;
+        }
+
+        switch(type){
+        case "info":
+            icon.text = "i";
+            icon.attributes.addClass("alert");
+            view.windowCaption = CONF.Lang.Info;
+            break;
+        case "warning":
+            icon.text = "!";
+            icon.attributes.addClass("warning");
+            view.windowCaption = CONF.Lang.warning;
+
+            break;
+        case "error":
+            icon.text = "Χ";
+            icon.attributes.addClass("error");
+            view.windowCaption = CONF.Lang.Error;
+            break;
+        default:
+            icon.text = "i";
+            icon.attributes.addClass("alert");
+            view.windowCaption = CONF.Lang.Info;
+        }
+
+        if(view.parameters.caption != null && view.parameters.caption != ""){
+            view.windowCaption = view.parameters.caption;
+        }
+
+        var buttonList = "";
+        //生成按钮
+        if(buttons == undefined || buttons.length == 0){
+            buttonList = "<button id='yes' class='ok' role='default-button'>"+ CONF.Lang.OK +"</button>";
+        }else{
+            for (var btn in buttons){
+                let c = btn.class == undefined ? "cancel" : btn.class;
+                let role = btn.role == undefined ? "" : btn.role;
+                buttonList += "<button id='"+ btn.id +"' class='"+ c +"' role='"+ role +"'>" + btn.text +"</button>";
+            }
+        }
+        $(#button_list).html = buttonList;        
+        
+        self.on("click", "#button_list button", function(evt) {
+            view.close(this.attributes["id"]);
+        });
+
+    });
+
+    </script>
+</body>
+</html>
