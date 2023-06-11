@@ -8,7 +8,7 @@ import (
 	"simUI/code/utils"
 )
 
-//读取菜单列表
+// 读取菜单列表
 func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 	newMenu := []*db.Menu{}
 
@@ -17,7 +17,7 @@ func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 		return newMenu, err
 	}
 	//读取根目录下是否有rom
-	count, err := (&db.Rom{}).Count(0,platform, ConstMenuRootKey, "", "", "", "", "", "","","")
+	count, err := (&db.Rom{}).Count(0, platform, ConstMenuRootKey, "", "", "", "", "", "", "", "", "", "")
 	if err != nil {
 		return newMenu, err
 	}
@@ -36,7 +36,7 @@ func GetMenuList(platform uint32, page uint32) ([]*db.Menu, error) {
 	return newMenu, nil
 }
 
-//读取所有平台的菜单列表
+// 读取所有平台的菜单列表
 func GetAllPlatformMenuList() (map[string][]map[string]string, error) {
 
 	platformList, _ := (&db.Platform{}).GetAll()
@@ -67,47 +67,112 @@ func GetAllPlatformMenuList() (map[string][]map[string]string, error) {
 
 }
 
-func AddMenu(platform uint32,name string) error {
-	folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+func AddMenu(platform uint32, name string, virtual int8) error {
 
-	if utils.FolderExists(folder){
-		return errors.New(config.Cfg.Lang["MenuExists"])
+	//读取目录信息
+	info := (&db.Menu{}).GetByName(platform, name)
+
+	//检查目录是否存在
+	folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+	exists := utils.DirExists(folder)
+
+	//如果是实体目录，才去新建文件夹
+	if virtual == 0 {
+		if exists {
+			return errors.New(config.Cfg.Lang["MenuExists"])
+		}
+		if err := utils.CreateDir(folder); err != nil {
+			return err
+		}
+	} else {
+		if info != nil {
+			return errors.New(config.Cfg.Lang["MenuExists"])
+		}
+		//如果目录真实存在，则转换为实体目录
+		if exists {
+			virtual = 0
+		}
 	}
-	if err := utils.CreateDir(folder);err != nil{
-		return err
+
+	//更新数据库
+	if info == nil {
+		if err := (&db.Menu{
+			Name:     name,
+			Platform: platform,
+			Pinyin:   utils.TextToPinyin(name),
+			Virtual:  virtual,
+			Sort:     0,
+		}).Add(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
-func MenuRename(platform uint32,oldName string,newName string) error {
+func MenuRename(platform uint32, oldName string, newName string) error {
 	oldMenu := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + oldName
 	newMenu := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + newName
 
-	if !utils.FolderExists(oldMenu){
+	//读取目录信息
+	info := (&db.Menu{}).GetByName(platform, oldName)
+	if info == nil {
 		return errors.New(config.Cfg.Lang["MenuIsNotExists"])
 	}
-	if err := utils.FolderMove(oldMenu,newMenu);err != nil{
-		return err
+
+	if info.Virtual == 0 {
+		if !utils.DirExists(oldMenu) {
+			return errors.New(config.Cfg.Lang["MenuIsNotExists"])
+		}
+		if err := utils.FolderMove(oldMenu, newMenu); err != nil {
+			return err
+		}
 	}
+
+	//更新数据库
+	(&db.Menu{}).UpdateName(platform, oldName, newName)
+	(&db.Rom{}).UpdateMenu(platform, oldName, newName)
+
 	return nil
 
 }
 
-func DeleteMenu(platform uint32,name string) error {
-	folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+func DeleteMenu(platform uint32, name string) error {
 
-	if !utils.FolderExists(folder){
+	//读取目录信息
+	info := (&db.Menu{}).GetByName(platform, name)
+
+	if info == nil {
 		return errors.New(config.Cfg.Lang["MenuIsNotExists"])
 	}
 
-	dir, _ := ioutil.ReadDir(folder)
-	if len(dir) > 0{
-		return errors.New(config.Cfg.Lang["MenuIsNotEmpty"])
+	if info.Virtual == 1 {
+		volist, _ := (&db.Rom{}).GetByMenu(platform, name)
+		if len(volist) > 0 {
+			return errors.New(config.Cfg.Lang["MenuIsNotEmpty"])
+		}
+	} else {
+		folder := config.Cfg.Platform[platform].RomPath + config.Cfg.Separator + name
+		exists := utils.DirExists(folder)
+
+		if exists == true {
+			dir, _ := ioutil.ReadDir(folder)
+			if len(dir) > 0 {
+				return errors.New(config.Cfg.Lang["MenuIsNotEmpty"])
+			}
+
+			if err := utils.DeleteDir(folder); err != nil {
+				return err
+			}
+		}
 	}
 
-
-	if err := utils.DeleteDir(folder);err != nil{
+	//删除数据库
+	if err := (&db.Menu{
+		Platform: platform,
+		Name:     name,
+	}).DeleteByName(); err != nil {
 		return err
 	}
+
 	return nil
 }

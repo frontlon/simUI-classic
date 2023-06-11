@@ -1,25 +1,28 @@
-﻿<html>
+﻿<html window-frame="standard" window-resizable>
   <head>
     <title></title>
     <div id="themefile"></div>    
     <style>
       @import 'this://app/images/public.css';
       @import 'this://app/images/form.css';
-      html,body {overflow:scroll-indicator;margin:0;background:color(center-background-color);padding:0;width:100%;}
+
+      html,body {overflow:scroll-indicator scroll-manner(animation:false);vertical-scrollbar:"constom-scroll";margin:0;background:color(center-background-color);padding:0;width:100%;}
       .wrapper {height:*;padding:0 10dip;margin:0;}
       .titlebar {flow:horizontal-flow;width:*;display:block;}
       .titlebar_left {width:*;display:block;}
       .titlebar_right {width:*;text-align:right;display:block;}
       .content {display:block;clear:both;}
       label {display:block;}
-      table {style-set:resizeable;border-collapse:collapse;border-spacing:0;width:*;margin-top:10dip;}
+      table {border-collapse:collapse;border-spacing:0;width:*;margin-top:10dip;style-set: vgrid}
       table label {text-align:left;}
-      table th {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:5dip;width:*;text-align:left;font-weight:bold;}
-      table td {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:0 5dip;width:*;text-align:left;}
+      table th {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:5dip;width:*;text-align:left!important;font-weight:bold;vertical-align:middle}
+      table td {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:0 5dip;width:*;text-align:left!important;overflow-x:hidden;text-overflow:ellipsis;white-space: nowrap;}
       table tr.checked {background:color(manager-tr-checked-background-color);}
       table tr:hover {background:color(manager-tr-hover-background-color);}
       table th:nth-child(1),table td:nth-child(1) {width:40dip;}
-      table input[type='text'] {background:none;border:0;margin:0;text-align:left;display:block;}
+      table .notcheck {width:*;}
+      table .sub_tr{background:color(manager-tr-sub-background-color);}
+      table input[type='text']{background:none;border:0;margin:0;text-align:left;display:inline-block;width:100%}
       table input[type='checkbox'] {display:inline-block;}
       table input[type='text']:hover {background:none;}
       table .nosave {color:color(manager-input-nosave-text-color);}
@@ -27,10 +30,11 @@
       table tr.grp1 td{background-color:color(manager-grp1-tr-background-color);}
       table tr.grp2 td{background-color:color(manager-grp2-tr-background-color);}
 
+      .small_btn{width:20dip;height:17dip;line-height:17dip;font-size:10dip;vertical-align:middle}
 
       .openfile {cursor:pointer;}
-      .pages {width:*;text-align:center;}
-      .pages li {display:inline-block;size:20dip;line-height:20dip;border:1px solid color(manager-pages-border-color);background:color(manager-pages-background-color);text-align:center;color:color(manager-pages-text-color);margin:0 2dip;}
+      .pages {width:70%;text-align:center;}
+      .pages li {display:inline-block;height:20dip;width:auto;min-width:20dip;padding:0 3dip;line-height:20dip;border:1px solid color(manager-pages-border-color);background:color(manager-pages-background-color);text-align:center;color:color(manager-pages-text-color);margin:2dip;}
       .pages li:hover {background:color(manager-pages-hover-background-color);}
       .pages li:current {background:none;border:0;}
       select {width:100dip;}
@@ -39,31 +43,57 @@
 
       /* 表格宽度 */
       #romlist_rombase th,#romlist_rombase td input{width:240dip}
-      #romlist_rombase th:nth-child(3),#romlist_rombase td:nth-child(3) input{width:50dip}
-      #romlist_rombase th:nth-child(4),#romlist_rombase td:nth-child(4) input{width:100dip}
-      #romlist_rombase th:nth-child(5),#romlist_rombase td:nth-child(5) input{width:80dip}
-      #romlist_rombase th:nth-child(6),#romlist_rombase td:nth-child(6) input{width:50dip}
+      #romlist_rombase th:nth-child(1),#romlist_rombase td:nth-child(1) input{width:50dip}
+      #romlist_rombase th:nth-child(4),#romlist_rombase td:nth-child(4) input{width:50dip}
+      #romlist_rombase th:nth-child(5),#romlist_rombase td:nth-child(5) input{width:100dip}
+      #romlist_rombase th:nth-child(6),#romlist_rombase td:nth-child(6) input{width:80dip}
       #romlist_rombase th:nth-child(7),#romlist_rombase td:nth-child(7) input{width:50dip}
       #romlist_rombase th:nth-child(8),#romlist_rombase td:nth-child(8) input{width:50dip}
       #romlist_rombase th:nth-child(9),#romlist_rombase td:nth-child(9) input{width:50dip}
-      #romlist_rombase th:nth-child(10),#romlist_rombase td:nth-child(10) input{width:80dip}
+      #romlist_rombase th:nth-child(10),#romlist_rombase td:nth-child(10) input{width:50dip}
       #romlist_rombase th:nth-child(11),#romlist_rombase td:nth-child(11) input{width:80dip}
       #romlist_rombase th:nth-child(12),#romlist_rombase td:nth-child(12) input{width:80dip}
       #romlist_rombase th:nth-child(13),#romlist_rombase td:nth-child(13) input{width:80dip}
       #romlist_rombase th:nth-child(14),#romlist_rombase td:nth-child(14) input{width:80dip}
       #romlist_rombase th:nth-child(15),#romlist_rombase td:nth-child(15) input{width:80dip}
+      #romlist_rombase th:nth-child(16),#romlist_rombase td:nth-child(16) input{width:80dip}
 
+      #rombase_submit{display:none;background:color(button-ok-background-color);color:color(button-ok-text-color);border:0}
 
-      #rombase_submit{display:none}
-      .form_bottom{border:0}
+      .form_bottom{border:0;text-align:left;}
+
+      /* 子游戏管理 */
+      splitter{background:color(sidebar-background-color);}
+      splitter:hover{background:color(sidebar-background-color)}
+      #subgame_left{height:*;overflow:scroll-indicator scroll-manner(animation:false);vertical-scrollbar:"constom-scroll";}
+      #subgame_right{height:*;overflow:scroll-indicator scroll-manner(animation:false);vertical-scrollbar:"constom-scroll";}
+      
+      .subgame_table td{width:*}
+      .subgame_table tr:current{background:color(manager-tr-active-background-color)}
+      .subgame_table tr.hide{display:none}
+      .subgame_table th:nth-child(1),.subgame_table td:nth-child(1){min-width:100dip;}
+      .subgame_table th:nth-child(2),.subgame_table td:nth-child(2){min-width:100dip;}
+      .subgame_table th:nth-child(3),.subgame_table td:nth-child(3){width:50dip;}
+
+      #romlist_subgame_master tbody tr{context-menu:selector(menu#subGameContext);}
+
+      #rename_box{background:color(search-box-background-color);border-radius:5px;box-shadow:0 0 20dip color(search-box-box-shadow);position:absolute;top:50%;left:50%;width:400dip;padding:10dip 10dip ;margin: -80dip 0 0 -200dip;opacity:0.9;display:none}
+      #rename_box h2{font-size:16dip;margin:0 0 10dip 0;padding:0;color:color(search-box-title-color)}
+      #rename_box input{color:color(search-box-text-color);display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 
     </style>
   </head>
   <body>
+  <div id="rename_box">
+    <h2></h2>
+    <input type="text" id="rename_input" value="" />
+  </div>
+  <menu.context id="subGameContext"></menu>
     <tabs class="tabs" id="mytabs">
       <strip>
-        <label ww="1200dip" wh="700dip" for="first" selected>{{RombaseManager}}</label>
-        <label ww="1200dip" wh="700dip" for="second">{{MediaManager}}</label>
+        <label ww="1200dip" wh="700dip" for="seventh" selected>{{GameManager}}</label>
+        <label ww="1200dip" wh="700dip" for="first">{{RombaseManager}}</label>
+        <!--<label ww="1200dip" wh="700dip" for="second">{{MediaManager}}</label>-->
         <label ww="1200dip" wh="700dip" for="third">{{SimulatorManager}}</label>
         <label ww="800dip" wh="700dip" for="fourth">{{FileManager}}</label>
         <label ww="800dip" wh="700dip" for="fifth">{{RomRemoveDuplicate}}</label>
@@ -81,13 +111,15 @@
                 <select id="menu_rombase">
                   <option id="">{{SelectMenu}}</option>
                 </select>
+                <button id="rombase_submit">{{BatchUpdate}}</button>
               </div>
               <div class="titlebar_right"></div>
             </div>
             <div class="content">
-              <table id="romlist_rombase">
+              <table id="romlist_rombase" resizeable>
                 <thead>
                   <tr>
+                    <th>{{Run}}</th>
                     <th>{{BaseRomName}}</th>
                     <th>{{BaseName}}</th>
                     <th>{{BaseYear}}</th>
@@ -108,13 +140,11 @@
                 <tbody></tbody>
               </table>
               <ul class="pages" id="pages_rombase"></ul>
-              <div class="form_bottom">
-                <button class="ok" id="rombase_submit">{{BatchUpdate}}</button>
-          </div>
             </div>
           </div>
         </section>
         <!-- 媒体管理 -->
+        <!--
         <section id="second">
           <div class="tab_tip">{{TipInputPath}}</div>
           <div class="wrapper">
@@ -153,6 +183,7 @@
             </div>
           </div>
         </section>
+        -->
         <!-- 模拟器管理 -->
         <section id="third">
           <div class="wrapper">
@@ -218,7 +249,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_file">
+              <table class="check_table" id="romlist_file" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}<input type='checkbox' name='all_simulator' id='all_file' value='1' /></th>
@@ -251,7 +282,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_repeat">
+              <table class="check_table" id="romlist_repeat" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}<input type='checkbox' name='all_simulator' id='all_repeat' value='1' /></th>
@@ -281,7 +312,7 @@
               </div>
             </div>
             <div class="content">
-              <table class="check_table" id="romlist_zombie">
+              <table class="check_table" id="romlist_zombie" resizeable>
                 <thead>
                   <tr>
                     <th>{{Select}}<input type='checkbox' name='all_simulator' id='all_zombie' value='1' /></th>
@@ -294,13 +325,85 @@
             </div>
           </div>
         </section>
+
+        <!-- 子游戏管理 -->
+        <section id="seventh">
+          <div class="tab_tip">{{TipSubGameManager}}</div>
+
+            <frameset cols="*,*" noresize="noresize">
+              <section id="subgame_left">
+                <div class="wrapper">
+                  <div class="titlebar">
+                    <div class="titlebar_left">
+                      <select id="platform_subgame"></select>
+                      &nbsp;
+                      <select id="menu_subgame_master">
+                        <option value="">{{SelectMenu}}</option>
+                      </select>
+                      <input type="text" value="" id="search_subgame_master" novalue="{{InputSearchKeyword}}" />
+                    </div>
+                  </div>
+                  <div class="content">
+                    <table id="romlist_subgame_master" class="subgame_table" resizeable>
+                      <thead>
+                        <tr>
+                          <th class="notcheck">{{BaseName}}</th>
+                          <th>{{FilePath}}</th>
+                          <th>{{Option}}</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                    <ul class="pages" id="pages_subgame_master"></ul>
+                  </div>
+                </div>
+              </section>
+              <splitter id="right_splitter" />
+              <section id="subgame_right">
+
+                <div class="wrapper">
+                  <div class="titlebar">
+                    <div class="titlebar_left">
+                      <select id="menu_subgame_slave">
+                        <option value="">{{SelectMenu}}</option>
+                      </select>
+                      <input type="text" value="" id="search_subgame_slave" novalue="{{InputSearchKeyword}}" />
+                    </div>
+                  </div>
+                  <div class="content">
+                    <table id="romlist_subgame_slave" class="subgame_table" resizeable>
+                      <thead>
+                        <tr>
+                          <th class="notcheck">{{BaseName}}</th>
+                          <th>{{FilePath}}</th>
+                          <th>{{Option}}</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                    <ul class="pages" id="pages_subgame_slave"></ul>
+                  </div>
+                </div>
+
+              </section>
+
+          </frameset>
+        <section>
+
       </panels>
     </tabs>
 
     <script type="text/tiscript">
-      include ROOTPATH + "tis/plugins/tabs.tis";
-      include ROOTPATH + "tis/utils.tis";
-      include ROOTPATH + "tis/dialog/rom_manager.tis";
+      include ROOTPATH + "js/plugins/tabs.js";
+      include ROOTPATH + "js/utils.js";
+      include ROOTPATH + "js/dialog/rom_manager/init.js";
+      include ROOTPATH + "js/dialog/rom_manager/file.js";
+      //include ROOTPATH + "js/dialog/rom_manager/media.js";
+      include ROOTPATH + "js/dialog/rom_manager/rombase.js";
+      include ROOTPATH + "js/dialog/rom_manager/rpeat.js";
+      include ROOTPATH + "js/dialog/rom_manager/simulator.js";
+      include ROOTPATH + "js/dialog/rom_manager/zombie.js";
+      include ROOTPATH + "js/dialog/rom_manager/subgame.js";
 
       //初始化平台列表
       managerInit();
@@ -331,63 +434,15 @@
         }
       }
 
-      //全选功能 - 模拟器管理
-      event change $(#all_simulator){
-        var checks = $$(.check_simulator);
-        for(var c in checks){
-            c.checked = this.checked;
-            if(this.checked == true){
-                c.parent.parent.attributes.addClass("checked");
-            }else{
-                c.parent.parent.attributes.removeClass("checked");
-            }
-        }
+      //文本框修改 文字高亮
+      event change $(table input[type=text]) {
+        this.attributes.addClass("nosave");
       }
-      //全选功能 - 文件管理
-      event change $(#all_file){
-        var checks = $$(.check_file);
-        for(var c in checks){
-            c.checked = this.checked;
-            if(this.checked == true){
-                c.parent.parent.attributes.addClass("checked");
-            }else{
-                c.parent.parent.attributes.removeClass("checked");
-            }
-        }
-      }
-      //全选功能 - rom去重
-      event change $(#all_repeat){
-        var checks = $$(.check_repeat);
-        for(var c in checks){
-            c.checked = this.checked;
-            if(this.checked == true){
-                c.parent.parent.attributes.addClass("checked");
-            }else{
-                c.parent.parent.attributes.removeClass("checked");
-            }
-        }
-      }
-      //全选功能 - 无效资源清理
-      event change $(#all_zombie){
-        var checks = $$(.check_zombie);
-        for(var c in checks){
-            c.checked = this.checked;
-            if(this.checked == true){
-                c.parent.parent.attributes.addClass("checked");
-            }else{
-                c.parent.parent.attributes.removeClass("checked");
-            }
-        }
-      }
+
 
       /**
        * 游戏资料管理
       **/
-
-      //文本框修改 - 游戏资料管理
-      event change $(table input[type=text]) {
-        this.attributes.addClass("nosave");
-      }
 
       //切换平台 - 游戏资料管理
       event change $(#platform_rombase){
@@ -407,9 +462,13 @@
       }
 
       //批量更新 - 游戏资料管理
-      
       event click $(#rombase_submit) {
         managerRombaseBatchSave();
+      }
+
+      //批量更新 - 游戏资料管理
+      event click $(#romlist_rombase .run) {
+        managerRombaseRunGame(this);
       }
       
 
@@ -418,11 +477,11 @@
         managerCreateRombaseByPages(this);
       }
 
+
       /**
        * 媒体资源编辑
       **/
-
-
+/*
       //分页 - 媒体资源编辑
       event click $(#romlist_media .openfile){
        openFile(this);
@@ -434,6 +493,7 @@
 
 
       //切换平台 - 媒体资源编辑
+      
       event change $(#platform_media){
         managerChangeMediaPlatform(this.value);
       }
@@ -455,10 +515,24 @@
         }
         managerSetMedia(this);
       }
+    */
 
       /**
        * 模拟器管理
       **/
+
+      //全选功能 - 模拟器管理
+      event change $(#all_simulator){
+        var checks = $$(.check_simulator);
+        for(var c in checks){
+            c.checked = this.checked;
+            if(this.checked == true){
+                c.parent.parent.attributes.addClass("checked");
+            }else{
+                c.parent.parent.attributes.removeClass("checked");
+            }
+        }
+      }
 
       //切换平台 - 模拟器管理
       event change $(#platform_sim){
@@ -498,9 +572,23 @@
           openFileLua(this);
        }
 
+
       /**
        * 文件管理
       **/
+
+      //全选功能 - 文件管理
+      event change $(#all_file){
+        var checks = $$(.check_file);
+        for(var c in checks){
+            c.checked = this.checked;
+            if(this.checked == true){
+                c.parent.parent.attributes.addClass("checked");
+            }else{
+                c.parent.parent.attributes.removeClass("checked");
+            }
+        }
+      }
 
       //切换平台 - 文件管理
       event change $(#platform_file){
@@ -531,10 +619,23 @@
         managerFileDelete();
       }
 
+
       /**
        * rom去重
       **/
 
+      //全选功能 - rom去重
+      event change $(#all_repeat){
+        var checks = $$(.check_repeat);
+        for(var c in checks){
+            c.checked = this.checked;
+            if(this.checked == true){
+                c.parent.parent.attributes.addClass("checked");
+            }else{
+                c.parent.parent.attributes.removeClass("checked");
+            }
+        }
+      }
 
       //检测重复rom - rom去重
       event click $(#select_check_repeat){
@@ -555,10 +656,24 @@
         managerRunGame(this);
       }
 
+
+
       /**
        * 无效资源清理
       **/
 
+      //全选功能 - 无效资源清理
+      event change $(#all_zombie){
+        var checks = $$(.check_zombie);
+        for(var c in checks){
+            c.checked = this.checked;
+            if(this.checked == true){
+                c.parent.parent.attributes.addClass("checked");
+            }else{
+                c.parent.parent.attributes.removeClass("checked");
+            }
+        }
+      }
 
       //检测重复rom - 无效资源清理
       event click $(#select_check_zombie){
@@ -574,6 +689,97 @@
         managerFileZombieDelete();
       }
       
+
+
+      /**
+       * 子游戏管理
+      **/
+
+      //切换平台 - 子游戏管理
+      event change $(#platform_subgame){
+        managerChangeSubgamePlatform(this.value);
+      }
+
+      //切换目录 - 子游戏管理 - 主游戏列表
+      event change $(#menu_subgame_master){
+        managerCreateListMaster(0);
+      }
+
+      //切换目录 - 子游戏管理 - 子游戏列表
+      event change $(#menu_subgame_slave){
+        managerCreateListSlave(0);
+      }
+
+      //名称模糊搜索 - 子游戏管理 - 主列表
+      event change $(#search_subgame_master){
+        managerCreateListMaster(0);
+      }
+
+      //名称模糊搜索 - 子游戏管理 - 子列表
+      event change $(#search_subgame_slave){
+        managerCreateListSlave(0);
+      }
+
+      //分页 - 子游戏管理 - 主列表
+      event click $(#pages_subgame_master li){
+        var page = this.html.toInteger() - 1;
+        managerCreateListMaster(page,this);
+      }
+
+      //分页 - 子游戏管理 - 子列表
+      event click $(#pages_subgame_slave li){
+        var page = this.html.toInteger() - 1;
+        managerCreateListSlave(page,this);
+      }
+
+      //选定主rom - 子游戏管理
+      event click $(#romlist_subgame_master tbody tr){
+        managerSetMasterGame(this);
+      }
+
+      //绑定rom - 子游戏管理
+      event click $(#romlist_subgame_slave tbody .small_btn){
+        managerBindGame(this);
+      }
+
+      //解绑rom - 子游戏管理
+      event click $(#romlist_subgame_master tbody .small_btn){
+        managerUnBindGame(this);
+      }
+
+      //删除rom及相关资源文件 - 子游戏管理
+      event click $(#subGameContext .delete) (evt,input) {
+        managerDeleteRom(this);
+      }
+
+      //rom列表右键菜单 - 子游戏管理
+      event contextmenusetup $(#romlist_subgame_master tbody tr) (evt,input) {
+        managerSubGameContextMenu(this);
+      }
+
+      //修改别名 - 子游戏管理
+      event click $(#subGameContext .rename) (evt,input) {
+        openRenameBox(this);
+      }
+    
+      //修改文件名 - 子游戏管理
+      event click $(#subGameContext .basename) (evt,input) {
+        openbaseNameBox(this);
+      }
+
+    
+      //回车改名
+      self.on("keyup", function(evt) {
+          if (evt.keyCode == Event.VK_RETURN){
+            managerSubGameEditName();
+          }
+      });
+
+      //搜索框失去焦点
+      self.on("blur", "#rename_input", function(evt) {
+          closeRenameBox();
+      });
+
     </script>
   </body>
 </html>

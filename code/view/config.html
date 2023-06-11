@@ -7,10 +7,6 @@
     @import "this://app/images/form.css";
     html,body{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0;}
     .wrapper{width:*;height:*;flow:horizontal-flow;overflow:auto;padding:0;margin:0;}
-
-    .frame_left{width:120dip;height:*;display:inline-block;}
-    .frame_right{width:*;height:*;display:inline-block;padding-left:8dip;margin-right:20dip;}
-    .frame_right input[type="text"]{width:*}
   
     #table_default td:first-child{width:120dip;}
     .table_platform tr td:nth-child(odd){font-size:11dip;text-align:right;padding:3dip 0;}
@@ -34,16 +30,20 @@
     .rombaseEnum_wrapper textarea{height:300dip;display:block;width:auto}
     
 
+    #thumb_orders{flow:horizontal-wrap;height:auto;width:*;display:block}
+    #thumb_orders li{width:100dip;display:block;background:color(button-background-color);border:1px solid color(button-border-color);color:color(button-text-color);margin:5dip;padding:10dip;text-align:center;}
+
   </style>
   </head>
 <body>
 
   <tabs class="tabs" id="mytabs">
     <strip>
-      <label ww="650dip" wh="310dip" for="first" selected>{{GeneralConfig}}</label>
+      <label ww="650dip" wh="350dip" for="first" selected>{{GeneralConfig}}</label>
       <label ww="540dip" wh="305dip" for="second">{{InterfaceConfig}}</label>
       <label ww="670dip" wh="500dip" for="third">{{RombaseEnum}}</label>
       <label ww="570dip" wh="350dip" for="fourth">{{Shortcut}}</label>
+      <label ww="570dip" wh="350dip" for="fifth">{{ThumbOrders}}</label>
     </strip>
     <panels>
       <section id="first">
@@ -52,6 +52,8 @@
             <tr><td><div class="tip" title="{{SoftTitleTip}}">?</div>{{SoftTitle}}：</td><td><input type="text"  id="config_soft_name" value=""> <button class="openfile" for="config_soft_name" caption="{{SelectPicFile}}" filter="picture Files (*.ico,*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.ico;*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button></td></tr>
             <tr><td><div class="tip" title="{{LangTip}}">?</div>{{Lang}}：</td><td><select id="config_lang"></select></td></tr>
             <tr><td><div class="tip" title="{{PicSearchEnginesTitle}}">?</div>{{PicSearchEngines}}：</td><td><input type="text" id="config_search_engines" style="width:280dip"></td></tr>  
+            <tr><td><div class="tip" title="{{MusicPlayerTip}}">?</div>{{MusicPlayer}}：</td><td><input type="text"  id="config_music_player" value=""> <button class="openfile" for="config_music_player" caption="{{SelectPicFile}}" filter="picture Files (*.exe)|*.exe|All Files (*.*)|*.*">...</button></td></tr>
+
             <tr><td>{{StartCheckUpgrade}}：</td><td><select id="config_enable_upgrade">
                 <option value="1">{{Yes}}</option>
                 <option value="0">{{No}}</option>
@@ -75,7 +77,7 @@
             </tr>
             <tr>
               <td><div class="tip" title="{{TipBackground}}">?</div>{{DefaultBackground}}：</td>
-              <td colspan="3"><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="Background Files (*.png,*.gif,*.jpg,*.jpeg,*.mp4,*.wmv,*.flv,*.avi)|*.png;*.gif;*.jpg;*.jpeg;*.mp4;*.wmv;*.flv;*.avi|All Files (*.*)|*.*">...</button>
+              <td colspan="3"><input type="text"  id="config_background" value=""> <button class="openfile" for="config_background" caption="{{SelectPicFile}}" filter="Media Files (*.png,*.gif,*.jpg,*.jpeg,,*.webp,*.mp4,*.wmv,*.flv,*.avi)|*.png;*.gif;*.jpg;*.jpeg;*.webp;*.mp4;*.wmv;*.flv;*.avi;*.webm|All Files (*.*)|*.*">...</button>
                 <select id="config_background_repeat">
                     <option value="repeat">{{BackgroundRepeat}}</option>
                     <option value="cover">{{BackgroundCover}}</option>
@@ -83,18 +85,25 @@
                 </select>
                 <select id="config_background_fuzzy">
                     <option value="0">{{NotFuzzy}}</option>
-                    <option value="1">{{Fuzzy}}</option>
+                    <option value="1">{{Fuzzy}}1</option>
+                    <option value="3">{{Fuzzy}}2</option>
+                    <option value="5">{{Fuzzy}}3</option>
+                    <option value="7">{{Fuzzy}}4</option>
+                    <option value="9">{{Fuzzy}}5</option>
+                    <option value="15">{{Fuzzy}}6</option>
+                    <option value="30">{{Fuzzy}}7</option>
+                    <option value="45">{{Fuzzy}}8</option>
                 </select>
               </td>
             </tr>
             <tr>
               <td><div class="tip" title="{{TipBackgroundMask}}">?</div>{{DefaultBackgroundMask}}：</td>
-              <td colspan="3"><input type="text" id="config_background_mask" value=""> <button class="openfile" for="config_background_mask" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button>
+              <td colspan="3"><input type="text" id="config_background_mask" value=""> <button class="openfile" for="config_background_mask" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp,*.webp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp;*.webp|All Files (*.*)|*.*">...</button>
               </td>
             </tr>
             <tr>
               <td><div class="tip" title="{{TipWallpaper}}">?</div>{{DefaultWallpaper}}：</td>
-              <td colspan="3"><input type="text"  id="config_wallpaper" value=""> <button class="openfile" for="config_wallpaper" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*">...</button>
+              <td colspan="3"><input type="text"  id="config_wallpaper" value=""> <button class="openfile" for="config_wallpaper" caption="{{SelectPicFile}}" filter="picture Files (*.png,*.gif,*.jpg,*.jpeg,*.bmp,*.webp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp;*.webp|All Files (*.*)|*.*">...</button>
               </td>
             </tr>
           </table>
@@ -127,14 +136,22 @@
         </div>
       </section>
 
+      <section id="fifth">
+        <!-- 图集排序 -->
+        <div class="wrapper">
+          <ul id="thumb_orders">
+          </ul>
+        </div>
+      </section>
+
     </panels>
   </tabs>
 
   <script type="text/tiscript">
-    include ROOTPATH + "tis/plugins/tabs.tis";
-    include ROOTPATH + "tis/plugins/dragdrop.tis";
-    include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog/config.tis";
+    include ROOTPATH + "js/plugins/tabs.js";
+    include ROOTPATH + "js/plugins/dragdrop.js";
+    include ROOTPATH + "js/utils.js";
+    include ROOTPATH + "js/dialog/config.js";
 
     //初始化主题
     initUiTheme();
@@ -214,7 +231,6 @@
         rombaseSubmit();
     }
     
-
 
 </script>
 </body>

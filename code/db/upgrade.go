@@ -1,42 +1,75 @@
 package db
 
 import (
-	"bufio"
-	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"io"
-	"os"
-	"simUI/code/utils"
 )
 
-//升级数据库
-func UpgradeDB() {
-
-	db, _ := sql.Open("sqlite3", "./data.dll")
-
-	filename := "upgrade.sql"
-	f, err := os.Open(filename)
-	if err != nil {
-		return
-	}
-
-	defer os.Remove(filename)
-	defer f.Close()
-	defer db.Close()
-
-	br := bufio.NewReader(f)
-	for {
-		a, _, c := br.ReadLine()
-
-		if c == io.EOF {
-			break
-		}
-
-		if len(a) == 0 {
-			continue
-		}
-		if _,err := db.Exec(string(a));err != nil{
-			utils.WriteLog(err.Error())
-		}
+// 数据库更新列表，列表中数据不能删除，如果有重复update，则将老记录留空，最后添加新记录
+// 如果有添加，就往最后添加，不要往前面或中间添加
+func DbUpdateSqlList(upgradeId string) []string {
+	return []string{
+		`update config SET upgrade_id = ` + upgradeId + ` where id = 1`,
+		``,
+		`ALTER TABLE menu ADD COLUMN "sort" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE platform ADD COLUMN "title_path" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "background_path" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "doc_path" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "rombase" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "cassette_path"  TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "icon_path"  TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "gif_path"  TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "files_path"  TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "wallpaper_path"  TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE simulator ADD COLUMN "sort" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE simulator ADD COLUMN "lua" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_version" TEXT DEFAULT ''`,
+		`ALTER TABLE config ADD COLUMN "romlist_font_size" INTEGER NOT NULL DEFAULT 4`,
+		`ALTER TABLE config ADD COLUMN "wallpaper_image" TEXT NOT NULL DEFAULT 'theme/bg.jpg'`,
+		`ALTER TABLE config ADD COLUMN "romlist_name_type" INTEGER NOT NULL DEFAULT 0`,
+		`CREATE TABLE "rombase_enum" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,"type" TEXT NOT NULL DEFAULT '',"name" TEXT NOT NULL DEFAULT '')`,
+		`ALTER TABLE config ADD COLUMN "background_fuzzy" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE config ADD COLUMN "background_mask" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "audio_path" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "rom_name" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_name_en" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_name_jp" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_producer" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "run_num" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE rom ADD COLUMN "run_lasttime" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE rom ADD COLUMN "base_other_a" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_other_b" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_other_c" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "base_other_d" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "size" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "optimized_path" TEXT NOT NULL DEFAULT ''`,
+		`CREATE INDEX "idx_file_md5" ON "rom" ("file_md5")`,
+		`DROP INDEX IF EXISTS idx_info_md5`,
+		`DROP INDEX IF EXISTS idx_pinyin`,
+		`DROP TABLE rom_config`,
+		`DROP INDEX IF EXISTS idx_uniq`,
+		`CREATE TABLE "rom_setting" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"platform" integer NOT NULL DEFAULT 0,"file_md5" TEXT NOT NULL DEFAULT '',"star" integer NOT NULL DEFAULT 0,"hide" integer NOT NULL,"run_num" INTEGER NOT NULL DEFAULT 0,"run_lasttime" integer NOT NULL DEFAULT 0,"sim_id" INTEGER NOT NULL DEFAULT 0,"sim_conf" TEXT NOT NULL DEFAULT '{}')`,
+		`CREATE INDEX "idx_setting_file_md5" ON "rom_setting" ("platform" ASC, "file_md5" ASC)`,
+		`CREATE TABLE "rom_subgame" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"platform" integer NOT NULL DEFAULT 0,"file_md5" TEXT NOT NULL DEFAULT '',"pname" TEXT NOT NULL DEFAULT '')`,
+		`CREATE INDEX "idx_subgame_platform" ON "rom_subgame" ("platform" ASC,"file_md5")`,
+		`CREATE INDEX "idx_subgame_pname" ON "rom_subgame" ("pname")`,
+		`ALTER TABLE platform ADD COLUMN "desc" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE config ADD COLUMN "music_player" TEXT NOT NULL DEFAULT 'tools/CHKenPlayer/CHKenPlayer.exe'`,
+		`DROP TABLE filter`,
+		`CREATE TABLE "filter" ("platform"  INTEGER NOT NULL DEFAULT 0,"type"  TEXT NOT NULL,"name"  TEXT NOT NULL DEFAULT '')`,
+		`ALTER TABLE platform ADD COLUMN "thumb" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom_setting ADD COLUMN "menu" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE menu ADD COLUMN "virtual" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE platform ADD COLUMN "tag" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE config ADD COLUMN "thumb_orders" TEXT NOT NULL DEFAULT '[]'`,
+		`ALTER TABLE platform ADD COLUMN "thumb_direction" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom ADD COLUMN "complete" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE rom ADD COLUMN "score" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE rom_setting ADD COLUMN "complete" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE config ADD COLUMN "romlist_orders" TEXT NOT NULL DEFAULT '1'`,
+		`ALTER TABLE config ADD COLUMN "sql_update_num" INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE platform ADD COLUMN "thumb_font_size" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "thumb_margin" TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE platform ADD COLUMN "thumb_size" TEXT NOT NULL DEFAULT ''`,
+		`update config SET search_engines = 'https://image.baidu.com/search/acjson?tn=resultjson_com&logid=11768148716592990738&ipn=rj&ct=201326592&is=&fp=result&queryWord={$keyword}&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=&z=&ic=&hd=&latest=&copyright=&word={$keyword}&s=&se=&tab=&width=&height=&face=&istype=&qc=&nc=1&fr=&expermode=&force=&pn={$NumIndex}&rn={$pageNum}&gsm=78&1622211780093=' where id = 1`,
 	}
 }

@@ -1,0 +1,67 @@
+﻿<html>
+<head>
+    <title></title>
+    <div id="themefile"></div>
+    <style>
+        @import "this://app/images/public.css";
+        @import "images/form.css";
+    
+        html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);height:100%;background:color(center-background-color);}
+        #wrapper{width:*;padding:8dip;}
+        input[type=text]{width:300dip}
+        .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;font-size:10dip;display:block;padding:5dip;}
+
+    </style>
+</head>
+<body>
+    <div class="tab_tip">{{AddSlnkDesc}}</div>
+    <div id="wrapper">
+        <table>
+            <tr><td>{{GameType}}:</td><td>
+                <select id="game_type">
+                    <option value="pc">{{GameTypePc}}</option>
+                    <option value="ps3">{{GameTypePs3}}</option>
+                    <option value="rom">{{GameTypeRom}}</option>
+                </select>
+            </td></tr>
+            <tr><td id="select_text">{{SelectFile}}</td><td>
+                <input type="text" id="file_path" value="">
+                <button class="openfile" for="file_path" id="SelectFile" caption="{{SelectBootFile}}" filter="All Files (*.*)|*.*">...</button>
+            </td></tr>
+            <tr><td>
+                <div class="tip" title="{{BootParamsDesc}}">?</div>{{BootParams}}:</td><td><input type="text" id="cmd" value="" novalue="{{SimulatorCmdNoValue}}">
+            </td></tr>
+           
+        </table>
+        <div class="form_bottom">
+            <button class="cancel" id="close-dialog">{{Cancel}}</button>
+            <button class="ok" id="submit">{{Confirm}}</button>
+        </div>
+    </div>
+
+<script type="text/tiscript">
+    include ROOTPATH + "js/utils.js";
+    include ROOTPATH + "js/dialog/add_slnk.js";
+ 
+    //切换游戏类别选项卡
+    event change $(#game_type){
+        changeGameType(this.value);
+    }
+
+    //选择文件
+    event click $(.openfile){
+        openFile(this);
+    }
+
+    //关闭
+    event click $(#close-dialog){
+        view.close();
+    }
+
+    event click $(#submit){
+        submitSlnk();
+    }
+
+</script>
+</body>
+</html>

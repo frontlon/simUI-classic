@@ -1,27 +1,43 @@
 ﻿<html>
 <head>
-  <title>关于SimUI</title>
+  <title></title>
   <div id="themefile"></div>
   <style>
     @import "images/public.css";
     @import "images/form.css";
     html,body{overflow:hidden;margin:0;padding:0;background:color(about-background-color);color:color(about-text-color)}
-    #thumb{height:123px;width:*;background-repeat:no-repeat;background-size:100% auto;border-bottom:3px solid color(about-thumb-line-color);}
-    .content{padding:8dip}
-    p{font-size:10dip}
+    .logo{width:*;text-align:center;margin:20dip 0}
+    .logo img{size:96dip}
+    .content{text-align:center}
+    p{font-size:13dip}
     p a{color:color(about-link-color)}
+    .strong{font-weight:bold;font-size:16dip;}
+    #qq_group{text-decoration:underline}
   </style>
   <script type="text/tiscript">
 
-    include ROOTPATH + "tis/plugins/decorators.tis";
-    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "js/plugins/decorators.js";
+    include ROOTPATH + "js/utils.js";
+
     //初始化主题
     initUiTheme();
-    $(#thumb).style['background-image'] = "url("+ ROOTPATH + "images/about.jpg" +")";
+
+    //创建语言
+    createLang();
+    
+    //标题
+    $(title).html = CONF.Lang.AboutSimUI;
+
+
+    //读取sciter版本
     var ver = String.printf("%d.%d.%d.%d", 
 		  (Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
 		  (Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
-    $(#sciter-version).text = "引擎版本：" + ver + " (感谢sciter提供引擎支持)";
+    $(#sciter-version).text = ver;
+
+
+    //读取软件编译时间
+    $(#compile-time).text = CONST_SOFT_BUILD_TIME;
 
     $(#close).setState(Element.STATE_FOCUS);
     @click @on "#close":
@@ -35,20 +51,29 @@
         Sciter.launch(href);
         return true;
     });
+
+     //打开网址
+    self.on("click", "#qq_group", function(evt) {
+        Sciter.launch("https://qm.qq.com/cgi-bin/qm/qr?k=1RxGE9izpXHFnS48ocXzjwpqu6yQUSkb&jump_from=webapi");
+        return true;
+    });
     </script>
 </head>
 <body>
-<div id="thumb"></div>
+<div class="logo"><img src="this://app/images/ico.png" /></div>
 <div class="content">
-    <p>simUI版本：v2.8.3</p>
-    <p#sciter-version></p>
-    <p>文档：<a href="http://www.simui.net/" target="_blank" title="点击访问网站" id="link">http://www.simui.net/</a></p>
-    <p>作者：frontLon</p>
-    <p>ＱＱ群：851347939</p>
-    <p>邮件：front_diablo@163.com</p>
+    <p>{{SimuiVersion}}：v3.1.0</p>
+    <p>{{CompileTime}}：<span#compile-time></span></p>
+    <p>{{EngineVersion}}：<span#sciter-version></span>({{ThinksSciter}})</p>
+    <p>{{Website}}：<a href="http://www.simui.net/" target="_blank" title="{{VisitWebsite}}" id="link">http://www.simui.net/</a></p>
+    <p>{{QQGroup}}：<span#qq_group>851347939</span></p>
+    <p>{{Email}}：front_diablo@163.com</p>
+    <p></p>
+    <p class="strong">{{Thanks}}</p>
+    <p>春华秋实｜孟虎｜睡神林克｜wood.exe｜冰澤｜alexxyz2<br>以及广大网友 ...</p>
 </div>
 <div class="form_bottom">
-    <button class="ok" id="close">确定</button>
+    <button class="ok" id="close">{{OK}}</button>
 </div>
 </body>
 </html>

@@ -16,10 +16,10 @@ import (
 )
 
 func main() {
-
+	
 	runtime.LockOSThread()
 
-	db.UpgradeDB() //数据库升级
+	UpgradeId := "11" //当前版本id
 	env, _ := utils.ReadFile("env")
 	config.Cfg = &config.ConfStruct{}
 	rootpath, _ := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -31,6 +31,7 @@ func main() {
 		config.Cfg.ViewPath = env //测试环境
 	}
 
+	config.Cfg.UpgradeId = UpgradeId                                  //当前版本id
 	config.Cfg.RootPath = rootpath + separator                        //当前软件的绝对路径
 	config.Cfg.Separator = separator                                  //系统的目录分隔符
 	config.Cfg.CachePath = rootpath + separator + "cache" + separator //缓存路径
@@ -39,9 +40,7 @@ func main() {
 	defer func() {
 
 		//删除解压的缓存
-		err := utils.DeleteDir(config.Cfg.UnzipPath)
-
-		fmt.Println(err)
+		utils.DeleteDir(config.Cfg.UnzipPath)
 
 		if r := recover(); r != nil {
 			var trace [1024]byte
@@ -55,11 +54,27 @@ func main() {
 		}
 	}()
 
+	//创建数据库文件
+	if err := db.CreateDbFile(); err != nil {
+		//系统alert提示
+		utils.WriteLog(err.Error())
+		utils.ShowAlertAndExit("error", err.Error())
+		return
+	}
+
 	//连接数据库
-	db.Conn()
+	if err := db.Conn(); err != nil {
+		//系统alert提示
+		utils.WriteLog("database connect faild!")
+		utils.ShowAlertAndExit("error", "database connect faild!")
+		return
+	}
 
 	//初始化配置
 	errConf := config.InitConf()
+
+	//数据库升级
+	modules.UpgradeDB()
 
 	//读取宽高
 	width := config.Cfg.Default.WindowWidth
@@ -97,15 +112,14 @@ func main() {
 
 	//配置出先错误
 	if errConf != nil {
-		utils.ErrorMsg(errConf.Error())
+		utils.ShowAlertAndExit("error", errConf.Error())
 		os.Exit(1)
 		return
 	}
 
 	if len(config.Cfg.Lang) == 0 {
 		utils.WriteLog("没有找到语言文件或语言文件为空\n language files is not exists")
-		utils.ErrorMsg("没有找到语言文件或语言文件为空\n language files is not exists")
-		os.Exit(1)
+		utils.ShowAlertAndExit("error", "没有找到语言文件或语言文件为空\n language files is not exists")
 		return
 	}
 
@@ -125,7 +139,7 @@ func main() {
 	w.Run()
 }
 
-//注册控制器
+// 注册控制器
 func regViewFunction() {
 	controller.CacheController()
 	controller.ConfigController()
@@ -141,9 +155,11 @@ func regViewFunction() {
 	controller.StrategyFilesController()
 	controller.AudioController()
 	controller.ImageController()
+	controller.BackupController()
+	controller.OthersController()
 }
 
-//资源加载
+// 资源加载
 func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 	return func(ld *sciter.ScnLoadData) int {
 		uri := ld.Uri()

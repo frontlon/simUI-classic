@@ -10,6 +10,7 @@ type Platform struct {
 	Id             uint32
 	Name           string
 	Icon           string
+	Tag            string
 	RomExts        string
 	RomPath        string
 	ThumbPath      string
@@ -31,6 +32,12 @@ type Platform struct {
 	Rombase        string
 	Pinyin         string
 	Sort           uint32
+	Desc           string
+	Thumb          string
+	ThumbDirection string
+	ThumbFontSize  string
+	ThumbMargin    string
+	ThumbSize      string
 	SimList        map[uint32]*Simulator `gorm:"-"` //模拟器列表
 	UseSim         *Simulator            `gorm:"-"` //当前使用的模拟器
 }
@@ -76,6 +83,7 @@ func (m *Platform) UpdateById() error {
 	create := map[string]interface{}{
 		"name":            m.Name,
 		"icon":            m.Icon,
+		"tag":             m.Tag,
 		"rom_exts":        m.RomExts,
 		"rom_path":        m.RomPath,
 		"thumb_path":      m.ThumbPath,
@@ -122,18 +130,26 @@ func (m *Platform) UpdateFieldById(field string, value interface{}) error {
 	return result.Error
 }
 
-//删除一个平台
-func (m *Platform) DeleteById() error {
-	result := getDb().Delete(&m)
+//更新平台的一个字段
+func (m *Platform) ClearAllPlatformAField(field string) error {
+	var value interface{}
+	switch field {
+	case "id", "sort":
+		value = 0
+	default:
+		value = ""
+	}
+
+	result := getDb().Table(m.TableName()).Update(field, value)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}
 	return result.Error
 }
 
-//更新排序
-func (m *Platform) UpdateSortById() error {
-	result := getDb().Table(m.TableName()).Where("id=?", m.Id).Update("sort", m.Sort)
+//删除一个平台
+func (m *Platform) DeleteById() error {
+	result := getDb().Delete(&m)
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())
 	}

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"strings"
 )
 
 /**
@@ -18,21 +17,6 @@ func SlicetoString(glue string, pieces []string) string {
 		}
 	}
 	return buf.String()
-}
-
-/*
-查看slice中一个字段是否存在
-字符串
-*/
-func InSliceStringToLower(str string, slice []string) bool {
-	isset := false
-	for _, v := range slice {
-		if strings.ToLower(v) == strings.ToLower(str) {
-			isset = true
-			break
-		}
-	}
-	return isset
 }
 
 /*
@@ -99,19 +83,33 @@ func SliceDeleteLast(s []string) []string {
 
 // 去重
 func SliceRemoveDuplicate(slc []string) []string {
-	result := []string{}  // 存放结果
-	for i := range slc{
+	result := []string{} // 存放结果
+	for i := range slc {
 		flag := true
-		for j := range result{
+		for j := range result {
 			if slc[i] == result[j] {
-				flag = false  // 存在重复元素，标识为false
+				flag = false // 存在重复元素，标识为false
 				break
 			}
 		}
-		if flag {  // 标识为false，不添加进结果
+		if flag { // 标识为false，不添加进结果
 			result = append(result, slc[i])
 		}
 	}
 	return result
 }
 
+// 去除空数据
+func SliceRemoveEmpty(s []string) []string {
+	if len(s) == 0 {
+		return s
+	}
+	j := 0
+	for _, v := range s {
+		if v != "" {
+			s[j] = v
+			j++
+		}
+	}
+	return s[:j]
+}

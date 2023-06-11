@@ -9,6 +9,7 @@ import (
 type Menu struct {
 	Name     string
 	Platform uint32
+	Virtual  int8
 	Pinyin   string
 	Sort     uint32
 }
@@ -57,6 +58,24 @@ func (*Menu) GetAll() ([]*Menu, error) {
 	return volist, nil
 }
 
+//读取一个目录信息
+func (m *Menu) GetByName(platform uint32, name string) *Menu {
+	vo := &Menu{}
+
+	where := map[string]interface{}{
+		"platform": platform,
+		"name":     name,
+	}
+
+	result := getDb().Table(m.TableName()).Where(where).First(&vo)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		return nil
+	}
+
+	return vo
+}
+
 //删除一个平台下不存在的目录
 func (*Menu) DeleteNotExists(platform uint32, menus []string) error {
 
@@ -103,6 +122,17 @@ func (m *Menu) DeleteByPlatform() error {
 	return result.Error
 }
 
+//删除一个目录
+func (m *Menu) DeleteByName() error {
+	result := getDb().Where("platform = ? AND name = ?", m.Platform, m.Name).Delete(&m)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return result.Error
+}
+
 //读取一个平台下的所有menu数据
 func (*Menu) GetAllNamesByPlatform(platform uint32) ([]string, error) {
 
@@ -135,6 +165,15 @@ func (m *Menu) Truncate() error {
 //更新排序
 func (m *Menu) UpdateSortByName() error {
 	result := getDb().Table(m.TableName()).Where("name = (?)", m.Name).Update("sort", m.Sort)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	return result.Error
+}
+
+//更新目录名称
+func (m *Menu) UpdateName(platform uint32, oldName string, newName string) error {
+	result := getDb().Table(m.TableName()).Where("platform = ? AND name = ?", platform, oldName).Update("name", newName)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}

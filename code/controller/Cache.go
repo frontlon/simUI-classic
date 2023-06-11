@@ -62,6 +62,16 @@ func CacheController() {
 		return sciter.NullValue()
 	})
 
+	//清理游戏统计信息
+	utils.Window.DefineFunction("ClearGameStat", func(args ...*sciter.Value) *sciter.Value {
+		if err := modules.ClearGameStat(); err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+
+	})
+
 	//清理csv文件
 	utils.Window.DefineFunction("ClearRombase", func(args ...*sciter.Value) *sciter.Value {
 
@@ -82,14 +92,14 @@ func CacheController() {
 					continue
 				}
 
-				for a, _ := range romBase {
+				for name, _ := range romBase {
 					//如果rom列表中无此游戏，则清理
-					if !utils.InSliceString(a, nameList) {
-						delete(romBase, a)
+					if !utils.InSliceString(name, nameList) {
+						delete(romBase, name)
 						count++
 					}
-
 				}
+
 				if count > 0 {
 					_ = modules.CoverRomBaseFile(platform, romBase)
 					total += count

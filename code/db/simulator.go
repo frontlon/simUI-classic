@@ -52,7 +52,7 @@ func (*Simulator) GetById(id uint32) (*Simulator, error) {
 	return vo, result.Error
 }
 
-//根据条件，查询多条数据
+//查询出平台下的所有模拟器
 func (*Simulator) GetByPlatform(platform uint32) ([]*Simulator, error) {
 
 	volist := []*Simulator{}

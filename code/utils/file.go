@@ -1,15 +1,18 @@
 package utils
 
 import (
+	"bufio"
 	"fmt"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
+	"time"
 )
 
-//复制文件
+// 复制文件
 func FileCopy(src, dst string) error {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
@@ -36,7 +39,79 @@ func FileCopy(src, dst string) error {
 	return err
 }
 
-//移动文件
+func FolderCopy(from, to string) error {
+
+	if from == "" || to == "" {
+		return nil
+	}
+
+	var err error
+
+	f, err := os.Stat(from)
+	if err != nil {
+		return err
+	}
+
+	fn := func(fromFile string) error {
+		//复制文件的路径
+		rel, err := filepath.Rel(from, fromFile)
+		if err != nil {
+			return err
+		}
+		toFile := filepath.Join(to, rel)
+
+		//创建复制文件目录
+		if err = os.MkdirAll(filepath.Dir(toFile), 0777); err != nil {
+			return err
+		}
+
+		//读取源文件
+		file, err := os.Open(fromFile)
+		if err != nil {
+			return err
+		}
+
+		defer file.Close()
+		bufReader := bufio.NewReader(file)
+		// 创建复制文件用于保存
+		out, err := os.Create(toFile)
+		if err != nil {
+			return err
+		}
+
+		defer out.Close()
+		// 然后将文件流和文件流对接起来
+		_, err = io.Copy(out, bufReader)
+		return err
+	}
+
+	//转绝对路径
+	pwd, _ := os.Getwd()
+	if !filepath.IsAbs(from) {
+		from = filepath.Join(pwd, from)
+	}
+	if !filepath.IsAbs(to) {
+		to = filepath.Join(pwd, to)
+	}
+
+	//复制
+	if f.IsDir() {
+		return filepath.WalkDir(from, func(path string, d fs.DirEntry, err error) error {
+			if !d.IsDir() {
+				return fn(path)
+			} else {
+				if err = os.MkdirAll(path, 0777); err != nil {
+					return err
+				}
+			}
+			return err
+		})
+	} else {
+		return fn(from)
+	}
+}
+
+// 移动文件
 func FileMove(oldFile string, newFile string) error {
 	if FileExists(oldFile) {
 		err := os.Rename(oldFile, newFile)
@@ -45,9 +120,9 @@ func FileMove(oldFile string, newFile string) error {
 	return nil
 }
 
-//移动文件夹
+// 移动文件夹
 func FolderMove(oldFolder string, newFolder string) error {
-	if FolderExists(oldFolder) {
+	if DirExists(oldFolder) {
 		err := os.Rename(oldFolder, newFolder)
 		return err
 	}
@@ -55,14 +130,28 @@ func FolderMove(oldFolder string, newFolder string) error {
 }
 
 /*
- 重命名
+重命名
 */
-func Rename(oldpath string, filename string) error {
+func FileRename(oldpath string, filename string) error {
+	if !FileExists(oldpath) {
+		return nil
+	}
 	newpath := filepath.Dir(oldpath) + "/" + filename + path.Ext(oldpath)
 	return os.Rename(oldpath, newpath)
 }
 
-//删除文件
+/*
+重命名文件夹
+*/
+func FolderRename(oldpath string, filename string) error {
+	if !DirExists(oldpath) {
+		return nil
+	}
+	newpath := filepath.Dir(oldpath) + "/" + filename
+	return os.Rename(oldpath, newpath)
+}
+
+// 删除文件
 func FileDelete(src string) error {
 	if FileExists(src) {
 		err := os.Remove(src)
@@ -71,9 +160,9 @@ func FileDelete(src string) error {
 	return nil
 }
 
-//删除目录
+// 删除目录
 func DeleteDir(src string) error {
-	if FolderExists(src) {
+	if DirExists(src) {
 		err := os.RemoveAll(src)
 		return err
 	}
@@ -139,7 +228,7 @@ func OverlayWriteFile(p string, t string) error {
 	return nil
 }
 
-//一次性读取文件内容
+// 一次性读取文件内容
 func ReadFile(p string) (string, error) {
 	if p == "" {
 		return "", nil
@@ -154,4 +243,15 @@ func ReadFile(p string) (string, error) {
 		return "", nil
 	}
 	return string(bytes), nil
+}
+
+// 读取文件的更新时间
+func GetFileUpdateDate(p string) time.Time {
+	f, err := os.Open(p)
+	defer f.Close()
+	if err != nil {
+		return time.Time{}
+	}
+	stat, _ := f.Stat()
+	return stat.ModTime()
 }

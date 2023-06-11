@@ -2,9 +2,12 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
+	"simUI/code/components"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
+	"simUI/code/request"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter"
 	"strings"
@@ -36,7 +39,7 @@ func RomController() {
 		if f == "" {
 			return sciter.NullValue()
 		}
-		if err := utils.RunGame("", []string{f}); err != nil {
+		if err := components.RunGame("", []string{f}); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -44,14 +47,14 @@ func RomController() {
 
 	})
 
-	//打开rom目录
+	//在资源管理器中打开目录
 	utils.Window.DefineFunction("OpenFolder", func(args ...*sciter.Value) *sciter.Value {
 
 		id := uint64(utils.ToInt(args[0].String()))
 		opt := args[1].String()
-		simId := uint32(utils.ToInt(args[2].String()))
+		otherId := args[2].String()
 
-		err := modules.OpenFolder(id, opt, simId)
+		err := modules.OpenFolder(id, opt, otherId)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -60,53 +63,86 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
+	//在资源管理器中打开rom目录
+	utils.Window.DefineFunction("OpenRomPathFolder", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String()))
+		err := modules.OpenRomPathFolder(platform)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
+	//添加path游戏
+	utils.Window.DefineFunction("AddIndieGame", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String()))
+		menu := args[1].String()
+		datastr := args[2].String()
+
+		files := []string{}
+		_ = json.Unmarshal([]byte(datastr), &files)
+
+		err := errors.New("")
+		err = modules.AddIndieGame(platform, menu, files)
+
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
+	//添加游戏分身
+	utils.Window.DefineFunction("AddSlnkGame", func(args ...*sciter.Value) *sciter.Value {
+
+		platform := uint32(utils.ToInt(args[0].String()))
+		menu := args[1].String()
+		gameType := args[2].String()
+		cmd := args[3].String()
+		fileStr := args[4].String()
+		files := strings.Split(fileStr, "|")
+
+		err := modules.AddSlnkGame(platform, menu, gameType, files, cmd)
+
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
 	//读取游戏列表
 	utils.Window.DefineFunction("GetGameList", func(args ...*sciter.Value) *sciter.Value {
-		showHide := uint8(utils.ToInt(args[0].String()))         //平台
-		platform := uint32(utils.ToInt(args[1].String()))        //平台
-		catname := strings.Trim(args[2].String(), " ")           //分类
-		keyword := strings.Trim(args[3].String(), " ")           //关键字
-		num := strings.Trim(args[4].String(), " ")               //字母索引
-		page := utils.ToInt(strings.Trim(args[5].String(), " ")) //分页数
+		data := &request.GetGameList{}
 
-		baseType := args[6].String()
-		basePublisher := args[7].String()
-		baseYear := args[8].String()
-		baseCountry := args[9].String()
-		baseTranslate := args[10].String()
-		baseVersion := args[11].String()
-		baseProducer := args[12].String()
+		_ = json.Unmarshal([]byte(args[0].String()), &data)
 
-		if baseType == config.Cfg.Lang["BaseType"] {
-			baseType = ""
+		if data.BaseYear == config.Cfg.Lang["BaseYear"] {
+			data.BaseYear = ""
 		}
 
-		if baseProducer == config.Cfg.Lang["BaseProducer"] {
-			baseProducer = ""
-		}
-
-		if basePublisher == config.Cfg.Lang["BasePublisher"] {
-			basePublisher = ""
-		}
-		if baseYear == config.Cfg.Lang["BaseYear"] {
-			baseYear = ""
-		}
-		if baseCountry == config.Cfg.Lang["BaseCountry"] {
-			baseCountry = ""
-		}
-		if baseTranslate == config.Cfg.Lang["BaseTranslate"] {
-			baseTranslate = ""
-		}
-		if baseVersion == config.Cfg.Lang["BaseVersion"] {
-			baseVersion = ""
-		}
 		newlist := []*db.Rom{}
-		if num == "" {
-			newlist, _ = (&db.Rom{}).Get(showHide, page, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion,baseProducer)
+		if data.Num == "" {
+			newlist, _ = (&db.Rom{}).Get(data.ShowSubGame, data.ShowHide, data.Page, data.Platform, data.Catname, data.Keyword, data.BaseType, data.BasePublisher, data.BaseYear, data.BaseCountry, data.BaseTranslate, data.BaseVersion, data.BaseProducer, data.Score, data.Complete)
 		} else {
 			//按拼音查询
-			newlist, _ = (&db.Rom{}).GetByPinyin(showHide, page, platform, catname, num)
+			newlist, _ = (&db.Rom{}).GetByPinyin(data.ShowHide, data.Page, data.Platform, data.Catname, data.Num)
 		}
+
+		jsonRom, _ := json.Marshal(newlist)
+		return sciter.NewValue(string(jsonRom))
+	})
+
+	//读取没有子游戏的主游戏列表
+	utils.Window.DefineFunction("GetGameListNotSubGame", func(args ...*sciter.Value) *sciter.Value {
+		data := &request.GetGameList{}
+
+		_ = json.Unmarshal([]byte(args[0].String()), &data)
+		newlist := []*db.Rom{}
+		newlist, _ = (&db.Rom{}).GetNotSubRom(data.Page, data.ShowHide, data.Platform, data.Catname, data.Keyword)
 
 		jsonRom, _ := json.Marshal(newlist)
 		return sciter.NewValue(string(jsonRom))
@@ -127,20 +163,39 @@ func RomController() {
 
 	})
 
+	//根据父id夺取子游戏列表
+	utils.Window.DefineFunction("GetSubGamesByPid", func(args ...*sciter.Value) *sciter.Value {
+		pid := uint64(utils.ToInt(args[0].String())) //romId
+		rom, _ := (&db.Rom{}).GetById(pid)
+		romlist, _ := (&db.Rom{}).GetSubRom(rom.Platform, rom.FileMd5)
+		jsonRom, _ := json.Marshal(romlist)
+		return sciter.NewValue(string(jsonRom))
+	})
+
 	//读取游戏数量
 	utils.Window.DefineFunction("GetGameCount", func(args ...*sciter.Value) *sciter.Value {
-		showHide := uint8(utils.ToInt(args[0].String()))
-		platform := uint32(utils.ToInt(args[1].String()))
-		catname := strings.Trim(args[2].String(), " ")
-		keyword := strings.Trim(args[3].String(), " ") //关键字
-		baseType := args[4].String()
-		basePublisher := args[5].String()
-		baseYear := args[6].String()
-		baseCountry := args[7].String()
-		baseTranslate := args[8].String()
-		baseVersion := args[9].String()
-		baseProducer := args[10].String()
-		count, _ := (&db.Rom{}).Count(showHide, platform, catname, keyword, baseType, basePublisher, baseYear, baseCountry, baseTranslate, baseVersion,baseProducer)
+		data := &request.GetGameList{}
+		_ = json.Unmarshal([]byte(args[0].String()), &data)
+
+		if data.BaseYear == config.Cfg.Lang["BaseYear"] {
+			data.BaseYear = ""
+		}
+
+		count := 0
+		if data.Num == "" {
+			count, _ = (&db.Rom{}).Count(data.ShowHide, data.Platform, data.Catname, data.Keyword, data.BaseType, data.BasePublisher, data.BaseYear, data.BaseCountry, data.BaseTranslate, data.BaseVersion, data.BaseProducer, data.Score, data.Complete)
+		} else {
+			//按拼音查询
+			count, _ = (&db.Rom{}).CountByPinyin(data.ShowHide, data.Page, data.Platform, data.Catname, data.Num)
+		}
+
+		return sciter.NewValue(utils.ToString(count))
+	})
+	//读取游戏数量 - 不显示包含子游戏的主rom
+	utils.Window.DefineFunction("GetGameCountNotSubGame", func(args ...*sciter.Value) *sciter.Value {
+		data := &request.GetGameList{}
+		_ = json.Unmarshal([]byte(args[0].String()), &data)
+		count, _ := (&db.Rom{}).CountNotSubGame(data.ShowHide, data.Platform, data.Catname, data.Keyword)
 		return sciter.NewValue(utils.ToString(count))
 	})
 
@@ -156,11 +211,20 @@ func RomController() {
 		return sciter.NewValue(string(jsonMenu))
 	})
 
+	//根据id读取rom基本信息
+	utils.Window.DefineFunction("GetGameById", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+		rom, _ := (&db.Rom{}).GetById(id)
+		jsonInfo, _ := json.Marshal(&rom)
+		return sciter.NewValue(string(jsonInfo))
+	})
+
 	//读取游戏攻略内容
 	utils.Window.DefineFunction("GetGameDoc", func(args ...*sciter.Value) *sciter.Value {
 		t := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
-		res, err := modules.GetGameDoc(t, id)
+		toHtml := uint8(utils.ToInt(args[2].String()))
+		res, err := modules.GetGameDoc(t, id, toHtml)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -193,31 +257,13 @@ func RomController() {
 		return sciter.NullValue()
 	})
 
-	//上传攻略图片
-	utils.Window.DefineFunction("UploadStrategyImages", func(args ...*sciter.Value) *sciter.Value {
-		id := uint64(utils.ToInt(args[0].String()))
-		p := args[1].String()
-		relative, err := modules.UploadStrategyImages(id, p)
-		if err != nil {
-			utils.WriteLog(err.Error())
-			return utils.ErrorMsg(err.Error())
-		}
-		return sciter.NewValue(relative)
-	})
-
 	//设为我的最爱
 	utils.Window.DefineFunction("SetFavorite", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
 		star := uint8(utils.ToInt(args[1].String()))
 
-		//更新rom表
-		rom := &db.Rom{
-			Id:   id,
-			Star: star,
-		}
-
 		//更新数据
-		if err := rom.UpdateStar(); err != nil {
+		if err := modules.SetFavorite(id, star); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -228,15 +274,11 @@ func RomController() {
 	//设为隐藏
 	utils.Window.DefineFunction("SetHide", func(args ...*sciter.Value) *sciter.Value {
 
-		romIdsStr := strings.Split(args[0].String(), ",")
-		ishide := uint8(utils.ToInt(args[1].String()))
+		id := uint64(utils.ToInt(args[0].String()))
+		hide := uint8(utils.ToInt(args[1].String()))
 
-		romIds := []uint64{}
-		for _, v := range romIdsStr {
-			romIds = append(romIds, uint64(utils.ToInt(v)))
-		}
 		//更新数据
-		if err := (&db.Rom{}).UpdateHideByIds(romIds, ishide); err != nil {
+		if err := modules.SetHide(id, hide); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -244,42 +286,101 @@ func RomController() {
 		return sciter.NewValue("1")
 	})
 
-	//下载rom图片
-	utils.Window.DefineFunction("DownloadRomThumbs", func(args ...*sciter.Value) *sciter.Value {
-		typeName := args[0].String()
-		id := uint64(utils.ToInt(args[1].String()))
-		newPath := args[2].String()
-		newFileName, err := modules.DownloadRomThumbs(typeName, id, newPath)
-		if err != nil {
+	//批量设为隐藏
+	utils.Window.DefineFunction("SetHideBatch", func(args ...*sciter.Value) *sciter.Value {
+
+		romIdsStr := strings.Split(args[0].String(), ",")
+		hide := uint8(utils.ToInt(args[1].String()))
+
+		romIds := []uint64{}
+		for _, v := range romIdsStr {
+			romIds = append(romIds, uint64(utils.ToInt(v)))
+		}
+
+		//更新数据
+		if err := modules.SetHideBatch(romIds, hide); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-		return sciter.NewValue(newFileName)
+
+		return sciter.NewValue("1")
 	})
 
 	//编辑图片
 	utils.Window.DefineFunction("EditRomThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
-		newPath := args[2].String()
-		newFileName, err := modules.EditRomThumbs(typeName, id, newPath)
+		sid := args[2].String()
+		newPath := args[3].String()
+		ext := args[4].String()
+
+		newFileName, sid, err := modules.EditRomThumbs(typeName, id, sid, newPath, ext)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-		return sciter.NewValue(newFileName)
+
+		resp := map[string]string{
+			"filepath": newFileName,
+			"sid":      sid,
+		}
+		respstr, _ := json.Marshal(resp)
+
+		return sciter.NewValue(string(respstr))
 	})
 
 	//删除图片
 	utils.Window.DefineFunction("DeleteThumbs", func(args ...*sciter.Value) *sciter.Value {
 		typeName := args[0].String()
 		id := uint64(utils.ToInt(args[1].String()))
-		err := modules.DeleteThumbs(typeName, id)
+		sid := args[2].String()
+		err := modules.DeleteThumbs(typeName, id, sid)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
 		return sciter.NullValue()
+	})
+
+	//设置图片为主图片
+	utils.Window.DefineFunction("SetMasterThumbs", func(args ...*sciter.Value) *sciter.Value {
+		typeName := args[0].String()
+		id := uint64(utils.ToInt(args[1].String()))
+		sid := args[2].String()
+		err := modules.SetMasterThumbs(typeName, id, sid)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
+	//下载展示图 - 百度图片搜索
+	utils.Window.DefineFunction("SearchThumbsForBaidu", func(args ...*sciter.Value) *sciter.Value {
+		keyword := args[0].String()
+		page := utils.ToInt(args[1].String()) //页码，从0开始
+		data, err := modules.SearchThumbsForBaidu(keyword, page)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		jsonInfo, _ := json.Marshal(&data)
+		return sciter.NewValue(string(jsonInfo))
+	})
+
+	//下载展示图 - HfsDB搜索
+	utils.Window.DefineFunction("SearchThumbsForHfsDb", func(args ...*sciter.Value) *sciter.Value {
+		keyword := args[0].String()
+		page := utils.ToInt(args[1].String()) //页码，从0开始
+		data, err := modules.SearchThumbsForHfsDb(keyword, page)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		jsonInfo, _ := json.Marshal(&data)
+		return sciter.NewValue(string(jsonInfo))
 	})
 
 	//重命名
@@ -307,6 +408,21 @@ func RomController() {
 			return utils.ErrorMsg(err.Error())
 		}
 		return sciter.NullValue()
+	})
+
+	//编辑rom基础信息中的名称
+	utils.Window.DefineFunction("SetRomBaseName", func(args ...*sciter.Value) *sciter.Value {
+
+		id := uint64(utils.ToInt(args[0].String()))
+		name := args[1].String()
+
+		if err := modules.SetRomBaseName(id, name); err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+
+		return sciter.NullValue()
+
 	})
 
 	//编辑rom基础信息
@@ -352,11 +468,10 @@ func RomController() {
 		id := uint64(utils.ToInt(args[0].String()))
 		rom, _ := (&db.Rom{}).GetById(id)
 
-		romName := utils.GetFileName(rom.RomPath)
-		baseinfo, _ := modules.GetRomBaseList(rom.Platform)
+		baseinfo := modules.GetRomBaseById(rom.Platform, utils.GetFileName(rom.RomPath))
 
-		if _, ok := baseinfo[romName]; ok {
-			jsonMenu, _ := json.Marshal(baseinfo[romName])
+		if baseinfo != nil {
+			jsonMenu, _ := json.Marshal(baseinfo)
 			return sciter.NewValue(string(jsonMenu))
 		}
 
@@ -366,8 +481,8 @@ func RomController() {
 	//读取过滤器列表
 	utils.Window.DefineFunction("GetFilter", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
-		t := args[1].String()
-		lists, err := (&db.Filter{}).GetByPlatform(platform, t)
+
+		lists, err := modules.GetFilter(platform)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -385,28 +500,7 @@ func RomController() {
 		err := modules.DeleteRomAndRes(id, deleteRes)
 		if err != nil {
 			utils.WriteLog(err.Error())
-		}
-
-		//删除数据库缓存
-		info, err := (&db.Rom{}).GetById(id)
-		if err != nil {
-			utils.WriteLog(err.Error())
-		}
-
-		//删除攻略文件
-		fname := utils.GetFileName(info.RomPath)
-		romFiles, _ := utils.ScanDirByKeyword(config.Cfg.Platform[info.Platform].FilesPath, fname+"__")
-		for _, f := range romFiles {
-			_ = utils.FileDelete(f)
-		}
-
-		err = (&db.Rom{}).DeleteById(id)
-		if err != nil {
-			utils.WriteLog(err.Error())
-		}
-		err = (&db.Rom{}).DeleteSubRom(info.Platform,info.Name)
-		if err != nil {
-			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
 		}
 
 		return sciter.NewValue("1")
@@ -416,10 +510,9 @@ func RomController() {
 	utils.Window.DefineFunction("MoveRom", func(args ...*sciter.Value) *sciter.Value {
 
 		id := uint64(utils.ToInt(args[0].String()))
-		newPlatform := uint32(utils.ToInt(args[1].String()))
-		newFolder := args[2].String()
+		newFolder := args[1].String()
 
-		if err := modules.MoveRom(id, newPlatform, newFolder); err != nil {
+		if err := modules.MoveRom(id, newFolder); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -435,40 +528,34 @@ func RomController() {
 		return sciter.NewValue(string(jsonRom))
 	})
 
-	//读取子游戏
-	utils.Window.DefineFunction("GetSubGames", func(args ...*sciter.Value) *sciter.Value {
-		pid := uint64(utils.ToInt(args[0].String())) //romId
-		rom, _ := (&db.Rom{}).GetById(pid)
-		romName := utils.GetFileName(rom.RomPath)
-		romlist, _ := (&db.Rom{}).GetSubRom(rom.Platform,romName)
-		jsonRom, _ := json.Marshal(romlist)
-		return sciter.NewValue(string(jsonRom))
-	})
+	//设置评分
+	utils.Window.DefineFunction("SetScore", func(args ...*sciter.Value) *sciter.Value {
 
-	//上传sub rom文件
-	utils.Window.DefineFunction("UploadSubGameFile", func(args ...*sciter.Value) *sciter.Value {
 		id := uint64(utils.ToInt(args[0].String()))
-		name := args[1].String()
-		p := args[2].String()
+		score := args[1].String()
 
-		relPath, err := modules.UploadSubGameFile(id, name, p)
-		if err != nil {
+		//更新数据
+		if err := modules.SetScore(id, score); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
 
-		return sciter.NewValue(relPath)
+		return sciter.NewValue("1")
 	})
 
-	//更新sub rom配置
-	utils.Window.DefineFunction("UpdateSubGameInfo", func(args ...*sciter.Value) *sciter.Value {
+	//设置通关状态
+	utils.Window.DefineFunction("SetComplete", func(args ...*sciter.Value) *sciter.Value {
+
 		id := uint64(utils.ToInt(args[0].String()))
-		data := args[1].String()
-		if err := modules.UpdateSubGameFiles(id, data); err != nil {
+		status := uint8(utils.ToInt(args[1].String()))
+
+		//更新数据
+		if err := modules.SetComplete(id, status); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-		return sciter.NullValue()
+
+		return sciter.NewValue("1")
 	})
 
 }

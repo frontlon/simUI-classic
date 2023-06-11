@@ -1,87 +1,211 @@
 ﻿<html>
-<head>
+  <head>
     <title></title>
-    <div id="themefile"></div>
+    <div id="themefile"></div>    
     <style>
-        @import "this://app/images/public.css";
-        @import "images/form.css";
+      @import 'this://app/images/public.css';
+      @import 'this://app/images/form.css';
 
-        html{background:color(center-background-color)}
-        body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
-        textarea{color:color(general-text-color);background:none;size:*;height:500dip;padding:5dip;width:*;border:0;overflow:scroll-indicator;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
+      html,body {overflow:scroll-indicator;margin:0;background:color(center-background-color);padding:0;width:100%;}
+      .wrapper {height:*;padding:0 10dip;margin:0;}
+      .titlebar {flow:horizontal-flow;width:*;display:block;}
+      .titlebar_left {width:*;display:block;}
+      .titlebar_right {width:*;text-align:right;display:block;}
+      .content {display:block;clear:both;}
+      label {display:block;}
+      table {border-collapse:collapse;border-spacing:0;width:*;margin-top:10dip;style-set: vgrid}
+      table label {text-align:left;}
+      table th {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:5dip;width:*;text-align:left!important;font-weight:bold;vertical-align:middle}
+      table td {font-size:12dip;padding:0;border:1px solid color(manager-table-border-color);padding:0 5dip;width:*;text-align:left!important;}
+      table tr.checked {background:color(manager-tr-checked-background-color);}
+      table tr:hover {background:color(manager-tr-hover-background-color);}
+      table th:nth-child(1),table td:nth-child(1) {width:40dip;}
+      table .notcheck {width:*;}
+      table .sub_tr{background:color(manager-tr-sub-background-color);}
+      table input[type='text']{background:none;border:0;margin:0;text-align:left;display:inline-block;}
+      table input[type='checkbox'] {display:inline-block;}
+      table input[type='text']:hover {background:none;}
+      table .nosave {color:color(manager-input-nosave-text-color);}
 
-        #game_list{padding:0;}
-        #game_list li{flow:row(input,input,button,button,button,label);list-style:none;margin-bottom:5dip}
-        #game_list li *{margin: 0 3dip;vertical-align: middle}
-        #game_list li input[type="text"]:nth-child(1){width:130px;}
-        #game_list li input[type="text"]:nth-child(2){width:230px;margin-right:3dip;}
-        #game_list li .openfile{margin-left:0;}
-        .add_wrapper{text-align:center}
+      table tr.grp1 td{background-color:color(manager-grp1-tr-background-color);}
+      table tr.grp2 td{background-color:color(manager-grp2-tr-background-color);}
+
+      .small_btn{width:20dip;height:17dip;line-height:17dip;font-size:10dip;vertical-align:middle}
+
+      .openfile {cursor:pointer;}
+      .pages {width:*;text-align:center;}
+      .pages li {display:inline-block;size:20dip;line-height:20dip;border:1px solid color(manager-pages-border-color);background:color(manager-pages-background-color);text-align:center;color:color(manager-pages-text-color);margin:0 2dip;}
+      .pages li:hover {background:color(manager-pages-hover-background-color);}
+      .pages li:current {background:none;border:0;}
+      select {width:100dip;}
+      select option {display:block;}
+      .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;height:20dip;font-size:12dip;display:block;padding:5dip;margin:0 0 7dip 0;}
+
+
+      #rombase_submit{display:none}
+      .form_bottom{border:0}
+
+      /* 子游戏管理 */
+      splitter{background:color(sidebar-background-color);}
+      splitter:hover{background:color(sidebar-background-color)}
+      #subgame_left{height:*;overflow:scroll-indicator}
+      #subgame_right{height:*;overflow:scroll-indicator}
+      
+      .subgame_table td{white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;width:*}
+      .subgame_table tr:current{background:color(manager-tr-active-background-color)}
+      .subgame_table th:nth-child(1),.subgame_table td:nth-child(1){min-width:100dip;}
+      .subgame_table th:nth-child(2),.subgame_table td:nth-child(2){min-width:100dip;}
+      .subgame_table th:nth-child(3),.subgame_table td:nth-child(3){width:50dip;}
+
+      #romlist_subgame_master tbody tr{context-menu:selector(menu#subGameContext);}
+
+      #rename_box{background:color(search-box-background-color);border-radius:5px;box-shadow:0 0 20dip color(search-box-box-shadow);position:absolute;top:50%;left:50%;width:400dip;padding:10dip 10dip ;margin: -80dip 0 0 -200dip;opacity:0.9;display:none}
+      #rename_box h2{font-size:16dip;margin:0 0 10dip 0;padding:0;color:color(search-box-title-color)}
+      #rename_box input{color:color(search-box-text-color);display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
 
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div id="rename_box">
+    <h2></h2>
+    <input type="text" id="rename_input" value="" />
+  </div>
+  <menu.context id="subGameContext"></menu>
 
-    <section>
-        <div class="wrapper">
-            <ul id="game_list"></ul>
-            <div class="add_wrapper"><button id="game_add">{{AddSubGame}}</button></div>
-            <div class="form_bottom">
-                <button class="cancel" id="close-dialog">{{Cancel}}</button>
-                <button class="ok" id="submit_game">{{OK}}</button>
-            </div>
-        </div>
+  <div class="tab_tip">{{TipSubGameManager}}</div>
 
-    </section>
+  <frameset cols="*,*" noresize="noresize">
+      <section id="subgame_left">
+      <div class="wrapper">
+          <div class="titlebar">
+          </div>
+          <div class="content">
+          <table id="romlist_subgame_master" class="subgame_table" resizeable>
+              <thead>
+              <tr>
+                  <th>{{BaseName}}</th>
+                  <th>{{FilePath}}</th>
+                  <th>{{Option}}</th>
+              </tr>
+              </thead>
+              <tbody></tbody>
+          </table>
+          <ul class="pages" id="pages_subgame_master"></ul>
+          </div>
+      </div>
+      </section>
+      <splitter id="right_splitter" />
+      <section id="subgame_right">
 
-<script type="text/tiscript">
-    include ROOTPATH + "tis/plugins/tabs.tis";
-    include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog/edit_subgame.tis";
+      <div class="wrapper">
+          <div class="titlebar">
+          <div class="titlebar_left">
+              <select id="menu_subgame_slave">
+              <option value="">{{SelectMenu}}</option>
+              </select>
+              <input type="text" value="" id="search_subgame_slave" novalue="{{InputSearchKeyword}}" />
+          </div>
+          </div>
+          <div class="content">
+          <table id="romlist_subgame_slave" class="subgame_table" resizeable>
+              <thead>
+              <tr>
+                  <th class="notcheck">{{BaseName}}</th>
+                  <th>{{FilePath}}</th>
+                  <th>{{Option}}</th>
+              </tr>
+              </thead>
+              <tbody></tbody>
+          </table>
+          <ul class="pages" id="pages_subgame_slave"></ul>
+          </div>
+      </div>
+
+      </section>
+
+  </frameset>
+    
+
+    <script type="text/tiscript">
+      include ROOTPATH + "js/plugins/tabs.js";
+      include ROOTPATH + "js/utils.js";
+      include ROOTPATH + "js/dialog/edit_subgame.js";
+
+      subGameInit();
+
+      /**
+       * 通用
+      **/
+
    
-    //更新子游戏
-    event click $(#update_game){
-        updateGame();
-    }
+      //文本框修改 文字高亮
+      event change $(table input[type=text]) {
+        this.attributes.addClass("nosave");
+      }
 
-    //删除子游戏
-    event click $(#delete_game){
-        deleteGame();
-    }
+    
+      //切换目录 - 子游戏列表
+      event change $(#menu_subgame_slave){
+        managerCreateListSlave(0);
+      }
 
-    //添加子游戏文件
-    event click $(#game_add){
-        try{
-            addGame();
-        }catch(e){
-            alert(e);
-        }
-    }
+      //名称模糊搜索 - 子列表
+      event change $(#search_subgame_slave){
+        managerCreateListSlave(0);
+      }
 
-    //删除子游戏文件
-    event click $(.game_delete){
-        deleteGame(this);
-    }
+      //分页 - 子列表
+      event click $(#pages_subgame_slave li){
+        var page = this.html.toInteger() - 1;
+        managerCreateListSlave(page,this);
+      }
 
-    //更新配置
-    event click $(#submit_game){
-        try{
-            submitGame();
-        }catch(e){
-            alert(e);
-        }
-    }
+      //绑定rom
+      event click $(#romlist_subgame_slave tbody .small_btn){
+        managerBindGame(this);
+      }
 
-    //选择文件
-    event click $(.openfile){
-        try{
-            openFile(this);
-        }catch(e){
-            alert(e);
-        }
-    }
+      //解绑rom
+      event click $(#romlist_subgame_master tbody .small_btn){
+        managerUnBindGame(this);
+      }
 
-</script>
+       //删除rom及相关资源文件 - 子游戏管理
+      event click $(#subGameContext .delete) (evt,input) {
+        managerDeleteRom(this);
+      }
 
-</body>
+
+      //rom列表右键菜单 - 子游戏管理
+      event contextmenusetup $(#romlist_subgame_master tbody tr) (evt,input) {
+        managerSubGameContextMenu(this);
+      }
+
+      //修改别名 - 子游戏管理
+      event click $(#subGameContext .rename) (evt,input) {
+        openRenameBox(this);
+      }
+    
+      //修改文件名 - 子游戏管理
+      event click $(#subGameContext .basename) (evt,input) {
+        openbaseNameBox(this);
+      }
+
+    
+      //回车改名
+      self.on("keyup", function(evt) {
+          if (evt.keyCode == Event.VK_RETURN){
+            managerSubGameEditName();
+          }
+      });
+
+      //搜索框失去焦点
+      self.on("blur", "#rename_input", function(evt) {
+          closeRenameBox();
+      });
+
+
+
+    </script>
+  </body>
 </html>

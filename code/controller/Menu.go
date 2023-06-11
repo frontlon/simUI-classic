@@ -1,13 +1,12 @@
 package controller
 
 import (
+	"encoding/json"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
 )
-
 
 /**
  * 定义view用function
@@ -15,14 +14,13 @@ import (
 
 func MenuController() {
 
-
 	//读取目录列表
 	utils.Window.DefineFunction("GetMenuList", func(args ...*sciter.Value) *sciter.Value {
 		platform := uint32(utils.ToInt(args[0].String()))
 		page := uint32(utils.ToInt(args[1].String()))
 		//读取数据库
 
-		menu,err := modules.GetMenuList(uint32(utils.ToInt(platform)),page)
+		menu, err := modules.GetMenuList(uint32(utils.ToInt(platform)), page)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -59,11 +57,10 @@ func MenuController() {
 		return sciter.NewValue("1")
 	})
 
-
 	//读取所有平台的菜单列表
 	utils.Window.DefineFunction("GetAllPlatformMenuList", func(args ...*sciter.Value) *sciter.Value {
 
-		lists , err := modules.GetAllPlatformMenuList()
+		lists, err := modules.GetAllPlatformMenuList()
 		if err != nil {
 			utils.WriteLog(err.Error())
 		}
@@ -77,8 +74,9 @@ func MenuController() {
 
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		name := args[1].String()
+		virtual := int8(args[2].Int())
 
-		if err := modules.AddMenu(platform,name);err != nil{
+		if err := modules.AddMenu(platform, name, virtual); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -93,7 +91,7 @@ func MenuController() {
 		oldName := args[1].String()
 		newName := args[2].String()
 
-		if err := modules.MenuRename(platform,oldName,newName);err != nil{
+		if err := modules.MenuRename(platform, oldName, newName); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
@@ -107,13 +105,12 @@ func MenuController() {
 		platform := uint32(utils.ToInt(args[0].String())) //平台
 		name := args[1].String()
 
-		if err := modules.DeleteMenu(platform,name);err != nil{
+		if err := modules.DeleteMenu(platform, name); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
 
 		return sciter.NullValue()
 	})
-
 
 }

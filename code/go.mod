@@ -1,6 +1,6 @@
 module simUI/code
 
-go 1.14
+go 1.18
 
 require (
 	github.com/GeertJohan/go.rice v1.0.2
@@ -12,6 +12,13 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/simulatedsimian/joystick v1.0.1
+	golang.org/x/text v0.3.0
+)
+
+require (
+	github.com/daaku/go.zipexe v1.0.0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	golang.org/x/sys v0.0.0-20190904154756-749cb33beabd // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )

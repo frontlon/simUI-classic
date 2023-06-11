@@ -7,17 +7,23 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"simUI/code/components"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter"
+	"strconv"
 	"strings"
+	"time"
 )
 
 /**
  * 创建缓存入口
  **/
 func CreateRomCache(getPlatform uint32) error {
+
+	//重新更新下config
+	config.InitConf()
 
 	//检查更新一个平台还是所有平台
 	PlatformList := map[uint32]*db.Platform{}
@@ -30,42 +36,38 @@ func CreateRomCache(getPlatform uint32) error {
 	}
 
 	//先检查平台，将不存在的平台数据先干掉
-	if getPlatform == 0 {
-		if err := ClearPlatform(); err != nil {
-			return err
-		}
-	}
+	ClearPlatform()
 
 	//开始重建缓存
 	for platform, _ := range PlatformList {
 
-		//第一步：创建rom缓存
-		romlist, err := CreateRomData(platform)
+		//第一步：更新文件时间，并获取文件id列表
+		fileMap, _ := updateFileDate(platform)
+
+		//更新数据库file_md5
+		updateRomFileMd5(platform, fileMap)
+
+		//第二步：读取rom缓存
+		romlist, err := getRomData(platform)
 		if err != nil {
 			utils.WriteLog(err.Error())
 			continue
 		}
 
-		//第二步：更新rom数据
-		if err := UpdateRomDB(platform, romlist); err != nil {
-			//不报错，只记录错误日志
-			utils.WriteLog(err.Error())
-		}
+		//第三步：更新rom数据
+		romlist = updateRomDB(platform, fileMap, romlist)
 
-		//第三步：读取rom目录
-		menu, err := CreateMenuList(platform)
-		if err != nil {
-			return err
-		}
+		//第四步：读取rom目录
+		menu, _ := createMenuList(platform)
 
-		//第四步：更新menu数据
-		if err := UpdateMenuDB(platform, menu); err != nil {
-			return err
-		}
+		//第五步：更新menu数据
+		updateMenuDB(platform, menu)
 
-		//第五步：更新filter数据
-		UpdateFilterDB(platform)
+		//第六步：更新filter数据
+		updateFilterDB(platform, romlist)
 
+		//第六步：清理rom_config和rom_sub
+		updateRomConfig(platform, romlist)
 	}
 
 	//收缩数据库
@@ -73,7 +75,7 @@ func CreateRomCache(getPlatform uint32) error {
 
 	//数据更新完成后，页面回调，更新页面DOM
 	if _, err := utils.Window.Call("CB_createCache", sciter.NewValue("")); err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 	}
 	return nil
 
@@ -82,10 +84,10 @@ func CreateRomCache(getPlatform uint32) error {
 /**
  * 创建缓存
  **/
-func CreateRomData(platform uint32) ([]*db.Rom, error) {
+func getRomData(platform uint32) ([]*db.Rom, error) {
 
 	romlist := []*db.Rom{}
-
+	fileMd5List := map[string]string{}
 	RomPath := config.Cfg.Platform[platform].RomPath //rom文件路径
 
 	//获取扩展名并转换成map
@@ -94,7 +96,18 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 	for _, v := range RomExt {
 		RomExtMap[v] = true
 	}
+
+	//csv游戏信息
 	BaseInfo, err := GetRomBaseList(platform)
+
+	//rom配置信息（喜爱，隐藏）
+	romConfig, err := (&db.RomSetting{}).GetByPlatformToMap(platform)
+
+	//读取子游戏关系
+	romSubGame, err := (&db.RomSubGame{}).GetByPlatformToMap(platform)
+
+	//从数据库中读取file_md5值
+	//dbData, _ := (&db.Rom{}).GetFileMd5ByPlatform(platform)
 
 	if err != nil {
 		return nil, errors.New(config.Cfg.Lang["CsvFormatError"] + err.Error())
@@ -108,6 +121,10 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 				return err
 			}
 
+			if f.IsDir() == true {
+				return nil
+			}
+
 			//转换为相对路径
 			p = strings.Replace(p, RomPath+config.Cfg.Separator, "", -1)
 
@@ -119,48 +136,66 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 				newpath = strings.Replace(newpath, "/", "", 1)
 			}
 			subpath := strings.Split(newpath, config.Cfg.Separator)
-			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
-			romExists := false                     //rom是否存在
+			romExists := false //rom是否存在
 
+			romExt := strings.ToLower(utils.GetFileExt(f.Name())) //获取文件后缀
 			if _, ok := RomExtMap[romExt]; ok {
 				romExists = true //rom存在
+			} else if romExt == "" {
+				//没有扩展名的rom
+				if _, ok := RomExtMap[".noext"]; ok {
+					romExists = true //rom存在
+				}
 			}
 
 			//如果该文件是游戏rom，并是否存在
-			if f.IsDir() == false && romExists == true {
+			if romExists == true {
 				romName := utils.GetFileName(f.Name())
 				title := romName
 
+				fileSize := utils.GetFileSizeString(f.Size())
+
+				fileMd5 := utils.CreateRomUniqId(utils.ToString(f.ModTime().UnixNano()), f.Size())
+
 				//先读取基础数据，如果没有基础数据，则读取别名
-				baseName := ""
 				base := &RomBase{}
-				if _, ok := BaseInfo[title]; ok {
-					base = BaseInfo[title]
-					if BaseInfo[title].Name != "" {
-						baseName = BaseInfo[title].Name
+				if _, ok := BaseInfo[romName]; ok {
+					base = BaseInfo[romName]
+					if BaseInfo[romName].Name != "" {
+						title = BaseInfo[romName].Name
 					}
 				}
 
-				if baseName != "" {
-					title = baseName
+				score, _ := strconv.ParseFloat(base.Score, 64)
+				if score > 0 {
+					rs := []rune(utils.ToString(base.Score))
+					if len(rs) > 3 {
+						round, _ := strconv.ParseFloat(fmt.Sprintf("%.1f", score), 64)
+						base.Score = utils.ToString(round)
+					}
+				} else {
+					base.Score = ""
 				}
 
-				fileMd5 := GetRomMd5(utils.ToString(platform), p)
-				infoMd5 := GetRomMd5(title, p, base.Type, base.Year, base.Producer, base.Publisher, base.Country, base.Translate, base.Version, base.NameEN, base.NameJP, base.OtherA, base.OtherB, base.OtherC, base.OtherD, utils.ToString(f.Size()))
+				infoMd5 := utils.GetRomMd5(title, p, base.Type, base.Year, base.Producer, base.Publisher, base.Country, base.Translate, base.Version, base.NameEN, base.NameJP, base.OtherA, base.OtherB, base.OtherC, base.OtherD, base.Score, fileSize)
+
 				//如果游戏名称存在分隔符，说明是子游戏
 				menu := ConstMenuRootKey //无目录，读取默认参数
 				//定义目录，如果有子目录，则记录子目录名称
-				if len(subpath) > 1 {
+
+				_, ok := romConfig[fileMd5]
+				if ok && romConfig[fileMd5].Menu != "" {
+					menu = romConfig[fileMd5].Menu
+				} else if len(subpath) > 1 {
 					menu = subpath[0]
 				}
 
 				//读取rom大小
-				//如果游戏名称存在分隔符，说明是子游戏
+				//如果游戏名称存在分隔符，说明是老版本子游戏
 				if strings.Contains(title, ConstSeparator) {
 
 					//拆分文件名
 					sub := strings.Split(title, ConstSeparator)
-
 					//去掉扩展名，生成标题
 					sinfo := &db.Rom{
 						Name:          sub[1],
@@ -170,7 +205,7 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 						Platform:      platform,
 						Star:          0,
 						Hide:          0,
-						Size:          utils.GetFileSizeString(f.Size()),
+						Size:          fileSize,
 						Pinyin:        utils.TextToPinyin(sub[1]),
 						InfoMd5:       infoMd5,
 						FileMd5:       fileMd5,
@@ -188,22 +223,51 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 						BaseOtherB:    base.OtherB,
 						BaseOtherC:    base.OtherC,
 						BaseOtherD:    base.OtherD,
+						Score:         "",
+						Complete:      0,
 					}
 					romlist = append(romlist, sinfo)
 				} else { //不是子游戏
-					//去掉扩展名，生成标题
+
+					star := uint8(0)
+					hide := uint8(0)
+					runNum := uint64(0)
+					runLastTime := int64(0)
+					simId := uint32(0)
+					complete := uint8(0)
+					simConf := ""
+					if romConfig[fileMd5] != nil {
+						star = romConfig[fileMd5].Star
+						complete = romConfig[fileMd5].Complete
+						hide = romConfig[fileMd5].Hide
+						runNum = romConfig[fileMd5].RunNum
+						runLastTime = romConfig[fileMd5].RunLasttime
+						simId = romConfig[fileMd5].SimId
+						simConf = romConfig[fileMd5].SimConf
+					}
+
+					fileMd5List[title] = fileMd5
+					fileMd5List[romName] = fileMd5
+
+					pname := ""
+					if _, ok := romSubGame[fileMd5]; ok {
+						pname = romSubGame[fileMd5]
+					}
+
 					rinfo := &db.Rom{
 						Menu:          menu,
 						Name:          title,
 						Platform:      platform,
+						Pname:         pname,
 						RomPath:       p,
-						Star:          0,
-						Hide:          0,
-						Size:          utils.GetFileSizeString(f.Size()),
+						Star:          star,
+						Hide:          hide,
+						Size:          fileSize,
 						Pinyin:        utils.TextToPinyin(title),
 						InfoMd5:       infoMd5,
 						FileMd5:       fileMd5,
-						SimConf:       "{}",
+						SimId:         simId,
+						SimConf:       simConf,
 						BaseType:      base.Type,
 						BaseYear:      base.Year,
 						BaseProducer:  base.Producer,
@@ -217,6 +281,10 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 						BaseOtherB:    base.OtherB,
 						BaseOtherC:    base.OtherC,
 						BaseOtherD:    base.OtherD,
+						RunNum:        runNum,
+						RunLasttime:   runLastTime,
+						Score:         base.Score,
+						Complete:      complete,
 					}
 
 					romlist = append(romlist, rinfo)
@@ -227,11 +295,120 @@ func CreateRomData(platform uint32) ([]*db.Rom, error) {
 		}); err != nil {
 		return nil, errors.New(config.Cfg.Lang["RomMenuCanNotBeExists"])
 	}
+
+	//更新老版本子游戏 __pname
+	if len(romlist) > 0 {
+		for k, rom := range romlist {
+			if rom.Pname != "" && !utils.HasRomUniqId(rom.Pname) {
+				if _, ok := fileMd5List[rom.Pname]; ok {
+					romlist[k].Pname = fileMd5List[rom.Pname]
+				} else {
+					romlist[k].Pname = ""
+				}
+			}
+		}
+	}
 	return romlist, nil
 }
 
-//创建菜单列表
-func CreateMenuList(platform uint32) (map[string]*db.Menu, error) {
+/*
+更新文件日期
+*/
+func updateFileDate(platform uint32) (map[string]string, error) {
+
+	create := map[string][]string{}
+	fileMap := map[string]string{}
+	RomPath := config.Cfg.Platform[platform].RomPath //rom文件路径
+
+	//获取扩展名并转换成map
+	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
+	RomExtMap := map[string]bool{}
+	for _, v := range RomExt {
+		RomExtMap[v] = true
+	}
+
+	//进入循环，遍历文件
+	if err := filepath.Walk(RomPath,
+		func(p string, f os.FileInfo, err error) error {
+
+			if f == nil {
+				return err
+			}
+
+			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
+			romExists := false                     //rom是否存在
+
+			if _, ok := RomExtMap[romExt]; ok {
+				romExists = true //rom存在
+			}
+
+			//如果是目录，或不是rom，则跳过
+			if f.IsDir() == true || romExists == false {
+				return nil
+			}
+
+			//检查修改时间是否完整
+			fileMd5 := utils.CreateRomUniqId(utils.ToString(f.ModTime().UnixNano()), f.Size())
+
+			c := create[fileMd5]
+			if _, ok := create[fileMd5]; ok {
+				c = append(c, p)
+			} else {
+				c = []string{p}
+			}
+			create[fileMd5] = c
+
+			//转换为相对路径
+			fp := strings.Replace(p, RomPath+config.Cfg.Separator, "", -1)
+
+			fileMap[fp] = fileMd5
+
+			return nil
+		}); err != nil {
+		return map[string]string{}, errors.New(config.Cfg.Lang["RomMenuCanNotBeExists"])
+	}
+
+	//开始检查是否有重复的md5，如果有重复的，则修改文件时间
+	if len(create) > 0 {
+		i := 1
+		for _, v := range create {
+			if len(v) > 1 {
+				for _, p := range v {
+					stat, _ := os.Stat(p)
+					modTime := utils.ToString(stat.ModTime().UnixNano())
+
+					t := ""
+					s := 0
+					e := 0
+					if modTime == "0" || len(modTime) < 10 {
+						t = utils.ToString(time.Now().UnixNano())
+						s = utils.ToInt(t[:10]) + i
+						e = utils.ToInt(t[11:])
+					} else {
+						n := utils.ToString(time.Now().UnixNano())
+						s = utils.ToInt(stat.ModTime().Unix()) + i
+						e = utils.ToInt(n[11:])
+					}
+					tm := time.Unix(int64(s), int64(e))
+
+					//修改文件时间
+					os.Chtimes(p, tm, tm)
+
+					//获取md5
+					fp := strings.Replace(p, RomPath+config.Cfg.Separator, "", -1)
+					fileMap[fp] = utils.CreateRomUniqId(utils.ToString(tm.UnixNano()), stat.Size())
+
+					i++
+				}
+			}
+		}
+	}
+
+	return fileMap, nil
+}
+
+// 创建菜单列表
+func createMenuList(platform uint32) (map[string]*db.Menu, error) {
 
 	menuList := map[string]*db.Menu{}
 
@@ -255,7 +432,7 @@ func CreateMenuList(platform uint32) (map[string]*db.Menu, error) {
 /**
  * 删除不存在平台的缓存数据
  **/
-func ClearPlatform() error {
+func ClearPlatform() {
 	pfs := []string{}
 	for k, _ := range config.Cfg.Platform {
 		pfs = append(pfs, utils.ToString(k))
@@ -263,20 +440,67 @@ func ClearPlatform() error {
 
 	//清空不存在的平台（rom表）
 	if err := (&db.Rom{}).ClearByNotPlatform(pfs); err != nil {
-		return err
+		fmt.Println(err)
 	}
 
 	//清空不存在的平台（menu表）
 	if err := (&db.Menu{}).ClearByNotPlatform(pfs); err != nil {
-		return err
+		fmt.Println(err)
 	}
-	return nil
+
+	//清空不存在的平台（rom_subpage表）
+	if err := (&db.RomSubGame{}).ClearByNotPlatform(pfs); err != nil {
+		fmt.Println(err)
+	}
+
+	//清空不存在的平台（rom_setting表）
+	if err := (&db.RomSetting{}).ClearByNotPlatform(pfs); err != nil {
+		fmt.Println(err)
+	}
+}
+
+/**
+ * 更新rom file_md5
+ **/
+func updateRomFileMd5(platform uint32, fileMap map[string]string) {
+
+	romlist, _ := (&db.Rom{}).GetByPlatform(platform)
+
+	//更新变更的rom唯一id
+	dbMap := map[string]string{}
+	for _, v := range romlist {
+		dbMap[v.RomPath] = v.FileMd5
+	}
+
+	//更新rom唯一id
+	replaceFileMd5 := []map[string]string{}
+	if len(fileMap) > 0 && len(romlist) > 0 {
+		for _, v := range romlist {
+
+			if _, ok := fileMap[v.RomPath]; !ok {
+				continue
+			}
+			if v.FileMd5 != fileMap[v.RomPath] {
+				fmt.Println(v.FileMd5, fileMap[v.RomPath])
+				m := map[string]string{}
+				m["romPath"] = v.RomPath
+				m["oldMd5"] = v.FileMd5
+				m["newMd5"] = fileMap[v.RomPath]
+				replaceFileMd5 = append(replaceFileMd5, m)
+			}
+		}
+
+		//更新数据库
+		(&db.Rom{}).BatchUpdateFileMd5(platform, replaceFileMd5)
+		(&db.RomSubGame{}).BatchUpdateFileMd5(platform, replaceFileMd5)
+		(&db.RomSetting{}).BatchUpdateFileMd5(platform, replaceFileMd5)
+	}
 }
 
 /**
  * 更新rom cache
  **/
-func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
+func updateRomDB(platform uint32, fileMap map[string]string, romlist []*db.Rom) []*db.Rom {
 
 	romlistInfoMd5 := []string{} //磁盘文件
 	romlistFileMd5 := []string{} //磁盘文件
@@ -303,37 +527,36 @@ func UpdateRomDB(platform uint32, romlist []*db.Rom) error {
 	}
 
 	//在已有数据中查找info_md5不一致的数据，就是修改的数据
-
 	updateIssetData := []*db.Rom{}
+	updateFileMd5 := []string{}
 	for _, v := range updateData {
 
 		if !utils.InSliceString(v.InfoMd5, DbInfoMd5) {
+			updateFileMd5 = append(updateFileMd5, v.FileMd5)
 			updateIssetData = append(updateIssetData, v) //添加的数据
 		}
 	}
 
-	//删除不存在的rom
-	err := (&db.Rom{}).DeleteByMd5(platform, subFileUniq)
-	if err != nil {
-		return err
-	}
-
-	//添加新rom
-	(&db.Rom{}).BatchAdd(addData, 1)
-
-	//更新现有rom
-	(&db.Rom{}).BatchUpdate(updateIssetData)
-
 	//删除重复数据
 	(&db.Rom{}).DeleteRepeat(platform)
 
-	return nil
+	//删除不存在的rom
+	(&db.Rom{}).DeleteByMd5(platform, subFileUniq)
+
+	//写入新rom
+	(&db.Rom{}).BatchAdd(addData, 1)
+
+	//更新现有rom
+	(&db.Rom{}).DeleteByMd5(platform, updateFileMd5)
+	(&db.Rom{}).BatchAdd(updateIssetData, 1)
+
+	return romlist
 }
 
 /**
- * 更新rom cache
+ * 更新menu cache
  **/
-func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
+func updateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 
 	//磁盘中目录列表
 	diskMenus := []string{}
@@ -353,11 +576,11 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 	}
 
 	add := utils.SliceDiff(diskMenus, dbNames)
-	sub := utils.SliceDiff(dbNames, diskMenus)
+	//sub := utils.SliceDiff(dbNames, diskMenus)
 
 	//删除当前平台下不存在的菜单
-	if err := (&db.Menu{}).DeleteNotExists(platform, sub); err != nil {
-	}
+	/*if err := (&db.Menu{}).DeleteNotExists(platform, sub); err != nil {
+	}*/
 
 	//取出需要写入数据库的rom数据。
 	saveMenulist := []*db.Menu{}
@@ -383,100 +606,84 @@ func UpdateMenuDB(platform uint32, menumap map[string]*db.Menu) error {
 	return nil
 }
 
-//读取路径Md5
-func GetRomMd5(par ...string) string {
-	str := strings.Join(par, ",")
-	return utils.Md5(str)
-}
-
 /**
  * 更新filter cache
  **/
-func UpdateFilterDB(platform uint32) {
+func updateFilterDB(platform uint32, romlist []*db.Rom) {
 
-	//清空过滤器
-	(&db.Filter{Platform: platform}).DeleteByPlatform()
+	dbf, _ := (&db.Filter{}).GetByPlatform(platform)
+	romFilters, dbFilter := components.FilterFactory(romlist, dbf)
 
-	baseType, _ := (&db.Rom{}).GetFilter(platform, "base_type")
-	baseYear, _ := (&db.Rom{}).GetFilter(platform, "base_year")
-	basePublisher, _ := (&db.Rom{}).GetFilter(platform, "base_publisher")
-	baseProducer, _ := (&db.Rom{}).GetFilter(platform, "base_producer")
-	baseCountry, _ := (&db.Rom{}).GetFilter(platform, "base_country")
-	baseTranslate, _ := (&db.Rom{}).GetFilter(platform, "base_translate")
-	baseVersion, _ := (&db.Rom{}).GetFilter(platform, "base_version")
+	//增加过滤器
+	if len(romFilters) > 0 {
+		addFilter := []string{}
+		for t, v := range romFilters {
+			if _, ok := dbFilter[t]; !ok {
+				//如果数据库没数据，则添加全部
+				addFilter = v
+			} else {
+				addFilter = utils.SliceDiff(romFilters[t], dbFilter[t])
+			}
 
-	filters := []*db.Filter{}
-	for _, v := range baseType {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_type",
-			Platform: platform,
+			//开始写入数据库
+			if len(addFilter) > 0 {
+				create := []*db.Filter{}
+				for _, name := range addFilter {
+					f := &db.Filter{
+						Platform: platform,
+						Type:     t,
+						Name:     name,
+					}
+					create = append(create, f)
+				}
+				(&db.Filter{}).BatchAdd(create)
+			}
+
 		}
-		filters = append(filters, data)
 	}
 
-	for _, v := range baseYear {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_year",
-			Platform: platform,
+	//删除过滤器
+	if len(dbFilter) > 0 {
+		subFilter := []string{}
+		for t, v := range dbFilter {
+			if _, ok := romFilters[t]; !ok {
+				//如果数据库没数据，则添加全部
+				subFilter = v
+			} else {
+				subFilter = utils.SliceDiff(dbFilter[t], romFilters[t])
+			}
+
+			if len(subFilter) > 0 {
+				(&db.Filter{}).DeleteByFileNames(platform, t, subFilter)
+			}
 		}
-		filters = append(filters, data)
 	}
 
-	for _, v := range baseProducer {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_producer",
-			Platform: platform,
-		}
-		filters = append(filters, data)
+}
+
+func updateRomConfig(platform uint32, romlist []*db.Rom) {
+
+	if len(romlist) == 0 {
+		return
 	}
 
-	for _, v := range basePublisher {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_publisher",
-			Platform: platform,
-		}
-		filters = append(filters, data)
+	md5s := []string{}
+	for _, v := range romlist {
+		md5s = append(md5s, v.FileMd5)
 	}
 
-	for _, v := range baseCountry {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_country",
-			Platform: platform,
-		}
-		filters = append(filters, data)
-	}
+	RomSettingDbList, _ := (&db.RomSetting{}).GetFileMd5ByPlatform(platform)
+	RomSettingDiff := utils.SliceDiff(RomSettingDbList, md5s)
+	(&db.RomSetting{}).DeleteByFileMd5s(platform, RomSettingDiff)
 
-	for _, v := range baseTranslate {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_translate",
-			Platform: platform,
-		}
-		filters = append(filters, data)
-	}
-	for _, v := range baseVersion {
-		data := &db.Filter{
-			Name:     v,
-			Type:     "base_version",
-			Platform: platform,
-		}
-		filters = append(filters, data)
-	}
-	(&db.Filter{}).BatchAdd(filters)
-
+	RomSubGameDbList, _ := (&db.RomSubGame{}).GetFileMd5ByPlatform(platform)
+	RomSubGameDiff := utils.SliceDiff(RomSubGameDbList, md5s)
+	(&db.RomSubGame{}).DeleteByFileMd5s(platform, RomSubGameDiff)
 }
 
 /**
  * 清空缓存
  */
-/**
- * 创建缓存入口
- **/
 func TruncateRomCache(getPlatform uint32) error {
 
 	//检查更新一个平台还是所有平台
@@ -502,10 +709,6 @@ func TruncateRomCache(getPlatform uint32) error {
 			return err
 		}
 
-		//清空filter表
-		if err := (&db.Filter{Platform: platform}).DeleteByPlatform(); err != nil {
-			return err
-		}
 	}
 
 	//收缩数据库
@@ -516,4 +719,13 @@ func TruncateRomCache(getPlatform uint32) error {
 
 	return nil
 
+}
+
+/**
+ * 清理游戏统计信息
+ */
+func ClearGameStat() error {
+	_ = (&db.Rom{}).TruncateGameStat()
+	_ = (&db.RomSetting{}).TruncateGameStat()
+	return nil
 }

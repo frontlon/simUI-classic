@@ -3,6 +3,7 @@ package modules
 import (
 	"encoding/json"
 	"errors"
+	"simUI/code/components"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
@@ -18,7 +19,7 @@ func GetStrategyFile(id uint64) ([]map[string]string, error) {
 	}
 
 	//搜索攻略文件
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, name+"__")
+	exists, _ := utils.ScanSlaveFiles(config.Cfg.Platform[vo.Platform].FilesPath, name)
 
 	volist := []map[string]string{}
 	for _, v := range exists {
@@ -76,7 +77,7 @@ func UpdateStrategyFiles(id uint64, data string) error {
 
 	//读取已存在的文件
 	fileName := utils.GetFileName(vo.RomPath)
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].FilesPath, fileName+"__")
+	exists, _ := utils.ScanSlaveFiles(config.Cfg.Platform[vo.Platform].FilesPath, fileName)
 	for _, v := range exists {
 		rel := strings.Replace(v, config.Cfg.RootPath, "", 1)
 		if !utils.InSliceString(rel, newData) {
@@ -89,7 +90,7 @@ func UpdateStrategyFiles(id uint64, data string) error {
 	return nil
 }
 
-//打开攻略文件
+// 打开攻略文件
 func OpenStrategyFiles(p string) error {
 
 	if !utils.IsAbsPath(p) {
@@ -103,7 +104,7 @@ func OpenStrategyFiles(p string) error {
 	cmd := []string{}
 	cmd = append(cmd, p)
 
-	if err := utils.RunGame("", cmd); err != nil {
+	if err := components.RunGame("", cmd); err != nil {
 		return err
 	}
 

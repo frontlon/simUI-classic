@@ -4,7 +4,7 @@
     <div id="themefile"></div>
     <style>
         @import "this://app/images/public.css";
-        @import "images/form.css";
+        @import "this://app/images/form.css";
 
         html{background:color(center-background-color)}
         body{width:*; height:max-content; overflow:hidden;margin:0;padding:0;font-size:12dip}
@@ -56,12 +56,12 @@
     </section>
 
 <script type="text/tiscript">
-    include ROOTPATH + "tis/plugins/tabs.tis";
-    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "js/plugins/tabs.js";
+    include ROOTPATH + "js/utils.js";
 
 
     try{
-    include ROOTPATH + "tis/dialog/edit_strategy.tis";
+    include ROOTPATH + "js/dialog/edit_strategy.js";
     }catch(e){
     alert(e);
     }

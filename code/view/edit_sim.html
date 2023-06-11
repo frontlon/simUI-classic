@@ -22,14 +22,23 @@
             </td></tr>
             <tr><td><div class="tip" title="{{SimParamsDesc}}">?</div>{{SimParams}}：</td><td><input type="text" id="sim_cmd" value="" novalue="{{SimulatorCmdNoValue}}">
                 <select id="set_cmd">
-                <option value="">Default</option>
-                <option value="{RomName}">MAME</option>
-                <option value="-g {RomName} -w">FBAS</option>
-                <option value="{RomName}">Winkawaks</option>
-                <option value='-loadbin {RomFullPath} -nogui'>ePsXe</option>
-                <option value="-e {RomFullPath}">Dolphin</option>
-                <option value="-rom={RomName}">Demul</option>
-            </select>
+                    <option value=''>Default</option>
+                    <option value='{RomName}'>MAME</option>
+                    <option value='{RomName}'>Winkawaks</option>
+                    <option value='-g {RomName} -w'>FBA Shuffle</option>
+                    <option value='-run=dc -image={RomFullPath}'>Demul</option>
+                    <option value='-loadbin {RomFullPath} -nogui'>ePsXe</option>
+                    <option value='-e {RomFullPath}'>Dolphin</option>
+                    <option value='load {RomFullPath}'>OpenBOR</option>
+                    <option value='-L cores\xxx.dll {RomFullPath}'>RetroArch</option>
+                    <option value='-conf {RomFullPath} -exit'>DosBox</option>
+                    <option value='{RomFullPath} -batch'>DuckStation</option>
+                    <option value='{RomName}'>Nebula2</option>
+                    <option value='-config nullDC:Emulator.Autostart=1 -config ImageReader:LoadDefaultImage=1 -config ImageReader:DefaultImage={RomFullPath}'>NullDC</option>
+                    <option value='–iso={RomFullPath}'>Yabuse</option>
+                    <option value='–config {RomFullPath} -f'>PCem</option>
+                    <option value='-g {RomFullPath} -f'>Cemu</option>
+                </select>
             </td></tr>
             <tr><td><div class="tip" title="{{LuaDesc}}">?</div>{{Lua}}：</td><td>
                 <input type="text" id="lua" value="">
@@ -50,8 +59,8 @@
     </div>
 
 <script type="text/tiscript">
-    include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog/edit_sim.tis";
+    include ROOTPATH + "js/utils.js";
+    include ROOTPATH + "js/dialog/edit_sim.js";
  
     //初始化主题
     initUiTheme();

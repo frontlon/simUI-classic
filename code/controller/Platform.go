@@ -27,6 +27,7 @@ func PlatformController() {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
+
 		jsonInfo, _ := json.Marshal(&info)
 
 		return sciter.NewValue(string(jsonInfo))
@@ -102,6 +103,15 @@ func PlatformController() {
 		json.Unmarshal([]byte(data), &d)
 		id := uint32(utils.ToInt(d["id"]))
 
+		//中文字符转换
+		d["exts"] = strings.ReplaceAll(d["exts"], "，", ",")
+
+		//去空去重
+		extsArr := strings.Split(d["exts"], ",")
+		extsArr = utils.SliceRemoveEmpty(extsArr)
+		extsArr = utils.SliceRemoveDuplicate(extsArr)
+		d["exts"] = strings.Join(extsArr, ",")
+
 		//取掉路径结尾路径分隔符
 		d["rom"] = strings.TrimRight(d["rom"], `\`)
 		d["rom"] = strings.TrimRight(d["rom"], `/`)
@@ -139,9 +149,10 @@ func PlatformController() {
 		d["audio"] = strings.TrimRight(d["audio"], `/`)
 		platform := &db.Platform{
 			Id:             id,
-			Name:           d["name"],
+			Name:           strings.Trim(d["name"], " "),
 			Icon:           d["ico"],
-			RomExts:        d["exts"],
+			Tag:            strings.Trim(d["tag"], " "),
+			RomExts:        strings.ToLower(d["exts"]),
 			RomPath:        d["rom"],
 			ThumbPath:      d["thumb"],
 			SnapPath:       d["snap"],
@@ -187,12 +198,7 @@ func PlatformController() {
 		}
 
 		for id, val := range d {
-			platform := &db.Platform{
-				Id:   id,
-				Sort: val,
-			}
-			err := platform.UpdateSortById()
-			if err != nil {
+			if err := (&db.Platform{Id: id}).UpdateFieldById("sort", val); err != nil {
 				utils.WriteLog(err.Error())
 				return utils.ErrorMsg(err.Error())
 			}
@@ -211,4 +217,29 @@ func PlatformController() {
 
 		return sciter.NewValue(config.ENV)
 	})
+
+	//更新平台配置的一个字段
+	utils.Window.DefineFunction("UpdatePlatformFieldById", func(args ...*sciter.Value) *sciter.Value {
+		platform := uint32(utils.ToInt(args[0].String()))
+		field := args[1].String()
+		val := args[2].String()
+		err := modules.UpdatePlatformFieldById(platform, field, val)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
+	//清空平台界面配置
+	utils.Window.DefineFunction("ClearAllPlatformConfig", func(args ...*sciter.Value) *sciter.Value {
+		typ := args[0].String()
+		err := modules.ClearAllPlatformAField(typ)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		return sciter.NullValue()
+	})
+
 }

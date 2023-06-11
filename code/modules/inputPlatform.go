@@ -134,9 +134,9 @@ func inputIniConfig(p string) error {
 
 	//更新simId到数据库
 	for k, v := range simIdList {
-		simListIds := []string{}
+		simListIds := []uint64{}
 		for _, b := range v {
-			simListIds = append(simListIds, utils.ToString(IdList[b]))
+			simListIds = append(simListIds, IdList[b])
 		}
 		(&db.Rom{}).UpdateSimIdByIds(simListIds, simIds[k])
 	}

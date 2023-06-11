@@ -2,7 +2,6 @@ package modules
 
 import (
 	"encoding/csv"
-	"errors"
 	"os"
 	"simUI/code/config"
 	"simUI/code/utils"
@@ -25,40 +24,51 @@ type RomBase struct {
 	OtherB    string // 其他内容b
 	OtherC    string // 其他内容c
 	OtherD    string // 其他内容d
-
+	Score     string // 评分
 }
+
+var RomBaseList map[uint32]map[string]*RomBase
 
 //读取游戏资料列表
 func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 
+	//如果已经读取，则直接返回
+	if len(RomBaseList[platform]) > 0 {
+		return RomBaseList[platform], nil
+	}
+
+	//开始整理数据
+	RomBaseList = map[uint32]map[string]*RomBase{}
+	RomBaseList[platform] = map[string]*RomBase{}
+
 	if config.Cfg.Platform[platform].Rombase == "" {
-		return map[string]*RomBase{}, nil
+		return RomBaseList[platform], nil
 	}
 
 	if !utils.FileExists(config.Cfg.Platform[platform].Rombase) {
-		return map[string]*RomBase{}, nil
+		return RomBaseList[platform], nil
 	}
 
-	des := map[string]*RomBase{}
 	records, err := utils.ReadCsv(config.Cfg.Platform[platform].Rombase)
 	if err != nil {
-		return map[string]*RomBase{}, nil //直接返回空，不返回错误
+		return RomBaseList[platform], nil //直接返回空，不返回错误
 	}
 
 	isUtf8 := false
 	if len(records) > 0 {
 		isUtf8 = utils.IsUTF8(records[0][0])
 	} else {
-		return nil, nil
+		return RomBaseList[platform], nil
 	}
 
+	creates := [][]string{}
 	for k, r := range records {
 
-		if k == 0 || r[0] == "" {
+		if k == 0 {
 			continue
 		}
 
-		create := []string{"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}
+		create := []string{"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}
 		createLen := len(create)
 		i := 1
 		for a, b := range r {
@@ -69,44 +79,85 @@ func GetRomBaseList(platform uint32) (map[string]*RomBase, error) {
 			create[a] = b
 		}
 
+		//转换成utf-8编码
 		if isUtf8 == false {
-			create[0] = utils.ToUTF8(create[0])
-			create[1] = utils.ToUTF8(create[1])
-			create[2] = utils.ToUTF8(create[2])
-			create[3] = utils.ToUTF8(create[3])
-			create[4] = utils.ToUTF8(create[4])
-			create[5] = utils.ToUTF8(create[5])
-			create[6] = utils.ToUTF8(create[6])
-			create[7] = utils.ToUTF8(create[7])
-			create[8] = utils.ToUTF8(create[8])
-			create[9] = utils.ToUTF8(create[9])
-			create[10] = utils.ToUTF8(create[10])
-			create[11] = utils.ToUTF8(create[11])
-			create[12] = utils.ToUTF8(create[12])
-			create[13] = utils.ToUTF8(create[13])
-			create[14] = utils.ToUTF8(create[14])
+			for ck, cv := range create {
+				create[ck] = utils.ToUTF8(cv)
+			}
 		}
-
-		des[create[0]] = &RomBase{
-			RomName:   create[0],
-			Name:      strings.Trim(create[1], " "),
-			Type:      strings.Trim(create[2], " "),
-			Year:      strings.Trim(create[3], " "),
-			Publisher: strings.Trim(create[4], " "),
-			Country:   strings.Trim(create[5], " "),
-			Translate: strings.Trim(create[6], " "),
-			Version:   strings.Trim(create[7], " "),
-			Producer:  strings.Trim(create[8], " "),
-			NameEN:    strings.Trim(create[9], " "),
-			NameJP:    strings.Trim(create[10], " "),
-			OtherA:    strings.Trim(create[11], " "),
-			OtherB:    strings.Trim(create[12], " "),
-			OtherC:    strings.Trim(create[13], " "),
-			OtherD:    strings.Trim(create[14], " "),
-		}
+		creates = append(creates, create)
 	}
 
-	return des, nil
+	//老版本csv没有Id，需要转换
+	/*if len(creates) > 1 && len(records[0]) < 16 && utils.ToInt(creates[0][0]) == 0 {
+		creates, _ = upgradeRomBase(platform, creates)
+	}*/
+
+	for _, create := range creates {
+		if create[0] == "" {
+			continue
+		}
+		lists := &RomBase{}
+		if len(create) >= 1 {
+			lists.RomName = strings.Trim(create[0], " ")
+		}
+		if len(create) >= 2 {
+			lists.Name = strings.Trim(create[1], " ")
+		}
+		if len(create) >= 3 {
+			lists.Type = strings.Trim(create[2], " ")
+		}
+		if len(create) >= 4 {
+			lists.Year = strings.Trim(create[3], " ")
+		}
+		if len(create) >= 5 {
+			lists.Publisher = strings.Trim(create[4], " ")
+		}
+		if len(create) >= 6 {
+			lists.Country = strings.Trim(create[5], " ")
+		}
+		if len(create) >= 7 {
+			lists.Translate = strings.Trim(create[6], " ")
+		}
+		if len(create) >= 8 {
+			lists.Version = strings.Trim(create[7], " ")
+		}
+		if len(create) >= 9 {
+			lists.Producer = strings.Trim(create[8], " ")
+		}
+		if len(create) >= 10 {
+			lists.NameEN = strings.Trim(create[9], " ")
+		}
+		if len(create) >= 11 {
+			lists.NameJP = strings.Trim(create[10], " ")
+		}
+		if len(create) >= 12 {
+			lists.OtherA = strings.Trim(create[11], " ")
+		}
+		if len(create) >= 13 {
+			lists.OtherB = strings.Trim(create[12], " ")
+		}
+		if len(create) >= 14 {
+			lists.OtherC = strings.Trim(create[13], " ")
+		}
+		if len(create) >= 15 {
+			lists.OtherD = strings.Trim(create[14], " ")
+		}
+		if len(create) >= 16 {
+			lists.Score = strings.Trim(create[15], " ")
+		}
+		RomBaseList[platform][create[0]] = lists
+	}
+	return RomBaseList[platform], nil
+}
+
+//读取一个rom的资料信息
+func GetRomBaseById(platform uint32, id string) *RomBase {
+	romlist, _ := GetRomBaseList(platform)
+	if _, ok := romlist[id]; ok {
+		return RomBaseList[platform][id]
+	}
+	return nil
 }
 
 //写csv文件
@@ -118,49 +169,15 @@ func WriteRomBaseFile(platform uint32, newData *RomBase) error {
 
 	info, _ := GetRomBaseList(platform) //读取老数据
 	//如果全为空则删除当前记录
-	if newData.Name == "" && newData.Publisher == "" && newData.Year == "" && newData.Type == "" && newData.Country == "" && newData.Translate == "" && newData.Version == "" {
-		delete(info, newData.RomName)
-	} else {
-		info[newData.RomName] = newData //并入新数据
-	}
-	//转换为切片
-	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
-	defer f.Close()
-	if err != nil {
-		return errors.New(config.Cfg.Lang["TipRombaseWriteError"])
-	}
+	info[newData.RomName] = newData //并入新数据
 
-	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
-
-	writer := csv.NewWriter(f)
-
-	//表头
-	if err := writer.Write(getCsvTitle()); err != nil {
+	//写入csv文件
+	if err := WriteDataToFile(config.Cfg.Platform[platform].Rombase, info); err != nil {
 		return err
 	}
 
-	for _, v := range info {
-
-		writer.Write([]string{
-			v.RomName,
-			strings.Trim(v.Name, " "),
-			strings.Trim(v.Type, " "),
-			strings.Trim(v.Year, " "),
-			strings.Trim(v.Publisher, " "),
-			strings.Trim(v.Country, " "),
-			strings.Trim(v.Translate, " "),
-			strings.Trim(v.Version, " "),
-			strings.Trim(v.Producer, " "),
-			strings.Trim(v.NameEN, " "),
-			strings.Trim(v.NameJP, " "),
-			strings.Trim(v.OtherA, " "),
-			strings.Trim(v.OtherB, " "),
-			strings.Trim(v.OtherC, " "),
-			strings.Trim(v.OtherD, " "),
-		})
-
-	}
-	writer.Flush() // 此时才会将缓冲区数据写入
+	//更新全局变量
+	RomBaseList[platform][newData.RomName] = newData
 
 	return nil
 }
@@ -172,8 +189,27 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 		return nil
 	}
 
+	//写入csv文件
+	if err := WriteDataToFile(config.Cfg.Platform[platform].Rombase, newData); err != nil {
+		return err
+	}
+
+	//更新全局变量
+	RomBaseList[platform] = map[string]*RomBase{}
+	RomBaseList[platform] = newData
+
+	return nil
+}
+
+//写入csv文件
+func WriteDataToFile(filePath string, data map[string]*RomBase) error {
+
+	if filePath == "" {
+		return nil
+	}
+
 	//转换为切片
-	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
+	f, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
@@ -186,9 +222,11 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 	//表头
 	writer.Write(getCsvTitle())
 
-	for _, v := range newData {
+	for _, v := range data {
 
-		if v.Name == "" && v.Producer == "" && v.Publisher == "" && v.Year == "" && v.Type == "" && v.Country == "" && v.Translate == "" && v.Version == "" && v.NameEN == "" && v.NameJP == "" && v.OtherA == "" && v.OtherB == "" && v.OtherC == "" && v.OtherD == "" {
+		str := strings.Join([]string{v.Name, v.Producer, v.Publisher, v.Year, v.Type, v.Country, v.Translate, v.Version, v.NameEN, v.NameJP, v.OtherA, v.OtherB, v.OtherC, v.OtherD, v.Score}, "")
+
+		if str == "" {
 			continue
 		}
 
@@ -208,6 +246,7 @@ func CoverRomBaseFile(platform uint32, newData map[string]*RomBase) error {
 			strings.Trim(v.OtherB, " "),
 			strings.Trim(v.OtherC, " "),
 			strings.Trim(v.OtherD, " "),
+			strings.Trim(v.Score, " "),
 		})
 
 	}
@@ -236,6 +275,66 @@ func CreateNewRomBaseFile(p string) error {
 	return nil
 }
 
+//csv 升级
+/*func upgradeRomBase(platform uint32, records [][]string) ([][]string, error) {
+	fmt.Println("进入版本转换，platformId：", platform)
+
+	if len(records) < 2 {
+		return [][]string{}, nil
+	}
+
+	//遍历文件，读取文件名和file_md5
+	RomExt := strings.Split(config.Cfg.Platform[platform].RomExts, ",") //rom扩展名
+	RomExtMap := map[string]bool{}
+	for _, v := range RomExt {
+		RomExtMap[v] = true
+	}
+	romsMap := map[string]string{}
+	if err := filepath.Walk(config.Cfg.Platform[platform].RomPath,
+		func(p string, f os.FileInfo, err error) error {
+			romExists := false                     //rom是否存在
+			romExt := strings.ToLower(path.Ext(p)) //获取文件后缀
+			if _, ok := RomExtMap[romExt]; ok {
+				romExists = true //rom存在
+			}
+			if f.IsDir() == false && romExists == true {
+				romsMap[utils.GetFileName(p)] = utils.CreateRomUniqId(f.ModTime().UnixNano())
+			}
+			return nil
+		}); err != nil {
+		return records, nil
+	}
+
+	//加入id字段
+	for k, record := range records {
+		id := ""
+		if _, ok := romsMap[record[0]]; ok {
+			id = romsMap[record[0]]
+		}
+		records[k] = append([]string{id}, record...)
+	}
+
+	//开始写入文件
+	f, err := os.Create(config.Cfg.Platform[platform].Rombase)
+	if err != nil {
+		return records, err
+	}
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM，避免使用Microsoft Excel打开乱码
+
+	writer := csv.NewWriter(f)
+
+	writer.Write(getCsvTitle())
+
+	for _, r := range records {
+		writer.Write(r)
+	}
+	writer.Flush() // 此时才会将缓冲区数据写入
+
+	return records, nil
+}*/
+
 //表头
 func getCsvTitle() []string {
 	return []string{
@@ -254,5 +353,6 @@ func getCsvTitle() []string {
 		config.Cfg.Lang["BaseOther"] + "B",
 		config.Cfg.Lang["BaseOther"] + "C",
 		config.Cfg.Lang["BaseOther"] + "D",
+		config.Cfg.Lang["Score"],
 	}
 }

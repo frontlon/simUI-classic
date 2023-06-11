@@ -40,10 +40,10 @@ func (*Rom) GetSimConf(romId uint64, simId uint32) (*SimConf, error) {
 }
 
 //设置rom模拟器参数
-func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8, file string,lua string) error {
+func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8, file string, lua string) error {
 
 	vo := &Rom{}
-	result := getDb().Select("sim_conf,name,platform").Where("id=?", romId).First(&vo)
+	result := getDb().Select("sim_conf,file_md5,platform").Where("id=?", romId).First(&vo)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
@@ -57,57 +57,30 @@ func (m *Rom) UpdateSimConf(romId uint64, simId uint32, cmd string, unzip uint8,
 		Cmd:   cmd,
 		Unzip: unzip,
 		File:  file,
-		Lua : lua,
+		Lua:   lua,
 	}
 	jsonInfo, _ := json.Marshal(&sim)
 
-	//更新到数据库
+	//更新到rom数据库
 	result = getDb().Table(m.TableName()).Where("id=?", romId).Update("sim_conf", jsonInfo)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
-	//更新所有子游戏
-	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("sim_conf", jsonInfo)
+	//更新到rom_conf数据库
+	result = getDb().Table((&RomSetting{}).TableName()).Where("file_md5=?", vo.FileMd5).Update("sim_conf", jsonInfo)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 
 	return result.Error
 }
 
 //更新模拟器配置
 func (m *Rom) UpdateSimConfById(id uint64, conf string) error {
-	result := getDb().Table(m.TableName()).Where("id = ?",id).Update("sim_conf", conf)
+	result := getDb().Table(m.TableName()).Where("id = ?", id).Update("sim_conf", conf)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
-	return result.Error
-}
-
-//删除一个rom模拟器参数
-func (m *Rom) DelSimConf(romId uint64, simId uint32) error {
-
-	vo := &Rom{}
-
-	result := getDb().Select("sim_conf,name,platform").Where("id=?", romId).First(&vo)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-
-	sim := map[uint32]*SimConf{}
-
-	json.Unmarshal([]byte(vo.SimConf), &sim)
-
-	delete(sim, simId)
-
-	jsonInfo, _ := json.Marshal(&sim)
-
-	//更新到数据库
-	result = getDb().Table(m.TableName()).Where("id=? AND sim_id=?", romId, simId).Update("sim_conf", jsonInfo)
-	if result.Error != nil {
-		fmt.Println(result.Error)
-	}
-
-	//更新所有子游戏
-	getDb().Table(m.TableName()).Where("platform=? AND pname=?", vo.Platform, vo.Name).Update("sim_conf", jsonInfo)
-
 	return result.Error
 }

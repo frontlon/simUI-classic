@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td>{{BaseYear}}：</td>
-                <td><input type="text" id="year" value="" maxlength="4"></td>
+                <td><input type="text" id="year" value=""></td>
             </tr>
             <tr>
                 <td>{{BaseProducer}}：</td>
@@ -43,6 +43,22 @@
             <tr>
                 <td>{{BaseTranslate}}：</td>
                 <td><input type="text" id="translate"></td>
+            </tr>
+            <tr>
+                <td>{{Score}}</td>
+                <td><select id="score" editable>
+                <option value='0'>0</option>
+                    <option value='0.5'>0.5</option>
+                    <option value='1.0'>1.0</option>
+                    <option value='1.5'>1.5</option>
+                    <option value='2.0'>2.0</option>
+                    <option value='2.5'>2.5</option>
+                    <option value='3.0'>3.0</option>
+                    <option value='3.5'>3.5</option>
+                    <option value='4.0'>4.0</option>
+                    <option value='4.5'>4.5</option>
+                    <option value='5.0'>5.0</option>
+                </select></td>
             </tr>
         </table>
     </div>
@@ -89,7 +105,7 @@
 </div>
 
 <script type="text/tiscript">
-include ROOTPATH + "tis/utils.tis";
+include ROOTPATH + "js/utils.js";
 
 view.root.on("ready", function(){
     //初始化主题
@@ -147,6 +163,7 @@ view.root.on("ready", function(){
         if(info.Country != undefined && info.Country != ""){$(#country).value = info.Country;}
         if(info.Translate != undefined && info.Translate != ""){$(#translate).value = info.Translate;}
         if(info.Version != undefined && info.Version != ""){$(#version).value = info.Version;}
+        if(info.Score != undefined && info.Score != ""){$(#score).value = info.Score;}
 
         if(info.NameEN != undefined && info.NameEN != ""){$(#name_en).value = info.NameEN;}
         if(info.NameJP != undefined && info.NameJP != ""){$(#name_jp).value = info.NameJP;}
@@ -176,6 +193,7 @@ event click $(#submit){
         country:$(#country).value,
         translate:$(#translate).value,
         version:$(#version).value,
+        score:$(#score).value,
         name_en:$(#name_en).value,
         name_jp:$(#name_jp).value,
         other_a:$(#other_a).value,

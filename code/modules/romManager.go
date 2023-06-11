@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"simUI/code/config"
@@ -193,4 +194,54 @@ func CheckRomZombie(platformId uint32) ([]map[string]string, error) {
 	}
 
 	return notExistsList, nil
+}
+
+//绑定子游戏
+func BindSubGame(pid uint64, sid uint64) (*db.Rom, error) {
+	master, err := (&db.Rom{}).GetById(pid)
+	if err != nil {
+		return nil, errors.New(config.Cfg.Lang["MasterGameNotFound"])
+	}
+
+	slave, err := (&db.Rom{}).GetById(sid)
+	if err != nil {
+		return nil, errors.New(config.Cfg.Lang["SlaveGameNotFound"])
+	}
+
+	subRoms, err := (&db.Rom{}).GetSubRom(master.Platform,slave.FileMd5)
+	if len(subRoms) > 0{
+		return nil, errors.New(config.Cfg.Lang["SubGameExists"])
+	}
+
+	//更新数据库
+	if (&db.Rom{}).UpdatePnameById(sid, master.FileMd5) != nil {
+		return nil, err
+	}
+	if (&db.RomSubGame{}).UpdatePname(slave.Platform,slave.FileMd5,master.FileMd5) != nil {
+		return nil, err
+	}
+
+	//整理返回值
+	slave.Pname = master.FileMd5
+
+	return slave, nil
+}
+
+//解绑子游戏
+func UnBindSubGame(id uint64) (*db.Rom, error) {
+	//读取子游戏数据
+	vo, err := (&db.Rom{}).GetById(id)
+
+	//更新数据库
+	if (&db.Rom{}).UpdatePnameById(id, "") != nil {
+		return nil, err
+	}
+	if (&db.RomSubGame{}).DeleteByFileMd5(vo.Platform,vo.FileMd5) != nil {
+		return nil, err
+	}
+
+	//整理返回值
+	vo.Pname = ""
+
+	return vo, nil
 }

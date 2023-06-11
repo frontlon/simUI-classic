@@ -12,32 +12,31 @@ solid-with-shadow
 <style type="text/css">
     
     @import "this://app/images/public.css";
-    
+
     html{min-height:300dip;width:*;background:none;border:1dip solid color(window-outside-border-color);}
     a{text-decoration:none}
     body{font-size:11dip;border:1dip solid color(window-inside-border-color);background-position:center center;background-repeat:no-repeat;background-size:cover;margin:0}
-    splitter{background:color(sidebar-background-color);}
+    splitter{background:color(sidebar-background-color);width:3dip}
     splitter:hover{background:color(sidebar-background-color)}
     #left_platform{background-color:color(sidebar-background-color);height:*;}
     #left_menu{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;position:relative}
     #center{background-color:color(center-background-color);box-shadow:inset 0 0 4dip color(center-box-shadow-color);height:*;position:relative;}
-    #center_fuzzy{backdrop-filter:blur(3dip);position:absolute;size:*;display:none}
+    #center_fuzzy{position:absolute;size:*;display:none}
     #center_mask{position:absolute;z-index:2;size:*;background-repeat:repeat}
     #center_video{position:absolute;size:*;display:none}
-    #center_video video{foreground-size:cover;foreground-repeat:no-repeat;image-rendering:optimize-qualitydisplay:block;width:*;height:*}
+    #center_video video{foreground-size:cover;foreground-repeat:no-repeat;image-rendering:optimize-quality;display:block;width:*;height:*}
 
-    #center_content{position:absolute;z-index:3;size:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";}
-    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";padding:0 9dip;position:relative;min-width:217px;max-width:700px}
-    
-    /* 菜单 */
-    menu{display:none;border:1dip solid color(context-border-color);padding:0}
-    menu li{padding:9dip 16dip 9dip 9dip;text-align:center;color:color(context-text-color);line-height:17dip;height:17dip;list-style:none;}
-    menu li:nth-child(odd){ background:color(context-odd-background-color)}
-    menu li:nth-child(even){ background:color(context-even-background-color)}
-    menu li:hover{background:color(context-hover-background-color);color:color(context-hover-text-color);}
-    menu li.active{background:color(context-hover-background-color);color:color(context-hover-text-color);}
-    menu li i{line-height:17dip;height:17dip;width:18dip;text-align:left;padding-top:0;vertical-align:middle;font-size:14dip!important;}
-    menu hr{display:block;background:none;border:0;border-top:1px solid color(context-hr-dark-color);border-bottom:1px solid color(context-hr-light-color);padding:0;margin:0}
+    #center_content{position:absolute;z-index:3;size:*;overflow:scroll-indicator scroll-manner(animation:false);vertical-scrollbar:"constom-scroll";}
+    #right{background-color:color(sidebar-background-color);height:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";padding:0 9dip;position:relative;min-width:230px;max-width:700px}
+
+    #center_fuzzy.fuzzy1{backdrop-filter:blur(1dip);}
+    #center_fuzzy.fuzzy3{backdrop-filter:blur(3dip);}
+    #center_fuzzy.fuzzy5{backdrop-filter:blur(5dip);}
+    #center_fuzzy.fuzzy7{backdrop-filter:blur(7dip);}
+    #center_fuzzy.fuzzy9{backdrop-filter:blur(9dip);}
+    #center_fuzzy.fuzzy15{backdrop-filter:blur(15dip);}
+    #center_fuzzy.fuzzy30{backdrop-filter:blur(30dip);}
+    #center_fuzzy.fuzzy45{backdrop-filter:blur(45dip);}
 
     /* 标题栏 */
     frameset{position:relative}
@@ -59,12 +58,17 @@ solid-with-shadow
     .statebar{background:color(statebar-background-color);height:auto;width:*;margin-top:0;flow:horizontal-flow}
     .statebar .counnum{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:right;width:max-content;padding-right:10dip}
     .statebar .filter{color:color(statebar-text-color);height:42dip;line-height:42dip;text-align:left;width:*;padding-left:10dip}
-    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:80dip}
+    .statebar .filter select{background:color(filter-background-color);display:inline-block;height:24dip;line-height:1.5em;border:0;max-width:80dip;}
     .statebar .filter select > button{fill:color(filter-arrow-text-color);foreground-image:url(stock:chevron-down);background:color(filter-arrow-background-color)}
-    .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);}
-    .statebar .filter select > caption{color:color(filter-text-color)}
-    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:60dip;padding:0 5dip;display:inline-block;vertical-align: middle}
+    .statebar .filter select > popup{background:color(filter-popup-background-color);color:color(filter-popup-text-color);overflow:scroll-indicator;}
+    .statebar .filter select > caption{color:color(filter-text-color);background:none;border:0}
+    .statebar .filter input[type='text']{color:color(filter-text-color);height:24dip;background:color(filter-background-color);border:0;width:70dip;padding:0 5dip;display:inline-block;vertical-align: middle}
     .statebar .filter button{color:color(filter-button-text-color);background:color(filter-button-background-color);height:24dip;border:0;vertical-align: middle}
+
+    .statebar .add_rom{vertical-align:middle;padding-right:10dip;}
+    .statebar .add_rom_btn{width:24dip;height:24dip;padding:0;border:0;background:color(addrom-background-color);}
+    .statebar .add_rom_btn:hover{;background:color(addrom-active-background-color);}
+    .statebar .add_rom_btn i{background-size: 65%;}
 
     /* 字母选择 */
     #num_search{position:fixed;display:block;top:130dip;height:*;padding:0;width:30dip}
@@ -75,13 +79,23 @@ solid-with-shadow
     /* 平台按钮 */
     #platform_ul{overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";height:*;margin:0;padding:0;background:color(platform-background-color);}
     #platform_ul >li{flow:horizontal-flow;display:block;text-align:center;vertical-align: middle;min-height:40dip;color:color(platform-text-color);background:none;border-top:1dip solid color(platform-arrow-border-light);border-bottom:1dip solid color(platform-arrow-border-dark);}
-    #platform_ul >li .leftdiv{size:*;margin:0;padding:5dip;border-right:1dip solid color(platform-arrow-border-dark);vertical-align:middle;}
-    #platform_ul >li img{size:28dip;margin:3dip auto 5dip auto;}
+    #platform_ul >li .leftdiv{size:*;margin:0;padding:5dip;vertical-align:middle;}
+    #platform_ul >li img{width:32dip;margin:3dip auto 5dip auto;}
     #platform_ul >li p{margin:0;line-height:1.4em;display:block;font-size:12dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
     #platform_ul >li button{width:10dip;line-height:1em;padding:0;color:#FFF;background:none;vertical-align:middle;border-radius:0;margin:0;border:0;border-left:1dip solid color(platform-arrow-border-light);}
     #platform_ul >li button i{height:*;line-height:*;vertical-align:middle;background-size: 120%;}
     #platform_ul li:hover{opacity:0.7;}
     #platform_ul li:current{background-color:color(platform-active-background-color);opacity:1;border-right:color(platform-active-background-color);border-left:color(platform-active-background-color)}
+
+
+    #platform_tags{background:color(platform-background-color);color:color(select-text-color);height:40dip;line-height:40dip;vertical-align:middle;margin:0;text-align:left;width:*;border:0;border-radius:0;border-bottom:1dip solid color(platform-arrow-border-dark);margin:0;display:block;}
+    #platform_tags > button{fill:color(select-button-fill-color);foreground-image:url(stock:chevron-down);background:color(platform-background-color);margin:0;border-radius:0;}
+    #platform_tags > button:hover{opacity:0.7;}
+    #platform_tags > popup{color:color(select-popup-text-color);border:1px solid color(select-popup-border-color);background:color(select-popup-option-background-color);overflow:scroll-indicator}
+    #platform_tags > popup option{height:28dip;line-height:28dip;background:color(select-popup-option-background-color);color:color(select-popup-option-text-color)}
+    #platform_tags > popup option:hover{background:color(select-popup-option-hover-background-color)}
+    #platform_tags > caption{color:color(platform-text-color);background:none;border:0;vertical-align:middle;text-align:center;}
+    #platform_tags > caption:hover{opacity:0.7;}
 
     /* 侧边栏菜单 */
     #menulist{padding:0 9dip;height:*;overflow:scroll-indicator;vertical-scrollbar:"constom-scroll";}
@@ -97,19 +111,14 @@ solid-with-shadow
     /* rom模块 */
     #romlist{display:block;}
     .romblock{flow:horizontal-flow;clear:both;padding:0;margin-left:20dip;}
-    .romblock > li{text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;width:*;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom;overflow:hidden}
+    .romblock > li{text-align:center;color:color(rom-block-text-color);display:inline-block;position:relative;width:*;context-menu:selector(menu#romcontext);height:auto;vertical-align:bottom;overflow:hidden;transform:scale(1);transition:transform sine-in-out 100ms;}
+
     .romblock > li:hover{box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color)}
     .romblock > li:current{border:5dip solid color(rom-block-active-border-color);box-shadow:0 0 12dip color(rom-block-hover-box-shadow-color);transform: scale(1.2);z-index:2;}
     .romblock > li img{width:100%;height:auto;display:block;}
     .romblock > li img:hover{}
 
-    .romblock li div:nth-child(2){white-space: nowrap;padding:4dip;height:29dip;display:block;vertical-align:middle;overflow: hidden;text-overflow:ellipsis;}
-    .romblock li div:nth-child(3){display:none}
-    .romblock li div:nth-child(4){display:none}
-    .romblock li div:nth-child(5){display:none}
-    .romblock li div:nth-child(6){display:none}
-    .romblock li div:nth-child(7){display:none}
-    .romblock li div:nth-child(8){display:none}
+    .romblock li div:nth-child(2){white-space: nowrap;padding:4dip;display:block;vertical-align:middle;overflow: hidden;text-overflow:ellipsis;}
 
     #romlist.textShadow{text-shadow: 1px 1px 1px color(rom-block-text-shadow-color);box-shadow:0}
     #romlist.textShadow li:current{border:0;box-shadow:0;overflow:visable}
@@ -127,12 +136,13 @@ solid-with-shadow
     #romlist.fontsize11 li{display:inherit;font-size:18dip}
     #romlist.fontsize12 li{display:inherit;font-size:20dip}
     #romlist.fontsize13 li{display:inherit;font-size:24dip}
-    #romlist.fontsize14 li{display:inherit;font-size:36dip;line-height:52dip;height:52dip}
-    #romlist.fontsize15 li{display:inherit;font-size:48dip;line-height:70dip;height:70dip}
-    #romlist.fontsize14 li div:nth-child(1){width:45dip;}
-    #romlist.fontsize14 li img{width:32dip;height:32dip;margin-top:1dip;}
-    #romlist.fontsize15 li div:nth-child(1){width:60dip}
-    #romlist.fontsize15 li img{width:40dip;height:40dip;margin-top:6dip;}
+    #romlist.fontsize14 li{display:inherit;font-size:36dip;}
+    #romlist.fontsize15 li{display:inherit;font-size:48dip;}
+    #romlist.fontsize16 li{display:inherit;font-size:60dip;}
+    #romlist.fontsize17 li{display:inherit;font-size:72dip;}
+    #romlist.fontsize18 li{display:inherit;font-size:84dip;}
+    #romlist.fontsize19 li{display:inherit;font-size:96dip;}
+
     
     .romblock.zoom1 > li{min-width:32dip;max-width:48dip;}
     .romblock.zoom2 > li{min-width:80dip;max-width:100dip;}
@@ -144,6 +154,15 @@ solid-with-shadow
     .romblock.zoom8 > li{min-width:240dip;max-width:280dip;}
     .romblock.zoom9 > li{min-width:280dip;max-width:320dip;}
     .romblock.zoom10 > li{min-width:320dip;max-width:360dip;}
+    .romblock.zoom11 > li{min-width:480dip;max-width:520dip;}
+    .romblock.zoom12 > li{min-width:640dip;max-width:680dip;}
+    .romblock.zoom13 > li{min-width:960dip;max-width:1000dip;}
+    .romblock.zoom14 > li{min-width:1280dip;max-width:1320dip;}
+    .romblock.zoom15 > li{min-width:1680dip;max-width:1720dip;}
+    .romblock.zoom16{flow:inherit;position:static;}
+    .romblock.zoom16 > li{display:block;width:85%;margin-left:auto!important;margin-right:auto!important;}
+    .romblock.zoom16 > li:current{transform: scale(1.1);}
+
 
     .romblock.margin1 > li{margin:3dip 6dip;}
     .romblock.margin2 > li{margin:6dip 12dip}
@@ -171,31 +190,50 @@ solid-with-shadow
     .romblock.vertical >li img{height:width(125%);}
 
     /* rom列表 */
-    .romlist{width:*;margin-top:24dip;margin:0 20dip 0 30dip;list-style-type:none;padding:0;}
-    .romlist > li{color:color(rom-list-text-color);text-shadow: 1px 1px 1px color(rom-block-text-shadow-color);position:relative;flow:horizontal-flow;vertical-align:middle;line-height:36dip;height:36dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}
+    .romlist{width:*;margin-top:24dip;margin:0 20dip 0 40dip;list-style-type:none;padding:0;}
+    .romlist > li{color:color(rom-list-text-color);position:relative;flow:horizontal-flow;vertical-align:middle;line-height:30dip;height:30dip;padding:0 12dip 0 0;margin:0;context-menu:selector(menu#romcontext);}
+    .romlist > li:nth-child(1){border-top:0;}
+    .romlist > li{border-bottom:1px solid color(rom-list-border-bottom-color);border-top:1px solid color(rom-list-border-top-color);}
+    .romlist > li:nth-child(odd){background:color(rom-list-odd-background-color);}
+    .romlist > li:nth-child(even){background:color(rom-list-even-background-color)}
     .romlist > li:current{background:color(rom-list-active-background-color);color:color(rom-list-active-text-color);}
-    .romlist > li img{width:19dip;height:19dip;vertical-align:middle;margin:0;display:block;position:absolute;top:9dip;transform:scale(1);transition:transform sine-in-out 100ms;context-menu:selector(menu#romcontext);}
-    .romlist > li:current img{transform: scale(1.5);}
-    .romlist > li div{width:*;display:inline-block;white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;}
-    .romlist > li div:nth-child(1){display:inline-block;width:30dip;height:*;overflow:visable;padding-left:12dip}
-    .romlist > li div:nth-child(2){width:*}
-    .romlist > li div:nth-child(3){color:color(rom-list-text-slave-color);min-width:30dip;max-width:100dip;width:10%}
-    .romlist > li div:nth-child(4){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
-    .romlist > li div:nth-child(5){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
-    .romlist > li div:nth-child(6){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
-    .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
-    .romlist > li div:nth-child(8){color:color(rom-list-text-slave-color);min-width:50dip;max-width:100dip;width:10%}
+    .romlist > li div{width:*;display:inline-block;white-space: nowrap;overflow-x:hidden;text-overflow:ellipsis;padding:0 10dip;}
+    
+    .romlist > li div:nth-child(1){min-width:30%}
+    .romlist > li div:nth-child(2){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(3){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(4){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(5){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(6){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(7){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(8){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(9){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(10){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(11){color:color(rom-list-text-slave-color)}
+    .romlist > li div:nth-child(12){color:color(rom-list-text-slave-color)}
+
+    .romlist > li div.menu{min-width:30dip;max-width:90dip;}
+    .romlist > li div.type{min-width:30dip;max-width:90dip;}
+    .romlist > li div.year{min-width:70dip;max-width:70dip;}
+    .romlist > li div.producer{min-width:30dip;max-width:80dip;}
+    .romlist > li div.publisher{min-width:30dip;max-width:80dip;}
+    .romlist > li div.country{min-width:30dip;max-width:50dip;}
+    .romlist > li div.translate{min-width:30dip;max-width:80dip;}
+    .romlist > li div.version{min-width:30dip;max-width:80dip;}
+    .romlist > li div.score{min-width:30dip;max-width:80dip;}
+    .romlist > li div.complete{min-width:60dip;max-width:80dip;}
+
     .romth div{color:color(rom-list-title-text-color)!important;font-weight:bold;}
     .rom_star {position:absolute;top:0; left:0;width:12px; height:12px;background:url(this://app/images/star.gif) no-repeat left top}
-    .romlist > li div.star{border-left:3px solid yellow}
+    .romlist > li div.fav{border-left:3px solid yellow}
     /* 右侧边栏 */
     #right h1{font-size:20dip;color:color(sidebar-name-text-color);display:none;text-shadow: 1px 1px 2px color(sidebar-name-text-shadow);}
     #right h2{text-align:left;padding:9dip 0;color:color(sidebar-title-text-color);font-weight:normal;font-size:11dip;line-height:19dip;margin:0}
     #right .run{padding:4dip;line-height:1.5em;height:auto;width:*;display:block;background:color(run-button-background-color);color:color(run-button-text-color);text-align:center;margin-bottom:9dip;overflow:hidden;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     #right .run:hover{color:color(run-button-hover-text-color);background:color(run-button-hover-background-color);}
     #right .run:active{color:color(run-button-active-text-color);background:color(run-button-active-background-color)}
-    #right .filedrop_ctl_btn{top:-28dip;left:0dip;position:absolute;}
-    #right_second h2{margin-left:25dip;}
+    #right .run:current{background:color(run-button-hover-background-color)}
+
     .doc{vertical-align:top;height:*;min-height:150dip;overflow:scroll-indicator;margin-bottom:2dip;border:1dip solid color(right-doc-border-color);color:color(right-doc-text-color);background:color(right-doc-background-color);line-height:1.5em;padding:4dip;font-size:14dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all}
     .nodoc{vertical-align:middle;text-align:center;font-size:12dip;color:color(right-no-doc-text-color)}
     .button_wrapper{position:relative;z-index:2;}
@@ -204,9 +242,6 @@ solid-with-shadow
     .funbtn:hover{background:color(func-button-background-color);opacity:0.5}
     .funbtn i{display:block}
 
-    .game_stat{margin:0;padding:0;position:relative}
-    .game_stat li{color:color(right-stat-text-color);list-style:none;padding:3dip 0 3dip 15dip;background:url(this://app/images/gamestat.gif) no-repeat left center;background-size:9px;}
-
     .flow_wrapper{;height:*;}
     .flow_wrapper_left{height:auto;flow:none;}
     .flow_wrapper_right{height:*;}
@@ -214,8 +249,8 @@ solid-with-shadow
     .menulist_menu{position:absolute;top:18dip;right:8dip}
     
     /* 基础信息表格 */
-    #right_rombase{width:*;overflow:hidden;display:block;clear:both;height:auto;padding:0;margin:0;background:color(right-doc-background-color);}
-    #right_rombase li{word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;}
+    #right_rombase{width:*;overflow:hidden;display:block;clear:both;height:auto;padding:0;margin:0;background:color(right-rombase-background-color);}
+    #right_rombase li{behavior:edit;context-menu:selector(menu#rombase_menucontext);word-break:break-all;word-wrap:break-word;white-space:pre-wrap;display:inline-block;min-height:10dip;margin:5dip 10dip 5dip 0;padding:5dip 10dip;color:color(right-play-info-text-color);list-style:none;border-radius:15dip;}
     #right_rombase li:nth-child(1){background-color:color(right-play-info-background-color-1);}
     #right_rombase li:nth-child(2){background-color:color(right-play-info-background-color-2);}
     #right_rombase li:nth-child(3){background-color:color(right-play-info-background-color-3);}
@@ -231,24 +266,30 @@ solid-with-shadow
     #right_rombase li:nth-child(13){background-color:color(right-play-info-background-color-5);}
     #right_rombase li:nth-child(14){background-color:color(right-play-info-background-color-6);}
     #right_rombase li:nth-child(15){background-color:color(right-play-info-background-color-1);}
+    #right_rombase li:nth-child(16){background-color:color(right-play-info-background-color-2);}
+    #right_rombase li:last-child{background-color:color(right-play-info-background-color-8);}
 
     /* 侧边栏滚动图片 */
-    .rotate_wrapper{position:relative;}
-    #rotate{border:0;text-align:center;height:25dip;line-height:25dip;width:25dip;color:color(func-button-text-color);background:color(func-button-background-color);display:inline-block;padding:0;top:-30dip;right:0dip;position:absolute;opacity:0.8}
-    #rotate:hover{opacity:1}
-    .stack{overflow:hidden;flow:stack;width:100%;text-align:center;}
+    .rotate_wrapper{position:relative;margin-top:5dip;}
+    #rotate{border:0;height:*;width:40%;color:color(func-button-text-color);background-image:url(this://app/images/svg/rotate.svg);background-position:center center;background-repeat:no-repeat;background-size:50%;display:inline-block;padding:0;top:0;right:0dip;position:absolute;opacity:0}
+    #rotate:hover{opacity:0.4;}
+    .stack{overflow:hidden;flow:stack;width:100%;text-align:center;position:relative}
     .stack>img{max-width:360dip;width:100%;margin:0 auto}
     .stack>img:hover{cursor:pointer;opacity:0.8;}
 
     /* 右侧边栏遮罩 */
-    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:5;text-align:center;vertical-align:middle;display:block;background-size:70%;}
+    #mask{background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:6;text-align:center;vertical-align:middle;display:block;background-size:70%;}
     #mask img{width:60%;display:block;opacity: 0.3;}
     #mask p{font-size:16dip;display: block;opacity: 0.5;margin-bottom:50dip}
+    
+    /* 右侧边栏平台介绍 */
+    #platform_desc{color:color(sidebar-platform-desc-text-color);font-size:14dip;display: block;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;line-height:1.5em;padding:10dip 5dip;overflow:scroll-indicator;background:color(sidebar-background-color) no-repeat center center;width:*;height:100%;position:absolute;z-index:5;text-align:left;vertical-align:top;display:none;}
+    #platform_desc img{width:80%!important;margin:10dip auto;display:block}
 
     /* 模拟器选择 */
     #sim_select{margin:0 0 9dip 0;display:block;padding:0}
-    #sim_select li{behavior:shell-icon;display:block;height:19dip;line-height:19dip;padding:0 4dip 0 26dip;color:color(sim-switch-text-color);foreground-repeat:no-repeat;foreground-position:4dip 50%;flow:horizontal-flow;}
-    #sim_select li p{display:block;width:*;vertical-align:top;margin:0;height:*;overflow:hidden;}
+    #sim_select li{behavior:shell-icon;display:block;line-height:1.5em;padding:0 4dip 0 26dip;color:color(sim-switch-text-color);foreground-repeat:no-repeat;foreground-position:4dip 50%;flow:horizontal-flow;}
+    #sim_select li p{display:block;width:*;vertical-align:top;margin:0;height:auto;overflow:hidden;}
     #sim_select li button{border:0;background:color(sim-switch-button-background-color);color:color(sim-switch-button-text-color);display:block;height:14dip;width:25dip;vertical-align:middle;text-align:center;padding:0;font-size: 9dip;position:relative;top:3;}
     #sim_select li:hover{color:color(sim-switch-hover-text-color)}
     #sim_select li:current{color:color(sim-switch-active-text-color);background:color(sim-switch-active-background-color);}
@@ -262,7 +303,7 @@ solid-with-shadow
     #doc hr{border:0;border-bottom:1px solid color(right-doc-text-color);margin:10dip 0}
 
     /* rom右键菜单 */
-    #romcontext{font-size: 10dip;width:auto;max-height:max-content;overflow:auto}
+    #romcontext{width:auto;max-height:max-content;overflow:auto}
     #romcontext  li{padding:7dip 16dip 7dip 28dip;text-align: left;white-space:nowrap;background-position:4dip center;background-repeat:no-repeat;background-size: 16dip;}
     #romcontext .file{behavior: shell-icon;foreground-repeat:no-repeat;foreground-position:4dip 50%;}
     #romcontext .folder{background-image:url(this://app/images/fileico_folder.png);}
@@ -284,6 +325,7 @@ solid-with-shadow
     #loading{box-shadow:0 0 9dip #fff;position:absolute;top:50%;left:50%;width:240dip;margin:-52dip 0 0 -120dip;height:auto;background:#FFF;text-align:center;padding:24dip 0;display:none}
     #loading img{display:block;margin:0 auto 9dip auto;}
     #ping{width:1;height:1;position: absolute;top:0;left:0;}
+    #console{width:500dip;height:500dip;position: absolute;top:0;left:0;background:#fff;overflow:auto;display:none}
 
     /* 侧边栏tab选项卡 */
     .sidetabs{prototype:Tabs;size:*;display:block;flow:vertical;}
@@ -298,9 +340,9 @@ solid-with-shadow
     .sidetabs>panels>*{visibility:none}
     .sidetabs>panels>:expanded{visibility:visible;height:*;background:none;}
     
-    #second_thumbs img{display:block;max-width:360px;width:100%;margin:0 auto}
+    #second_thumbs img{display:block;max-width:360px;width:100%;margin:0 auto;}
     #second_thumbs img:hover{opacity:0.8;}
-    #third_strategy{color:color(desc-content-text-color);line-height:1.5em;padding-top:10dip;font-size:14dip;}
+    #third_strategy{white-space:pre-wrap;word-wrap:break-word;word-break:break-all;color:color(desc-content-text-color);line-height:1.5em;padding-top:10dip;font-size:14dip;}
     #third_strategy p{line-height:2em;}
     #third_strategy img{display:block;max-width:300px;width:100%;margin:0 auto}
     #third_strategy img.ctl{width:16dip;height:16dip;margin:0 1dip;vertical-align:middle;display:inline-block;}
@@ -310,24 +352,15 @@ solid-with-shadow
     .sidebar_empty{padding-top:50dip;text-align:center;opacity:0.7;color:#FFF;opacity:0.5}
 
     .filedropzone_widget{position:relative;}
-    .file-drop-zone {margin:0 auto;prototype: FileDropZone;max-width:300dip;width:100%}
+    .file-drop-zone {margin:5dip auto;prototype: FileDropZone;max-width:300dip;width:100%;context-menu:selector(menu#thumbcontext);}
     .file-drop-zone.disabled{border:1px dashed #eee}
     .file-drop-zone.active-target {background:gold;}
     .file-drop-zone img{width:auto;height:auto;max-width:100%;max-height:100%;}
     .file-drop-zone video{size:*;foreground-repeat:no-repeat;foreground-position:top center}
-    .file-drop-zone-empty{width:*;padding:0 15dip;min-height:width(75%);line-height:1em;border: 1px dashed;text-align:center;font-size:12dip;vertical-align:middle;color: gray;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
-
+    .file-drop-zone-empty{width:*;padding:0 15dip;height:100dip;line-height:1em;border: 1px dashed;text-align:center;font-size:12dip;vertical-align:middle;color: gray;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    .file-drop-zone-isset{color:color(thumb-video-text-color);background:color(thumb-video-background-color)}
     #search_box{background:color(search-box-background-color);border-radius:5px;box-shadow:0 0 20dip color(search-box-box-shadow);position:absolute;top:50%;left:50%;width:400dip;height:50dip;padding:20dip 10dip 0 10dip ;margin: -25dip 0 0 -200dip;opacity:0.9;display:none}
     #search_box input{color:color(search-box-text-color);display:block;border:0;background:none;line-height:25dip;height:25dip;font-size:16dip;}
-
-    #right_video_wrapper{width:*}
-    #right_video_wrapper video{max-width:360dip;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
-    #right_video_wrapper .bar {text-align:center;width:*;height:*;margin:*;flow:horizontal;padding:4dip;position:absolute;top:0;display:none;}
-
-    #right_video_wrapper:hover .bar{display:block;}
-    #right_video_wrapper .bar > button {vertical-align:middle;display:block;size:70dip;background:#000;opacity:0.7;border:0;color:#fff;}
-    #right_video_wrapper .bar > button:first-child { margin-left:*;margin-right:10dip }
-    #right_video_wrapper .bar > button:last-child { margin-right:*;margin-left:10dip }
 
     /* 攻略文件 */
     #third_files{flow:horizontal-flow;padding:0}
@@ -341,18 +374,25 @@ solid-with-shadow
     #big_thumb_content{z-index:6;position:absolute;size:*;vertical-align:middle;text-align:center;margin:auto;}
     #big_thumb_content img{vertical-align:middle;margin:auto;display:block}
 
+    /* 侧边栏视频 */
+    #right_video_wrapper{display:block;width:100%;position:relative}
+    #right_video_wrapper video{max-width:360dip;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
+    #right_video_wrapper .bar {text-align:center;width:*;height:*;margin:*;flow:horizontal;padding:4dip;position:absolute;top:0;display:none;}
+    #right_video_wrapper:hover .bar{display:block;}
+    #right_video_wrapper .bar > button {vertical-align:middle;display:block;size:70dip;background:#000;opacity:0.4;border:0;color:#fff;}
+    #right_video_wrapper .bar > button:first-child { margin-left:*;margin-right:10dip}
+    #right_video_wrapper .bar > button:last-child { margin-right:*;margin-left:10dip}
+
     /* 宽模式 */
     .widthMode{height:*}
-    .widthMode #thumb_h2{display:none;}
-    .widthMode #funBtn_h2{display:none;}
     .right_bg{display:none}
     .widthMode  .right_bg{background:no-repeat center top;background-size:100%;height:300dip;display:block; box-shadow: inset 0 -100dip 100dip color(sidebar-background-color);position:relative}
     .widthMode .margin_wrapper{margin-top:-50dip;height:*;}
     .widthMode .button_wrapper{display:none}
-    .widthMode .rotate_wrapper{height:90dip;z-index:3}
+    .widthMode .rotate_wrapper{top:-100dip;}
     .widthMode  #right_title{display:block}
-    .widthMode #rotate{height:35dip;line-height:35dip;width:35dip;top:-40dip;right:0dip;position:absolute;z-index:2;}
-    .widthMode .stack{position:absolute;top:-120dip;width:auto;height:200px;right:40dip;vertical-align:middle;text-align:right}
+    .widthMode #rotate{width:80dip;top:0;right:10dip;background-size:50%}
+    .widthMode .stack{width:auto;height:200px;vertical-align:middle;right:10dip}
     .widthMode .stack>img{max-width:auto;width:auto;height:200dip;margin-right:0}
     .widthMode video{margin:0;padding:0}
     .widthMode .sim_select{display:block;width:*;}
@@ -363,6 +403,8 @@ solid-with-shadow
     .widthMode #sim_select li{padding-top:3dip;padding-bottom:3dip;}
     .widthMode #right_rombase{width:*;margin-right:10dip;}
     .widthMode .doc{width:*;height:*}
+    .widthMode #right_video_wrapper{display:inline-block;width:100%;position:absolute;z-index:3;right:0;}
+    .widthMode #right_video_wrapper video{max-width:360dip;foreground-position:center center;foreground-size:100%;foreground-repeat:no-repeat;image-rendering:optimize-quality;margin:0 auto;display:block;size:*;}
 
     /* 相关游戏 */
     .related{display:none}
@@ -386,34 +428,89 @@ solid-with-shadow
     .audio_title_wrapper h2{width:*;}
     .audio_title_wrapper button{margin-top:9dip;size:17dip}
 
+    .load_more{display:none;background:color(load-more-background-color);color:color(load-more-text-color);width:40%;height:40dip;line-height:40dip;text-align:center;margin:50dip auto 0 auto;}
+    .load_more:hover{opacity:0.5}
+
+    #joystickFocus{position:absolute;top:0;left:0;border:5px solid #f00;display:none;z-index:3}
+
+    /* 游戏评星 */
+    .score_wrapper{flow:horizontal-flow;width:*;}
+    #score_num{font-family:"Times New Roman";color:color(score-title-text-color);text-shadow: 1px 1px 1px color(score-title-shadow-color);display:block;width:40dip;line-height:24dip;font-weight:bold;font-size:24dip;text-align:right;vertical-align:middle;}
+    #score {background:color(score-background-color);border-radius:7dip;width:*;display:block;text-align:center;vertical-align:middle}
+    #score span {display: inline-block;size:24dip;background-size:100%;background-image: url(this://app/images/score_empty.png);}
+    #score span.full {background-image: url(this://app/images/score_full.png);}
+    #score span.empty {background-image: url(this://app/images/score_empty.png);}
+    #score span.half {background-image: url(this://app/images/score_half.png);}
+    #score span.h-full {background-image: url(this://app/images/score_full.png);opacity:0.5;}
+    #score span.h-half {background-image: url(this://app/images/score_half.png);opacity:0.5;}
+
+    /* 游戏运行信息 */
+    .game_stat_ul{margin:0;padding:0;flow:horizontal-flow;text-align:center;width:*}
+    .game_stat_ul li{height:70dip;width:*;overflow:hidden;padding:10dip 0;text-align:center;border-radius:10px;background:color(stat-background-color);list-style:none}
+    .game_stat_ul li:nth-child(2){margin:0 5dip;}
+    .game_stat_ul li span.img{fill:color(stat-image-color);opacity:1;display:block;margin:0 auto;size:32dip;background:center center;background-size:100%;}
+    .game_stat_ul li span.info{font-size:10dip;font-weight:bold;color:color(stat-info-text-color);display:block;margin:5dip 0;height:15dip;vertical-align:middle;}
+    .game_stat_ul li span.title{font-size:10dip;color:color(stat-title-text-color)}
+    .game_stat_ul li:nth-child(2) span.img{background-image:url("this://app/images/svg/number.svg");}
+    .game_stat_ul li:nth-child(3) span.img{background-image:url("this://app/images/svg/time.svg");}
+    .game_stat_ul li.complete0 span.img{background-image:url("this://app/images/svg/game.svg");fill:color(stat-complete0-image-color)}
+    .game_stat_ul li.complete1 span.img{background-image:url("this://app/images/svg/complete.svg");fill:color(stat-complete1-image-color)}
+    .game_stat_ul li.complete2 span.img{background-image:url("this://app/images/svg/complete100.svg");fill:color(stat-complete2-image-color)}
+    
+    /* 动画 */
+    .actShake{animation:animationShake 300ms infinite;animation-iteration-count:1;}
+    @keyframes animationShake{
+        0%{transform:rotate(0) scale(1);}
+        70%{transform:rotate(10deg) scale(0.9);}
+        80%{transform:rotate(-10deg) scale(0.9);}
+        90%{transform:rotate(10deg) scale(0.9);}
+        100%{transform:rotate(0) scale(1);}
+    }
+
 </style>
 
 </head>
 <body>
+<!-- 全局部分 -->
+<div#console></div>
+<div id="search_box"><input type="text" id="search_box_input" value="" novalue="{{InputSearchKeyword}}" /></div>
+<div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
+<div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
+<menu.context#romcontext></menu>
+<menu.context#menucontext></menu>
+<menu.context#rombase_menucontext>
+<li command="edit:copy"	style="foreground-image:url(sciter:copy.png)"><label>{{Copy}}</label><span class="accesskey">Ctrl+C</span></li>
+<li command="edit:selectall"><label>{{SelectAll}}</label><span class="accesskey">Ctrl+A</span></li>
+</menu>
+<menu.context#thumbcontext></menu>
 
-<!-- 大图 -->
+<!-- 内容部分 -->
 <div id="big_thumb_wrapper">
     <div id="big_thumb_bg"></div>
     <div id="big_thumb_content"><img id="big_thumb" src="" /></div>
 </div>
-<!-- 搜索框 -->
-<div id="search_box"><input type="text" id="search_box_input" value="" novalue="请输入搜索关键字" /></div>
-
-<div id="console" style="display:none;box-shadow:0 0 9dip #fff;position:absolute;top:30%;left:50%;width:500dip;margin:-52dip 0 0 -250dip;height:auto;background:#FFF;text-align:center;padding:24dip 0"></div>
-<div id="loading"><img src="images/loading.gif" /><p><span id="loading_platform"></span><span id="loading_text">{{Loading}}</span></p></div>
-<menu.context id="romcontext"></menu>
-<menu id="menucontext"></menu>
 <div class="titlebar" id="titlebar" role=window-caption>
     <div id="logo"></div>
     <div id="tb_left">
         <button id="close_platform" value="" title="{{ClosePlatformPanel}}"><i.frame_left.minsize></i></button><button id="close_menu" value="" title="{{CloseMenuPanel}}"><i.frame_center.minsize></i></button><button id="close_right" value="" title="{{CloseSidebarPanel}}"><i.frame_right.minsize></i></button>
         <button id="switch_romlist" value="1" title="{{SwitchRomlist}}"><i></i></button><button id="interface_config" value="1" type="menu" title="{{UIConfig}}"><i.interface.minsize></i><menu>
-            <li id="config_romlist_direction">{{ThumbDirection}}<menu><li opt="0">{{ThumbAuto}}</li><li opt="1">{{ThumbHorizontal}}</li><li opt="2">{{ThumbVertical}}</li></menu></li>
-            <li id="config_thumb">{{IndexThumb}}<menu><li opt="optimized">{{OptimizedCache}}</li><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="title">{{TitlePic}}</li><li opt="cassette">{{CassettePic}}</li><li opt="icon">{{IconPic}}</li><li opt="gif">{{GifPic}}</li><li opt="wallpaper">{{WallpaperPic}}</li><li opt="background">{{BackgroundPic}}</li></menu></li>
+            <!-- 排序方式 -->
+            <li id="config_orders">{{Sort}}<menu><li opt="1">{{Name}}{{SortAsc}}</li><li opt="2">{{Name}}{{SortDesc}}</li><hr><li opt="5">{{BaseYear}}{{SortAsc}}</li><li opt="6">{{BaseYear}}{{SortDesc}}</li><hr><li opt="3">{{Score}}{{SortAsc}}</li><li opt="4">{{Score}}{{SortDesc}}</li><hr><li opt="7">{{PlayMost}}{{SortDesc}}</li><li opt="8">{{LastRunTime}}{{SortDesc}}</li></menu></li>
+            <!-- 展示图方向 -->
+            <li id="config_romlist_direction">{{ThumbDirection}}<menu></menu></li>
+            <!-- 首页展示图类型 -->
+            <li id="config_thumb">{{IndexThumb}}<menu></menu></li>
+            <!-- 标题字体大小 -->
+            <li id="config_title_fontsize">{{TitleFontSize}}<menu></menu></li>
+            <!-- 模块大小 -->
+            <li id="config_romlist_size">{{BlockSize}}<menu></menu></li>
+            <!-- 模块间距 -->
+            <li id="config_romlist_margin">{{BlockMargin}}<menu></menu></li>
+            <!-- 模块标题背景 -->
             <li id="config_font_background">{{TitleBackground}}<menu><li opt="2">{{TitleShow}}</li><li opt="0">{{TitleHideBackground}}</li><li opt="1">{{TitleHide}}</li></menu></li>
-            <li id="config_title_fontsize">{{TitleFontSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li><li opt="11">11</li><li opt="12">12</li><li opt="13">13</li><li opt="14">14</li><li opt="15">15</li></menu></li>
-            <li id="config_romlist_size">{{BlockSize}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li></menu></li>
-            <li id="config_romlist_margin">{{BlockMargin}}<menu><li opt="1">1</li><li opt="2">2</li><li opt="3">3</li><li opt="4">4</li><li opt="5">5</li><li opt="6">6</li><li opt="7">7</li><li opt="8">8</li><li opt="9">9</li><li opt="10">10</li><li opt="11">11</li><li opt="12">12</li><li opt="13">13</li><li opt="14">14</li><li opt="15">15</li></menu></li>
+            <!-- 名称显示类型 -->
+            <li id="config_show_name_type">{{ShowNameType}}<menu><li opt="0">{{Alias}}</li><li opt="1">{{FileName}}</li></menu></li>
+            <!-- 列表栏 -->
             <li>{{RomlistColumn}}<menu>
                 <li><label><input class="romlist_column" opt="0" type="checkbox"> {{FilterMenu}}</label></li>
                 <li><label><input class="romlist_column" opt="1" type="checkbox"> {{BaseType}}</label></li>
@@ -423,8 +520,10 @@ solid-with-shadow
                 <li><label><input class="romlist_column" opt="5" type="checkbox"> {{BaseTranslate}}</label></li>
                 <li><label><input class="romlist_column" opt="6" type="checkbox"> {{BaseVersion}}</label></li>
                 <li><label><input class="romlist_column" opt="7" type="checkbox"> {{BaseProducer}}</label></li>
+                <li><label><input class="romlist_column" opt="8" type="checkbox"> {{FilePath}}</label></li>
+                <li><label><input class="romlist_column" opt="9" type="checkbox"> {{Score}}</label></li>
+                <li><label><input class="romlist_column" opt="10" type="checkbox"> {{GameCompleteState}}</label></li>
             </menu></li>
-            <li id="config_show_name_type">{{ShowNameType}}<menu><li opt="0">{{Alias}}</li><li opt="1">{{FileName}}</li></menu></li>
         </menu></button>
 
         <button id="istop" value="" title="{{GoTop}}"><i.top.minsize></i></button>
@@ -439,18 +538,38 @@ solid-with-shadow
                 <li><i.optimized></i><span>{{CreateOptimizedCache}}</span><menu id="create_optimized"><li opt="thumb">{{Thumb}}</li><li opt="snap">{{Snap}}</li><li opt="title">{{TitlePic}}</li><li opt="poster">{{Poster}}</li><li opt="packing">{{Packing}}</li><li opt="cassette">{{CassettePic}}</li><li opt="icon">{{Icon}}</li></menu>
                 </li>
                 <hr/>
+                <!--
                 <li id="clear_db" opt="platform"><i.clear></i><span>{{ClearDBPlatform}}</span></li>
                 <li id="clear_db" opt="all"><i.clear></i><span>{{ClearDBPlatformAll}}</span></li>
                 <hr/>
-                <li id="clear_rombase" opt="res"><i.clear></i><span>{{ClearRombase}}</span></li>
+                -->
+                <li><i.clear></i>{{DataClear}}<menu>
+                <li id="clear_game_stat">{{ClearGameStat}}</li>
+                <li id="clear_rombase">{{ClearRombase}}</li>
+                </menu></li>
             </menu>
         </button><button type="menu" title="{{Config}}"><i.config.minsize></i>
             <menu>
-                <li id="platform_config"><i.config></i><span>{{PlatformConfig}}</span></li>
+                <li id="platform_config"><i.platform></i><span>{{PlatformConfig}}</span></li>
                 <li id="config"><i.config></i><span>{{Config}}</span></li>
-                <li id="rom_manager"><i.config></i><span>{{RomManager}}</span></li>
+                <li id="rom_manager"><i.rom_manage></i><span>{{RomManager}}</span></li>
                 <li id="theme"><i.skin></i><span>{{Theme}}</span><menu></menu></li>
                 <li id="check_joystick"><i.joystick></i><span>{{CheckJoystick}}</span></li>
+                <li><i.backup></i><span>{{Backup}}</span>
+                    <menu>
+                    <!--
+                        <li id="rom_config_output"><i.backup></i><span>{{RomOutput}}</span></li>
+                        <li id="rom_config_input"><i.backup></i><span>{{RomInput}}</span></li>
+                        <hr />
+                    -->
+                        <li id="rom_config_backup_platform"><i.backup></i><span>{{BackupRomConfigPlatform}}</span></li>
+                        <li id="rom_config_restore_platform"><i.backup></i><span>{{RestoreRomConfigPlatform}}</span></li>
+                        <li id="rom_config_backup_all"><i.backup></i><span>{{BackupRomConfigAll}}</span></li>
+                        <li id="rom_config_restore_all"><i.backup></i><span>{{RestoreRomConfigAll}}</span></li>
+                        <hr />
+                        <li id="merge_db"><i.backup></i><span>{{SoftMerge}}</span></li>
+                    </menu>
+                </li>
                 <li id="about"><i.info></i><span>{{About}}</span></li>
                 <li id="help"><i.help></i><span>{{Help}}</span></li>
                 <li id="upgrade"><i.update></i><span>{{CheckUpgrade}}</span></li>
@@ -461,54 +580,74 @@ solid-with-shadow
 <!-- 状态栏 -->
 <div class="statebar">
     <div class="filter">
-        <select id="filter_type"><option value="">{{BaseType}}</option></select>
-        <select id="filter_year"><option value="">{{BaseYear}}</option></select>
-        <select id="filter_producer"><option value="">{{BaseProducer}}</option></select>
-        <select id="filter_publisher"><option value="">{{BasePublisher}}</option></select>
-        <select id="filter_country"><option value="">{{BaseCountry}}</option></select>
-        <select id="filter_translate"><option value="">{{BaseTranslate}}</option></select>
-        <select id="filter_version"><option value="">{{BaseVersion}}</option></select>
-        <input type="text" id="search_input" novalue="{{Keyword}}" />
+        <select id="filter_type"></select>
+        <select id="filter_year" editable></select>
+        <select id="filter_producer"></select>
+        <select id="filter_publisher"></select>
+        <select id="filter_country"></select>
+        <select id="filter_translate"></select>
+        <select id="filter_version"></select>
+        <select id="filter_score"></select>
+        <select id="filter_complete"></select>
+        <input type="text" id="search_input" novalue="{{InputKeyword}}" />
         <button id="filter_clear">{{FilterClear}}</button>
     </div>
-    <div class="counnum">
-        <span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>
+    <div class="counnum"><span id="rom_count_text">{{GameCount}}：</span><span id="rom_count_num">0</span></div>
+    <div class="add_rom" id="add_rom">
+        <button type="menu" class="add_rom_btn" id="add_rom_btn"><i.add></i>
+            <menu>
+                <li class="add_rom">{{OpenRomFolder}}</li>
+                <li class="add_slnk">{{AddSlnk}}</li>
+                <!--
+                <li class="add_indie" opt="pc">{{AddPcGame}}</li>
+                <li class="add_indie" opt="ps3">{{AddPs3Game}}</li>
+                -->
+            </menu>
+        
+        </button>
+    </div>
 </div>
 
 <frameset cols="62dip,140dip,*,217dip" noresize="noresize">
+    <!-- 平台栏 -->
     <section id="left_platform">
+        <select id="platform_tags"></select>
         <ul id="platform_ul"></ul>
     </section>
     <splitter id="platform_splitter" />
+    <!-- 菜单栏 -->
     <section id="left_menu">
         <dl id="menulist"></dl>
-       
         <button type="menu" class="menulist_menu funbtn" title="{{Config}}"><i.setting></i>
             <menu>
                 <li id="add_menu">{{AddMenu}}</li>
                 <li id="romlist_hide">{{HideGame}}</li>
             </menu>
-        
         </button>
     </section>
     <splitter id="menu_splitter" />
+    <!-- ROM栏 -->
     <section id="center" class="scrollbar">
     <div id="center_video"></div>
     <div id="center_fuzzy"></div>
     <div id="center_mask"></div>
     <div id="center_content">
-        <ul id="num_search"><li>ALL</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li><li>#</li></ul>
+        <div#joystickFocus></div>
+        <ul id="num_search"><li>ALL</li><li>#</li><li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li></ul>
         <div id="romwrapper"><ul id="romlist"></ul></div>
+        <div id="load_more" class="load_more">{{LoadMore}}<div>
     </div>
     </section>
     <splitter id="right_splitter" />
+    <!-- 侧边栏 -->
     <section id="right">
         <div id="mask"></div>
+        <div id="platform_desc"></div>
         <tabs id="mytabs"  class="sidetabs">
         <strip>
-        <label id="label_first" for="right_first" selected>{{SideTabInfo}}</label>
-        <label id="label_second" for="right_second">{{SideTabThumb}}</label>
-        <label id="label_third" for="right_third">{{SideTabStrategy}}</label>
+        <label id="idx_label_first" for="right_first" selected>{{SideTabInfo}}</label>
+        <label id="idx_label_second" for="right_second">{{SideTabThumb}}</label>
+        <label id="idx_label_third" for="right_third">{{SideTabStrategy}}</label>
         </strip>
         <panels>
         <section id="right_first">
@@ -516,23 +655,9 @@ solid-with-shadow
             <div class="right_bg" id="right_bg"></div>
 
             <div class="margin_wrapper">
-            <div class="button_wrapper">
-                <h2 id="funBtn_h2">{{FunButton}}</h2>
-                    <button id="right_favorite" class="funbtn" rid="" value="" title="{{SetFavorite}}"></button>
-                    <button id="right_hide" class="funbtn" rid="" rname="" title="{{SetHide}}"></button>
-                    <button id="right_rename" class="funbtn" rid="" rname="" title="{{Rename}}"><img src="this://app/images/fileico_rename.png" /></button>
-                    <button id="right_base_info" class="funbtn" platform="" name="" value="" rid="" title="{{EditBaseInfo}}"><img src="this://app/images/fileico_baseinfo.png" /></button>
-                    <button id="right_edit_strategy" class="funbtn" rid="" rname="" title="{{EditDocAndStrategy}}"><img src="this://app/images/fileico_strategy.png" /></button>
-                    <button id="right_edit_audio" class="funbtn" rid="" rname="" title="{{EditAudio}}"><img src="this://app/images/fileico_audio.png" /></button>
-                    <button id="right_move" class="funbtn" platform="" name="" value="" rid="" title="{{RomMove}}"><img src="this://app/images/fileico_move.png" /></button>
-                    <button id="right_open_folder" type="menu" class="funbtn" rid="" rname="" title="{{OpenFolder}}"><img src="this://app/images/fileico_folder.png" /><menu id="foldercontext" type="menu"></menu></button>
-                    <button id="right_delete" class="funbtn" platform="" name="" value="" title="{{DeleteRom}}"><img src="this://app/images/fileico_delete.png" /></button>                
-            </div>
-
-            <h2 id="thumb_h2">{{SideTabThumb}}</h2>
             <div class="rotate_wrapper">
-                <button id="rotate">&gt;</button>
                 <div class="stack" id="stack"></div>
+                <button id="rotate"></button>
             </div>
 
             <div class="flow_wrapper">
@@ -540,18 +665,28 @@ solid-with-shadow
                     <h2>{{RunGame}}</h2>
                     <ul class="sim_select" id="sim_select"></ul>
                     <div class="buttons" id="buttons"></div>
+
+                    <h2>{{Score}}</h2>
+                    <div class="score_wrapper">
+                        <div id="score"><span></span><span></span><span></span><span></span><span></span></div>
+                        <span id="score_num"></span>
+                    </div>
+
                     <h2 class="related_h2">{{PlayMost}}</h2>
                     <ul id="related" class="related"></ul>
                 </div>
+
                 <div class="flow_wrapper_right">
                     <h2>{{BaseInfo}}</h2>
                     <ul id="right_rombase">
                     </ul>
 
-                    <h2 id="game_stat">{{GameStat}}</h2>
-                    <ul class="game_stat">
-                        <li>{{GameRunNum}}：<span id="run_num"></span></li>
-                        <li>{{GameRunLasttime}}：<span id="run_lasttime"></span></li>
+                    <h2 id="game_stat_title">{{GameStat}}</h2>
+
+                    <ul class="game_stat_ul">
+                        <li id="game_complete"><span class="img"></span><span class="info"></span><span class="title">{{GameCompleteState}}</span></li>
+                        <li><span class="img"></span><span class="info" id="run_num"></span><span class="title">{{GameRunNum}}</span></li>
+                        <li><span class="img"></span><span class="info" id="run_lasttime"></span><span class="title">{{GameRunLasttime}}</span></li>
                     </ul>
 
                     <h2 id="doc_title">{{Doc}}</h2>
@@ -591,36 +726,42 @@ solid-with-shadow
 </body>
 
 <script type="text/tiscript">
-    var ROOTPATH  = view.GetViewPath();
-    var SEPARATOR = view.GetSeparator(); //路径分隔符
-    var mediaVars = view.mediaVars();
+    //读取系统配置
+    var constConfig = JSON.parse(view.GetConstInfo());
+    var ROOTPATH  = constConfig.viewPath;
+    var SEPARATOR = constConfig.separator; //路径分隔符
+    var CONST_ROM_LIST_PAGE_SIZE = constConfig.romListPageSize.toInteger(); //rom列表分页数量大小
+    var CONST_SOFT_BUILD_TIME = constConfig.buildTime; //系统编译时间
+
+    //定义首页变量
     var mainView  = view;
+    var mainSelf  = self;
 
-    include ROOTPATH + "tis/plugins/decorators.tis";
-    include ROOTPATH + "tis/plugins/tabs.tis";
-    include ROOTPATH + "tis/plugins/rotator.tis";
-    //include ROOTPATH + "tis/plugins/markdown.tis";
-    include ROOTPATH + "tis/plugins/dragdrop.tis";
-    include ROOTPATH + "tis/plugins/filedropzone.tis";
-    include ROOTPATH + "tis/utils.tis";
-
-    include ROOTPATH + "tis/libs/joystick.tis";
-    include ROOTPATH + "tis/libs/rom.tis";
-    include ROOTPATH + "tis/libs/platform.tis";
-    include ROOTPATH + "tis/libs/menu.tis";
-    include ROOTPATH + "tis/libs/sidebar.tis";
-    include ROOTPATH + "tis/libs/statebar.tis";
-    include ROOTPATH + "tis/libs/thumb.tis";
-    include ROOTPATH + "tis/libs/interface_config.tis";
-    include ROOTPATH + "tis/libs/window.tis";
-    include ROOTPATH + "tis/libs/romcontext.tis";
-    include ROOTPATH + "tis/libs/menucontext.tis";
-    include ROOTPATH + "tis/libs/audio.tis";
-    include ROOTPATH + "tis/libs/keycode.tis";
-    include ROOTPATH + "tis/libs/cache.tis";
-    
-    include ROOTPATH + "tis/event.tis";
-    include ROOTPATH + "tis/app.tis";
+    include ROOTPATH + "js/const.js";
+    include ROOTPATH + "js/plugins/decorators.js";
+    include ROOTPATH + "js/plugins/tabs.js";
+    include ROOTPATH + "js/plugins/rotator.js";
+    //include ROOTPATH + "js/plugins/markdown.js";
+    include ROOTPATH + "js/plugins/dragdrop.js";
+    include ROOTPATH + "js/plugins/filedropzone.js";
+    include ROOTPATH + "js/utils.js";
+    include ROOTPATH + "js/libs/joystick.js";
+    include ROOTPATH + "js/libs/rom.js";
+    include ROOTPATH + "js/libs/platform.js";
+    include ROOTPATH + "js/libs/menu.js";
+    include ROOTPATH + "js/libs/sidebar.js";
+    include ROOTPATH + "js/libs/statebar.js";
+    include ROOTPATH + "js/libs/thumb.js";
+    include ROOTPATH + "js/libs/interface_config.js";
+    include ROOTPATH + "js/libs/window.js";
+    include ROOTPATH + "js/libs/romcontext.js";
+    include ROOTPATH + "js/libs/menucontext.js";
+    include ROOTPATH + "js/libs/audio.js";
+    include ROOTPATH + "js/libs/keycode.js";
+    include ROOTPATH + "js/libs/cache.js";
+    include ROOTPATH + "js/libs/initialize.js";
+    include ROOTPATH + "js/event.js";
+    include ROOTPATH + "js/app.js";
 
 </script>
 </html>

@@ -1,12 +1,13 @@
 package controller
 
 import (
+	"encoding/json"
+	"os"
+	"simUI/code/components"
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
-	"os"
 )
 
 /**
@@ -29,7 +30,7 @@ func ShortcutController() {
 	//添加快捷工具
 	utils.Window.DefineFunction("AddShortcut", func(args ...*sciter.Value) *sciter.Value {
 
-		count,err := (&db.Shortcut{}).Count()
+		count, err := (&db.Shortcut{}).Count()
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -39,7 +40,7 @@ func ShortcutController() {
 			Sort: uint32(count),
 		}
 
-		id, err := shortcut.Add();
+		id, err := shortcut.Add()
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
@@ -101,7 +102,6 @@ func ShortcutController() {
 		return sciter.NewValue("1")
 	})
 
-
 	//运行快捷工具
 	utils.Window.DefineFunction("RunShortcut", func(args ...*sciter.Value) *sciter.Value {
 
@@ -111,10 +111,10 @@ func ShortcutController() {
 		_, err := os.Stat(shortcut)
 		if err != nil {
 			utils.WriteLog(config.Cfg.Lang["ShortcutNotExists"])
-			return utils.ErrorMsg( config.Cfg.Lang["ShortcutNotExists"])
+			return utils.ErrorMsg(config.Cfg.Lang["ShortcutNotExists"])
 		}
 
-		err = utils.RunGame("", []string{shortcut})
+		err = components.RunGame("", []string{shortcut})
 		if err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())

@@ -6,7 +6,7 @@ import (
 	"simUI/code/utils"
 )
 
-//读取详情文件
+// 快速创建一个平台
 func CreatePlatform(id uint32) error {
 
 	//读取平台信息
@@ -17,14 +17,14 @@ func CreatePlatform(id uint32) error {
 	}
 
 	//创建rom目录
-	if !utils.FolderExists(config.Cfg.Platform[id].RomPath) {
+	if !utils.DirExists(config.Cfg.Platform[id].RomPath) {
 		utils.CreateDir(config.Cfg.Platform[id].RomPath)
 	}
 
 	//创建资源目录
 	dirList := config.GetResPath(id)
 	for _, v := range dirList {
-		if !utils.FolderExists(v) {
+		if !utils.DirExists(v) {
 			utils.CreateDir(v)
 		}
 	}
@@ -32,9 +32,20 @@ func CreatePlatform(id uint32) error {
 	if info.Rombase != "" {
 		info.Rombase = config.Cfg.RootPath + info.Rombase
 		if !utils.FileExists(info.Rombase) {
-			CreateNewRomBaseFile(info.Rombase);
+			CreateNewRomBaseFile(info.Rombase)
 		}
 	}
 
 	return nil
+}
+
+// 更新平台缩略图类型
+func UpdatePlatformFieldById(platform uint32, field, val string) error {
+	//更新到数据库
+	return (&db.Platform{Id: platform}).UpdateFieldById(field, val)
+}
+
+// 清空平台缩略图类型
+func ClearAllPlatformAField(typ string) error {
+	return (&db.Platform{}).ClearAllPlatformAField(typ)
 }

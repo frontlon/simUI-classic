@@ -1,0 +1,154 @@
+﻿<html>
+  <head>
+    <title></title>
+    <div id="themefile"></div>    
+    <style>
+      @import 'this://app/images/public.css';
+      @import 'this://app/images/form.css';
+
+    body,html{width:*;height:*;overflow:hidden;margin:0;background:color(center-background-color);padding:0;}
+    .wrapper{margin:0;padding:10dip}
+    
+    .titlebar{flow:horizontal-flow;}
+    .titlebar .left{text-align:left;width:*}
+    .titlebar .right{text-align:right;width:*}
+    .ok{height:30dip!important;line-height:30dip!important;}
+    h2{display:none;text-align:left;color:color(sidebar-title-text-color);font-weight:normal;font-size:11dip;line-height:1em;margin:15dip 0 10dip 0;padding:0}
+    #platform{display:none}
+    label {display:block;}
+    .small_info{font-size:10dip;opacity:0.5;padding-left:5dip;display:inline-block}
+    .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;font-size:12dip;display:block;padding:5dip;margin-bottom:7dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+
+    /* 目录 */
+    .menu_list{padding:0;margin:0;display:none}
+    .menu_list li{list-style:none;margin-bottom:5dip;border:1px solid color(select-border-color);background:color(select-background-color);color:color(select-text-color);height:28dip;line-height:28dip;vertical-align:middle;text-align:left}
+    .menu_list li label{display:block}
+    .menu_list li input{margin:0 5dip;}
+
+    #options_ul{flow:horizontal-flow}
+    #options_ul li{width:20%;margin:0 5dip 5dip 0}
+
+    /* 搜索列表 */
+    #romname_wrapper{margin-top:5dip;position:relative;display:none}
+    #romname_wrapper input{height:28dip;line-height:28dip;width:*}
+    #name_ul{display:none;padding:0;width:*;position:absolute;top:15dip;left:0;max-height:300dip;overflow:scroll-indicator;border:1px solid color(select-popup-border-color);}
+    #name_ul li{padding-left:5dip;list-style:none;width:*;height:28dip;line-height:28dip;background:color(center-background-color);color:color(select-popup-option-text-color)}
+    #name_ul li:hover{background:color(select-popup-option-hover-background-color)}
+
+    /* 已选定游戏列表 */
+    #game_ul{padding:0;margin:0;display:none}
+    #game_ul li{flow:horizontal-flow;list-style:none;margin-bottom:5dip;border:1px solid color(select-border-color);background:color(select-background-color);color:color(select-text-color);height:28dip;line-height:28dip;vertical-align:middle;text-align:left}
+    #game_ul li div{width:*;display:block;padding-left:5dip}
+    #game_ul li button{width:20dip;height:17dip;line-height:17dip;font-size:10dip;vertical-align:middle;margin:5dip 5dip 0 0;}
+    
+    </style>
+  </head>
+  <body>
+   
+<div class="tab_tip">{{RomOutputTip}}</div>
+  <div class="wrapper">
+
+    <div class="titlebar">
+      <div class="left">
+        <select id="type">
+          <option value="">请选择导出类型</option>
+          <option value="platform">根据平台导出</option>
+          <option value="menu">根据目录导出</option>
+          <option value="rom">导出指定ROM</option>
+        </select>
+        <select id="platform"></select>
+      </div>
+
+      <div class="right">
+        <button class="ok" id="ok">导出</button>
+      </div>
+    </div>
+
+    <!-- 导出选项 -->
+    <h2 id="options_h2">导出选项</h2>
+    <ul class="menu_list" id="options_ul">
+      <li><label><input type='checkbox' value="roms" checked />ROM</label></li>
+      <li><label><input type='checkbox' value="subgame" checked />{{SubGame}}</label></li>
+      <li><label><input type='checkbox' value="rombase" checked />{{Rombase}}</label></li>
+      <li><label><input type='checkbox' value="thumb" checked />{{Thumb}}</label></li>
+      <li><label><input type='checkbox' value="snap" checked />{{Snap}}</label></li>
+      <li><label><input type='checkbox' value="title" checked />{{TitlePic}}</label></li>
+      <li><label><input type='checkbox' value="poster" checked />{{Poster}}</label></li>
+      <li><label><input type='checkbox' value="packing" checked />{{Packing}}</label></li>
+      <li><label><input type='checkbox' value="cassette" checked />{{CassettePic}}</label></li>
+      <li><label><input type='checkbox' value="icon" checked />{{Icon}}</label></li>
+      <li><label><input type='checkbox' value="gif" checked />{{GifPic}}</label></li>
+      <li><label><input type='checkbox' value="background" checked />{{BackgroundPic}}</label></li>
+      <li><label><input type='checkbox' value="wallpaper" checked />{{WallpaperPic}}</label></li>
+      <li><label><input type='checkbox' value="video" checked />{{Video}}</label></li>
+      <li><label><input type='checkbox' value="doc" checked />{{Doc}}</label></li>
+      <li><label><input type='checkbox' value="strategy" checked />{{Strategy}}</label></li>
+      <li><label><input type='checkbox' value="files" checked />{{StrategyFiles}}</label></li>
+      <li><label><input type='checkbox' value="audio" checked />{{Audio}}</label></li>
+    </ul>
+    
+    <!-- 目录列表 -->
+    <h2 id="menu_h2">请选择目录</h2>
+    <ul id="menu_ul" class="menu_list"></ul>
+
+
+    <!-- 已选择ROM -->
+    <h2 id="game_h2">已选择ROM</h2>
+    <ul id="game_ul"></ul>
+
+    <!-- rom搜索 -->
+    <h2 id="search_h2">ROM搜索</h2>
+    <div id="romname_wrapper">
+      <input type="text" id="romname" novalue="{{InputSearchKeyword}}" value="" />
+      <ul id="name_ul"></ul>
+    </div>
+
+
+  </div>
+
+    <script type="text/tiscript">
+      include ROOTPATH + "js/utils.js";
+      include ROOTPATH + "js/dialog/input.js";
+
+      event change $(#type){
+        changeType(this.value);
+      }
+
+      event change $(#platform){
+        changePlatform(this.value);
+      }
+
+      event mousemove $(#romname){
+        if($$(#name_ul li).length == 0){
+          $(#name_ul).style["display"] = "none";
+        }else{
+          $(#name_ul).style["display"] = "block";
+        }
+      }
+
+      event change $(#romname){
+        searchRom(this.value);
+      }
+
+      event click $(#name_ul li){
+        var id = this.attributes["opt"];
+        var html = this.html;
+        selectGame(id,html);
+      }
+
+      event click $(#game_ul li button){
+        this.parent.remove();
+      }
+
+      event click $(#ok){
+        outputData();
+      }
+
+      event click $(body){
+        $(#name_ul).style["display"] = "none";
+      }
+
+    </script>
+  </body>
+</html>
+

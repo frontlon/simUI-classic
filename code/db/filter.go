@@ -3,10 +3,10 @@ package db
 import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"math"
 )
 
 type Filter struct {
-	Id       string
 	Platform uint32
 	Type     string
 	Name     string
@@ -30,31 +30,49 @@ func (m *Filter) BatchAdd(data []*Filter) {
 	tx.Commit()
 }
 
-//根据条件，查询多条数据
-func (*Filter) GetByPlatform(platform uint32, t string) ([]*Filter, error) {
+func (*Filter) GetAll() ([]*Filter, error) {
 	volist := []*Filter{}
-	where := map[string]interface{}{}
-	group := ""
-	if platform > 0 {
-		where["platform"] = platform
-	} else {
-		group = "name"
-	}
-	where["type"] = t
 
-	result := getDb().Select("name").Where(where).Group(group).Find(&volist)
+	result := getDb().Select("name,type").Order("name ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
+
 	return volist, nil
 }
 
-//删除一个平台的数据
-func (f *Filter) DeleteByPlatform() error {
-	result := getDb().Where("platform = ?", f.Platform).Delete(&f)
+func (*Filter) GetByPlatform(platform uint32) ([]*Filter, error) {
+	volist := []*Filter{}
+
+	result := getDb().Select("name,type").Where("platform = ?", platform).Order("name ASC").Find(&volist)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
+
+	return volist, nil
+}
+
+//删除记录
+func (m *Filter) DeleteByFileNames(platform uint32, t string, nameList []string) error {
+
+	if len(nameList) == 0 {
+		return nil
+	}
+
+	listLen := len(nameList)
+
+	ceil := int(math.Ceil(float64(listLen) / float64(maxVar)))
+
+	for i := 0; i < ceil; i++ {
+		start := i * maxVar
+		end := (i + 1) * maxVar
+		if end > listLen {
+			end = listLen
+		}
+		list := nameList[start:end]
+		getDb().Where("platform = ? AND type = ? AND name in (?)", platform, t, list).Delete(&m)
+	}
+
 	return nil
 }
 

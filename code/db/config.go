@@ -15,7 +15,7 @@ type Config struct {
 	RomlistSize           string // 当前缩放等级
 	RomlistFontBackground string // 是否显示字体背景
 	RomlistMargin         string // 是否显示模块间距
-	RomlistDirection      string // 模块显示方向（自动、横向、竖向）
+	RomlistDirection      uint8  // 模块显示方向（自动、横向、竖向）
 	RomlistColumn         string // 列表列
 	RomlistFontSize       string // 字体大小
 	RomlistNameType       string // 显示名称类型(0:别名;1:文件名)
@@ -41,6 +41,10 @@ type Config struct {
 	WallpaperImage        string // 侧边栏图图片
 	Cursor                string // 鼠标指针
 	VideoVolume           string // 视频默认音量状态
+	MusicPlayer           string //音乐播放器路径
+	ThumbOrders           string //图集排序列
+	RomlistOrders         string //rom列表排序方式
+	SqlUpdateNum          uint32 //sql升级进度id
 }
 
 func (*Config) TableName() string {
@@ -52,6 +56,19 @@ func (*Config) Get() (*Config, error) {
 
 	vo := &Config{}
 	result := getDb().Where("id=1").First(&vo)
+
+	if result.Error != nil {
+		fmt.Println(result.Error.Error())
+	}
+
+	return vo, result.Error
+}
+
+//根据id查询一条数据
+func (*Config) GetField(field string) (*Config, error) {
+
+	vo := &Config{}
+	result := getDb().Select(field).Where("id=1").First(&vo)
 
 	if result.Error != nil {
 		fmt.Println(result.Error.Error())

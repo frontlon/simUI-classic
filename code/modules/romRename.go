@@ -9,34 +9,57 @@ import (
 )
 
 //rom重命名
-func RomRename(id uint64, filename string) error {
+func RomRename(id uint64, newName string) error {
 
 	//读取老信息
 	rom, _ := (&db.Rom{}).GetById(id)
-	if filename == rom.Name || filename == "" { //如果名称一样则不用修改
+	if newName == rom.Name || newName == "" { //如果名称一样则不用修改
 		return nil
 	}
 
-	//读取子游戏
-	romName := utils.GetFileName(rom.RomPath)
-	subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, romName)
-
 	err := errors.New("")
 
-	if err = renameFile(filename, rom, subRom); err != nil {
+	//重命名文件
+	if err = renameFile(newName, rom); err != nil {
 		return err
 	}
 
-	//更新数据库
-	fname := rom.RomPath
-	fpath := utils.GetFileAbsPath(rom.RomPath)
-	fext := utils.GetFileExt(rom.RomPath)
-	fname = filename + fext
-	if fpath != "." {
-		fname = fpath + "/" + filename + fext
+	//读取资料数据
+	baseInfo := GetRomBaseById(rom.Platform, utils.GetFileName(rom.RomPath))
+	baseName := newName
+	if baseInfo != nil && baseInfo.Name != "" {
+		baseName = baseInfo.Name
 	}
 
-	err = (&db.Rom{Id: id, Name: filename, RomPath: fname, Pinyin: utils.TextToPinyin(filename)}).UpdateName()
+	//写csv配置文件
+	if baseInfo != nil {
+		create := &RomBase{}
+		create = baseInfo
+		create.RomName = newName
+		//写入配置文件
+		if err := WriteRomBaseFile(rom.Platform, create); err != nil {
+			return err
+		}
+	}
+
+	//更新数据库
+	p := rom.RomPath
+	fpath := utils.GetFileAbsPath(rom.RomPath)
+	fext := utils.GetFileExt(rom.RomPath)
+	p = newName + fext
+	if fpath != "." {
+		p = fpath + "/" + newName + fext
+	}
+
+	infoMd5 := utils.GetRomMd5(baseName, p, rom.BaseType, rom.BaseYear, rom.BaseProducer, rom.BasePublisher, rom.BaseCountry, rom.BaseTranslate, rom.BaseVersion, rom.BaseNameEn, rom.BaseNameJp, rom.BaseOtherA, rom.BaseOtherB, rom.BaseOtherC, rom.BaseOtherD, rom.Score, rom.Size)
+
+	err = (&db.Rom{
+		Id:      id,
+		Name:    baseName,
+		RomPath: p,
+		Pinyin:  utils.TextToPinyin(baseName),
+		InfoMd5: infoMd5,
+	}).UpdateName()
 	if err != nil {
 		return err
 	}
@@ -75,13 +98,10 @@ func BatchRomRename(data []map[string]string) error {
 	for _, v := range create {
 		rom := romlist[uint64(utils.ToInt(v["id"]))]
 		filename := v["filename"]
-		//读取子游戏
-		romName := utils.GetFileName(rom.RomPath)
-		subRom, _ := (&db.Rom{}).GetSubRom(rom.Platform, romName)
 
 		err := errors.New("")
 
-		if err = renameFile(filename, rom, subRom); err != nil {
+		if err = renameFile(filename, rom); err != nil {
 			return err
 		}
 
@@ -105,63 +125,37 @@ func BatchRomRename(data []map[string]string) error {
 }
 
 //修改文件名
-func renameFile(name string, rom *db.Rom, subRom []*db.Rom) error {
+func renameFile(newName string, rom *db.Rom) error {
 	platform := rom.Platform
+	oldfileName := utils.GetFileName(rom.RomPath)
 
-	//主rom
-	rompath := config.Cfg.Platform[platform].RomPath + "/" + rom.RomPath
+	resPaths := config.GetResPath(platform)
+	resPaths["rom"] = config.Cfg.Platform[platform].RomPath
 
-	if utils.IsAbsPath(rom.RomPath) {
-		rompath = rom.RomPath
+	//遍历资源目录
+	for _, rpath := range resPaths {
+		//读取相关资源文件
+		files, _ := utils.ScanMasterSlaveFiles(rpath, oldfileName)
+		for _, f := range files {
+			fname := utils.GetFileName(f)
+			newFilename := newName
+			if strings.Contains(f, "__") {
+				fileNameArr := strings.Split(fname, "__")
+				newFilename = newFilename + "__" + fileNameArr[1]
+			}
+			//开始改名
+			if err := utils.FileRename(f, newFilename); err != nil {
+				return err
+			}
+		}
+
 	}
-	if err := utils.Rename(rompath, name); err != nil {
+
+	//改名音乐文件
+	audioPath := resPaths["audio"] + config.Cfg.Separator + oldfileName
+	if err := utils.FolderRename(audioPath, newName); err != nil {
 		return err
 	}
 
-	//子rom
-	for _, v := range subRom {
-		fileName := utils.GetFileName(v.RomPath)
-		fileNameArr := strings.Split(fileName, "__")
-		newName := name + "__" + fileNameArr[1]
-
-		rompath := config.Cfg.Platform[platform].RomPath + "/" + v.RomPath
-		if utils.IsAbsPath(v.RomPath) {
-			rompath = v.RomPath
-		}
-		if err := utils.Rename(rompath, newName); err != nil {
-			return err
-		}
-	}
-
-	//修改资源文件
-	oldfileName := utils.GetFileName(rom.RomPath)
-	resExts := config.GetResExts()
-	for resName, path := range config.GetResPath(platform) {
-		if path != "" {
-			for _, ext := range resExts[resName] {
-				picpath := path + "/" + oldfileName + ext
-				if utils.FileExists(picpath) {
-					if err := utils.Rename(picpath, name); err != nil {
-						return err
-					}
-					break
-				}
-			}
-		}
-	}
-	//修改攻略文件
-	masterName := utils.GetFileName(rom.RomPath)
-	files, _ := utils.ScanDirByKeyword(config.Cfg.Platform[rom.Platform].FilesPath, masterName+"__")
-	for _, f := range files {
-		fArr := strings.Split(f, "__")
-		fName := fArr[len(fArr)-1]
-		fArr = strings.Split(fName, ".")
-		fArr = utils.SliceDeleteLast(fArr)
-		fName = strings.Join(fArr, ".")
-		newName := name + "__" + fName
-		if err := utils.Rename(f, newName); err != nil {
-			return err
-		}
-	}
 	return nil
 }

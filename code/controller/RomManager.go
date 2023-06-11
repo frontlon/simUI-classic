@@ -77,8 +77,36 @@ func RomManagerController() {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}
-		
+
 		return sciter.NullValue()
+	})
+
+	//绑定子游戏
+	utils.Window.DefineFunction("BindSubGame", func(args ...*sciter.Value) *sciter.Value {
+		pid := uint64(utils.ToInt(args[0].String()))
+		sid := uint64(utils.ToInt(args[1].String()))
+
+		vo, err := modules.BindSubGame(pid, sid)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		romJson, _ := json.Marshal(&vo)
+		return sciter.NewValue(string(romJson))
+	})
+
+	//解绑子游戏
+	utils.Window.DefineFunction("UnBindSubGame", func(args ...*sciter.Value) *sciter.Value {
+		id := uint64(utils.ToInt(args[0].String()))
+
+		vo, err := modules.UnBindSubGame(id)
+		if err != nil {
+			utils.WriteLog(err.Error())
+			return utils.ErrorMsg(err.Error())
+		}
+		romJson, _ := json.Marshal(&vo)
+
+		return sciter.NewValue(string(romJson))
 	})
 
 }

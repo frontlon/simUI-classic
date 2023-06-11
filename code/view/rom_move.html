@@ -27,7 +27,7 @@
     </div>
     
     <script type="text/tiscript">
-    include ROOTPATH + "tis/utils.tis";
+    include ROOTPATH + "js/utils.js";
     //创建语言
     createLang();
     view.root.on("ready", function(){
@@ -38,28 +38,34 @@
         view.windowCaption =  CONF.Lang.RomMove;
 
         //标题
-
-
         var ids = view.parameters.id.split(",");
+        var platform = view.parameters.platform;
+
         if(ids.length == 1){
-            var getjson = mainView.GetGameDetail(view.parameters.id);
+            var getjson = mainView.GetGameById(view.parameters.id);
             var detailObj = JSON.parse(getjson);
-            $(h1).html = detailObj.Info.Name;
+            platform = detailObj.Platform;
+            $(h1).html = detailObj.Name;
         }else{
             $(h1).html = CONF.Lang.RomMove;
         }
+
+
+        //读取平台信息
+        var platformInfo = JSON.parse(mainView.GetPlatformById(platform));
+
+        //读取平台菜单
+        var menuList = JSON.parse(mainView.GetMenuList(platform,0))
+
         //生成列表
-        var lists = mainView.GetAllPlatformMenuList();
-        var listObj = JSON.parse(lists);
-        var create = "";
-        for(var name in listObj) {
-                create += "<option class='title' expanded value=''>";
-                create += "<caption class='title'>"+name+"</caption>";
-                for(var obj in listObj[name]) {
-                    create += "<option pf='"+ obj.platform +"' value='"+obj.name+"'><img src='this://app/images/folder.png'> "+obj.name+"</option>";
-                }
-                create += "</option>";
+        var create = "<option class='title' expanded value=''>";
+        create += "<caption class='title'>"+platformInfo.Name+"</caption>";
+        for(var obj in menuList) {
+            var name = obj.Name == "_7b9" ? CONF.Lang.Uncate : obj.Name;
+            create += "<option value='"+ obj.Name +"'><img src='this://app/images/folder.png'> "+ name +"</option>";
         }
+        create += "</option>";
+        
         $(#menu).html = create;
     });
 
@@ -75,7 +81,6 @@
         }
         
         var newMenu = obj.attributes["value"];
-        var newPlatform = obj.attributes["pf"];
         if(newMenu == undefined || newMenu == ""){
             alert(CONF.Lang.NotSelectDirectory);
             return;
@@ -86,11 +91,10 @@
 
         var ids = view.parameters.id.split(",");
         for(var id in ids) {
-            mainView.MoveRom(id,newPlatform,newMenu);
+            mainView.MoveRom(id,newMenu);
         }
 
         var response = {
-            "platform":newPlatform,
             "menu":newMenu,
         }
 

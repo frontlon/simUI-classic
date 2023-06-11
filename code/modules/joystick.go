@@ -4,10 +4,15 @@ import (
 	"github.com/simulatedsimian/joystick"
 	"simUI/code/utils"
 	"sync"
+	"syscall"
 	"time"
+	"unsafe"
 )
 
 var JOYSTICK int8
+var user32 = syscall.NewLazyDLL("user32.dll")
+var procGetForegroundWindow = user32.NewProc("GetForegroundWindow")
+var getWindowThreadProcessId = user32.NewProc("GetWindowThreadProcessId")
 
 func CheckJoystick() (status int8) {
 
@@ -30,7 +35,7 @@ func CheckJoystick() (status int8) {
 			wg.Done()
 			return
 		}
-		var btnLock [10]int64
+		btnLock := map[string]int64{}
 		var dirLock int64
 		JOYSTICK = 1
 		wg.Done()
@@ -39,6 +44,14 @@ func CheckJoystick() (status int8) {
 			select {
 			case <-time.After(time.Millisecond * time.Duration(40)):
 
+				/*
+					// 判断句柄是否属于当前进程
+					hwnd, _, _ := procGetForegroundWindow.Call()
+					processID := getProcessIDFromHWND(hwnd)
+					if processID != uint32(syscall.Getpid()) {
+						break
+					}
+				*/
 				active := utils.CheckWinActive()
 				if active == false {
 					break
@@ -62,9 +75,11 @@ func CheckJoystick() (status int8) {
 					//fmt.Println("Buttons:", dir)
 				}
 
-				if btn > 0 {
-					if current-btnLock[btn] < 500 {
-						break
+				if btn != "" {
+					if _, ok := btnLock[btn]; ok {
+						if current-btnLock[btn] < 500 {
+							break
+						}
 					}
 
 					btnLock[btn] = current
@@ -83,15 +98,15 @@ func CheckJoystick() (status int8) {
 //读取方向
 //1上2下3左4右
 func GetJoystickDirection(axis []int) int {
-	if (len(axis) == 6) {
+	if len(axis) == 6 {
 		//条件位置不能换
-		if (axis[0] == -32767 || axis[4] == -32767) {
+		if axis[0] == -32767 || axis[4] == -32767 {
 			return 3
-		} else if (axis[0] == 32768 || axis[4] == 32768) {
+		} else if axis[0] == 32768 || axis[4] == 32768 {
 			return 4
-		} else if (axis[1] == -32767 || axis[5] == -32767) {
+		} else if axis[1] == -32767 || axis[5] == -32767 {
 			return 1
-		} else if (axis[1] == 32768 || axis[5] == 32768) {
+		} else if axis[1] == 32768 || axis[5] == 32768 {
 			return 2
 		}
 
@@ -127,36 +142,49 @@ func GetJoystickDirection(axis []int) int {
 }
 
 //读取按钮
-func GetJoystickButtons(button uint32) int {
-	btn := 0
+func GetJoystickButtons(button uint32) string {
+	btn := ""
 	switch button {
 	case 1:
-		btn = 1 //A
+		btn = "A" //A
 		break
 	case 2:
-		btn = 2 //B
+		btn = "B" //B
 		break
 	case 4:
-		btn = 3 //X
+		btn = "X" //X
 		break
 	case 8:
-		btn = 4 //Y
+		btn = "Y" //Y
 		break
 	case 16:
-		btn = 5 //LB
+		btn = "LB" //LB
 		break
 	case 32:
-		btn = 6 //RB
+		btn = "RB" //RB
 		break
 	case 64:
-		btn = 7 //back
+		btn = "BACK" //back
 		break
 	case 128:
-		btn = 8 //start
+		btn = "START" //start
 		break
 	case 192:
-		btn = 9 //start + back
+		btn = "START+BACK" //start + back
 		break
 	}
 	return btn
+}
+
+// 获取 HWND 所属的进程 ID
+func getProcessIDFromHWND(hwnd uintptr) uint32 {
+	var processID uint32
+	threadID, _, _ := getWindowThreadProcessId.Call(
+		hwnd,
+		uintptr(unsafe.Pointer(&processID)),
+	)
+	if threadID == 0 {
+		return 0
+	}
+	return processID
 }

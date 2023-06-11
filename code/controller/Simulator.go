@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
 	"simUI/code/db"
 	"simUI/code/modules"
 	"simUI/code/utils"
-	"encoding/json"
 	"simUI/code/utils/go-sciter"
 	"strings"
 )
@@ -93,10 +93,15 @@ func SimulatorController() {
 
 	//设置rom的模拟器
 	utils.Window.DefineFunction("SetRomSimulator", func(args ...*sciter.Value) *sciter.Value {
-		romIds := strings.Split(args[0].String(),",")
+		romIdsStr := strings.Split(args[0].String(),",")
 		simId := uint32(utils.ToInt(args[1].String()))
-		//更新数据
-		if err := (&db.Rom{}).UpdateSimIdByIds(romIds,simId); err != nil {
+
+		romIds := []uint64{}
+		for _,id := range romIdsStr{
+			romIds = append(romIds,uint64(utils.ToInt(id)))
+		}
+
+		if err := modules.SetRomSimulator(romIds,simId); err != nil {
 			utils.WriteLog(err.Error())
 			return utils.ErrorMsg(err.Error())
 		}

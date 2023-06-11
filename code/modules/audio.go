@@ -17,15 +17,18 @@ func GetAudioList(id uint64) ([]map[string]string, error) {
 	}
 
 	//搜索音频文件
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].AudioPath, name+"__")
+	p := config.Cfg.Platform[vo.Platform].AudioPath + config.Cfg.Separator + name
+	exists, _ := utils.ScanDirAndSubDir(p)
 	volist := []map[string]string{}
 	for _, v := range exists {
-		name := utils.GetFileName(v)
-		namearr := strings.Split(name, "__")
-		p := strings.Replace(v, config.Cfg.RootPath, "", 1)
+		ext := utils.GetFileExt(v)
+		if !utils.InSliceString(ext, config.AUDIO_EXTS) {
+			continue
+		}
+
 		vo := make(map[string]string)
-		vo["name"] = namearr[1]
-		vo["path"] = p
+		vo["name"] = utils.GetFileName(v)
+		vo["path"] = strings.Replace(v, config.Cfg.RootPath, "", 1)
 		volist = append(volist, vo)
 	}
 	return volist, nil
@@ -41,13 +44,17 @@ func UploadAudioFile(id uint64, name string, p string) (string, error) {
 	}
 	ext := utils.GetFileExt(p)
 	fileName := utils.GetFileName(vo.RomPath)
-	newPath := config.Cfg.Platform[vo.Platform].AudioPath + config.Cfg.Separator + fileName + "__" + name + ext
+	newPath := config.Cfg.Platform[vo.Platform].AudioPath + config.Cfg.Separator + fileName + config.Cfg.Separator + name + ext
 
 	rel := strings.Replace(newPath, config.Cfg.RootPath, "", 1)
 	if rel == p {
 		return p, nil
 	}
 
+	//创建目录
+	_ = utils.CreateDir(utils.GetFilePath(newPath))
+
+	//复制文件
 	if err := utils.FileCopy(p, newPath); err != nil {
 		return "", err
 	}
@@ -73,7 +80,8 @@ func UpdateAudio(id uint64, data string) error {
 	}
 
 	//读取已存在的文件
-	exists, _ := utils.ScanDirByKeyword(config.Cfg.Platform[vo.Platform].AudioPath, vo.Name+"__")
+	p := config.Cfg.Platform[vo.Platform].AudioPath + config.Cfg.Separator + vo.Name
+	exists, _ := utils.ScanDirAndSubDir(p)
 	for _, v := range exists {
 		rel := strings.Replace(v, config.Cfg.RootPath, "", 1)
 		if !utils.InSliceString(rel, newData) {

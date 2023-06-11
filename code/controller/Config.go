@@ -5,8 +5,10 @@ import (
 	"simUI/code/config"
 	"simUI/code/db"
 	"simUI/code/modules"
+	"simUI/code/request"
 	"simUI/code/utils"
 	"simUI/code/utils/go-sciter"
+	"strings"
 )
 
 /**
@@ -14,16 +16,6 @@ import (
  **/
 
 func ConfigController() {
-
-	//读取视图路径
-	utils.Window.DefineFunction("GetViewPath", func(args ...*sciter.Value) *sciter.Value {
-		return sciter.NewValue(config.Cfg.ViewPath);
-	})
-
-	//读取路径分隔符
-	utils.Window.DefineFunction("GetSeparator", func(args ...*sciter.Value) *sciter.Value {
-		return sciter.NewValue(config.Cfg.Separator);
-	})
 
 	//初始化数据
 	utils.Window.DefineFunction("InitData", func(args ...*sciter.Value) *sciter.Value {
@@ -67,25 +59,24 @@ func ConfigController() {
 		return sciter.NewValue(body)
 	})
 
-	//导出设置
+	//导出平台设置
 	utils.Window.DefineFunction("InputPlatform", func(args ...*sciter.Value) *sciter.Value {
 		p := args[0].String()
 		modules.InputPlatform(p)
 		return sciter.NewValue(1)
 	})
 
-	//导出设置
-	utils.Window.DefineFunction("OutputPlatform", func(args ...*sciter.Value) *sciter.Value {
-		platform := uint32(utils.ToInt(args[0].String()))
-		p := args[1].String()
-		compress := utils.ToInt(args[2].String())
-		packRom := utils.ToInt(args[3].String())
+	//导出(分享)rom
+	utils.Window.DefineFunction("OutputRom", func(args ...*sciter.Value) *sciter.Value {
+		request := &request.OutputRom{}
 
+		_ = json.Unmarshal([]byte(args[0].String()), &request)
 
+		request.Save = strings.Replace(request.Save, `file://`, "", 1)
+		request.Save = strings.Replace(request.Save, `file:\\`, "", 1)
 
-		go func() {
-			modules.OutputPlatform(platform, p, compress,packRom)
-		}()
+		modules.OutputRom(request)
+
 		return sciter.NewValue(1)
 	})
 

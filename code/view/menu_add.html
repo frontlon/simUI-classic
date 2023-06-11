@@ -9,13 +9,18 @@
         html,body{width:*; height:*; overflow:hidden;margin:0;padding:0;color:color(general-text-color);}
         .desc{font-size:11dip;color:#666}
         .input_wrapper{padding:0 10dip 10dip 10dip;}
+        .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;font-size:12dip;display:block;padding:5dip;margin:0 0 7dip 0;}
         input{width:*;}
     </style>
 </head>
 <body>
+    <div class="tab_tip">{{TipDirAdd}}</div>
     <div class="input_wrapper">
-        <h4 id="desc">{{InputMenuName}}</h4>
-        <select  id="platform"></select>
+        <select id="platform"></select>
+        <select id="virtual">
+            <option value="1" selected>{{virtualDir}}</option>
+            <option value="0">{{Folder}}</option>
+        </select>
         <input type="text" id="menuname" value="" />
     </div>
     <div class="form_bottom">
@@ -25,8 +30,8 @@
 
 
 <script type="text/tiscript">
-    include ROOTPATH + "tis/utils.tis";
-    include ROOTPATH + "tis/dialog/menu_add.tis";
+    include ROOTPATH + "js/utils.js";
+    include ROOTPATH + "js/dialog/menu_add.js";
 
     //初始化主题
     initUiTheme();

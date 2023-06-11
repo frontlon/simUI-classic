@@ -1,0 +1,79 @@
+﻿<html>
+  <head>
+    <title></title>
+    <div id="themefile"></div>    
+    <style>
+      @import 'this://app/images/public.css';
+      @import 'this://app/images/form.css';
+
+    body,html{width:*;height:*;overflow:scroll-indicator;margin:0;background:color(center-background-color);padding:0 0 5dip 0;color: color(general-text-color);}
+    .wrapper{margin:0;padding:10dip}
+    .tab_tip {background:color(manager-tip-background-color);color:color(manager-tip-text-color);line-height:20dip;font-size:12dip;display:block;padding:5dip;margin-bottom:7dip;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;}
+    input[type=text]{width:400dip}
+    ul{list-style:none;padding:0;}
+    h2{font-size:14dip;color:color(button-ok-text-color)}
+    h3{font-size:12dip;}
+    ul{flow:horizontal-flow;}
+    label{width:*;display:block}
+    .item{border-top:1px solid #000;margin-top:20dip;padding-top:20dip}
+    table{border-collapse:collapse;}
+    table tbody tr:hover {background:color(manager-tr-hover-background-color);}
+    table th{font-size:10dip;font-weight:bold;padding:10dip 5dip;border:1px solid color(manager-table-border-color);}
+    .res_check td{text-align:left;font-size:10dip;border:1px solid color(manager-table-border-color);padding:0 5dip;width:100dip;background-size:12dip;background-repeat:no-repeat;background-position:5dip center}
+    .res_check td.suc{padding-left:20dip;background-image:url(this://app/images/check_right.png)}
+    .res_check td.err{padding-left:20dip;background-image:url(this://app/images/check_wrong.png)}
+    .res_check td.warn{padding-left:20dip;background-image:url(this://app/images/check_warn.png)}
+
+    .platform_select li{border:1px solid color(input-hover-border-color);padding:5dip;margin:0 10dip 10dip 0;width:100dip;}
+    .sim_select li{border:1px solid color(input-hover-border-color);padding:5dip;margin:0 10dip 10dip 0;width:200dip;}
+    li.active{background:color(button-ok-background-color);color:color(button-ok-text-color);border:color(button-ok-background-color)}
+
+    </style>
+  </head>
+  <body>
+   
+<div class="tab_tip">{{SoftMergeTip}}</div>
+<div class="wrapper">
+    <input type="text"  id="db_file" readonly value=""> <button class="openfile" for="db_file" caption="{{SelectPicFile}}" filter="Database Files (*.dll,*.db)|*.dll;*.db|All Files (*.*)|*.*">{{SoftMergeSelectDb}}</button>
+    <h2>{{SelectInputPlatform}}</h2>
+    <ul class="platform_select" id="platform_select"></ul>
+    <div id="content"></div>
+</div>
+
+</div>
+<div class="form_bottom">
+  <button class="cancel" id="close-dialog">{{Cancel}}</button>
+  <button class="ok" id="ok" role="default-button">{{StartMerge}}</button>
+</div>
+    <script type="text/tiscript">
+      include ROOTPATH + "js/utils.js";
+      include ROOTPATH + "js/dialog/merge_db.js";
+
+    //选择文件
+    event click $(.openfile){
+        openFile(this);
+    }
+
+    //切换平台标签
+    self.on("change", "#platform_select input[type=checkbox]", function (evt) {
+        activePlatform(this);
+    });
+
+    //切换模拟器标签
+    self.on("change", ".sim_select input[type=checkbox]", function (evt) {
+        activeSimulator(this);
+    });
+
+    //确定导入
+    event click $(#ok){
+        startMergeDb();
+    }
+
+    //关闭窗口
+    event click $(.cancel){
+        view.close();
+    }
+    </script>
+  </body>
+</html>
+
